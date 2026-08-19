@@ -245,6 +245,7 @@ export const 기본: Story = { render: (args) => <Controlled {...args} /> };
 구성을 처음부터 다시 만든다면 이 순서가 막히지 않는다.
 
 1. `apps/storybook` 에 `package.json`(private) + `dev`/`build` 스크립트
+   루트에서 부를 수 있도록 `dev:storybook` · `build:storybook` 도 함께 추가한다
 2. 루트에 `storybook` · `@storybook/react-vite` · `@storybook/addon-docs` 설치 (2-8)
 3. `.storybook/main.ts` — `stories` · `framework` 만으로 먼저 띄운다
 4. 스토리 하나를 만들어 **사이드바에 뜨는지** 확인 (스타일은 아직 깨져 있다)

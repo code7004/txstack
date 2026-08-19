@@ -96,7 +96,8 @@ docs/ROADMAP.md 와 docs/plans/<계획문서>.md 를 읽고 <job ID> 부터 진�
 - 린트: `pnpm lint` / 자동수정 `pnpm lint:fix`
 - 빌드: `pnpm build` — `dist/*.js` 와 `dist/*.d.ts` 가 생성되는지 확인
 - 배포 산출물 점검: 해당 패키지에서 `npm pack --dry-run` 으로 포함 파일 목록 확인
-- 화면 변경: `pnpm dev` (playground) 로 실제 렌더 확인
+- 화면 변경: `pnpm dev` (playground, :5310) 로 실제 렌더 확인
+- 컴포넌트 변경: `pnpm dev:storybook` (:6310) 로 카탈로그 확인
 
 ## 자주 쓰는 명령
 
@@ -105,7 +106,9 @@ pnpm i                    # 설치
 pnpm check                # lint + typecheck + test
 pnpm test                 # 회귀 테스트 (vitest)
 pnpm build                # packages/* 전체 빌드
-pnpm dev                  # playground 실행
+pnpm dev                  # playground 실행 (= dev:playground)
+pnpm dev:storybook        # 컴포넌트 카탈로그 실행 (:6310)
+pnpm build:storybook      # 카탈로그 정적 빌드
 pnpm changeset            # 변경 기록 작성 (배포 전 필수)
 pnpm release:version      # changeset -> 버전/CHANGELOG 반영
 pnpm release:publish      # 빌드 후 npm 배포 (사용자 요청 시에만)

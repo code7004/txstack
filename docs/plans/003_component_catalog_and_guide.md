@@ -76,7 +76,7 @@ argTypes    control · description   열거형은 select, 함수·theme 은 cont
 ## 검증 방법
 
 - `pnpm check` — 스토리도 `packages/ui` 의 typecheck 대상이다
-- `pnpm --filter @txstack/storybook dev` 로 렌더 확인, 콘솔 에러 0건
+- `pnpm dev:storybook` 으로 렌더 확인, 콘솔 에러 0건
 - `pnpm build` 후 `dist` 에 스토리 유입 0건 · `npm pack --dry-run` 목록에 `.stories.` 0건
 - 결과는 `docs/verification/003_*.md` 에 기록
 
