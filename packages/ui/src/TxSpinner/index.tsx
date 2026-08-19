@@ -1,7 +1,7 @@
 import React from "react";
 import { cm } from "../tx-ui.utils";
 
-interface TxSpinnerProps extends React.SVGProps<SVGSVGElement> {
+export interface ITxSpinnerProps extends React.SVGProps<SVGSVGElement> {
   size?: string; // ex: "2em" | "24px" | "w-6 h-6"
 }
 
@@ -12,7 +12,7 @@ interface TxSpinnerProps extends React.SVGProps<SVGSVGElement> {
  * - 기본 크기/색상 제공 (size, className 조정 가능)
  * - 접근성 고려 (role, aria-label)
  */
-function TxSpinner({ size = "2em", className = "w-full items-center", ...props }: TxSpinnerProps) {
+function TxSpinner({ size = "2em", className = "w-full items-center", ...props }: ITxSpinnerProps) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={size} height={size} role="status" aria-label="Loading..." className={cm("animate-spin text-current", className)} {...props}>
       <path

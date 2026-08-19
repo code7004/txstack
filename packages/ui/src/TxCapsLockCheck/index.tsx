@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { cm } from "../tx-ui.utils";
 
-interface ITxCapsLockCheck {
+export interface ITxCapsLockCheckProps {
   className?: string;
   text?: string;
   locale?: (text: string) => string;
@@ -20,7 +20,7 @@ interface ITxCapsLockCheck {
  * <TxCapsLockChecker text="caps 감지" />
  * <TxCapsLockChecker i18n={$t} preserveSpace={false} />
  */
-export const TxCapsLockCheck = ({ className, text = "Caps Lock이 켜져 있습니다.", locale = (k) => k, preserveSpace = true }: ITxCapsLockCheck) => {
+export const TxCapsLockCheck = ({ className, text = "Caps Lock이 켜져 있습니다.", locale = (k) => k, preserveSpace = true }: ITxCapsLockCheckProps) => {
   const [caps, _caps] = useState(false);
 
   useEffect(() => {

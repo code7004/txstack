@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
 import { TxTooltipTheme } from "./index";
 
-interface ITxTooltipProps {
+export interface ITxTooltipProps {
   tip: ReactNode;
   children: ReactNode;
   delay?: number;

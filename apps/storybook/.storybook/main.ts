@@ -10,6 +10,9 @@ const pkg = (path: string) => fileURLToPath(new URL(`../../../packages/${path}`,
  */
 const config: StorybookConfig = {
   stories: ["../../../packages/ui/src/**/*.stories.tsx"],
+  // autodocs(타입에서 props 표 자동 생성)는 이 애드온이 있어야 동작한다. Storybook 10 에서 docs 는 별도 패키지다.
+  addons: ["@storybook/addon-docs"],
+  docs: { defaultName: "문서" },
   framework: { name: "@storybook/react-vite", options: {} },
   viteFinal: async (viteConfig) => {
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];

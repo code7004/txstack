@@ -2,17 +2,18 @@
 
 - 관련 요구사항: [003 요구사항](../requirements/003_component_catalog_and_guide.md)
 - 착수일: 2026-08-19
-- 상태: P1 진행 중
+- 상태: P1 완료 / P2 대기
+- 검증: [003 검증](../verification/003_component_catalog_and_guide.md)
 
 ## Phase
 
-| ID  | 내용                                    | 수용 기준 | 상태       |
-| --- | --------------------------------------- | --------- | ---------- |
-| P0  | Storybook 10 구성 + 예시 스토리 1종     | R1·R3     | ✅ 완료    |
-| P1  | 스토리 형식 확정 → `Tx*` 27종으로 확장  | R1·R2·R4  | 🔄 진행 중 |
-| P2  | 가이드 화면 (설치 → Tailwind → 첫 화면) | R5        | ⬜         |
-| P3  | playground 예제에 소스 코드 노출        | R6        | ⬜         |
-| P4  | 정적 사이트 배포                        | R7        | ⬜         |
+| ID  | 내용                                    | 수용 기준 | 상태    |
+| --- | --------------------------------------- | --------- | ------- |
+| P0  | Storybook 10 구성 + 예시 스토리 1종     | R1·R3     | ✅ 완료 |
+| P1  | 스토리 형식 확정 → `Tx*` 27종으로 확장  | R1·R2·R4  | ✅ 완료 |
+| P2  | 가이드 화면 (설치 → Tailwind → 첫 화면) | R5        | ⬜      |
+| P3  | playground 예제에 소스 코드 노출        | R6        | ⬜      |
+| P4  | 정적 사이트 배포                        | R7        | ⬜      |
 
 ## P0 결과 (완료)
 
@@ -78,3 +79,26 @@ argTypes    control · description   열거형은 select, 함수·theme 은 cont
 - `pnpm --filter @txstack/storybook dev` 로 렌더 확인, 콘솔 에러 0건
 - `pnpm build` 후 `dist` 에 스토리 유입 0건 · `npm pack --dry-run` 목록에 `.stories.` 0건
 - 결과는 `docs/verification/003_*.md` 에 기록
+
+## P1 결과 (완료)
+
+- **27종 등재 / 스토리 106개 / 자동 docs 27개.** 전부 렌더 확인, 에러 0건. 상세는 [003 검증](../verification/003_component_catalog_and_guide.md).
+- 그룹별 스토리 수: Form 39 · Overlay 24 · Data 17 · Layout 10 · Feedback 8 · Date 8
+
+### P1 이 추가로 잡아낸 결함 2건
+
+| 결함                                                                       | 처리                                                               |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `TxCapsLockCheck` · `TxSpinner` · `TxTooltip` 의 props 인터페이스 미export | export + `I<컴포넌트명>Props` 로 이름 통일. changeset 작성         |
+| `tags: ["autodocs"]` 가 동작하지 않음 (docs 0개)                           | Storybook 10 은 docs 가 별도 패키지 — `@storybook/addon-docs` 등록 |
+
+두 번째는 특히 짚어둘 만하다. 태그만 달고 넘어갔다면 **R2 를 충족했다고 착각한 채** 끝났을 것이다.
+수용 기준은 "태그를 달았다" 가 아니라 "docs 페이지가 생성됐다" 로 확인해야 한다.
+
+### 스토리 작성에서 걸린 TypeScript 함정
+
+| 증상                                                 | 원인·해결                                                                            |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| 필수 prop 이 있으면 `render` 만 있는 스토리가 거부됨 | meta 의 `args` 에 기본값을 채운다 (`children: null` 포함)                            |
+| `decorators` 를 쓰면 `TS2742`(비이식적 타입)         | `satisfies Meta<...>` 대신 `const meta: Meta<typeof X>` 명시 주석을 쓴다             |
+| `as const` 배열이 리터럴 타입으로 좁혀짐             | 드롭다운 `data` 는 `string[]` 로 선언한다. 안 그러면 `useState<string>` 과 안 맞는다 |
