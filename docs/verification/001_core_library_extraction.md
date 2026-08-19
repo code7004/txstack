@@ -231,3 +231,34 @@ const keyword: string = query.keyword; // 추론이 무너지면 여기서 tsc �
 - **커버리지 측정 없음.** 핵심 계약 위주로 썼고 전 컴포넌트를 덮지 않았다. `Tx*` 컴포넌트 렌더 테스트는 없다.
 - `useUrlQuery` 의 `encode` 옵션, `TxCoolTable` 의 중첩 경로 유틸(`getNestedValue`·`setNestedValue`)은 미커버.
 - 브라우저 실렌더는 여전히 V4 소관이다.
+
+---
+
+## 7. 2차 검증 라운드 — V4 playground 브라우저 재검증
+
+- 수행일: 2026-08-19
+- 환경: 이관된 PC(W:\Projects\txstack), Vite 7.3.6, `pnpm dev` → http://localhost:5310
+
+### 7-1. 결과
+
+12화면을 SPA 내비게이션으로 순회하며 렌더·콘솔을 확인했다.
+
+| 항목                 | 결과                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------ |
+| 12화면 렌더          | ✅ 전부 렌더. 콘솔 **에러 0건**                                                            |
+| 다크모드             | ✅ 토글 시 `html.dark` 와 배경색 동시 변경 (`oklch(0.129 …)` ↔ `rgb(255,255,255)`), 복원됨 |
+| 서브패스 지연로딩    | ✅ `ag-grid` · `react-day-picker` 가 해당 화면 진입 후에만 로드됨                          |
+| route-meta 메뉴 파생 | ✅ 좌측 메뉴 12개. `/hidden`(meta.hidden) · `/disabled`(enabled:false) 제외 확인           |
+| 콘솔 warning         | ⚠ `TxCoolTable` deprecated 경고 4회 — 의도된 경고지만 **매 렌더마다** 찍힌다 → `001-2` I8  |
+
+### 7-2. 발견
+
+`TxCoolTable` 의 deprecation 경고가 컴포넌트 **본문에서** `console.warn` 으로 호출된다
+([TxCoolTable.tsx:66](../../packages/ui/src/TxCoolTable/TxCoolTable.tsx)). 렌더마다 실행되고
+StrictMode 이중 렌더까지 겹쳐, 화면 하나에서 4회가 찍혔다. 소비자 콘솔을 오염시킨다.
+
+### 7-3. 한계
+
+- **스크린샷 없음** — 브라우저 패널이 표시되지 않는 환경이라 DOM·계산된 스타일·콘솔로 검증했다. 1차와 동일한 제약이다.
+- 시각적 회귀(레이아웃 깨짐, 색 대비)는 이 방법으로 잡히지 않는다. 사람 눈 또는 스냅샷 도구가 필요하다.
+- 상호작용은 다크모드 토글까지만 확인했다. 폼 제출·드롭다운 선택·모달 열기 등은 미확인.
