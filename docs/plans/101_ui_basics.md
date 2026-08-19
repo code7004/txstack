@@ -55,6 +55,24 @@
 | U1-17 | Data 그룹 렌더 테스트                               | 🤖   | `TxJsonTree` 가 falsy 값을 숨기지 않음을 고정한다 |
 | U1-18 | a11y 룰 2종(`anchor-is-valid`·`alt-text`) 복구 검토 | 🤝   | 켤 수 있으면 켜고, 못 켜면 이유가 문서에 남는다   |
 
+### E. 라우터 결합 해소 (배포 전 필수)
+
+`000 §3-5` 확정분. **25종 중 3종 때문에 UI 라이브러리 전체가 React Router 에 묶여 있다.**
+Next.js · TanStack Router 소비자가 설치조차 못 하므로, §1-1 의 "진짜 공개 범용" 과 어긋난다.
+
+| ID    | job                                              | 담당 | 완료 기준                                                   |
+| ----- | ------------------------------------------------ | ---- | ----------------------------------------------------------- |
+| U1-19 | `linkComponent` 주입 API 설계 (형태 승인)        | 🤝   | `TxThemeProvider` 가 받는 형태를 예제 코드로 먼저 적고 승인 |
+| U1-20 | `TxCard` 의 `link` 를 주입 방식으로 전환         | 🤖   | `react-router-dom` import 가 사라진다                       |
+| U1-21 | `TxDropMenu.LinkItem` 을 주입 방식으로 전환      | 🤖   | 위와 동일                                                   |
+| U1-22 | `TxContextMenu` 옵션 `to` 를 주입 방식으로 전환  | 🤖   | 위와 동일                                                   |
+| U1-23 | 미지정 시 폴백 동작 정의 · 구현                  | 🤖   | 라우터를 안 쓰면 `<a>` 로 떨어지거나 해당 기능이 비활성     |
+| U1-24 | `react-router-dom` 을 peerDependencies 에서 제거 | 🤖   | `packages/ui/package.json` 에서 빠진다                      |
+| U1-25 | 소비자 픽스처로 검증 (라우터 미설치)             | 🤖   | react-router 없이 `@txstack/ui` 설치·빌드가 통과한다        |
+| U1-26 | changeset 작성                                   | 🤖   | breaking 이다. 마이그레이션 방법이 적힌다                   |
+
+> `U1-25` 가 이 절의 증명이다. peer 에서 지우는 것만으로는 결합이 실제로 끊겼는지 알 수 없다.
+
 ## 검증
 
 - `pnpm check`
