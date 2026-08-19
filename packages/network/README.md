@@ -8,6 +8,11 @@ pnpm add @txstack/network axios
 
 `axios` 는 peerDependency 다.
 
+## 호환성
+
+- **ESM 전용이다.** CommonJS `require()` 로는 불러올 수 없다 — `ERR_PACKAGE_PATH_NOT_EXPORTED` 가 난다.
+  Node 가 내보내는 메시지(`No "exports" main defined`)는 원인을 알려주지 않으니 주의한다.
+
 ## 설계 원칙
 
 이 패키지는 **앱의 정책을 결정하지 않는다.** 인증 토큰을 어디서 읽는지, 401 이면 무엇을 하는지,

@@ -8,6 +8,13 @@ pnpm add @txstack/ui
 
 `react` / `react-dom` / `react-router-dom` / `framer-motion` 은 peerDependency 다.
 
+## 호환성
+
+- **ESM 전용이다.** CommonJS `require()` 로는 불러올 수 없다 — `ERR_PACKAGE_PATH_NOT_EXPORTED` 가 난다.
+  Node 가 내보내는 메시지(`No "exports" main defined`)는 원인을 알려주지 않으니 주의한다.
+- TypeScript 의 `moduleResolution` 은 `bundler` · `node16` · `nodenext` 중 하나여야 한다.
+  구형 `node` 설정에서는 **루트 엔트리만 해석되고 서브패스는 해석되지 않는다.**
+
 ## ⚠ Tailwind v4 설정 (필수)
 
 이 패키지의 스타일은 런타임 CSS 가 아니라 **Tailwind 클래스 문자열**이다.

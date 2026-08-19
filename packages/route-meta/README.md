@@ -2,6 +2,11 @@
 
 `route-meta`는 React Router의 라우트 정의와 GNB/Sidebar 같은 메뉴 정의를 하나의 `RouteData`에서 관리하기 위한 작은 라우팅 패턴입니다.
 
+## 호환성
+
+- **ESM 전용이다.** CommonJS `require()` 로는 불러올 수 없다 — `ERR_PACKAGE_PATH_NOT_EXPORTED` 가 난다.
+  Node 가 내보내는 메시지(`No "exports" main defined`)는 원인을 알려주지 않으니 주의한다.
+
 ## 목적
 
 페이지가 늘어나면 같은 경로가 여러 곳에 흩어지기 쉽습니다.

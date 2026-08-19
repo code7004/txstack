@@ -106,3 +106,128 @@ playground `/network` 에서 브라우저로도 재확인: 봉투 해제, `Beare
 - **자동화 테스트 없음** — 위 동치 검증은 일회성 스크립트로 수행했고 저장소에 테스트로 남기지 않았다. 회귀 방지가 필요하면 P5 에서 vitest 도입을 검토한다.
 - **스크린샷 없음** — 브라우저 패널이 표시되지 않는 환경이라 DOM 조회·콘솔·페이지 텍스트로 검증했다.
 - **소비자 환경 실검증 없음** — 외부 프로젝트에 설치해 Tailwind `@source` 유무에 따른 스타일 차이를 대조하는 것은 P4 항목이다.
+
+---
+
+## 5. 2차 검증 라운드 — V1 소비자 환경 실검증
+
+- 수행일: 2026-08-19
+- 배경: 위 §4 는 소비자 환경 실검증을 "P4(배포) 항목" 으로 미뤄뒀다. **이 판단은 틀렸다.**
+  `npm pack` 산출물을 `file:` 프로토콜로 설치하면 publish 없이 소비자 환경을 그대로 재현할 수 있고,
+  오히려 **배포 전에 해야** 의미가 있다. 배포 후 발견하면 되돌릴 수 없다.
+
+### 5-1. 재현 방법
+
+```sh
+# 1) 4종 패킹
+pnpm build
+cd packages/ui && npm pack --pack-destination <OUT> && cd ../..   # hooks / route-meta / network 동일
+
+# 2) 빈 Vite + React 19 + Tailwind v4 앱을 만들고 tgz 를 file: 로 설치
+#    (pnpm 이 아니라 npm 으로 설치한다 — 워크스페이스 링크·pnpm 고유 호이스팅을 배제하기 위함)
+npm i file:<OUT>/txstack-ui-0.0.0.tgz ...
+```
+
+검증 픽스처는 스크래치 디렉터리에 만들었고 저장소에는 남기지 않았다. 재현 자동화는 `001-2` 항목이다.
+
+### 5-2. 결과
+
+| #   | 검증 항목                                                      | 결과   | 근거                                                                                                    |
+| --- | -------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------- |
+| C1  | tarball 내용물                                                 | ✅     | 4종 모두 `dist` + `README` + `LICENSE` + `package.json` 만. `src`·`tsconfig`·`tsup.config` 유입 0건     |
+| C2  | optional peer 미설치                                           | ✅     | `ag-grid-community` · `ag-grid-react` · `react-day-picker` · `dayjs` **자동 설치되지 않음**             |
+| C3  | 필수 peer 자동 설치                                            | ✅     | `react` · `react-dom` · `react-router-dom` · `framer-motion` · `axios` + deps(`clsx`·`tailwind-merge`)  |
+| C4  | 타입 해석 (`moduleResolution: bundler`, `skipLibCheck: false`) | ✅     | `tsc --noEmit` 통과. **타입 인자 없이** 4개 패키지 사용                                                 |
+| C5  | 타입 해석 (`moduleResolution: node16`)                         | ✅     | `@txstack/hooks` 단독 픽스처에서 통과                                                                   |
+| C6  | **R4 수용 기준** — `@txstack/hooks` 단독 설치                  | ✅     | tx-ui·react-router-dom 없이 설치·타입체크 통과                                                          |
+| C7  | `@txstack/network` React 비의존                                | ✅     | react 미설치 Node 환경에서 스모크 8항목 통과 (unwrap·토큰주입·401·parseApiError·유틸3·싱글턴 throw)     |
+| C8  | optional peer 없는 상태로 프로덕션 빌드                        | ✅     | `vite build` 성공. 번들에 ag-grid/day-picker 문자열 **0건**                                             |
+| C9  | **Tailwind `@source` 유무 대조**                               | ✅     | 있음 **40,800 bytes** / 없음 **4,559 bytes**. `disabled\:opacity-50`·`dark\:hover\:bg-blue-700` 등 소실 |
+| C10 | 서브패스 런타임 격리 (실제 설치본)                             | ✅     | 코어 청크 476.93kB(해당 문자열 0건) vs `Heavy` 청크 1,320.51kB                                          |
+| C11 | 서브패스 CSS 격리                                              | ✅     | `rdp` 클래스가 코어 CSS 0건 / Heavy CSS 에만 존재 (8.08kB 별도 청크)                                    |
+| C12 | CJS `require()`                                                | ⚠ 제약 | `ERR_PACKAGE_PATH_NOT_EXPORTED`. **ESM 전용**이며 문서에 명시가 없다 → `001-2`                          |
+
+**C10 이 이번 라운드의 핵심이다.** playground 는 Vite alias 로 `@txstack/*` 를 소스에 연결하므로,
+`exports` 필드를 통한 서브패스 런타임 해석은 지금까지 한 번도 검증된 적이 없었다. 실제 설치본으로 확인했다.
+
+### 5-3. 발견한 결함
+
+| #   | 결함                         | 심각도 | 상태                                          |
+| --- | ---------------------------- | ------ | --------------------------------------------- |
+| 6   | `useUrlQuery` 타입 추론 붕괴 | 높음   | ✅ 수정 완료 (changeset `tricky-hooks-infer`) |
+
+`queryTypes` / `urlKeys` 가 제네릭 `T` 의 추론 후보라서, 타입 인자를 생략하면 `T` 가 `queryTypes` 의
+키만으로 결정되고 값 타입이 전부 `unknown` 이 됐다. `defaults` 를 `Partial<T>` → `T` 로 바꾸고
+나머지 옵션을 `NoInfer<T>` 로 감쌌다.
+
+> **이 결함이 1차 검증을 통과한 이유** — playground 가 `useUrlQuery<IDemoQuery>` 로 타입 인자를
+> 명시하고 있었다. 샘플 앱이 라이브러리를 "정답을 아는 사람" 처럼 쓰면 추론 결함이 가려진다.
+> 소비자 픽스처는 타입 인자를 생략하는 등 **일부러 순진하게** 써야 한다.
+
+### 5-4. 한계
+
+- 브라우저 실렌더 확인은 이 라운드에서 하지 않았다 (V4 항목). 빌드 산출물 정적 분석까지다.
+- 픽스처가 스크래치에만 있어 **재현이 수동**이다. 자동화는 `001-2`.
+- npm registry 실게시는 여전히 미수행. `file:` 설치는 tarball 전개까지만 동일하고, registry 메타데이터·`publishConfig`·태그 동작은 포함하지 않는다.
+
+---
+
+## 6. 2차 검증 라운드 — V2 자동화 회귀 테스트
+
+- 수행일: 2026-08-19
+- 배경: §4 의 "**자동화 테스트 없음**" 을 해소한다. 1차의 동치 검증은 일회성 스크립트로 수행돼
+  저장소에 남지 않았고, 따라서 **회귀를 잡을 수단이 0** 이었다.
+
+### 6-1. 구성
+
+vitest 3. 루트 `vitest.config.ts` 하나에서 두 프로젝트로 나눈다.
+
+| 프로젝트 | 환경  | 대상                            | 이유                                                     |
+| -------- | ----- | ------------------------------- | -------------------------------------------------------- |
+| `node`   | node  | `ui` · `network` · `route-meta` | 순수 로직. **network 가 React 비의존이라는 사실을 유지** |
+| `dom`    | jsdom | `hooks`                         | React 렌더가 필요 (`@testing-library/react`)             |
+
+환경을 jsdom 으로 통일하지 않은 것은 의도적이다. 통일하면 `@txstack/network` 가 React 없이
+동작한다는 설계 주장이 테스트에서 드러나지 않는다.
+
+`pnpm check` 에 `pnpm test` 를 편입했다 — 이제 `check` 는 lint + typecheck + test 다.
+
+### 6-2. 결과
+
+| 대상                  | 파일                      | 테스트 | 내용                                                                   |
+| --------------------- | ------------------------- | ------ | ---------------------------------------------------------------------- |
+| `@txstack/ui`         | `src/tx-ui.utils.test.ts` | 12     | `themeMerge`(merge/override/중첩/불변) · `orderByKey`(nil 정렬) · `cm` |
+| `@txstack/network`    | `src/client.test.ts`      | 17     | unwrap · 토큰 주입 · 401 · del params/body 분리 · 싱글턴 · 유틸 3종    |
+| `@txstack/route-meta` | `src/utils.test.ts`       | 10     | 실행 계층 vs 네비게이션 계층의 **필터 규칙 차이**를 고정               |
+| `@txstack/hooks`      | `src/hooks.test.tsx`      | 17     | 4개 훅 + **I1 회귀 방지(컴파일 타임)**                                 |
+| **합계**              |                           | **56** | 전부 통과 (3.1s)                                                       |
+
+- 배포 산출물 오염 없음 — `dist/*.js` 에 테스트 코드 0건, `npm pack --dry-run` 파일 목록에 `.test.` 0건.
+- 테스트 의존(`vitest`·`jsdom`·`@testing-library/*`)은 루트 devDependencies 에 둔다. 배포되지 않으며
+  패키지 `package.json` 을 오염시키지 않는다.
+
+### 6-3. 테스트가 잡아낸 것
+
+라이브러리 결함은 없었다. 다만 **테스트를 쓰는 과정에서 두 가지가 드러났다.**
+
+| 항목                          | 성격        | 처리                                                                                                                                                                           |
+| ----------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `removeUndefined` 의 이름     | API 명확성  | 이름과 달리 **공백 문자열도 지운다**. JSDoc 에 명시된 의도된 동작이지만 이름이 동작보다 좁게 읽힌다 → `001-2` I6 개선 후보                                                     |
+| `useSafePolling` 의 스킵 가드 | 테스트 작성 | `advanceTimersByTime(3000)` 으로 한 번에 감으면 tick 3회가 동기적으로 몰려 마이크로태스크가 flush 되지 않고, 2·3번째가 가드에 걸린다. 라이브러리는 정상 — 테스트 주석으로 기록 |
+
+### 6-4. I1 회귀는 컴파일 타임에서 막는다
+
+`useUrlQuery` 추론 결함(§5-3)의 회귀 테스트는 런타임 단언이 아니라 **타입 인자를 생략했다는 사실 자체**다.
+
+```ts
+const [query] = useUrlQuery({ defaults: { keyword: "", page: 1, onlyActive: false }, queryTypes: { page: "number" } });
+const keyword: string = query.keyword; // 추론이 무너지면 여기서 tsc 가 깨진다
+```
+
+추론이 되돌아가면 `pnpm typecheck` 가 실패한다. 런타임 테스트로는 잡을 수 없는 종류의 회귀다.
+
+### 6-5. 한계
+
+- **커버리지 측정 없음.** 핵심 계약 위주로 썼고 전 컴포넌트를 덮지 않았다. `Tx*` 컴포넌트 렌더 테스트는 없다.
+- `useUrlQuery` 의 `encode` 옵션, `TxCoolTable` 의 중첩 경로 유틸(`getNestedValue`·`setNestedValue`)은 미커버.
+- 브라우저 실렌더는 여전히 V4 소관이다.
