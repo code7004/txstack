@@ -1,7 +1,17 @@
 # 100. `@txstack/ui` (트랙 1)
 
 - 로드맵: [ROADMAP](../ROADMAP.md)
+- 제품 정의: [000 §2-1](000_product_definition.md) — **확정 (2026-08-19)**
 - 하위 트랙: [1-1 기본](../plans/101_ui_basics.md) · [1-2 카탈로그·문서](../plans/102_ui_catalog.md) · [1-3 고도화](../plans/103_ui_advanced.md)
+
+## 포지셔닝 (000 §2-1 확정)
+
+기성 라이브러리(MUI · shadcn · Radix)를 **대체하려 하지 않는다.** 파는 것은 **얇은 통제권**이다 —
+Tailwind 클래스를 그대로 얹을 수 있고(`className`), 기본 스타일이 방해되면 끌 수 있다(`theme: ""`).
+별도 추상을 배우지 않는다는 것이 실제 차이다.
+
+**컴포넌트 2종을 제거한다** — `TxCoolTable`(1,024줄 · deprecated · 대체재 존재) ·
+`TxClipboardButton`(5줄 · `<div onClick>` + 이모지). 패키지 소스의 18% 가 줄어든다.
 
 ## 배경 / 목적
 

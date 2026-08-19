@@ -93,7 +93,10 @@ V2 는 핵심 계약 위주로 56건을 깔았다. 남은 구멍:
 
 V4(브라우저 재검증) 결과를 보고 우선순위를 정한다. 렌더 테스트가 playground 수동 확인을 대체할 수 있는지가 판단 기준이다.
 
-### I8. `TxCoolTable` deprecation 경고가 매 렌더마다 찍힌다 — ⬜
+### I8. `TxCoolTable` deprecation 경고가 매 렌더마다 찍힌다 — ✅ 해소 예정
+
+> **2026-08-19 — `TxCoolTable` 자체를 제거하기로 확정**([000 §2-1](../requirements/000_product_definition.md)).
+> 이 항목은 별도 수정 없이 트랙 1-1 의 `U1-01` 로 해소된다.
 
 V4 에서 발견. 컴포넌트 본문에서 `console.warn` 을 직접 호출해, 렌더마다 실행되고 StrictMode
 이중 렌더까지 겹친다. 화면 하나에서 4회가 찍혔다. 소비자 콘솔을 오염시킨다.
