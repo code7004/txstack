@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* @txstack/ui 의 테마는 클래스 문자열이므로, 소스를 스캔하지 않으면 전부 purge 된다. */
+@source "../../../packages/ui/src";
+
+/* 다크모드는 class 전략 — <html class="dark"> 토글. */
+@custom-variant dark (&:where(.dark, .dark *));

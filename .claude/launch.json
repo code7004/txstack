@@ -7,6 +7,13 @@
       "runtimeArgs": ["--filter", "@txstack/playground", "dev"],
       "port": 5310,
       "url": "http://localhost:5310"
+    },
+    {
+      "name": "storybook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@txstack/storybook", "dev"],
+      "port": 6310,
+      "url": "http://localhost:6310"
     }
   ]
 }

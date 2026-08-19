@@ -1,0 +1,31 @@
+{
+  "name": "@txstack/storybook",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Component catalog for @txstack/ui. Not published.",
+  "scripts": {
+    "dev": "storybook dev -p 6310 --no-open",
+    "build": "storybook build -o dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@txstack/ui": "workspace:*",
+    "ag-grid-community": "^35.3.1",
+    "ag-grid-react": "^35.3.1",
+    "dayjs": "^1.11.23",
+    "framer-motion": "^13.1.0",
+    "react": "^19.2.8",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.5.9",
+    "@tailwindcss/vite": "^4.2.1",
+    "@vitejs/plugin-react": "^5.1.2",
+    "storybook": "^10.5.9",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.2.7"
+  }
+}
