@@ -3,7 +3,7 @@
 - 요구사항: [900 배포](../requirements/900_release.md) — P5 / 기존 요구사항 `002`
 - 선행: 9-2 (배포된 패키지가 있어야 소비할 수 있다)
 - 상태: 대기
-- ⚠ **원본 저장소가 있는 PC 에서만 가능하다.**
+- 원본 3개 저장소는 **이 PC 에 있다** (`/w/Projects/{black-message,usertics,chain-wallet-service}`).
 
 ## 목표
 

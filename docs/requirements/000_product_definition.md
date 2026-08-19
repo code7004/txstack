@@ -146,9 +146,120 @@ api.interceptors.request.use((c) => {
 
 467줄 / 6파일. 훅 4종. 논의 예정.
 
-### 2-4. `@txstack/route-meta` — 대기
+### 2-4. `@txstack/route-meta` — **API 방향 확정 (2026-08-19)**
 
-312줄 / 5파일. 논의 예정. "라이브러리인가 스니펫인가" 가 쟁점.
+#### 원래 목적 (사용자 진술)
+
+1. react-router-dom 의 라우터 리스트만으로 부족한 것을 **메타 방식으로 추가**
+2. 페이지 컨트롤 · 설명 · icon
+3. **GNB · 하위 메뉴**를 쉽게 구현
+4. **페이지 이동을 path 문자열이 아니라 변수로** 관리
+
+#### 원본 3개 저장소 실측
+
+원본이 이 PC 에 있어 직접 확인했다 (`/w/Projects/{black-message,usertics,chain-wallet-service}`).
+
+**두 세대가 존재한다.** usertics 는 `ExRouteObject extends Omit<RouteObject, "children">` 로
+`name`·`icon`·`disable`·`permisions`(숫자 배열)를 **최상위 필드**에 두는 구세대다.
+black-message / chain-wallet 이 `meta` 로 분리한 현세대이고, 패키지는 이쪽을 가져왔다.
+
+| 항목                    | black-message | usertics  | chain-wallet  |
+| ----------------------- | ------------- | --------- | ------------- |
+| 노드 수                 | 36            | 44        | 52            |
+| `meta.description`      | 0             | 5         | **52 (전체)** |
+| `meta.icon`             | 0             | 44 (전체) | **52 (전체)** |
+| `meta.onClick`          | 0             | 0         | **0**         |
+| **동적 경로(`:param`)** | **0**         | **0**     | **0**         |
+
+- `description` · `icon` 은 실제로 쓰인다 → 유지
+- **`meta.onClick` 은 세 저장소 어디서도 안 쓴다** → 제거 후보
+- **동적 경로가 한 건도 없다** → `to(path, { id })` 같은 파라미터 헬퍼가 불필요. 설계가 크게 단순해진다
+
+#### 목표별 대조
+
+| 목표               | 결과                                                       |
+| ------------------ | ---------------------------------------------------------- |
+| 1. 메타 추가       | ✅ 달성. `meta` 가 실행 계층으로 전달되지 않는 분리도 명확 |
+| 2. 설명 · icon     | ✅ 달성. `meta.onClick` 만 사문화                          |
+| 3. GNB · 하위 메뉴 | ⚠️ **절반.** 패키지는 데이터만 준다 (§아래)                |
+| 4. path 를 변수로  | ⚠️ 성립하지만 **취약하다** (§아래)                         |
+
+**목표 3 이 절반인 이유** — `getNavigableRoutes` 는 필터된 데이터만 돌려주고, 실제 메뉴 컴포넌트는
+세 앱에 각자 남아 있다. black-message `LayoutGNB`(80줄, 하위 메뉴 컬럼 정렬 트릭 포함),
+usertics `GNB` + `SideNavBar`(접기/펴기, 아이콘 자리 확보). "쉽게 구현"의 어려운 부분이 전부 앱에 있다.
+
+#### 발견한 결함 — `RouteTree` 타입 주석이 목표 4를 깨뜨린다
+
+`RouteTree = Record<string, RouteNode>` 이므로, **타입 주석으로 붙이면 리터럴 키가 사라진다.**
+tsc 로 확인했다:
+
+```ts
+const A: RouteTree = { dashboard: { path: "/dashboard" } };
+A.dashboarrrd; // ❌ 오타가 안 잡힌다 (Record<string, …> 이므로 어떤 키든 유효)
+
+const B = { dashboard: { path: "/dashboard" } } satisfies RouteTree;
+B.dashboarrrd; // ✅ TS2551 "Did you mean 'dashboard'?"
+```
+
+black-message 원본은 주석 없이 선언해 **우연히** 살아 있고,
+**우리 playground 예제는 `: RouteTree` 를 붙여 목표 4를 깨뜨리고 있다.**
+패키지 어디에도 "주석 대신 `satisfies` 를 쓰라" 는 안내가 없다.
+
+#### 결정 1 — 경로 맵은 **계층형**으로 간다
+
+세 형태를 만들어 TypeScript 컴파일러에 **go-to-definition(F12) 이 어디에 착지하는지 직접 물었다.**
+
+| 형태                         | 자동완성 | 오타 검출 | **F12 추적**           |
+| ---------------------------- | -------- | --------- | ---------------------- |
+| **A. 계층형** (`.$`)         | ✅       | ✅        | ✅ 원본 선언으로 착지  |
+| B. 평탄형                    | ✅       | ✅        | ❌ **아무 데도 안 감** |
+| C. `children` 투명 (`.path`) | ✅       | ✅        | ✅ 원본 선언으로 착지  |
+
+**평탄형은 추적이 되지 않는다.** 평탄화가 `UnionToIntersection`(조건부 타입 + `infer`)을 거치면서
+원본 선언과의 연결이 끊긴다. 자동완성 목록에는 뜨지만 F12 가 이동하지 않는다.
+`[K in keyof T]` 형태(homomorphic mapped type)만 선언 링크를 보존한다.
+
+**A(계층형)로 확정한다.** 사용자의 초기 의도 형태이며 추적이 보장된다.
+
+```ts
+paths.Contents.BlackUsers; // "/black"      리프는 문자열 그대로
+paths.Contents.Dashboard.$; // "/dashboard"  중간 노드는 예약 키 `$` 로 자기 경로
+paths.Contents.Dashboard.DashboardSearch; // "/dashboard/search"
+```
+
+> **비용** — 자식이 있는 노드는 문자열이면서 동시에 객체일 수 없으므로 `.$` 가 붙는다.
+> `String` 객체로 둘 다 되게 하는 트릭은 `navigate()` 가 `typeof to === "string"` 을 보기 때문에
+> 런타임에서 깨진다. 실사용에서 `.$` 가 거슬리면 C 로 바꾸는 것은 타입 한 줄 교체다.
+
+값 타입은 리터럴이 아니라 `string` 으로 넓어진다 (`RouteNode.path?: string` 때문).
+동적 경로가 0건이라 실용상 문제 없다. 리터럴이 필요해지면 `as const` 를 추가로 요구한다.
+
+#### 결정 2 — **팩토리 + 훅.** 리터럴 보존이 전제다
+
+패키지가 독립적인 `useRoutePath()` 를 export 하면 **앱의 트리 타입을 알 수 없어** 반환 타입이
+`RouteTree` 로 뭉개진다. 그러면 결정 1이 통째로 무너진다.
+
+따라서 **소비자의 트리를 통과시키는 팩토리**가 타입이 붙은 훅을 만들어 내보낸다.
+
+```ts
+// app/routes.ts
+export const { routes, paths, useRoutePath } = createRoutes({
+  Contents: { path: "/", children: { Dashboard: { path: "/dashboard", meta: { label: "대시보드" } } } }
+});
+```
+
+- 제네릭 추론이 걸리므로 소비자가 **타입 주석을 붙일 일 자체가 없다** → `satisfies` 함정이 사라진다
+- `paths` 는 값이라 컴포넌트 밖(라우터 가드·유틸)에서도 쓴다
+- `useRoutePath()` 는 그 값을 돌려주는 sugar 다. 훅으로만 제공하지 않는 이유는, 훅으로 강제하면
+  컴포넌트 밖에서 못 쓰기 때문이다
+
+#### 결정 3 — GNB · SideNavBar 는 패키지에 넣지 않는다
+
+세 저장소의 메뉴 구현이 서로 많이 다르다 (드롭다운형 GNB / 접히는 사이드바 / 하위 메뉴 컬럼 정렬).
+**프로젝트마다 커스텀이 강한 영역**이므로 컴포넌트로 고정하지 않고, **문서에 다양한 예제**로 해결한다.
+
+패키지는 `getNavigableRoutes` 로 데이터를 주는 데까지만 한다. 목표 3 은 "라이브러리가 메뉴를
+그려준다" 가 아니라 **"메뉴를 그리기 쉬운 데이터를 준다"** 로 재정의한다.
 
 ---
 
@@ -170,7 +281,10 @@ api.interceptors.request.use((c) => {
 
 ## 결정 기록
 
-| 날짜       | 결정                                               | 절   |
-| ---------- | -------------------------------------------------- | ---- |
-| 2026-08-19 | 설계 기준은 공개 범용, 성공 기준은 채택 수가 아님  | §1   |
-| 2026-08-19 | `@txstack/network` 를 axios 플러그인 모음으로 축소 | §2-2 |
+| 날짜       | 결정                                                                  | 절   |
+| ---------- | --------------------------------------------------------------------- | ---- |
+| 2026-08-19 | 설계 기준은 공개 범용, 성공 기준은 채택 수가 아님                     | §1   |
+| 2026-08-19 | `@txstack/network` 를 axios 플러그인 모음으로 축소                    | §2-2 |
+| 2026-08-19 | `route-meta` 경로 맵은 **계층형** — 평탄형은 F12 추적 불가 (tsc 확인) | §2-4 |
+| 2026-08-19 | `route-meta` 는 팩토리 + 훅으로 제공 — 리터럴 보존이 전제             | §2-4 |
+| 2026-08-19 | GNB·SideNavBar 는 패키지에 넣지 않고 문서 예제로                      | §2-4 |

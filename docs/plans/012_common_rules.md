@@ -10,15 +10,15 @@
 
 ## 현재 상태
 
-| 문서                                   | 상태                                                    |
-| -------------------------------------- | ------------------------------------------------------- |
-| `01_PACKAGE_BOUNDARIES.md`             | ⬜ 예정                                                 |
-| `02_MONOREPO_STRUCTURE.md`             | ⬜ 예정                                                 |
-| `03_PUBLISHING_AND_VERSIONING.md`      | ✅ 작성됨 (2026-08-19)                                  |
-| `04_TX_UI_CONVENTIONS.md`              | ⬜ 예정                                                 |
-| `05_TAILWIND_V4_CONSUMER_SETUP.md`     | ⬜ 예정                                                 |
-| `06_STORYBOOK_SETUP.md`                | ⬜ 신규 — 트랙 1-2 의 직접 구축을 위해 필요             |
-| `19_FRONTEND_ROLE_SEPARATION_GUIDE.md` | ⬜ 예정 — black-message 원본에서 이식. **원본 PC 필요** |
+| 문서                                   | 상태                                        |
+| -------------------------------------- | ------------------------------------------- |
+| `01_PACKAGE_BOUNDARIES.md`             | ⬜ 예정                                     |
+| `02_MONOREPO_STRUCTURE.md`             | ⬜ 예정                                     |
+| `03_PUBLISHING_AND_VERSIONING.md`      | ✅ 작성됨 (2026-08-19)                      |
+| `04_TX_UI_CONVENTIONS.md`              | ⬜ 예정                                     |
+| `05_TAILWIND_V4_CONSUMER_SETUP.md`     | ⬜ 예정                                     |
+| `06_STORYBOOK_SETUP.md`                | ⬜ 신규 — 트랙 1-2 의 직접 구축을 위해 필요 |
+| `19_FRONTEND_ROLE_SEPARATION_GUIDE.md` | ⬜ 예정 — black-message 원본에서 이식       |
 
 ## job
 
@@ -30,7 +30,7 @@
 | C2-04 | `05_TAILWIND_V4_CONSUMER_SETUP` 작성     | 🤖   | `@source` 실측 수치(40,800 → 4,559 bytes)가 근거로 들어간다                   |
 | C2-05 | `06_STORYBOOK_SETUP` 작성                | 🤝   | **구성의 각 조각이 왜 필요한지** 설명한다. 복붙 레시피가 아니라 계약을 적는다 |
 | C2-06 | 검증 픽스처 작성 원칙 추가 (`001-2` I5)  | 🤖   | "소비자 픽스처는 일부러 순진하게 쓴다" 가 규약으로 남는다                     |
-| C2-07 | `19_FRONTEND_ROLE_SEPARATION_GUIDE` 이식 | 🧑   | 원본 저장소가 있는 PC 에서 가져온다                                           |
+| C2-07 | `19_FRONTEND_ROLE_SEPARATION_GUIDE` 이식 | 🤖   | black-message 원본에서 가져와 도메인 제거 후 이식                             |
 | C2-08 | `docs/rules/README.md` 인덱스 갱신       | 🤖   | "(예정)" 0개                                                                  |
 
 ## 검증

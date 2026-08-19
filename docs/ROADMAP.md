@@ -14,8 +14,14 @@
 | §2-1 | `@txstack/ui` 존재 이유         | ⏳ 잠정 — 논의 마무리 필요 |
 | §2-2 | `@txstack/network` 존재 이유    | ✅ **축소 확정**           |
 | §2-3 | `@txstack/hooks` 존재 이유      | ⬜ 대기                    |
-| §2-4 | `@txstack/route-meta` 존재 이유 | ⬜ 대기                    |
+| §2-4 | `@txstack/route-meta` 존재 이유 | ✅ **API 방향 확정**       |
 | §3   | 4개 분할이 옳은가               | ⬜ 대기                    |
+
+## 원본 3개 저장소
+
+**이 PC 에 있다** — `/w/Projects/{black-message,usertics,chain-wallet-service}`.
+실사용 대조·미이관 자산 회수·역이식을 별도 PC 없이 할 수 있다.
+단 [CLAUDE.md](../CLAUDE.md) 대로 **읽기만 하고 수정하지 않는다** (역이식 트랙 9-3 에서만 해제된다).
 
 ## 원칙
 
