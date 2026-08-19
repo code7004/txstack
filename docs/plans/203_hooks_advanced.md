@@ -3,10 +3,14 @@
 - 요구사항: [200 @txstack/hooks](../requirements/200_hooks_library.md) — H5
 - 선행: 2-1 · 2-2
 - 상태: 대기
+- 제품 정의: [000 §2-3](../requirements/000_product_definition.md)
 
 ## 목표
 
-라우터·프레임워크 결합을 더 줄이고, 실사용에서 반복되는 패턴을 훅으로 회수한다.
+라우터·프레임워크 결합을 더 줄인다.
+
+> ⚠ **훅을 늘리는 트랙이 아니다.** 2-1 에서 4종 → 2종으로 줄였다.
+> 새 훅은 [000 §1-3](../requirements/000_product_definition.md) 의 "라인업을 채우지 않는다" 기준을 통과할 때만 넣는다.
 
 ## job
 

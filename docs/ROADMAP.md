@@ -13,7 +13,7 @@
 | §1   | 소비자와 포지셔닝               | ✅ 확정 (2026-08-19)       |
 | §2-1 | `@txstack/ui` 존재 이유         | ⏳ 잠정 — 논의 마무리 필요 |
 | §2-2 | `@txstack/network` 존재 이유    | ✅ **축소 확정**           |
-| §2-3 | `@txstack/hooks` 존재 이유      | ⬜ 대기                    |
+| §2-3 | `@txstack/hooks` 존재 이유      | ✅ **축소·재설계 확정**    |
 | §2-4 | `@txstack/route-meta` 존재 이유 | ✅ **API 방향 확정**       |
 | §3   | 4개 분할이 옳은가               | ⬜ 대기                    |
 
@@ -36,7 +36,7 @@
 | ----- | --------------------- | ----------------------------------------------- | -------------------------------------------------- |
 | **0** | 공통 인프라           | 0-1 테스트·CI · 0-2 규약 문서 · 0-3 검증 자동화 | [요구사항](requirements/010_common_infra.md)       |
 | **1** | `@txstack/ui`         | 1-1 기본 · 1-2 카탈로그/문서 · 1-3 고도화       | [요구사항](requirements/100_ui_library.md)         |
-| **2** | `@txstack/hooks`      | 2-1 기본 · 2-2 문서 · 2-3 고도화                | [요구사항](requirements/200_hooks_library.md)      |
+| **2** | `@txstack/hooks`      | 2-1 **축소** · 2-2 문서 · 2-3 고도화            | [요구사항](requirements/200_hooks_library.md)      |
 | **3** | `@txstack/route-meta` | 3-1 기본 · 3-2 문서 · 3-3 고도화                | [요구사항](requirements/300_route_meta_library.md) |
 | **4** | `@txstack/network`    | 4-1 **축소** · 4-2 문서                         | [요구사항](requirements/400_network_library.md)    |
 | **9** | 배포                  | 9-1 사전 점검 · 9-2 알파 배포 · 9-3 역이식(002) | [요구사항](requirements/900_release.md)            |

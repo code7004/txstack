@@ -142,9 +142,100 @@ api.interceptors.request.use((c) => {
 그것이 이 프로젝트를 시작한 문제 그 자체다. 로깅과 에러 판별만 남기면 종속은 0 이 되면서
 그 문제는 막힌다.
 
-### 2-3. `@txstack/hooks` — 대기
+### 2-3. `@txstack/hooks` — **축소 · API 재설계 확정 (2026-08-19)**
 
-467줄 / 6파일. 훅 4종. 논의 예정.
+#### 원본 실사용
+
+| 훅                                          | 줄  | black-message | usertics | chain-wallet | 합계   |
+| ------------------------------------------- | --- | ------------- | -------- | ------------ | ------ |
+| `useUrlQuery`                               | 268 | 2             | **31**   | 2            | **35** |
+| `useStateForObject` (구명 `useUpdateState`) | 65  | 6             | 15       | 14           | **35** |
+| `useObjectChanged`                          | 66  | 0             | 4        | 0            | 4      |
+| `useSafePolling`                            | 51  | 0             | 0        | 2            | 2      |
+
+남길 둘이 뺄 둘보다 **9~17배** 많이 쓰인다.
+
+#### 결정 1 — 훅 2종만 남긴다
+
+**유지** — `useStateForObject` · `useUrlQuery`
+**제거** — `useSafePolling`(2건) · `useObjectChanged`(4건)
+
+각 훅의 존재 이유:
+
+| 훅                  | 무엇을 해결하나                                                                    |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| `useStateForObject` | 객체 상태를 부분 갱신한다. `setObj({...obj, a: 10})` 대신 `setObj({ a: 10 })`      |
+| `useUrlQuery`       | URL 쿼리(`?a=10&b=apple&c=true`)를 객체로 오가게 한다. `searchParams` 의 편의 버전 |
+
+#### 결정 2 — `useUrlQuery` 의 API 를 대폭 좁힌다
+
+원본에서 옵션별 실사용을 세어 보니 예상과 달랐다.
+
+| 옵션         | 사용    | 처리                                                     |
+| ------------ | ------- | -------------------------------------------------------- |
+| `urlKeys`    | 28건    | **제거** (아래 참조)                                     |
+| `postParse`  | 25건    | 유지                                                     |
+| `encode`     | 4건     | 유지                                                     |
+| `replace`    | 4건     | 유지                                                     |
+| `queryTypes` | 3건     | **제거** — 기본값의 `typeof` 로 런타임이 타입을 알아낸다 |
+| `afterParse` | **0건** | **제거** (이미 deprecated)                               |
+
+> **`urlKeys` 를 제거하는 이유** — 구현은 "키를 **추가**" 인데, 28건의 실사용은
+> "URL 에 실을 키를 **고른다**" 로 쓰고 있었다. 예: `defaults` 에 `keyword` 가 이미 있는데
+> `urlKeys: ["keyword"]` 를 또 지정한다(무효). **API 가 오해를 부르고 있었다는 신호다.**
+> 새 API 에서는 `defaults` 가 곧 타입이라 키 추가라는 개념 자체가 성립하지 않는다.
+
+**새 시그니처** — 기본값을 래핑 없이 첫 인자로 받는다.
+
+```ts
+export function useUrlQuery<T extends object>(defaults: T, options?: UseUrlQueryOptions<NoInfer<T>>): [T, UrlQuerySetter<T>];
+
+export interface UseUrlQueryOptions<T> {
+  postParse?: (query: Partial<T>) => Partial<T>;
+  replace?: boolean;
+  encode?: boolean;
+}
+```
+
+```ts
+useUrlQuery({ a: 10, b: "apple" }); // 추론
+useUrlQuery<{ a: number; b: string }>({ a: 10, b: "apple" }); // 명시
+useUrlQuery({ page: 1 }, { postParse: (q) => ({ offset: ((q.page ?? 1) - 1) * 20 }) });
+```
+
+`NoInfer` 를 2번 인자에 거는 구조라, **추론이 1번 인자 한 곳에서만 일어난다.**
+2026-08-19 에 고친 추론 붕괴 결함이 구조적으로 재발할 수 없다.
+
+#### 결정 3 — 기성 라이브러리(nuqs) 대신 유지하는 근거
+
+[§1-3](#1-3-판단이-갈릴-때의-기준) 의 기준은 "기성 라이브러리에 있는 기능만으로는 만들 이유가
+되지 않는다. 우리 트레이드오프가 있을 때만" 이다. API 를 좁힌 결과 트레이드오프가 분명해졌다.
+
+```ts
+useQueryStates({ a: parseAsInteger.withDefault(10), b: parseAsString.withDefault("apple") }); // nuqs
+useUrlQuery({ a: 10, b: "apple" }); // txstack
+```
+
+- **값에서 타입이 나온다.** 키마다 파서를 선언하지 않는다
+- **의존이 0 이다.** `react-router-dom` peer 외에 추가 설치·어댑터 설정이 없다
+- `postParse` 로 파생값 보정이 훅 안에서 끝난다 (25건 사용)
+
+전환 비용(35개 파일)도 유지 쪽 근거지만, 그것만으로는 근거가 되지 않는다고 본다.
+
+#### 결정 4 — 패키지를 나누지 않는다
+
+훅별 분리는 **의존 프로파일이 다를 때** 의미가 있는데, 그건 이미 subpath(`@txstack/hooks/router`)로
+해결돼 있다. 훅 2개에 패키지 2개면 버전·README·changeset·배포가 2배가 되고 얻는 것이 없다.
+
+패키지는 **유지**한다. `useUrlQuery` 가 nuqs 대비 분명한 우위를 갖게 되었으므로,
+"65줄짜리 훅 하나만 남아 패키지가 성립하지 않는" 시나리오는 발생하지 않는다.
+
+#### 열어둔 질문
+
+- `useStateForObject` 의 핵심은 3줄(`setState(s => ({...s, ...p}))`)이다. 나머지 62줄은
+  `postParse` · shallowEqual 리렌더 차단 · 함수형 patch 다. 이것들이 "각자 쓰면 안 되는 이유" 가
+  될 만큼 강한지는 2-1 에서 다시 본다.
+- 라우터 어댑터를 열어 Next.js·TanStack Router 소비자를 받을지 (2-3)
 
 ### 2-4. `@txstack/route-meta` — **API 방향 확정 (2026-08-19)**
 
@@ -288,3 +379,6 @@ export const { routes, paths, useRoutePath } = createRoutes({
 | 2026-08-19 | `route-meta` 경로 맵은 **계층형** — 평탄형은 F12 추적 불가 (tsc 확인) | §2-4 |
 | 2026-08-19 | `route-meta` 는 팩토리 + 훅으로 제공 — 리터럴 보존이 전제             | §2-4 |
 | 2026-08-19 | GNB·SideNavBar 는 패키지에 넣지 않고 문서 예제로                      | §2-4 |
+| 2026-08-19 | `hooks` 는 `useUrlQuery` · `useStateForObject` 2종만 유지             | §2-3 |
+| 2026-08-19 | `useUrlQuery` 는 기본값을 첫 인자로 받고 옵션 3개만 남긴다            | §2-3 |
+| 2026-08-19 | `hooks` 패키지는 나누지 않고 단일 유지                                | §2-3 |
