@@ -11,12 +11,27 @@ type SearchParamSetter = ReturnType<typeof useSearchParams>[1];
 type UrlQueryValueType = "string" | "number" | "boolean";
 
 export interface UseUrlQueryOptions<T extends object> {
-  defaults: Partial<T>;
-  urlKeys?: (keyof T)[];
-  queryTypes?: Partial<Record<keyof T, UrlQueryValueType>>;
-  postParse?: (query: Partial<T>) => Partial<T>;
+  /**
+   * URL 에 값이 없을 때 사용할 기본값.
+   *
+   * **반환 상태의 키 집합이 이 객체로 결정된다.** 훅이 `{ ...defaults, ...url }` 를 `T` 로 반환하므로,
+   * 여기에 없는 키는 런타임에도 존재하지 않는다. 따라서 `Partial<T>` 가 아니라 `T` 다.
+   */
+  defaults: T;
+
+  /**
+   * 아래 옵션들은 `NoInfer` 로 감싼다.
+   *
+   * 감싸지 않으면 `keyof T` 를 받는 옵션이 T 의 추론 후보가 되어, `queryTypes` 에 적은 키만으로
+   * T 가 결정되고 값 타입이 전부 `unknown` 으로 무너진다. 추론은 `defaults` 한 곳에서만 일어나야 한다.
+   *
+   * @see https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-4.html#the-noinfer-utility-type
+   */
+  urlKeys?: (keyof NoInfer<T>)[];
+  queryTypes?: Partial<Record<keyof NoInfer<T>, UrlQueryValueType>>;
+  postParse?: (query: Partial<NoInfer<T>>) => Partial<NoInfer<T>>;
   /** @deprecated Use `postParse` instead. */
-  afterParse?: (query: Partial<T>) => Partial<T>;
+  afterParse?: (query: Partial<NoInfer<T>>) => Partial<NoInfer<T>>;
   encode?: boolean;
   replace?: boolean;
 }
