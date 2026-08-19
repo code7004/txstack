@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useMemo, type ReactNode } from "react";
 import { TxModalTheme } from ".";
-import { IconClose, cm, themeMerge, type DeepPartial } from "..";
+import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
+import { IconClose } from "../TxIcons";
 
 export interface ITxModalProps {
   children: ReactNode;

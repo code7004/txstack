@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, type PropsWithChildren, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { TxCardTheme, type ITxCardProps } from ".";
-import { cm, getDisplayName, themeMerge } from "..";
+import { cm, getDisplayName, themeMerge } from "../tx-ui.utils";
 
 const TxCardRoot = ({ className = "flex flex-col", theme, caption, header, footer, link, useFold = false, isFold = false, children, onClick, isLoading = false }: ITxCardProps) => {
   const stableTheme = useMemo(() => themeMerge(TxCardTheme, theme, "override"), [theme]);

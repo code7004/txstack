@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 import { TxContextMenuTheme } from "./TxContextMenu.theme";
 import type { ITxContextMenuProps, TTxContextMenuItem } from "./TxContextMenu.types";
 

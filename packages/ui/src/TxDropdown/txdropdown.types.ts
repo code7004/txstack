@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import type { DeepPartial, TxDropdownTheme } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
+import type { TxDropdownTheme } from "./txdropdown.theme";
 
 /**
  * -------------------------------------------------------

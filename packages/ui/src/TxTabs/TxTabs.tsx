@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 import { TxTabsTheme } from "./TxTabs.theme";
 import type { ITxTabRenderHeadProps, ITxTabs } from "./TxTabs.types";
 

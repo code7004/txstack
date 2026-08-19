@@ -1,5 +1,6 @@
 import type React from "react";
-import type { DeepPartial, TxFormTheme } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
+import type { TxFormTheme } from "./TxForm.theme";
 
 export interface ITxFormCtx {
   labelWidth?: string;

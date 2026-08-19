@@ -1,4 +1,4 @@
-import { TxClassBorderColor, TxClassTheme } from "..";
+import { TxClassBorderColor, TxClassTheme } from "../TxTheme";
 
 // ------------------- Card -------------------
 export const TxCardTheme = {

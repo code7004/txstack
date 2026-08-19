@@ -1,6 +1,7 @@
 // TxJsonTree.tsx
 import { useMemo, useState } from "react";
-import { TxJsonTreeTheme, themeMerge } from "..";
+import { themeMerge } from "../tx-ui.utils";
+import { TxJsonTreeTheme } from "./TxJsonTree.theme";
 import type { EditableValue, ITreeNodeProps, ITxJsonTreeProps, JsonArray, JsonObject } from "./TxJsonTree.types";
 import { getType, isPrimitive } from "./TxJsonTree.utils";
 

@@ -1,7 +1,7 @@
 import type React from "react";
 import { type ReactNode } from "react";
 import type { TxCoolTablePagenationTheme, TxCoolTableTheme } from ".";
-import { type DeepPartial } from "..";
+import { type DeepPartial } from "../tx-ui.utils";
 
 type Deprecated<T> = T & {
   /**

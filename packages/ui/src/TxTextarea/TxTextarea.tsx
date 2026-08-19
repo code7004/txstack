@@ -1,6 +1,9 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { TxTextareaTheme, cm, themeMerge, useInput, type ITxTextarea, type ITxTextareaRef } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
+import { useInput } from "../TxInput";
+import { TxTextareaTheme } from "./TxTextarea.theme";
+import { type ITxTextarea, type ITxTextareaRef } from "./TxTextarea.types";
 
 const TxTextareaComponent = forwardRef<ITxTextareaRef, ITxTextarea>(({ readOnly = false, id, name, theme, className, focus, autoComplete, value, defaultValue, onChangedText, ...props }, ref) => {
   const stableTheme = useMemo(() => themeMerge(TxTextareaTheme, theme, "override"), [theme]);

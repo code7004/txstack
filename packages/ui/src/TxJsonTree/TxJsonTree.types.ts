@@ -1,4 +1,5 @@
-import type { DeepPartial, TxJsonTreeTheme } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
+import type { TxJsonTreeTheme } from "./TxJsonTree.theme";
 
 export type JsonPrimitive = string | number | boolean | null;
 

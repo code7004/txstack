@@ -1,5 +1,5 @@
 import type { TxDropMenuTheme } from ".";
-import type { DeepPartial } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
 
 export interface ITxDropMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

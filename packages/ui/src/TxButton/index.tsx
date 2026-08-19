@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from "react";
 import React, { useMemo, useState } from "react";
-import { cm, themeMerge, type DeepPartial } from "..";
+import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
 import TxSpinner from "../TxSpinner";
 import { TxButtonTheme } from "./TxButton.theme";
 

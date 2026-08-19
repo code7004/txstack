@@ -1,5 +1,5 @@
 import type { TxCheckBoxTheme } from ".";
-import type { DeepPartial } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
 
 export interface ITxCheckBoxProps {
   label?: string;

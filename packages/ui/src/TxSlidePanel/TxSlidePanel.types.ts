@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import type { DeepPartial, TxSlidePanelTheme } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
+import type { TxSlidePanelTheme } from "./TxSlidePanel.theme";
 
 export type TTxSlidePanelSide = "left" | "right" | "top" | "bottom";
 

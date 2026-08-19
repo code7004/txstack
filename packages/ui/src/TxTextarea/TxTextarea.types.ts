@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 import type React from "react";
-import type { TxTextareaTheme } from "..";
-import { type DeepPartial } from "..";
+import type { TxTextareaTheme } from "./TxTextarea.theme";
+import { type DeepPartial } from "../tx-ui.utils";
 
 export interface ITxTextarea extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "onChange" | "autoComplete"> {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;

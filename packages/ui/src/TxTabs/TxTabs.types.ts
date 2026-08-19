@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { TxTabsTheme } from ".";
-import type { DeepPartial } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
 
 /**
  * Tabs 내부 Head 렌더러에 전달되는 기본 속성

@@ -1,6 +1,10 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { TxInputTheme, cm, parseTxInputNumber, themeMerge, useInput, type ITxInput, type ITxInputRef } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
+import { useInput } from "./TxInput.hook";
+import { TxInputTheme } from "./TxInput.theme";
+import { type ITxInput, type ITxInputRef } from "./TxInput.types";
+import { parseTxInputNumber } from "./TxInput.utils";
 
 const TxInputComponent = forwardRef<ITxInputRef, ITxInput>(
   ({ readOnly = false, id, name, theme, className, focus, autoComplete, value, defaultValue, onEnter, onSubmitText, onSubmitNumber, onBlurNumber, onChangeText, onChangeInt, onChangeFloat, onChangeNumber, ...props }, ref) => {

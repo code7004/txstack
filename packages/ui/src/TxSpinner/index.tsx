@@ -1,5 +1,5 @@
 import React from "react";
-import { cm } from "..";
+import { cm } from "../tx-ui.utils";
 
 interface TxSpinnerProps extends React.SVGProps<SVGSVGElement> {
   size?: string; // ex: "2em" | "24px" | "w-6 h-6"

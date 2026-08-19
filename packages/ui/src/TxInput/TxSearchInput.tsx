@@ -1,7 +1,10 @@
 import type { KeyboardEvent } from "react";
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { TxSearchInputTheme, type ITxInputRef, type ITxSearchInputProps, type ITxSearchInputRef } from ".";
-import { IconClose, IconSearch, TxFlex, TxInput, cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
+import { TxFlex } from "../TxFlex";
+import { IconClose, IconSearch } from "../TxIcons";
+import { TxInput } from "./TxInput";
 
 export const TxSearchInput = forwardRef<ITxSearchInputRef, ITxSearchInputProps>(({ theme, className, onClear, onSubmitText, onChangeText, value, ...props }, ref) => {
   const stableTheme = useMemo(() => themeMerge(TxSearchInputTheme, theme, "override"), [theme]);

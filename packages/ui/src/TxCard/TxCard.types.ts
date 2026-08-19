@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { TxCardTheme } from ".";
-import type { DeepPartial } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
 
 export interface ITxCardProps {
   caption?: string;

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import ReactDOM from "react-dom";
-import { TxTooltipTheme, cm, themeMerge, type DeepPartial } from "..";
+import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
+import { TxTooltipTheme } from "./index";
 
 interface ITxTooltipProps {
   tip: ReactNode;

@@ -1,6 +1,7 @@
 import React from "react";
 import { TxInputTheme, TxSearchInputTheme } from ".";
-import { IconClose, cm } from "..";
+import { cm } from "../tx-ui.utils";
+import { IconClose } from "../TxIcons";
 
 export interface ITxInputLikeProps {
   value?: string;

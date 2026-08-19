@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TxCoolTableTheme } from ".";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 import { createCSS, shortUID } from "../tx-ui.dom";
 import type { ITxCoolTable, ITxCoolTableOption, ITxCoolTableSortType, ITxCoolTableTDProps, ITxCoolTableTRProps } from "./TxCoolTable.types";
 import { castValue, orderByKey, safeRender, setNestedValue } from "./TxCoolTable.utils";

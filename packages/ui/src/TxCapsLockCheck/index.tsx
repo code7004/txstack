@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cm } from "..";
+import { cm } from "../tx-ui.utils";
 
 interface ITxCapsLockCheck {
   className?: string;

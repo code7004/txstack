@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import ReactDOM from "react-dom";
-import { IconClose, cm, themeMerge, type TTxSlidePanelSide } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
+import { IconClose } from "../TxIcons";
+import { type TTxSlidePanelSide } from "./TxSlidePanel.types";
 import { TxSlidePanelTheme, type ITxSlidePanel } from ".";
 
 function getSlidePanelMotion(side: TTxSlidePanelSide) {

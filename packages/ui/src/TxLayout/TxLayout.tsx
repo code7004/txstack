@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TxLayoutTheme } from ".";
-import { cm, IconDragHandleHonrizonBold, IconDragHandleVerticalBold, themeMerge, type DeepPartial } from "..";
+import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
+import { IconDragHandleHonrizonBold, IconDragHandleVerticalBold } from "../TxIcons";
 import type { ITxLayout, ITxLayoutMiddleProps, ITxLayoutPanelSlotProps, TLayoutPanelProps, TResizeSession, TTxLayoutResizableSlot } from "./TxLayout.types";
 import { clampSize, collectLayoutSlots, createLayoutSlot, getHandleClassName, getHandleIconClassName, getHandleIconPositionClassName, isResizableSlot, normalizeSize, parsePixelSize } from "./TxLayout.utils";
 

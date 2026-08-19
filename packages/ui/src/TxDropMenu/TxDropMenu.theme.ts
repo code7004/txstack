@@ -1,4 +1,4 @@
-import { TxClassBorderColor, TxClassHover, TxClassTheme } from "..";
+import { TxClassBorderColor, TxClassHover, TxClassTheme } from "../TxTheme";
 
 // ------------------- DropPanel -------------------
 export const TxDropMenuTheme = {

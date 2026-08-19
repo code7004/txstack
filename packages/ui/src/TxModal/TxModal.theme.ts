@@ -1,4 +1,4 @@
-import { TxClassBorderColor, TxClassTheme } from "..";
+import { TxClassBorderColor, TxClassTheme } from "../TxTheme";
 
 export const TxModalTheme = {
   overlay: "absolute inset-0 bg-black/40",

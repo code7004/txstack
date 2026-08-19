@@ -1,7 +1,7 @@
 // TxHeader.tsx
 import React, { useMemo } from "react";
 import { TxHeaderTheme } from ".";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 
 export interface ITxHeader extends React.HTMLAttributes<HTMLDivElement> {
   theme?: Partial<typeof TxHeaderTheme>;

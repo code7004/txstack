@@ -1,7 +1,8 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
 import type React from "react";
-import type { TxInput, TxInputTheme } from "..";
-import { type DeepPartial } from ".."; // :contentReference[oaicite:0]{index=0}
+import type { TxInput } from "./TxInput";
+import type { TxInputTheme } from "./TxInput.theme";
+import { type DeepPartial } from "../tx-ui.utils";
 
 export type TTxInputValue = string | number | readonly string[] | undefined;
 

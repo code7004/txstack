@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, type SVGProps } from "react";
 import { TxCheckBoxTheme, type ITxCheckBoxProps } from ".";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 
 export const TxCheckBox: React.FC<ITxCheckBoxProps> = ({ label, theme, children, value = false, onChangeBool, className, variant = "checkbox" }) => {
   const stableTheme = useMemo(() => themeMerge(TxCheckBoxTheme, theme, "override"), [theme]);

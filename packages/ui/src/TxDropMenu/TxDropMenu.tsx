@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
 import { TxDropMenuTheme, type ITxDropMenuItemProps, type ITxDropMenuLinkItemProps, type ITxDropMenuProps } from ".";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 
 const TX_DROP_MENU_OPEN_EVENT = "tx-drop-menu-open";
 const DEFAULT_PANEL_WIDTH = 160;

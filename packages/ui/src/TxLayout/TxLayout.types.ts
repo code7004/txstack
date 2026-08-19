@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
-import type { DeepPartial, TxLayoutTheme } from "..";
+import type { DeepPartial } from "../tx-ui.utils";
+import type { TxLayoutTheme } from "./TxLayout.theme";
 
 export type TTxLayoutSlot = "top" | "left" | "middle" | "right" | "bottom";
 export type TTxLayoutSize = number | string;

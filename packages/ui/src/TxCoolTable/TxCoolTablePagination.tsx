@@ -1,5 +1,8 @@
 import { useCallback, useMemo } from "react";
-import { TxButton, TxCoolTablePagenationTheme, cm, themeMerge, type ITxCoolTablePaginationProps } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
+import { TxButton } from "../TxButton";
+import { TxCoolTablePagenationTheme } from "./TxCoolTable.theme";
+import { type ITxCoolTablePaginationProps } from "./TxCoolTable.types";
 
 /**
  * TxPagenation - 페이지네이션 컴포넌트

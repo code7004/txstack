@@ -1,6 +1,6 @@
 import React, { createContext, memo, useCallback, useContext, useMemo } from "react";
 import { TxFormTheme, type ITxForm, type ITxFormCtx, type ITxFormLabelProps } from ".";
-import { cm, themeMerge } from "..";
+import { cm, themeMerge } from "../tx-ui.utils";
 
 const FormCtx = createContext<ITxFormCtx>({});
 
