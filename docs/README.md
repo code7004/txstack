@@ -16,14 +16,15 @@ V 모델 기준 문서 구조. 상세 규약은 루트 `CLAUDE.md` 의 "문서 �
 
 **[ROADMAP](ROADMAP.md) 이 진입점이다.** 트랙별 현재 위치와 다음 할 일이 거기 있다.
 
-| 트랙 | 대상                   | 요구사항                                      |
-| ---- | ---------------------- | --------------------------------------------- |
-| `0`  | 공통 인프라            | [010](requirements/010_common_infra.md)       |
-| `1`  | `@txstack/ui`          | [100](requirements/100_ui_library.md)         |
-| `2`  | `@txstack/hooks`       | [200](requirements/200_hooks_library.md)      |
-| `3`  | `@txstack/route-meta`  | [300](requirements/300_route_meta_library.md) |
-| `4`  | `@txstack/network`     | [400](requirements/400_network_library.md)    |
-| `9`  | 배포 (최하위 우선순위) | [900](requirements/900_release.md)            |
+| 트랙  | 대상                   | 요구사항                                      |
+| ----- | ---------------------- | --------------------------------------------- |
+| `000` | **제품 정의** (상위)   | [000](requirements/000_product_definition.md) |
+| `0`   | 공통 인프라            | [010](requirements/010_common_infra.md)       |
+| `1`   | `@txstack/ui`          | [100](requirements/100_ui_library.md)         |
+| `2`   | `@txstack/hooks`       | [200](requirements/200_hooks_library.md)      |
+| `3`   | `@txstack/route-meta`  | [300](requirements/300_route_meta_library.md) |
+| `4`   | `@txstack/network`     | [400](requirements/400_network_library.md)    |
+| `9`   | 배포 (최하위 우선순위) | [900](requirements/900_release.md)            |
 
 ### 작업 이력 (완료분)
 
