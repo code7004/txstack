@@ -8,9 +8,9 @@ txstack 작업 시 지켜야 할 핵심 규약입니다. 상세 배경은 `docs/
 무엇을 만들었고, 무엇이 미결이며, 다음에 뭘 해야 하는지가 그 문서에 정리돼 있다.
 
 - 요구사항 `001` — **P0~P3 완료 / P4(npm 배포) 대기**
-- **아직 배포하지 않았고, git 커밋도 0건이다.**
-- 사용자 결정 대기 1건: `TxForm.DayPicker` API 를 subpath 분리 상태로 둘지 (리포트 §6-1)
-- 미정: git remote 주소, npm org `txstack` 생성
+- **아직 npm 에 배포하지 않았다.** git 은 초기화·첫 커밋·push 완료 (`github.com/code7004/txstack`).
+- `TxForm.DayPicker` API — **subpath 분리 유지로 확정** (2026-08-19). 근거는 리포트 §6-1.
+- 미정: npm org `txstack` 생성 (npmjs.com 선점 확인 필요)
 
 ## 프로젝트 개요
 

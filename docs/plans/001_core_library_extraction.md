@@ -361,6 +361,11 @@ black-message 가 최신이므로 그쪽을 원본으로 하되, **그대로 복
 | `TxForm.DayPickerRange` → `TxFormDayPickerRange`                 | 위와 동일                                                                |
 | `TxAgGrid` → `@txstack/ui/aggrid`                                | Q3 승인 사항                                                             |
 
+> **결정 확정 (2026-08-19)** — `TxForm.DayPicker` 는 위 표대로 **subpath 분리 상태를 유지**한다. 코어 통합(= `react-day-picker`·`dayjs` 를 필수 peer 로 환원) 안은 기각했다.
+> 기각 사유는 설치 용량(4.1MB)보다 **CSS 전파**가 크다 — `TxDayPicker` 가 `react-day-picker/dist/style.css` 를 정적 import 하므로, 코어에 넣으면 날짜를 쓰지 않는 소비자의 번들러까지 node_modules CSS import 처리를 요구받는다(CSS 로더 없는 rollup/esbuild, CSS 변환 없는 vitest 환경에서 파손). 또한 P2-3 에서 의도적으로 걷어낸 `dayjs` 코어 의존이 되살아난다.
+> 다만 프로덕션 청크 기준 DayPicker 는 84KB 로 ag-grid(1.2MB) 대비 14배 가볍다. **번들 크기만으로는 분리 근거가 약했다**는 점을 남겨 둔다.
+> 002(원본 3개 저장소 역이식)에서 `TxForm.DayPicker` 호출부는 `TxFormDayPicker` 로 기계적 치환한다. 호출부가 많아 부담이 크면, 서브패스에서 `TxForm` 을 확장해 재export 하는 안(=export 추가이므로 breaking 아님)을 그때 검토한다.
+
 ### 8-3. P3 검증 결과 (2026-08-19 수행, 브라우저 실동작)
 
 `apps/playground` — Vite + React 19 + Tailwind v4, 12개 화면. usertics `core/tx-ui-storybook` 7파일을 시드로 쓰되 redux·`@/store`·`$t` 등 앱 종속을 전부 제거했다.
