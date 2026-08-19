@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/*
+ * ⚠ 이 한 줄이 없으면 @txstack/ui 의 클래스가 전부 purge 되어 스타일이 사라진다.
+ * Tailwind v4 는 node_modules 를 기본 스캔하지 않기 때문이다.
+ * 소비자 프로젝트도 동일하게 지정해야 한다. (packages/ui/README.md 참고)
+ *
+ * playground 는 워크스페이스라 node_modules/@txstack/ui 가 심볼릭 링크다.
+ * Tailwind 가 링크를 따라가지 않는 경우가 있어 실제 경로를 직접 가리킨다.
+ */
+@source "../../../packages/ui/src";
+
+/* 다크모드는 class 전략 — <html class="dark"> 토글로 제어한다. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body,
+#root {
+  height: 100%;
+}

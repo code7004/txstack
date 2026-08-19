@@ -1,0 +1,55 @@
+{
+  "name": "@txstack/hooks",
+  "version": "0.0.0",
+  "description": "Reusable React hooks — URL query state, object state, safe polling",
+  "keywords": [
+    "react",
+    "hooks",
+    "url-query",
+    "polling"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code7004/txstack.git",
+    "directory": "packages/hooks"
+  },
+  "homepage": "https://github.com/code7004/txstack/tree/main/packages/hooks#readme",
+  "bugs": "https://github.com/code7004/txstack/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./router": {
+      "types": "./dist/router.d.ts",
+      "import": "./dist/router.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-router-dom": ">=6"
+  },
+  "peerDependenciesMeta": {
+    "react-router-dom": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

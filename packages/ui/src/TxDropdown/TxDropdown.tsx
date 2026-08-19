@@ -1,0 +1,144 @@
+import React, { useEffect, useMemo } from "react";
+import type { ITxDropdownData, ITxDropdownItem, ITxDropdownProps, InferDropdownValue } from ".";
+import { TxDropdownBase } from "./TxDropdownBase";
+
+// ✅ single normalize
+const normalizeSingle = <TData extends ITxDropdownData>(data: TData | undefined, value: InferDropdownValue<TData> | undefined, hasValue: boolean, addNoChoiceItem?: boolean): ITxDropdownItem<InferDropdownValue<TData> | undefined>[] => {
+  if (!data) return [];
+
+  let items: ITxDropdownItem<InferDropdownValue<TData> | undefined>[] = data.map((item) => (typeof item === "object" ? { ...item, checked: false } : { name: String(item), value: item as InferDropdownValue<TData>, checked: false }));
+  if (addNoChoiceItem) {
+    const noChoice: ITxDropdownItem<InferDropdownValue<TData> | undefined> = { name: "no select", value: undefined, checked: !hasValue || value === undefined };
+    items = [noChoice, ...items];
+  }
+
+  if (hasValue) {
+    items = items.map((i) => ({
+      ...i,
+      checked: i.value === value
+    }));
+  }
+
+  return items;
+};
+
+/**
+ * TxDropdown (Single Select)
+ *
+ * @description
+ * 단일 선택 드롭다운 컴포넌트.
+ * controlled / uncontrolled 사용을 모두 지원하며,
+ * `null` 과 `undefined` 를 서로 다른 의미로 해석한다.
+ *
+ * @features
+ * - 단일 항목 선택
+ * - controlled / uncontrolled 동시 지원
+ * - 문자열, 숫자, 객체 형태 데이터 지원
+ * - 키보드 내비게이션 (Tab, Enter, Space)
+ * - 외부 value 변경 시 내부 상태 자동 동기화
+ * - 다양한 타입별 onChange 콜백 제공
+ *
+ * @value-semantics
+ * value prop 존재 여부로 controlled / uncontrolled 를 구분한다.
+ * value={undefined} 는 명시적인 controlled 값으로 처리되며,
+ * data 안의 undefined 항목도 선택 상태로 표시할 수 있다.
+ *
+ * @props
+ * @param {TxDropdownValue | undefined} value
+ * 외부에서 제어하는 선택 값.
+ * prop 자체가 생략된 경우 uncontrolled 모드로 동작한다.
+ *
+ * @param {ITxDropdownData} data
+ * 드롭다운에 표시할 데이터 목록.
+ * 문자열, 숫자, ITxDropdownItem 객체를 혼합하여 사용할 수 있다.
+ *
+ * @param {boolean} [addNoChoiceItem]
+ * true 인 경우 "no select" 항목을 자동으로 추가한다.
+ *
+ * @param {string} [fixedHead]
+ * 헤더에 항상 고정적으로 표시할 텍스트.
+ * 지정 시 선택 상태와 무관하게 우선 적용된다.
+ *
+ * @param {string} [defaultHead]
+ * 선택된 값이 없을 때 헤더에 표시할 기본 텍스트.
+ * 기본값은 "Choose".
+ *
+ * @param {(key: string) => string} [locale]
+ * 표시 텍스트를 변환하기 위한 locale 함수.
+ * 기본값은 identity 함수이다.
+ *
+ * @param {(item: ITxDropdownItem) => void} [onChangeValue]
+ * 선택된 아이템 전체 객체를 반환한다.
+ *
+ * @param {(value: string) => void} [onChangeText]
+ * 선택된 값이 문자열일 경우 호출된다.
+ *
+ * @param {(value: number) => void} [onChangeNumb]
+ * 선택된 값이 숫자일 경우 호출된다.
+ *
+ * @param {(value: boolean) => void} [onChangeBool]
+ * 선택된 값이 boolean 으로 해석될 경우 호출된다.
+ *
+ * @remarks
+ * - 내부적으로 `xvalue` 상태를 사용하여 uncontrolled 모드를 지원한다.
+ * - Base 컴포넌트는 value 개념을 알지 않으며, UI / 인터랙션만 담당한다.
+ * - `undefined` 도 사용자 데이터 값으로 사용할 수 있다.
+ *
+ * @example
+ * ```tsx
+ * // controlled
+ * <TxDropdown caption="선택" value={form.value} data={[1, 2, 3]} onChangeText={v => setForm({ value: v })} />
+ *
+ * // uncontrolled
+ * <TxDropdown caption="선택" addNoChoiceItem data={["A", "B", "C"]} onChangeText={v => console.log(v)} />
+ * ```
+ */
+
+export const TxDropdown = <TData extends ITxDropdownData>(componentProps: ITxDropdownProps<TData>) => {
+  const { data, value, locale = (k) => k, fixedHead, addNoChoiceItem, defaultHead = "Choose", ...props } = componentProps;
+  const isControlled = Object.prototype.hasOwnProperty.call(componentProps, "value");
+
+  // onChange* 는 이 컴포넌트가 직접 소비하는 콜백이다. baseProps 에 남겨두면 TxDropdownBase 가
+  // 최종적으로 <div> 에 spread 해서 React 가 "Unknown event handler property" 경고를 낸다.
+  // TxDropdownMulti 는 원래 이렇게 분리하고 있었고 단일 쪽만 빠져 있었다.
+  const { onChangeValue, onChangeText, onChangeNumb, onChangeBool, ...baseProps } = props;
+
+  const [xvalue, _xvalue] = React.useState<InferDropdownValue<TData> | undefined>(value);
+  const [hasXvalue, _hasXvalue] = React.useState(isControlled);
+
+  const actualValue = isControlled ? value : xvalue;
+  const hasActualValue = isControlled || hasXvalue;
+
+  const items = useMemo(() => normalizeSingle(data, actualValue, hasActualValue, addNoChoiceItem), [data, actualValue, hasActualValue, addNoChoiceItem]);
+
+  const head = React.useMemo(() => {
+    const checked = items.find((i) => i.checked);
+    return locale(fixedHead || checked?.name || defaultHead);
+  }, [items, fixedHead, defaultHead, locale]);
+
+  useEffect(() => {
+    if (isControlled) {
+      _xvalue(value);
+      _hasXvalue(true);
+    }
+  }, [isControlled, value]);
+
+  function hdChange(items: ITxDropdownItem<InferDropdownValue<TData>>[]) {
+    const item = items[0];
+    if (!item) return;
+
+    if (!isControlled) {
+      _xvalue(item.value);
+      _hasXvalue(true);
+    }
+    onChangeValue?.(item);
+
+    const v = item.value;
+
+    if (typeof v === "string" || typeof v === "undefined") onChangeText?.(v);
+    if (typeof v === "number" || typeof v === "undefined") onChangeNumb?.(v);
+    if (typeof v === "boolean" || typeof v === "undefined") onChangeBool?.(v);
+  }
+
+  return <TxDropdownBase {...baseProps} data={items} locale={locale} head={head} multiple={false} onChangeInternal={hdChange} />;
+};

@@ -1,0 +1,14 @@
+# Rules 인덱스
+
+항상 유효한 규약 문서 모음. 기능·구조·배포를 바꾸기 전에 해당 문서를 먼저 확인한다.
+
+| 문서                                   | 언제 확인하나                                                                    |
+| -------------------------------------- | -------------------------------------------------------------------------------- |
+| `01_PACKAGE_BOUNDARIES.md`             | 패키지 간 import 를 추가하거나 의존성을 늘릴 때 (예정)                           |
+| `02_MONOREPO_STRUCTURE.md`             | 패키지/앱을 추가하거나 워크스페이스 구조를 바꿀 때 (예정)                        |
+| `03_PUBLISHING_AND_VERSIONING.md`      | 공개 API 를 바꾸거나 npm 배포를 할 때 (예정)                                     |
+| `04_TX_UI_CONVENTIONS.md`              | Tx\* 컴포넌트를 추가·수정할 때 (theme/themeMerge/cm/data-tag 패턴) (예정)        |
+| `05_TAILWIND_V4_CONSUMER_SETUP.md`     | 테마 클래스나 빌드 산출물 구성을 바꿀 때 (예정)                                  |
+| `19_FRONTEND_ROLE_SEPARATION_GUIDE.md` | 프론트 역할 분리 원칙 — 이 라이브러리의 설계 근거 (black-message 에서 이식 예정) |
+
+> 문서는 `docs/plans/001` 의 Phase 진행에 따라 순차 작성한다. 아직 파일이 없는 항목은 `(예정)` 으로 표시한다.

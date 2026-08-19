@@ -1,0 +1,46 @@
+import type { ChangeEvent, KeyboardEvent } from "react";
+import type React from "react";
+import type { TxInput, TxInputTheme } from "..";
+import { type DeepPartial } from ".."; // :contentReference[oaicite:0]{index=0}
+
+export type TTxInputValue = string | number | readonly string[] | undefined;
+
+/** @deprecated TTxInputValue를 사용한다. */
+export type TTxInputVale = TTxInputValue;
+
+export interface ITxInput extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "autoComplete"> {
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+
+  onChangeText?: (value: string) => void;
+  onChangeInt?: (value: number) => void;
+  onChangeFloat?: (value: number) => void;
+  onChangeNumber?: (value: number) => void;
+
+  onSubmitText?: (value: string) => void;
+  onSubmitNumber?: (value: number | undefined) => void;
+  onBlurNumber?: (value: number | undefined) => void;
+
+  onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
+
+  focus?: boolean;
+  value?: TTxInputValue;
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
+  theme?: DeepPartial<typeof TxInputTheme>;
+}
+
+export interface ITxInputRef {
+  setValue: (v: string) => void;
+  getValue: () => string;
+  focus: () => void;
+  select: () => void;
+}
+
+export interface ITxSearchInputProps extends React.ComponentProps<typeof TxInput> {
+  onClear?: (value: string) => void;
+  onSubmitText?: (value: string) => void;
+}
+
+export interface ITxSearchInputRef extends ITxInputRef {
+  clear: () => void;
+  submit: () => void;
+}
