@@ -70,7 +70,8 @@ txstack 작업 시 지켜야 할 핵심 규약입니다. 상세 배경은 `docs/
 
 ## 검증 (작업 후 반드시 실행)
 
-- 전체: `pnpm check` (lint + 전 패키지 typecheck)
+- 전체: `pnpm check` (lint + 전 패키지 typecheck + 회귀 테스트)
+- 테스트: `pnpm test` / 워치 `pnpm test:watch` — vitest. 패키지별로 node·jsdom 환경이 갈린다
 - 린트: `pnpm lint` / 자동수정 `pnpm lint:fix`
 - 빌드: `pnpm build` — `dist/*.js` 와 `dist/*.d.ts` 가 생성되는지 확인
 - 배포 산출물 점검: 해당 패키지에서 `npm pack --dry-run` 으로 포함 파일 목록 확인
@@ -80,7 +81,8 @@ txstack 작업 시 지켜야 할 핵심 규약입니다. 상세 배경은 `docs/
 
 ```sh
 pnpm i                    # 설치
-pnpm check                # lint + typecheck
+pnpm check                # lint + typecheck + test
+pnpm test                 # 회귀 테스트 (vitest)
 pnpm build                # packages/* 전체 빌드
 pnpm dev                  # playground 실행
 pnpm changeset            # 변경 기록 작성 (배포 전 필수)
