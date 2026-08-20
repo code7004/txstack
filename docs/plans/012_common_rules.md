@@ -15,7 +15,7 @@
 | `01_PACKAGE_BOUNDARIES.md`             | ⬜ 예정                               |
 | `02_MONOREPO_STRUCTURE.md`             | ✅ 작성됨 (2026-08-19)                |
 | `03_PUBLISHING_AND_VERSIONING.md`      | ✅ 작성됨 (2026-08-19)                |
-| `04_TX_UI_CONVENTIONS.md`              | ⬜ 예정                               |
+| `04_TX_UI_CONVENTIONS.md`              | ✅ 작성됨 (2026-08-19)                |
 | `05_TAILWIND_V4_CONSUMER_SETUP.md`     | ⬜ 예정                               |
 | `06_STORYBOOK_SETUP.md`                | ✅ 작성됨 (2026-08-19)                |
 | `19_FRONTEND_ROLE_SEPARATION_GUIDE.md` | ⬜ 예정 — black-message 원본에서 이식 |
