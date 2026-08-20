@@ -31,42 +31,54 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 
 ## 3. 스크립트 네이밍 규약
 
-### 3-1. 네 가지 형태만 쓴다
+### 3-1. 세 가지 형태만 쓴다
 
-| 형태            | 뜻                           | 예                                         |
-| --------------- | ---------------------------- | ------------------------------------------ |
-| `<동사>`        | **워크스페이스 전체**에 적용 | `build` · `lint` · `typecheck` · `test`    |
-| `<동사>:<대상>` | 대상을 좁힘                  | `dev:playground` · `dev:storybook`         |
-| `<동사>:<변형>` | 같은 동사의 **다른 모드**    | `lint:fix` · `test:watch` · `format:check` |
-| `<영역>:<동작>` | 도구가 영역을 이룰 때        | `release:version` · `release:publish`      |
+| 형태                           | 뜻                             | 예                                                          |
+| ------------------------------ | ------------------------------ | ----------------------------------------------------------- |
+| `<동작>`                       | **워크스페이스 전체**에 적용   | `build` · `lint` · `typecheck` · `test` · `check`           |
+| `<대상\|영역>:<동작>[:<변형>]` | 대상이나 도구 영역이 있는 동작 | `storybook:dev` · `release:version` · `backend:migrate:dev` |
+| `<동작>:<변형>`                | 전체 동작의 **다른 모드**      | `lint:fix` · `test:watch` · `format:check`                  |
 
-**`:` 뒤가 대상인지 변형인지 헷갈릴 때** — 워크스페이스에 **실재하는 앱/패키지 이름**이면 대상,
-아니면 변형이다. `dev:storybook` 은 `apps/storybook` 이 있으므로 대상이고,
-`test:watch` 는 `watch` 라는 워크스페이스가 없으므로 변형이다.
+**판정은 첫 segment 로 한다.**
 
-### 3-2. 왜 `dev:storybook` 이고 `storybook:dev` 가 아닌가
+- 첫 segment 가 **명사**(워크스페이스 이름 또는 도구 영역)면 → 대상형
+- 첫 segment 가 **동사**면 → 변형형
 
-**동사를 앞에 둔다.**
+`storybook:dev` 는 `storybook` 이 명사(앱 이름)라 대상형이고,
+`test:watch` 는 `test` 가 동사라 변형형이다. **읽는 순서대로 판정된다.**
 
-- 스크립트 목록은 알파벳순으로 정렬된다. 동사가 앞이면 **같은 동작이 한자리에 모인다**
-- `pnpm dev` 까지 치고 탭을 누르면 실행 가능한 것이 다 나온다
-- 우리는 앱이 2개고 동작이 여럿이다. **수가 많은 쪽을 앞에 두는 것**이 목록을 읽기 쉽게 만든다
+### 3-2. 왜 대상을 앞에 두는가
 
-> 대상이 10개가 넘고 동작이 2~3개뿐인 저장소라면 반대(`<대상>:<동사>`)가 나을 수 있다.
-> 그때는 이 규칙을 다시 정한다. **지금 구조에 맞춰 정한 것**이지 절대 규칙이 아니다.
+1. **생태계에서 더 흔하다** — `db:migrate` · `db:seed` · `docker:up` · `prisma:generate` 처럼
+   **영역:동작**이 가장 널리 퍼진 형태다. Nx 도 `project:target` 순서다
+2. **네임스페이스 관례에 맞다** — 일반에서 구체로 좁힌다 (`com.example.app`, BEM `block__element--modifier`)
+3. **단계가 늘어나도 읽힌다** — `backend:migrate:dev` 는 자연스럽지만
+   `dev:backend:migrate` 는 읽히지 않는다
+4. **다른 저장소와 통일된다.** 저장소가 여럿일 때 규칙이 갈리는 비용이 규칙 자체의 우열보다 크다
+
+> 이전 판(2026-08-19 오전)은 동사를 앞에 뒀다. 근거는 "알파벳순으로 같은 동작이 모인다" 였는데,
+> **워크스페이스 전체 동작은 접두어가 없어서 애초에 대상별 명령과 섞이지 않는다.**
+> 그 이점이 `dev` / `dev:playground` 정도에만 걸려 근거가 얇았다. 같은 날 뒤집었다.
+
+부수 효과로 형태가 4개에서 3개로 줄었다. 이전 판에서는 `release:version`(영역:동작)과
+`dev:storybook`(동사:대상)이 같은 모양이면서 뜻이 반대라 어색했는데, 그것이 해소된다.
 
 ### 3-3. 별칭
 
-가장 자주 쓰는 대상 하나에만 짧은 별칭을 둔다. 별칭은 **실제 스크립트를 호출**한다.
+가장 자주 쓰는 명령 하나에만 짧은 별칭을 둔다. 별칭은 **실제 스크립트를 호출**한다.
 
 ```json
-"dev": "pnpm dev:playground",
-"dev:playground": "pnpm --filter @txstack/playground dev",
-"dev:storybook": "pnpm --filter @txstack/storybook dev"
+"dev": "pnpm playground:dev",
+"playground:dev": "pnpm --filter @txstack/playground dev",
+"storybook:dev": "pnpm --filter @txstack/storybook dev",
+"storybook:build": "pnpm --filter @txstack/storybook build"
 ```
 
 명령을 복제하지 않는다. 복제하면 한쪽만 고쳐져 갈라진다.
-**어느 것이 기본인지 애매하면 별칭을 두지 않는다.** 둘 다 명시적으로 부르게 한다.
+
+`dev` 는 규칙상 "워크스페이스 전체 dev" 로 읽히지만 실제로는 playground 하나를 띄운다.
+**JS 생태계에서 `pnpm dev` 가 반사적으로 쓰이는 명령이라 예외로 둔 것**이며,
+`package.json` 에서 별칭임이 드러나게 적는다. **어느 것이 기본인지 애매하면 별칭을 두지 않는다.**
 
 ### 3-4. 워크스페이스 안쪽 이름은 접두어 없이 통일한다
 
@@ -101,7 +113,7 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 
 1. `apps/<이름>/package.json` — **`"private": true` 필수**
 2. `scripts` 는 `dev` · `build` · `typecheck`
-3. 루트에 `dev:<이름>` 추가 (정적 산출물이 필요하면 `build:<이름>` 도)
+3. 루트에 `<이름>:dev` 추가 (정적 산출물이 필요하면 `<이름>:build` 도)
 4. `.claude/launch.json` 에 항목 추가 (포트 지정)
 5. **changesets 는 손댈 것이 없다** — 아래 참조
 
