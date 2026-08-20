@@ -45,6 +45,30 @@
 | U1-12 | 테마 객체 이름 규칙 점검 (`Tx*Theme`)         | 🤖   | 이탈 목록이 나오거나 0건임이 확인된다                 |
 | U1-13 | 내부 전용 모듈(`tx-ui.dom.ts`) 노출 여부 점검 | 🤖   | 배럴로 새지 않음을 확인하거나, 의도적 노출이면 문서화 |
 
+> **호환 제약이 풀렸다** ([000 §1-4](../requirements/000_product_definition.md), 2026-08-19).
+> 원본 호출부가 깨지는 개명도 한다. 역이식(9-3)에서 고친다.
+
+| ID    | job                                    | 담당 | 완료 기준                                                          |
+| ----- | -------------------------------------- | ---- | ------------------------------------------------------------------ |
+| U1-27 | 콜백 이름 규칙 확정 (API 승인)         | 🤝   | 아래 실측 불일치를 어떤 규칙으로 통일할지 정한다                   |
+| U1-28 | 숫자 변경 콜백 통일                    | 🤖   | `onChangeNumb`·`onChangeNumber`·`onChangeInt`·`onChangeFloat` 정리 |
+| U1-29 | `onChangedText` → `onChangeText` 통일  | 🤖   | 과거형 `d` 하나 차이로 갈려 있던 것을 없앤다                       |
+| U1-30 | 닫기 콜백 통일 (`onExit` vs `onClose`) | 🤖   | 같은 의미에 이름이 둘이다                                          |
+| U1-31 | 제출 콜백 통일                         | 🤖   | `onSubmitNumber`·`onSubmitNumb`·`onSubmitNums`·`onSubmitBool` 정리 |
+| U1-32 | 전체 콜백 목록 재점검 + changeset      | 🤖   | 같은 의미에 두 이름이 남아 있지 않다                               |
+
+**실측된 불일치 (2026-08-19)**
+
+| 같은 의미   | 갈린 이름                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| 숫자 변경   | `onChangeNumb`(TxDropdown) · `onChangeNumber`(TxInput) · `onChangeInt` · `onChangeFloat` |
+| 텍스트 변경 | `onChangeText`(TxInput·TxDropdown) vs `onChangedText`(TxTextarea)                        |
+| 닫기        | `onExit`(TxModal) vs `onClose`(TxSlidePanel)                                             |
+| 제출        | `onSubmitNumber` · `onSubmitNumb` · `onSubmitNums` · `onSubmitBool` · `onSubmitValue`    |
+
+> 이것이 **"얇은 통제권"(000 §2-1)의 값어치를 깎는다.** 배울 것이 적다는 것이 판매 논거인데
+> 컴포넌트마다 콜백 이름을 외워야 하면 그 논거가 약해진다.
+
 ### D. 렌더 회귀 테스트
 
 | ID    | job                                                 | 담당 | 완료 기준                                         |
