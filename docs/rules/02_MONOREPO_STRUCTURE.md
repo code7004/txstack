@@ -36,7 +36,7 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 | 형태                           | 뜻                             | 예                                                          |
 | ------------------------------ | ------------------------------ | ----------------------------------------------------------- |
 | `<동작>`                       | **워크스페이스 전체**에 적용   | `build` · `lint` · `typecheck` · `test` · `check`           |
-| `<대상\|영역>:<동작>[:<변형>]` | 대상이나 도구 영역이 있는 동작 | `storybook:dev` · `release:version` · `backend:migrate:dev` |
+| `<대상\|영역>:<동작>[:<변형>]` | 대상이나 도구 영역이 있는 동작 | `storybook:dev` · `release:version` · `frontend:build:live` |
 | `<동작>:<변형>`                | 전체 동작의 **다른 모드**      | `lint:fix` · `test:watch` · `format:check`                  |
 
 **판정은 첫 segment 로 한다.**
@@ -52,8 +52,8 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 1. **생태계에서 더 흔하다** — `db:migrate` · `db:seed` · `docker:up` · `prisma:generate` 처럼
    **영역:동작**이 가장 널리 퍼진 형태다. Nx 도 `project:target` 순서다
 2. **네임스페이스 관례에 맞다** — 일반에서 구체로 좁힌다 (`com.example.app`, BEM `block__element--modifier`)
-3. **단계가 늘어나도 읽힌다** — `backend:migrate:dev` 는 자연스럽지만
-   `dev:backend:migrate` 는 읽히지 않는다
+3. **단계가 늘어나도 읽힌다** — `backend:migrate:up` · `frontend:build:live` 는 자연스럽지만
+   `up:backend:migrate` · `build:frontend:live` 는 읽히지 않는다
 4. **다른 저장소와 통일된다.** 저장소가 여럿일 때 규칙이 갈리는 비용이 규칙 자체의 우열보다 크다
 
 > 이전 판(2026-08-19 오전)은 동사를 앞에 뒀다. 근거는 "알파벳순으로 같은 동작이 모인다" 였는데,
@@ -80,7 +80,67 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 **JS 생태계에서 `pnpm dev` 가 반사적으로 쓰이는 명령이라 예외로 둔 것**이며,
 `package.json` 에서 별칭임이 드러나게 적는다. **어느 것이 기본인지 애매하면 별칭을 두지 않는다.**
 
-### 3-4. 워크스페이스 안쪽 이름은 접두어 없이 통일한다
+### 3-4. 동작 어휘를 고정한다
+
+형태만 정하면 `start` 와 `dev` 중 무엇을 쓸지가 남는다. 어휘도 고정한다.
+
+| 동작                                     | 뜻                                   |
+| ---------------------------------------- | ------------------------------------ |
+| `dev`                                    | **개발 서버 실행** (파일 감시 · HMR) |
+| `start`                                  | **프로덕션 산출물 실행**             |
+| `build`                                  | 빌드                                 |
+| `preview`                                | 빌드 결과를 로컬에서 확인            |
+| `lint` · `typecheck` · `test` · `format` | 검사                                 |
+| `check`                                  | 위 검사들을 묶어 한 번에             |
+| `deploy`                                 | 배포                                 |
+
+**`start` 와 `dev` 는 같은 뜻이 아니다.**
+
+- `dev` 는 Vite · Next · Nuxt · Astro · SvelteKit 이 **모두 쓰는** 개발 서버 이름이다
+- `start` 는 npm 이 특별 취급하는 이름이고(스크립트가 없으면 `node server.js` 를 실행한다),
+  `next start` · `nest start` 처럼 **프로덕션 실행**을 뜻한다
+
+> **원본 저장소 실태 (2026-08-19 확인)**
+>
+> | 저장소                   | 개발 서버 |
+> | ------------------------ | --------- |
+> | usertics · black-message | `start`   |
+> | chain-wallet-service     | `dev`     |
+>
+> `start` = 개발 서버는 **CRA(create-react-app) 시절 관례**다. CRA 는 폐기됐고 Vite 계열은
+> 전부 `dev` 로 옮겨갔다. **새 코드는 `dev` 로 통일한다.**
+> 기존 저장소를 지금 바꿀 필요는 없지만, 손대게 되면 `dev` 로 맞춘다.
+
+### 3-5. 환경은 세 번째 자리에만 쓴다
+
+`dev` 는 동작 이름이면서 환경 이름이기도 하다(`build:dev`). **자리로 구분한다.**
+
+```
+<대상> : <동작> : <환경|변형>
+
+portal   : dev              ← 2번째 = 동작 (개발 서버를 띄운다)
+portal   : build : dev      ← 3번째 = 환경 (dev 환경용으로 빌드한다)
+frontend : deploy : live
+backend  : migrate : up
+```
+
+**위치가 뜻을 결정하므로** 같은 글자가 두 자리에 나와도 헷갈리지 않는다.
+새 규칙이 필요 없고, 3-1 의 형태가 그대로 해결한다.
+
+환경 이름은 한 저장소 안에서 통일한다. 현재 조직 관례는 `dev` · `live` 다
+(생태계에서는 `production` 이 더 흔하지만, 이미 쓰고 있는 것을 바꿀 이유가 크지 않다).
+
+### 3-6. txstack 에는 무엇이 해당하나
+
+이 저장소는 **라이브러리**라 프로덕션 런타임이 없다. 따라서
+
+- `start` · `deploy` · 환경 변형(`:dev` · `:live`)을 **쓰지 않는다**
+- 쓰는 동작은 `dev` · `build` · `preview` · `lint` · `typecheck` · `test` · `check` · `format` 뿐이다
+
+`playground:dev` · `storybook:dev` · `storybook:build` 가 전부다.
+`release:version` · `release:publish` 는 `release` 가 도구 영역인 경우다(3-1 의 두 번째 형태).
+
+### 3-7. 워크스페이스 안쪽 이름은 접두어 없이 통일한다
 
 각 패키지·앱의 `scripts` 는 `dev` · `build` · `typecheck` 처럼 **접두어 없는 공통 이름**을 쓴다.
 
@@ -92,7 +152,7 @@ pnpm 10.0.0 은 이 위치를 아직 읽지 않아 경고가 뜨지만, esbuild 
 이름이 통일돼야 `pnpm -r typecheck` 처럼 **전체를 한 번에 부르는 것**이 성립한다.
 루트가 특정 대상을 부를 때는 `--filter` 를 쓴다.
 
-### 3-5. 하지 않는 것
+### 3-8. 하지 않는 것
 
 - 루트에 워크스페이스 스크립트의 **내용을 복제**하지 않는다. `--filter` 로 부른다
 - 같은 동작에 **두 이름**을 두지 않는다 (`test` 와 `unit` 을 같이 두지 않는다)
