@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import TxSpinner from ".";
 
 const meta = {
-  title: "Form/TxButton", //  그룹/컴포넌트명
+  title: "TxSpinner", //  그룹/컴포넌트명
   component: TxSpinner,
   tags: ["autodocs"], //  props 표 자동 생성
   parameters: {

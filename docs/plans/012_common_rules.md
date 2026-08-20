@@ -13,7 +13,7 @@
 | 문서                                   | 상태                                  |
 | -------------------------------------- | ------------------------------------- |
 | `01_PACKAGE_BOUNDARIES.md`             | ⬜ 예정                               |
-| `02_MONOREPO_STRUCTURE.md`             | ⬜ 예정                               |
+| `02_MONOREPO_STRUCTURE.md`             | ✅ 작성됨 (2026-08-19)                |
 | `03_PUBLISHING_AND_VERSIONING.md`      | ✅ 작성됨 (2026-08-19)                |
 | `04_TX_UI_CONVENTIONS.md`              | ⬜ 예정                               |
 | `05_TAILWIND_V4_CONSUMER_SETUP.md`     | ⬜ 예정                               |

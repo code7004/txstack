@@ -5,7 +5,7 @@
 | 문서                                                                 | 언제 확인하나                                                                    |
 | -------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | `01_PACKAGE_BOUNDARIES.md`                                           | 패키지 간 import 를 추가하거나 의존성을 늘릴 때 (예정)                           |
-| `02_MONOREPO_STRUCTURE.md`                                           | 패키지/앱을 추가하거나 워크스페이스 구조를 바꿀 때 (예정)                        |
+| [`02_MONOREPO_STRUCTURE.md`](02_MONOREPO_STRUCTURE.md)               | 패키지·앱을 추가하거나, 루트 스크립트를 만들거나, 워크스페이스 설정을 바꿀 때    |
 | [`03_PUBLISHING_AND_VERSIONING.md`](03_PUBLISHING_AND_VERSIONING.md) | 공개 API 를 바꾸거나 npm 배포를 하거나, `package.json` 엔트리 필드를 손댈 때     |
 | `04_TX_UI_CONVENTIONS.md`                                            | Tx\* 컴포넌트를 추가·수정할 때 (theme/themeMerge/cm/data-tag 패턴) (예정)        |
 | `05_TAILWIND_V4_CONSUMER_SETUP.md`                                   | 테마 클래스나 빌드 산출물 구성을 바꿀 때 (예정)                                  |
