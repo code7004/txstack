@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from "react";
 import React, { useMemo, useState } from "react";
 import { cm, themeMerge, type DeepPartial } from "../tx-ui.utils";
-import TxSpinner from "../TxSpinner";
+import { TxSpinner } from "../TxSpinner";
 import { TxButtonTheme } from "./TxButton.theme";
 
 export interface ITxButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
@@ -38,7 +38,7 @@ export interface ITxButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButt
  * <TxButton label="sync button" onClick={async () => (await waitForSeconds(3000), alert("hello"))} />
  * ```
  */
-export const TxButton: React.FC<ITxButtonProps> = ({ label, theme, variant = "primary", color, className, children, onEnter, loading = <TxSpinner />, disabled, onClick, ...props }) => {
+export const TxButton: React.FC<ITxButtonProps> = ({ label, theme, variant = "primary", color, className, children, onEnter, loading = <TxSpinner decorative />, disabled, onClick, ...props }) => {
   const stableTheme = useMemo(() => themeMerge(TxButtonTheme, theme, "override"), [theme]);
   const [isLoading, _isLoading] = useState(false);
 

@@ -43,4 +43,3 @@ export * from "./tx-ui.utils";
  */
 export { default as TxClipboardButton } from "./TxClipboardButton";
 export { default as TxInputLike } from "./TxInput/TxInputLike";
-export { default as TxSpinner } from "./TxSpinner";

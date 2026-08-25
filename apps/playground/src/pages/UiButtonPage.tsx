@@ -37,7 +37,7 @@ export const UiButtonPage = () => {
       <TxCard caption="TxSpinner · TxLoading · TxCapsLockCheck">
         <TxCard.Content className="flex flex-col gap-3">
           <TxFlex className="items-center gap-3">
-            <TxSpinner size="1.5em" className="w-auto" />
+            <TxSpinner size="1.5em" />
             <TxButton label={loading ? "로딩 중 (3초)" : "TxLoading 띄우기"} variant="secondary" onClick={hdShowLoading} />
           </TxFlex>
           <div className="text-xs text-slate-500 dark:text-slate-400">아래 입력에 CapsLock 을 켜고 입력해보면 경고가 뜬다.</div>

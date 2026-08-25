@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import TxSpinner from ".";
+import { TxSpinner } from ".";
 
 const meta = {
   title: "TxSpinner", //  그룹/컴포넌트명
@@ -8,7 +8,8 @@ const meta = {
   parameters: {
     docs: { description: { component: "…" } } //  주의점부터 적는다
   },
-  args: { size: "2em", className: "" } //  기본값 — 첫 스토리가 바로 조작 가능해진다
+  // args 로 기본값을 덮지 않는다 — 첫 스토리는 "아무것도 안 준 상태" 를 보여줘야 한다 (D5)
+  args: {}
 } satisfies Meta<typeof TxSpinner>;
 
 export default meta;
