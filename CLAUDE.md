@@ -32,7 +32,7 @@ pnpm workspace 모노레포. `packages/*` 4종이 각각 독립 배포되고, `a
 | `003` | `@txstack/hooks`      | `useUrlQuery` — URL params 를 상태처럼           | O          |
 | `004` | `@txstack/network`    | axios 확장 — 로그와 초기화                       | **X**      |
 
-지원 트랙: `901` Storybook · `902` Vitest · `903` 문서 사이트 · `904` Claude 가이드(패키지 동봉 배포).
+지원 트랙: `901` Storybook · `902` Vitest · `903` 문서 사이트 · `904` 에이전트 가이드(**사이트에서 다운로드**, npm 동봉 안 함).
 
 `packages/*` 의 기본 기능은 **이미 구현되어 있다.** 지금 하는 일은 새로 만들기가 아니라,
 **하나씩 열어보고 결함·불필요한 것을 정리해 배포 가능한 수준으로 올리는 것**이다.

@@ -24,14 +24,14 @@
 | `003` | `@txstack/hooks`      | `useUrlQuery` 로 **URL params 를 상태처럼 읽고 쓴다**                                              | [003_hooks](003_hooks/README.md)           |
 | `004` | `@txstack/network`    | axios 확장. **로그와 초기화**를 쉽게                                                               | [004_network](004_network/README.md)       |
 
-### 지원 (배포하지 않음 — 단, `904` 산출물은 패키지에 동봉된다)
+### 지원 (배포하지 않음. `904` 산출물도 **npm 에 동봉하지 않고** 사이트에서 내려받는다)
 
-| 번호  | 대상          | 한 줄 정의                                                     | 문서                                           |
-| ----- | ------------- | -------------------------------------------------------------- | ---------------------------------------------- |
-| `901` | Storybook     | `001` 의 **가이드**를 제공한다                                 | [901_storybook](901_storybook/README.md)       |
-| `902` | Vitest        | **안정화된 테스트 방향**을 제시한다                            | [902_testing](902_testing/README.md)           |
-| `903` | 문서 사이트   | **예제와 코드**를 제공한다 (Storybook 연계 여부 미결)          | [903_docs_site](903_docs_site/README.md)       |
-| `904` | Claude 가이드 | 타 프로젝트의 **Claude 가 정확히 쓰도록** 하는 에이전트용 설명 | [904_claude_guide](904_claude_guide/README.md) |
+| 번호  | 대상            | 한 줄 정의                                                                      | 문서                                           |
+| ----- | --------------- | ------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `901` | Storybook       | `001` 의 **가이드**를 제공한다                                                  | [901_storybook](901_storybook/README.md)       |
+| `902` | Vitest          | **안정화된 테스트 방향**을 제시한다                                             | [902_testing](902_testing/README.md)           |
+| `903` | 문서 사이트     | **예제와 코드**를 제공한다 (Storybook 연계 여부 미결)                           | [903_docs_site](903_docs_site/README.md)       |
+| `904` | 에이전트 가이드 | 타 프로젝트의 **에이전트가 정확히 쓰도록** 하는 설명. **사이트에서 내려받는다** | [904_claude_guide](904_claude_guide/README.md) |
 
 **지원 트랙은 "양식(기준)"을 소유한다.** 실제 실행은 `001`~`004` 의 컴포넌트 플로우에서 일어난다 (§5).
 
@@ -93,7 +93,7 @@ docs/
 **컴포넌트(또는 훅) 하나가 작업 항목이다.** 그 하나를 6단계로 끝까지 올린다.
 
 ```
-TxSpinner ─ S1 문서 → S2 구현 → S3 테스트 → S4 스토리북 → 🧑 확인 → S5 문서사이트 → S6 Claude가이드 ─▶ 완료
+TxSpinner ─ S1 문서 → S2 구현 → S3 테스트 → S4 스토리북 → 🧑 확인 → S5 문서사이트 → S6 에이전트가이드 ─▶ 완료
 TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
                     ▲                 │
                     └── 2차 개선 ─────┘
@@ -122,16 +122,16 @@ TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
 
 **창 하나 = 한 항목의 한 단계.** 보드에서 다음 항목을 골라 새 창을 연다.
 
-| 트랙                | 진행 보드                                   | 항목              | 항목 문서                                  |
-| ------------------- | ------------------------------------------- | ----------------- | ------------------------------------------ |
-| `001` ui            | [30_tasks.md](001_ui/30_tasks.md)           | **26** (컴포넌트) | [components/](001_ui/components/README.md) |
-| `002` route-meta    | [30_tasks.md](002_route_meta/30_tasks.md)   | 5 (공개 기능)     | [items/](002_route_meta/items/)            |
-| `003` hooks         | [30_tasks.md](003_hooks/30_tasks.md)        | 4 (훅)            | [items/](003_hooks/items/)                 |
-| `004` network       | [30_tasks.md](004_network/30_tasks.md)      | 5 (공개 기능)     | [items/](004_network/items/)               |
-| `901` Storybook     | [30_tasks.md](901_storybook/30_tasks.md)    | 6 (양식 확정 job) | —                                          |
-| `902` 테스트        | [30_tasks.md](902_testing/30_tasks.md)      | 6 (양식 확정 job) | —                                          |
-| `903` 문서 사이트   | [30_tasks.md](903_docs_site/30_tasks.md)    | 6 (양식 확정 job) | —                                          |
-| `904` Claude 가이드 | [30_tasks.md](904_claude_guide/30_tasks.md) | 7 (양식 확정 job) | —                                          |
+| 트랙                  | 진행 보드                                   | 항목              | 항목 문서                                  |
+| --------------------- | ------------------------------------------- | ----------------- | ------------------------------------------ |
+| `001` ui              | [30_tasks.md](001_ui/30_tasks.md)           | **26** (컴포넌트) | [components/](001_ui/components/README.md) |
+| `002` route-meta      | [30_tasks.md](002_route_meta/30_tasks.md)   | 5 (공개 기능)     | [items/](002_route_meta/items/)            |
+| `003` hooks           | [30_tasks.md](003_hooks/30_tasks.md)        | 4 (훅)            | [items/](003_hooks/items/)                 |
+| `004` network         | [30_tasks.md](004_network/30_tasks.md)      | 5 (공개 기능)     | [items/](004_network/items/)               |
+| `901` Storybook       | [30_tasks.md](901_storybook/30_tasks.md)    | 6 (양식 확정 job) | —                                          |
+| `902` 테스트          | [30_tasks.md](902_testing/30_tasks.md)      | 6 (양식 확정 job) | —                                          |
+| `903` 문서 사이트     | [30_tasks.md](903_docs_site/30_tasks.md)    | 6 (양식 확정 job) | —                                          |
+| `904` 에이전트 가이드 | [30_tasks.md](904_claude_guide/30_tasks.md) | 7 (양식 확정 job) | —                                          |
 
 **지금 열어야 할 창**은 §7 을 본다.
 
@@ -150,8 +150,8 @@ TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
 | `004` | client · interceptors · singleton · types · utils                           | 미작성    |
 | `901` | `apps/storybook` 존재. 스토리 24/26, **그룹 없는 스토리 0건**               | 관찰 기록 |
 | `902` | 테스트 5개 파일. **`TxSpinner.test.tsx` 가 첫 컴포넌트 렌더 테스트**        | 관찰 기록 |
-| `903` | 없음                                                                        | 미작성    |
-| `904` | 없음                                                                        | 미작성    |
+| `903` | 없음. **`904` 배포와 `TxSpinner-S5` 가 여기에 물려 있다**                   | 미작성    |
+| `904` | **`packages/ui/AGENTS.md`** (npm 에는 안 실린다). 사이트 다운로드 대기      | 골격 있음 |
 
 ### 다음에 열 창 (순서대로)
 
@@ -162,9 +162,10 @@ TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
 | ~~3~~  | ~~`001-TxSpinner-S3`~~    | **✅ 2026-08-25 완료.** 렌더 테스트 15개. `ui` 첫 사례                         | —                                                                       |
 | ~~4~~  | ~~`001-TxSpinner-S4`~~    | **✅ 2026-08-25 완료.** 스토리 5개. 그룹 없는 스토리가 0건이 됐다              | —                                                                       |
 | ~~🧑~~ | ~~TxSpinner 사용자 확인~~ | **✅ 2026-08-25 통과.** 2건 잡아 고친 뒤 승인. **공개 API 확정**               | —                                                                       |
-| 1      | `001-TxSpinner-S5`        | 문서 사이트. **`903` 은 코드가 아예 없다** — Storybook 과의 역할 분담이 먼저   | `… TxSpinner.md 를 읽고 001-TxSpinner-S5 진행해줘`                      |
-| 2      | `001-TxSpinner-S6`        | Claude 가이드. **`904` 골격을 여기서 만든다** — 패키지에 동봉되는 산출물이다   | `… TxSpinner.md 를 읽고 001-TxSpinner-S6 진행해줘`                      |
-| 3      | `001-TxButton-S1`         | 파일럿 2차. **커스터마이징 방식·props·콜백 이름 규칙 확정**                    | `… docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1 진행해줘` |
+| ~~6~~  | ~~`001-TxSpinner-S6`~~    | **✅ 2026-08-25 완료.** `packages/ui/AGENTS.md`. **동봉 안 함으로 재결정**     | —                                                                       |
+| ⏸      | `001-TxSpinner-S5`        | 문서 사이트. **`903` 도구 미정으로 보류.** 아래 `903-01` 이 풀어야 한다        | —                                                                       |
+| 1      | `903-01`                  | **문서 사이트 요구사항** (🤝). Storybook 갈음 안은 버렸다 — 근거는 §5          | `docs/README.md 와 docs/903_docs_site/ 를 읽고 903-01 부터 진행해줘`    |
+| 2      | `001-TxButton-S1`         | 파일럿 2차. **커스터마이징 방식·props·콜백 이름 규칙 확정**                    | `… docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1 진행해줘` |
 | —      | `001-typenames`           | `ITx*` 53개 → `Tx*Props` 일괄 리네임 (S1 Q1 결정). **순서 무관, 언제 해도 됨** | `docs/001_ui/30_tasks.md 의 001-typenames 를 진행해줘`                  |
 
 `001_ui/10_requirements.md`(패키지 수용 기준 · Tailwind `@source` 제약 · 범위 밖)는 **파일럿과 병행**해도 된다.
