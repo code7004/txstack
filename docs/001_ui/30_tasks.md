@@ -3,7 +3,8 @@
 > **컴포넌트 하나가 작업 항목이다.** 규칙은 [06_COMPONENT_FLOW](../00_foundation/06_COMPONENT_FLOW.md).
 > 상태 표기: 없음(미착수) · `🔄`(진행중) · `✅`(완료) · `⏸`(보류) · `❌`(폐기)
 
-전체 **26 항목** × 6단계. 인벤토리는 2026-08-25 자동 수집값이며, `test✗` 는 26종 전부 해당한다.
+전체 **26 항목** × 6단계. 인벤토리는 2026-08-25 자동 수집값이다.
+`test✗` 는 `TxSpinner` 를 뺀 25종에 해당한다 — 컴포넌트 렌더 테스트의 선례는 `TxSpinner.test.tsx` 다.
 
 ## 새 창을 여는 법
 
@@ -32,10 +33,10 @@ docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1
 
 플로우 절차와 커스터마이징 방침을 여기서 확정한다. **나머지는 이게 끝나기 전에 시작하지 않는다.**
 
-| 컴포넌트    | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                            | 문서                                 |
-| ----------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------- | ------------------------------------ |
-| `TxSpinner` | ✅  | ✅  |     |     |     |     | 56행 · theme✗ · types(동거) · test✗ · tag✓ · 스토리1 · named export | [TxSpinner](components/TxSpinner.md) |
-| `TxButton`  |     |     |     |     |     |     | 134행 · theme✓ · types✗ · test✗ · tag✓ · 스토리6                    | [TxButton](components/TxButton.md)   |
+| 컴포넌트    | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                                  | 문서                                 |
+| ----------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------------- | ------------------------------------ |
+| `TxSpinner` | ✅  | ✅  | ✅  |     |     |     | 56행 · theme✗ · types(동거) · **test 13** · tag✓ · 스토리1 · named export | [TxSpinner](components/TxSpinner.md) |
+| `TxButton`  |     |     |     |     |     |     | 134행 · theme✓ · types✗ · test✗ · tag✓ · 스토리6                          | [TxButton](components/TxButton.md)   |
 
 ### B. 파일럿에 묶인 것
 

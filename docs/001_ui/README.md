@@ -45,11 +45,11 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 - 기반: Tailwind v4 클래스 문자열 + `dark:` variant
 - 무거운 의존은 subpath 로 격리: `@txstack/ui/aggrid`, `@txstack/ui/daypicker`
 - 일부 컴포넌트에 `*.stories.tsx` 존재 → `901`
-- 유틸 테스트 1개 (`tx-ui.utils.test.ts`) 뿐 → `902`
+- 테스트는 유틸 1개 + `TxSpinner.test.tsx`(첫 컴포넌트 렌더 테스트) → `902`
 
 ## 상태
 
-**파일럿 1차 진행 중.** `TxSpinner` S1(명세·감사) 완료 — 2026-08-25.
+**파일럿 1차 진행 중.** `TxSpinner` S1(명세·감사) · S2(구현) · S3(테스트) 완료 — 2026-08-25. 다음은 S4.
 
 S1 에서 나온 **전 패키지 결정** (근거: [TxSpinner §5](components/TxSpinner.md#5-설계-결정-2026-08-25-합의))
 
@@ -72,11 +72,11 @@ S1 에서 나온 **전 패키지 결정** (근거: [TxSpinner §5](components/Tx
 | **Tailwind `@source` purge 제약을 유지할 것인가** | 유지하면 소비자가 설정을 빠뜨리면 스타일이 전부 사라진다. 파일럿 S5·S6 에 직결 |
 | **범위 밖** (하지 않을 것)                        | 안 적으면 계속 늘어난다                                                        |
 
-### 2) 파일럿 1차 `TxSpinner` — **S1·S2 ✅ / 다음은 `001-TxSpinner-S3`**
+### 2) 파일럿 1차 `TxSpinner` — **S1·S2·S3 ✅ / 다음은 `001-TxSpinner-S4`**
 
 플로우 절차 자체를 확정한다. **여기서 901/902/903/904 의 최소 골격도 함께 만든다.**
 S2 처리 결과·검증 기록·인계 사항은 [TxSpinner §8~§10](components/TxSpinner.md#8-s2-처리-결과-2026-08-25) 에 있다.
-S3 은 **`902` 테스트 양식을 만드는 자리**이기도 하다 — 현재 `ui` 에는 컴포넌트 테스트 선례가 없다.
+S3 에서 `ui` 의 첫 컴포넌트 렌더 테스트가 생겼다 — **jsdom 으로는 CSS 결함을 못 잡는다**는 것도 거기서 드러났다 ([902 README](../902_testing/README.md)).
 
 ### 3) 파일럿 2차 `TxButton`
 
@@ -92,10 +92,10 @@ theme 객체 / className 병합 / CSS 변수 / slot 중 무엇이냐에 따라 2
 
 ## 문서
 
-| 파일                                  | 상태                                                    |
-| ------------------------------------- | ------------------------------------------------------- |
-| `10_requirements.md`                  | 미작성                                                  |
-| `20_design.md`                        | 미작성 (파일럿 2차 후)                                  |
-| [`30_tasks.md`](30_tasks.md)          | **작성됨** — 26 항목 × 6단계 보드 + 공통 job            |
-| `40_verification.md`                  | 미작성                                                  |
-| [`components/`](components/README.md) | **TxSpinner S1 ✅ (양식 본보기) · 그 외 25종 스켈레톤** |
+| 파일                                  | 상태                                                          |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `10_requirements.md`                  | 미작성                                                        |
+| `20_design.md`                        | 미작성 (파일럿 2차 후)                                        |
+| [`30_tasks.md`](30_tasks.md)          | **작성됨** — 26 항목 × 6단계 보드 + 공통 job                  |
+| `40_verification.md`                  | 미작성                                                        |
+| [`components/`](components/README.md) | **TxSpinner S1·S2·S3 ✅ (양식 본보기) · 그 외 25종 스켈레톤** |
