@@ -15,7 +15,7 @@ const pkg = (path: string) => fileURLToPath(new URL(`../../../packages/${path}`,
  * 스토리는 컴포넌트 옆(`packages/ui/src/<Name>/`)에 둔다. 카탈로그가 컴포넌트와 같이
  * 움직여야 수정할 때 함께 갱신된다. Storybook 앱은 도구만 담고 배포되지 않는다.
  */
-const READY = ["TxSpinner"];
+const READY = ["TxSpinner", "TxButton"];
 
 const config: StorybookConfig = {
   stories: READY.map((name) => `../../../packages/ui/src/${name}/*.stories.tsx`),
