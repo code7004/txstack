@@ -1,155 +1,86 @@
 # CLAUDE.md
 
-txstack 작업 시 지켜야 할 핵심 규약입니다. 상세 배경은 `docs/`를 참고하세요.
+txstack 작업 시 지켜야 할 핵심 규약. **상세는 `docs/` 가 소유한다. 이 문서는 얇게 유지한다.**
 
-## 🔖 현재 진행 상태 (2026-08-19)
+## 🔖 시작하기
 
-**작업을 이어받는다면 [`docs/ROADMAP.md`](docs/ROADMAP.md) 를 먼저 읽는다.**
-무엇이 끝났고 다음에 뭘 할 차례인지가 거기 있다. 상세는 각 트랙 문서로 들어간다.
+**작업을 이어받는다면 [`docs/README.md`](docs/README.md) 를 먼저 읽는다.**
+이 저장소가 무엇을 만드는지, 어디까지 왔는지, 다음에 뭘 할 차례인지가 거기 있다.
 
-- **배포는 최하위 우선순위다.** 되돌릴 수 없으므로, 되돌릴 수 있는 동안(트랙 0~4) 최대한 다듬는다.
-- 작업은 **패키지별 트랙**으로 진행한다 — 0 공통 · 1 ui · 2 hooks · 3 route-meta · 4 network · 9 배포.
-- job 은 **30분~1시간 단위**다. 하나를 끝내고 커밋할 수 있어야 한다.
-- 담당 표기 — 🧑 사용자 직접 · 🤖 Claude · 🤝 함께. **🧑 job 은 Claude 가 대신 하지 않는다.**
-- `001` · `001-2` · `003` 은 작업 이력이다. 미결 항목은 전부 트랙으로 옮겼다.
+문서 체계를 **2026-08-25 에 새로 짰다.** 이전 문서는 전부 `docs/temp/` 에 있다 — **참고만 한다.**
 
-## 새 세션에서 트랙 하나를 진행하는 법
-
-작업은 **트랙의 하위 트랙 단위로 새 대화를 열어** 진행한다. 컨텍스트가 섞이지 않고, 끝나면 닫으면 된다.
-
-첫 프롬프트는 이 형태면 충분하다.
-
-```
-docs/ROADMAP.md 와 docs/plans/<계획문서>.md 를 읽고 <job ID> 부터 진행해줘.
-```
-
-예: `docs/ROADMAP.md 와 docs/plans/101_ui_basics.md 를 읽고 U1-01 부터 진행해줘.`
-
-세션을 여는 쪽이 알아야 할 것:
-
-- **계획 문서는 자립적이다.** 요구사항·제품 정의 링크, job 목록, 완료 기준, 검증 방법이 모두 그 안에 있다.
-- **판단이 필요한 job(🤝)은 사용자 승인 없이 넘어가지 않는다.** 공개 API 형태는 예제 코드로 먼저 합의한다.
-- **🧑 job 은 Claude 가 대신 하지 않는다.**
-- job 을 끝내면 계획 문서의 ID 앞에 `✅` 를 붙이고, 담당 열은 그대로 둔다.
-- 결과는 `docs/verification/<같은 번호>_*.md` 에 기록한다.
+| 무엇을 하려는가                             | 어디를 읽나                                                                        |
+| ------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 전체 파악 · 다음 할 일 찾기                 | [docs/README.md](docs/README.md)                                                   |
+| 패키지 경계 · 의존 방향 판단                | [docs/00_foundation/01_ARCHITECTURE.md](docs/00_foundation/01_ARCHITECTURE.md)     |
+| 담당(🧑/🤖/🤝) 판단 · 문서 쓰기 · 세션 운영 | [docs/00_foundation/02_WORKFLOW.md](docs/00_foundation/02_WORKFLOW.md)             |
+| 이름 · 파일 구조 · 커밋 메시지              | [docs/00_foundation/03_CONVENTIONS.md](docs/00_foundation/03_CONVENTIONS.md)       |
+| 명령 실행 · 검증 범위 · Tailwind 제약       | [docs/00_foundation/04_TOOLING.md](docs/00_foundation/04_TOOLING.md)               |
+| 공개 API 변경 · 버전 · 배포                 | [docs/00_foundation/05_RELEASE.md](docs/00_foundation/05_RELEASE.md)               |
+| 컴포넌트·훅 하나를 작업 항목으로 잡기       | [docs/00_foundation/06_COMPONENT_FLOW.md](docs/00_foundation/06_COMPONENT_FLOW.md) |
+| 주제별 진행 (001~904)                       | `docs/<번호>_<이름>/README.md`                                                     |
 
 ## 프로젝트 개요
 
-- pnpm workspace 모노레포. **npm 에 배포되는 범용 React 라이브러리**다.
-- `packages/*` 4종이 각각 독립 배포된다. `apps/playground` 는 배포하지 않는 검증용 샘플 앱이다.
+**여러 프로젝트에서 재사용할 수 있는 범용 React 라이브러리 세트.** npm 에 배포한다.
+pnpm workspace 모노레포. `packages/*` 4종이 각각 독립 배포되고, `apps/*` 는 배포하지 않는다.
 
-| 패키지                | 역할                                   | React 의존 |
-| --------------------- | -------------------------------------- | ---------- |
-| `@txstack/ui`         | Tx\* UI 컴포넌트 (Tailwind v4 기반)    | O          |
-| `@txstack/hooks`      | 범용 React 훅                          | O          |
-| `@txstack/route-meta` | 라우트 메타 정의 · 렌더러 · 네비게이션 | O          |
-| `@txstack/network`    | axios 기반 HTTP 클라이언트             | **X**      |
+| 번호  | 패키지                | 역할                                             | React 의존 |
+| ----- | --------------------- | ------------------------------------------------ | ---------- |
+| `001` | `@txstack/ui`         | Tx\* UI 컴포넌트 — 쉬운 사용법·쉬운 커스터마이징 | O          |
+| `002` | `@txstack/route-meta` | 라우트를 메타데이터로 관리 (icon·path·scope)     | O          |
+| `003` | `@txstack/hooks`      | `useUrlQuery` — URL params 를 상태처럼           | O          |
+| `004` | `@txstack/network`    | axios 확장 — 로그와 초기화                       | **X**      |
 
-- 원본은 `black-message` / `usertics` / `chain-wallet-service` 의 `src/core` 다. 이관 근거는 `docs/plans/001`.
+지원 트랙: `901` Storybook · `902` Vitest · `903` 문서 사이트 · `904` Claude 가이드(패키지 동봉 배포).
 
-## 필수 규칙
+`packages/*` 의 기본 기능은 **이미 구현되어 있다.** 지금 하는 일은 새로 만들기가 아니라,
+**하나씩 열어보고 결함·불필요한 것을 정리해 배포 가능한 수준으로 올리는 것**이다.
 
-- **패키지 매니저는 pnpm만 사용한다.** npm/yarn lockfile을 만들지 않는다.
-- **Node `24.14.0`, pnpm `>=10.0.0`.**
-- **커밋/푸시는 사용자가 명시적으로 요청할 때만** 한다. 자동 커밋 금지.
-- **npm publish 는 사용자가 명시적으로 요청할 때만** 한다. 되돌릴 수 없다.
-- 기존 사용자 변경사항을 되돌리지 않는다. 관련 없는 diff는 건드리지 않는다.
-- 커밋 메시지는 Conventional Commits + 한글 (예: `feat: TxDropdown 다중선택 지원`). commitlint/husky가 검사한다.
-- ESLint/Prettier 설정은 **루트가 소유**한다. 패키지 개별 설정을 추가하지 않는다.
-- **원본 3개 저장소(`black-message` 등)를 수정하지 않는다.** 이 저장소는 추출본이다. 역이식은 별도 요구사항(`002`)이다.
+## 절대 규칙
 
-## 패키지 경계 (가장 중요)
+작업 방식:
 
-- **의존 방향은 `ui → hooks` 하나만 허용한다.** `hooks` / `route-meta` / `network` 는 서로 참조하지 않는다. 순환 금지.
+- **전체 틀은 사용자가 숙지한다.** "다 만들어" 가 아니다. 설계는 함께 합의하고, **첫 구현은 사용자가 한다.**
+  Claude 는 반복 구현·테스트·정리를 맡는다. 판정 기준은 [02_WORKFLOW](docs/00_foundation/02_WORKFLOW.md) 참고.
+- **🧑 job 은 Claude 가 대신 하지 않는다.** 막히면 설명·리뷰·대안 제시까지만 한다.
+- **판단이 필요한 job 은 사용자 승인 없이 넘어가지 않는다.** 공개 API 형태는 예제 코드로 먼저 합의한다.
+- **커밋 / 푸시는 사용자가 명시적으로 요청할 때만.** 자동 커밋 금지.
+- **`npm publish` 는 사용자가 명시적으로 요청할 때만.** 되돌릴 수 없다.
+- 기존 사용자 변경사항을 되돌리지 않는다. 관련 없는 diff 는 건드리지 않는다.
+- **작업 단위는 컴포넌트·기능 하나다.** 계층별로 몰아서 하지 않고 `S1 문서 → S2 구현 → S3 테스트 → S4 스토리북 → S5 문서사이트 → S6 Claude가이드` 를 수직으로 관통한다. 상세는 [06_COMPONENT_FLOW](docs/00_foundation/06_COMPONENT_FLOW.md).
+
+패키지 경계 (어기면 범용 라이브러리가 아니다):
+
+- **의존 방향은 `ui → hooks` 하나만 허용한다.** `hooks` / `route-meta` / `network` 는 서로 참조하지 않는다.
 - **앱 전역(ambient) 타입·전역 변수에 의존하지 않는다.** 소비자 프로젝트에는 그 전역이 없다.
-  - 전역 `IAxiosResponse`, `$http`, `_`, `$d`, `$t` 같은 것을 쓰면 안 된다. 필요한 타입은 패키지가 직접 export 한다.
-- **런타임 정책(인증 토큰, 401 처리, 응답 봉투 형태)을 패키지가 결정하지 않는다.** 전부 옵션으로 주입받는다.
-- **`react` / `react-dom` / `react-router-dom` / `ag-grid-*` 는 peerDependencies** 다. dependencies 로 옮기면 소비 앱에서 React 인스턴스가 중복되어 hooks 가 깨진다.
-- 무거운 선택적 의존(ag-grid, react-day-picker)은 **subpath export** 로 격리하고 `peerDependenciesMeta.optional` 로 표시한다.
-- 도메인 지식(블랙/문자/지갑/유저타입 등)을 패키지 코드에 넣지 않는다. 발견하면 옵션이나 제네릭으로 뽑는다.
+- **런타임 정책(인증 토큰, 401 처리, 응답 봉투)을 패키지가 결정하지 않는다.** 옵션으로 주입받는다.
+- **`react` / `react-dom` / `react-router-dom` / `ag-grid-*` 는 peerDependencies 다.**
+- 도메인 지식(블랙/문자/지갑/유저타입 등)을 패키지 코드에 넣지 않는다.
 
-## Tailwind v4 (소비자 영향)
+환경:
 
-- `@txstack/ui` 의 테마는 런타임 CSS 가 아니라 **Tailwind 클래스 문자열**이다.
-- 소비 앱이 `@source "../node_modules/@txstack/ui/dist";` 를 지정하지 않으면 **클래스가 purge 되어 스타일이 전부 사라진다.**
-- 테마 관련 변경 시 이 제약이 깨지지 않는지 확인하고, README 안내 문구도 함께 갱신한다.
-- 다크모드는 `dark:` variant(class 전략) 기준이다.
+- **pnpm 만 사용한다.** npm/yarn lockfile 을 만들지 않는다. Node `24.14.0`, pnpm `>=10.0.0`.
+- ESLint / Prettier 설정은 **루트가 소유**한다. 패키지 개별 설정을 추가하지 않는다.
+- 커밋 메시지는 Conventional Commits + 한글 (예: `feat: TxDropdown 다중선택 지원`).
+- **원본 3개 저장소(`black-message` · `usertics` · `chain-wallet-service`)를 수정하지 않는다.** 읽기만 한다.
 
-## 작업 방식
+## 작업 순서
 
-- 새 기능/패키지 구조/배포 관련 작업은 먼저 `docs/`와 `docs/plans/`의 관련 문서를 확인한다.
-- 구현 전 변경 범위가 어느 패키지까지인지 분리해서 판단한다. **패키지 경계를 넘는 변경은 계획 문서를 먼저 갱신한다.**
-- 구현 후 변경 범위에 맞는 최소 검증을 실행하고, 실행하지 못한 검증은 이유를 남긴다.
-- 관련 문서가 있는 기능을 바꿨다면 문서 업데이트 필요 여부도 함께 판단한다.
-- **공개 API(export)를 바꿨다면 changeset 을 함께 작성한다.**
+1. 관련 `docs/00_foundation/` 규약과 해당 번호 폴더 문서를 먼저 읽는다.
+2. 변경 범위가 어느 패키지까지인지 분리해서 판단한다. **패키지 경계를 넘는 변경은 문서를 먼저 갱신한다.**
+3. 구현 후 [04_TOOLING](docs/00_foundation/04_TOOLING.md) 의 "변경 범위별 최소 검증" 을 실행한다.
+   **실행하지 못한 검증은 이유를 남긴다.**
+4. **공개 API(export)를 바꿨다면 changeset 을 함께 작성한다.**
+5. 문서 상태(`30_tasks.md`, 폴더 `README.md` 의 "다음 할 일") 를 갱신한다.
 
-## 구현 순서 원칙
-
-- 도메인/요구사항이 불명확한 기능은 playground 에 먼저 구현해 사용 흐름을 확인한다.
-- 공개 API 형태(props, 옵션, 반환 타입)에 대해 사용자 승인을 받은 뒤 내부 구현으로 넘어간다.
-- 소비자가 어떻게 쓸지를 먼저 예제 코드로 적고, 그 예제가 자연스러운 방향으로 API 를 맞춘다.
-
-## 검증 (작업 후 반드시 실행)
-
-- 전체: `pnpm check` (lint + 전 패키지 typecheck + 회귀 테스트)
-- 테스트: `pnpm test` / 워치 `pnpm test:watch` — vitest. 패키지별로 node·jsdom 환경이 갈린다
-- 린트: `pnpm lint` / 자동수정 `pnpm lint:fix`
-- 빌드: `pnpm build` — `dist/*.js` 와 `dist/*.d.ts` 가 생성되는지 확인
-- 배포 산출물 점검: 해당 패키지에서 `npm pack --dry-run` 으로 포함 파일 목록 확인
-- 화면 변경: `pnpm dev` (playground, :5310) 로 실제 렌더 확인
-- 컴포넌트 변경: `pnpm storybook:dev` (:6310) 로 카탈로그 확인
-
-## 자주 쓰는 명령
+## 검증 명령
 
 ```sh
-pnpm i                    # 설치
-pnpm check                # lint + typecheck + test
+pnpm check                # lint + typecheck + test  ← 기본
 pnpm test                 # 회귀 테스트 (vitest)
 pnpm build                # packages/* 전체 빌드
-pnpm dev                  # playground 실행 (= playground:dev 별칭)
-pnpm storybook:dev        # 컴포넌트 카탈로그 실행 (:6310)
-pnpm storybook:build      # 카탈로그 정적 빌드
-pnpm changeset            # 변경 기록 작성 (배포 전 필수)
-pnpm release:version      # changeset -> 버전/CHANGELOG 반영
-pnpm release:publish      # 빌드 후 npm 배포 (사용자 요청 시에만)
+pnpm dev                  # playground 실행
+pnpm storybook:dev        # 컴포넌트 카탈로그
+pnpm changeset            # 변경 기록 (공개 API 변경 시 필수)
 ```
-
-## 버전 / 배포
-
-- **changesets** 로 패키지별 독립 버전을 매긴다. 모노레포지만 버전은 묶이지 않는다.
-- scope 패키지이므로 `--access public` 이 필요하다 (`.changeset/config.json` 의 `access: public`).
-- 초기에는 `alpha` 태그로 배포한다.
-- **breaking change 판정**: export 제거/이름 변경, props 필수화, peerDeps 범위 축소, 기본 동작 변경은 major.
-- `apps/playground` 는 `private: true` 이며 changesets `ignore` 대상이다.
-
-## 문서 구조 (V 모델)
-
-`docs/`는 소프트웨어 생명주기(V 모델)에 맞춰 5개 범주로 나눈다. 번호로 범위를 한정하지 말고 **폴더의 성격**으로 이해한다.
-
-| 범주             | 위치                 | 성격                                            | 파일명         |
-| ---------------- | -------------------- | ----------------------------------------------- | -------------- |
-| **Rules(규약)**  | `docs/rules/`        | 항상 따르는 아키텍처·컨벤션·가드레일. 상시 유효 | `NN_TITLE.md`  |
-| **Requirements** | `docs/requirements/` | 원 요청·요구사항 정의 (무엇을/왜)               | `nnn_title.md` |
-| **Plans**        | `docs/plans/`        | 작업사항 = 구현 계획 (어떻게)                   | `nnn_title.md` |
-| **Verification** | `docs/verification/` | 검증 = 테스트 계획·수행·결과 (제대로 됐나)      | `nnn_title.md` |
-| **Reports**      | `docs/reports/`      | 산출물 = 메신저 전달 요약 + 작업 종합           | `nnn_title.md` |
-
-### 원칙
-
-- **작업은 항상 `Rules` 문서를 따른다.** 패키지 구조나 배포를 바꾸기 전에 관련 `Rules`를 먼저 확인한다.
-- 하나의 요구사항은 **같은 번호 `nnn`을 공유**하며 아래 순서로 흐른다:
-  **`nnn` 요구사항 → `nnn` 작업사항 → `nnn` 검증 → `nnn` 산출물**
-  (한 요청이 여러 계획으로 갈라지면 `002`, `002-2`처럼 접미어를 쓴다.)
-- Rules는 번호(`NN`)를 쓰고 요구사항 흐름과 무관하게 상시 갱신한다.
-
-### 기재 양식
-
-- **Requirements** — 배경/목적, 요구사항 목록(수용 기준), 영향 범위(패키지/playground/배포), 제약·비고.
-- **Plans** — 관련 요구사항 링크, 설계·변경 범위, 공개 API 영향, 작업 항목, 검증 방법.
-- **Verification** — 관련 `Plans` 링크, 검증 항목, 수행 절차(재현 스텝), 결과(통과/실패·증거). 수용 기준과 매핑한다.
-- **Reports** — 무엇을 만들었나(요약), 변경/커밋, 검증 결과, 배포 상태, 관련 링크. 메신저로 그대로 전달 가능한 수준으로 압축.
-- **Rules** — 형식 자유. 상단에 "언제 확인해야 하는지"를 한 줄로 남긴다.
-
-### Rules 인덱스
-
-`docs/rules/README.md` 참고.
