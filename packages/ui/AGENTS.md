@@ -46,13 +46,49 @@ peer 로 `react` `react-dom` `react-router-dom` `framer-motion` 이 필요하다
 
 ## 2. 전 컴포넌트 공통 규칙
 
-| 규칙        | 내용                                                                      |
-| ----------- | ------------------------------------------------------------------------- |
-| import      | 전부 배럴에서. `import { TxSpinner } from "@txstack/ui"`                  |
-| 이름        | 컴포넌트는 `Tx` 접두, props 타입은 `<컴포넌트명>Props` (`I` 접두 없음)    |
-| `className` | **기본 클래스와 병합된다. 교체가 아니다.** 충돌하는 것만 밀어낸다         |
-| 색          | 대체로 부모에게서 상속한다. 부모에 `text-*` 를 주는 쪽이 먼저다           |
-| DOM 찾기    | 모든 컴포넌트가 `data-tag="<컴포넌트명>"` 을 붙인다. 테스트 셀렉터로 쓴다 |
+| 규칙        | 내용                                                                                           |
+| ----------- | ---------------------------------------------------------------------------------------------- |
+| import      | 전부 배럴에서. `import { TxSpinner } from "@txstack/ui"`                                       |
+| 이름        | 컴포넌트는 `Tx` 접두, props 타입은 `<컴포넌트명>Props` (`I` 접두 없음)                         |
+| `className` | **기본 클래스와 병합된다. 교체가 아니다.** 충돌하는 것만 밀어낸다. **아래 ⚠ 를 반드시 읽는다** |
+| 색          | 대체로 부모에게서 상속한다. 부모에 `text-*` 를 주는 쪽이 먼저다                                |
+| DOM 찾기    | 모든 컴포넌트가 `data-tag="<컴포넌트명>"` 을 붙인다. 테스트 셀렉터로 쓴다                      |
+
+### 커스터마이징은 범위에 따라 셋 중 하나를 고른다
+
+| 무엇을 바꾸나           | 무엇으로          |
+| ----------------------- | ----------------- |
+| 이 하나만               | `className`       |
+| 이 컴포넌트의 내부 구조 | `theme` prop      |
+| **앱 전체**             | `TxThemeProvider` |
+
+`theme` 은 **갈아끼우기**(문자열을 교체), `className` 은 **덧붙이기**(충돌만 밀어냄)다.
+`TxThemeProvider` 는 선택이고, 감싸지 않아도 라이브러리 기본값으로 동작한다.
+
+### ⚠ `className` 으로 색을 바꿀 때는 `hover:` · `dark:` 도 같이 준다
+
+**타입은 통과하는데 절반만 적용되는 함정이다.**
+
+```tsx
+<TxButton className="bg-yellow-500 text-black" /> // ✗ 평상시만 노랑
+```
+
+`tailwind-merge` 는 **조건이 같은 클래스끼리만** 충돌로 본다. `bg-blue-500` 은 밀려나지만
+`hover:bg-blue-600` · `dark:bg-blue-600` 은 조건이 달라 **그대로 남는다.**
+마우스를 올리면 원래 색, 다크모드면 원래 색이 된다.
+
+```tsx
+// ✓ 바꿀 조건을 전부 적는다
+<TxButton className="bg-yellow-500 text-black hover:bg-yellow-600 dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-600" />
+```
+
+**같은 색을 여러 곳에서 쓴다면 `className` 을 반복하지 말고 variant 를 하나 만든다.**
+
+```tsx
+<TxThemeProvider theme={{ TxButton: { variants: { warning: "bg-yellow-500 text-black hover:bg-yellow-600" } } }}>
+  <TxButton variant="warning" />
+</TxThemeProvider>
+```
 
 ### 하지 말 것
 
