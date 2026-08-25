@@ -1,7 +1,7 @@
 # 001 진행 보드 — @txstack/ui
 
 > **컴포넌트 하나가 작업 항목이다.** 규칙은 [06_COMPONENT_FLOW](../00_foundation/06_COMPONENT_FLOW.md).
-> 상태 표기: 없음(미착수) · `🔄`(진행중) · `✅`(완료) · `⏸`(보류) · `❌`(폐기)
+> 상태 표기: 없음(미착수) · `🔄`(진행중·확인중) · `✅`(완료·통과) · `↩`(2차 개선으로 되돌림) · `⏸`(보류) · `❌`(폐기)
 
 전체 **26 항목** × 6단계. 인벤토리는 2026-08-25 자동 수집값이다.
 `test✗` 는 `TxSpinner` 를 뺀 25종에 해당한다 — 컴포넌트 렌더 테스트의 선례는 `TxSpinner.test.tsx` 다.
@@ -33,74 +33,74 @@ docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1
 
 플로우 절차와 커스터마이징 방침을 여기서 확정한다. **나머지는 이게 끝나기 전에 시작하지 않는다.**
 
-| 컴포넌트    | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                                      | 문서                                 |
-| ----------- | --- | --- | --- | --- | --- | --- | ----------------------------------------------------------------------------- | ------------------------------------ |
-| `TxSpinner` | ✅  | ✅  | ✅  | ✅  |     |     | 56행 · theme✗ · types(동거) · **test 13** · tag✓ · **스토리5** · named export | [TxSpinner](components/TxSpinner.md) |
-| `TxButton`  |     |     |     |     |     |     | 134행 · theme✓ · types✗ · test✗ · tag✓ · 스토리6                              | [TxButton](components/TxButton.md)   |
+| 컴포넌트    | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                                      | 문서                                 |
+| ----------- | --- | --- | --- | --- | --- | --- | --- | ----------------------------------------------------------------------------- | ------------------------------------ |
+| `TxSpinner` | ✅  | ✅  | ✅  | ✅  | 🔄  |     |     | 56행 · theme✗ · types(동거) · **test 13** · tag✓ · **스토리5** · named export | [TxSpinner](components/TxSpinner.md) |
+| `TxButton`  |     |     |     |     |     |     |     | 134행 · theme✓ · types✗ · test✗ · tag✓ · 스토리6                              | [TxButton](components/TxButton.md)   |
 
 ### B. 파일럿에 묶인 것
 
 파일럿의 결정이 그대로 걸리는 항목. 바로 뒤에 붙인다.
 
-| 컴포넌트    | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                               | 문서                                 |
-| ----------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------ | ------------------------------------ |
-| `TxLoading` |     |     |     |     |     |     | 43행 · theme✗ · types✓ · test✗ · tag✓ · 스토리3        | [TxLoading](components/TxLoading.md) |
-| `TxTheme`   |     |     |     |     |     |     | 24행 · theme✗ · types✗ · test✗ · tag✗ · **스토리없음** | [TxTheme](components/TxTheme.md)     |
+| 컴포넌트    | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                               | 문서                                 |
+| ----------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------ | ------------------------------------ |
+| `TxLoading` |     |     |     |     |     |     |     | 43행 · theme✗ · types✓ · test✗ · tag✓ · 스토리3        | [TxLoading](components/TxLoading.md) |
+| `TxTheme`   |     |     |     |     |     |     |     | 24행 · theme✗ · types✗ · test✗ · tag✗ · **스토리없음** | [TxTheme](components/TxTheme.md)     |
 
 ### C. 존치 판정 먼저
 
 **S1 에서 폐기될 수 있다.** 먼저 잘라내면 뒤가 가벼워진다.
 
-| 컴포넌트            | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                            | 문서                                                 |
-| ------------------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------- | ---------------------------------------------------- |
-| `TxCoolTable`       |     |     |     |     |     |     | 1031행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                   | [TxCoolTable](components/TxCoolTable.md)             |
-| `TxFlex`            |     |     |     |     |     |     | 7행 · theme✗ · types✗ · test✗ · tag✓ · 스토리3                      | [TxFlex](components/TxFlex.md)                       |
-| `TxClipboardButton` |     |     |     |     |     |     | 6행 · theme✗ · types✗ · test✗ · tag✗ · 스토리2 · **default export** | [TxClipboardButton](components/TxClipboardButton.md) |
-| `TxIcons`           |     |     |     |     |     |     | 80행 · theme✗ · types✗ · test✗ · tag✗ · **스토리없음**              | [TxIcons](components/TxIcons.md)                     |
+| 컴포넌트            | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                            | 문서                                                 |
+| ------------------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------- | ---------------------------------------------------- |
+| `TxCoolTable`       |     |     |     |     |     |     |     | 1031행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                   | [TxCoolTable](components/TxCoolTable.md)             |
+| `TxFlex`            |     |     |     |     |     |     |     | 7행 · theme✗ · types✗ · test✗ · tag✓ · 스토리3                      | [TxFlex](components/TxFlex.md)                       |
+| `TxClipboardButton` |     |     |     |     |     |     |     | 6행 · theme✗ · types✗ · test✗ · tag✗ · 스토리2 · **default export** | [TxClipboardButton](components/TxClipboardButton.md) |
+| `TxIcons`           |     |     |     |     |     |     |     | 80행 · theme✗ · types✗ · test✗ · tag✗ · **스토리없음**              | [TxIcons](components/TxIcons.md)                     |
 
 ### D. 폼 계열
 
 `TxInput` 이 이 계열의 기준이 된다. 그 다음은 같은 규약의 반복이라 🤖 비중이 커진다.
 
-| 컴포넌트          | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                              | 문서                                             |
-| ----------------- | --- | --- | --- | --- | --- | --- | --------------------------------------------------------------------- | ------------------------------------------------ |
-| `TxInput`         |     |     |     |     |     |     | 315행 · theme✓ · types✓ · test✗ · tag✓ · 스토리9 · **default export** | [TxInput](components/TxInput.md)                 |
-| `TxTextarea`      |     |     |     |     |     |     | 105행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                      | [TxTextarea](components/TxTextarea.md)           |
-| `TxCheckBox`      |     |     |     |     |     |     | 85행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5                       | [TxCheckBox](components/TxCheckBox.md)           |
-| `TxDropdown`      |     |     |     |     |     |     | 689행 · theme✓ · types✓ · test✗ · tag✓ · 스토리7                      | [TxDropdown](components/TxDropdown.md)           |
-| `TxCapsLockCheck` |     |     |     |     |     |     | 60행 · theme✗ · types✗ · test✗ · tag✗ · 스토리3                       | [TxCapsLockCheck](components/TxCapsLockCheck.md) |
-| `TxForm`          |     |     |     |     |     |     | 251행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5                      | [TxForm](components/TxForm.md)                   |
+| 컴포넌트          | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                              | 문서                                             |
+| ----------------- | --- | --- | --- | --- | --- | --- | --- | --------------------------------------------------------------------- | ------------------------------------------------ |
+| `TxInput`         |     |     |     |     |     |     |     | 315행 · theme✓ · types✓ · test✗ · tag✓ · 스토리9 · **default export** | [TxInput](components/TxInput.md)                 |
+| `TxTextarea`      |     |     |     |     |     |     |     | 105행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                      | [TxTextarea](components/TxTextarea.md)           |
+| `TxCheckBox`      |     |     |     |     |     |     |     | 85행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5                       | [TxCheckBox](components/TxCheckBox.md)           |
+| `TxDropdown`      |     |     |     |     |     |     |     | 689행 · theme✓ · types✓ · test✗ · tag✓ · 스토리7                      | [TxDropdown](components/TxDropdown.md)           |
+| `TxCapsLockCheck` |     |     |     |     |     |     |     | 60행 · theme✗ · types✗ · test✗ · tag✗ · 스토리3                       | [TxCapsLockCheck](components/TxCapsLockCheck.md) |
+| `TxForm`          |     |     |     |     |     |     |     | 251행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5                      | [TxForm](components/TxForm.md)                   |
 
 ### E. 오버레이
 
 열림/닫힘·포커스·바깥클릭 규약이 공통이다. 한 항목에서 정하면 나머지가 따라온다.
 
-| 컴포넌트        | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                         | 문서                                         |
-| --------------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------ | -------------------------------------------- |
-| `TxModal`       |     |     |     |     |     |     | 91행 · theme✓ · types✗ · test✗ · tag✓ · 스토리4  | [TxModal](components/TxModal.md)             |
-| `TxSlidePanel`  |     |     |     |     |     |     | 158행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxSlidePanel](components/TxSlidePanel.md)   |
-| `TxDropMenu`    |     |     |     |     |     |     | 217행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxDropMenu](components/TxDropMenu.md)       |
-| `TxToolTip`     |     |     |     |     |     |     | 135행 · theme✗ · types✗ · test✗ · tag✓ · 스토리5 | [TxToolTip](components/TxToolTip.md)         |
-| `TxContextMenu` |     |     |     |     |     |     | 168행 · theme✓ · types✓ · test✗ · tag✓ · 스토리3 | [TxContextMenu](components/TxContextMenu.md) |
+| 컴포넌트        | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                         | 문서                                         |
+| --------------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------ | -------------------------------------------- |
+| `TxModal`       |     |     |     |     |     |     |     | 91행 · theme✓ · types✗ · test✗ · tag✓ · 스토리4  | [TxModal](components/TxModal.md)             |
+| `TxSlidePanel`  |     |     |     |     |     |     |     | 158행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxSlidePanel](components/TxSlidePanel.md)   |
+| `TxDropMenu`    |     |     |     |     |     |     |     | 217행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxDropMenu](components/TxDropMenu.md)       |
+| `TxToolTip`     |     |     |     |     |     |     |     | 135행 · theme✗ · types✗ · test✗ · tag✓ · 스토리5 | [TxToolTip](components/TxToolTip.md)         |
+| `TxContextMenu` |     |     |     |     |     |     |     | 168행 · theme✓ · types✓ · test✗ · tag✓ · 스토리3 | [TxContextMenu](components/TxContextMenu.md) |
 
 ### F. 레이아웃 · 내비
 
-| 컴포넌트   | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                         | 문서                               |
-| ---------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------ | ---------------------------------- |
-| `TxLayout` |     |     |     |     |     |     | 403행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxLayout](components/TxLayout.md) |
-| `TxHeader` |     |     |     |     |     |     | 28행 · theme✓ · types✗ · test✗ · tag✓ · 스토리3  | [TxHeader](components/TxHeader.md) |
-| `TxCard`   |     |     |     |     |     |     | 170행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5 | [TxCard](components/TxCard.md)     |
-| `TxTabs`   |     |     |     |     |     |     | 111행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxTabs](components/TxTabs.md)     |
+| 컴포넌트   | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                         | 문서                               |
+| ---------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------ | ---------------------------------- |
+| `TxLayout` |     |     |     |     |     |     |     | 403행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxLayout](components/TxLayout.md) |
+| `TxHeader` |     |     |     |     |     |     |     | 28행 · theme✓ · types✗ · test✗ · tag✓ · 스토리3  | [TxHeader](components/TxHeader.md) |
+| `TxCard`   |     |     |     |     |     |     |     | 170행 · theme✓ · types✓ · test✗ · tag✓ · 스토리5 | [TxCard](components/TxCard.md)     |
+| `TxTabs`   |     |     |     |     |     |     |     | 111행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 | [TxTabs](components/TxTabs.md)     |
 
 ### G. 데이터 · 무거운 의존
 
 subpath 격리가 걸린 항목이 있다. 마지막에 둔다.
 
-| 컴포넌트      | S1  | S2  | S3  | S4  | S5  | S6  | 인벤토리                                                                        | 문서                                     |
-| ------------- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------------------- | ---------------------------------------- |
-| `TxJsonTree`  |     |     |     |     |     |     | 249행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                                | [TxJsonTree](components/TxJsonTree.md)   |
-| `TxAgGrid`    |     |     |     |     |     |     | 679행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 · **default export** · subpath | [TxAgGrid](components/TxAgGrid.md)       |
-| `TxDayPicker` |     |     |     |     |     |     | 399행 · theme✓ · types✓ · test✗ · tag✗ · 스토리8 · subpath                      | [TxDayPicker](components/TxDayPicker.md) |
+| 컴포넌트      | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                                        | 문서                                     |
+| ------------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------------------- | ---------------------------------------- |
+| `TxJsonTree`  |     |     |     |     |     |     |     | 249행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4                                | [TxJsonTree](components/TxJsonTree.md)   |
+| `TxAgGrid`    |     |     |     |     |     |     |     | 679행 · theme✓ · types✓ · test✗ · tag✓ · 스토리4 · **default export** · subpath | [TxAgGrid](components/TxAgGrid.md)       |
+| `TxDayPicker` |     |     |     |     |     |     |     | 399행 · theme✓ · types✓ · test✗ · tag✗ · 스토리8 · subpath                      | [TxDayPicker](components/TxDayPicker.md) |
 
 ## 공통 job (컴포넌트에 속하지 않는 것)
 

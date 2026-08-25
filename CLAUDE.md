@@ -48,7 +48,10 @@ pnpm workspace 모노레포. `packages/*` 4종이 각각 독립 배포되고, `a
 - **커밋 / 푸시는 사용자가 명시적으로 요청할 때만.** 자동 커밋 금지.
 - **`npm publish` 는 사용자가 명시적으로 요청할 때만.** 되돌릴 수 없다.
 - 기존 사용자 변경사항을 되돌리지 않는다. 관련 없는 diff 는 건드리지 않는다.
-- **작업 단위는 컴포넌트·기능 하나다.** 계층별로 몰아서 하지 않고 `S1 문서 → S2 구현 → S3 테스트 → S4 스토리북 → S5 문서사이트 → S6 Claude가이드` 를 수직으로 관통한다. 상세는 [06_COMPONENT_FLOW](docs/00_foundation/06_COMPONENT_FLOW.md).
+- **작업 단위는 컴포넌트·기능 하나다.** 계층별로 몰아서 하지 않고 `S1 문서 → S2 구현 → S3 테스트 → S4 스토리북 → 🧑 사용자 확인 → S5 문서사이트 → S6 Claude가이드` 를 수직으로 관통한다. 상세는 [06_COMPONENT_FLOW](docs/00_foundation/06_COMPONENT_FLOW.md).
+- **`S4` 뒤에서 멈춘다.** 사용자가 Storybook 에서 직접 확인하고 2차 개선을 지시해야 `S5` 로 간다. **확인 없이 문서화로 넘어가지 않는다.**
+- **vitest = 🤖 자동 검증 / Storybook = 🧑 가 직접 보는 자리.** Storybook 에 `play` 함수나 `addon-vitest` 를 넣지 않는다.
+  Storybook 에는 `main.ts` 의 `READY` 목록에 올린 **확인 준비가 된 컴포넌트만** 싣는다.
 
 패키지 경계 (어기면 범용 라이브러리가 아니다):
 
