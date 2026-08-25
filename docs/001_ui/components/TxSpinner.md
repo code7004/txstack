@@ -1,10 +1,11 @@
 # TxSpinner
 
 > **플로우 S1 산출물.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md) · 파일럿 1차
-> 상태: **S1·S2·S3 완료 (2026-08-25).** 이 문서가 `TxSpinner` 의 단일 진실 공급원이다.
+> 상태: **S1~S4 완료 (2026-08-25).** 남은 것은 S5(문서 사이트) · S6(Claude 가이드).
+> 이 문서가 `TxSpinner` 의 단일 진실 공급원이다.
 
 현재 코드: `packages/ui/src/TxSpinner/TxSpinner.tsx` (구현 + props 타입) · `index.ts` (재수출) ·
-`TxSpinner.test.tsx` (13개) · `TxSpinner.stories.tsx` (S4 에서 개편)
+`TxSpinner.test.tsx` (13개) · `TxSpinner.stories.tsx` (`Feedback/TxSpinner`, 5개)
 
 ## 진행
 
@@ -13,7 +14,7 @@
 | `S1` | 문서 = 명세 + 현행 코드 감사 🤝 | `001-TxSpinner-S1` | ✅   | Q1~Q4 결정 완료                                         |
 | `S2` | 구현 = 감사 결과 반영 🤖        | `001-TxSpinner-S2` | ✅   | D1–D5 · A1–A3 · C1~C7 처리. changeset 작성됨. 검증은 §9 |
 | `S3` | 테스트 🤖                       | `001-TxSpinner-S3` | ✅   | 13개. jsdom 한계 발견 → §11                             |
-| `S4` | 스토리북 🤖                     | `001-TxSpinner-S4` |      | `901` 양식을 여기서 만든다                              |
+| `S4` | 스토리북 🤖                     | `001-TxSpinner-S4` | ✅   | 스토리 5개. D1 을 실물로 증명 → §12                     |
 | `S5` | 문서 사이트 🤖                  | `001-TxSpinner-S5` |      | `903` 골격을 여기서 만든다                              |
 | `S6` | Claude 가이드 🤖                | `001-TxSpinner-S6` |      | `904` 골격을 여기서 만든다                              |
 
@@ -61,8 +62,8 @@ export const TxSpinner: (props: TxSpinnerProps) => JSX.Element;
 ```
 packages/ui/src/TxSpinner/
 ├─ TxSpinner.tsx          구현 + TxSpinnerProps
-├─ TxSpinner.stories.tsx  Feedback/TxSpinner (스토리 3개 이상)
-├─ TxSpinner.test.tsx     S3 에서 생성
+├─ TxSpinner.stories.tsx  Feedback/TxSpinner (스토리 5개)
+├─ TxSpinner.test.tsx     회귀 테스트 13개
 └─ index.ts               재수출만 (C2)
 ```
 
@@ -225,19 +226,19 @@ import { TxSpinner } from "@txstack/ui";
 
 ## 8. S2 처리 결과 (2026-08-25)
 
-| 항목         | 처리                                                                                  | 파일                                            |
-| ------------ | ------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| C1 · C2      | `TxSpinner.tsx` 로 분리, named export. `index.ts` 는 `export * from "./TxSpinner"` 만 | `TxSpinner.tsx` · `index.ts`                    |
-| Q1 · C6      | `TxSpinnerProps`, `import type { SVGProps } from "react"`                             | `TxSpinner.tsx:1,4`                             |
-| D1 · D2 · D3 | 기본 `className` 제거 → `cm()` 병합. `w-full` · `items-center` 사라짐                 | `TxSpinner.tsx:41`                              |
-| C4           | `data-tag="TxSpinner"`                                                                | `TxSpinner.tsx:36`                              |
-| Q3 · D4      | `size?: number \| string` 기본 `"1em"`. 거짓 주석 교체                                | `TxSpinner.tsx:6`                               |
-| A1 · A2      | `decorative` 분기. 끄면 `role="status"`+`aria-label="Loading"`, 켜면 `aria-hidden`    | `TxSpinner.tsx:30`                              |
-| A3           | `motion-reduce:[animation-duration:2s]` — 멈추지 않고 늦춘다                          | `TxSpinner.tsx:41`                              |
-| C1 (배럴)    | `src/index.ts` 의 default 특례 재수출에서 `TxSpinner` 줄 제거                         | `packages/ui/src/index.ts`                      |
-| A2 (적용)    | `TxButton` 기본 `loading` → `<TxSpinner decorative />`, import 도 named 로            | `packages/ui/src/TxButton/index.tsx:4,41`       |
-| D1 (증거)    | 소비자 우회 `className="w-auto"` 제거                                                 | `apps/playground/src/pages/UiButtonPage.tsx:40` |
-| D5           | **부분 처리.** 기본값을 덮던 `args` 만 걷어냈다. 제목·설명·스토리 수(C5·C7)는 **S4**  | `TxSpinner.stories.tsx`                         |
+| 항목         | 처리                                                                                                 | 파일                                            |
+| ------------ | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| C1 · C2      | `TxSpinner.tsx` 로 분리, named export. `index.ts` 는 `export * from "./TxSpinner"` 만                | `TxSpinner.tsx` · `index.ts`                    |
+| Q1 · C6      | `TxSpinnerProps`, `import type { SVGProps } from "react"`                                            | `TxSpinner.tsx:1,4`                             |
+| D1 · D2 · D3 | 기본 `className` 제거 → `cm()` 병합. `w-full` · `items-center` 사라짐                                | `TxSpinner.tsx:41`                              |
+| C4           | `data-tag="TxSpinner"`                                                                               | `TxSpinner.tsx:36`                              |
+| Q3 · D4      | `size?: number \| string` 기본 `"1em"`. 거짓 주석 교체                                               | `TxSpinner.tsx:6`                               |
+| A1 · A2      | `decorative` 분기. 끄면 `role="status"`+`aria-label="Loading"`, 켜면 `aria-hidden`                   | `TxSpinner.tsx:30`                              |
+| A3           | `motion-reduce:[animation-duration:2s]` — 멈추지 않고 늦춘다                                         | `TxSpinner.tsx:41`                              |
+| C1 (배럴)    | `src/index.ts` 의 default 특례 재수출에서 `TxSpinner` 줄 제거                                        | `packages/ui/src/index.ts`                      |
+| A2 (적용)    | `TxButton` 기본 `loading` → `<TxSpinner decorative />`, import 도 named 로                           | `packages/ui/src/TxButton/index.tsx:4,41`       |
+| D1 (증거)    | 소비자 우회 `className="w-auto"` 제거                                                                | `apps/playground/src/pages/UiButtonPage.tsx:40` |
+| D5           | **부분 처리.** 기본값을 덮던 `args` 만 걷어냈다. 제목·설명·스토리 수(C5·C7)는 **S4 에서 완료 → §12** | `TxSpinner.stories.tsx`                         |
 
 `.changeset/tidy-spinner-surface.md` 작성 (`minor`).
 
@@ -310,11 +311,55 @@ jsdom 에는 Tailwind CSS 가 없으니 그 승부 자체가 일어나지 않는
 `@testing-library/jest-dom` 은 도입하지 않았다. 속성·클래스 확인에는 기본 matcher 로 충분하다.
 RTL 자동 cleanup 은 `globals` 를 켜야 등록되므로 `afterEach(cleanup)` 을 파일에서 직접 붙였다 — **양식 후보.**
 
-## 12. 다음 단계
+## 12. S4 스토리북 (2026-08-25)
 
-`001-TxSpinner-S4` — 스토리북. `901` 양식을 여기서 만든다. 남은 것은 **D5·C5·C7**:
-제목을 `Feedback/TxSpinner` 로, `docs.description.component` 의 `"…"` 플레이스홀더 교체, 스토리 3개 이상.
-§6 의 예제 3개가 그대로 스토리 후보다.
+`TxSpinner.stories.tsx` 전면 개편. **D5 · C5 · C7 이 여기서 닫힌다.**
+
+| 스토리           | 보여주는 것                                                                   |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `기본`           | 아무것도 주지 않은 상태. **args 로 기본값을 덮지 않는다** (D5)                |
+| `크기`           | 두 갈래 — 부모 `text-*` 상속 vs `size`. 같은 `<TxSpinner />` 가 셋으로 보인다 |
+| `색`             | `currentColor` 상속 vs `className` 직접 지정                                  |
+| `장식용`         | `decorative` 유무의 차이, `TxButton` 안에서의 실제 쓰임                       |
+| `안내_문구_교체` | `aria-label` 로 기본 영어 문구를 덮는 경로                                    |
+
+- 제목 `Feedback/TxSpinner` — `TxLoading`·`TxClipboardButton` 과 같은 그룹 (C5)
+- `docs.description.component` 의 `"…"` 플레이스홀더를 실제 설명으로 교체 (D5).
+  **"주의점부터 적는다"** — `size` 에 클래스를 주면 안 된다는 것(D4 의 재발 방지)이 앞쪽에 온다
+- `argTypes` 에 `size`·`decorative`·`className`·`aria-label` 4개 모두 설명을 달았다
+
+### 여기서 D1 이 처음으로 **실물로** 증명됐다
+
+S3 이 못 하던 층이다. 실제 브라우저 + 실제 Tailwind 에서 `크기` 스토리의 스피너 6개를 실측했다.
+
+| 준 것                | 렌더된 크기 |
+| -------------------- | ----------- |
+| `text-xs` 부모       | 12 × 12     |
+| `text-base` 부모     | 16 × 16     |
+| `text-2xl` 부모      | 24 × 24     |
+| `size="1.5em"`       | 21 × 21     |
+| `size={32}`          | 32 × 32     |
+| `className="size-8"` | 32 × 32     |
+
+**6개 전부 정사각형**이고 폰트 크기 상속이 설계대로 동작한다. 옛 구현이었다면 폭이 컨테이너 전체였다.
+`className="size-8"` 이 `size` 를 이기는 것도 확인됐다 — §3 의 "클래스로 크기를 덮을 수 있다" 가 사실이다.
+
+`장식용` 스토리에서 두 스피너의 ARIA 도 실측했다 — 기본은 `role="status"`+`aria-label="Loading"`,
+`decorative` 는 `aria-hidden="true"` 에 둘 다 없음.
+
+> **`901` 로 넘기는 관찰** (`901-02`·`901-03` 재료):
+>
+> 1. **스토리는 "props 를 하나씩 보여주는 것"이 아니라 "판단 기준을 보여주는 것"이 낫다.**
+>    `크기` 스토리의 값은 크기 목록이 아니라 **"두 갈래 중 어느 쪽을 쓸 것인가"** 다.
+> 2. **CSS 가 걸린 결함의 검증처는 여기다.** 테스트(`902`)는 원인을, 스토리(`901`)는 결과를 지킨다.
+>    D1 이 그 경계를 실제로 그었다 — §11 과 함께 읽어야 한다.
+> 3. `docs.description.component` 는 **주의점부터** 적었다. 소비자가 틀리는 지점이 감사에 이미 있다(D4).
+
+## 13. 다음 단계
+
+`001-TxSpinner-S5` — 문서 사이트. `903` 골격을 여기서 만든다.
+**`903` 은 아직 아무것도 없다** — Storybook 과의 역할 분담(`901-05` · `903` 미결)이 먼저 걸릴 수 있다.
+§6 예제와 §12 스토리가 이미 있으므로, 사이트가 그걸 **다시 쓰는지 참조하는지**가 첫 결정이다.
 
 인계 사항:
 
