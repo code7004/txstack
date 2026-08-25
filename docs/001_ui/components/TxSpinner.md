@@ -6,19 +6,19 @@
 > 이 문서가 `TxSpinner` 의 단일 진실 공급원이다.
 
 현재 코드: `packages/ui/src/TxSpinner/TxSpinner.tsx` (구현 + props 타입) · `index.ts` (재수출) ·
-`TxSpinner.test.tsx` (13개) · `TxSpinner.stories.tsx` (`Feedback/TxSpinner`, 5개)
+`TxSpinner.test.tsx` (15개) · `TxSpinner.stories.tsx` (`Feedback/TxSpinner`, 5개)
 
 ## 진행
 
-| 단계 | 내용                                           | job ID             | 상태 | 비고                                                              |
-| ---- | ---------------------------------------------- | ------------------ | ---- | ----------------------------------------------------------------- |
-| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxSpinner-S1` | ✅   | Q1~Q4 결정 완료                                                   |
-| `S2` | 구현 = 감사 결과 반영 🤖                       | `001-TxSpinner-S2` | ✅   | D1–D5 · A1–A3 · C1~C7 처리. changeset 작성됨. 검증은 §9           |
-| `S3` | 테스트 🤖                                      | `001-TxSpinner-S3` | ✅   | 13개. jsdom 한계 발견 → §11                                       |
-| `S4` | 스토리북 🤖                                    | `001-TxSpinner-S4` | ✅   | 스토리 5개. D1 을 실물로 증명 → §12                               |
-| 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                  | 🔄   | **여기서 멈춰 있다.** `pnpm storybook:dev` → `Feedback/TxSpinner` |
-| `S5` | 문서 사이트 🤖                                 | `001-TxSpinner-S5` |      | `903` 골격을 여기서 만든다                                        |
-| `S6` | Claude 가이드 🤖                               | `001-TxSpinner-S6` |      | `904` 골격을 여기서 만든다                                        |
+| 단계 | 내용                                           | job ID             | 상태 | 비고                                                    |
+| ---- | ---------------------------------------------- | ------------------ | ---- | ------------------------------------------------------- |
+| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxSpinner-S1` | ✅   | Q1~Q4 결정 완료                                         |
+| `S2` | 구현 = 감사 결과 반영 🤖                       | `001-TxSpinner-S2` | ✅   | D1–D5 · A1–A3 · C1~C7 처리. changeset 작성됨. 검증은 §9 |
+| `S3` | 테스트 🤖                                      | `001-TxSpinner-S3` | ✅   | 15개. jsdom 한계 발견 → §11                             |
+| `S4` | 스토리북 🤖                                    | `001-TxSpinner-S4` | ✅   | 스토리 5개(플레이그라운드 포함) → §12                   |
+| 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                  | 🔄   | **진행 중.** 2건 잡혀 고침 → §12. `pnpm storybook:dev`  |
+| `S5` | 문서 사이트 🤖                                 | `001-TxSpinner-S5` |      | `903` 골격을 여기서 만든다                              |
+| `S6` | Claude 가이드 🤖                               | `001-TxSpinner-S6` |      | `904` 골격을 여기서 만든다                              |
 
 ## 1. 목적
 
@@ -49,13 +49,16 @@ export const TxSpinner: (props: TxSpinnerProps) => JSX.Element;
 
 `SVGProps` 의 나머지(`style` · `onClick` · `aria-label` · `width` · `height` …)는 그대로 통과한다.
 
+**단, `decorative` 가 켜지면 `role`·`aria-label` 은 소비자가 준 값이라도 버린다.** 둘을 같이 주는 건 모순이고,
+`aria-hidden` 요소에 남은 라벨은 읽히지도 않으면서 마크업만 어지럽힌다. 꺼져 있을 때는 소비자 값이 기본값을 이긴다.
+
 | 항목               | 값                                                                        | 근거  |
 | ------------------ | ------------------------------------------------------------------------- | ----- |
 | export             | **named** (`export const TxSpinner`)                                      | C1    |
 | 타입 이름          | `TxSpinnerProps` — **`I` 접두 없음**                                      | §5 Q1 |
 | `size` 기본값      | `"1em"`                                                                   | §5 Q3 |
 | `className` 기본값 | **없음.** 내부 클래스와 `cm()` 으로 병합한다                              | D2    |
-| 스크린리더 문구    | `aria-label` 기본 `"Loading"`. 소비자가 `aria-label` 로 덮는다            | A1    |
+| 스크린리더 문구    | `aria-label` 기본 `"Loading"`. 소비자가 `aria-label`·`role` 로 덮는다     | A1    |
 | 애니메이션         | `animate-spin` + `prefers-reduced-motion` 시 **느려진다 (멈추지 않는다)** | A3    |
 | DOM 표식           | `data-tag="TxSpinner"`                                                    | C4    |
 
@@ -65,7 +68,7 @@ export const TxSpinner: (props: TxSpinnerProps) => JSX.Element;
 packages/ui/src/TxSpinner/
 ├─ TxSpinner.tsx          구현 + TxSpinnerProps
 ├─ TxSpinner.stories.tsx  Feedback/TxSpinner (스토리 5개)
-├─ TxSpinner.test.tsx     회귀 테스트 13개
+├─ TxSpinner.test.tsx     회귀 테스트 15개
 └─ index.ts               재수출만 (C2)
 ```
 
@@ -317,18 +320,50 @@ RTL 자동 cleanup 은 `globals` 를 켜야 등록되므로 `afterEach(cleanup)`
 
 `TxSpinner.stories.tsx` 전면 개편. **D5 · C5 · C7 이 여기서 닫힌다.**
 
-| 스토리           | 보여주는 것                                                                   |
-| ---------------- | ----------------------------------------------------------------------------- |
-| `기본`           | 아무것도 주지 않은 상태. **args 로 기본값을 덮지 않는다** (D5)                |
-| `크기`           | 두 갈래 — 부모 `text-*` 상속 vs `size`. 같은 `<TxSpinner />` 가 셋으로 보인다 |
-| `색`             | `currentColor` 상속 vs `className` 직접 지정                                  |
-| `장식용`         | `decorative` 유무의 차이, `TxButton` 안에서의 실제 쓰임                       |
-| `안내_문구_교체` | `aria-label` 로 기본 영어 문구를 덮는 경로                                    |
+| 스토리               | 보여주는 것                                                                          | 컨트롤   |
+| -------------------- | ------------------------------------------------------------------------------------ | -------- |
+| **`플레이그라운드`** | **직접 만져보는 자리.** 4개 prop 모두 살아 있고 즉시 반영된다                        | **live** |
+| `기본`               | 아무것도 주지 않은 상태. **args 로 기본값을 덮지 않는다** (D5)                       | 꺼짐     |
+| `크기`               | 두 갈래 — 부모 `text-*` 상속 vs `size`. 윗줄은 같은 `<TxSpinner />` 가 셋으로 보인다 | 꺼짐     |
+| `색`                 | `currentColor` 상속 vs `className` 직접 지정                                         | 꺼짐     |
+| `장식용`             | `decorative` 유무의 차이, `TxButton` 안에서의 실제 쓰임                              | 꺼짐     |
 
 - 제목 `Feedback/TxSpinner` — `TxLoading`·`TxClipboardButton` 과 같은 그룹 (C5)
 - `docs.description.component` 의 `"…"` 플레이스홀더를 실제 설명으로 교체 (D5).
   **"주의점부터 적는다"** — `size` 에 클래스를 주면 안 된다는 것(D4 의 재발 방지)이 앞쪽에 온다
 - `argTypes` 에 `size`·`decorative`·`className`·`aria-label` 4개 모두 설명을 달았다
+
+### 처음 판은 만질 수 없었다 — 게이트가 잡은 것 ①
+
+첫 S4 산출물은 스토리 5개를 전부 **보여주기용**으로 짰다. `render: () => …` 를 쓰니 args 가 무시돼서
+**컨트롤 패널을 만져도 아무 일이 일어나지 않았다.** `기본` 만 args 를 받았는데, 그마저 `args` 를 비워 둬서
+모든 컨트롤이 "Set string" 버튼으로 접혀 있었다 — 패널이 비어 보인다.
+
+D5("args 로 기본값을 덮지 않는다")를 **과잉 적용한 것**이다. D5 의 취지는 "의미 있는 기본값을 덮지 마라"였는데,
+S2 에서 기본 `className` 자체를 없앴으므로 이제 덮을 기본값이 없다. 오히려 args 를 채워야 플레이그라운드가 된다.
+
+고친 방식:
+
+- **`플레이그라운드` 를 첫 스토리로 세우고 args 를 채웠다.** `render: (args) => …` 로 받아서 컨트롤이 즉시 반영된다
+- 눈에 안 보이는 prop(`decorative`·`aria-label`)은 **스크린리더가 뭐라고 읽는지를 한 줄로 표시**했다.
+  안 그러면 토글해도 아무 변화가 없어 보인다
+- 비교용 스토리(`기본`·`크기`·`색`·`장식용`)는 `controls: { disable: true }` 로 **컨트롤 탭 자체를 없앴다.**
+  죽은 손잡이를 보여주지 않는다
+- `안내_문구_교체` 스토리는 없앴다 — 플레이그라운드의 `aria-label` 컨트롤이 그 역할을 한다
+
+### `decorative` 가 `aria-label` 을 못 버리고 있었다 — 게이트가 잡은 것 ②
+
+플레이그라운드에서 `aria-label="Loading"` 이 들어간 채로 `decorative` 를 켜 보니
+**`aria-label` 이 그대로 남았다.** `{...props}` 를 `{...a11y}` 뒤에 펼친 탓에 소비자가 준 값이 살아남은 것이다.
+
+명세 §2 는 "`role`·`aria-label` 을 빼고 `aria-hidden` 을 붙인다" 라고 적혀 있으니 **구현이 명세를 어긴 상태**였다.
+`aria-hidden` 요소의 라벨은 읽히지도 않아 실害는 없지만, 마크업이 거짓말을 한다.
+
+`role` 과 `aria-label` 을 구조분해로 따로 꺼내 **장식용일 때는 소비자가 준 값이라도 버리도록** 고쳤다.
+꺼져 있을 때는 여전히 소비자 값이 기본값을 이긴다. 회귀 테스트 2개 추가 (13 → **15개**).
+
+> S3 테스트는 이걸 못 잡았다. `<TxSpinner decorative />` 단독만 검사했고 **`decorative` + `aria-label` 조합**은
+> 짚지 않았기 때문이다. 조합에서 나오는 결함은 사람이 만지다 나온다 — 게이트가 있는 이유가 이거다.
 
 ### 여기서 D1 이 처음으로 **실물로** 증명됐다
 

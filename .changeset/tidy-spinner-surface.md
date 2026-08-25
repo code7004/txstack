@@ -20,6 +20,9 @@
 - `className` 이 이제 **기본 클래스를 교체하지 않고 병합**된다. 색만 바꾸려다 레이아웃이 사라지지 않는다.
 - `decorative` prop 추가. 켜면 `role="status"` · `aria-label` 대신 `aria-hidden` 이 붙는다.
   옆에 이미 읽을 문구가 있는 자리(버튼 안 등)에서 스크린리더 중복 안내를 막는다.
+  **소비자가 `role`·`aria-label` 을 함께 주더라도 `decorative` 가 켜져 있으면 버린다** —
+  `aria-hidden` 요소에 남은 라벨은 읽히지도 않으면서 마크업만 어지럽힌다.
+  꺼져 있을 때는 소비자가 준 `role`·`aria-label` 이 기본값을 이긴다.
   `TxButton` 의 기본 로딩 표시가 `<TxSpinner decorative />` 로 바뀌었다.
 
 **그 밖에**

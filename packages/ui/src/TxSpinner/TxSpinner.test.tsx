@@ -116,6 +116,20 @@ describe("TxSpinner — 접근성", () => {
     expect(svg.getAttribute("role")).toBeNull();
     expect(svg.getAttribute("aria-label")).toBeNull();
   });
+
+  it("decorative 는 소비자가 준 aria-label·role 도 버린다 (A2)", () => {
+    const svg = renderSpinner(<TxSpinner decorative role="img" aria-label="불러오는 중" />);
+
+    // Storybook 확인에서 잡힌 결함이다. 둘을 같이 주는 건 모순이고, aria-hidden 요소에 남은
+    // 라벨은 읽히지도 않으면서 마크업만 어지럽힌다. 명세(§2)가 "빼고" 라고 적혀 있으니 뺀다.
+    expect(svg.getAttribute("aria-hidden")).toBe("true");
+    expect(svg.getAttribute("role")).toBeNull();
+    expect(svg.getAttribute("aria-label")).toBeNull();
+  });
+
+  it("decorative 가 꺼져 있으면 role 도 덮을 수 있다", () => {
+    expect(renderSpinner(<TxSpinner role="img" />).getAttribute("role")).toBe("img");
+  });
 });
 
 describe("TxSpinner — 그 밖의 계약", () => {

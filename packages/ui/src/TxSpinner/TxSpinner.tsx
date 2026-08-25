@@ -25,10 +25,13 @@ export interface TxSpinnerProps extends Omit<SVGProps<SVGSVGElement>, "children"
  *
  * 명세: `docs/001_ui/components/TxSpinner.md`
  */
-export const TxSpinner = ({ size = "1em", decorative = false, className, ...props }: TxSpinnerProps) => {
+export const TxSpinner = ({ size = "1em", decorative = false, className, role, "aria-label": ariaLabel, ...props }: TxSpinnerProps) => {
   // 장식용인데 role="status" + aria-label 을 남겨두면 옆의 문구와 중복 안내된다.
   // (TxButton 처럼 버튼에 이미 label 이 붙어 있는 자리가 그렇다.)
-  const a11y: SVGProps<SVGSVGElement> = decorative ? { "aria-hidden": true } : { role: "status", "aria-label": "Loading" };
+  //
+  // role·aria-label 을 따로 꺼내 두는 이유: 장식용일 때는 소비자가 준 값이라도 **버려야** 한다.
+  // aria-hidden 요소에 남은 라벨은 읽히지도 않으면서 마크업만 어지럽히고, 명세와도 어긋난다.
+  const a11y: SVGProps<SVGSVGElement> = decorative ? { "aria-hidden": true } : { role: role ?? "status", "aria-label": ariaLabel ?? "Loading" };
 
   return (
     <svg
@@ -37,10 +40,10 @@ export const TxSpinner = ({ size = "1em", decorative = false, className, ...prop
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      {...a11y}
       // 모션 저감에서 회전을 멈추면 "로딩 중" 이라는 정보 자체가 사라진다. 끄지 않고 늦춘다.
       className={cm("animate-spin text-current motion-reduce:[animation-duration:2s]", className)}
       {...props}
+      {...a11y}
     >
       <path
         fill="currentColor"

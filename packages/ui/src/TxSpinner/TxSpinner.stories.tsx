@@ -12,6 +12,8 @@ const meta = {
         component: [
           "로딩 중임을 알리는 **회전 아이콘 하나.** 그 이상은 하지 않는다 — 문구·오버레이·표시 여부 판단은 `TxLoading` 이 담당한다.",
           "",
+          "**`플레이그라운드` 에서 컨트롤 패널로 직접 만져본다.** 나머지 스토리는 비교용이라 컨트롤이 적용되지 않는다.",
+          "",
           "- **아무것도 주지 않는 게 기본 사용법이다.** 크기 `1em` + `currentColor` 라 놓인 자리의 글자 크기·색에 저절로 맞는다.",
           '- `size` 는 **CSS 길이나 number(px)** 를 받는다. `size="w-6"` 처럼 클래스를 주면 안 된다 — `width` 속성값으로 들어가 무효다. 클래스로 크기를 바꾸려면 `className` 을 쓴다.',
           "- `className` 은 기본 클래스를 **교체하지 않고 병합**된다. 색만 바꿔도 회전은 남는다.",
@@ -24,27 +26,49 @@ const meta = {
     }
   },
   argTypes: {
-    size: { control: "text", description: 'CSS 길이 또는 number(px). 기본 `"1em"` — 부모 font-size 를 따른다' },
+    size: { control: "text", description: 'CSS 길이 또는 number(px). 비우면 기본 `"1em"` — 부모 font-size 를 따른다' },
     decorative: { control: "boolean", description: "켜면 `role`·`aria-label` 을 빼고 `aria-hidden` 을 붙인다" },
     className: { control: "text", description: "기본 클래스와 병합된다 (교체 아님)" },
     "aria-label": { control: "text", description: '스크린리더 문구. 기본 `"Loading"`' }
   }
-  // args 로 기본값을 덮지 않는다 — 첫 스토리는 "아무것도 안 준 상태" 를 보여줘야 한다 (D5)
 } satisfies Meta<typeof TxSpinner>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** 아무것도 주지 않은 상태. 이게 대부분의 경우 정답이다. */
-export const 기본: Story = {};
+/** 컨트롤이 적용되지 않는 비교용 스토리에 붙인다. 죽은 손잡이를 보여주지 않는다. */
+const 비교용 = { controls: { disable: true } };
+
+/**
+ * **여기서 직접 만져본다.** 컨트롤 패널의 값을 바꾸면 즉시 반영된다.
+ *
+ * 옆에 놓인 글자와 비교해서 크기·색을 본다. 아래 회색 줄은 **스크린리더가 뭐라고 읽는지**를
+ * 보여준다 — `decorative` 와 `aria-label` 은 눈에 안 보이는 prop 이라 이렇게 드러내야 확인이 된다.
+ */
+export const 플레이그라운드: Story = {
+  args: { size: "2em", decorative: false, className: "text-blue-600 dark:text-blue-400", "aria-label": "Loading" },
+  render: (args) => (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-3 text-base">
+        <TxSpinner {...args} />
+        <span>옆 글자와 비교해서 본다</span>
+      </div>
+      <p className="text-xs text-slate-500 dark:text-slate-400">스크린리더: {args.decorative ? "안내하지 않음 (aria-hidden)" : `"${args["aria-label"] || "Loading"}" 로 안내`}</p>
+    </div>
+  )
+};
+
+/** 아무것도 주지 않은 상태. 이게 대부분의 경우 정답이다. **기본 크기는 `1em`** 이라 글자만 하다. */
+export const 기본: Story = { parameters: 비교용 };
 
 /**
  * **크기는 두 갈래로 정한다.**
  *
  * `size` 로 직접 주거나, 아무것도 주지 않고 **부모의 `text-*` 에 맡기거나.**
- * 아래 줄은 전부 `<TxSpinner />` 하나이고, 다른 건 부모의 글자 크기뿐이다.
+ * 윗줄은 전부 `<TxSpinner />` 하나이고, 다른 건 부모의 글자 크기뿐이다.
  */
 export const 크기: Story = {
+  parameters: 비교용,
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex items-end gap-4">
@@ -78,6 +102,7 @@ export const 크기: Story = {
  * 스피너에 직접 주면 그쪽이 이긴다 — `className` 은 기본 클래스를 지우지 않고 병합된다.
  */
 export const 색: Story = {
+  parameters: 비교용,
   render: () => (
     <div className="flex items-center gap-6">
       <span className="text-blue-600 dark:text-blue-400">
@@ -87,7 +112,7 @@ export const 색: Story = {
         <TxSpinner size="1.5em" />
       </span>
       <TxSpinner size="1.5em" className="text-emerald-600 dark:text-emerald-400" />
-      <span className="text-slate-400 text-xs">앞의 둘은 부모 상속, 마지막은 className 직접 지정</span>
+      <span className="text-xs text-slate-400">앞의 둘은 부모 상속, 마지막은 className 직접 지정</span>
     </div>
   )
 };
@@ -101,6 +126,7 @@ export const 색: Story = {
  * `TxButton` 의 기본 로딩 표시가 그 경우라서, 내부적으로 `<TxSpinner decorative />` 를 쓴다.
  */
 export const 장식용: Story = {
+  parameters: 비교용,
   render: () => (
     <div className="flex flex-col gap-4 text-sm">
       <div className="flex items-center gap-2">
@@ -117,12 +143,4 @@ export const 장식용: Story = {
       </div>
     </div>
   )
-};
-
-/**
- * 스크린리더 문구는 `aria-label` 로 바꾼다. 기본값이 영어(`"Loading"`)라 **언어를 강제하지 않으려면 이 경로를 쓴다.**
- * 별도 prop 을 두지 않은 건, 표준 속성으로 이미 되는 일이기 때문이다.
- */
-export const 안내_문구_교체: Story = {
-  args: { "aria-label": "주문 내역을 불러오는 중", size: "1.5em" }
 };
