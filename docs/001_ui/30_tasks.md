@@ -4,15 +4,16 @@
 > 상태 표기: 없음(미착수) · `🔄`(진행중·확인중) · `✅`(완료·통과) · `↩`(2차 개선으로 되돌림) · `⏸`(보류) · `❌`(폐기)
 
 전체 **26 항목** × 6단계. 인벤토리는 2026-08-25 자동 수집값이다.
-`test✗` 는 `TxSpinner` 를 뺀 25종에 해당한다 — 컴포넌트 렌더 테스트의 선례는 `TxSpinner.test.tsx` 다.
+`test✗` 는 파일럿 2종을 뺀 24종에 해당한다 — 렌더 테스트 선례는 `TxSpinner`·`TxButton` 이다.
 
 ## 새 창을 여는 법
 
 ```
-docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1 부터 진행해줘.
+docs/README.md 와 docs/001_ui/components/TxInput.md 를 읽고 001-TxInput-S1 ~ S4 까지 진행해줘.
 ```
 
-한 창에서 **한 항목의 한 단계**만 한다. 끝나면 그 항목 문서와 이 보드를 갱신하고 창을 닫는다.
+한 창에서 **한 항목의 `S1`~`S4`(1차)** 를 이어 돈다. 끝나면 🧑 확인 게이트에서 멈추고 창을 닫는다.
+게이트를 통과하면 `S5`·`S6` 를 새 창에서 한다.
 
 ## 단계
 
@@ -23,7 +24,7 @@ docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1
 | `S3` | 테스트                                             | [902](../902_testing/README.md)      |
 | `S4` | 스토리북                                           | [901](../901_storybook/README.md)    |
 | `S5` | 문서 사이트                                        | [903](../903_docs_site/README.md)    |
-| `S6` | Claude 가이드                                      | [904](../904_claude_guide/README.md) |
+| `S6` | 에이전트 가이드                                    | [904](../904_claude_guide/README.md) |
 
 ## 진행 순서
 
@@ -36,7 +37,7 @@ docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1
 | 컴포넌트    | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                                      | 문서                                 |
 | ----------- | --- | --- | --- | --- | --- | --- | --- | ----------------------------------------------------------------------------- | ------------------------------------ |
 | `TxSpinner` | ✅  | ✅  | ✅  | ✅  | ✅  | ⏸   | ✅  | 56행 · theme✗ · types(동거) · **test 15** · tag✓ · **스토리5** · named export | [TxSpinner](components/TxSpinner.md) |
-| `TxButton`  |     |     |     |     |     |     |     | 134행 · theme✓ · types✗ · test✗ · tag✓ · 스토리6                              | [TxButton](components/TxButton.md)   |
+| `TxButton`  | ✅  | ✅  | ✅  | ✅  | 🔄  | ⏸   |     | 76행 · theme✓ · types(동거) · **test 20** · tag✓ · **스토리5**                | [TxButton](components/TxButton.md)   |
 
 ### B. 파일럿에 묶인 것
 

@@ -46,6 +46,20 @@ docs/README.md 와 docs/001_ui/components/TxInput.md 를 읽고 001-TxInput-S1 �
 - 한 폴더에 `TxInput`·`TxSearchInput`·`TxInputLike`(default) 3개 — 항목 분리 여부 판단
 - 폼 계열의 기준 컴포넌트. `TxTextarea`·`TxDropdown` 이 이 규약을 따라간다
 
+### `001-TxButton-S1` 에서 넘어온 결정·결함 (2026-08-25)
+
+**콜백 이름 규칙이 확정됐다** → [TxButton §5 Q4](TxButton.md#q4--콜백-이름-규칙-추가-합의).
+접미어는 살리되 어휘가 닫혔다: `Text` · `Number` · `Int` · `Boolean` · `Item` · `Value`.
+**`Numb`·`Bool`·`Nums`·`Float` 금지.** 이 컴포넌트가 그 규칙의 **첫 적용처**다.
+
+이미 확인된 결함 —
+
+- **`onChangeFloat` 와 `onChangeNumber` 가 같은 값을 넘긴다.** `TxInput.tsx:43,45` 가 둘 다 `num` 을
+  그대로 준다. 이름만 둘이고 동작이 같으니 `onChangeFloat` 를 없앤다. **`Float` 금지의 실제 근거다**
+- `onChangeInt` 는 `Math.trunc` 라 **동작이 다르다.** 살린다
+- `onEnter` 가 있다 — `TxButton` 에서는 폐기했지만 **`<input>` 은 사정이 다르다** (Enter 가 click 을
+  만들지 않는다). 여기서는 유지가 맞는지 다시 판단한다
+
 ## 2. 목적 🤝
 
 왜 있나. 없으면 소비자가 무엇을 직접 해야 하나.

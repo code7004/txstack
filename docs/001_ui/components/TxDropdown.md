@@ -46,6 +46,19 @@ docs/README.md 와 docs/001_ui/components/TxDropdown.md 를 읽고 001-TxDropdow
 - **파일명 규약 이탈**: `txdropdown.types.ts`·`txdropdown.theme.ts` 가 소문자 (다른 폴더는 `<Name>.types.ts`)
 - 689행. `TxDropdown`·`TxDropdownBase`·`TxDropdownMulti` 3개 — 항목 분리 여부 판단
 
+### `001-TxButton-S1` 에서 넘어온 결정·결함 (2026-08-25)
+
+**콜백 이름 규칙이 확정됐다** → [TxButton §5 Q4](TxButton.md#q4--콜백-이름-규칙-추가-합의).
+허용: `Text` · `Number` · `Int` · `Boolean` · `Item` · `Value`. **금지: `Numb`·`Bool`·`Nums`·`Float`.**
+
+이미 확인된 결함 —
+
+- **`onChangeNumb`·`onChangeBool` 은 약어라 금지 대상**이다 → `onChangeNumber`·`onChangeBoolean`
+- **`onChangeInternal`·`onSubmitInternal`·`onCloseInternal` 이 공개 props 에 나와 있다**
+  (`txdropdown.types.ts:61-63`). 내부용은 공개하지 않는다
+- **`onChangeValue` 는 실제로 항목 객체 전체를 넘긴다** → **`onChangeItem` 으로 바꾼다.**
+  `Value` 는 그 항목의 원시값 자리로 비워 둔다. `value` 라는 단어가 두 뜻으로 쓰이던 것을 여기서 가른다
+
 ## 2. 목적 🤝
 
 왜 있나. 없으면 소비자가 무엇을 직접 해야 하나.
