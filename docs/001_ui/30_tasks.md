@@ -131,14 +131,14 @@ subpath 격리가 걸린 항목이 있다. 마지막에 둔다.
 
 파일럿에서 나온 **전 패키지 결정**을 기계적으로 반영하는 job. 컴포넌트별 S2 에 끌고 다니지 않는다.
 
-| job ID           | 내용                                                                                                                                                        | 상태 | 근거                                                                       |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------------------------------- |
-| `001-styles-css` | ~~**자체 CSS 를 `dist/styles.css` 로 번들**~~ → **✅ 2026-08-25.** `scripts/build-css.mjs` · `@txstack/ui/styles.css` export · `npm pack` 확인              | ✅   | [TxSpinner §16](components/01_TxSpinner.md)                                |
-| `001-tokens`     | ~~**전역 토큰(`--tx-*`) 정의**~~ → **✅ 2026-08-26.** `src/tokens.css` · 11개 · `.dark` 재정의. 늘리는 건 쓰는 컴포넌트가 생길 때                           | ✅   | [20_design §5](20_design.md)                                               |
-| `001-css-layer`  | ~~**라이브러리 CSS 를 `@layer tx` 로**~~ → **✅ 2026-08-26.** `styles.css` · `build-css.mjs` · 두 앱 진입점. 소비자는 레이어 순서 한 줄                     | ✅   | [TxButton §17](components/02_TxButton.md)                                  |
-| `001-statelayer` | ~~**상태 색을 파생으로**~~ → **✅ 2026-08-26.** `-hover` 짝 토큰 폐기, `color-mix` 로 배경에서 계산. **`color-mix()` 지원 하한이 정해졌다**                 | ✅   | [20_design §5-1](20_design.md) · [TxButton §19](components/02_TxButton.md) |
-| `001-typenames`  | `ITx*` 나머지 → `Tx*Props` **일괄 리네임 1커밋.** 기계적 치환. 공개 타입이 바뀌므로 changeset 동반                                                          |      | [TxSpinner §5 Q1](components/01_TxSpinner.md#q1--i-접두-폐지)              |
-| `001-r4-sass`    | **`R4` 를 Sass 소비자로 실제 검증.** 빈 Vite+sass 프로젝트에서 import 한 줄 → 렌더 + `--tx-*` 값 변경. 문서가 6군데서 약속하는데 **Tailwind 로만 확인했다** |      | [10_requirements R4](10_requirements.md)                                   |
+| job ID           | 내용                                                                                                                                                         | 상태 | 근거                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | -------------------------------------------------------------------------- |
+| `001-styles-css` | ~~**자체 CSS 를 `dist/styles.css` 로 번들**~~ → **✅ 2026-08-25.** `scripts/build-css.mjs` · `@txstack/ui/styles.css` export · `npm pack` 확인               | ✅   | [TxSpinner §16](components/01_TxSpinner.md)                                |
+| `001-tokens`     | ~~**전역 토큰(`--tx-*`) 정의**~~ → **✅ 2026-08-26.** `src/tokens.css` · 11개 · `.dark` 재정의. 늘리는 건 쓰는 컴포넌트가 생길 때                            | ✅   | [20_design §5](20_design.md)                                               |
+| `001-css-layer`  | ~~**라이브러리 CSS 를 `@layer tx` 로**~~ → **✅ 2026-08-26.** `styles.css` · `build-css.mjs` · 두 앱 진입점. 소비자는 레이어 순서 한 줄                      | ✅   | [TxButton §17](components/02_TxButton.md)                                  |
+| `001-statelayer` | ~~**상태 색을 파생으로**~~ → **✅ 2026-08-26.** `-hover` 짝 토큰 폐기, `color-mix` 로 배경에서 계산. **`color-mix()` 지원 하한이 정해졌다**                  | ✅   | [20_design §5-1](20_design.md) · [TxButton §19](components/02_TxButton.md) |
+| `001-typenames`  | `ITx*` 나머지 → `Tx*Props` **일괄 리네임 1커밋.** 기계적 치환. 공개 타입이 바뀌므로 changeset 동반                                                           |      | [TxSpinner §5 Q1](components/01_TxSpinner.md#q1--i-접두-폐지)              |
+| `001-r4-sass`    | ~~**`R4` 를 Sass 소비자로 검증**~~ → **✅ 2026-08-26.** tarball 을 빈 Vite+sass 앱에 설치해 통과. 어두운 배경 hover 결함 1건을 찾아 탈출구를 규약으로 올렸다 | ✅   | [10_requirements §3](10_requirements.md)                                   |
 
 ## 완료 조건
 

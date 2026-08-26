@@ -111,8 +111,13 @@ purge 되어 **아무 스타일도 안 남는다.** 경로는 그 CSS 파일 기
 .tx-button[data-variant="brand"] {
   --tx-button-bg: #0f172a;
   --tx-button-fg: #fff;
+  --tx-color-state: #fff; /* 배경이 아주 어두울 때만 필요하다 — 아래 */
 }
 ```
+
+**배경이 아주 어둡거나(라이트) 아주 밝으면(다크) hover 가 안 보인다.** 상태 색을 배경에 섞어
+만드는데 둘이 가까우면 값이 안 움직인다. `#0f172a` 배경은 hover 가 배경과 **완전히 같게** 나온다.
+그 자리에만 `--tx-color-state` 를 반대쪽 색으로 주면 풀린다.
 
 ### ⚠ 색은 `className` 으로 바꾸지 않는다 — 토큰으로 바꾼다
 

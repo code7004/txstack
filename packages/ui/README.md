@@ -36,6 +36,10 @@ import "@txstack/ui/styles.css";
 
 빠뜨리면 `TxSpinner`·`TxButton` 의 스타일이 하나도 안 나온다.
 
+> **Sass 를 쓴다면 `.scss` 안이 아니라 JS 에서 import 한다.** Sass 는 `.css` 로 끝나는 `@import` 를
+> 해석하지 않고 그대로 흘려보내서, 번들러가 풀어주지 않으면 브라우저가 그 문자열을 URL 로 알고 실패한다.
+> Vite 는 풀어주지만 **JS 에서 import 하면 그 갈림길 자체가 없다.**
+
 ### 2. Tailwind 를 쓴다면 레이어 순서를 적는다
 
 `styles.css` 의 내용은 전부 **`tx` 캐스케이드 레이어** 안에 있다. 레이어에 없는 CSS 는 레이어에
@@ -150,8 +154,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 .tx-button[data-variant="brand"] {
   --tx-button-bg: #0f172a;
   --tx-button-fg: #fff;
+  --tx-color-state: #fff; /* 배경이 아주 어두울 때 필요하다 — 아래 참고 */
 }
 ```
+
+> **배경이 아주 어둡거나(라이트 모드) 아주 밝으면(다크 모드) hover 가 안 보인다.**
+> 상태 색을 배경에 섞어 만드는데, 섞는 색과 배경이 가까우면 값이 거의 안 움직이기 때문이다.
+> 그 자리에만 `--tx-color-state` 를 반대쪽으로 주면 된다.
 
 상태·변종은 `data-*` 로 나가므로 바깥에서 조준할 수 있다 (`data-variant` · `data-loading`).
 
