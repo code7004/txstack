@@ -86,7 +86,7 @@
 진행 보드에서 다음 항목을 골라 새 창을 연다. 첫 프롬프트는 이 형태로 충분하다.
 
 ```
-docs/README.md 와 docs/001_ui/components/TxButton.md 를 읽고 001-TxButton-S1 진행해줘.
+docs/README.md 와 docs/001_ui/components/02_TxButton.md 를 읽고 001-TxButton-S1 진행해줘.
 ```
 
 항목 문서에는 인벤토리·착수 전 판단·단계 표가 이미 있으므로, **그 문서 하나로 시작할 수 있다.**

@@ -6,7 +6,7 @@
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/004_network/items/singleton.md 를 읽고 004-singleton-S1 부터 진행해줘.
+docs/README.md 와 docs/004_network/items/05_singleton.md 를 읽고 004-singleton-S1 부터 진행해줘.
 ```
 
 단계를 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -57,7 +57,7 @@ docs/README.md 와 docs/004_network/items/singleton.md 를 읽고 004-singleton-
 |     |      |      |                |
 
 분류는 `결함` · `정책누출` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [001_ui/components/TxSpinner.md](../../001_ui/components/TxSpinner.md) 를 본다.
+양식 예시는 [001_ui/components/01_TxSpinner.md](../../001_ui/components/01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 

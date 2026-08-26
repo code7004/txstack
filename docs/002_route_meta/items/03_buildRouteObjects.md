@@ -1,12 +1,12 @@
-# useStateForObject
+# buildRouteObjects
 
-> **@txstack/hooks 의 작업 항목.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md)
+> **@txstack/route-meta 의 작업 항목.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md)
 > 상태: **미착수**
 
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/003_hooks/items/useStateForObject.md 를 읽고 003-useStateForObject-S1 부터 진행해줘.
+docs/README.md 와 docs/002_route_meta/items/03_buildRouteObjects.md 를 읽고 002-buildRouteObjects-S1 부터 진행해줘.
 ```
 
 단계를 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -15,26 +15,26 @@ docs/README.md 와 docs/003_hooks/items/useStateForObject.md 를 읽고 003-useS
 
 | 단계 | 내용                                            | job ID                     | 상태 | 비고                                              |
 | ---- | ----------------------------------------------- | -------------------------- | ---- | ------------------------------------------------- |
-| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                 | `003-useStateForObject-S1` |      |                                                   |
-| `S2` | 구현 = 감사 결과 반영 🧑/🤖                     | `003-useStateForObject-S2` |      |                                                   |
-| `S3` | 테스트 🤖                                       | `003-useStateForObject-S3` |      |                                                   |
+| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                 | `002-buildRouteObjects-S1` |      |                                                   |
+| `S2` | 구현 = 감사 결과 반영 🧑/🤖                     | `002-buildRouteObjects-S2` |      |                                                   |
+| `S3` | 테스트 🤖                                       | `002-buildRouteObjects-S3` |      |                                                   |
 | `S4` | 스토리북                                        | —                          | —    | `ui` 패키지가 아니므로 해당 없음                  |
 | 🧑   | **사용자 확인** — playground·예제로 직접 써본다 | —                          | —    | 통과하면 S5 로. 고칠 게 나오면 S2~S3 을 다시 돈다 |
-| `S5` | 문서 사이트 (예제·코드) 🤖                      | `003-useStateForObject-S5` |      |                                                   |
-| `S6` | Claude 가이드 🤖                                | `003-useStateForObject-S6` |      |                                                   |
+| `S5` | 문서 사이트 (예제·코드) 🤖                      | `002-buildRouteObjects-S5` |      |                                                   |
+| `S6` | Claude 가이드 🤖                                | `002-buildRouteObjects-S6` |      |                                                   |
 
 ## 1. 현재 코드 인벤토리 (2026-08-25)
 
-| 항목      | 값                                        |
-| --------- | ----------------------------------------- |
-| 위치      | `packages/hooks/src/useStateForObject.ts` |
-| 코드 행수 | 65행                                      |
-| export    | `useStateForObject`                       |
+| 항목      | 값                                    |
+| --------- | ------------------------------------- |
+| 위치      | `packages/route-meta/src/utils.ts:21` |
+| 코드 행수 | 94행                                  |
+| export    | `buildRouteObjects`                   |
 
 ### 착수 전에 알아야 할 것
 
-- **존재 이유부터 판단한다.** 요청 범위에 없다 — 유지/폐기 후보
-- `T extends Record<string, any>` — `any` 사용
+- 라우트 트리 → React Router `RouteObject[]` 변환
+- react-router-dom 결합점. 어댑터로 뺄지 여기서 판단한다
 
 ## 2. 목적 🤝
 
@@ -57,7 +57,7 @@ docs/README.md 와 docs/003_hooks/items/useStateForObject.md 를 읽고 003-useS
 |     |      |      |                |
 
 분류는 `결함` · `정책누출` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [001_ui/components/TxSpinner.md](../../001_ui/components/TxSpinner.md) 를 본다.
+양식 예시는 [001_ui/components/01_TxSpinner.md](../../001_ui/components/01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 

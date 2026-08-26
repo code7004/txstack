@@ -6,7 +6,7 @@
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/004_network/items/types.md 를 읽고 004-types-S1 부터 진행해줘.
+docs/README.md 와 docs/004_network/items/01_types.md 를 읽고 004-types-S1 부터 진행해줘.
 ```
 
 단계를 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -34,7 +34,7 @@ docs/README.md 와 docs/004_network/items/types.md 를 읽고 004-types-S1 부�
 ### 착수 전에 알아야 할 것
 
 - **`IApiResponse<T>` 가 응답 봉투를 규정한다.** 패키지가 봉투 모양을 정하면 범용성이 죽는다 — 최우선 판단 항목
-- `I` 접두 사용 — 전 패키지 이름 규약 결정과 묶인다 ([TxSpinner Q1](../../001_ui/components/TxSpinner.md))
+- `I` 접두 사용 — 전 패키지 이름 규약 결정과 묶인다 ([TxSpinner Q1](../../001_ui/components/01_TxSpinner.md))
 
 ## 2. 목적 🤝
 
@@ -57,7 +57,7 @@ docs/README.md 와 docs/004_network/items/types.md 를 읽고 004-types-S1 부�
 |     |      |      |                |
 
 분류는 `결함` · `정책누출` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [001_ui/components/TxSpinner.md](../../001_ui/components/TxSpinner.md) 를 본다.
+양식 예시는 [001_ui/components/01_TxSpinner.md](../../001_ui/components/01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 
