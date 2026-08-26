@@ -1,6 +1,8 @@
 # @txstack/ui
 
-Tailwind v4 기반 `Tx*` React 컴포넌트 모음. 폼·테이블·오버레이·내비게이션을 다크모드까지 포함해 제공한다.
+`Tx*` React 컴포넌트 모음. 폼·테이블·오버레이·내비게이션을 다크모드까지 포함해 제공한다.
+스타일은 **자체 CSS + `--tx-*` 토큰**으로 옮기는 중이고, 아직 Tailwind 클래스 문자열을 쓰는
+컴포넌트가 남아 있다 → [스타일 설정](#스타일-설정).
 
 ```sh
 pnpm add @txstack/ui
@@ -15,24 +17,73 @@ pnpm add @txstack/ui
 - TypeScript 의 `moduleResolution` 은 `bundler` · `node16` · `nodenext` 중 하나여야 한다.
   구형 `node` 설정에서는 **루트 엔트리만 해석되고 서브패스는 해석되지 않는다.**
 
-> **⚠ 이행 중이다 (2026-08-25).** 이 문서는 **지금 코드에 있는 그대로**를 적은 것이다.
-> 스타일을 **Tailwind 클래스 문자열에서 자체 CSS 로** 바꾸기로 했고
-> (`docs/001_ui/20_design.md`), `theme` prop 과 `TxThemeProvider` 는 **폐기 예정**이다.
-> 컴포넌트별 S2 에서 옮기면서 이 문서도 그때 고친다. **아직 배포된 버전은 없다.**
+> **⚠ 이행 중이다 (2026-08-26).** 이 문서는 **지금 코드에 있는 그대로**를 적은 것이다.
+> 스타일을 Tailwind 클래스 문자열에서 **자체 CSS + `--tx-*` 토큰**으로 옮기는 중이다
+> (`docs/001_ui/20_design.md`). **26종 중 2종(`TxSpinner`·`TxButton`)이 옮겨졌고**,
+> 그 둘은 `theme` prop 이 없다. 나머지 24종은 아직 예전 방식이다.
+> **아직 배포된 버전은 없다.** 이행이 끝나면 아래 `@source` 절이 사라진다.
 
-## ⚠ Tailwind v4 설정 (필수) — 지금 버전 기준
+## 스타일 설정
 
-이 패키지의 스타일은 런타임 CSS 가 아니라 **Tailwind 클래스 문자열**이다.
-아래 `@source` 지정이 없으면 Tailwind 가 `node_modules` 안을 스캔하지 않아 **클래스가 전부 purge 되고 스타일이 하나도 적용되지 않는다.**
+**옮긴 컴포넌트와 안 옮긴 컴포넌트가 서로 다른 것을 요구한다.** 지금은 둘 다 해야 한다.
+
+### 1. `styles.css` 를 import 한다 — 옮긴 2종에 필요하다
+
+```tsx
+// 앱 엔트리에서 한 번
+import "@txstack/ui/styles.css";
+```
+
+빠뜨리면 `TxSpinner`·`TxButton` 의 스타일이 하나도 안 나온다.
+
+### 2. Tailwind 를 쓴다면 레이어 순서를 적는다
+
+`styles.css` 의 내용은 전부 **`tx` 캐스케이드 레이어** 안에 있다. 레이어에 없는 CSS 는 레이어에
+있는 CSS 를 **특이도와 무관하게 이기기** 때문이다 — 우리가 레이어 밖에 있으면 `className` 으로
+무엇을 주든 `.tx-button` 이 정한 속성이 꿈쩍도 하지 않는다.
 
 ```css
 /* src/index.css */
+@layer theme, base, tx, components, utilities;
+
 @import "tailwindcss";
+@import "@txstack/ui/styles.css"; /* JS 에서 import 했다면 생략 */
+```
+
+`tx` 는 **preflight(`base`) 뒤, 유틸리티 앞**이어야 한다. 앞에 두면 preflight 가 버튼의 배경과
+여백을 지우고, 뒤에 두면 `className` 이 안 먹는다.
+
+**순수 CSS · Sass · CSS Modules 를 쓴다면 이 절은 필요 없다.** 레이어를 안 쓰는 CSS 가 항상 이긴다.
+
+### 3. `@source` 지정 — 아직 안 옮긴 24종에 필요하다
+
+```css
 @source "../node_modules/@txstack/ui/dist";
 ```
 
-경로는 CSS 파일 기준 상대경로다. 모노레포에서 호이스팅됐다면 실제 `node_modules` 위치에 맞춘다.
-다크모드는 `dark:` variant(class 전략) 기준이므로, `<html>` 이나 `<body>` 에 `dark` 클래스를 토글한다.
+이 컴포넌트들의 스타일은 여전히 **Tailwind 클래스 문자열**이다. 이 줄이 없으면 Tailwind 가
+`node_modules` 를 스캔하지 않아 **클래스가 전부 purge 되고 스타일이 하나도 안 남는다.**
+경로는 CSS 파일 기준 상대경로다. 모노레포에서 호이스팅됐다면 실제 위치에 맞춘다.
+
+> **이 줄은 임시다.** 옮긴 컴포넌트가 늘어날수록 필요 없어지고, 26종이 끝나면 삭제된다.
+> 그때부터 **Tailwind 를 쓰지 않는 프로젝트에서도 전부 동작한다.**
+
+### 다크모드
+
+**`<html>` 이나 `<body>` 에 `dark` 클래스를 토글한다.** 양쪽 방식 모두 이 전략이다 —
+옮긴 컴포넌트는 `.dark` 에서 토큰을 재정의하고, 안 옮긴 쪽은 Tailwind `dark:` variant 를 쓴다.
+
+### 값 바꾸기 — 옮긴 컴포넌트는 CSS 변수다
+
+```css
+:root {
+  --tx-color-primary: #7c3aed;
+  --tx-radius: 9999px;
+}
+```
+
+`hover` · 눌린 색 · 포커스 링 · 다크모드가 이 한 줄에서 따라온다. 상태 색은 배경에서 계산되므로
+따로 줄 필요가 없다 (`color-mix()` — **2023년 이후 브라우저**가 필요하다).
 
 ## 엔트리
 
@@ -78,14 +129,45 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 ## 테마
 
-모든 컴포넌트는 `theme` prop 으로 기본 테마를 부분 재정의할 수 있다. 병합은 `themeMerge` 가 담당한다.
+**컴포넌트에 따라 방식이 다르다.** 이행 중이라 그렇다.
+
+### 옮긴 컴포넌트 (`TxSpinner` · `TxButton`) — CSS 변수
+
+`theme` prop 이 **없다.** 값은 `--tx-*` 토큰으로, 이 인스턴스의 겉은 `className`,
+안쪽 슬롯은 `classNames` 로 바꾼다.
+
+```tsx
+<TxButton label="저장" className="my-cta" classNames={{ label: "truncate" }} />
+```
+
+```css
+/* 앱 전체 */
+:root {
+  --tx-color-primary: #7c3aed;
+}
+
+/* 이 variant 만 — 없던 이름도 만들 수 있다 */
+.tx-button[data-variant="brand"] {
+  --tx-button-bg: #0f172a;
+  --tx-button-fg: #fff;
+}
+```
+
+상태·변종은 `data-*` 로 나가므로 바깥에서 조준할 수 있다 (`data-variant` · `data-loading`).
+
+### 나머지 24종 — `theme` prop
+
+기본 테마를 부분 재정의한다. 병합은 `themeMerge` 가 담당한다.
 
 - `merge` (기본): 문자열 클래스는 `cm()` 으로 병합한다. Tailwind 충돌은 뒤쪽이 이긴다.
 - `override`: 문자열 클래스를 교체한다.
 
 ```tsx
-<TxButton theme={{ variant: { primary: "bg-emerald-500 hover:bg-emerald-600" } }}>저장</TxButton>
+<TxCard theme={{ wrapper: "border-emerald-500" }} />
 ```
+
+**이 경로는 컴포넌트가 옮겨질 때마다 하나씩 사라진다.** `TxThemeProvider` 는 만들었다가 폐기했다 —
+전역 브랜딩이 `:root` 한 줄이면 되기 때문이다.
 
 유틸도 함께 export 한다: `cm`, `themeMerge`, `getDisplayName`, `copyToClipboard`, `getItemKey`, `numberToPeriod`.
 
