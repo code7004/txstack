@@ -14,7 +14,7 @@ const meta = {
         component: [
           "Tailwind 기반 버튼.",
           "",
-          "**`플레이그라운드` 에서 직접 만져본다.** 나머지 스토리는 비교용이라 컨트롤이 적용되지 않는다.",
+          "**`Playground` 에서 직접 만져본다.** 나머지 스토리는 noControls이라 컨트롤이 적용되지 않는다.",
           "",
           '- **`type` 기본값은 `"button"` 이다.** 폼 제출 버튼만 `type="submit"` 을 명시한다 — 안 그러면 `TxForm` 안의 모든 버튼이 폼을 제출한다.',
           "- `onClick` 이 **Promise 를 반환하면** 해제될 때까지 스피너가 뜨고 버튼이 잠긴다. 연타해도 한 번만 실행된다.",
@@ -23,7 +23,7 @@ const meta = {
           '- ⚠ **`className` 으로 색을 바꿀 때는 `hover:`·`dark:` 도 같이 준다.** `className="bg-yellow-500"` 만 주면 평상시만 노랑이고 마우스를 올리거나 다크모드가 되면 원래 색으로 돌아간다 — `tailwind-merge` 는 조건이 같은 클래스끼리만 충돌로 보기 때문이다. 같은 색을 여러 번 쓸 거면 `theme` 으로 variant 를 하나 만드는 게 낫다.',
           "- `variant` 는 **열려 있다.** `theme` 으로 `variants` 에 키를 추가하면 그 이름을 그대로 쓸 수 있다.",
           "",
-          "명세: `docs/001_ui/components/TxButton.md`"
+          "명세: `docs/001_ui/components/02_TxButton.md`"
         ].join("\n")
       }
     }
@@ -43,17 +43,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** 컨트롤이 적용되지 않는 비교용 스토리에 붙인다. 죽은 손잡이를 보여주지 않는다. */
-const 비교용 = { controls: { disable: true } };
+/** 컨트롤이 적용되지 않는 noControls 스토리에 붙인다. 죽은 손잡이를 보여주지 않는다. */
+const noControls = { controls: { disable: true } };
 
 /** **여기서 직접 만져본다.** 컨트롤 패널의 값을 바꾸면 즉시 반영된다. */
-export const 플레이그라운드: Story = {
+export const Playground: Story = {
   args: { label: "확인", variant: "primary", disabled: false, type: "button", className: "" }
 };
 
 /** `variant` 5종. **의미**를 기준으로 고른다. 팔레트 색을 고르는 `color` prop 은 없앴다 — `className` 으로 한다. */
 export const Variant: Story = {
-  parameters: 비교용,
+  parameters: noControls,
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       {VARIANTS.map((v) => (
@@ -68,8 +68,8 @@ export const Variant: Story = {
  *
  * 옆의 동기 버튼은 **로딩 상태로 들어가지 않는다** — 스피너가 한 프레임 깜빡이던 것을 없앴다.
  */
-export const 로딩: Story = {
-  parameters: 비교용,
+export const Loading: Story = {
+  parameters: noControls,
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <TxButton label="3초 걸리는 작업" onClick={() => new Promise((resolve) => window.setTimeout(resolve, 3000))} />
@@ -85,8 +85,8 @@ export const 로딩: Story = {
  * 아래 폼에서 왼쪽 버튼은 눌러도 제출되지 않고, `type="submit"` 을 명시한 오른쪽만 제출된다.
  * 예전에는 HTML 기본값인 `submit` 이 그대로 먹어서 **폼 안의 모든 버튼이 폼을 제출했다.**
  */
-export const 폼_안에서: Story = {
-  parameters: 비교용,
+export const InForm: Story = {
+  parameters: noControls,
   render: () => (
     <form
       className="flex items-center gap-2 rounded border border-slate-300 p-3 dark:border-slate-700"
@@ -123,9 +123,9 @@ export const 폼_안에서: Story = {
  *
  * 아래 노란 버튼 두 개에 **마우스를 올리거나 테마를 다크로 바꿔** 보면 차이가 바로 보인다.
  */
-export const Customizing_class: Story = {
+export const CustomizingClass: Story = {
   name: "Customizing - class",
-  parameters: 비교용,
+  parameters: noControls,
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -157,9 +157,9 @@ export const Customizing_class: Story = {
  *
  * **감싸지 않아도 동작한다.** Provider 는 선택이다.
  */
-export const Customizing_Provider: Story = {
+export const CustomizingProvider: Story = {
   name: "Customizing - Provider",
-  parameters: 비교용,
+  parameters: noControls,
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">

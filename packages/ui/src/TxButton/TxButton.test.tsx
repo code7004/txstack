@@ -4,7 +4,7 @@ import { TxThemeProvider } from "../TxTheme";
 import { TxButton } from "./TxButton";
 
 /**
- * `001-TxButton-S3`. 명세는 `docs/001_ui/components/TxButton.md`.
+ * `001-TxButton-S3`. 명세는 `docs/001_ui/components/02_TxButton.md`.
  *
  * S2 에서 고친 결함을 못박는다. 각 테스트에 결함 ID 를 달아 두었다.
  *

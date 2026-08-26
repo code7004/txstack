@@ -18,12 +18,14 @@ export interface TxSpinnerProps extends Omit<SVGProps<SVGSVGElement>, "children"
  *
  * @example
  * ```tsx
- * <TxSpinner />                                              // 상속에 맡긴다
- * <TxSpinner size={24} className="text-blue-500" />          // 크기·색 지정
- * <TxSpinner decorative />                                   // 옆에 읽을 문구가 이미 있을 때
+ * <TxSpinner />                                    // 상속에 맡긴다
+ * <TxSpinner size={24} />                          // 크기만 지정
+ * <TxSpinner decorative />                         // 옆에 읽을 문구가 이미 있을 때
  * ```
  *
- * 명세: `docs/001_ui/components/TxSpinner.md`
+ * 회전 속도는 CSS 변수로 바꾼다 — `.tx-spinner { --tx-spinner-duration: 2s }`.
+ *
+ * 명세: `docs/001_ui/components/01_TxSpinner.md`
  */
 export const TxSpinner = ({ size = "1em", decorative = false, className, role, "aria-label": ariaLabel, ...props }: TxSpinnerProps) => {
   // 장식용인데 role="status" + aria-label 을 남겨두면 옆의 문구와 중복 안내된다.
@@ -40,8 +42,8 @@ export const TxSpinner = ({ size = "1em", decorative = false, className, role, "
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      // 모션 저감에서 회전을 멈추면 "로딩 중" 이라는 정보 자체가 사라진다. 끄지 않고 늦춘다.
-      className={cm("animate-spin text-current motion-reduce:[animation-duration:2s]", className)}
+      // 회전과 모션 저감 처리는 TxSpinner.css 가 한다. 여기서는 클래스만 건다.
+      className={cm("tx-spinner", className)}
       {...props}
       {...a11y}
     >

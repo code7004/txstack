@@ -1,0 +1,18 @@
+/**
+ * `@txstack/ui` 의 전체 스타일시트. 소비자는 이 파일 하나만 import 한다.
+ *
+ * ```tsx
+ * import "@txstack/ui/styles.css";
+ * ```
+ *
+ * **컴포넌트가 자기 CSS 를 import 하지 않는다.** 여기서만 모은다 —
+ * 그래야 SSR·번들러 환경에 따라 깨지는 경로가 생기지 않는다 (20_design §8).
+ *
+ * 빌드가 이 파일의 `@import` 를 펼쳐 `dist/styles.css` 로 낸다 (`scripts/build-css.mjs`).
+ * **순서가 곧 캐스케이드다.** 토큰 → 컴포넌트 순으로 둔다.
+ *
+ * 아직 옮기지 않은 컴포넌트는 Tailwind 클래스 문자열을 쓰고 있어 여기에 없다.
+ * 각자의 S2 에서 한 줄씩 추가된다 — 진행 상황은 docs/001_ui/30_tasks.md.
+ */
+
+@import "./TxSpinner/TxSpinner.css";

@@ -1,4 +1,4 @@
-# TxTextarea
+# TxDropMenu
 
 > **플로우 S1~S6 작업 항목.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md)
 > 상태: **미착수**
@@ -6,7 +6,7 @@
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/001_ui/components/TxTextarea.md 를 읽고 001-TxTextarea-S1 부터 진행해줘.
+docs/README.md 와 docs/001_ui/components/17_TxDropMenu.md 를 읽고 001-TxDropMenu-S1 부터 진행해줘.
 ```
 
 단계를 하나 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -15,13 +15,13 @@ docs/README.md 와 docs/001_ui/components/TxTextarea.md 를 읽고 001-TxTextare
 
 | 단계 | 내용                                           | job ID              | 상태 | 비고                                              |
 | ---- | ---------------------------------------------- | ------------------- | ---- | ------------------------------------------------- |
-| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxTextarea-S1` |      |                                                   |
-| `S2` | 구현 = 감사 결과 반영 🧑/🤖                    | `001-TxTextarea-S2` |      |                                                   |
-| `S3` | 테스트 🤖                                      | `001-TxTextarea-S3` |      |                                                   |
-| `S4` | 스토리북 🤖                                    | `001-TxTextarea-S4` |      | 기존 스토리 있음 — 양식에 맞춰 개편               |
+| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxDropMenu-S1` |      |                                                   |
+| `S2` | 구현 = 감사 결과 반영 🧑/🤖                    | `001-TxDropMenu-S2` |      |                                                   |
+| `S3` | 테스트 🤖                                      | `001-TxDropMenu-S3` |      |                                                   |
+| `S4` | 스토리북 🤖                                    | `001-TxDropMenu-S4` |      | 기존 스토리 있음 — 양식에 맞춰 개편               |
 | 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                   |      | 통과하면 S5 로. 고칠 게 나오면 S2~S4 를 다시 돈다 |
-| `S5` | 문서 사이트 🤖                                 | `001-TxTextarea-S5` |      |                                                   |
-| `S6` | Claude 가이드 🤖                               | `001-TxTextarea-S6` |      |                                                   |
+| `S5` | 문서 사이트 🤖                                 | `001-TxDropMenu-S5` |      |                                                   |
+| `S6` | Claude 가이드 🤖                               | `001-TxDropMenu-S6` |      |                                                   |
 
 표기: 없음(미착수) · `🔄` · `✅` · `⏸` · `❌`
 
@@ -29,17 +29,17 @@ docs/README.md 와 docs/001_ui/components/TxTextarea.md 를 읽고 001-TxTextare
 
 | 항목           | 값                                                                                                       |
 | -------------- | -------------------------------------------------------------------------------------------------------- |
-| 위치           | `packages/ui/src/TxTextarea/`                                                                            |
-| 코드 행수      | 105행 (스토리 제외)                                                                                      |
-| 파일           | `TxTextarea.stories.tsx` · `TxTextarea.theme.ts` · `TxTextarea.tsx` · `TxTextarea.types.ts` · `index.ts` |
-| named export   | `TxTextareaTheme` · `TxTextarea`                                                                         |
+| 위치           | `packages/ui/src/TxDropMenu/`                                                                            |
+| 코드 행수      | 217행 (스토리 제외)                                                                                      |
+| 파일           | `TxDropMenu.stories.tsx` · `TxDropMenu.theme.ts` · `TxDropMenu.tsx` · `TxDropMenu.types.ts` · `index.ts` |
+| named export   | `TxDropMenuTheme` · `TxDropMenu`                                                                         |
 | default export | 없음                                                                                                     |
-| props 타입     | `ITxTextarea` · `ITxTextareaRef`                                                                         |
+| props 타입     | `ITxDropMenuItemProps` · `ITxDropMenuProps` · `ITxDropMenuLinkItemProps`                                 |
 | `.theme.ts`    | 있음                                                                                                     |
 | `.types.ts`    | 있음                                                                                                     |
 | 테스트         | **없음**                                                                                                 |
 | `data-tag`     | 있음                                                                                                     |
-| 스토리         | `Form/TxTextarea` (스토리 4개)                                                                           |
+| 스토리         | `Overlay/TxDropMenu` (스토리 4개)                                                                        |
 
 ## 2. 목적 🤝
 
@@ -62,7 +62,7 @@ props · 콜백 시그니처. [03_CONVENTIONS](../../00_foundation/03_CONVENTION
 |     |      |      |                |
 
 분류는 `결함` · `접근성` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [TxSpinner.md](TxSpinner.md) 를 본다.
+양식 예시는 [01_TxSpinner.md](01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 

@@ -46,4 +46,4 @@
 - **동기 `onClick` 은 로딩 상태로 들어가지 않는다.** 스피너가 한 프레임 깜빡이던 것이 사라진다.
 - **`disabled` 만으로는 `cursor-wait` 가 붙지 않는다.** 로딩과 비활성은 다른 상태다.
 
-명세: `docs/001_ui/components/TxButton.md`
+명세: `docs/001_ui/components/02_TxButton.md`

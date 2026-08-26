@@ -6,7 +6,7 @@
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/001_ui/components/TxDropdown.md 를 읽고 001-TxDropdown-S1 부터 진행해줘.
+docs/README.md 와 docs/001_ui/components/12_TxDropdown.md 를 읽고 001-TxDropdown-S1 부터 진행해줘.
 ```
 
 단계를 하나 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -48,7 +48,7 @@ docs/README.md 와 docs/001_ui/components/TxDropdown.md 를 읽고 001-TxDropdow
 
 ### `001-TxButton-S1` 에서 넘어온 결정·결함 (2026-08-25)
 
-**콜백 이름 규칙이 확정됐다** → [TxButton §5 Q4](TxButton.md#q4--콜백-이름-규칙-추가-합의).
+**콜백 이름 규칙이 확정됐다** → [TxButton §5 Q4](02_TxButton.md#q4--콜백-이름-규칙-추가-합의).
 허용: `Text` · `Number` · `Int` · `Boolean` · `Item` · `Value`. **금지: `Numb`·`Bool`·`Nums`·`Float`.**
 
 이미 확인된 결함 —
@@ -80,7 +80,7 @@ props · 콜백 시그니처. [03_CONVENTIONS](../../00_foundation/03_CONVENTION
 |     |      |      |                |
 
 분류는 `결함` · `접근성` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [TxSpinner.md](TxSpinner.md) 를 본다.
+양식 예시는 [01_TxSpinner.md](01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 

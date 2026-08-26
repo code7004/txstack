@@ -111,7 +111,7 @@ Provider 를 두면 **같은 일을 하는 경로가 둘**이 되고, 소비자�
   `clsx` 만으로 충분하다. `tailwind-merge` 의존을 뺄 수 있다
 
 > 하루 만에 버리는 게 아깝지만, **26종에 박히고 나면 훨씬 비싸다.** 파일럿의 목적이 이것이다 —
-> 24종을 돌리기 전에 틀린 방향을 찾는 것. 근거: [TxButton §5 Q1](components/TxButton.md)
+> 24종을 돌리기 전에 틀린 방향을 찾는 것. 근거: [TxButton §5 Q1](components/02_TxButton.md)
 
 ## 5. 토큰 규약
 

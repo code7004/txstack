@@ -34,7 +34,7 @@ const isThenable = (value: unknown): value is Promise<unknown> => typeof (value 
  * <TxButton type="submit" label="제출" />
  * ```
  *
- * 명세: `docs/001_ui/components/TxButton.md`
+ * 명세: `docs/001_ui/components/02_TxButton.md`
  */
 export const TxButton = ({ label, theme, variant = "primary", className, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
   const stableTheme = useTxTheme("TxButton", TxButtonTheme, theme);

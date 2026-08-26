@@ -6,7 +6,7 @@
 ## 새 창에서 시작하는 법
 
 ```
-docs/README.md 와 docs/001_ui/components/TxLoading.md 를 읽고 001-TxLoading-S1 부터 진행해줘.
+docs/README.md 와 docs/001_ui/components/03_TxLoading.md 를 읽고 001-TxLoading-S1 부터 진행해줘.
 ```
 
 단계를 하나 끝내면 이 문서의 진행 표와 [30_tasks.md](../30_tasks.md) 보드를 함께 갱신한다.
@@ -56,9 +56,9 @@ docs/README.md 와 docs/001_ui/components/TxLoading.md 를 읽고 001-TxLoading-
    따라서 `Dots` 를 `TxSpinner` 로 교체한다. 로딩 시각 언어를 하나로 통일하는 것이 목적이고,
    기존 스토리 설명("스피너에 문구를 얹은 것")이 사실이 된다. **겉모습이 바뀌므로 changeset 필수.**
 2. **모션 저감은 끄지 않고 늦춘다** — `animate-bounce` 에도 `motion-reduce:` 로 **느린 대안**을 준다.
-   멈추면 "로딩 중"이라는 정보 자체가 사라진다. 근거: [TxSpinner §4 접근성 A3](TxSpinner.md#접근성)
+   멈추면 "로딩 중"이라는 정보 자체가 사라진다. 근거: [TxSpinner §4 접근성 A3](01_TxSpinner.md#접근성)
 
-근거 원문: [TxSpinner §5 Q2](TxSpinner.md#q2--로딩-시각-언어를-하나로)
+근거 원문: [TxSpinner §5 Q2](01_TxSpinner.md#q2--로딩-시각-언어를-하나로)
 
 ## 2. 목적 🤝
 
@@ -81,7 +81,7 @@ props · 콜백 시그니처. [03_CONVENTIONS](../../00_foundation/03_CONVENTION
 |     |      |      |                |
 
 분류는 `결함` · `접근성` · `규약이탈` · `설계질문` 로 나눈다.
-양식 예시는 [TxSpinner.md](TxSpinner.md) 를 본다.
+양식 예시는 [01_TxSpinner.md](01_TxSpinner.md) 를 본다.
 
 ## 6. 사용 예제 🤝
 

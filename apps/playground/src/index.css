@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
+/* 자체 CSS 로 옮긴 컴포넌트의 스타일. 소비자의 `@txstack/ui/styles.css` 와 같은 내용이다. */
+@import "../../../packages/ui/src/styles.css";
+
 /*
- * ⚠ 이 한 줄이 없으면 @txstack/ui 의 클래스가 전부 purge 되어 스타일이 사라진다.
+ * ⚠ 아직 Tailwind 클래스 문자열을 쓰는 컴포넌트가 있다. 이 한 줄이 없으면 그쪽 스타일이 사라진다.
  * Tailwind v4 는 node_modules 를 기본 스캔하지 않기 때문이다.
  * 소비자 프로젝트도 동일하게 지정해야 한다. (packages/ui/README.md 참고)
  *

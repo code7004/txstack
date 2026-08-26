@@ -23,7 +23,7 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 ```
 
 - 규칙·완료 기준: [00_foundation/06_COMPONENT_FLOW.md](../00_foundation/06_COMPONENT_FLOW.md)
-- 컴포넌트별 명세(S1): [components/](components/README.md)
+- 컴포넌트별 명세(S1): [components/](components/README.md) — **파일 이름 번호가 작업 순서다** (`01`~`26`)
 - 진행 보드: [30_tasks.md](30_tasks.md) — 26 항목 × 6단계
 
 기본 기능은 이미 구현되어 있다. 이 트랙의 실제 일은 **하나씩 열어보고 결함·불필요한 것을 정리해 올리는 것**이다.
@@ -43,9 +43,10 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 | 기반        | `TxTheme` `TxIcons`                                                         |
 
 - 기반: **자체 CSS + `--tx-*` 토큰** (`.dark` 클래스 전략). 2026-08-25 에 Tailwind 클래스 문자열에서 바꿨다 → [20_design §2](20_design.md)
+  - **옮긴 것: `TxSpinner` 1종.** 나머지 25종은 아직 Tailwind 클래스 문자열이라 소비자의 `@source` 지정이 필요하다
 - 무거운 의존은 subpath 로 격리: `@txstack/ui/aggrid`, `@txstack/ui/daypicker`
 - 일부 컴포넌트에 `*.stories.tsx` 존재 → `901`
-- 테스트: 유틸 1개 + `TxSpinner` 15개 + `TxButton` 20개 → `902`
+- 테스트: 유틸 1개 + `TxSpinner` 20개 + `TxButton` 20개 → `902`
 
 ## 상태
 
@@ -61,7 +62,7 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 게이트도 제 일을 했다. 확인 과정에서 **4건이 나왔다** — 컨트롤이 죽어 있던 스토리,
 `decorative` 가 소비자 `aria-label` 을 못 버리던 결함, `className` 으로 색이 반만 바뀌던 것,
 커스터마이징 스토리가 하나로 뭉쳐 있던 것. **세 번째가 CSS 전환을 민 직접 증거였다.**
-상세: [TxSpinner §12~§13](components/TxSpinner.md) · [TxButton §10](components/TxButton.md)
+상세: [TxSpinner §12~§13](components/01_TxSpinner.md) · [TxButton §10](components/02_TxButton.md)
 
 ### 지금 유효한 전 패키지 결정
 
@@ -78,7 +79,7 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 | **`variant` 는 열어둔다** — CSS 로 `[data-variant="…"]` 를 늘리면 된다 | variant 를 가진 모든 컴포넌트              |
 
 **폐기된 것** — `theme` prop · `TxThemeProvider` · `useTxTheme` · `themeMerge` · `TxClass*` 상수.
-파일럿 2차에서 만들었지만 CSS 로 오면서 존재 이유를 잃었다. 경위: [TxButton §5 Q1](components/TxButton.md).
+파일럿 2차에서 만들었지만 CSS 로 오면서 존재 이유를 잃었다. 경위: [TxButton §5 Q1](components/02_TxButton.md).
 
 ### 콜백 이름 규칙 — 그대로 유효하다
 
@@ -97,21 +98,30 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 | [10_requirements](10_requirements.md) | R1~R6 · **수용 기준 = 남긴 컴포넌트 전부가 🧑 게이트 통과** · 범위 밖 4가지   |
 | [20_design](20_design.md)             | **26종 전부의 형태** — CSS · 선택자 · 커스터마이징 3경로 · 토큰 · 이름 · 파일 |
 
-### 2) 파일럿 2차 — **`TxSpinner`·`TxButton` 의 S2~S4 를 CSS 로 다시 돈다**
+### 2) ~~`TxSpinner` 2차~~ — **✅ S2~S4 완료 (2026-08-25). 🧑 확인 대기**
 
-**여기가 다음 차례다.** 새 방침의 첫 실물이라 그대로 24종의 본보기가 된다.
-같이 정해지는 것: **전역 토큰의 실제 이름·색값** (20_design §5 — 미리 설계하지 않고 여기서 정한다).
+새 방침의 첫 실물이다. 상세: [TxSpinner §16~§20](components/01_TxSpinner.md)
+
+| 나온 것             | 내용                                                                         |
+| ------------------- | ---------------------------------------------------------------------------- |
+| 컴포넌트 CSS        | `TxSpinner.css` — 클래스 하나(`tx-spinner`), 토큰 둘, `.dark` 분기 없음      |
+| **배포 경로**       | `@txstack/ui/styles.css` — job `001-styles-css` 가 여기서 끝났다             |
+| **CSS 계약 테스트** | jsdom 이 못 보는 캐스케이드를 **CSS 파일을 읽어** 지킨다 (15→20개)           |
+| 전역 토큰           | **안 만들었다.** `TxSpinner` 가 하나도 안 쓴다 — 색이 필요한 `TxButton` 에서 |
+
+### 3) `TxButton` 2차 — **다음 차례**
+
+`theme`·`TxThemeProvider` 제거가 여기서 실제로 일어나고, **전역 색 토큰도 여기서 정해진다.**
 
 ```
-docs/README.md 와 docs/001_ui/20_design.md 를 읽고 001-TxSpinner-S2 ~ S4 (2차) 를 진행해줘.
+docs/001_ui/20_design.md 를 읽고 001-TxButton-S2 ~ S4 (2차) 를 진행해줘.
 ```
 
-### 3) 공통 job
+### 4) 공통 job
 
-`001-styles-css`(CSS 번들) · `001-tokens`(전역 토큰) · `001-typenames`(`ITx*` 리네임).
-앞의 둘은 파일럿 2차와 맞물린다 → [30_tasks.md](30_tasks.md)
+~~`001-styles-css`~~(✅ 완료) · `001-tokens`(전역 토큰, `TxButton` 2차와 함께) · `001-typenames`(`ITx*` 리네임) → [30_tasks.md](30_tasks.md)
 
-### 4) 나머지 24종
+### 5) 나머지 24종
 
 [30_tasks.md](30_tasks.md) 보드를 따라 반복한다 (🤖 + 사용자 리뷰). **`❌` 폐기도 정당한 결과다.**
 

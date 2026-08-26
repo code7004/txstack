@@ -89,7 +89,7 @@ export default [
   },
 
   {
-    files: ["**/*.config.{js,ts,mjs}", "**/tsup.config.ts", "**/vite.config.ts"],
+    files: ["**/*.config.{js,ts,mjs}", "**/tsup.config.ts", "**/vite.config.ts", "**/scripts/*.mjs"],
     languageOptions: {
       globals: { ...globals.node }
     }
