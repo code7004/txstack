@@ -26,7 +26,26 @@ import "@txstack/ui/styles.css"; // 앱에서 한 번
 }
 ```
 
-**이번 릴리스에 실린 것은 `TxSpinner` 하나다.** 나머지 컴포넌트는 아직 Tailwind 클래스
+## Tailwind 를 쓴다면 레이어 순서를 한 줄 적는다
+
+`styles.css` 의 내용은 전부 **`tx` 캐스케이드 레이어** 안에 있다. 레이어에 없는 CSS 는 레이어에 있는
+CSS 를 **특이도와 무관하게 이기기** 때문이다 — 우리가 레이어 밖에 있으면 소비자가 `className` 으로
+무엇을 주든 `.tx-button` 이 정한 속성은 꿈쩍도 하지 않는다.
+
+**순수 CSS · Sass · CSS Modules 를 쓴다면 아무것도 안 해도 된다.** 레이어를 안 쓰는 평범한 CSS 가
+항상 이긴다. Tailwind 는 유틸리티가 `@layer utilities` 안에 있으므로 `tx` 의 자리를 알려줘야 한다.
+
+```css
+@layer theme, base, tx, components, utilities;
+
+@import "tailwindcss";
+@import "@txstack/ui/styles.css";
+```
+
+`tx` 를 `base` 앞에 두면 Tailwind preflight 가 버튼의 배경과 여백을 지우고, `utilities` 뒤에 두면
+`className` 이 다시 안 먹는다. **그 사이여야 한다.**
+
+**이번 릴리스에 실린 것은 `TxSpinner` 와 `TxButton` 이다.** 나머지 컴포넌트는 아직 Tailwind 클래스
 문자열을 쓰고 있어 `@source` 지정이 계속 필요하다. 하나씩 옮기며 그 목록을 줄인다.
 
 - 새 export: `@txstack/ui/styles.css` (사전 빌드 CSS, `dist/styles.css`)

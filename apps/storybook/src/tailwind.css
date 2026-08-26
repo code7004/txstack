@@ -1,3 +1,6 @@
+/* 레이어 우선순위. tx 는 preflight(base) 보다 뒤, 유틸리티보다 앞에 둔다 — 소비자도 이 한 줄이 필요하다. */
+@layer theme, base, tx, components, utilities;
+
 @import "tailwindcss";
 
 /* 자체 CSS 로 옮긴 컴포넌트의 스타일. 소비자의 `@txstack/ui/styles.css` 와 같은 내용이다. */
