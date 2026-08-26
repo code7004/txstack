@@ -155,6 +155,36 @@ Tailwind 는 빌드 때 소스 파일을 훑어 **거기 쓰인 클래스만** �
 <p className="text-xs text-slate-500">스크린리더: {args.decorative ? "안내하지 않음 (aria-hidden)" : `"${args["aria-label"]}" 로 안내`}</p>
 ```
 
+### 포털되는 컴포넌트는 데코레이터 **밖**에 붙는다 (2026-08-26)
+
+**테마·배경 클래스를 스토리 안쪽 `div` 에만 걸면 포털된 콘텐츠는 그걸 못 받는다.**
+`createPortal` 로 `document.body` 에 붙는 것(`TxLoading fullScreen`, 앞으로 오버레이 계열 전부)은
+그 `div` 밖에 있으므로 **상속할 색이 없어 다크모드에서 글자가 검게 남는다.**
+
+`body` 에도 같은 클래스를 걸어 둔다 (`apps/storybook/.storybook/preview.tsx`).
+
+```tsx
+document.documentElement.classList.toggle("dark", isDark);
+// 포털된 것은 데코레이터 div 밖, body 직속에 붙는다
+document.body.classList.add("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-slate-100");
+```
+
+> **`TxLoading` 실측에서 잡혔다.** 같은 자리에 라이브러리 결함(문구 색이 딤과 반대로 뒤집힘)이
+> 겹쳐 있어서, 라이브러리를 고친 뒤에도 화면이 안 바뀌었다 — **카탈로그의 구멍이 수정을 가리고 있었다.**
+> 상세: [001_ui/components/03_TxLoading §10](../001_ui/components/03_TxLoading.md)
+
+### 페인트 순서·계산된 스타일은 브라우저에서만 보인다
+
+vitest 는 jsdom 이라 캐스케이드도 페인트 순서도 없다. **딤 아래에 글자가 깔리는 종류의 결함**은
+자동 검증이 못 잡으므로 이 자리에서 본다. 좌표 하나로 확인할 수 있다.
+
+```js
+// 문구 중앙에서 실제로 잡히는 요소가 문구인가, 그 위의 딤인가
+document.elementFromPoint(x, y);
+```
+
+오버레이가 있는 컴포넌트(`TxModal` · `TxSlidePanel` · `TxDropMenu` · `TxContextMenu`)는 전부 해당한다.
+
 ### CSS 변수는 스토리가 없으면 없는 기능이다
 
 `--tx-*` 토큰은 autodocs props 표에 안 나온다. **토큰을 가진 컴포넌트는 토큰 스토리를 하나 갖는다.**

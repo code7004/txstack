@@ -1,0 +1,100 @@
+/**
+ * TxLoading — 로딩 표시. `TxSpinner` 에 문구와 전체화면 딤을 얹는다.
+ *
+ * **문구의 색과 크기를 선언하지 않는다.** 놓인 자리의 글자를 따라간다 — `TxSpinner` 와 같은 방식이다.
+ * 여기가 소유하는 것은 배치(간격·정렬)와 아이콘 크기, 그리고 전체화면 딤뿐이다.
+ *
+ * 명세: docs/001_ui/components/03_TxLoading.md
+ */
+
+.tx-loading {
+  /* 아이콘·문구와 같이 글자 크기를 따라간다. `rem` 이면 큰 글자 옆에서 간격이 좁아 보인다 */
+  --tx-loading-gap: 0.5em;
+
+  /* 아이콘 크기. `em` 이라 놓인 자리의 글자 크기를 따라간다 */
+  --tx-loading-icon-size: 1.5em;
+
+  /**
+   * 딤은 전체화면에서만 쓰지만 토큰은 여기에 둔다. `[data-full-screen]` 안에 두면
+   * 소비자가 `.tx-loading { … }` 로 덮을 때 더 특이한 선택자에게 져서 아무 일도 안 일어난다.
+   *
+   * **색을 리터럴로 적지 않는다.** `--tx-color-state` 는 tokens.css 에서 다크모드에 뒤집히는 값이라
+   * 이 파생 한 줄로 라이트는 검게 · 다크는 밝게 덮인다 — 컴포넌트 CSS 에 `.dark` 분기가 필요 없다.
+   */
+  --tx-loading-backdrop-opacity: 20%;
+  --tx-loading-backdrop-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-loading-backdrop-opacity), transparent);
+  --tx-loading-z: 50;
+
+  /**
+   * **전체화면 문구의 색.** 인라인 문구는 색을 선언하지 않고 놓인 자리에서 상속받지만,
+   * 전체화면은 `body` 직속으로 포털돼서 **상속의 출발점이 호출한 자리가 아니다.**
+   * 거기서는 `body` 가 무슨 색이든 딤과 짝이 맞아야 하므로 토큰으로 되돌린다 (명세 D6).
+   *
+   * `--tx-color-text` 는 다크모드에서 뒤집히고 딤도 같은 방향으로 뒤집히므로 대비가 유지된다.
+   * **딤을 크게 올리면 이 값도 함께 정한다** — 60% 쯤에서는 배경이 반대쪽으로 넘어간다.
+   */
+  --tx-loading-fg: var(--tx-color-text);
+
+  /* 인라인은 가로 한 줄이다 — `◌ 불러오는 중` */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-loading-gap);
+}
+
+/**
+ * `TxSpinner` 는 `width`/`height` 가 `1em` 이라 **자기 font-size 를 따른다.**
+ * 그래서 크기를 정할 때 `.tx-spinner` 를 직접 조준하지 않는다 — 남의 컴포넌트 CSS 를 밖에서
+ * 덮기 시작하면 어느 쪽이 이기는지가 import 순서에 달리게 된다. 이 슬롯의 글자 크기만 정한다.
+ */
+.tx-loading__icon {
+  display: inline-flex;
+  font-size: var(--tx-loading-icon-size);
+}
+
+/**
+ * 딤은 `absolute` 다. 그냥 두면 **문구 위에 그려진다** — 포지션 요소가 비포지션 형제보다 나중에
+ * 그려지기 때문이다. 안쪽 슬롯도 포지션 요소로 만들어 순서를 트리 순서로 되돌린다.
+ *
+ * **`z-index` 를 쓰지 않는다.** 층을 숫자로 매기면 소비자가 그 안에 무엇을 끼울 때마다
+ * 숫자를 다시 계산해야 한다. 트리 순서면 그 계산이 없다.
+ */
+.tx-loading__icon,
+.tx-loading__text {
+  position: relative;
+}
+
+/* --- 전체화면 -------------------------------------------------------------- */
+
+/**
+ * `document.body` 로 포털돼서 붙는다 (TxLoading.tsx). 조상의 `transform`·`filter`·`contain` 안에
+ * 갇히면 "화면 전체" 가 "그 조상 전체" 가 되기 때문이다.
+ *
+ * 인라인과 달리 **세로**다 — 스피너 위, 문구 아래, 화면 중앙.
+ */
+.tx-loading[data-full-screen] {
+  /* 전체화면 값을 바꾸려면 같은 선택자로 조준한다 — `.tx-loading[data-full-screen] { … }` */
+  --tx-loading-icon-size: 2.5em;
+  --tx-loading-gap: 1em;
+
+  position: fixed;
+  inset: 0;
+  z-index: var(--tx-loading-z);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/**
+ * **전체화면에서만 문구 색을 정한다.** 인라인은 여전히 상속이다 —
+ * 이 선택자를 `.tx-loading__text` 로 넓히면 캡션 안에서도 본문 색으로 나온다.
+ */
+.tx-loading[data-full-screen] .tx-loading__text {
+  color: var(--tx-loading-fg);
+}
+
+.tx-loading__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: var(--tx-loading-backdrop-bg);
+}

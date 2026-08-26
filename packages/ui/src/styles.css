@@ -42,4 +42,5 @@
 @import "./tokens.css" layer(tx);
 
 @import "./TxButton/TxButton.css" layer(tx);
+@import "./TxLoading/TxLoading.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);

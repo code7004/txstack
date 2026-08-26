@@ -12,6 +12,11 @@ import "../src/tailwind.css";
 const ThemeCanvas = ({ theme, children }: { theme: "light" | "dark"; children: ReactNode }) => {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
+
+    // 포털되는 컴포넌트(`TxLoading fullScreen` · 오버레이 계열)는 이 데코레이터 div 밖,
+    // body 직속에 붙는다. body 에도 테마를 걸어 두지 않으면 상속할 색이 없어서
+    // **다크모드에서 글자가 검게 남는다** — 라이브러리 결함처럼 보이지만 카탈로그 쪽 구멍이다.
+    document.body.classList.add("bg-white", "text-slate-900", "dark:bg-slate-900", "dark:text-slate-100");
   }, [theme]);
 
   return <div className="min-h-24 bg-white p-6 text-slate-900 dark:bg-slate-900 dark:text-slate-100">{children}</div>;
