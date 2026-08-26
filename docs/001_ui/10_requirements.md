@@ -56,6 +56,8 @@ import "@txstack/ui/styles.css"; // 한 번만
 
 - `@source` 는 **더 이상 존재하지 않는다.** 안내할 함정 자체가 없어졌다
 - **소비자의 스타일 방식을 묻지 않는다** — CSS · Sass · Tailwind · CSS Modules 어느 쪽이든 `className` 은 통한다
+- **이건 소비자 쪽 요구사항이다.** 라이브러리 소스를 무엇으로 쓰는지(= 평문 CSS)와는 별개고,
+  배포물은 어느 쪽이든 CSS 라 소비자는 차이를 모른다 → [20_design §2-1](20_design.md)
 - 대가와 버린 대안은 [20_design §2](20_design.md) 가 소유한다. 여기서 중복하지 않는다
 
 ### 구현할 때 주의할 것 (`001-styles-css` job)

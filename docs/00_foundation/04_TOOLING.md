@@ -60,6 +60,8 @@ pnpm changeset            # 변경 기록 작성 (공개 API 변경 시 필수)
 **`@txstack/ui` 의 스타일은 자체 CSS 다** (2026-08-25 결정 → [001_ui/20_design §2](../001_ui/20_design.md)).
 소비자는 `import "@txstack/ui/styles.css"` 한 줄이면 되고, **CSS·Sass·Tailwind 중 무엇을 쓰든** 커스터마이징된다.
 
+- **소스도 평문 `.css` 다. Sass·Less 를 넣지 않는다** (2026-08-26 → [001_ui/20_design §2-1](../001_ui/20_design.md)).
+  전처리기 변수는 빌드타임에 값을 굳혀서 런타임 오버라이드와 충돌한다. **소비자가 Sass 를 쓰는 것과는 무관하다**
 - 값은 `--tx-*` CSS 변수로 바꾼다. **토큰 이름은 공개 API 다** — 지우거나 바꾸면 major
 - 다크모드는 `.dark` 클래스 전략. **컴포넌트 CSS 에 `.dark` 분기를 흩뿌리지 않고 토큰만 재정의**한다
 - 스타일 변경 시 `dist/styles.css` 가 실제로 tarball 에 들어가는지 `npm pack --dry-run` 으로 확인한다

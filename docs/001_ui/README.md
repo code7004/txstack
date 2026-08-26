@@ -43,10 +43,11 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 | 기반        | `TxTheme` `TxIcons`                                                         |
 
 - 기반: **자체 CSS + `--tx-*` 토큰** (`.dark` 클래스 전략). 2026-08-25 에 Tailwind 클래스 문자열에서 바꿨다 → [20_design §2](20_design.md)
-  - **옮긴 것: `TxSpinner` 1종.** 나머지 25종은 아직 Tailwind 클래스 문자열이라 소비자의 `@source` 지정이 필요하다
+  - **옮긴 것: `TxSpinner`·`TxButton` 2종.** 나머지 24종은 아직 Tailwind 클래스 문자열이라 소비자의 `@source` 지정이 필요하다
+  - 옮긴 CSS 는 전부 **`tx` 캐스케이드 레이어** 안이다. Tailwind 소비자는 레이어 순서 한 줄이 필요하다 → [20_design §4](20_design.md)
 - 무거운 의존은 subpath 로 격리: `@txstack/ui/aggrid`, `@txstack/ui/daypicker`
 - 일부 컴포넌트에 `*.stories.tsx` 존재 → `901`
-- 테스트: 유틸 1개 + `TxSpinner` 20개 + `TxButton` 20개 → `902`
+- 테스트: 유틸 1개 + `TxSpinner` 20개 + `TxButton` 41개 → `902`
 
 ## 상태
 
@@ -58,6 +59,11 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 
 > **파일럿이 제 일을 한 것이다.** 24종에 박히기 전에 틀린 방향을 찾는 게 파일럿의 목적이다.
 > 되돌린 작업이 아깝지만 **26종에 퍼진 뒤였다면 훨씬 비쌌다.**
+
+**2차도 둘 다 끝났고 게이트를 통과했다** — `TxSpinner` 2026-08-25, `TxButton` 2026-08-26.
+**파일럿이 닫혔다.** 다음은 B 그룹(`TxLoading`·`TxTheme`)이다.
+`TxButton` 2차에서 **전역 토큰이 정해졌고**, 브라우저 실측이 **레이어 결함을 하나 더 잡아냈다.**
+파일럿이 두 번 제 일을 한 셈이다 — 자세한 건 아래 "다음 할 일" 의 2)·3).
 
 게이트도 제 일을 했다. 확인 과정에서 **4건이 나왔다** — 컨트롤이 죽어 있던 스토리,
 `decorative` 가 소비자 `aria-label` 을 못 버리던 결함, `className` 으로 색이 반만 바뀌던 것,
@@ -113,17 +119,40 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 | **CSS 계약 테스트** | jsdom 이 못 보는 캐스케이드를 **CSS 파일을 읽어** 지킨다 (15→20개)           |
 | 전역 토큰           | **안 만들었다.** `TxSpinner` 가 하나도 안 쓴다 — 색이 필요한 `TxButton` 에서 |
 
-### 3) `TxButton` 2차 — **다음 차례**
+### 3) ~~`TxButton` 2차~~ — **✅ S2~S4 + 🧑 확인 통과 (2026-08-26)**
 
-`theme`·`TxThemeProvider` 제거가 여기서 실제로 일어나고, **전역 색 토큰도 여기서 정해진다.**
+`theme`·`TxThemeProvider` 가 실제로 사라졌고, **전역 토큰 11개가 여기서 정해졌다.**
+상세: [TxButton §14~§20](components/02_TxButton.md)
 
-```
-docs/001_ui/20_design.md 를 읽고 001-TxButton-S2 ~ S4 (2차) 를 진행해줘.
-```
+| 나온 것                  | 내용                                                                         |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| 컴포넌트 CSS             | `TxButton.css` — 클래스 하나 + `data-variant`, `.dark` 분기 없음             |
+| **전역 토큰**            | `src/tokens.css` 11개. 색값은 이행 전 팔레트와 같다                          |
+| 폐기                     | `theme` prop · `TxThemeProvider` · `useTxTheme` · `TxButtonTheme`            |
+| 신설                     | `classNames={{ label }}` 슬롯                                                |
+| CSS 계약 테스트          | 20→41개. 변이 28건 전부 잡힘                                                 |
+| **🔴 캐스케이드 레이어** | 브라우저 실측에서 **`className` 이 조용히 무시되던 것**을 잡았다 — 아래 참고 |
+| **🔴 상태 레이어**       | 테마 스파이크에서 **`hover` 가 안 따라오던 것**을 잡았다 — 아래 참고         |
+
+**설계 결함이 둘 나왔다. 둘 다 자동 검증이 초록인 상태에서 나왔다.**
+
+1. **`className` 이 조용히 무시됐다** — 우리 CSS 가 캐스케이드 레이어 밖에 있어 Tailwind
+   유틸리티(`@layer utilities`)를 무조건 이겼다. 비레이어가 레이어를 특이도와 무관하게 이기기 때문이다.
+   → **`@layer tx`** ([20_design §4](20_design.md))
+2. **`--tx-color-primary` 를 바꿔도 `hover` 가 안 따라왔다** — 짝 토큰(`-hover`)을 따로 들고 있어서다.
+   1차의 "평상시만 노랑" 과 **같은 증상이 메커니즘만 바꿔 돌아온 것**이다.
+   → **상태 레이어 파생** ([20_design §5-1](20_design.md))
+
+둘 다 🧑 판정으로 채택했다. **나머지 24종이 이 위에서 돈다.**
 
 ### 4) 공통 job
 
-~~`001-styles-css`~~(✅ 완료) · `001-tokens`(전역 토큰, `TxButton` 2차와 함께) · `001-typenames`(`ITx*` 리네임) → [30_tasks.md](30_tasks.md)
+~~`001-styles-css`~~ · ~~`001-tokens`~~ · ~~`001-css-layer`~~ (셋 다 ✅) · `001-typenames`(`ITx*` 리네임) → [30_tasks.md](30_tasks.md)
+
+### 4-1) 🧑 게이트를 통과하면
+
+`packages/ui/README.md` 와 `AGENTS.md` 가 아직 `TxThemeProvider`·`@source` 를 안내하고 있다.
+**`@layer` 한 줄 안내도 여기 들어가야 한다** — `001-TxSpinner-S6` · `001-TxButton-S6`.
 
 ### 5) 나머지 24종
 
