@@ -15,4 +15,31 @@
  * 각자의 S2 에서 한 줄씩 추가된다 — 진행 상황은 docs/001_ui/30_tasks.md.
  */
 
-@import "./TxSpinner/TxSpinner.css";
+/**
+ * **전부 `tx` 레이어에 넣는다. 이 한 줄이 `className` 을 살린다.**
+ *
+ * 레이어에 없는 CSS 는 레이어에 있는 CSS 를 **특이도와 상관없이 무조건 이긴다.**
+ * 그래서 우리 스타일이 레이어 밖에 있으면 소비자가 `className` 으로 무엇을 주든
+ * `.tx-button` 이 정한 속성은 꿈쩍도 하지 않는다 — Tailwind 유틸리티가 `@layer utilities`
+ * 안에 있으므로 `className="rounded-full"` 이 조용히 무시된다.
+ *
+ * **레이어를 안 쓰는 평범한 CSS 는 항상 이긴다** — 순수 CSS·Sass·CSS Modules 를 쓰는 쪽은
+ * 아무것도 안 해도 된다.
+ *
+ * **Tailwind 를 쓴다면 한 줄이 필요하다.** 레이어 우선순위는 처음 선언된 순서로 정해지는데,
+ * `tx` 는 preflight(`base`) 보다 뒤, 유틸리티보다 앞이어야 한다. 앞에 두면 preflight 가
+ * 버튼의 배경과 여백을 지워 버리고, 뒤에 두면 `className` 이 다시 안 먹는다.
+ *
+ * ```css
+ * @layer theme, base, tx, components, utilities;
+ *
+ * @import "tailwindcss";
+ * @import "@txstack/ui/styles.css";
+ * ```
+ */
+@layer tx;
+
+@import "./tokens.css" layer(tx);
+
+@import "./TxButton/TxButton.css" layer(tx);
+@import "./TxSpinner/TxSpinner.css" layer(tx);

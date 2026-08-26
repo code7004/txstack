@@ -1,18 +1,19 @@
 import { useState, type ButtonHTMLAttributes, type MouseEvent, type ReactElement, type ReactNode } from "react";
 import { cm } from "../tx-ui.utils";
 import { TxSpinner } from "../TxSpinner";
-import { useTxTheme } from "../TxTheme";
-import { TxButtonTheme, type TxButtonThemeOverride, type TxButtonVariant } from "./TxButton.theme";
+
+/** 기본 5종. 소비자가 CSS 로 늘릴 수 있게 열려 있다 — `(string & {})` 가 자동완성을 살린 채 임의 문자열도 받는다 */
+export type TxButtonVariant = "primary" | "secondary" | "danger" | "ghost" | "text" | (string & {});
 
 export interface TxButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
   /** 버튼 텍스트. `children` 을 써도 된다 (`label` 이 우선) */
   label?: string;
-  /** 의미 기반 스타일. 기본 `"primary"`. `theme` 으로 키를 추가하면 그 이름도 쓸 수 있다 */
+  /** 의미 기반 스타일. 기본 `"primary"`. `data-variant` 로 나가므로 CSS 에서 새 이름을 늘릴 수 있다 */
   variant?: TxButtonVariant;
   /** 로딩 중 보여줄 엘리먼트. 기본은 장식용 스피너 */
   loading?: ReactElement;
-  /** 이 인스턴스만의 부분 테마. 전역은 `TxThemeProvider` 로 준다 */
-  theme?: TxButtonThemeOverride;
+  /** 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다 */
+  classNames?: { label?: string };
   /** Promise 를 반환하면 해제될 때까지 자동으로 로딩 상태가 되고 중복 클릭이 막힌다 */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<void> | void;
   children?: ReactNode;
@@ -21,7 +22,7 @@ export interface TxButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
 const isThenable = (value: unknown): value is Promise<unknown> => typeof (value as Promise<unknown> | undefined)?.then === "function";
 
 /**
- * Tailwind 기반 버튼.
+ * 누르면 뭔가 일어나는 자리.
  *
  * - `onClick` 이 **Promise 를 반환하면** 해제될 때까지 스피너가 뜨고 버튼이 잠긴다. 연타해도 한 번만 실행된다
  * - 동기 `onClick` 은 로딩 상태로 들어가지 않는다 — 스피너가 깜빡이지 않는다
@@ -34,15 +35,13 @@ const isThenable = (value: unknown): value is Promise<unknown> => typeof (value 
  * <TxButton type="submit" label="제출" />
  * ```
  *
+ * 색·반경은 CSS 변수로 바꾼다 — 앱 전체는 `:root { --tx-color-primary: … }`,
+ * 이 컴포넌트만은 `.tx-button { --tx-button-bg: … }`.
+ *
  * 명세: `docs/001_ui/components/02_TxButton.md`
  */
-export const TxButton = ({ label, theme, variant = "primary", className, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
-  const stableTheme = useTxTheme("TxButton", TxButtonTheme, theme);
+export const TxButton = ({ label, variant = "primary", className, classNames, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
   const [isLoading, _isLoading] = useState(false);
-
-  // variants 에 없는 이름을 주면 아무 스타일도 안 붙는다. theme 으로 키를 추가한 경우가 그렇고,
-  // 그때는 추가한 쪽 문자열이 여기로 들어온다.
-  const variantClass = (stableTheme.variants as Record<string, string | undefined>)[variant];
 
   const hdClick = (evt: MouseEvent<HTMLButtonElement>) => {
     if (!onClick) return;
@@ -63,9 +62,22 @@ export const TxButton = ({ label, theme, variant = "primary", className, childre
   };
 
   return (
-    <button data-tag="TxButton" type={type} className={cm(stableTheme.base, stableTheme.focus, variantClass, "relative active:opacity-50", isLoading && "cursor-wait", className)} disabled={disabled || isLoading} onClick={hdClick} {...props}>
-      {isLoading && <span className="absolute inset-0 flex items-center justify-center">{loading}</span>}
-      <span className={isLoading ? "opacity-30" : undefined}>{label || children}</span>
+    <button
+      // 통과 props 를 먼저 편다. 아래 계약 속성(data-*·type·disabled)은 덮이면 안 된다 —
+      // 특히 data-loading 이 밖에서 뒤집히면 화면과 실제 상태가 어긋난다.
+      {...props}
+      data-tag="TxButton"
+      data-variant={variant}
+      // 값 없는 불리언 속성. CSS 는 `[data-loading]` 으로 잡는다 (20_design §3)
+      data-loading={isLoading ? "" : undefined}
+      type={type}
+      // 스타일은 TxButton.css 가 소유한다. 여기서는 기본 클래스만 걸고 className 을 덧붙인다.
+      className={cm("tx-button", className)}
+      disabled={disabled || isLoading}
+      onClick={hdClick}
+    >
+      {isLoading && <span className="tx-button__loading">{loading}</span>}
+      <span className={cm("tx-button__label", classNames?.label)}>{label || children}</span>
     </button>
   );
 };

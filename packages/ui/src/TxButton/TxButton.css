@@ -1,0 +1,143 @@
+/**
+ * TxButton — 누르면 뭔가 일어나는 자리.
+ *
+ * 겉모습을 정하는 값은 전부 `--tx-button-*` 토큰으로 나가 있고, 그 기본값이 전역 토큰을 참조한다.
+ * 그래서 색을 바꾸는 길이 두 개다 — 앱 전체는 `:root { --tx-color-primary: … }`,
+ * 이 variant 만은 `.tx-button[data-variant="brand"] { --tx-button-bg: … }`.
+ *
+ * **variant 는 색만 갈아끼운다.** 여백·반경·포커스 링·disabled 처리는 `.tx-button` 이 전부 소유한다 —
+ * 예전에는 `text` 만 공통 스타일을 건너뛰어 **키보드 포커스 링이 없었다** (명세 §4 D2).
+ *
+ * 명세: docs/001_ui/components/02_TxButton.md
+ */
+
+.tx-button {
+  /* 컴포넌트 토큰. 전역을 기본값으로 받되, 이 셀렉터에서 덮으면 버튼만 바뀐다 */
+  --tx-button-bg: var(--tx-color-primary);
+  --tx-button-fg: var(--tx-color-on-accent);
+
+  /**
+   * hover · pressed 를 **배경색에서 파생한다.** 별도 색 토큰을 읽지 않는다.
+   *
+   * 그래서 `--tx-button-bg` 가 무엇이 되든 — variant 든, 소비자가 바꾼 값이든 —
+   * 상태 색이 거기서 다시 계산된다. `--tx-color-primary` 한 줄만 바꿔도 hover 가 따라오는 게 이것 때문이다.
+   * 이 두 줄을 리터럴 색으로 되돌리면 "평상시만 보라" 결함이 되살아난다 (명세 §19).
+   */
+  --tx-button-bg-hover: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-button-bg));
+  --tx-button-bg-pressed: color-mix(in oklab, var(--tx-color-state) var(--tx-state-pressed), var(--tx-button-bg));
+
+  --tx-button-padding: 0.5rem;
+  --tx-button-radius: var(--tx-radius);
+  --tx-button-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+  --tx-button-font-weight: 500;
+  --tx-button-transition: background-color 150ms;
+
+  /* 로딩 표시가 라벨 위에 겹쳐 앉는다. 그 기준점이다 */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--tx-button-padding);
+  border: none;
+  border-radius: var(--tx-button-radius);
+  background-color: var(--tx-button-bg);
+  color: var(--tx-button-fg);
+  box-shadow: var(--tx-button-shadow);
+
+  /* 버튼은 UA 기본 글꼴을 쓴다. 상속시키지 않으면 주변 글자와 따로 논다 */
+  font: inherit;
+  font-weight: var(--tx-button-font-weight);
+  cursor: pointer;
+  transition: var(--tx-button-transition);
+}
+
+/* `:not(:disabled)` 가 없으면 비활성 버튼에도 hover 색이 붙는다 */
+.tx-button:hover:not(:disabled) {
+  background-color: var(--tx-button-bg-hover);
+}
+
+/* hover 와 특이도가 같다. **순서로 이긴다** — 이 규칙을 위로 올리면 눌러도 안 바뀐다 */
+.tx-button:active:not(:disabled) {
+  background-color: var(--tx-button-bg-pressed);
+}
+
+/**
+ * `:focus-visible` 이라 마우스로 누를 때는 안 뜨고 키보드로 이동할 때만 뜬다.
+ * **모든 variant 가 이걸 받는다.** 표면이 없는 variant 라고 빠지면 포커스 위치를 볼 수 없다.
+ */
+.tx-button:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 로딩과 비활성은 다른 상태다. 커서로 구분한다 */
+.tx-button[data-loading] {
+  cursor: wait;
+}
+
+/**
+ * --- variant — **배경과 글자만 바꾼다** ------------------------------------
+ *
+ * hover · pressed 를 여기서 안 적는 게 핵심이다. 위에서 `--tx-button-bg` 로부터 파생되므로
+ * 배경 한 줄만 바꾸면 상태 색이 따라온다. **새 variant 를 만드는 소비자도 똑같다.**
+ */
+
+.tx-button[data-variant="secondary"] {
+  --tx-button-bg: var(--tx-color-muted);
+  --tx-button-fg: var(--tx-color-text);
+}
+
+.tx-button[data-variant="danger"] {
+  --tx-button-bg: var(--tx-color-danger);
+}
+
+/**
+ * 표면을 지우는 두 종류. 토큰 한 줄이면 다크모드까지 따라온다 —
+ * 클래스 문자열 시절에는 `dark:` 가 별도 규칙이라 지우는 선언을 두 벌 써야 했다 (명세 §4 D7).
+ *
+ * 배경이 `transparent` 라 상태 레이어가 **반투명한 색으로 나온다.** 그게 의도다 —
+ * 뒤에 무엇이 깔려 있든 그 위에 옅게 얹힌다.
+ */
+.tx-button[data-variant="ghost"],
+.tx-button[data-variant="text"] {
+  --tx-button-bg: transparent;
+  --tx-button-fg: var(--tx-color-text);
+  --tx-button-shadow: none;
+}
+
+.tx-button[data-variant="text"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* --- 안쪽 요소 ------------------------------------------------------------ */
+
+/**
+ * 로딩 표시는 라벨을 밀어내지 않고 **위에 겹친다.** 그래야 버튼 폭이 그대로 유지돼
+ * 누르는 순간 옆의 버튼들이 밀리지 않는다.
+ */
+.tx-button__loading {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * flex 자식의 기본 `min-width: auto` 는 내용보다 작아지기를 거부한다.
+ * 그대로 두면 `classNames={{ label: "truncate" }}` 로 라벨을 잘라도 버튼 밖으로 삐져나온다.
+ */
+.tx-button__label {
+  min-width: 0;
+}
+
+.tx-button[data-loading] .tx-button__label {
+  opacity: 0.3;
+}

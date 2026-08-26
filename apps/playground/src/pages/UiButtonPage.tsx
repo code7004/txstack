@@ -1,5 +1,5 @@
 import { TxButton, TxCapsLockCheck, TxCard, TxClipboardButton, TxFlex, TxLoading, TxSpinner, TxTooltip } from "@txstack/ui";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
@@ -23,10 +23,11 @@ export const UiButtonPage = () => {
         </TxCard.Content>
       </TxCard>
 
-      <TxCard caption="비동기 · 테마 재정의 · 툴팁 · 클립보드">
+      <TxCard caption="비동기 · 토큰 재정의 · 툴팁 · 클립보드">
         <TxCard.Content className="flex flex-wrap items-center gap-2">
           <TxButton label="async (700ms)" onClick={() => wait(700)} />
-          <TxButton label="테마 override" theme={{ variants: { primary: "bg-emerald-600 hover:bg-emerald-700" } }} />
+          {/* 색은 CSS 변수로 바꾼다. 앱 전체라면 :root 에 한 줄이면 되고, 여기서는 이 버튼만 바꿨다. */}
+          <TxButton label="토큰 override" style={{ "--tx-button-bg": "#059669", "--tx-button-bg-hover": "#047857" } as CSSProperties} />
           <TxTooltip tip="TxTooltip 내용">
             <TxButton label="hover 해보기" variant="secondary" />
           </TxTooltip>

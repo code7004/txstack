@@ -20,5 +20,3 @@ export const TxContextMenuTheme = {
   item: `px-4 py-2 text-sm font-bold cursor-pointer ${TxClassHover}`,
   divider: `my-1 border-t ${TxClassBorderColor}`
 };
-
-export * from "./TxThemeProvider";

@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { TxThemeProvider } from "../TxTheme";
-import { TxButton, TxButtonTheme } from ".";
+import type { CSSProperties } from "react";
+import { TxButton } from ".";
 
-const VARIANTS = Object.keys(TxButtonTheme.variants) as (keyof typeof TxButtonTheme.variants)[];
+const VARIANTS = ["primary", "secondary", "danger", "ghost", "text"] as const;
+
+/** CSS 변수를 인라인 스타일로 주려면 타입을 넓혀야 한다. 스토리에서만 쓴다. */
+const vars = (v: Record<`--${string}`, string>) => v as CSSProperties;
 
 const meta = {
   title: "Form/TxButton",
@@ -12,29 +15,38 @@ const meta = {
     docs: {
       description: {
         component: [
-          "Tailwind 기반 버튼.",
+          "누르면 뭔가 일어나는 자리. 비동기 작업이면 잠금과 스피너가 따라붙는다.",
           "",
-          "**`Playground` 에서 직접 만져본다.** 나머지 스토리는 noControls이라 컨트롤이 적용되지 않는다.",
+          "```tsx",
+          'import { TxButton } from "@txstack/ui";',
+          'import "@txstack/ui/styles.css"; // 앱에서 한 번',
           "",
-          '- **`type` 기본값은 `"button"` 이다.** 폼 제출 버튼만 `type="submit"` 을 명시한다 — 안 그러면 `TxForm` 안의 모든 버튼이 폼을 제출한다.',
-          "- `onClick` 이 **Promise 를 반환하면** 해제될 때까지 스피너가 뜨고 버튼이 잠긴다. 연타해도 한 번만 실행된다.",
-          "- 동기 `onClick` 은 로딩 상태로 들어가지 않는다. 스피너가 깜빡이지 않는다.",
-          "- 색을 바꾸려면 `className`, 이 버튼만의 구조를 바꾸려면 `theme`, **앱 전체를 바꾸려면 `TxThemeProvider`** 다.",
-          '- ⚠ **`className` 으로 색을 바꿀 때는 `hover:`·`dark:` 도 같이 준다.** `className="bg-yellow-500"` 만 주면 평상시만 노랑이고 마우스를 올리거나 다크모드가 되면 원래 색으로 돌아간다 — `tailwind-merge` 는 조건이 같은 클래스끼리만 충돌로 보기 때문이다. 같은 색을 여러 번 쓸 거면 `theme` 으로 variant 를 하나 만드는 게 낫다.',
-          "- `variant` 는 **열려 있다.** `theme` 으로 `variants` 에 키를 추가하면 그 이름을 그대로 쓸 수 있다.",
+          '<TxButton label="저장" onClick={async () => await save()} />;',
+          "```",
           "",
-          "명세: `docs/001_ui/components/02_TxButton.md`"
+          "`onClick` 이 Promise 를 반환하면 해제될 때까지 스피너가 뜨고 버튼이 잠긴다. 연타해도 한 번만 실행된다.",
+          "동기 `onClick` 은 잠기지 않는다.",
+          "",
+          '- **`type` 기본값이 `"button"` 이다.** 폼을 제출할 버튼에만 `type="submit"` 을 준다.',
+          "- 색·반경은 CSS 변수로 바꾼다. 앱 전체는 `:root { --tx-color-primary: … }` 한 줄이다.",
+          '- `variant` 는 5종이 들어 있고, CSS 로 새 이름을 늘릴 수 있다 — `.tx-button[data-variant="brand"] { … }`.',
+          "- `className` 은 `.tx-button` 을 교체하지 않고 덧붙는다. 라벨만 겨냥하려면 `classNames={{ label }}`.",
+          "- `onClick` 이 던진 에러는 콘솔에만 남는다. 화면에 띄우려면 핸들러 안에서 잡는다.",
+          "",
+          "아이콘·크기 스케일·링크(`href`)는 다루지 않는다. 아이콘은 `children` 으로 넣는다.",
+          "",
+          "컨트롤 패널은 `Playground` 에서만 동작한다. 나머지는 비교용이다."
         ].join("\n")
       }
     }
   },
   argTypes: {
-    variant: { control: "select", options: VARIANTS, description: "의미 기반 스타일. `theme` 으로 늘릴 수 있다" },
     label: { control: "text" },
+    variant: { control: "select", options: VARIANTS, description: "의미로 고른다. CSS 로 새 이름을 늘릴 수 있다" },
     disabled: { control: "boolean" },
     type: { control: "inline-radio", options: ["button", "submit", "reset"], description: '기본 `"button"`' },
-    className: { control: "text", description: "기본 클래스와 병합된다" },
-    theme: { control: false, description: "이 인스턴스만의 부분 테마" },
+    className: { control: "text", description: "`.tx-button` 에 덧붙는다 (교체 아님)" },
+    classNames: { control: false, description: "안쪽 슬롯. 지금은 `label` 하나다" },
     loading: { control: false },
     onClick: { control: false }
   }
@@ -43,15 +55,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** 컨트롤이 적용되지 않는 noControls 스토리에 붙인다. 죽은 손잡이를 보여주지 않는다. */
+/** 컨트롤을 받지 않는 비교용 스토리에 붙인다. */
 const noControls = { controls: { disable: true } };
 
-/** **여기서 직접 만져본다.** 컨트롤 패널의 값을 바꾸면 즉시 반영된다. */
+/** 컨트롤 패널에서 값을 바꿔가며 확인한다. */
 export const Playground: Story = {
-  args: { label: "확인", variant: "primary", disabled: false, type: "button", className: "" }
+  args: { label: "확인", variant: "primary", disabled: false, type: "button", className: "" },
+  render: (args) => <TxButton {...args} />
 };
 
-/** `variant` 5종. **의미**를 기준으로 고른다. 팔레트 색을 고르는 `color` prop 은 없앴다 — `className` 으로 한다. */
+/**
+ * 다섯 가지가 들어 있다. 색이 아니라 **의미**로 고른다.
+ *
+ * `ghost` 와 `text` 는 표면이 없고, 마우스를 올렸을 때만 배경이 뜬다.
+ */
 export const Variant: Story = {
   parameters: noControls,
   render: () => (
@@ -64,9 +81,9 @@ export const Variant: Story = {
 };
 
 /**
- * `onClick` 이 Promise 를 반환하면 해제될 때까지 스피너가 뜨고 버튼이 잠긴다. 연타해도 한 번만 실행된다.
+ * 왼쪽 버튼의 `onClick` 은 3초짜리 Promise 를 반환한다. 누르면 잠기고, 풀리면 돌아온다.
  *
- * 옆의 동기 버튼은 **로딩 상태로 들어가지 않는다** — 스피너가 한 프레임 깜빡이던 것을 없앴다.
+ * 가운데는 동기 핸들러라 잠기지 않는다. 라벨은 로딩 중에도 자리를 지키므로 버튼 폭이 그대로다.
  */
 export const Loading: Story = {
   parameters: noControls,
@@ -80,10 +97,9 @@ export const Loading: Story = {
 };
 
 /**
- * **`type` 기본값이 `"button"` 이다.**
+ * 폼 안에서 왼쪽 버튼은 눌러도 제출되지 않는다. `type="submit"` 을 준 오른쪽만 제출된다.
  *
- * 아래 폼에서 왼쪽 버튼은 눌러도 제출되지 않고, `type="submit"` 을 명시한 오른쪽만 제출된다.
- * 예전에는 HTML 기본값인 `submit` 이 그대로 먹어서 **폼 안의 모든 버튼이 폼을 제출했다.**
+ * HTML 버튼의 기본값은 `submit` 이지만 `TxButton` 은 `"button"` 으로 시작한다.
  */
 export const InForm: Story = {
   parameters: noControls,
@@ -103,93 +119,96 @@ export const InForm: Story = {
 };
 
 /**
- * 커스터마이징은 **범위에 따라 셋 중 하나**를 고른다.
+ * 색과 반경은 CSS 변수로 바꾼다. **`hover` 와 눌린 색은 배경에서 저절로 계산되므로 따로 줄 필요가 없다.**
  *
- * | 무엇을 바꾸나         | 무엇으로            |
- * | --------------------- | ------------------- |
- * | 이 버튼 하나          | `className`         |
- * | 이 버튼의 내부 구조   | `theme`             |
- * | **앱 전체**           | `TxThemeProvider`   |
+ * 앱 전체는 `:root` 한 곳, 없던 variant 는 선택자 하나다.
  *
- * 아래 오른쪽 두 개는 Provider 로 감싼 영역이다. `brand` 는 **원래 없던 variant** 인데
- * Provider 에서 키를 추가해 그대로 쓰고 있다.
+ * ```css
+ * :root {
+ *   --tx-color-primary: #7c3aed;
+ *   --tx-radius: 9999px;
+ * }
+ *
+ * .tx-button[data-variant="brand"] {
+ *   --tx-button-bg: #0f172a;
+ *   --tx-button-fg: #fff;
+ * }
+ * ```
+ *
+ * 두 경우 다 배경만 줬는데 마우스를 올리면 그 색에서 진해진다. 상태 색을 따로 적지 않는다.
+ *
+ * 아래 두 번째 줄은 앱 전체 대신 그 영역에만 같은 변수를 걸어 본 것이다.
+ * 세 번째 줄의 `brand` 는 라이브러리에 없는 이름인데, 위 CSS 두 줄로 만들어 쓰고 있다.
+ * 마우스를 올려 보면 hover 색까지 따라오는 게 보인다.
  */
-/**
- * **이 버튼 하나만 바꾼다.** 가장 흔한 경우고, `className` 이면 끝난다.
- *
- * 다만 **색을 바꿀 때는 `hover:`·`dark:` 도 같이 줘야 한다.** `tailwind-merge` 는
- * 조건이 같은 클래스끼리만 충돌로 보기 때문에, `bg-yellow-500` 은 `bg-blue-500` 을 밀어내지만
- * `hover:bg-blue-600` 과 `dark:bg-blue-600` 은 그대로 남는다.
- *
- * 아래 노란 버튼 두 개에 **마우스를 올리거나 테마를 다크로 바꿔** 보면 차이가 바로 보인다.
- */
-export const CustomizingClass: Story = {
-  name: "Customizing - class",
+export const CustomizingTokens: Story = {
   parameters: noControls,
   render: () => (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <TxButton label="모양만 바꾼다" className="rounded-full px-6" />
-        <span className="text-xs text-slate-400">색이 아닌 것은 한 줄이면 된다</span>
+    <div className="flex flex-col gap-4 text-sm">
+      <style>{`
+        .tx-button[data-variant="brand"] {
+          --tx-button-bg: #0f172a;
+          --tx-button-fg: #fff;
+        }
+      `}</style>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="기본값" />
+        <TxButton label="삭제" variant="danger" />
+        <span className="text-slate-500 dark:text-slate-400">라이브러리 기본 토큰</span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 rounded border border-amber-300 p-3 dark:border-amber-800">
-        <TxButton label="✗ 평상시만 노랑" className="bg-yellow-500 text-black" />
-        <TxButton label="✓ 조건까지 전부" className="bg-yellow-500 text-black hover:bg-yellow-600 dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-600" />
-        <span className="text-xs text-slate-400">
-          왼쪽에 <b>마우스를 올리거나 다크로 바꿔</b> 보라
+      <div className="flex flex-wrap items-center gap-3 rounded border border-violet-300 p-3 dark:border-violet-800" style={vars({ "--tx-color-primary": "#7c3aed", "--tx-radius": "9999px" })}>
+        <TxButton label="기본값" />
+        <TxButton label="삭제" variant="danger" />
+        <span className="text-slate-500 dark:text-slate-400">
+          이 영역에만 <code>--tx-color-primary</code> · <code>--tx-radius</code> — 올려보면 hover 도 보라 계열이다
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <TxButton label="theme 으로 갈아끼우기" theme={{ variants: { primary: "bg-emerald-600 text-white hover:bg-emerald-700" } }} />
-        <span className="text-xs text-slate-400">이 버튼의 variant 자체를 교체한다 — 조건을 한 곳에 모을 수 있다</span>
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="가입" variant="brand" />
+        <span className="text-slate-500 dark:text-slate-400">
+          <code>variant=&quot;brand&quot;</code> — CSS 로 늘린 이름
+        </span>
       </div>
     </div>
   )
 };
 
 /**
- * **앱 전체를 바꾼다.** 한 번 감싸면 그 아래 모든 `TxButton` 에 적용된다.
+ * 이 버튼 하나의 겉은 `className` 으로, 안쪽 라벨은 `classNames={{ label }}` 로 바꾼다.
+ * 둘 다 `.tx-button` 을 교체하지 않고 덧붙으므로, 여백만 바꾸려다 색이나 로딩 표시가 사라지지 않는다.
  *
- * 같은 색을 여러 곳에서 쓸 거라면 `className` 을 반복하지 말고 **여기서 variant 를 만든다.**
- * 아래 `brand` 는 라이브러리에 원래 없던 variant 인데 Provider 에서 키를 추가해 그대로 쓰고 있다.
+ * ```tsx
+ * <TxButton label="저장" className="my-save-btn" />
+ * <TxButton label="아주 긴 라벨" classNames={{ label: "truncate" }} />
+ * ```
  *
- * **감싸지 않아도 동작한다.** Provider 는 선택이다.
+ * 세 번째 줄의 라벨은 잘려 있다. 버튼에 폭을 주고 라벨 슬롯에만 자르기를 걸었다.
  */
-export const CustomizingProvider: Story = {
-  name: "Customizing - Provider",
+export const CustomizingClass: Story = {
   parameters: noControls,
   render: () => (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <TxButton label="Provider 바깥 primary" />
-        <span className="text-xs text-slate-400">라이브러리 기본값</span>
+    <div className="flex flex-col gap-4 text-sm">
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="넓고 둥글게" className="rounded-full px-6" />
+        <span className="text-slate-500 dark:text-slate-400">
+          <code>className</code> — 이 버튼의 겉
+        </span>
       </div>
 
-      <TxThemeProvider
-        theme={{
-          TxButton: {
-            variants: {
-              primary: "bg-violet-600 text-white hover:bg-violet-700",
-              warning: "bg-yellow-500 text-black hover:bg-yellow-600",
-              brand: "bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
-            }
-          }
-        }}
-      >
-        <div className="flex flex-col gap-2 rounded border border-violet-300 p-3 dark:border-violet-800">
-          <div className="flex flex-wrap items-center gap-2">
-            <TxButton label="Provider 안 primary" />
-            <TxButton label="warning (새 variant)" variant="warning" />
-            <TxButton label="brand (새 variant)" variant="brand" />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <TxButton label="인스턴스 theme 이 이긴다" theme={{ variants: { primary: "bg-emerald-600 text-white hover:bg-emerald-700" } }} />
-            <span className="text-xs text-slate-400">라이브러리 → Provider → 인스턴스 순으로 뒤가 이긴다</span>
-          </div>
-        </div>
-      </TxThemeProvider>
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="그림자 얹기" className="shadow-lg" />
+        <span className="text-slate-500 dark:text-slate-400">Tailwind 든 자기 CSS 클래스든 그대로 붙는다</span>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="줄바꿈 없이 잘리는 아주 긴 라벨" className="w-40" classNames={{ label: "truncate" }} />
+        <span className="text-slate-500 dark:text-slate-400">
+          <code>classNames=&#123;&#123; label &#125;&#125;</code> — 안쪽 슬롯
+        </span>
+      </div>
     </div>
   )
 };
