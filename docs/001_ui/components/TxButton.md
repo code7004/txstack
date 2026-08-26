@@ -1,7 +1,7 @@
 # TxButton
 
 > **플로우 S1 산출물.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md) · **파일럿 2차**
-> 상태: **S1~S4 + 🧑 사용자 확인 통과 (2026-08-25).** 남은 것은 S5(⏸ `903` 미정) · S6.
+> 상태: **S1~S4 + 🧑 확인 + S6 완료 (2026-08-25). 남은 것은 S5 뿐이고 `903` 미정으로 ⏸ 보류다.**
 > **공개 API 와 커스터마이징 3단이 여기서 확정됐다.** 이 문서가 `TxButton` 의 단일 진실 공급원이다.
 
 현재 코드: `packages/ui/src/TxButton/TxButton.tsx` · `TxButton.theme.ts` · `index.ts` ·
@@ -17,7 +17,7 @@
 | `S4` | 스토리북 🤖                                    | `001-TxButton-S4` | ✅   | 스토리 6개(플레이그라운드 포함) → §12                  |
 | 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                 | ✅   | **통과 (2026-08-25).** 2차 개선 2건 반영 후 승인 → §10 |
 | `S5` | 문서 사이트 🤖                                 | `001-TxButton-S5` | ⏸    | `903` 도구 미정으로 보류 (TxSpinner 와 같은 사유)      |
-| `S6` | 에이전트 가이드 🤖                             | `001-TxButton-S6` |      | `packages/ui/AGENTS.md` 에 항목 추가                   |
+| `S6` | 에이전트 가이드 🤖                             | `001-TxButton-S6` | ✅   | `packages/ui/AGENTS.md` 에 항목 추가 (2026-08-25)      |
 
 ## 1. 목적
 

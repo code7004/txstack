@@ -104,6 +104,60 @@ peer 로 `react` `react-dom` `react-router-dom` `framer-motion` 이 필요하다
 > **검증이 끝난 것만 싣는다.** 여기 없는 컴포넌트는 패키지에 있어도 아직 명세가 확정되지 않았다.
 > 그런 건 `.d.ts` 를 보고 쓰되, 동작이 바뀔 수 있다고 가정한다.
 
+### TxButton
+
+누르면 뭔가 일어나는 자리. **비동기 작업 중 중복 클릭을 막는 게 이 컴포넌트의 진짜 값이다.**
+
+```tsx
+import { TxButton } from "@txstack/ui";
+
+<TxButton
+  label="저장"
+  onClick={async () => {
+    await save();
+  }}
+/>; // 잠금·스피너가 저절로 붙는다
+```
+
+```tsx
+// 의미로 고른다
+<TxButton label="삭제" variant="danger" />
+
+// 폼 안 — 제출 버튼만 type 을 명시한다
+<form onSubmit={hdSubmit}>
+  <TxButton label="취소" variant="secondary" onClick={hdCancel} />
+  <TxButton label="제출" type="submit" />
+</form>
+```
+
+| prop      | 타입                                          | 기본값         | 메모                                             |
+| --------- | --------------------------------------------- | -------------- | ------------------------------------------------ |
+| `label`   | `string`                                      | —              | `children` 을 써도 된다 (`label` 이 우선)        |
+| `variant` | `primary` `secondary` `danger` `ghost` `text` | `"primary"`    | **열려 있다** — `theme` 으로 키를 추가할 수 있다 |
+| `type`    | `button` `submit` `reset`                     | **`"button"`** | HTML 기본값(`submit`)과 다르다                   |
+| `onClick` | `(e) => Promise<void> \| void`                | —              | Promise 를 반환하면 자동으로 잠긴다              |
+| `theme`   | `TxButtonThemeOverride`                       | —              | 이 인스턴스만의 부분 테마                        |
+
+그 밖의 `ButtonHTMLAttributes` 는 그대로 통과한다.
+
+**주의할 것**
+
+- **`type` 기본값이 `"button"` 이다.** 폼을 제출하려면 **`type="submit"` 을 반드시 명시한다.**
+  HTML 기본값과 반대이므로, 폼이 제출되지 않으면 여기부터 본다
+- **동기 `onClick` 은 로딩 상태로 들어가지 않는다.** 잠금이 필요하면 `async` 로 만들거나 Promise 를 반환한다
+- **`aria-label` 을 자동으로 붙이지 않는다.** 글자가 없는 아이콘 버튼이라면 직접 준다
+- **`onEnter` prop 은 없다.** 버튼은 포커스 상태에서 Enter 를 누르면 브라우저가 click 을 발생시킨다
+- **`color` prop 은 없다.** 색은 `className`·`theme`·`TxThemeProvider` 로 한다 (위 ⚠ 참고)
+- `onClick` 이 던진 에러는 콘솔에만 남는다. 소비자가 잡아야 하면 **핸들러 안에서 try/catch 한다**
+
+**이럴 땐 다른 걸 쓴다**
+
+| 하고 싶은 것       | 쓸 것                                       |
+| ------------------ | ------------------------------------------- |
+| 링크로 이동        | `<a>` 를 쓴다. `href` prop 은 없다          |
+| 아이콘만 있는 버튼 | `children` 에 아이콘 + `aria-label` 을 준다 |
+| 같은 색을 여러 번  | `TxThemeProvider` 로 variant 를 만든다      |
+
 ### TxSpinner
 
 로딩 중임을 알리는 **회전 아이콘 하나.** 문구·전체화면 오버레이·표시 여부 판단은 하지 않는다.

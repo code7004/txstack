@@ -106,7 +106,7 @@ TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
 2차 개선에서 props 하나만 바뀌어도 사이트와 가이드를 다시 써야 하기 때문이다.
 
 도구도 그 선을 따른다. **vitest = 🤖 의 자동 검증 / Storybook = 🧑 가 직접 보는 자리.**
-그래서 Storybook 에는 **확인 준비가 된 컴포넌트만 싣는다** (`main.ts` 의 `READY` 목록).
+Storybook 에는 스토리가 있는 것을 전부 싣고, **무엇이 검증됐는지는 진행 보드가 말한다.**
 
 **지금은 양식이 전부 미정이므로 파일럿으로 만든다.**
 
@@ -169,7 +169,7 @@ TxButton  ─ S1 → S2 → S3 → S4 → 🧑 → S5 → S6 ─▶ 완료
 | 1      | `001_ui/10_requirements`   | **패키지 수용 기준 · `@source` 제약 유지 여부 · 범위 밖** (🤝). `20_design` 승격의 선행 | `docs/001_ui/ 를 읽고 10_requirements 를 확정하자`                   |
 | 2      | `001_ui/20_design`         | **파일럿 2종의 결정을 양식으로 승격.** 커스터마이징 3단 · 콜백 이름 규칙                | `docs/001_ui/ 를 읽고 20_design 으로 승격해줘`                       |
 | 3      | `903-01`                   | **문서 사이트 요구사항** (🤝). Storybook 갈음 안은 버렸다 — 근거는 §5                   | `docs/README.md 와 docs/903_docs_site/ 를 읽고 903-01 부터 진행해줘` |
-| 4      | `001-TxButton-S6`          | `packages/ui/AGENTS.md` 에 TxButton 항목 추가. **게이트를 통과해 이제 실을 수 있다**    | `… TxButton.md 를 읽고 001-TxButton-S6 진행해줘`                     |
+| ~~6~~  | ~~`001-TxButton-S6`~~      | **✅ 2026-08-25 완료.** `packages/ui/AGENTS.md` 에 TxButton 항목                        | —                                                                    |
 | —      | `001-typenames`            | `ITx*` 나머지 → `Tx*Props` 일괄 리네임. **순서 무관, 언제 해도 됨**                     | `docs/001_ui/30_tasks.md 의 001-typenames 를 진행해줘`               |
 
 **파일럿 두 개가 다 게이트를 통과했다.** 이제 산출물을 양식으로 승격할 차례다 —
