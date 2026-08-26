@@ -51,7 +51,7 @@ docs/README.md 와 docs/001_ui/components/09_TxInput.md 를 읽고 001-TxInput-S
 
 | 컴포넌트    | S1  | S2  | S3  | S4  | 🧑  | S5  | S6  | 인벤토리                                                                        | 문서                                    |
 | ----------- | --- | --- | --- | --- | --- | --- | --- | ------------------------------------------------------------------------------- | --------------------------------------- |
-| `TxSpinner` | ✅  | ✅  | ✅  | ✅  | 🔄  | ⏸   | ↩   | 56행 · **CSS✓** · types(동거) · **test 20** · tag✓ · **스토리6** · named export | [TxSpinner](components/01_TxSpinner.md) |
+| `TxSpinner` | ✅  | ✅  | ✅  | ✅  | ✅  | ⏸   | ↩   | 56행 · **CSS✓** · types(동거) · **test 20** · tag✓ · **스토리6** · named export | [TxSpinner](components/01_TxSpinner.md) |
 | `TxButton`  | ✅  | ↩   | ↩   | ↩   | ↩   | ⏸   | ↩   | 76행 · theme✓ · types(동거) · **test 20** · tag✓ · **스토리6**                  | [TxButton](components/02_TxButton.md)   |
 
 ### B. 파일럿에 묶인 것

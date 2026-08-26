@@ -14,34 +14,34 @@
 
 각 문서에는 **자동 수집한 현재 코드 인벤토리**와 **착수 전에 알아야 할 것**이 미리 채워져 있다.
 
-| #      | 컴포넌트                                     | 그룹                   | 상태                                            |
-| ------ | -------------------------------------------- | ---------------------- | ----------------------------------------------- |
-| **01** | [TxSpinner](01_TxSpinner.md)                 | A 파일럿               | **S1~S4 ✅ (2차) · 🧑 확인 대기** — 양식 본보기 |
-| **02** | [TxButton](02_TxButton.md)                   | A 파일럿               | **S1 ✅ · S2~S4 ↩** — CSS 전환으로 되돌림       |
-| 03     | [TxLoading](03_TxLoading.md)                 | B 파일럿에 묶인 것     |                                                 |
-| 04     | [TxTheme](04_TxTheme.md)                     | B 파일럿에 묶인 것     |                                                 |
-| 05     | [TxCoolTable](05_TxCoolTable.md)             | C 존치 판정 먼저       |                                                 |
-| 06     | [TxFlex](06_TxFlex.md)                       | C 존치 판정 먼저       |                                                 |
-| 07     | [TxClipboardButton](07_TxClipboardButton.md) | C 존치 판정 먼저       |                                                 |
-| 08     | [TxIcons](08_TxIcons.md)                     | C 존치 판정 먼저       |                                                 |
-| 09     | [TxInput](09_TxInput.md)                     | D 폼 계열              | 이 계열의 기준이 된다                           |
-| 10     | [TxTextarea](10_TxTextarea.md)               | D 폼 계열              |                                                 |
-| 11     | [TxCheckBox](11_TxCheckBox.md)               | D 폼 계열              |                                                 |
-| 12     | [TxDropdown](12_TxDropdown.md)               | D 폼 계열              |                                                 |
-| 13     | [TxCapsLockCheck](13_TxCapsLockCheck.md)     | D 폼 계열              |                                                 |
-| 14     | [TxForm](14_TxForm.md)                       | D 폼 계열              |                                                 |
-| 15     | [TxModal](15_TxModal.md)                     | E 오버레이             | 열림/닫힘 규약을 여기서 정한다                  |
-| 16     | [TxSlidePanel](16_TxSlidePanel.md)           | E 오버레이             |                                                 |
-| 17     | [TxDropMenu](17_TxDropMenu.md)               | E 오버레이             |                                                 |
-| 18     | [TxToolTip](18_TxToolTip.md)                 | E 오버레이             |                                                 |
-| 19     | [TxContextMenu](19_TxContextMenu.md)         | E 오버레이             |                                                 |
-| 20     | [TxLayout](20_TxLayout.md)                   | F 레이아웃 · 내비      |                                                 |
-| 21     | [TxHeader](21_TxHeader.md)                   | F 레이아웃 · 내비      |                                                 |
-| 22     | [TxCard](22_TxCard.md)                       | F 레이아웃 · 내비      |                                                 |
-| 23     | [TxTabs](23_TxTabs.md)                       | F 레이아웃 · 내비      |                                                 |
-| 24     | [TxJsonTree](24_TxJsonTree.md)               | G 데이터 · 무거운 의존 |                                                 |
-| 25     | [TxAgGrid](25_TxAgGrid.md)                   | G 데이터 · 무거운 의존 | subpath 격리                                    |
-| 26     | [TxDayPicker](26_TxDayPicker.md)             | G 데이터 · 무거운 의존 | subpath 격리                                    |
+| #      | 컴포넌트                                     | 그룹                   | 상태                                         |
+| ------ | -------------------------------------------- | ---------------------- | -------------------------------------------- |
+| **01** | [TxSpinner](01_TxSpinner.md)                 | A 파일럿               | **S1~S4 + 🧑 통과 ✅ (2차)** — 26종의 본보기 |
+| **02** | [TxButton](02_TxButton.md)                   | A 파일럿               | **S1 ✅ · S2~S4 ↩** — CSS 전환으로 되돌림    |
+| 03     | [TxLoading](03_TxLoading.md)                 | B 파일럿에 묶인 것     |                                              |
+| 04     | [TxTheme](04_TxTheme.md)                     | B 파일럿에 묶인 것     |                                              |
+| 05     | [TxCoolTable](05_TxCoolTable.md)             | C 존치 판정 먼저       |                                              |
+| 06     | [TxFlex](06_TxFlex.md)                       | C 존치 판정 먼저       |                                              |
+| 07     | [TxClipboardButton](07_TxClipboardButton.md) | C 존치 판정 먼저       |                                              |
+| 08     | [TxIcons](08_TxIcons.md)                     | C 존치 판정 먼저       |                                              |
+| 09     | [TxInput](09_TxInput.md)                     | D 폼 계열              | 이 계열의 기준이 된다                        |
+| 10     | [TxTextarea](10_TxTextarea.md)               | D 폼 계열              |                                              |
+| 11     | [TxCheckBox](11_TxCheckBox.md)               | D 폼 계열              |                                              |
+| 12     | [TxDropdown](12_TxDropdown.md)               | D 폼 계열              |                                              |
+| 13     | [TxCapsLockCheck](13_TxCapsLockCheck.md)     | D 폼 계열              |                                              |
+| 14     | [TxForm](14_TxForm.md)                       | D 폼 계열              |                                              |
+| 15     | [TxModal](15_TxModal.md)                     | E 오버레이             | 열림/닫힘 규약을 여기서 정한다               |
+| 16     | [TxSlidePanel](16_TxSlidePanel.md)           | E 오버레이             |                                              |
+| 17     | [TxDropMenu](17_TxDropMenu.md)               | E 오버레이             |                                              |
+| 18     | [TxToolTip](18_TxToolTip.md)                 | E 오버레이             |                                              |
+| 19     | [TxContextMenu](19_TxContextMenu.md)         | E 오버레이             |                                              |
+| 20     | [TxLayout](20_TxLayout.md)                   | F 레이아웃 · 내비      |                                              |
+| 21     | [TxHeader](21_TxHeader.md)                   | F 레이아웃 · 내비      |                                              |
+| 22     | [TxCard](22_TxCard.md)                       | F 레이아웃 · 내비      |                                              |
+| 23     | [TxTabs](23_TxTabs.md)                       | F 레이아웃 · 내비      |                                              |
+| 24     | [TxJsonTree](24_TxJsonTree.md)               | G 데이터 · 무거운 의존 |                                              |
+| 25     | [TxAgGrid](25_TxAgGrid.md)                   | G 데이터 · 무거운 의존 | subpath 격리                                 |
+| 26     | [TxDayPicker](26_TxDayPicker.md)             | G 데이터 · 무거운 의존 | subpath 격리                                 |
 
 빈 칸은 미착수다. 단계별 상태(S1~S6)는 [30_tasks.md](../30_tasks.md) 보드가 소유한다 — 여기서 중복하지 않는다.
 
