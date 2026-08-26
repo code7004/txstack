@@ -147,12 +147,15 @@ S1 문서(명세·감사) → S2 구현 → S3 테스트 → S4 스토리북 →
 
 ### 4) 공통 job
 
-~~`001-styles-css`~~ · ~~`001-tokens`~~ · ~~`001-css-layer`~~ (셋 다 ✅) · `001-typenames`(`ITx*` 리네임) → [30_tasks.md](30_tasks.md)
+~~`001-styles-css`~~ · ~~`001-tokens`~~ · ~~`001-css-layer`~~ · ~~`001-statelayer`~~ (넷 다 ✅) ·
+`001-typenames`(`ITx*` 리네임) · `001-r4-sass`(Sass 소비자 검증) → [30_tasks.md](30_tasks.md)
 
-### 4-1) 🧑 게이트를 통과하면
+### 4-1) ~~소비자 문서~~ — **✅ 2026-08-26**
 
-`packages/ui/README.md` 와 `AGENTS.md` 가 아직 `TxThemeProvider`·`@source` 를 안내하고 있다.
-**`@layer` 한 줄 안내도 여기 들어가야 한다** — `001-TxSpinner-S6` · `001-TxButton-S6`.
+`packages/ui/README.md` 와 `AGENTS.md` 를 이행 상태에 맞췄다 (`001-TxSpinner-S6` · `001-TxButton-S6`).
+**`AGENTS.md` 가 삭제된 `TxThemeProvider` 를 권장 경로로 가르치고 있었다** — 에이전트가 그대로
+따라 쓰면 컴파일이 안 되는 상태였다. 둘 다 "옮긴 2종 / 나머지 24종" 으로 갈라 적었고,
+`@source` 는 24종에 아직 필요해서 **지우지 않고 임시라고 표시**했다.
 
 ### 5) 나머지 24종
 
