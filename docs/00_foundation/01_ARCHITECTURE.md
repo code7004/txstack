@@ -83,12 +83,12 @@ network         (독립)
 
 새 판에서 아직 확정되지 않은 것들. 해당 주제 문서에서 결론이 나면 여기서 지운다.
 
-| 항목                                                                                                                                           | 어디서 결정하나                                           |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| ~~`@txstack/ui` 의 커스터마이징 방식~~ → **3단(`className` / `theme` / `TxThemeProvider`)** (2026-08-25 결정)                                  | [TxButton §5](../001_ui/components/TxButton.md)           |
-| ~~Tailwind v4 `@source` purge 제약~~ → **없앤다. 사전 빌드 CSS 동봉** (2026-08-25 결정, job `001-styles-css`)                                  | [001_ui/10_requirements §3](../001_ui/10_requirements.md) |
-| `hooks` 의 범위 — `useUrlQuery` 외 3개 훅을 유지할 것인가                                                                                      | `003_hooks/10_requirements.md`                            |
-| `network` 의 범위 — 401 처리·응답 봉투를 계속 다룰 것인가                                                                                      | `004_network/10_requirements.md`                          |
-| `route-meta` 의 `scope` 가 무엇을 뜻하는가 (권한? 표시 범위?)                                                                                  | `002_route_meta/10_requirements.md`                       |
-| 문서 사이트(903)를 무엇으로 세울 것인가 — **Storybook 갈음 안은 버렸다**                                                                       | `903_docs_site/10_requirements.md`                        |
-| ~~에이전트 가이드의 파일명·원본 위치~~ → **`AGENTS.md`, `packages/<pkg>/` 안(`files` 밖). npm 동봉 안 하고 사이트 다운로드** (2026-08-25 결정) | [904 README](../904_claude_guide/README.md)               |
+| 항목                                                                                                                                           | 어디서 결정하나                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| ~~`@txstack/ui` 의 커스터마이징 방식~~ → **CSS 변수 / `className` / `classNames`** (2026-08-25 결정. `theme`·`TxThemeProvider` 는 폐기)        | [001_ui/20_design §4](../001_ui/20_design.md) |
+| ~~Tailwind v4 `@source` purge 제약~~ → **자체 CSS 로 전환해 제약 자체가 사라졌다** (2026-08-25 결정, job `001-styles-css`)                     | [001_ui/20_design §2](../001_ui/20_design.md) |
+| `hooks` 의 범위 — `useUrlQuery` 외 3개 훅을 유지할 것인가                                                                                      | `003_hooks/10_requirements.md`                |
+| `network` 의 범위 — 401 처리·응답 봉투를 계속 다룰 것인가                                                                                      | `004_network/10_requirements.md`              |
+| `route-meta` 의 `scope` 가 무엇을 뜻하는가 (권한? 표시 범위?)                                                                                  | `002_route_meta/10_requirements.md`           |
+| 문서 사이트(903)를 무엇으로 세울 것인가 — **Storybook 갈음 안은 버렸다**                                                                       | `903_docs_site/10_requirements.md`            |
+| ~~에이전트 가이드의 파일명·원본 위치~~ → **`AGENTS.md`, `packages/<pkg>/` 안(`files` 밖). npm 동봉 안 하고 사이트 다운로드** (2026-08-25 결정) | [904 README](../904_claude_guide/README.md)   |

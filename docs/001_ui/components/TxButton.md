@@ -1,23 +1,31 @@
 # TxButton
 
 > **플로우 S1 산출물.** [06_COMPONENT_FLOW](../../00_foundation/06_COMPONENT_FLOW.md) · **파일럿 2차**
-> 상태: **S1~S4 + 🧑 확인 + S6 완료 (2026-08-25). 남은 것은 S5 뿐이고 `903` 미정으로 ⏸ 보류다.**
-> **공개 API 와 커스터마이징 3단이 여기서 확정됐다.** 이 문서가 `TxButton` 의 단일 진실 공급원이다.
+> 상태: **1차는 S1~S4 + 🧑 확인 + S6 까지 갔다. 2026-08-25 에 `↩` 로 되돌렸다** — [20_design](../20_design.md) 의 CSS 전환.
+> **여기서 확정했던 커스터마이징 3단(`className`/`theme`/`TxThemeProvider`)은 폐기됐다** — §5 Q1 참고.
+> 이 문서가 `TxButton` 의 단일 진실 공급원이다.
 
 현재 코드: `packages/ui/src/TxButton/TxButton.tsx` · `TxButton.theme.ts` · `index.ts` ·
 `TxButton.test.tsx` (20개) · `TxButton.stories.tsx` (`Form/TxButton`, 6개)
 
 ## 진행
 
-| 단계 | 내용                                           | job ID            | 상태 | 비고                                                   |
-| ---- | ---------------------------------------------- | ----------------- | ---- | ------------------------------------------------------ |
-| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxButton-S1` | ✅   | 커스터마이징 방식 확정 → §5                            |
-| `S2` | 구현 = 감사 결과 반영 🤖                       | `001-TxButton-S2` | ✅   | D1–D7 처리 + `TxThemeProvider` 신설. changeset 작성됨  |
-| `S3` | 테스트 🤖                                      | `001-TxButton-S3` | ✅   | 20개. 결함 7개 전부 변이로 확인 → §11                  |
-| `S4` | 스토리북 🤖                                    | `001-TxButton-S4` | ✅   | 스토리 6개(플레이그라운드 포함) → §12                  |
-| 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                 | ✅   | **통과 (2026-08-25).** 2차 개선 2건 반영 후 승인 → §10 |
-| `S5` | 문서 사이트 🤖                                 | `001-TxButton-S5` | ⏸    | `903` 도구 미정으로 보류 (TxSpinner 와 같은 사유)      |
-| `S6` | 에이전트 가이드 🤖                             | `001-TxButton-S6` | ✅   | `packages/ui/AGENTS.md` 에 항목 추가 (2026-08-25)      |
+| 단계 | 내용                                           | job ID            | 상태 | 비고                                                    |
+| ---- | ---------------------------------------------- | ----------------- | ---- | ------------------------------------------------------- |
+| `S1` | 문서 = 명세 + 현행 코드 감사 🤝                | `001-TxButton-S1` | ✅   | 커스터마이징 방식 확정 → §5                             |
+| `S2` | 구현 = 감사 결과 반영 🤖                       | `001-TxButton-S2` | ↩    | 1차 완료(D1–D7) → §8. **`TxThemeProvider` 는 제거된다** |
+| `S3` | 테스트 🤖                                      | `001-TxButton-S3` | ↩    | 1차 20개 → §11. `theme` 병합 테스트가 사라진다          |
+| `S4` | 스토리북 🤖                                    | `001-TxButton-S4` | ↩    | 1차 6개 → §12. `Customizing - Provider` 가 바뀐다       |
+| 🧑   | **사용자 확인** — Storybook 에서 직접 만져본다 | —                 | ↩    | 1차 통과(2026-08-25) → §10. 2차에서 다시 받는다         |
+| `S5` | 문서 사이트 🤖                                 | `001-TxButton-S5` | ⏸    | `903` 도구 미정으로 보류 (TxSpinner 와 같은 사유)       |
+| `S6` | 에이전트 가이드 🤖                             | `001-TxButton-S6` | ↩    | 1차 작성. 커스터마이징 절이 통째로 바뀐다               |
+
+> **2026-08-25 — 게이트를 `↩` 로 되돌렸다.** [20_design](../20_design.md) 에서 **스타일을 Tailwind 클래스
+> 문자열에서 자체 CSS 로** 바꾸기로 했다. `TxButton` 은 그 방침으로 `S2`~`S4` 를 다시 돈다.
+>
+> **§2·§3 은 새 방침으로 다시 썼다.** 나머지 `S1`(§1·§4~§7)은 그대로 유효하다 — 목적·감사·접근성·범위 밖
+> 판정은 스타일 방식과 무관하다. 아래 `§8` 이후의 처리·검증 기록은 **1차의 기록으로 남긴다.**
+> 지우지 않는다 — 왜 이렇게 왔는지가 거기 있다.
 
 ## 1. 목적
 
@@ -32,80 +40,64 @@
 ```ts
 export interface TxButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
   label?: string; // 버튼 텍스트. children 을 써도 된다 (label 이 우선)
-  variant?: TxButtonVariant; // 기본 "primary". theme 으로 키를 추가하면 그 이름도 쓸 수 있다
+  variant?: TxButtonVariant; // 기본 "primary". data-variant 로 나가고 CSS 로 늘린다
   loading?: ReactElement; // 로딩 중 보여줄 엘리먼트. 기본은 장식용 스피너
-  theme?: TxButtonThemeOverride; // 이 인스턴스만의 부분 테마
+  classNames?: { label?: string }; // 안쪽 슬롯
   onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<void> | void;
 }
 
-export type TxButtonVariant = keyof typeof TxButtonTheme.variants | (string & {});
-export interface TxButtonThemeOverride {
-  base?: string;
-  focus?: string;
-  variants?: Partial<Record<TxButtonVariant, string>>;
-}
+export type TxButtonVariant = "primary" | "secondary" | "danger" | "ghost" | "text" | (string & {});
 ```
 
 | 항목           | 값                                                           | 근거  |
 | -------------- | ------------------------------------------------------------ | ----- |
 | `type` 기본값  | **`"button"`** — 제출 버튼만 `type="submit"` 을 명시한다     | D1    |
 | variant 5종    | `primary` `secondary` `danger` `ghost` `text`. **열려 있다** | §5 Q3 |
-| `color` prop   | **없앴다.** 색은 `className` 또는 `theme` 으로               | §5 Q2 |
+| DOM 속성       | `data-variant` · `data-loading` — 바깥에서 조준하는 자리     | §3    |
+| `color` prop   | **없앴다.** 색은 토큰 또는 `className` 으로                  | §5 Q2 |
 | `onEnter` prop | **없앴다.** 버튼은 Enter 로 이미 click 이 발생한다           | D3    |
 | `aria-label`   | **자동으로 붙이지 않는다.** 소비자가 준 것만 통과            | D4    |
 | DOM 표식       | `data-tag="TxButton"`                                        |       |
 
 `ButtonHTMLAttributes` 의 나머지(`title` · `form` · `autoFocus` …)는 그대로 통과한다.
 
-## 3. 커스터마이징 지점 — **범위에 따라 셋 중 하나**
+## 3. 커스터마이징 지점 — **세 경로, 겹치지 않는다**
 
-| 무엇을 바꾸나       | 무엇으로          | 예                                                    |
-| ------------------- | ----------------- | ----------------------------------------------------- |
-| 이 버튼 하나        | `className`       | `<TxButton className="rounded-full px-6" />`          |
-| 이 버튼의 내부 구조 | `theme`           | `theme={{ variants: { primary: "bg-emerald-600" } }}` |
-| **앱 전체**         | `TxThemeProvider` | `<TxThemeProvider theme={{ TxButton: {...} }}>`       |
+규약은 [20_design §4](../20_design.md) 가 소유한다. 여기서는 `TxButton` 의 실제 토큰과 슬롯만 적는다.
 
-**이 3단이 파일럿 2차의 결론이다** (§5 Q1). 라이브러리 기본 → Provider 전역 → 인스턴스 `theme` 순으로
-합쳐지고 뒤가 이긴다. 병합 정책은 `"override"` — 소비자가 `theme={{ base: "" }}` 로
-**기본 스타일을 끄는 것**이 실사용 주력이라 문자열을 합치면 안 된다.
-
-`className` 만 `cm()` 병합이다(충돌하는 것만 밀어낸다). 이 차이는 의도된 것이다 —
-`className` 은 "덧붙이기", `theme` 은 "갈아끼우기".
-
-### ⚠ `className` 으로 색을 바꿀 때는 `hover:`·`dark:` 도 같이 준다
-
-**이게 이 컴포넌트에서 제일 걸려 넘어지기 쉬운 지점이다.**
-
-```tsx
-<TxButton className="bg-yellow-500 text-black" /> // ✗ 평상시만 노랑이다
+```html
+<button class="tx-button" data-tag="TxButton" data-variant="primary" data-loading>
+  <span class="tx-button__label">저장</span>
+</button>
 ```
 
-`tailwind-merge` 는 **같은 조건의 클래스끼리만** 충돌로 본다. `bg-blue-500` 은 `bg-yellow-500` 이
-밀어내지만, `hover:bg-blue-600` 과 `dark:bg-blue-600` 은 **조건이 달라 그대로 남는다.**
-그래서 위 코드는 마우스를 올리면 파랑, 다크모드면 파랑이 된다.
+| 무엇을 바꾸나         | 무엇으로                 | 예                                        |
+| --------------------- | ------------------------ | ----------------------------------------- |
+| **값** (색·반경·여백) | **CSS 변수**             | `:root { --tx-color-primary: #7c3aed }`   |
+| 이 variant 만         | 클래스 + `data-*` 선택자 | `.tx-button[data-variant="danger"] { … }` |
+| 이 버튼 하나의 겉     | `className`              | `<TxButton className="my-cta" />`         |
+| 안쪽 라벨             | `classNames={{ label }}` | `classNames={{ label: "truncate" }}`      |
 
-실제로 남는 것 (`variant="primary"` 기준, 실측) —
+**값은 토큰으로 바꾼다.** 그러면 `hover`·`focus`·`.dark` 가 **저절로 따라온다.**
 
+```css
+/* 앱 전체 — 이 한 줄이면 5종 variant 가 다 따라온다 */
+:root {
+  --tx-color-primary: #7c3aed;
+}
+
+/* 새 variant 를 늘리는 법 */
+.tx-button[data-variant="warning"] {
+  --tx-button-bg: #f59e0b;
+  --tx-button-fg: #000;
+}
 ```
-bg-yellow-500  text-black          ← 내가 준 것
-hover:bg-blue-600                  ← 남는다
-dark:bg-blue-600  dark:hover:bg-blue-700   ← 남는다
-dark:text-gray-100                 ← 남는다 (base 의 TxClassTheme)
-```
 
-```tsx
-// ✓ 바꿀 조건을 전부 적는다
-<TxButton className="bg-yellow-500 text-black hover:bg-yellow-600 dark:bg-yellow-500 dark:text-black dark:hover:bg-yellow-600" />
-```
-
-**여러 곳에서 같은 색을 쓴다면 `theme` 이나 `TxThemeProvider` 로 variant 를 하나 추가하는 편이 낫다.**
-`className` 을 매번 여섯 조각씩 적을 일이 아니다.
-
-```tsx
-<TxThemeProvider theme={{ TxButton: { variants: { warning: "bg-yellow-500 text-black hover:bg-yellow-600" } } }}>
-  <TxButton variant="warning" />
-</TxThemeProvider>
-```
+> **1차에는 여기에 함정이 있었다.** 테마 값이 Tailwind 클래스 문자열이라
+> `className="bg-yellow-500"` 을 줘도 `hover:bg-blue-600`·`dark:bg-blue-600` 이 남아
+> **평상시만 노랑**이 됐다. 소비자가 조건 여섯 개를 직접 적어야 했다 (게이트에서 나온 것 ① → §10).
+> **토큰으로 오면서 그 함정이 사라졌다** — `hover`·`dark` 는 같은 변수를 읽으므로 한 곳만 바꾸면 된다.
+> 이게 [20_design §2](../20_design.md) 의 CSS 전환을 민 근거 중 하나다.
 
 ## 4. 현행 코드 감사
 
@@ -144,12 +136,12 @@ dark:text-gray-100                 ← 남는다 (base 의 TxClassTheme)
 
 ## 5. 설계 결정 (2026-08-25 합의) — **파일럿 2차의 본론**
 
-| ID  | 질문                                         | 결정                                                       |
-| --- | -------------------------------------------- | ---------------------------------------------------------- |
-| Q1  | 커스터마이징 방식                            | **theme 객체 유지 + `TxThemeProvider` 신설.** 3단 병합     |
-| Q2  | `variant` 와 `color` 의 중복                 | **`color` 폐기.** `variant` 만 남긴다                      |
-| Q3  | `variant` 를 소비자가 늘릴 수 있게 할 것인가 | **열어둔다.** `(string & {})`                              |
-| Q4  | 콜백 이름 규칙                               | **살린다 + 어휘를 5개로 닫는다.** `Item`·`Value` 를 가른다 |
+| ID  | 질문                                         | 결정                                                        |
+| --- | -------------------------------------------- | ----------------------------------------------------------- |
+| Q1  | 커스터마이징 방식                            | ~~theme + `TxThemeProvider` 3단~~ → **뒤집혔다.** 아래 참고 |
+| Q2  | `variant` 와 `color` 의 중복                 | **`color` 폐기.** `variant` 만 남긴다                       |
+| Q3  | `variant` 를 소비자가 늘릴 수 있게 할 것인가 | **열어둔다.** `(string & {})`                               |
+| Q4  | 콜백 이름 규칙                               | **살린다 + 어휘를 5개로 닫는다.** `Item`·`Value` 를 가른다  |
 
 ### Q1 — 진짜 구멍은 "theme 이냐 classNames 냐" 가 아니었다
 
@@ -175,6 +167,20 @@ dark:text-gray-100                 ← 남는다 (base 의 TxClassTheme)
 - **CSS 변수** — **Tailwind `@source` 제약에서 벗어나는 유일한 길**이라 장기적으로 매력이 있다.
   다만 26종 전면 재설계이고 `dark:`·`hover:` 를 직접 써야 한다.
   → `001_ui/10_requirements` 의 "`@source` 제약을 유지할 것인가" 와 **같은 질문**이므로 거기서 다시 판단한다
+
+#### 그리고 실제로 뒤집혔다 (2026-08-25)
+
+위에서 "거기서 다시 판단한다" 고 미뤄 둔 그 질문을 [10_requirements §3](../10_requirements.md) 에서 열었고,
+**버린 대안이던 CSS 변수를 채택했다.** 뒤집힌 이유는 이 결정이 틀려서가 아니라 **질문이 한 겹 얕았기** 때문이다.
+
+- 여기서는 "**전역 브랜딩을 어떻게 먹이나**" 를 물었다. 그 답으로는 Provider 가 맞다
+- 다시 물은 것은 "**소비자가 커스터마이징하려면 무엇을 설치해야 하나**" 였다.
+  Provider 든 `theme` 이든 값이 Tailwind 클래스 문자열인 한, 답은 **"Tailwind"** 다 —
+  범용 라이브러리로서는 그게 실격 조건이다
+- CSS 로 오면 전역 브랜딩은 `:root` 한 줄이라 **Provider 가 풀던 문제 자체가 없어진다**
+
+**남겨 둔 이유** — 이 절이 없으면 나중에 "왜 Provider 를 안 만들었지" 를 처음부터 다시 논의하게 된다.
+결론은 [20_design §4](../20_design.md) 가 소유한다.
 
 ### Q2 — `color` 폐기
 
@@ -261,27 +267,37 @@ import { TxButton } from "@txstack/ui";
 </form>
 ```
 
-**앱 전체 브랜딩** — 한 번만 감싼다.
+**앱 전체 브랜딩** — CSS 한 곳. 감쌀 컴포넌트가 없다.
+
+```css
+/* src/index.css — 앱에서 한 번 */
+:root {
+  --tx-color-primary: #7c3aed;
+}
+
+/* 없던 variant 를 추가한다 */
+.tx-button[data-variant="brand"] {
+  --tx-button-bg: #000;
+  --tx-button-fg: #fff;
+}
+```
 
 ```tsx
-<TxThemeProvider
-  theme={{
-    TxButton: {
-      variants: {
-        primary: "bg-violet-600 text-white hover:bg-violet-700",
-        brand: "bg-black text-white hover:bg-neutral-800" // 없던 variant 를 추가한다
-      }
-    }
-  }}
->
-  <App />
-</TxThemeProvider>
+<TxButton label="가입" variant="brand" />
+```
+
+**이 버튼 하나만** — 소비자가 쓰는 스타일 방식이 무엇이든 통한다.
+
+```tsx
+<TxButton label="저장" className="my-save-btn" />        // 순수 CSS·Sass
+<TxButton label="저장" className="shadow-lg" />          // Tailwind 쓰는 프로젝트
+<TxButton label="저장" classNames={{ label: "truncate" }} /> // 안쪽 슬롯
 ```
 
 ## 7. 하지 않는 것
 
 - **아이콘 슬롯** (`iconLeft` 등) — `children` 으로 넣는다. 필요해지면 그때 만든다
-- **크기 토큰** (`size="sm"`) — 여백은 `className` 으로. 크기 스케일을 라이브러리가 소유하지 않는다
+- **크기 토큰** (`size="sm"`) — 여백은 `--tx-button-*` 토큰이나 `className` 으로. 크기 스케일을 라이브러리가 소유하지 않는다
 - **링크 버튼** (`href`) — `<a>` 는 버튼이 아니다. 라우팅은 소비자 몫이다
 - **버튼 그룹 · 토글 버튼** — 별도 컴포넌트다
 - **에러 처리 정책** — D6 참고. 로그만 남긴다
@@ -410,9 +426,12 @@ D5 는 첫 변이가 **결함을 재현하지 못해 통과했다.** 동기 `set
 
 - **`001-TxLoading-S1`** — `Dots` → `TxSpinner` 교체 (TxSpinner §5 Q2)
 - **`001-typenames`** — `ITx*` 나머지 일괄 리네임. `TxButton`·`TxSpinner` 는 이미 정리됨
-- **나머지 24종 S2** — `useTxTheme` 로 갈아끼우고 `TxThemeOverrides` 에 한 줄씩 추가한다
+- **나머지 24종 S2** — [20_design](../20_design.md) 대로 `<Name>.css` 를 만든다. **`useTxTheme` 은 쓰지 않는다**
 - **`901-04`** — 스토리북 다크 토글. §9 의 미해결 관찰이 여기 걸린다
 - **`902`** — 변이 테스트 절차(파일 복사 후 되돌리기 · 변이가 결함을 재현하는지 확인) → §11
-- **`001_ui/10_requirements`** — `@source` 제약 유지 여부. **CSS 변수 전환과 같은 질문이다** (§5 Q1)
+- ~~**`001_ui/10_requirements`** — `@source` 제약 유지 여부~~ → **끝났다.** CSS 로 전환해 제약 자체가 사라졌다 (§5 Q1)
+- **`001-TxButton-S2`(2차)** — `TxButton.css` 신설 · `theme`/`TxThemeProvider` 제거 · `data-variant` 로 전환.
+  **`.changeset/brave-buttons-theme.md` 를 그때 다시 쓴다** — 지금은 `TxThemeProvider` 를 새 API 로 알리고 있는데,
+  배포 전에 없어질 것이다. 아직 배포된 버전이 없어 changelog 를 고쳐 쓸 수 있다
 - **`TxInput`** — 콜백 규칙 첫 적용처. `onChangeFloat` 폐기(중복) → 해당 문서에 옮겨 적음
 - **`TxDropdown`** — `onChangeNumb`·`onChangeBool` 약어 정리, `*Internal` 비공개화, `onChangeValue` → `onChangeItem`

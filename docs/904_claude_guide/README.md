@@ -72,7 +72,7 @@
 
 그래서 가이드는 **타입이 말해주지 못하는 것**에 집중한다.
 
-- **필수 설정** — 특히 Tailwind `@source`. 빠뜨리면 스타일이 전부 사라진다
+- **필수 설정** — 특히 `@txstack/ui/styles.css` import. 빠뜨리면 스타일이 전부 사라진다
 - **언제 쓰나 / 언제 다른 걸 쓰나** — `TxSpinner` vs `TxLoading` vs `TxButton`
 - **함정** — `size="w-6"` 처럼 타입은 통과하지만 무효인 것
 - **하지 말 것** — 없는 prop 발명, 서브패스 임의 생성, `dist` 직접 import
@@ -108,7 +108,7 @@
 `packages/ui/AGENTS.md` 를 놓고 확인할 것 —
 
 - 없는 prop(`variant="primary"` 류)을 발명하지 않는가
-- Tailwind `@source` 를 스스로 넣는가
+- `@txstack/ui/styles.css` import 를 스스로 넣는가
 - `size="w-6"` 함정에 빠지지 않는가
 - 문구가 필요한 로딩에 `TxSpinner` 대신 `TxLoading` 을 고르는가
 

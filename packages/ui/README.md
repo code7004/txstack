@@ -15,7 +15,12 @@ pnpm add @txstack/ui
 - TypeScript 의 `moduleResolution` 은 `bundler` · `node16` · `nodenext` 중 하나여야 한다.
   구형 `node` 설정에서는 **루트 엔트리만 해석되고 서브패스는 해석되지 않는다.**
 
-## ⚠ Tailwind v4 설정 (필수)
+> **⚠ 이행 중이다 (2026-08-25).** 이 문서는 **지금 코드에 있는 그대로**를 적은 것이다.
+> 스타일을 **Tailwind 클래스 문자열에서 자체 CSS 로** 바꾸기로 했고
+> (`docs/001_ui/20_design.md`), `theme` prop 과 `TxThemeProvider` 는 **폐기 예정**이다.
+> 컴포넌트별 S2 에서 옮기면서 이 문서도 그때 고친다. **아직 배포된 버전은 없다.**
+
+## ⚠ Tailwind v4 설정 (필수) — 지금 버전 기준
 
 이 패키지의 스타일은 런타임 CSS 가 아니라 **Tailwind 클래스 문자열**이다.
 아래 `@source` 지정이 없으면 Tailwind 가 `node_modules` 안을 스캔하지 않아 **클래스가 전부 purge 되고 스타일이 하나도 적용되지 않는다.**

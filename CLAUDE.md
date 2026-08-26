@@ -15,7 +15,7 @@ txstack 작업 시 지켜야 할 핵심 규약. **상세는 `docs/` 가 소유�
 | 패키지 경계 · 의존 방향 판단                | [docs/00_foundation/01_ARCHITECTURE.md](docs/00_foundation/01_ARCHITECTURE.md)     |
 | 담당(🧑/🤖/🤝) 판단 · 문서 쓰기 · 세션 운영 | [docs/00_foundation/02_WORKFLOW.md](docs/00_foundation/02_WORKFLOW.md)             |
 | 이름 · 파일 구조 · 커밋 메시지              | [docs/00_foundation/03_CONVENTIONS.md](docs/00_foundation/03_CONVENTIONS.md)       |
-| 명령 실행 · 검증 범위 · Tailwind 제약       | [docs/00_foundation/04_TOOLING.md](docs/00_foundation/04_TOOLING.md)               |
+| 명령 실행 · 검증 범위 · 스타일 제약         | [docs/00_foundation/04_TOOLING.md](docs/00_foundation/04_TOOLING.md)               |
 | 공개 API 변경 · 버전 · 배포                 | [docs/00_foundation/05_RELEASE.md](docs/00_foundation/05_RELEASE.md)               |
 | 컴포넌트·훅 하나를 작업 항목으로 잡기       | [docs/00_foundation/06_COMPONENT_FLOW.md](docs/00_foundation/06_COMPONENT_FLOW.md) |
 | 주제별 진행 (001~904)                       | `docs/<번호>_<이름>/README.md`                                                     |

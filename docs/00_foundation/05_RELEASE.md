@@ -43,6 +43,7 @@ pnpm release:publish    # 빌드 후 npm 배포 (사용자 요청 시에만)
 - [ ] `pnpm build` 후 `dist/*.js` · `dist/*.d.ts` 존재
 - [ ] `npm pack --dry-run` 으로 포함 파일 확인 — `src/` 나 테스트가 들어가지 않았나
 - [ ] peerDependencies 가 맞나 — React 가 dependencies 에 섞이지 않았나
-- [ ] README 의 설치·설정 안내가 실제와 맞나 (특히 `@txstack/ui` 의 Tailwind `@source`)
+- [ ] README 의 설치·설정 안내가 실제와 맞나 (특히 `@txstack/ui` 의 `styles.css` import)
+- [ ] `@txstack/ui` — `dist/styles.css` 가 tarball 에 실제로 들어갔나 (`npm pack --dry-run`)
 - [ ] **Claude 가이드 파일이 `files` 에 포함되어 실제로 tarball 에 들어갔나** → [904](../904_claude_guide/README.md)
 - [ ] changeset 이 모든 변경을 덮나

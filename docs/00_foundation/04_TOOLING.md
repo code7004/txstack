@@ -55,17 +55,15 @@ pnpm changeset            # 변경 기록 작성 (공개 API 변경 시 필수)
 - 무거운 선택적 의존은 **subpath export** 로 분리한다 (`@txstack/ui/aggrid` 등).
   루트 배럴을 import 해도 그 의존이 로드되지 않아야 한다.
 
-## 6. Tailwind v4 — 소비자에게 영향이 가는 제약
+## 6. 스타일 — 소비자에게 영향이 가는 제약
 
-`@txstack/ui` 의 테마는 런타임 CSS 가 아니라 **Tailwind 클래스 문자열**이다. 여기서 제약이 생긴다.
+**`@txstack/ui` 의 스타일은 자체 CSS 다** (2026-08-25 결정 → [001_ui/20_design §2](../001_ui/20_design.md)).
+소비자는 `import "@txstack/ui/styles.css"` 한 줄이면 되고, **CSS·Sass·Tailwind 중 무엇을 쓰든** 커스터마이징된다.
 
-> 소비 앱이 `@source "../node_modules/@txstack/ui/dist";` 를 지정하지 않으면
-> **클래스가 purge 되어 스타일이 전부 사라진다.**
+- 값은 `--tx-*` CSS 변수로 바꾼다. **토큰 이름은 공개 API 다** — 지우거나 바꾸면 major
+- 다크모드는 `.dark` 클래스 전략. **컴포넌트 CSS 에 `.dark` 분기를 흩뿌리지 않고 토큰만 재정의**한다
+- 스타일 변경 시 `dist/styles.css` 가 실제로 tarball 에 들어가는지 `npm pack --dry-run` 으로 확인한다
 
-- 다크모드는 `dark:` variant (class 전략) 기준이다.
-- 테마 관련 변경 시 이 제약이 깨지지 않는지 확인하고, README 안내 문구도 함께 갱신한다.
-
-> **이 제약을 없애기로 했다** (2026-08-25) → [001_ui/10_requirements §3](../001_ui/10_requirements.md).
-> **사전 빌드 CSS(`dist/styles.css`)를 동봉**해 소비자가 `import` 한 줄로 끝내게 한다.
-> 구현은 job `001-styles-css`. **그때까지는 위 제약이 그대로 유효하다** —
-> 저장소 안의 `apps/*` 는 소스를 직접 스캔하므로 계속 `@source` 를 쓴다.
+> **이행 중이다.** 26종 중 아직 옮기지 않은 컴포넌트는 Tailwind 클래스 문자열을 쓰고 있고,
+> 그쪽은 여전히 소비 앱의 `@source "../node_modules/@txstack/ui/dist";` 가 있어야 스타일이 남는다.
+> **각 컴포넌트의 S2 에서 옮긴다** — 저장소 안의 `apps/*` 는 소스를 직접 스캔하므로 그동안 `@source` 를 쓴다.
