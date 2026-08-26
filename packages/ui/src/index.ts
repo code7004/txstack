@@ -29,7 +29,6 @@ export * from "./TxSpinner";
 export * from "./TxSlidePanel";
 export * from "./TxTabs";
 export * from "./TxTextarea";
-export * from "./TxTheme";
 export * from "./TxToolTip";
 
 export * from "./tx-ui.utils";

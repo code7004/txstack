@@ -1,9 +1,9 @@
-import { TxClassBorderColor, TxClassTheme } from "../TxTheme";
+import { TxClassBase, TxClassBorderColor } from "../TxTheme";
 
 // ------------------- Card -------------------
 export const TxCardTheme = {
-  base: `relative flex flex-col rounded-md shadow-sm p-2 border ${TxClassBorderColor} ${TxClassTheme}`,
-  caption: `absolute -top-4 left-1 px-1 z-[1] whitespace-nowrap font-bold overflow-hidden ${TxClassTheme} !bg-transparent`,
+  base: `relative flex flex-col rounded-md shadow-sm p-2 border ${TxClassBorderColor} ${TxClassBase}`,
+  caption: `absolute -top-4 left-1 px-1 z-[1] whitespace-nowrap font-bold overflow-hidden ${TxClassBase} !bg-transparent`,
   floating: `absolute z-10 space-x-2 text-xs text-gray-500 top-2 right-2 dark:text-gray-400`,
   floatingLink: `hover:text-gray-700 dark:hover:text-white`,
   floatingButton: `cursor-pointer hover:text-gray-700 dark:hover:text-white`,
