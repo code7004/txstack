@@ -64,4 +64,8 @@ pnpm changeset            # 변경 기록 작성 (공개 API 변경 시 필수)
 
 - 다크모드는 `dark:` variant (class 전략) 기준이다.
 - 테마 관련 변경 시 이 제약이 깨지지 않는지 확인하고, README 안내 문구도 함께 갱신한다.
-- **이 제약을 소비자에게 계속 요구할 것인가는 미결이다** → `001_ui/10_requirements.md` 에서 결정.
+
+> **이 제약을 없애기로 했다** (2026-08-25) → [001_ui/10_requirements §3](../001_ui/10_requirements.md).
+> **사전 빌드 CSS(`dist/styles.css`)를 동봉**해 소비자가 `import` 한 줄로 끝내게 한다.
+> 구현은 job `001-styles-css`. **그때까지는 위 제약이 그대로 유효하다** —
+> 저장소 안의 `apps/*` 는 소스를 직접 스캔하므로 계속 `@source` 를 쓴다.
