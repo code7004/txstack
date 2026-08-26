@@ -18,7 +18,8 @@ const config: StorybookConfig = {
   stories: ["../../../packages/ui/src/**/*.stories.tsx"],
   // autodocs(타입에서 props 표 자동 생성)는 이 애드온이 있어야 동작한다. Storybook 10 에서 docs 는 별도 패키지다.
   addons: ["@storybook/addon-docs"],
-  docs: { defaultName: "문서" },
+  // 문서 페이지 이름도 URL 에 들어간다(`--docs`). 스토리 이름 규약과 같은 이유로 영어다 → docs/901_storybook/20_design.md
+  docs: { defaultName: "Docs" },
   framework: { name: "@storybook/react-vite", options: {} },
   viteFinal: async (viteConfig) => {
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];
