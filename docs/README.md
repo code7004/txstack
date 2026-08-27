@@ -63,7 +63,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                         |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
-| `ui`          | 뼈대만 — 빈 배럴. temp 에 26개 대기                                      |
+| `ui`          | **1차 완료** — 기반 4개 · 테스트 107개 통과                              |
 | `apps/*`      | **없음** — playground · storybook                                        |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
@@ -80,15 +80,15 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 **`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.**
 
-스타일 파이프라인(0차)은 세웠다 — `tokens.css` · `styles.css` · CSS 빌드 · `@txstack/ui/styles.css`.
+0차(스타일 파이프라인)와 1차(기반 4개 — `TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`)는
+끝났다. `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **기반 4개를 옮긴다.** ← 다음 차례
-   `TxSpinner` → `TxButton` → `TxFlex` → `TxLoading` (244줄). temp 에서 CSS 이행이 끝나 있어
-   거의 그대로 온다. `TxButton` 이 나머지 전부의 레퍼런스가 된다.
-2. **Form 클러스터 8개** (1,942줄). `TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` →
-   `TxCapsLockCheck` → `TxDropdown` → `TxDayPicker` → `TxForm`.
-3. Storybook · playground 는 Form 클러스터가 어느 정도 쌓인 뒤에 세운다.
-4. 남은 12개를 자를지 남길지는 그다음에 정한다.
+1. **Form 클러스터 8개** (1,942줄). ← 다음 차례
+   `TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` →
+   `TxDayPicker` → `TxForm`. 앞의 넷과 달리 **CSS 이행이 안 돼 있다** — Tailwind 클래스 문자열과
+   `TxTheme` 참조를 걷어내면서 옮겨야 한다.
+2. Storybook · playground 는 Form 클러스터가 어느 정도 쌓인 뒤에 세운다.
+3. 남은 12개를 자를지 남길지는 그다음에 정한다.
 
 ### 이식은 복사가 아니다
 

@@ -14,6 +14,25 @@ Tx\* React 컴포넌트. 목표는 두 가지 — **쉬운 사용법, 쉬운 커
 > **아직 npm 에 배포되지 않았다.** 컴포넌트를 이식 중이다.
 > 전체 설계와 이행 계획은 [docs/001_ui.md](../../docs/001_ui.md).
 
+## 지금 있는 것
+
+`TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`.
+
+```tsx
+import { TxButton, TxFlex, TxLoading, TxSpinner } from "@txstack/ui";
+import "@txstack/ui/styles.css";
+
+<TxFlex>
+  <TxButton label="취소" variant="ghost" />
+  <TxButton label="저장" onClick={async () => { await save(); }} />
+</TxFlex>
+
+<TxLoading visible={rows} text="목록을 불러오는 중" />
+```
+
+`onClick` 이 **Promise 를 반환하면** 해제될 때까지 버튼이 잠기고 스피너가 뜬다. 연타해도 한 번만 실행된다.
+`TxLoading` 의 `visible` 에 **배열**을 주면 그 배열이 비어 있는 동안 보인다.
+
 ```sh
 pnpm add @txstack/ui react react-dom
 ```
