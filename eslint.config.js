@@ -44,7 +44,9 @@ export default [
       "no-redeclare": "off",
       "no-undef": "off",
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
+      // _ 접두사는 "일부러 안 쓴다" 는 표시로 쓴다. ignoreRestSiblings 는
+      // `const { children: _dropped, ...rest } = node` 처럼 필드를 빼는 관용구를 허용한다.
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", ignoreRestSiblings: true }],
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "separate-type-imports" }],
       "@typescript-eslint/no-empty-object-type": "off",
