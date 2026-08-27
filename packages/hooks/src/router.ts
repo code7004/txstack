@@ -6,5 +6,5 @@
  *
  * 설계: docs/003_hooks.md
  */
-
-export {};
+export { useUrlQuery } from "./useUrlQuery";
+export type { UseUrlQueryOptions } from "./useUrlQuery";
