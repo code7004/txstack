@@ -2,3 +2,6 @@ pnpm-lock.yaml
 dist/
 node_modules/
 *.tgz
+
+# macOS 가 확장속성을 못 싣는 볼륨에 만드는 부산물
+._*
