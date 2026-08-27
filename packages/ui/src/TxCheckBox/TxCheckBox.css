@@ -1,0 +1,177 @@
+/**
+ * TxCheckBox — 켜고 끄는 자리. 네모(`checkbox`)와 스위치(`toggle`) 두 모양.
+ *
+ * **상태를 CSS 가 읽는다.** 진짜 `<input type="checkbox">` 가 안에 있으므로
+ * `:checked` · `:disabled` · `:focus-visible` 을 형제 선택자로 잡는다.
+ * 그래서 컴포넌트가 체크 상태를 따로 들 필요가 없다 — uncontrolled 가 저절로 된다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-checkbox {
+  --tx-checkbox-gap: 0.5rem;
+  --tx-checkbox-label-size: 0.875rem;
+  --tx-checkbox-dimmed-opacity: 0.5;
+
+  /* --- 네모 --- */
+  --tx-checkbox-size: 1.25rem;
+  --tx-checkbox-radius: 0.25rem;
+  --tx-checkbox-border-width: 1px;
+  --tx-checkbox-border-color: var(--tx-color-border);
+  --tx-checkbox-bg: transparent;
+  --tx-checkbox-checked-bg: var(--tx-color-primary);
+  --tx-checkbox-checked-border-color: var(--tx-checkbox-checked-bg);
+  --tx-checkbox-icon-size: 1rem;
+  --tx-checkbox-icon-color: var(--tx-color-on-accent);
+
+  /* --- 스위치 --- */
+  --tx-checkbox-track-width: 2.25rem;
+  --tx-checkbox-track-height: 1.25rem;
+  --tx-checkbox-track-bg: var(--tx-color-muted);
+  --tx-checkbox-track-checked-bg: var(--tx-color-primary);
+  --tx-checkbox-thumb-size: 1rem;
+  --tx-checkbox-thumb-inset: 0.125rem;
+
+  /**
+   * 꺼진 손잡이 색을 **트랙에서 파생한다.** 리터럴 회색을 적으면 다크모드에서 따로 손봐야 한다.
+   * 섞는 색(`--tx-color-state`)이 라이트/다크에서 뒤집히므로 이 한 줄이 두 모드를 다 덮는다.
+   */
+  --tx-checkbox-thumb-bg: color-mix(in oklab, var(--tx-color-state) 35%, var(--tx-checkbox-track-bg));
+  --tx-checkbox-thumb-checked-bg: var(--tx-color-surface);
+
+  /**
+   * 손잡이가 움직이는 거리. **매직넘버를 쓰지 않는다** —
+   * 트랙이나 손잡이 크기를 바꾸면 이 값이 따라 계산된다.
+   */
+  --tx-checkbox-thumb-travel: calc(var(--tx-checkbox-track-width) - var(--tx-checkbox-thumb-size) - var(--tx-checkbox-thumb-inset) * 2);
+
+  --tx-checkbox-transition: 150ms;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-checkbox-gap);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tx-checkbox[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--tx-checkbox-dimmed-opacity);
+}
+
+/**
+ * 눈에서만 지운다. **`display: none` 이나 `visibility: hidden` 을 쓰지 않는다** —
+ * 그러면 Tab 으로 도달할 수 없고 폼 제출에도 안 실린다.
+ */
+.tx-checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* --- 네모 -------------------------------------------------------------- */
+
+.tx-checkbox[data-variant="checkbox"] .tx-checkbox__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: var(--tx-checkbox-size);
+  height: var(--tx-checkbox-size);
+
+  border: var(--tx-checkbox-border-width) solid var(--tx-checkbox-border-color);
+  border-radius: var(--tx-checkbox-radius);
+  background-color: var(--tx-checkbox-bg);
+  color: var(--tx-checkbox-icon-color);
+
+  transition:
+    background-color var(--tx-checkbox-transition),
+    border-color var(--tx-checkbox-transition);
+}
+
+.tx-checkbox__input:checked + .tx-checkbox__mark {
+  background-color: var(--tx-checkbox-checked-bg);
+  border-color: var(--tx-checkbox-checked-border-color);
+}
+
+/* 아이콘은 `1em` 이라 이 글자 크기를 따라간다 */
+.tx-checkbox__icon {
+  font-size: var(--tx-checkbox-icon-size);
+
+  /* 체크가 안 된 동안에도 자리를 지킨다. 빼면 켤 때 네모가 한 번 흔들린다 */
+  opacity: 0;
+  transition: opacity var(--tx-checkbox-transition);
+}
+
+.tx-checkbox__input:checked + .tx-checkbox__mark .tx-checkbox__icon {
+  opacity: 1;
+}
+
+/* --- 스위치 ------------------------------------------------------------ */
+
+.tx-checkbox[data-variant="toggle"] .tx-checkbox__mark {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+
+  width: var(--tx-checkbox-track-width);
+  height: var(--tx-checkbox-track-height);
+
+  border-radius: 9999px;
+  background-color: var(--tx-checkbox-track-bg);
+  transition: background-color var(--tx-checkbox-transition);
+}
+
+.tx-checkbox[data-variant="toggle"] .tx-checkbox__input:checked + .tx-checkbox__mark {
+  background-color: var(--tx-checkbox-track-checked-bg);
+}
+
+.tx-checkbox__thumb {
+  position: absolute;
+  top: var(--tx-checkbox-thumb-inset);
+  left: var(--tx-checkbox-thumb-inset);
+
+  width: var(--tx-checkbox-thumb-size);
+  height: var(--tx-checkbox-thumb-size);
+
+  border-radius: 9999px;
+  background-color: var(--tx-checkbox-thumb-bg);
+
+  transition:
+    transform var(--tx-checkbox-transition),
+    background-color var(--tx-checkbox-transition);
+}
+
+.tx-checkbox__input:checked + .tx-checkbox__mark .tx-checkbox__thumb {
+  transform: translateX(var(--tx-checkbox-thumb-travel));
+  background-color: var(--tx-checkbox-thumb-checked-bg);
+}
+
+/* --- 공통 -------------------------------------------------------------- */
+
+/**
+ * 포커스 링을 **보이는 모양에 건다.** 진짜 `<input>` 은 눈에서 지워져 있어서
+ * 거기에 걸면 아무것도 안 보인다. `:focus-visible` 이라 마우스로 누를 때는 안 뜬다.
+ */
+.tx-checkbox__input:focus-visible + .tx-checkbox__mark {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-checkbox__label {
+  font-size: var(--tx-checkbox-label-size);
+}
+
+/* 손잡이·아이콘이 움직이는 것을 원치 않는 사용자에게는 즉시 바뀐다 */
+@media (prefers-reduced-motion: reduce) {
+  .tx-checkbox {
+    --tx-checkbox-transition: 0ms;
+  }
+}

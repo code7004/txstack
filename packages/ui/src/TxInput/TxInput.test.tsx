@@ -173,6 +173,19 @@ describe("TxInput — 구조와 계약", () => {
     expect(el.classList.contains("w-64")).toBe(true);
   });
 
+  /**
+   * CSS 변수는 아래로만 상속된다. `style` 이 안쪽 요소로 가면 껍데기가 읽는 토큰이 안 바뀌어,
+   * 소비자가 `style={{ "--tx-…": … }}` 로 값을 줘도 아무 일도 일어나지 않는다.
+   */
+  it("style 은 className 과 같은 자리에 붙는다 — 토큰을 인라인으로 줄 수 있어야 한다", () => {
+    const { container } = render(<TxInput style={{ ["--tx-test" as string]: "1px", color: "red" }} />);
+    const root = container.querySelector<HTMLElement>('[data-tag="TxInput"]')!;
+
+    expect(root.style.getPropertyValue("--tx-test")).toBe("1px");
+    expect(root.style.color).toBe("red");
+    expect(container.querySelector<HTMLElement>(".tx-input__field")!.style.getPropertyValue("--tx-test")).toBe("");
+  });
+
   it("readOnly·disabled 가 값 없는 속성으로 나간다", () => {
     const { container: ro } = render(<TxInput readOnly />);
     expect(ro.querySelector('[data-tag="TxInput"]')!.getAttribute("data-readonly")).toBe("");

@@ -63,7 +63,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                         |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
-| `ui`          | 기반 4개 + `TxIcons` · `TxInput` · `TxTextarea` — 테스트 194개 통과      |
+| `ui`          | 기반 4개 + Form 4개(`TxIcons`~`TxCheckBox`) — 테스트 234개 통과          |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                             |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
@@ -83,8 +83,9 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인)와 1차(기반 4개 — `TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`)는
 끝났다. `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **Form 클러스터** — `TxIcons` · `TxInput` · `TxTextarea` 가 끝났다. **`TxCheckBox` 가 다음 차례.** ← 여기
-   이어서 `TxCapsLockCheck` → `TxDropdown` → `TxCombobox`(신규) → `TxDayPicker` → `TxForm`.
+1. **Form 클러스터** — `TxIcons` · `TxInput` · `TxTextarea` · `TxCheckBox` 가 끝났다.
+   **`TxCapsLockCheck` 가 다음 차례.** ← 여기
+   이어서 `TxDropdown` → `TxCombobox`(신규) → `TxDayPicker` → `TxForm`.
    `TxInput` 이 CSS 이행의 본보기다 — 래퍼가 껍데기를 소유하고 `<input>` 은 투명하며,
    껍데기를 함께 쓰는 컴포넌트는 `.tx-input` 클래스를 같이 건다.
 2. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310). playground 는 아직 없다.

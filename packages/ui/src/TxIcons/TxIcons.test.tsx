@@ -1,6 +1,6 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { TxIconClose, TxIconSearch } from ".";
+import { TxIconCheck, TxIconClose, TxIconSearch } from ".";
 
 /**
  * 아이콘은 **내부 전용**이라 공개 API 계약이 없다. 대신 이것들이 조합되는 근거인
@@ -16,7 +16,8 @@ afterEach(cleanup);
 
 const ICONS = [
   ["TxIconClose", TxIconClose],
-  ["TxIconSearch", TxIconSearch]
+  ["TxIconSearch", TxIconSearch],
+  ["TxIconCheck", TxIconCheck]
 ] as const;
 
 const svg = (ui: React.ReactElement) => {

@@ -33,7 +33,7 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
   it("내부 전용 아이콘이 새어 나가지 않는다", () => {
     // 두 개짜리 아이콘 세트는 소비자에게 쓸모가 없고, 공개하면 이름과 모양이 공개 API 가 된다.
     // 닫는 건 major 지만 나중에 여는 건 minor 이므로 지금은 닫아 둔다 (TxIcons/index.tsx).
-    for (const name of ["TxIconClose", "TxIconSearch"]) {
+    for (const name of ["TxIconClose", "TxIconSearch", "TxIconCheck"]) {
       expect(ui, `내부 전용 아이콘이 공개 API 로 새어 나갔다: ${name}`).not.toHaveProperty(name);
     }
   });
