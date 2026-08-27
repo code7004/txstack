@@ -24,6 +24,8 @@
 | `003` | `@txstack/hooks`      | 의존 없는 범용 훅 + URL 쿼리를 상태처럼                | O     | [003_hooks](003_hooks.md)           |
 | `004` | `@txstack/axios`      | axios 래퍼. 인증·에러·봉투 정책을 주입받는다           | **X** | [004_axios](004_axios.md)           |
 
+새 PC 에서 세팅하려면 [900_setup](900_setup.md) 을 본다.
+
 ### 경계 — 이게 흐려지면 라이브러리가 아니다
 
 **의존 방향은 `ui → hooks` 하나뿐이다.**
@@ -49,7 +51,8 @@
 **2026-08-27 — 저장소를 비우고 문서부터 다시 시작했다.**
 
 이전 구현 전체(4개 패키지 소스 · Storybook · playground)와 git 커밋 53개는
-`W:\Projects\txstack_temp` 에 그대로 보존되어 있다. **읽기 전용으로 참조한다.**
+이 저장소의 **`legacy` 브랜치**에 53개 커밋과 함께 보존되어 있다.
+`git worktree add ../txstack_temp legacy` 로 꺼내 **읽기 전용으로 참조한다.**
 원격 저장소(`github.com/code7004/txstack`)의 히스토리도 이때 리셋했다.
 
 다시 시작한 이유는 코드가 나빠서가 아니라 **문서가 코드보다 앞서 나갔기 때문**이다.
