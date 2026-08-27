@@ -49,6 +49,10 @@
     "build": "tsup && node scripts/build-css.mjs",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
   "peerDependencies": {
     "ag-grid-community": "^35.0.0",
     "ag-grid-react": "^35.0.0",
