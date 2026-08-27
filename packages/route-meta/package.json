@@ -1,0 +1,48 @@
+{
+  "name": "@txstack/route-meta",
+  "version": "0.0.0",
+  "description": "Declare routes as one metadata tree — derive React Router objects, navigation menus, and current route",
+  "keywords": [
+    "react",
+    "react-router",
+    "routing",
+    "navigation",
+    "menu",
+    "breadcrumb"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code7004/txstack.git",
+    "directory": "packages/route-meta"
+  },
+  "homepage": "https://github.com/code7004/txstack/tree/main/packages/route-meta#readme",
+  "bugs": "https://github.com/code7004/txstack/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-router-dom": ">=6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
