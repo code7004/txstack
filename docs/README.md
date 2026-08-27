@@ -63,7 +63,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                         |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
-| `ui`          | **1차 완료** — 기반 4개 · 테스트 107개 통과                              |
+| `ui`          | **1차 완료 + `TxIcons`** — 테스트 123개 통과                             |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                             |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
@@ -83,10 +83,10 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인)와 1차(기반 4개 — `TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`)는
 끝났다. `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **Form 클러스터 8개** (1,942줄). ← 다음 차례
-   `TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` →
-   `TxDayPicker` → `TxForm`. 앞의 넷과 달리 **CSS 이행이 안 돼 있다** — Tailwind 클래스 문자열과
-   `TxTheme` 참조를 걷어내면서 옮겨야 한다.
+1. **Form 클러스터** — `TxIcons` 는 끝났다. **`TxInput` 이 다음 차례.** ← 여기
+   이어서 `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` → `TxDayPicker` → `TxForm`.
+   기반 4개와 달리 **CSS 이행이 안 돼 있다** — Tailwind 클래스 문자열과 `TxTheme` 참조를
+   걷어내면서 옮겨야 한다. `TxIcons` 는 CSS 가 아예 없어 예외였다.
 2. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310). playground 는 아직 없다.
 3. 남은 12개를 자를지 남길지는 그다음에 정한다.
 
