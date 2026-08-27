@@ -51,6 +51,8 @@
 @import "./TxTextarea/TxTextarea.css" layer(tx);
 @import "./TxCombobox/TxCombobox.css" layer(tx);
 @import "./TxInput/TxSearchInput.css" layer(tx);
+/* 폼은 컨트롤을 칸에 앉히는 쪽이라 컨트롤 규칙 뒤에 온다 */
+@import "./TxForm/TxForm.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
 @import "./TxPopup/TxPopup.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);

@@ -14,4 +14,6 @@
  * **루트 배럴(`src/index.ts`)에서 이 파일을 참조하지 않는다.** 참조하는 순간 분리가 무너진다.
  */
 export { TxDayPicker, TxDayPickerRange } from "./TxDayPicker";
+export { TxFormDayPicker, TxFormDayPickerRange } from "./TxForm/TxFormDayPicker";
 export type { TxDateRange, TxDayPickerProps, TxDayPickerRangeProps, TxDayPickerRangeRef } from "./TxDayPicker";
+export type { TxFormDayPickerProps, TxFormDayPickerRangeProps } from "./TxForm/TxFormDayPicker";

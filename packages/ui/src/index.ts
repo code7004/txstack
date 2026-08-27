@@ -18,6 +18,7 @@ export * from "./TxCheckBox";
 export * from "./TxCombobox";
 export * from "./TxDropdown";
 export * from "./TxFlex";
+export * from "./TxForm";
 export * from "./TxInput";
 export * from "./TxLoading";
 export * from "./TxSpinner";

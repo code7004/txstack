@@ -27,6 +27,9 @@
   /* 강조 — 파괴적 동작 */
   --tx-color-danger: #ef4444;
 
+  /* 주의 — 막지는 않지만 알려야 하는 자리. `TxForm` 의 warning 메시지가 쓴다 */
+  --tx-color-warning: #d97706;
+
   /* 표면이 있는 보조 요소 */
   --tx-color-muted: #e5e7eb;
 
@@ -83,6 +86,7 @@
 .dark {
   --tx-color-primary: #2563eb;
   --tx-color-danger: #dc2626;
+  --tx-color-warning: #fbbf24;
   --tx-color-muted: #374151;
   --tx-color-surface: #1f2937;
   --tx-color-border: #4b5563;

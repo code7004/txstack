@@ -12,7 +12,14 @@ export interface TxInputLikeProps {
   /** 주면 값이 있을 때 지우기 버튼이 나온다. */
   onClear?: () => void;
 
+  /** 트리거 버튼의 `id`. 바깥의 캡션이 `aria-labelledby` 로 가리킬 때 필요하다. */
+  id?: string;
   ariaLabel?: string;
+  /** 이름을 밖에서 그려 줄 때. `TxForm.DayPicker` 의 캡션이 쓴다. */
+  ariaLabelledBy?: string;
+  /** 설명(에러·안내)을 밖에서 그려 줄 때. */
+  ariaDescribedBy?: string;
+  ariaInvalid?: boolean;
   /**
    * 열림 상태. **부모가 준다.**
    *
@@ -45,7 +52,7 @@ export interface TxInputLikeProps {
  *
  * 명세: `docs/001_ui.md`
  */
-export function TxInputLike({ value, placeholder = "", className, onClick, onKeyDown, onClear, ariaLabel, ariaExpanded, ariaHasPopup = "dialog", ariaControls, children }: TxInputLikeProps) {
+export function TxInputLike({ id, value, placeholder = "", className, onClick, onKeyDown, onClear, ariaLabel, ariaLabelledBy, ariaDescribedBy, ariaInvalid, ariaExpanded, ariaHasPopup = "dialog", ariaControls, children }: TxInputLikeProps) {
   const hasValue = Boolean(value);
 
   return (
@@ -54,7 +61,20 @@ export function TxInputLike({ value, placeholder = "", className, onClick, onKey
       원본처럼 SVG 에 onClick 을 걸면 키보드로 도달할 수 없다. 형제로 나란히 둔다.
     */
     <div data-tag="TxInputLike" data-empty={hasValue ? undefined : ""} className={cm("tx-input", "tx-input-like", className)}>
-      <button type="button" className="tx-input-like__trigger" onClick={onClick} onKeyDown={onKeyDown} aria-label={ariaLabel} aria-haspopup={ariaHasPopup} aria-expanded={ariaExpanded} aria-controls={ariaControls}>
+      <button
+        type="button"
+        id={id}
+        className="tx-input-like__trigger"
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid}
+        aria-haspopup={ariaHasPopup}
+        aria-expanded={ariaExpanded}
+        aria-controls={ariaControls}
+      >
         <span className="tx-input-like__value">{children ?? (hasValue ? value : placeholder)}</span>
       </button>
 

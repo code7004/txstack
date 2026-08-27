@@ -44,7 +44,15 @@ interface TxDropdownCommon {
   style?: CSSProperties;
   /** 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다. */
   classNames?: { head?: string; list?: string; item?: string };
+
+  /**
+   * 헤드는 `<div role="combobox">` 라 `<label for>` 로는 이름이 붙지 않는다.
+   * 바깥에서 캡션을 그려 주는 쪽(`TxForm.Dropdown`)은 `aria-labelledby` 를 쓴다.
+   */
   "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: boolean;
 }
 
 export interface TxDropdownProps<TData extends TxDropdownData = TxDropdownData> extends TxDropdownCommon {
