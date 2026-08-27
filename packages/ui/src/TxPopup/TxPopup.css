@@ -1,0 +1,32 @@
+/**
+ * TxPopup — 앵커에 붙어 뜨는 층. 내부 전용이다.
+ *
+ * **자리 계산은 JS 가 하고 여기서는 겉모습만 소유한다.** 위치는 인라인 스타일로 들어온다 —
+ * 화면 크기와 스크롤에 따라 매 순간 달라지는 값이라 CSS 로 적을 수 없다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-popup {
+  --tx-popup-bg: var(--tx-color-surface);
+  --tx-popup-fg: var(--tx-color-text);
+  --tx-popup-border-color: var(--tx-color-border);
+  --tx-popup-radius: var(--tx-radius);
+  --tx-popup-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+
+  /**
+   * 쌓임 순서. `document.body` 직속이라 조상의 쌓임 맥락에 갇히지 않지만,
+   * 모달 같은 다른 층과는 여기서 겨룬다. 토큰이라 소비자가 올릴 수 있다.
+   */
+  --tx-popup-z: 60;
+
+  position: fixed;
+  z-index: var(--tx-popup-z);
+  overflow-y: auto;
+
+  border: 1px solid var(--tx-popup-border-color);
+  border-radius: var(--tx-popup-radius);
+  background-color: var(--tx-popup-bg);
+  color: var(--tx-popup-fg);
+  box-shadow: var(--tx-popup-shadow);
+}
