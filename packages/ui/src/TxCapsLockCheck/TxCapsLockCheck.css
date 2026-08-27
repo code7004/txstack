@@ -1,0 +1,39 @@
+/**
+ * TxCapsLockCheck — 비밀번호 칸의 Caps Lock 경고.
+ *
+ * 감싼 입력창 아래에 안내 한 줄을 둔다. **그 줄은 늘 자리에 있고** 내용만 나타났다 사라진다 —
+ * 요소를 그때그때 만들면 스크린리더가 변화를 놓친다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-capslock {
+  --tx-capslock-color: var(--tx-color-danger);
+  --tx-capslock-font-size: 0.875rem;
+  --tx-capslock-line-height: 1.5;
+  --tx-capslock-gap: 0.25rem;
+  --tx-capslock-icon-gap: 0.25rem;
+}
+
+.tx-capslock__message {
+  margin: 0;
+  margin-top: var(--tx-capslock-gap);
+
+  color: var(--tx-capslock-color);
+  font-size: var(--tx-capslock-font-size);
+  line-height: var(--tx-capslock-line-height);
+}
+
+.tx-capslock__icon {
+  margin-right: var(--tx-capslock-icon-gap);
+}
+
+/**
+ * 경고가 없을 때도 한 줄 높이를 잡는다.
+ *
+ * **`&nbsp;` 를 넣지 않는다** — 그건 스크린리더가 읽는 텍스트 노드다.
+ * 높이는 글자 크기와 줄높이에서 계산하므로, 글자 크기를 바꿔도 빈 상태와 경고 상태가 정확히 맞는다.
+ */
+.tx-capslock[data-preserve-space] .tx-capslock__message {
+  min-height: calc(var(--tx-capslock-font-size) * var(--tx-capslock-line-height));
+}
