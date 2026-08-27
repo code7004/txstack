@@ -78,12 +78,15 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 ## 다음 할 일
 
-1. **`ui` 를 이식한다.** ← 다음 차례. 마지막이고, 그 안에서도 하나씩 간다.
-   temp 에서 이미 CSS + 토큰 방식으로 이행이 끝난 4개(`TxSpinner` · `TxButton` · `TxLoading` ·
-   `TxFlex`)부터 옮긴다. 방식이 검증된 것을 먼저 놓아야 나머지 22개의 기준이 선다.
-   그 전에 [001_ui](001_ui.md) 의 "26개 중 실제로 몇 개가 필요한가" 를 먼저 정리한다.
-2. `styles.css` 와 `scripts/build-css.mjs` 는 첫 컴포넌트를 옮길 때 함께 만든다.
-3. Storybook · playground 는 `ui` 이식이 시작된 뒤에 세운다.
+**`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.** Form 클러스터 8개
+(`TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` →
+`TxDayPicker` → `TxForm`, 약 1,940줄)를 의존 순서대로 옮긴다.
+
+1. **`TxIcons` 부터 시작한다.** ← 다음 차례
+2. `styles.css` 와 CSS 빌드 스크립트는 **첫 컴포넌트를 옮길 때 함께 만든다.**
+   temp 의 `scripts/build-css.mjs` 를 가져올지 그때 판단한다.
+3. Storybook · playground 는 Form 클러스터가 어느 정도 쌓인 뒤에 세운다.
+4. 나머지 18개를 자를지 남길지는 Form 클러스터가 끝난 뒤에 정한다.
 
 ### 이식은 복사가 아니다
 
