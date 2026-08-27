@@ -78,15 +78,17 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 ## 다음 할 일
 
-**`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.** Form 클러스터 8개
-(`TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` →
-`TxDayPicker` → `TxForm`, 약 1,940줄)를 의존 순서대로 옮긴다.
+**`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.**
 
-1. **`TxIcons` 부터 시작한다.** ← 다음 차례
-2. `styles.css` 와 CSS 빌드 스크립트는 **첫 컴포넌트를 옮길 때 함께 만든다.**
-   temp 의 `scripts/build-css.mjs` 를 가져올지 그때 판단한다.
+스타일 파이프라인(0차)은 세웠다 — `tokens.css` · `styles.css` · CSS 빌드 · `@txstack/ui/styles.css`.
+
+1. **기반 4개를 옮긴다.** ← 다음 차례
+   `TxSpinner` → `TxButton` → `TxFlex` → `TxLoading` (244줄). temp 에서 CSS 이행이 끝나 있어
+   거의 그대로 온다. `TxButton` 이 나머지 전부의 레퍼런스가 된다.
+2. **Form 클러스터 8개** (1,942줄). `TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` →
+   `TxCapsLockCheck` → `TxDropdown` → `TxDayPicker` → `TxForm`.
 3. Storybook · playground 는 Form 클러스터가 어느 정도 쌓인 뒤에 세운다.
-4. 나머지 18개를 자를지 남길지는 Form 클러스터가 끝난 뒤에 정한다.
+4. 남은 12개를 자를지 남길지는 그다음에 정한다.
 
 ### 이식은 복사가 아니다
 
