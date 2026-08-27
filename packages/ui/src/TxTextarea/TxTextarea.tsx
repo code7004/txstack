@@ -24,7 +24,10 @@ import type { TxTextareaProps, TxTextareaRef } from "./TxTextarea.types";
  *
  * 명세: `docs/001_ui.md`
  */
-export const TxTextarea = forwardRef<TxTextareaRef, TxTextareaProps>(function TxTextarea({ id, name, className, value, defaultValue, readOnly = false, focusOnMount, autoGrow = false, onChange, onBlur, onChangeText, onBlurText, ...props }, ref) {
+export const TxTextarea = forwardRef<TxTextareaRef, TxTextareaProps>(function TxTextarea(
+  { id, name, className, style, value, defaultValue, readOnly = false, focusOnMount, autoGrow = false, onChange, onBlur, onChangeText, onBlurText, ...props },
+  ref
+) {
   const areaRef = useRef<HTMLTextAreaElement>(null);
   const { currentValue, inputId, setValue } = useInput({ id, name, value, defaultValue });
 
@@ -91,7 +94,7 @@ export const TxTextarea = forwardRef<TxTextareaRef, TxTextareaProps>(function Tx
 
   return (
     // .tx-input 을 함께 건다 — 껍데기를 공유해야 입력창과 나란히 놓았을 때 줄이 맞는다.
-    <div data-tag="TxTextarea" data-readonly={readOnly ? "" : undefined} data-disabled={props.disabled ? "" : undefined} data-auto-grow={autoGrow ? "" : undefined} className={cm("tx-input", "tx-textarea", className)}>
+    <div data-tag="TxTextarea" data-readonly={readOnly ? "" : undefined} data-disabled={props.disabled ? "" : undefined} data-auto-grow={autoGrow ? "" : undefined} className={cm("tx-input", "tx-textarea", className)} style={style}>
       <textarea
         // 통과 props 를 먼저 편다. 아래 계약 속성은 덮이면 안 된다.
         {...props}

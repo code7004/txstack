@@ -26,7 +26,7 @@ import { parseTxInputNumber } from "./TxInput.utils";
  * 명세: `docs/001_ui.md`
  */
 export const TxInput = forwardRef<TxInputRef, TxInputProps>(function TxInput(
-  { id, name, className, value, defaultValue, readOnly = false, focusOnMount, onChange, onBlur, onEnter, onChangeText, onChangeNumber, onSubmitText, onSubmitNumber, onBlurNumber, ...props },
+  { id, name, className, style, value, defaultValue, readOnly = false, focusOnMount, onChange, onBlur, onEnter, onChangeText, onChangeNumber, onSubmitText, onSubmitNumber, onBlurNumber, ...props },
   ref
 ) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -100,7 +100,7 @@ export const TxInput = forwardRef<TxInputRef, TxInputProps>(function TxInput(
 
   return (
     // 스타일은 TxInput.css 가 소유한다. 여기서는 기본 클래스만 걸고 className 을 덧붙인다.
-    <div data-tag="TxInput" data-readonly={readOnly ? "" : undefined} data-disabled={props.disabled ? "" : undefined} className={cm("tx-input", className)}>
+    <div data-tag="TxInput" data-readonly={readOnly ? "" : undefined} data-disabled={props.disabled ? "" : undefined} className={cm("tx-input", className)} style={style}>
       <input
         // 통과 props 를 먼저 편다. 아래 계약 속성은 덮이면 안 된다.
         {...props}
