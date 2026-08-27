@@ -1,0 +1,29 @@
+/* 레이어 우선순위. tx 는 preflight(base) 보다 뒤, 유틸리티보다 앞에 둔다 — 소비자도 이 한 줄이 필요하다. */
+@layer theme, base, tx, components, utilities;
+
+@import "tailwindcss";
+
+/* 자체 CSS 로 옮긴 컴포넌트의 스타일. 소비자의 `@txstack/ui/styles.css` 와 같은 내용이다. */
+@import "../../../packages/ui/src/styles.css";
+
+/* 아직 안 옮긴 컴포넌트는 Tailwind 클래스 문자열이라, 소스를 스캔하지 않으면 전부 purge 된다. */
+@source "../../../packages/ui/src";
+
+/* 다크모드는 class 전략 — <html class="dark"> 토글. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/**
+ * **`className` 컨트롤을 살리기 위한 안전목록.**
+ *
+ * Tailwind 는 빌드 때 소스 파일을 훑어 쓰인 클래스만 만든다. 그런데 Storybook 컨트롤에
+ * **런타임에 타이핑한 문자열은 어느 파일에도 없다.** 그래서 `text-red-500` 은 먹히고
+ * (다른 컴포넌트 소스에 우연히 있다) `text-red-400` 은 안 먹히는 일이 생긴다 —
+ * 무엇이 되는지가 규칙이 아니라 복불복이라 손잡이로 쓸 수가 없다.
+ *
+ * 여기서 미리 만들어 두면 **소비자의 Tailwind 프로젝트와 같은 상태**가 된다.
+ * 그쪽에서는 자기 소스에 쓴 클래스를 자기 Tailwind 가 훑어 만들어 주기 때문이다.
+ *
+ * **이건 Storybook 앱만의 장치다.** `packages/ui` 는 이걸 모르고, 배포물에도 안 들어간다.
+ */
+@source inline("{,dark:}{text,bg,border}-{slate,gray,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose}-{50,{100..900..100},950}");
+@source inline("{,dark:}{text,bg,border}-{black,white,transparent,current,inherit}");
