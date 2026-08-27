@@ -17,3 +17,4 @@ export * from "./TxFlex";
 export * from "./TxInput";
 export * from "./TxLoading";
 export * from "./TxSpinner";
+export * from "./TxTextarea";
