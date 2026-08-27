@@ -11,8 +11,7 @@ export interface TxInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>
   /**
    * 입력값이 바뀔 때마다 숫자로 준다. **숫자로 읽을 수 없으면 `undefined` 를 준다.**
    *
-   * 원본은 읽히는 동안에만 불렀는데, 그러면 사용자가 값을 지웠을 때 콜백이 안 와서
-   * 소비자 상태에 옛 숫자가 남는다.
+   * 값을 지워도 콜백이 오므로 "비었다" 를 따로 감시하지 않아도 된다.
    */
   onChangeNumber?: (value: number | undefined) => void;
 
@@ -29,7 +28,6 @@ export interface TxInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>
   /**
    * 마운트 시 `true` 면 포커스한다. 이후 `false` → `true` 로 바뀌어도 다시 포커스한다.
    *
-   * 원본의 이름은 `focus` 였는데 HTML 의 `autoFocus` 와 헷갈렸다. 동작은 그대로다.
    * 임의 시점에 포커스하려면 `ref.focus()` 를 쓴다.
    */
   focusOnMount?: boolean;

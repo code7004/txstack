@@ -83,8 +83,8 @@ export const Basic: Story = {
 /**
  * 방향은 `className` 으로 준다.
  *
- * **셋 다 간격이 같다.** 예전에는 `className` 을 주는 순간 간격이 0 이 됐다 —
- * 방향만 바꾸려다 간격을 잃지 않는 것이 이 스토리에서 볼 것이다.
+ * **방향을 바꿔도 간격은 그대로다.** 간격이 클래스가 아니라 CSS 변수라서,
+ * `className` 으로 무엇을 주든 덮어쓰지 않는 한 유지된다.
  */
 export const Direction: Story = {
   parameters: noControls,
