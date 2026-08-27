@@ -23,7 +23,7 @@ pnpm workspace 모노레포. `packages/*` 4종이 각각 독립 배포되고, `a
 | `001` | `@txstack/ui`         | Tx\* UI 컴포넌트 — 쉬운 사용법·쉬운 커스터마이징 | O          |
 | `002` | `@txstack/route-meta` | 라우트를 메타데이터로 관리 (icon·path·권한)      | O          |
 | `003` | `@txstack/hooks`      | 범용 React 훅 + URL 쿼리 상태                    | O          |
-| `004` | `@txstack/network`    | axios 래퍼 — 정책 주입식 HTTP 클라이언트         | **X**      |
+| `004` | `@txstack/axios`      | axios 래퍼 — 정책 주입식 HTTP 클라이언트         | **X**      |
 
 **현재 상태: 저장소를 비우고 다시 시작했다.** 이전 구현 전체는 `W:\Projects\txstack_temp` 에
 git 히스토리와 함께 보존되어 있다. 지금 하는 일은 백지에서 새로 짜는 것이 아니라,
@@ -45,7 +45,7 @@ git 히스토리와 함께 보존되어 있다. 지금 하는 일은 백지에�
 
 패키지 경계 (어기면 범용 라이브러리가 아니다):
 
-- **의존 방향은 `ui → hooks` 하나만 허용한다.** `hooks` / `route-meta` / `network` 는 서로 참조하지 않는다.
+- **의존 방향은 `ui → hooks` 하나만 허용한다.** `hooks` / `route-meta` / `axios` 는 서로 참조하지 않는다.
 - **앱 전역(ambient) 타입·전역 변수에 의존하지 않는다.** 소비자 프로젝트에는 그 전역이 없다.
 - **런타임 정책(인증 토큰, 401 처리, 응답 봉투)을 패키지가 결정하지 않는다.** 옵션으로 주입받는다.
 - **`react` / `react-dom` / `react-router-dom` / `ag-grid-*` / `axios` 는 peerDependencies 다.**

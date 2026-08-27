@@ -80,7 +80,7 @@ importers:
 
   packages/hooks: {}
 
-  packages/network: {}
+  packages/axios: {}
 
   packages/route-meta: {}
 

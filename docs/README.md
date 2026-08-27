@@ -22,7 +22,7 @@
 | `001` | `@txstack/ui`         | Tx\* 컴포넌트. 쉬운 사용법, 쉬운 커스터마이징          | O     | [001_ui](001_ui.md)                 |
 | `002` | `@txstack/route-meta` | 라우트를 메타데이터 트리로 선언 → 라우터·메뉴·현재위치 | O     | [002_route_meta](002_route_meta.md) |
 | `003` | `@txstack/hooks`      | 의존 없는 범용 훅 + URL 쿼리를 상태처럼                | O     | [003_hooks](003_hooks.md)           |
-| `004` | `@txstack/network`    | axios 래퍼. 인증·에러·봉투 정책을 주입받는다           | **X** | [004_network](004_network.md)       |
+| `004` | `@txstack/axios`      | axios 래퍼. 인증·에러·봉투 정책을 주입받는다           | **X** | [004_axios](004_axios.md)           |
 
 ### 경계 — 이게 흐려지면 라이브러리가 아니다
 
@@ -30,12 +30,12 @@
 
 ```
        ui ──▶ hooks
-  route-meta        network
+  route-meta        axios
    (서로 참조하지 않는다)
 ```
 
-- `hooks` / `route-meta` / `network` 는 **서로를 import 하지 않는다.** 셋 다 독립 설치 가능해야 한다.
-- `network` 는 **React 를 모른다.** 훅도 컨텍스트도 없다. Node 스크립트에서도 돌아가야 한다.
+- `hooks` / `route-meta` / `axios` 는 **서로를 import 하지 않는다.** 셋 다 독립 설치 가능해야 한다.
+- `axios` 는 **React 를 모른다.** 훅도 컨텍스트도 없다. Node 스크립트에서도 돌아가야 한다.
 - **런타임 정책은 패키지가 정하지 않는다.** 토큰을 어디서 읽는지, 401 에 무엇을 할지,
   응답 봉투가 `{ body }` 인지 `{ data }` 인지는 전부 **옵션으로 주입받는다.**
 - **앱 전역 타입·전역 변수에 의존하지 않는다.** `import.meta.env` 를 패키지가 직접 읽지 않는다.
@@ -58,15 +58,17 @@
 
 | 영역          | 상태                                                                     |
 | ------------- | ------------------------------------------------------------------------ |
-| 문서          | **완료** — 이 문서 + 패키지별 4장 (6장 · 약 550줄)                       |
+| 문서          | **완료** — 이 문서 + 패키지별 4장                                        |
 | 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup |
-| `packages/*`  | **뼈대만** — 4개 전부 빈 배럴. 구현 0줄                                  |
+| `axios`       | **이식 완료** — 테스트 29개 통과                                         |
+| `hooks`       | 뼈대만 — 빈 배럴                                                         |
+| `route-meta`  | 뼈대만 — 빈 배럴                                                         |
+| `ui`          | 뼈대만 — 빈 배럴. temp 에 26개 대기                                      |
 | `apps/*`      | **없음** — playground · storybook                                        |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
-뼈대는 실제로 도는 것을 확인했다 — `pnpm build` 가 **진입점 7개**(`ui` 3 · `hooks` 2 ·
-`route-meta` 1 · `network` 1)를 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가
-통과한다. 컴포넌트를 얹기만 하면 되는 상태다.
+`pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
+ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
 
 ### 왜 changesets·husky 를 지금 안 넣었나
 
@@ -76,14 +78,23 @@
 
 ## 다음 할 일
 
-1. **`network` 를 이식한다.** ← 다음 차례
-   4개 중 가장 작고 React 를 모른다. 경계 규칙(정책 주입)이 가장 선명하게 드러나는 패키지라
-   여기서 이식 리듬을 잡는다. [004_network](004_network.md) 의 "결정할 것" 4개를 먼저 정리한다.
-2. **`hooks` → `route-meta`** 순으로 같은 방식을 반복한다.
+1. **`hooks` 를 이식한다.** ← 다음 차례
+   `axios` 에서 잡은 리듬을 반복한다. 원본을 전부 읽고 경계 위반부터 찾은 뒤, 공개 API 를
+   합의하고, 테스트를 함께 옮긴다. [003_hooks](003_hooks.md) 의 "결정할 것" 을 먼저 정리한다.
+2. **`route-meta`** 를 같은 방식으로 옮긴다.
 3. **`ui` 는 마지막이고, 그 안에서도 하나씩 간다.**
    temp 에서 이미 CSS + 토큰 방식으로 이행이 끝난 4개(`TxSpinner` · `TxButton` · `TxLoading` ·
    `TxFlex`)부터 옮긴다. 방식이 검증된 것을 먼저 놓아야 나머지 22개의 기준이 선다.
 4. Storybook · playground 는 `ui` 이식이 시작된 뒤에 세운다.
+
+### `axios` 에서 배운 것 — 이식은 복사가 아니다
+
+원본 659줄을 옮기면서 **경계 규칙 위반 3건**(쿠키 기본값, 콘솔 오염, Node 미지원)과
+**동작 결함 1건**(FormData 업로드가 깨짐)이 나왔다. 사실이 아닌 주석도 하나 있었다 —
+`delete` 가 예약어라 `del` 을 썼다는 것인데, 객체 메서드명으로는 유효하다.
+
+**그러니 다음 패키지도 파일을 옮기기 전에 전부 읽는다.** 옮긴 뒤에 고치면 무엇이 원본이고
+무엇이 판단이었는지 구분되지 않는다. 고친 내역은 각 패키지 문서의 "이식하며 고친 것" 에 남긴다.
 
 ## 문서 규칙
 
