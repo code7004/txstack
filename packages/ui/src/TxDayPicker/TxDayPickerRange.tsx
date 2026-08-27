@@ -50,6 +50,7 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
     format = "YYYY-MM-DD",
     keepOpen = true,
     disabled = false,
+    id,
     className,
     style,
     ...rest
@@ -141,7 +142,11 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
       <TxInputLike
         value={display}
         placeholder={placeholder}
+        id={id}
         ariaLabel={rest["aria-label"]}
+        ariaLabelledBy={rest["aria-labelledby"]}
+        ariaDescribedBy={rest["aria-describedby"]}
+        ariaInvalid={rest["aria-invalid"]}
         ariaHasPopup="dialog"
         ariaExpanded={open}
         ariaControls={open ? panelId : undefined}

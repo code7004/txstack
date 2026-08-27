@@ -25,7 +25,7 @@ import { formatDate, startOfDay } from "./TxDayPicker.utils";
  *
  * 명세: `docs/001_ui.md`
  */
-export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날짜 선택", format = "YYYY-MM-DD", keepOpen = false, disabled = false, className, style, ...rest }: TxDayPickerProps) {
+export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날짜 선택", format = "YYYY-MM-DD", keepOpen = false, disabled = false, id, className, style, ...rest }: TxDayPickerProps) {
   const [inner, setInner] = useState<Date | undefined>(defaultValue);
   const selected = value ?? inner;
 
@@ -47,7 +47,11 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
       <TxInputLike
         value={selected ? formatDate(selected, format) : ""}
         placeholder={placeholder}
+        id={id}
         ariaLabel={rest["aria-label"]}
+        ariaLabelledBy={rest["aria-labelledby"]}
+        ariaDescribedBy={rest["aria-describedby"]}
+        ariaInvalid={rest["aria-invalid"]}
         // 달력은 목록이 아니라 대화상자다. 열림 상태는 여기서만 아니까 직접 넘긴다.
         ariaHasPopup="dialog"
         ariaExpanded={open}

@@ -51,24 +51,24 @@
 **2026-08-27 — 저장소를 비우고 문서부터 다시 시작했다.**
 
 이전 구현 전체(4개 패키지 소스 · Storybook · playground)와 git 커밋 53개는
-이 저장소의 **`legacy` 브랜치**에 53개 커밋과 함께 보존되어 있다.
-`git worktree add ../txstack_temp legacy` 로 꺼내 **읽기 전용으로 참조한다.**
+원격의 **`legacy` 브랜치**에 보존되어 있다.
+`../txstack_temp` 에 **별도 클론으로 꺼내 읽기 전용으로 참조한다** (워크트리가 아니다).
 원격 저장소(`github.com/code7004/txstack`)의 히스토리도 이때 리셋했다.
 
 다시 시작한 이유는 코드가 나빠서가 아니라 **문서가 코드보다 앞서 나갔기 때문**이다.
 직전 문서 체계는 1,800줄이었는데 실제 정리된 컴포넌트는 4개였다.
 그래서 이번에는 **코드가 생긴 만큼만 문서가 자란다.**
 
-| 영역          | 상태                                                                     |
-| ------------- | ------------------------------------------------------------------------ |
-| 문서          | **완료** — 이 문서 + 패키지별 4장                                        |
-| 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup |
-| `axios`       | **이식 완료** — 테스트 29개 통과                                         |
-| `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
-| `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
-| `ui`          | 기반 4개 + Form 8개 + `TxPopup` — 테스트 367개 통과                      |
-| `apps/*`      | **storybook 있음** — playground 는 아직 없다                             |
-| 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
+| 영역          | 상태                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| 문서          | **완료** — 이 문서 + 패키지별 4장                                                       |
+| 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                |
+| `axios`       | **이식 완료** — 테스트 29개 통과                                                        |
+| `hooks`       | **이식 완료** — 테스트 25개 통과                                                        |
+| `route-meta`  | **이식 완료** — 테스트 21개 통과                                                        |
+| `ui`          | **Form 클러스터 완료** — 기반 4개 + Form 9개 + `TxPopup` · `TxForm` — 테스트 405개 통과 |
+| `apps/*`      | **storybook 있음** — playground 는 아직 없다                                            |
+| 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                         |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
@@ -83,16 +83,16 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 **`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.**
 
-0차(스타일 파이프라인)와 1차(기반 4개 — `TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`)는
-끝났다. `TxButton` 이 이후 전부의 레퍼런스다.
+0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
+`TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **`TxForm`(240줄) 이 Form 클러스터의 마지막이다.** ← 여기
-   앞의 여덟을 `Object.assign` 으로 묶은 조립 계층이다. `TxForm.CheckBox` · `TxForm.Combobox` 를
-   만들지도 함께 정한다.
-   `TxInput` 이 CSS 이행의 본보기다 — 래퍼가 껍데기를 소유하고 `<input>` 은 투명하며,
-   껍데기를 함께 쓰는 컴포넌트는 `.tx-input` 클래스를 같이 건다.
-2. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310). playground 는 아직 없다.
-3. 남은 12개를 자를지 남길지는 그다음에 정한다.
+1. **남은 12개 중 무엇을 자를지 정한다.** ← 여기
+   [001_ui](001_ui.md) 의 "3차" 표가 목록이다. 먼저 풀 문제가 하나 있다 —
+   `TxDropMenu` · `TxContextMenu` 가 `react-router-dom` 의 `NavLink` 를 직접 import 하는데
+   `@txstack/ui` 의 peer 에는 그것이 없다. 링크 컴포넌트를 주입받게 고치는 쪽이 맞아 보인다.
+2. **`tailwind-merge` 를 뗄 수 있는지 본다.** Form 클러스터가 끝나면 판단하기로 한 항목이다.
+   CSS 이행이 끝나 `twMerge` 가 할 일이 거의 없고, Tailwind 를 안 쓰는 소비자에게는 순수한 무게다.
+3. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
 
 ### 이식은 복사가 아니다
 
@@ -107,6 +107,10 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 `route-meta` 391줄에서는 **라우터와 어긋나는 매칭**이 나왔다. 경로 매칭을 자체 정규식으로
 구현해 순회 순서에 의존했고, `/users/:id` 가 `/users/new` 를 가로챘다 — 화면과 타이틀·
 브레드크럼이 갈리는 버그다. `matchRoutes` 에 위임해 없앴다. 테스트가 하나도 없던 부분이다.
+
+`ui` 의 `TxForm` 240줄에서는 **배선이 통째로 없는 것**이 나왔다. 캡션이 `<label>` 이 아니라
+어떤 컨트롤과도 이어지지 않았고, 에러는 `aria-invalid` 도 `aria-describedby` 도 없이 화면에만 떴다.
+`labelWidth` 는 읽는 쪽이 없어 **아무 일도 하지 않았는데 그것을 보여주는 스토리가 있었다.**
 
 **그러니 다음 패키지도 파일을 옮기기 전에 전부 읽는다.** 옮긴 뒤에 고치면 무엇이 원본이고
 무엇이 판단이었는지 구분되지 않는다. 고친 내역은 각 패키지 문서의 "이식하며 고친 것" 에 남긴다.

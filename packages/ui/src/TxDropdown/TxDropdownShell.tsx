@@ -39,6 +39,9 @@ export interface TxDropdownShellProps {
   style?: React.CSSProperties;
   classNames?: { head?: string; list?: string; item?: string };
   "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: boolean;
 }
 
 /**
