@@ -9,13 +9,6 @@
  * 명세: docs/001_ui.md
  */
 
-.tx-combobox {
-  --tx-combobox-item-padding: 0.5rem 0.75rem;
-  --tx-combobox-item-font-size: 0.875rem;
-  --tx-combobox-item-active-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
-  --tx-combobox-more-color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
-}
-
 .tx-combobox__field {
   /* flex 자식의 기본 min-width: auto 는 내용보다 작아지기를 거부한다 */
   min-width: 0;
@@ -43,7 +36,20 @@
 
 /* --- 목록 -------------------------------------------------------------- */
 
+/**
+ * **팝업 안에서 쓰는 토큰은 팝업 쪽에 선언한다.**
+ *
+ * 팝업은 `document.body` 로 포털되므로 앵커의 자손이 아니다. CSS 변수는 DOM 을 따라
+ * 상속되니, 앵커에 선언한 값은 **팝업에 닿지 않는다** — 칸 폭이 0 이 되고 색이 사라진다.
+ *
+ * 전역 토큰(`--tx-color-*`)은 `:root` 에 있어 어디서든 닿는다.
+ */
 .tx-combobox__list {
+  --tx-combobox-item-padding: 0.5rem 0.75rem;
+  --tx-combobox-item-font-size: 0.875rem;
+  --tx-combobox-item-active-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
+  --tx-combobox-more-color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
+
   padding: 0.25rem 0;
 }
 

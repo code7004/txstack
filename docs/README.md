@@ -63,7 +63,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                         |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
-| `ui`          | 기반 4개 + Form 7개 + `TxPopup` — 테스트 330개 통과                      |
+| `ui`          | 기반 4개 + Form 8개 + `TxPopup` — 테스트 367개 통과                      |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                             |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
@@ -83,9 +83,9 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인)와 1차(기반 4개 — `TxSpinner` · `TxButton` · `TxFlex` · `TxLoading`)는
 끝났다. `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **Form 클러스터** — `TxCombobox` 까지 끝났다. **`TxDayPicker`(394줄) 가 다음 차례.** ← 여기
-   `@txstack/ui/daypicker` 서브패스라 **optional peer 분리를 처음으로 실제 검증**한다.
-   `TxInputLike` 를 쓰는 쪽이기도 하다. 그다음이 마지막인 `TxForm`.
+1. **`TxForm`(240줄) 이 Form 클러스터의 마지막이다.** ← 여기
+   앞의 여덟을 `Object.assign` 으로 묶은 조립 계층이다. `TxForm.CheckBox` · `TxForm.Combobox` 를
+   만들지도 함께 정한다.
    `TxInput` 이 CSS 이행의 본보기다 — 래퍼가 껍데기를 소유하고 `<input>` 은 투명하며,
    껍데기를 함께 쓰는 컴포넌트는 `.tx-input` 클래스를 같이 건다.
 2. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310). playground 는 아직 없다.

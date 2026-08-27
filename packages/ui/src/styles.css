@@ -43,6 +43,7 @@
 @import "./TxButton/TxButton.css" layer(tx);
 @import "./TxCapsLockCheck/TxCapsLockCheck.css" layer(tx);
 @import "./TxCheckBox/TxCheckBox.css" layer(tx);
+@import "./TxDayPicker/TxDayPicker.css" layer(tx);
 @import "./TxDropdown/TxDropdown.css" layer(tx);
 @import "./TxFlex/TxFlex.css" layer(tx);
 @import "./TxInput/TxInput.css" layer(tx);
