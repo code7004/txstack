@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "tsup.config.ts"]
+  "include": ["src", "tsup.config.ts"],
+  /**
+   * 스토리는 이 패키지의 관심사가 아니다. `@storybook/*` 는 카탈로그 앱의 의존이고,
+   * 배포물(dist)에도 들어가지 않는다. 타입체크는 `apps/storybook` 이 맡는다.
+   */
+  "exclude": ["**/*.stories.tsx"]
 }

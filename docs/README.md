@@ -64,7 +64,7 @@
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
 | `ui`          | **1차 완료** — 기반 4개 · 테스트 107개 통과                              |
-| `apps/*`      | **없음** — playground · storybook                                        |
+| `apps/*`      | **storybook 있음** — playground 는 아직 없다                             |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
@@ -87,7 +87,7 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    `TxIcons` → `TxInput` → `TxTextarea` → `TxCheckBox` → `TxCapsLockCheck` → `TxDropdown` →
    `TxDayPicker` → `TxForm`. 앞의 넷과 달리 **CSS 이행이 안 돼 있다** — Tailwind 클래스 문자열과
    `TxTheme` 참조를 걷어내면서 옮겨야 한다.
-2. Storybook · playground 는 Form 클러스터가 어느 정도 쌓인 뒤에 세운다.
+2. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310). playground 는 아직 없다.
 3. 남은 12개를 자를지 남길지는 그다음에 정한다.
 
 ### 이식은 복사가 아니다

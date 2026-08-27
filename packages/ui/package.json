@@ -53,6 +53,9 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0"
   },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.5.9"
+  },
   "peerDependencies": {
     "ag-grid-community": "^35.0.0",
     "ag-grid-react": "^35.0.0",
