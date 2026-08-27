@@ -30,9 +30,8 @@ const meta = {
           "- `onBlurText` — 포커스가 빠질 때",
           "- `autoGrow` — 내용에 맞춰 높이가 늘어난다. 기본 `false`",
           "",
-          "**껍데기는 `TxInput` 과 같은 것을 쓴다.** `.tx-input` 클래스를 함께 걸어 테두리·배경·포커스 링·흐림 처리를 그대로 받고,",
-          "여기서는 높이만 되돌린다. 원본은 각자 그리다 배경 선언을 빠뜨려서 **텍스트영역만 배경이 없었다** — 다크모드에서 부모가 비쳤다.",
-          "입력한 글자도 `gray-500` 으로 흐렸다.",
+          "**겉모습은 `TxInput` 과 같다.** 테두리·배경·포커스 링·흐림 처리를 같은 토큰에서 받으므로,",
+          "폼 안에 나란히 놓아도 어긋나지 않는다. 다크 모드에서도 마찬가지다.",
           "",
           "컨트롤 패널은 `Playground` 에서만 동작한다."
         ].join("\n")
@@ -59,18 +58,16 @@ export const Playground: Story = {
 };
 
 /**
- * **이 스토리가 원본의 결함을 본다.**
+ * 입력창과 나란히 놓았을 때 테두리 색·굵기·모서리·배경이 같다. 글자 진하기도 같다.
  *
- * 입력창과 나란히 놓았을 때 테두리 색·굵기·모서리·배경이 같아야 한다.
- * 툴바에서 **다크로 바꿔 보면** 원본에서 텍스트영역만 배경이 비쳤던 자리가 보인다.
- * 글자를 넣어 보면 입력창과 같은 진하기로 나온다.
+ * 툴바에서 **다크로 바꿔 보면** 둘이 함께 따라간다 — 한쪽만 배경이 비치는 일이 없다.
  */
-export const SharesShellWithTxInput: Story = {
+export const AlignsWithTxInput: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex className="w-96 flex-col items-stretch gap-3">
-      <TxInput defaultValue="TxInput — 같은 껍데기" />
-      <TxTextarea defaultValue="TxTextarea — 테두리·배경·글자색이 같아야 한다" />
+      <TxInput defaultValue="TxInput" />
+      <TxTextarea defaultValue="TxTextarea — 테두리와 배경, 글자 진하기가 위와 같다" />
     </TxFlex>
   )
 };
@@ -89,10 +86,10 @@ export const States: Story = {
 };
 
 /**
- * **줄바꿈해도 콜백이 한 번만 온다.**
+ * 두 콜백이 언제 오는지 본다.
  *
- * 원본은 `onChangedText` 하나가 값 변경·Enter·blur 세 곳에서 불렸다.
- * Enter 는 줄바꿈이라 `change` 로 이미 오는데 같은 값으로 한 번 더 왔고, blur 는 값이 안 바뀌어도 왔다.
+ * - `onChangeText` — 값이 바뀔 때마다. **Enter 로 줄을 바꿔도 한 번만** 온다
+ * - `onBlurText` — 포커스가 빠질 때
  *
  * 아래에서 Enter 로 줄을 바꿔 보고, 포커스를 빼 보라.
  */
@@ -129,7 +126,7 @@ export const AutoGrow: Story = {
   )
 };
 
-/** `ref` 로 값을 읽고 쓰고 포커스한다. `getValue` 는 **DOM 에서 직접 읽어** 항상 최신이다. */
+/** `ref` 로 값을 읽고, 넣고, 포커스한다. `getValue` 는 언제 불러도 지금 화면에 있는 값을 준다. */
 export const ImperativeRef: Story = {
   parameters: noControls,
   render: function ImperativeRefStory() {
@@ -150,7 +147,7 @@ export const ImperativeRef: Story = {
   }
 };
 
-/** 토큰 한 줄로 바꾼다. 껍데기 토큰(`--tx-input-*`)도 그대로 먹는다. */
+/** 토큰 한 줄로 바꾼다. `TxInput` 과 공유하는 `--tx-input-*` 도 그대로 먹는다. */
 export const CustomizingTokens: Story = {
   parameters: noControls,
   render: () => (

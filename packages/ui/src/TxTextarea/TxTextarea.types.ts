@@ -3,19 +3,19 @@ import type { TextareaHTMLAttributes } from "react";
 export interface TxTextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value"> {
   value?: string;
 
-  /** 입력값이 바뀔 때마다. `onChange` 와 함께 불린다. `TxInput` 과 같은 이름이다. */
+  /** 입력값이 바뀔 때마다. `onChange` 와 함께 불린다. */
   onChangeText?: (value: string) => void;
   /**
    * 포커스가 빠질 때 그 시점의 값.
    *
-   * 원본은 `onChangedText` 하나가 **값 변경 · Enter · blur 세 곳에서** 불렸다.
-   * textarea 에서 Enter 는 줄바꿈이라 `change` 로 이미 오는데 한 번 더 왔다.
+   * 값이 바뀌는 순간이 필요하면 `onChangeText` 를 쓴다.
    */
   onBlurText?: (value: string) => void;
 
   /**
    * 마운트 시 `true` 면 포커스한다. 이후 `false` → `true` 로 바뀌어도 다시 포커스한다.
-   * `TxInput` 과 같다.
+   *
+   * 임의 시점에 포커스하려면 `ref.focus()` 를 쓴다.
    */
   focusOnMount?: boolean;
 

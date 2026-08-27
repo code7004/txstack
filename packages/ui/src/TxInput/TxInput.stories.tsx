@@ -58,7 +58,7 @@ export const Playground: Story = {
   args: { placeholder: "입력하세요", disabled: false, readOnly: false, type: "text", className: "" }
 };
 
-/** 상태별 겉모습. `readOnly` 와 `disabled` 는 지금 같은 흐림을 쓴다 — 원본과 같다. */
+/** 상태별 겉모습. `readOnly` 와 `disabled` 는 같은 흐림을 쓰고, 커서로 구분된다. */
 export const States: Story = {
   parameters: noControls,
   render: () => (
@@ -85,8 +85,10 @@ export const Types: Story = {
 };
 
 /**
- * **숫자 콜백은 값을 지워도 온다.** 원본은 읽히는 동안에만 불러서, 지우면 소비자 상태에
- * 옛 숫자가 남았다. 입력창을 비워 보면 아래가 `undefined` 로 바뀐다.
+ * `onChangeNumber` 는 **숫자로 읽을 수 없을 때 `undefined` 를 준다.**
+ * 값을 지워도 콜백이 오므로 "비었다" 를 따로 감시하지 않아도 된다.
+ *
+ * 숫자를 넣었다 지워 보면 아래가 `undefined` 로 바뀐다.
  */
 export const NumberCallbacks: Story = {
   parameters: noControls,
@@ -107,7 +109,7 @@ export const NumberCallbacks: Story = {
   }
 };
 
-/** `ref` 로 값을 읽고 쓰고 포커스한다. `getValue` 는 **DOM 에서 직접 읽어** 항상 최신이다. */
+/** `ref` 로 값을 읽고, 넣고, 포커스한다. `getValue` 는 언제 불러도 지금 화면에 있는 값을 준다. */
 export const ImperativeRef: Story = {
   parameters: noControls,
   render: function ImperativeRefStory() {
