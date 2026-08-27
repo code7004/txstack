@@ -1,0 +1,167 @@
+/**
+ * TxSearchInput · TxInputLike — `.tx-input` 껍데기를 함께 쓰는 둘.
+ *
+ * **둘 다 자기 테두리를 새로 그리지 않는다.** `.tx-input` 을 클래스로 함께 걸어
+ * 같은 토큰을 받는다. 그래야 폼 안에 나란히 놓았을 때 높이와 테두리가 어긋나지 않는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-search-input {
+  /* 아이콘 버튼이 차지하는 자리. 여백을 여기서 정해야 안쪽 입력의 padding 과 겹치지 않는다 */
+  --tx-search-input-button-size: 2rem;
+  --tx-search-input-button-color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
+  --tx-search-input-icon-size: 1.25rem;
+  --tx-search-input-padding-x: 0.5rem;
+
+  /**
+   * **높이를 명시한다.** 없으면 내용(안쪽 입력 2.5rem) 위에 자기 테두리가 얹혀 2px 더 커진다 —
+   * `TxInput` 과 나란히 놓았을 때 줄이 안 맞는다. `AlignsWithTxInput` 스토리가 그걸 본다.
+   *
+   * 토큰 이름을 `--tx-input-height` 로 맞춘 것은 의도다. 소비자가 이 껍데기의 높이를 바꾸면
+   * 안쪽 입력이 `height: 100%` 로 따라온다 — 두 군데를 고칠 필요가 없다.
+   */
+  --tx-input-height: 2.5rem;
+
+  display: flex;
+  align-items: center;
+  height: var(--tx-input-height);
+  padding-inline: var(--tx-search-input-padding-x);
+
+  /* 껍데기는 .tx-input 이 그린다. 여기서는 배치만 한다 */
+  border: var(--tx-input-border-width, 1px) solid var(--tx-color-border);
+  border-radius: var(--tx-radius);
+  background-color: var(--tx-color-surface);
+  color: var(--tx-color-text);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+}
+
+.tx-search-input:focus-within {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/**
+ * **안쪽 입력의 껍데기를 지운다.**
+ *
+ * 원본은 `theme={{ wrapper: "", focus: "" }}` 로 클래스를 비워 지웠는데, `theme` prop 이
+ * 폐기되면서 그 길이 사라졌다. 바깥 선택자로 지우면 공개 API 가 늘지 않는다.
+ *
+ * 포커스 링도 함께 끈다 — 링은 바깥 `.tx-search-input` 이 하나만 그린다.
+ */
+.tx-search-input .tx-input {
+  flex: 1;
+  min-width: 0;
+
+  /* 껍데기 높이를 그대로 채운다. 자기 --tx-input-height 를 쓰면 바깥과 어긋난다 */
+  height: 100%;
+
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.tx-search-input .tx-input:focus-within {
+  outline: none;
+}
+
+/* 아이콘 버튼은 껍데기가 없다. 색만 옅게 두고 hover 에서 본문 색으로 올린다 */
+.tx-search-input__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: var(--tx-search-input-button-size);
+  height: var(--tx-search-input-button-size);
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: var(--tx-search-input-button-color);
+
+  /* 아이콘이 `1em` 이라 이 글자 크기를 따라간다 */
+  font-size: var(--tx-search-input-icon-size);
+  cursor: pointer;
+}
+
+.tx-search-input__button:hover {
+  color: var(--tx-color-text);
+}
+
+.tx-search-input__button:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: 0;
+}
+
+/* --- TxInputLike ---------------------------------------------------------- */
+
+.tx-input-like {
+  --tx-input-like-padding-x: var(--tx-input-padding-x, 0.75rem);
+
+  cursor: pointer;
+}
+
+/**
+ * 트리거가 껍데기 전체를 채운다. 값이 짧아도 어디를 눌러도 열려야 한다.
+ *
+ * 포커스 링은 `.tx-input` 의 `:focus-within` 이 그리므로 여기서는 끈다 — 두 겹이 되면
+ * 테두리 안쪽에 링이 하나 더 생긴다.
+ */
+.tx-input-like__trigger {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+
+  padding-inline: var(--tx-input-like-padding-x);
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: inherit;
+  outline: none;
+}
+
+.tx-input-like__value {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 값이 없으면 자리표시 글자다. `.tx-input` 의 placeholder 토큰을 그대로 쓴다 */
+.tx-input-like[data-empty] .tx-input-like__value {
+  color: var(--tx-input-placeholder-color);
+}
+
+.tx-input-like__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.25rem;
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
+
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.tx-input-like__clear:hover {
+  color: var(--tx-color-text);
+}
+
+.tx-input-like__clear:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: 0;
+}

@@ -38,6 +38,14 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
     }
   });
 
+  it("내부 부품이 새어 나가지 않는다", () => {
+    // TxInputLike 는 aria-expanded 를 부모가 주입해야 정확하다. 열림 상태를 모르는 소비자가
+    // 쓰면 접근성이 거짓이 된다. useInput·parseTxInputNumber 는 구현 세부다.
+    for (const name of ["TxInputLike", "useInput", "parseTxInputNumber"]) {
+      expect(ui, `내부 부품이 공개 API 로 새어 나갔다: ${name}`).not.toHaveProperty(name);
+    }
+  });
+
   it("모든 공개 이름이 Tx 로 시작한다", () => {
     const offenders = Object.keys(ui).filter((name) => !name.startsWith("Tx"));
     expect(offenders).toEqual([]);
