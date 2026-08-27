@@ -300,7 +300,7 @@ describe("TxInputLike — 내부 부품", () => {
     const trigger = container.querySelector(".tx-input-like__trigger")!;
 
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
-    expect(trigger.getAttribute("aria-haspopup")).toBe("listbox");
+    expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
   });
 
   it("지우기가 트리거 안에 중첩되지 않는다 — 버튼 안 버튼은 유효하지 않다", () => {
