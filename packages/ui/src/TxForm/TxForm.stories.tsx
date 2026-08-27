@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState, type CSSProperties } from "react";
 import { TxButton } from "../TxButton";
+import { TxCapsLockCheck } from "../TxCapsLockCheck";
 import { TxInput } from "../TxInput";
 import { TxForm } from "./TxForm";
 
@@ -10,6 +11,37 @@ const vars = (v: Record<`--${string}`, string>) => v as CSSProperties;
 const AGES = Array.from({ length: 60 }, (_, i) => i + 20);
 const CITIES = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종"];
 const TAGS = ["신규", "휴면", "VIP", "블랙"];
+
+/**
+ * 검사 규칙을 한곳에 모아 둔다. **정규식과 문구가 짝이다** — 규칙을 고치면 문구도 같이 간다.
+ */
+const RULES = {
+  username: {
+    reg: /^[a-zA-Z0-9]{8,20}$/,
+    empty: "아이디를 입력하세요",
+    message: "아이디는 영문+숫자 8~20자여야 합니다 (특수기호 불가)"
+  },
+  password: {
+    reg: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^\w\s]).{10,}$/,
+    empty: "비밀번호를 입력하세요",
+    message: "비밀번호는 영문+숫자+특수문자를 포함해 10자 이상이어야 합니다"
+  },
+  nickname: {
+    reg: /^[a-zA-Z0-9가-힣]{2,}$/,
+    empty: "닉네임을 입력하세요",
+    message: "닉네임은 영문/숫자/한글 2자 이상이어야 합니다 (특수기호 불가)"
+  }
+} as const;
+
+type SignInForm = Record<keyof typeof RULES, string>;
+
+/** 빈 칸이 먼저고 그다음이 형식이다. 통과한 칸은 키 자체를 만들지 않는다. */
+const validate = (form: SignInForm) =>
+  Object.fromEntries(
+    (Object.keys(RULES) as (keyof SignInForm)[])
+      .map((key) => [key, form[key] === "" ? RULES[key].empty : RULES[key].reg.test(form[key]) ? undefined : RULES[key].message])
+      .filter(([, message]) => message !== undefined)
+  ) as Partial<SignInForm>;
 
 const meta = {
   title: "Form/TxForm",
@@ -228,6 +260,62 @@ export const Submit: Story = {
           <TxButton type="reset" label="초기화" variant="secondary" />
         </TxForm.Flex>
         <div className="font-mono text-sm text-slate-500 dark:text-slate-400">제출된 값: {result}</div>
+      </TxForm>
+    );
+  }
+};
+
+/**
+ * **실제로 쓰는 모양.** 정규식으로 검사하고 결과를 그 칸의 `error` 로 돌려준다.
+ *
+ * - **제출하기 전에는 조용하다.** 한 번 제출한 뒤부터는 고칠 때마다 바로 다시 검사한다 —
+ *   아직 다 치지도 않았는데 빨간 글씨가 뜨는 것을 막는다
+ * - 규칙은 통과했지만 더 나은 값이 있으면 `warning` 으로 알린다. **막지는 않는다**
+ * - 비밀번호 칸은 `TxCapsLockCheck` 로 감쌌다. **그 안에서 누른 키만 본다**
+ *
+ * 아무 값이나 넣고 **sign in** 을 눌러 보라. 스크린리더를 켜면 잘못된 칸이
+ * "잘못된 값" 으로 읽히고 그 자리에서 이유까지 읽어 준다.
+ */
+export const Validation: Story = {
+  parameters: noControls,
+  render: function ValidationStory() {
+    const [form, setForm] = useState<SignInForm>({ username: "", password: "", nickname: "" });
+    const [checking, setChecking] = useState(false);
+    const [done, setDone] = useState("");
+
+    // 제출하기 전에는 검사하지 않는다.
+    const errors = checking ? validate(form) : {};
+
+    // 규칙은 통과했지만 권하고 싶은 것. 에러가 있으면 그쪽이 자리를 가져간다.
+    const passwordWarning = !errors.password && form.password.length > 0 && form.password.length < 12 ? "12자 이상이면 더 안전합니다" : undefined;
+
+    const patch = (next: Partial<SignInForm>) => {
+      setForm((prev) => ({ ...prev, ...next }));
+      setDone("");
+    };
+
+    return (
+      <TxForm
+        labelWidth="5rem"
+        className="max-w-md"
+        onSubmit={() => {
+          setChecking(true);
+          setDone(Object.keys(validate(form)).length === 0 ? "통과 — 이제 서버로 보내면 된다" : "");
+        }}
+      >
+        <TxForm.Input caption="아이디" name="username" autoComplete="off" value={form.username} onChangeText={(username) => patch({ username })} error={errors.username} />
+
+        <TxCapsLockCheck text="Caps Lock 이 켜져 있습니다">
+          <TxForm.Input caption="비밀번호" name="password" type="password" autoComplete="off" value={form.password} onChangeText={(password) => patch({ password })} error={errors.password} warning={passwordWarning} />
+        </TxCapsLockCheck>
+
+        <TxForm.Input caption="닉네임" name="nickname" value={form.nickname} onChangeText={(nickname) => patch({ nickname })} error={errors.nickname} />
+
+        <TxForm.Flex>
+          <TxButton type="submit" label="sign in" />
+        </TxForm.Flex>
+
+        {done && <div className="text-sm text-slate-500 dark:text-slate-400">{done}</div>}
       </TxForm>
     );
   }

@@ -27,8 +27,13 @@
   /* 강조 — 파괴적 동작 */
   --tx-color-danger: #ef4444;
 
-  /* 주의 — 막지는 않지만 알려야 하는 자리. `TxForm` 의 warning 메시지가 쓴다 */
-  --tx-color-warning: #d97706;
+  /**
+   * 주의 — 막지는 않지만 알려야 하는 자리. `TxForm` 의 warning 메시지가 쓴다.
+   *
+   * **밝은 노랑을 쓰지 않는다.** 흰 바탕에서 `yellow-400` 은 대비가 1.53:1 이라
+   * 작은 글씨로는 읽히지 않는다 (AA 기준 4.5:1). 이 값은 4.92:1 이면서 색조는 노랑이다.
+   */
+  --tx-color-warning: #a16207;
 
   /* 표면이 있는 보조 요소 */
   --tx-color-muted: #e5e7eb;
@@ -86,7 +91,8 @@
 .dark {
   --tx-color-primary: #2563eb;
   --tx-color-danger: #dc2626;
-  --tx-color-warning: #fbbf24;
+  /* 어두운 바탕에서는 밝은 노랑이 읽힌다 — 11.66:1 */
+  --tx-color-warning: #facc15;
   --tx-color-muted: #374151;
   --tx-color-surface: #1f2937;
   --tx-color-border: #4b5563;
