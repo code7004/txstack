@@ -1,21 +1,22 @@
 {
-  "name": "@txstack/network",
+  "name": "@txstack/axios",
   "version": "0.0.0",
-  "description": "Framework-agnostic axios HTTP client — injectable auth, 401 handling, response envelope unwrapping",
+  "description": "Thin axios policy layer — injectable auth, 401 handling, response envelope unwrapping, logging hooks",
   "keywords": [
     "axios",
     "http",
     "api",
     "client",
-    "rest"
+    "rest",
+    "interceptor"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/code7004/txstack.git",
-    "directory": "packages/network"
+    "directory": "packages/axios"
   },
-  "homepage": "https://github.com/code7004/txstack/tree/main/packages/network#readme",
+  "homepage": "https://github.com/code7004/txstack/tree/main/packages/axios#readme",
   "bugs": "https://github.com/code7004/txstack/issues",
   "type": "module",
   "sideEffects": false,
@@ -30,6 +31,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./singleton": {
+      "types": "./dist/singleton.d.ts",
+      "import": "./dist/singleton.js"
     },
     "./package.json": "./package.json"
   },

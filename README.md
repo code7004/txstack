@@ -7,7 +7,7 @@
 | `@txstack/ui`         | Tx\* UI 컴포넌트                              | O     |
 | `@txstack/route-meta` | 라우트를 메타데이터 트리로 관리               | O     |
 | `@txstack/hooks`      | 범용 React 훅 + URL 쿼리 상태                 | O     |
-| `@txstack/network`    | axios 래퍼 — 인증·에러·봉투 정책을 주입받는다 | **X** |
+| `@txstack/axios`      | axios 래퍼 — 인증·에러·봉투 정책을 주입받는다 | **X** |
 
 **아직 npm 에 배포되지 않았다.** 4개 패키지 모두 구현 이식 중이다.
 
