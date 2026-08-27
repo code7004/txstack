@@ -26,7 +26,7 @@ const api = createHttpClient({
   // 인증 — 매 요청마다 호출된다. 없으면 헤더를 붙이지 않는다.
   getToken: () => localStorage.getItem("accessToken"),
   authHeader: "Authorization", // 기본값
-  authScheme: "Bearer",        // 기본값. "" 이면 토큰만 넣는다
+  authScheme: "Bearer", // 기본값. "" 이면 토큰만 넣는다
 
   // 에러 정책 — 앱이 결정한다
   onUnauthorized: () => logout(),
@@ -37,7 +37,7 @@ const api = createHttpClient({
 
   // 개발 로그. import.meta.env 를 패키지가 직접 읽지 않는다
   debug: import.meta.env.DEV,
-  maskFields: ["password", "privateKey"], // 기본값 있음
+  maskFields: ["password", "privateKey"] // 기본값 있음
 });
 ```
 
@@ -71,8 +71,8 @@ api.instance.request({ ... });
 import { initHttpClient, getHttpClient, resetHttpClient } from "@txstack/network";
 
 initHttpClient({ baseURL: "/api" }); // 앱 부팅 시 한 번
-const api = getHttpClient();         // 어디서든
-resetHttpClient();                   // 테스트 teardown
+const api = getHttpClient(); // 어디서든
+resetHttpClient(); // 테스트 teardown
 ```
 
 ### 유틸
@@ -81,8 +81,8 @@ resetHttpClient();                   // 테스트 teardown
 import { removeUndefined, isTokenExpired, parseApiError } from "@txstack/network";
 
 removeUndefined({ a: 1, b: undefined }); // → { a: 1 }
-isTokenExpired(expiresAt);               // → boolean
-parseApiError(err);                      // unknown → IApiError
+isTokenExpired(expiresAt); // → boolean
+parseApiError(err); // unknown → IApiError
 ```
 
 ### 타입

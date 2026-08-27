@@ -18,7 +18,7 @@ import { useObjectChanged, useSafePolling, useStateForObject } from "@txstack/ho
 ```ts
 const [filter, setFilter] = useStateForObject(
   { page: 1, keyword: "", status: "ALL" },
-  (next) => (next.keyword !== "" ? { page: 1 } : {}), // 파싱 후 보정
+  (next) => (next.keyword !== "" ? { page: 1 } : {}) // 파싱 후 보정
 );
 ```
 
@@ -65,10 +65,10 @@ setQuery({ page: 2 });
 ```ts
 import { searchQuery, getUrlQuery, pushUrlQuery, updateUrlQuery } from "@txstack/hooks/router";
 
-searchQuery();                       // 현재 URL 쿼리 → 레코드
-getUrlQuery({ page: 2 });            // → "page=2" 문자열
-pushUrlQuery({ page: 2 });           // history.push
-updateUrlQuery({ page: 2 });         // history.replace
+searchQuery(); // 현재 URL 쿼리 → 레코드
+getUrlQuery({ page: 2 }); // → "page=2" 문자열
+pushUrlQuery({ page: 2 }); // history.push
+updateUrlQuery({ page: 2 }); // history.replace
 ```
 
 ## 결정할 것
