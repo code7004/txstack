@@ -30,7 +30,7 @@ export const routes: RouteTree = {
   dashboard: {
     path: "/dashboard",
     element: <Dashboard />,
-    meta: { label: "대시보드", icon: <IconHome /> },
+    meta: { label: "대시보드", icon: <IconHome /> }
   },
   users: {
     path: "/users",
@@ -38,17 +38,17 @@ export const routes: RouteTree = {
     meta: { label: "회원", icon: <IconUser />, permissions: ["ADMIN"] },
     children: {
       detail: {
-        path: "/users/:id",       // 절대경로로 쓴다 (자동화 계층 일관성)
+        path: "/users/:id", // 절대경로로 쓴다 (자동화 계층 일관성)
         element: <UserDetail />,
-        meta: { label: "회원 상세", hidden: true }, // 메뉴에는 안 나온다
-      },
-    },
+        meta: { label: "회원 상세", hidden: true } // 메뉴에는 안 나온다
+      }
+    }
   },
   legacy: {
     path: "/legacy",
     element: <Legacy />,
-    enabled: false,               // 라우터에 아예 등록되지 않는다
-  },
+    enabled: false // 라우터에 아예 등록되지 않는다
+  }
 };
 ```
 
