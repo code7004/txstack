@@ -62,7 +62,7 @@
 | 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup |
 | `axios`       | **이식 완료** — 테스트 29개 통과                                         |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                         |
-| `route-meta`  | 뼈대만 — 빈 배럴                                                         |
+| `route-meta`  | **이식 완료** — 테스트 21개 통과                                         |
 | `ui`          | 뼈대만 — 빈 배럴. temp 에 26개 대기                                      |
 | `apps/*`      | **없음** — playground · storybook                                        |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다          |
@@ -78,12 +78,11 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 ## 다음 할 일
 
-1. **`route-meta` 를 이식한다.** ← 다음 차례
-   `axios`·`hooks` 와 같은 리듬이다. 원본을 전부 읽고 경계 위반부터 찾은 뒤, 공개 API 를
-   합의하고, 테스트를 함께 옮긴다. [002_route_meta](002_route_meta.md) 의 "결정할 것" 을 먼저 본다.
-2. **`ui` 는 마지막이고, 그 안에서도 하나씩 간다.**
+1. **`ui` 를 이식한다.** ← 다음 차례. 마지막이고, 그 안에서도 하나씩 간다.
    temp 에서 이미 CSS + 토큰 방식으로 이행이 끝난 4개(`TxSpinner` · `TxButton` · `TxLoading` ·
    `TxFlex`)부터 옮긴다. 방식이 검증된 것을 먼저 놓아야 나머지 22개의 기준이 선다.
+   그 전에 [001_ui](001_ui.md) 의 "26개 중 실제로 몇 개가 필요한가" 를 먼저 정리한다.
+2. `styles.css` 와 `scripts/build-css.mjs` 는 첫 컴포넌트를 옮길 때 함께 만든다.
 3. Storybook · playground 는 `ui` 이식이 시작된 뒤에 세운다.
 
 ### 이식은 복사가 아니다
@@ -95,6 +94,10 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 `hooks` 333줄에서는 **무한 반복의 원인**이 나왔다. `useUrlQuery` 가 상태 변경마다 URL 로
 되쓰는 `useEffect` 를 돌렸는데, `setSearchParams` 의 identity 가 매번 바뀌는 탓에 그 effect 가
 자기 자신을 다시 트리거했다. URL 을 단일 출처로 바꿔 effect 자체를 없앴다.
+
+`route-meta` 391줄에서는 **라우터와 어긋나는 매칭**이 나왔다. 경로 매칭을 자체 정규식으로
+구현해 순회 순서에 의존했고, `/users/:id` 가 `/users/new` 를 가로챘다 — 화면과 타이틀·
+브레드크럼이 갈리는 버그다. `matchRoutes` 에 위임해 없앴다. 테스트가 하나도 없던 부분이다.
 
 **그러니 다음 패키지도 파일을 옮기기 전에 전부 읽는다.** 옮긴 뒤에 고치면 무엇이 원본이고
 무엇이 판단이었는지 구분되지 않는다. 고친 내역은 각 패키지 문서의 "이식하며 고친 것" 에 남긴다.
