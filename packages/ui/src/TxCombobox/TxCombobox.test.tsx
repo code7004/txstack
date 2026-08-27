@@ -306,6 +306,38 @@ describe("TxCombobox — CSS 계약", () => {
     expect(css).not.toContain("__item:hover");
   });
 
+  /** 목록과 안내 줄은 팝업 안에 있다. 입력창은 앵커 쪽이다. */
+  const POPUP_SIDE = /__(list|item|more)/;
+
+  /**
+   * 팝업은 `document.body` 로 포털되므로 앵커의 자손이 아니다. CSS 변수는 DOM 을 따라
+   * 상속되니 **앵커에 선언한 값은 팝업에 닿지 않는다** — 값이 통째로 사라져 칸 폭이 0 이 되거나
+   * 색이 안 칠해진다. jsdom 에는 CSS 가 없어 렌더 결과로는 안 보인다.
+   */
+  it("팝업 안에서 쓰는 토큰을 앵커가 아니라 팝업에 선언한다", () => {
+    const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
+
+    // 앵커 쪽 규칙에서만 선언된 토큰
+    const declaredOnAnchor = new Set<string>();
+    const declaredOnPopup = new Set<string>();
+
+    for (const rule of rules) {
+      const names = [...rule.body.matchAll(/(--tx-combobox-[\w-]*)\s*:/g)].map((m) => m[1]);
+      const target = rule.selector.includes("__list") ? declaredOnPopup : rule.selector.includes(".tx-combobox") ? declaredOnAnchor : null;
+      names.forEach((name) => target?.add(name));
+    }
+
+    // 팝업 안쪽 규칙에서 쓰이는 토큰
+    const usedInPopup = new Set<string>();
+    for (const rule of rules) {
+      if (!POPUP_SIDE.test(rule.selector)) continue;
+      [...rule.body.matchAll(/var\(\s*(--tx-combobox-[\w-]*)/g)].forEach((m) => usedInPopup.add(m[1]));
+    }
+
+    const unreachable = [...usedInPopup].filter((name) => !declaredOnPopup.has(name) && declaredOnAnchor.has(name));
+    expect(unreachable, "앵커에만 선언돼 팝업에 닿지 않는 토큰").toEqual([]);
+  });
+
   it("styles.css 에 실려 나간다 — 안 실리면 소비자에게 도달하지 않는다", () => {
     expect(styles).toContain('@import "./TxCombobox/TxCombobox.css" layer(tx);');
   });

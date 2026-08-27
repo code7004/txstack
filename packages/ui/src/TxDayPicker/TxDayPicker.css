@@ -1,0 +1,286 @@
+/**
+ * TxDayPicker · TxDayPickerRange — 날짜와 기간을 고르는 자리.
+ *
+ * **`react-day-picker` 의 `dist/style.css` 를 쓰지 않는다.** 그쪽 클래스 이름을 우리 것으로
+ * 갈아끼우고(`TxDayPicker.calendar.ts`) 레이아웃까지 여기서 그린다. 그래서
+ *
+ * - 소비자는 여전히 `@txstack/ui/styles.css` 하나만 import 하면 된다
+ * - 소비자의 번들러가 `node_modules` 안의 CSS 를 처리할 수 있어야 할 이유가 없다
+ * - 그쪽이 버전을 올려 클래스 구조를 바꿔도 우리 규칙이 조용히 깨지지 않는다
+ *
+ * 껍데기(닫혀 있을 때의 입력창)는 `TxInputLike` 가 `.tx-input` 을 걸어 준다.
+ * 달력은 `TxPopup` 이 화면 맨 위 층으로 띄운다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-daypicker {
+  display: inline-block;
+}
+
+/* 소비자가 폭을 주면 껍데기가 그 폭을 채운다 */
+.tx-daypicker .tx-input-like {
+  width: 100%;
+}
+
+/**
+ * **팝업 안에서 쓰는 토큰은 팝업 쪽에 선언한다.**
+ *
+ * 팝업은 `document.body` 로 포털되므로 앵커의 자손이 아니다. CSS 변수는 DOM 을 따라
+ * 상속되니, 앵커에 선언한 값은 **팝업에 닿지 않는다** — 칸 폭이 0 이 되고 색이 사라진다.
+ *
+ * 전역 토큰(`--tx-color-*`)은 `:root` 에 있어 어디서든 닿는다.
+ */
+.tx-daypicker__panel {
+  --tx-daypicker-cell-size: 2.25rem;
+  --tx-daypicker-gap: 0.25rem;
+  --tx-daypicker-font-size: 0.875rem;
+
+  --tx-daypicker-accent: var(--tx-color-primary);
+  --tx-daypicker-on-accent: var(--tx-color-on-accent);
+  /* 기간 가운데. 강조색을 표면에 옅게 섞어 만든다 — 다크모드가 저절로 따라온다 */
+  --tx-daypicker-range-bg: color-mix(in oklab, var(--tx-color-primary) 18%, var(--tx-color-surface));
+  --tx-daypicker-hover-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
+  --tx-daypicker-muted: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
+
+  padding: 0.5rem;
+}
+
+.tx-daypicker__header,
+.tx-daypicker__footer {
+  padding: 0.25rem;
+}
+
+/* --- 달력 -------------------------------------------------------------- */
+
+.tx-daypicker__calendar {
+  font-size: var(--tx-daypicker-font-size);
+}
+
+.tx-daypicker__months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tx-daypicker__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tx-daypicker-gap);
+}
+
+/**
+ * 달 이름과 좌우 버튼이 같은 줄에 있다. 버튼을 절대 배치로 양끝에 두면
+ * 달 이름 길이가 바뀌어도 버튼이 흔들리지 않는다.
+ */
+.tx-daypicker__caption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: var(--tx-daypicker-cell-size);
+  font-weight: 600;
+}
+
+.tx-daypicker__nav {
+  position: absolute;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tx-daypicker__nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--tx-daypicker-cell-size);
+  height: var(--tx-daypicker-cell-size);
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tx-daypicker__nav-button:hover:not(:disabled) {
+  background-color: var(--tx-daypicker-hover-bg);
+}
+
+.tx-daypicker__nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.tx-daypicker__nav-button:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: 0;
+}
+
+.tx-daypicker__chevron {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+.tx-daypicker__grid {
+  border-collapse: collapse;
+}
+
+.tx-daypicker__weekdays,
+.tx-daypicker__week {
+  display: flex;
+}
+
+.tx-daypicker__weekday {
+  width: var(--tx-daypicker-cell-size);
+  padding-bottom: var(--tx-daypicker-gap);
+
+  color: var(--tx-daypicker-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.tx-daypicker__day {
+  width: var(--tx-daypicker-cell-size);
+  height: var(--tx-daypicker-cell-size);
+  padding: 0;
+  text-align: center;
+}
+
+.tx-daypicker__day-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 120ms;
+}
+
+.tx-daypicker__day-button:hover:not(:disabled) {
+  background-color: var(--tx-daypicker-hover-bg);
+}
+
+.tx-daypicker__day-button:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: -2px;
+}
+
+/* --- 날짜 상태 ---------------------------------------------------------- */
+
+.tx-daypicker__day--today .tx-daypicker__day-button {
+  font-weight: 700;
+  color: var(--tx-daypicker-accent);
+}
+
+.tx-daypicker__day--outside .tx-daypicker__day-button {
+  color: var(--tx-daypicker-muted);
+}
+
+.tx-daypicker__day--disabled .tx-daypicker__day-button {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.tx-daypicker__day--hidden {
+  visibility: hidden;
+}
+
+/**
+ * 고른 날. 오늘이면서 고른 날일 수 있으므로 **글자색을 여기서 다시 정한다** —
+ * 안 그러면 강조색 배경 위에 강조색 글자가 얹혀 안 보인다.
+ */
+.tx-daypicker__day--selected .tx-daypicker__day-button {
+  background-color: var(--tx-daypicker-accent);
+  color: var(--tx-daypicker-on-accent);
+  font-weight: 600;
+}
+
+.tx-daypicker__day--selected .tx-daypicker__day-button:hover {
+  background-color: var(--tx-daypicker-accent);
+}
+
+/* --- 기간 -------------------------------------------------------------- */
+
+/**
+ * 가운데는 칸 사이가 붙어 보여야 한다. 그래서 셀 자체에 배경을 깔고
+ * 안쪽 버튼의 모서리를 죽인다 — 버튼에만 깔면 칸마다 틈이 생긴다.
+ */
+.tx-daypicker__day--range-middle {
+  background-color: var(--tx-daypicker-range-bg);
+}
+
+.tx-daypicker__day--range-middle .tx-daypicker__day-button {
+  border-radius: 0;
+  background-color: transparent;
+  color: inherit;
+  font-weight: 400;
+}
+
+.tx-daypicker__day--range-middle .tx-daypicker__day-button:hover {
+  background-color: var(--tx-daypicker-hover-bg);
+}
+
+/* 양 끝은 바깥쪽만 둥글다. 안쪽이 둥글면 가운데와 사이에 흰 틈이 보인다 */
+.tx-daypicker__day--range-start {
+  background: linear-gradient(to right, transparent 50%, var(--tx-daypicker-range-bg) 50%);
+}
+
+.tx-daypicker__day--range-end {
+  background: linear-gradient(to left, transparent 50%, var(--tx-daypicker-range-bg) 50%);
+}
+
+/* 시작과 끝이 같은 날이면 양쪽 다 투명해야 한다 */
+.tx-daypicker__day--range-start.tx-daypicker__day--range-end {
+  background: transparent;
+}
+
+/* --- 확인 버튼 ---------------------------------------------------------- */
+
+.tx-daypicker__submit {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--tx-color-border);
+}
+
+.tx-daypicker__submit-button {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: var(--tx-color-primary);
+  color: var(--tx-color-on-accent);
+
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tx-daypicker__submit-button:hover:not(:disabled) {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-primary));
+}
+
+.tx-daypicker__submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tx-daypicker__submit-button:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}

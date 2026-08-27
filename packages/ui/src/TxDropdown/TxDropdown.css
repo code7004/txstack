@@ -21,12 +21,6 @@
   /* 자리표시 글자. 리터럴 회색을 적지 않는다 — 다크모드가 저절로 따라온다 */
   --tx-dropdown-placeholder-color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
 
-  --tx-dropdown-item-padding: 0.5rem 0.75rem;
-  --tx-dropdown-item-font-size: 0.875rem;
-  --tx-dropdown-item-active-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
-  --tx-dropdown-check-color: var(--tx-color-primary);
-  --tx-dropdown-check-size: 1rem;
-
   position: relative;
   display: inline-block;
 }
@@ -92,7 +86,21 @@
  * 목록은 `TxPopup` 이 `document.body` 로 띄운다. 그래서 이 선택자들은
  * **드롭다운 안쪽이 아니라 화면 최상단에 있는 요소**를 조준한다.
  */
+/**
+ * **팝업 안에서 쓰는 토큰은 팝업 쪽에 선언한다.**
+ *
+ * 팝업은 `document.body` 로 포털되므로 앵커의 자손이 아니다. CSS 변수는 DOM 을 따라
+ * 상속되니, 앵커에 선언한 값은 **팝업에 닿지 않는다** — 칸 폭이 0 이 되고 색이 사라진다.
+ *
+ * 전역 토큰(`--tx-color-*`)은 `:root` 에 있어 어디서든 닿는다.
+ */
 .tx-dropdown__list {
+  --tx-dropdown-item-padding: 0.5rem 0.75rem;
+  --tx-dropdown-item-font-size: 0.875rem;
+  --tx-dropdown-item-active-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
+  --tx-dropdown-check-color: var(--tx-color-primary);
+  --tx-dropdown-check-size: 1rem;
+
   padding: 0.25rem 0;
 }
 

@@ -46,6 +46,16 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
     }
   });
 
+  /**
+   * 서브패스로 가른 것이 루트로 새면 소비자가 `react-day-picker` 를 설치하지 않았을 때
+   * 배럴을 import 하는 것만으로 깨진다. 분리가 살아 있는지 여기서 지킨다.
+   */
+  it("서브패스 전용 컴포넌트가 루트 배럴에 없다", () => {
+    for (const name of ["TxDayPicker", "TxDayPickerRange", "TxAgGrid"]) {
+      expect(ui, `서브패스 컴포넌트가 루트 배럴로 새어 나갔다: ${name}`).not.toHaveProperty(name);
+    }
+  });
+
   it("모든 공개 이름이 Tx 로 시작한다", () => {
     const offenders = Object.keys(ui).filter((name) => !name.startsWith("Tx"));
     expect(offenders).toEqual([]);

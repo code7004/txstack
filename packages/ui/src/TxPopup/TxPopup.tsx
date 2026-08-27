@@ -27,7 +27,16 @@ export interface TxPopupProps {
 const GAP = 4;
 const EDGE = 8;
 
-const toPx = (value: number | string) => (typeof value === "number" ? value : Number.parseFloat(value) * (value.endsWith("rem") ? 16 : 1));
+/**
+ * 최대 높이를 픽셀로 읽는다. `"none"` 처럼 숫자가 아니면 **제한 없음**으로 본다 —
+ * 달력처럼 내용이 정해진 높이를 갖는 팝업이 그렇다.
+ */
+const toPx = (value: number | string) => {
+  if (typeof value === "number") return value;
+
+  const px = Number.parseFloat(value) * (value.endsWith("rem") ? 16 : 1);
+  return Number.isFinite(px) ? px : Infinity;
+};
 
 /**
  * **내부 전용. 배럴에서 내보내지 않는다.**
