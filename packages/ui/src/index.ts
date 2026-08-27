@@ -14,5 +14,6 @@
  */
 export * from "./TxButton";
 export * from "./TxFlex";
+export * from "./TxInput";
 export * from "./TxLoading";
 export * from "./TxSpinner";
