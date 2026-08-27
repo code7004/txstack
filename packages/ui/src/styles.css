@@ -43,10 +43,12 @@
 @import "./TxButton/TxButton.css" layer(tx);
 @import "./TxCapsLockCheck/TxCapsLockCheck.css" layer(tx);
 @import "./TxCheckBox/TxCheckBox.css" layer(tx);
+@import "./TxDropdown/TxDropdown.css" layer(tx);
 @import "./TxFlex/TxFlex.css" layer(tx);
 @import "./TxInput/TxInput.css" layer(tx);
 /* .tx-textarea 와 .tx-search-input .tx-input 이 위 규칙을 덮는다. 순서가 곧 캐스케이드다 */
 @import "./TxTextarea/TxTextarea.css" layer(tx);
 @import "./TxInput/TxSearchInput.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
+@import "./TxPopup/TxPopup.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);

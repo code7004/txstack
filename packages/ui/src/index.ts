@@ -15,6 +15,7 @@
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
 export * from "./TxCheckBox";
+export * from "./TxDropdown";
 export * from "./TxFlex";
 export * from "./TxInput";
 export * from "./TxLoading";
