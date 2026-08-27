@@ -1,0 +1,132 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { TxButton } from "../TxButton";
+import { TxFlex } from "../TxFlex";
+import { TxIconClose, TxIconSearch } from ".";
+
+const meta = {
+  title: "Internal/TxIcons",
+  tags: ["autodocs"],
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        component: [
+          "**내부 전용이다. `@txstack/ui` 배럴에서 내보내지 않는다.**",
+          "",
+          "두 개짜리 아이콘 세트는 소비자에게 쓸모가 없다 — 소비자는 이미 자기 세트(lucide·heroicons…)를 쓴다.",
+          "공개하면 이름과 모양이 공개 API 가 되어 바꿀 때마다 major 다.",
+          "**닫는 건 major 지만 나중에 여는 건 minor** 이므로 지금은 닫아 뒀다.",
+          "",
+          "여기 있는 이유는 하나다 — **두 규약이 지켜지는지 눈으로 보기 위해서.**",
+          "",
+          "- `width`/`height` 가 `1em` → 놓인 자리의 `font-size` 를 따라간다",
+          '- `fill="currentColor"` → 놓인 자리의 `color` 를 따라간다',
+          "",
+          "`TxSpinner` 와 같은 규약이다. 둘 중 하나라도 깨지면 `TxInput` 안에서 아이콘만 따로 노는데,",
+          "그건 아이콘을 넣은 자리에서 원인을 찾기 어렵다.",
+          "",
+          "소비자가 아이콘을 갈아끼워야 하는 자리(입력창의 지우기·검색 버튼)는 그 컴포넌트가",
+          "prop 으로 받는 쪽이 맞다. `TxInput` 을 옮길 때 판단한다."
+        ].join("\n")
+      }
+    }
+  }
+} satisfies Meta;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+const Row = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <TxFlex className="items-center gap-4">
+    <span className="w-40 shrink-0 text-sm text-slate-500 dark:text-slate-400">{label}</span>
+    {children}
+  </TxFlex>
+);
+
+/** 가져온 두 개. 나머지 5개는 쓰는 곳이 없거나 아직 안 옮긴 컴포넌트 것이라 두고 왔다. */
+export const Icons: Story = {
+  render: () => (
+    <TxFlex className="flex-col gap-4">
+      <Row label="TxIconClose">
+        <TxIconClose />
+      </Row>
+      <Row label="TxIconSearch">
+        <TxIconSearch />
+      </Row>
+    </TxFlex>
+  )
+};
+
+/**
+ * **크기를 넘기지 않았다.** 글자 크기만 바뀌는데 아이콘이 따라 커진다.
+ *
+ * 이게 안 되면 `TxInput` 안에서 아이콘만 작게 남는다.
+ */
+export const InheritsSize: Story = {
+  render: () => (
+    <TxFlex className="flex-col gap-4">
+      {["0.75rem", "1rem", "1.5rem", "2.5rem"].map((size) => (
+        <Row key={size} label={size}>
+          <span style={{ fontSize: size }}>
+            <TxFlex className="items-center">
+              <TxIconSearch />
+              <TxIconClose />
+              <span>가나다 Abc</span>
+            </TxFlex>
+          </span>
+        </Row>
+      ))}
+    </TxFlex>
+  )
+};
+
+/**
+ * **색도 넘기지 않았다.** 부모의 `color` 를 그대로 받는다.
+ *
+ * 그래서 다크모드에서 따로 할 일이 없다 — 툴바에서 테마를 바꿔 보면 글자와 같이 뒤집힌다.
+ */
+export const InheritsColor: Story = {
+  render: () => (
+    <TxFlex className="flex-col gap-4">
+      {[
+        ["상속 (기본)", ""],
+        ["text-blue-500", "text-blue-500"],
+        ["text-red-500", "text-red-500"],
+        ["text-emerald-500", "text-emerald-500"]
+      ].map(([label, cls]) => (
+        <Row key={label} label={label}>
+          <span className={cls}>
+            <TxFlex className="items-center">
+              <TxIconSearch />
+              <TxIconClose />
+              <span>가나다 Abc</span>
+            </TxFlex>
+          </span>
+        </Row>
+      ))}
+    </TxFlex>
+  )
+};
+
+/**
+ * 실제로 쓰이는 모습. `TxButton` 안에 넣으면 **버튼의 글자 크기와 글자색을 그대로 받는다** —
+ * variant 를 바꿔도 아이콘 색을 따로 맞출 필요가 없다.
+ */
+export const InButton: Story = {
+  render: () => (
+    <TxFlex className="items-center">
+      <TxButton aria-label="검색">
+        <TxIconSearch />
+      </TxButton>
+      <TxButton variant="secondary" aria-label="지우기">
+        <TxIconClose />
+      </TxButton>
+      <TxButton variant="danger" aria-label="삭제">
+        <TxIconClose />
+      </TxButton>
+      <TxButton variant="ghost" aria-label="닫기">
+        <TxIconClose />
+      </TxButton>
+    </TxFlex>
+  )
+};
