@@ -9,7 +9,8 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", "**/.temp/**", "**/.changeset/**"]
+    // `._*` 는 macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물이다. 소스 옆에 그대로 생긴다
+    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", "**/.temp/**", "**/.changeset/**", "**/._*"]
   },
 
   js.configs.recommended,

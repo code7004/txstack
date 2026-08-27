@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 /**
  * 회귀 테스트 설정.
@@ -16,6 +16,11 @@ export default defineConfig({
   test: {
     // 아직 테스트가 없는 패키지가 있다. 첫 이식이 끝나면 이 줄을 뺀다.
     passWithNoTests: true,
+    /**
+     * macOS 는 확장속성을 못 싣는 볼륨(exFAT 등)에 `._파일명` 부산물을 만든다.
+     * 소스 옆에 그대로 생기므로 `._TxForm.test.tsx` 가 테스트로 잡혀 파싱 에러가 났다.
+     */
+    exclude: [...configDefaults.exclude, "**/._*"],
     projects: [
       {
         test: {

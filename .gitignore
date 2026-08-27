@@ -4,6 +4,8 @@ build/
 coverage/
 *.tsbuildinfo
 .DS_Store
+# macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물. 소스 옆에 그대로 생긴다
+._*
 storybook-static/
 .env
 .env.*
