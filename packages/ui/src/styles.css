@@ -62,3 +62,4 @@
 @import "./TxDialog/TxDialog.css" layer(tx);
 @import "./TxPopup/TxPopup.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);
+@import "./TxTabs/TxTabs.css" layer(tx);

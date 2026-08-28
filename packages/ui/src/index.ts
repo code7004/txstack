@@ -25,4 +25,5 @@ export * from "./TxLoading";
 export * from "./TxModal";
 export * from "./TxPagination";
 export * from "./TxSpinner";
+export * from "./TxTabs";
 export * from "./TxTextarea";
