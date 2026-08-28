@@ -35,6 +35,7 @@ const meta = {
           "- **닫는 길은 셋이지만 콜백은 하나다** — 닫기 버튼 · 바깥 클릭 · Escape 가 모두 `onClose` 로 온다",
           "- 값의 주인은 소비자다. `onClose` 를 받고도 `open` 을 안 내리면 열린 채로 남는다",
           "- **제목이 없어도 닫기 버튼은 있다.** 닫는 길이 사라지지 않는다",
+          "- `hideCloseButton` 으로 X 를 없앨 수 있다 — **확인·취소가 답을 받는 창**에만 쓴다 (`TxDialog` 가 그렇다)",
           "- 열려 있는 동안 **배경 스크롤이 멈춘다.** 겹쳐 떠도 세어 두므로 안쪽이 닫혀도 풀리지 않는다",
           "",
           "**안에 진짜 `<dialog>` 가 있다.** 그래서 이런 것들이 브라우저 몫이다.",
@@ -60,6 +61,7 @@ const meta = {
     size: { control: "inline-radio", options: ["sm", "md", "lg"] },
     closeOnBackdrop: { control: "boolean" },
     closeLabel: { control: "text", description: "닫기 버튼의 이름. 스크린리더가 읽는다" },
+    hideCloseButton: { control: "boolean", description: "오른쪽 위 X 를 없앤다. 닫는 길을 따로 마련한 창에만" },
     className: { control: "text", description: "`.tx-modal` 에 덧붙는다 (교체 아님)" },
     classNames: { control: false }
   }
