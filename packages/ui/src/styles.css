@@ -57,5 +57,6 @@
 /* 쪽 번호는 TxButton 의 토큰을 자기 안에서만 덮는다. 버튼 뒤에 와야 한다 */
 @import "./TxPagination/TxPagination.css" layer(tx);
 @import "./TxAgGrid/TxAgGrid.css" layer(tx);
+@import "./TxModal/TxModal.css" layer(tx);
 @import "./TxPopup/TxPopup.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);
