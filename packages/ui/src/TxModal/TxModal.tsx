@@ -29,7 +29,7 @@ import { TxModalFooter } from "./TxModalFooter";
  *
  * 명세: `docs/001_ui.md`
  */
-export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size = "md", closeLabel = "닫기", className, classNames, children, ...props }: TxModalProps) => {
+export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size = "md", closeLabel = "닫기", hideCloseButton = false, className, classNames, children, ...props }: TxModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -93,9 +93,11 @@ export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size
             {title}
           </h2>
 
-          <button type="button" className="tx-modal__close" aria-label={closeLabel} onClick={onClose}>
-            <TxIconClose />
-          </button>
+          {!hideCloseButton && (
+            <button type="button" className="tx-modal__close" aria-label={closeLabel} onClick={onClose}>
+              <TxIconClose />
+            </button>
+          )}
         </div>
 
         <div className={cm("tx-modal__body", classNames?.body)}>{children}</div>

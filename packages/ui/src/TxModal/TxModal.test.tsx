@@ -262,6 +262,26 @@ describe("TxModal — 스크린리더", () => {
     expect(document.activeElement).toBe(close);
   });
 
+  /**
+   * 확인·취소 버튼이 답을 받는 창(`TxDialog`)에서는 X 가 "취소" 와 뜻이 같아 답이 둘로 보인다.
+   * **닫는 길을 따로 마련한 창에만 쓴다** — Escape 는 그래도 남는다.
+   */
+  it("hideCloseButton 으로 X 를 없앨 수 있다", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <TxModal open onClose={onClose} hideCloseButton title="답해야 하는 창">
+        내용
+      </TxModal>
+    );
+
+    expect(screen.queryByRole("button", { name: "닫기" })).toBeNull();
+
+    // 닫는 길을 전부 없애지는 못한다
+    const cancel = new Event("cancel", { bubbles: false, cancelable: true });
+    fireEvent(dialogOf(container), cancel);
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
   it("닫기 버튼의 이름을 바꿀 수 있다", () => {
     render(
       <TxModal open onClose={vi.fn()} closeLabel="Close">
