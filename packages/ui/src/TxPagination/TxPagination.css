@@ -1,0 +1,36 @@
+/**
+ * TxPagination — 쪽 번호.
+ *
+ * **버튼 자체는 `TxButton` 이 그린다.** 여기서는 줄 세우기와 크기만 정한다 —
+ * 원본은 페이지 버튼마다 Tailwind 클래스 덩어리를 새로 발라 `TxButton` 의 색·상태를 통째로
+ * 덮어썼다. 그러면 소비자가 `--tx-button-*` 이나 `--tx-color-primary` 를 바꿔도
+ * 페이지 번호만 따라오지 않는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-pagination {
+  --tx-pagination-gap: 0.25rem;
+  --tx-pagination-size: 2rem;
+  --tx-pagination-font-size: 0.75rem;
+  --tx-pagination-padding-x: 0.5rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tx-pagination-gap);
+}
+
+/**
+ * 번호와 화살표가 같은 크기여야 줄이 흔들리지 않는다.
+ * `TxButton` 의 토큰은 **이 안에서만** 덮는다 — 바깥 버튼은 그대로다.
+ */
+.tx-pagination__page,
+.tx-pagination__step {
+  --tx-button-padding: 0 var(--tx-pagination-padding-x);
+
+  min-width: var(--tx-pagination-size);
+  height: var(--tx-pagination-size);
+  font-size: var(--tx-pagination-font-size);
+}

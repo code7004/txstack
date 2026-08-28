@@ -54,5 +54,8 @@
 /* 폼은 컨트롤을 칸에 앉히는 쪽이라 컨트롤 규칙 뒤에 온다 */
 @import "./TxForm/TxForm.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
+/* 쪽 번호는 TxButton 의 토큰을 자기 안에서만 덮는다. 버튼 뒤에 와야 한다 */
+@import "./TxPagination/TxPagination.css" layer(tx);
+@import "./TxAgGrid/TxAgGrid.css" layer(tx);
 @import "./TxPopup/TxPopup.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);
