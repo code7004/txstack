@@ -1,0 +1,75 @@
+/**
+ * TxAgGrid — 표.
+ *
+ * **ag-grid 의 내부 클래스에 기대지 않는다.** 원본은 페이지네이션 껍데기를
+ * `ag-paging-panel` 로 그렸는데, 그건 ag-grid 것이라 그쪽이 이름을 바꾸면 조용히 깨진다.
+ *
+ * 그리드 안쪽(줄·헤더·셀)의 겉모습은 **ag-grid 의 Theming API 가 소유한다.**
+ * 여기서 덮으려 들면 두 곳이 같은 것을 정하게 되므로, 우리 CSS 는 바깥 틀과
+ * 우리가 얹은 것(순번 열·편집 표시)만 맡는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-ag-grid {
+  --tx-ag-grid-footer-gap: 0.5rem;
+  --tx-ag-grid-footer-padding: 0.5rem 0;
+
+  /**
+   * 높이를 여기서 소유한다. 원본은 이 값이 `className` 의 **기본값**(Tailwind 문자열)이라
+   * 소비자가 `className` 을 주는 순간 통째로 교체돼 그리드가 높이를 잃었다.
+   */
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 그리드가 남는 높이를 다 쓴다. `min-height: 0` 이 없으면 flex 자식이 내용보다 못 줄어든다 */
+.tx-ag-grid__viewport {
+  flex: 1;
+  min-height: 0;
+}
+
+.tx-ag-grid__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tx-ag-grid-footer-gap);
+  padding: var(--tx-ag-grid-footer-padding);
+}
+
+/* --- 우리가 얹은 것 -------------------------------------------------------- */
+
+.tx-ag-grid__index-cell,
+.tx-ag-grid__index-header {
+  text-align: center;
+}
+
+.tx-ag-grid__header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+/* 긴 헤더가 옆 열을 밀지 않는다 */
+.tx-ag-grid__header-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/**
+ * 고칠 수 있는 열 표시. 색은 토큰이라 다크모드 분기가 필요 없다.
+ * `primary` 를 쓰는 이유는 "누르면 뭔가 된다" 는 뜻을 버튼과 같은 색으로 알리기 위해서다.
+ */
+.tx-ag-grid__editable-dot {
+  --tx-ag-grid-editable-color: var(--tx-color-primary);
+  --tx-ag-grid-editable-size: 0.375rem;
+
+  flex: none;
+  width: var(--tx-ag-grid-editable-size);
+  height: var(--tx-ag-grid-editable-size);
+  border-radius: 9999px;
+  background-color: var(--tx-ag-grid-editable-color);
+}

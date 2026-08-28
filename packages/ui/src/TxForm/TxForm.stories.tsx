@@ -38,9 +38,7 @@ type SignInForm = Record<keyof typeof RULES, string>;
 /** 빈 칸이 먼저고 그다음이 형식이다. 통과한 칸은 키 자체를 만들지 않는다. */
 const validate = (form: SignInForm) =>
   Object.fromEntries(
-    (Object.keys(RULES) as (keyof SignInForm)[])
-      .map((key) => [key, form[key] === "" ? RULES[key].empty : RULES[key].reg.test(form[key]) ? undefined : RULES[key].message])
-      .filter(([, message]) => message !== undefined)
+    (Object.keys(RULES) as (keyof SignInForm)[]).map((key) => [key, form[key] === "" ? RULES[key].empty : RULES[key].reg.test(form[key]) ? undefined : RULES[key].message]).filter(([, message]) => message !== undefined)
   ) as Partial<SignInForm>;
 
 const meta = {

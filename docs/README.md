@@ -59,16 +59,16 @@
 직전 문서 체계는 1,800줄이었는데 실제 정리된 컴포넌트는 4개였다.
 그래서 이번에는 **코드가 생긴 만큼만 문서가 자란다.**
 
-| 영역          | 상태                                                                                    |
-| ------------- | --------------------------------------------------------------------------------------- |
-| 문서          | **완료** — 이 문서 + 패키지별 4장                                                       |
-| 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                |
-| `axios`       | **이식 완료** — 테스트 29개 통과                                                        |
-| `hooks`       | **이식 완료** — 테스트 25개 통과                                                        |
-| `route-meta`  | **이식 완료** — 테스트 21개 통과                                                        |
-| `ui`          | **Form 클러스터 완료** — 기반 4개 + Form 9개 + `TxPopup` · `TxForm` — 테스트 405개 통과 |
-| `apps/*`      | **storybook 있음** — playground 는 아직 없다                                            |
-| 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                         |
+| 영역          | 상태                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| 문서          | **완료** — 이 문서 + 패키지별 4장                                                           |
+| 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                    |
+| `axios`       | **이식 완료** — 테스트 29개 통과                                                            |
+| `hooks`       | **이식 완료** — 테스트 25개 통과                                                            |
+| `route-meta`  | **이식 완료** — 테스트 21개 통과                                                            |
+| `ui`          | 기반 4개 + Form 클러스터 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` — 테스트 470개 통과 |
+| `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                |
+| 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                             |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
@@ -86,10 +86,13 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
 `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **남은 12개 중 무엇을 자를지 정한다.** ← 여기
-   [001_ui](001_ui.md) 의 "3차" 표가 목록이다. 먼저 풀 문제가 하나 있다 —
-   `TxDropMenu` · `TxContextMenu` 가 `react-router-dom` 의 `NavLink` 를 직접 import 하는데
-   `@txstack/ui` 의 peer 에는 그것이 없다. 링크 컴포넌트를 주입받게 고치는 쪽이 맞아 보인다.
+1. **3차 이식 — 다음은 `TxModal`.** ← 여기
+   남은 12개 중 **10개를 이식하고 2개를 잘랐다**(`TxHeader` · `TxClipboardButton`).
+   그중 **`TxAgGrid` 는 끝났다** — 서브패스라 얽히지 않아 먼저 했고, 쪽 번호를
+   `TxPagination` 으로 갈라 루트 배럴에 뒀다.
+   순서와 근거는 [001_ui](001_ui.md) 의 "3차" 표가 갖는다. 함께 정한 것 둘 —
+   `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
+   peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
 2. **`tailwind-merge` 를 뗄 수 있는지 본다.** Form 클러스터가 끝나면 판단하기로 한 항목이다.
    CSS 이행이 끝나 `twMerge` 가 할 일이 거의 없고, Tailwind 를 안 쓰는 소비자에게는 순수한 무게다.
 3. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
