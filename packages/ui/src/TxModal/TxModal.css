@@ -1,0 +1,191 @@
+/**
+ * TxModal — 화면을 덮고 뜨는 창.
+ *
+ * **`<dialog>` 라서 z-index 가 없다.** 브라우저의 top layer 에 올라가므로 층을 다툴 일이
+ * 없고, `overflow: hidden` 조상에 잘리지도 않는다. `TxPopup` 이 `--tx-popup-z` 를 들고
+ * 있는 것과 다른 점이다.
+ *
+ * 여닫히는 움직임도 CSS 가 한다 — `@starting-style` 과 `allow-discrete` 로,
+ * 애니메이션 라이브러리 없이. 원본은 이 두 겹을 위해 framer-motion 을 peer 로 달고 있었다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-modal {
+  --tx-modal-width: 32rem;
+  --tx-modal-radius: calc(var(--tx-radius) * 2);
+  --tx-modal-bg: var(--tx-color-surface);
+  --tx-modal-fg: var(--tx-color-text);
+  --tx-modal-border-color: var(--tx-color-border);
+  --tx-modal-shadow: 0 10px 25px -5px rgb(0 0 0 / 20%);
+
+  --tx-modal-padding: 1.25rem;
+  --tx-modal-header-gap: 0.75rem;
+  --tx-modal-footer-gap: 0.5rem;
+
+  --tx-modal-title-size: 1rem;
+  --tx-modal-title-weight: 700;
+
+  /* 여닫히는 시간. 0 으로 두면 움직임 없이 즉시 뜬다 */
+  --tx-modal-duration: 150ms;
+
+  /**
+   * **바탕(`::backdrop`)은 여백이 아니라 클릭 판정 자리다.**
+   *
+   * `<dialog>` 자신에 여백을 주면 그 여백을 눌러도 target 이 dialog 라서 바깥 클릭으로
+   * 잡힌다 — 창을 누른 줄 알았는데 닫힌다. 그래서 여백은 안쪽 패널이 갖는다.
+   */
+  margin: auto;
+  padding: 0;
+  width: min(var(--tx-modal-width), calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+
+  border: 1px solid var(--tx-modal-border-color);
+  border-radius: var(--tx-modal-radius);
+  background-color: var(--tx-modal-bg);
+  color: var(--tx-modal-fg);
+  box-shadow: var(--tx-modal-shadow);
+  overflow: hidden;
+
+  opacity: 0;
+  /* `display` 와 `overlay` 도 함께 넘겨야 닫힐 때 사라지는 것을 기다려 준다 */
+  transition:
+    opacity var(--tx-modal-duration) ease,
+    display var(--tx-modal-duration) allow-discrete,
+    overlay var(--tx-modal-duration) allow-discrete;
+}
+
+.tx-modal[open] {
+  opacity: 1;
+}
+
+/* 열릴 때의 출발점. 이 규칙이 없으면 처음 뜰 때만 움직임이 없다 */
+@starting-style {
+  .tx-modal[open] {
+    opacity: 0;
+  }
+}
+
+.tx-modal::backdrop {
+  background-color: transparent;
+  transition:
+    background-color var(--tx-modal-duration) ease,
+    display var(--tx-modal-duration) allow-discrete,
+    overlay var(--tx-modal-duration) allow-discrete;
+}
+
+/**
+ * 바탕색은 전역 토큰이다. 라이트든 다크든 **화면을 어둡게 덮는다는 뜻**은 같아서
+ * `--tx-color-*` 처럼 뒤집지 않는다.
+ */
+.tx-modal[open]::backdrop {
+  background-color: var(--tx-color-backdrop);
+}
+
+@starting-style {
+  .tx-modal[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+/* --- 안쪽 ----------------------------------------------------------------- */
+
+/**
+ * 내용을 통째로 받아 내는 한 겹. 이게 있어야 "바탕을 눌렀다" 를 target 비교로 가릴 수 있다.
+ * 안쪽에 `stopPropagation` 을 걸면 소비자의 부모 클릭 핸들러까지 죽는다.
+ */
+.tx-modal__panel {
+  display: flex;
+  flex-direction: column;
+  /* 창이 화면보다 길어지면 본문만 스크롤하고 머리는 자리에 남는다 */
+  max-height: calc(100dvh - 2rem);
+}
+
+.tx-modal__header {
+  display: flex;
+  align-items: center;
+  gap: var(--tx-modal-header-gap);
+  padding: var(--tx-modal-padding);
+  padding-bottom: 0;
+}
+
+.tx-modal__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+
+  font-size: var(--tx-modal-title-size);
+  font-weight: var(--tx-modal-title-weight);
+}
+
+/**
+ * 진짜 `<button>` 이다. 원본은 SVG 에 `onClick` 을 걸어서 키보드로 도달할 수 없었고
+ * 스크린리더가 버튼으로 읽지도 않았다.
+ */
+.tx-modal__close {
+  --tx-modal-close-size: 1.75rem;
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--tx-modal-close-size);
+  height: var(--tx-modal-close-size);
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  /* 아이콘은 1em · currentColor 규약이라 놓인 자리의 색을 따라온다 */
+  color: inherit;
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+.tx-modal__close:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-modal__close:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-modal__body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--tx-modal-padding);
+  overflow: auto;
+}
+
+/**
+ * 버튼 줄은 `children` 의 일부라 본문 안에 들어온다. **바닥에 붙여 둔다** —
+ * 내용이 길어 스크롤이 생겨도 확인·취소가 화면 밖으로 밀려나지 않는다.
+ *
+ * 배경을 칠해야 글이 버튼 밑으로 비쳐 지나가지 않는다.
+ */
+.tx-modal__footer {
+  position: sticky;
+  bottom: calc(var(--tx-modal-padding) * -1);
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tx-modal-footer-gap);
+
+  margin: var(--tx-modal-padding) calc(var(--tx-modal-padding) * -1) calc(var(--tx-modal-padding) * -1);
+  padding: var(--tx-modal-padding);
+  background-color: var(--tx-modal-bg);
+}
+
+/* --- 폭 ------------------------------------------------------------------- */
+
+.tx-modal[data-size="sm"] {
+  --tx-modal-width: 24rem;
+}
+
+.tx-modal[data-size="lg"] {
+  --tx-modal-width: 48rem;
+}

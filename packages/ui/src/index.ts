@@ -21,6 +21,7 @@ export * from "./TxFlex";
 export * from "./TxForm";
 export * from "./TxInput";
 export * from "./TxLoading";
+export * from "./TxModal";
 export * from "./TxPagination";
 export * from "./TxSpinner";
 export * from "./TxTextarea";
