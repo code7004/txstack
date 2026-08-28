@@ -1,0 +1,129 @@
+/**
+ * TxCard — 내용을 담는 상자.
+ *
+ * 값어치는 로직이 아니라 **여백과 모서리가 앱 전체에서 같아지는 것**에 있다.
+ * 그래서 겉모습 값이 전부 `--tx-card-*` 로 나가 있고 그 기본값이 전역 토큰을 참조한다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-card {
+  --tx-card-bg: var(--tx-color-surface);
+  --tx-card-fg: var(--tx-color-text);
+  --tx-card-border-color: var(--tx-color-border);
+  --tx-card-radius: var(--tx-radius);
+  --tx-card-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+
+  --tx-card-padding: 1rem;
+  --tx-card-gap: 0.75rem;
+
+  --tx-card-title-size: 0.9375rem;
+  --tx-card-title-weight: 700;
+  --tx-card-footer-color: color-mix(in oklab, var(--tx-color-text) 65%, transparent);
+
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  border: 1px solid var(--tx-card-border-color);
+  border-radius: var(--tx-card-radius);
+  background-color: var(--tx-card-bg);
+  color: var(--tx-card-fg);
+  box-shadow: var(--tx-card-shadow);
+
+  /* 모서리를 둥글게 깎았으니 안쪽 것도 그 선을 넘지 않는다 */
+  overflow: hidden;
+}
+
+.tx-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--tx-card-gap);
+  padding: var(--tx-card-padding);
+  padding-bottom: 0;
+}
+
+/**
+ * **접히면 아래 여백을 채운다.** 펼쳐져 있을 때 아래가 0 인 것은 본문이 자기 여백을 갖고 있어
+ * 두 겹이 되는 것을 막으려는 것인데, 접히면 그 본문이 없다. 그대로 두면 글자가 위로 붙어 보인다.
+ */
+.tx-card[data-collapsed] .tx-card__header {
+  padding-bottom: var(--tx-card-padding);
+}
+
+.tx-card__title {
+  flex: 1;
+  min-width: 0;
+
+  font-size: var(--tx-card-title-size);
+  font-weight: var(--tx-card-title-weight);
+}
+
+/**
+ * 접기 버튼. 화살표는 **펼쳐져 있을 때 아래를, 접혀 있을 때 오른쪽을** 가리킨다 —
+ * 다음에 무엇이 열릴지가 아니라 지금 어디를 향해 있는지를 보인다.
+ */
+.tx-card__toggle {
+  --tx-card-toggle-size: 1.75rem;
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--tx-card-toggle-size);
+  height: var(--tx-card-toggle-size);
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+  font-size: 1.125rem;
+  cursor: pointer;
+
+  transition: transform 150ms;
+}
+
+.tx-card__toggle:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-card__toggle:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-card[data-collapsed] .tx-card__toggle {
+  transform: rotate(-90deg);
+}
+
+.tx-card__body {
+  min-width: 0;
+  padding: var(--tx-card-padding);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--tx-card-gap);
+}
+
+/**
+ * 접혔을 때. `hidden` 속성이 붙지만 `.tx-card__body` 의 `display: flex` 가 그걸 이기므로
+ * **여기서 다시 감춰야 한다.** 속성만 믿으면 접어도 그대로 보인다.
+ */
+.tx-card__body[hidden] {
+  display: none;
+}
+
+/**
+ * 푸터. 본문 안에 놓이지만 **카드 폭을 꽉 채운다** — 음수 여백으로 본문의 안쪽 여백을 되돌린다.
+ * 자식을 뒤져 푸터를 찾아내는 대신 CSS 가 자리를 잡는 방식이다.
+ */
+.tx-card__footer {
+  margin: 0 calc(var(--tx-card-padding) * -1) calc(var(--tx-card-padding) * -1);
+  margin-top: auto;
+  padding: var(--tx-card-padding);
+
+  border-top: 1px solid var(--tx-card-border-color);
+  color: var(--tx-card-footer-color);
+}

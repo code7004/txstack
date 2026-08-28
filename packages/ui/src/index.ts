@@ -14,6 +14,7 @@
  */
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
+export * from "./TxCard";
 export * from "./TxCheckBox";
 export * from "./TxCombobox";
 export * from "./TxDialog";
