@@ -1,0 +1,137 @@
+/**
+ * TxCollapsible — 눌러서 접고 펴는 한 덩이.
+ *
+ * **네이티브 `<details>` 다.** 여닫기·키보드·스크린리더·페이지 내 검색을 브라우저가 맡는다.
+ * 여기서 하는 것은 겉모습과, **접었다 펴는 움직임**뿐이다.
+ *
+ * `TxAccordion` 이 이 겉모습을 그대로 쓴다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-collapsible {
+  --tx-collapsible-padding: 0.875rem 1rem;
+  --tx-collapsible-radius: var(--tx-radius);
+  --tx-collapsible-border-color: var(--tx-color-border);
+  --tx-collapsible-bg: transparent;
+
+  --tx-collapsible-title-weight: 600;
+  --tx-collapsible-title-size: 0.9375rem;
+  --tx-collapsible-marker-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+
+  --tx-collapsible-duration: 200ms;
+  --tx-collapsible-disabled-opacity: 0.45;
+
+  border: 1px solid var(--tx-collapsible-border-color);
+  border-radius: var(--tx-collapsible-radius);
+  background-color: var(--tx-collapsible-bg);
+  color: var(--tx-color-text);
+}
+
+/* --- 늘 보이는 줄 ----------------------------------------------------------- */
+
+.tx-collapsible__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: var(--tx-collapsible-padding);
+
+  font-size: var(--tx-collapsible-title-size);
+  font-weight: var(--tx-collapsible-title-weight);
+  cursor: pointer;
+
+  /**
+   * 브라우저가 붙이는 삼각형을 지운다. **두 규칙이 다 필요하다** —
+   * 표준은 `list-style` 이지만 옛 WebKit 은 자기 가상요소로 그린다.
+   */
+  list-style: none;
+}
+
+.tx-collapsible__summary::-webkit-details-marker {
+  display: none;
+}
+
+.tx-collapsible__summary:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-collapsible__summary:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+.tx-collapsible__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.tx-collapsible__marker {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+
+  color: var(--tx-collapsible-marker-color);
+  font-size: 1.125em;
+
+  transition: rotate var(--tx-collapsible-duration) ease;
+}
+
+.tx-collapsible[open] .tx-collapsible__marker {
+  rotate: 180deg;
+}
+
+/* --- 안쪽 ----------------------------------------------------------------- */
+
+.tx-collapsible__body {
+  padding: var(--tx-collapsible-padding);
+  /* 줄이 이미 그 여백을 갖고 있다. 사이가 두 배로 벌어지지 않게 한다 */
+  padding-top: 0;
+}
+
+/* --- 접히고 펴지는 움직임 ---------------------------------------------------- */
+
+/**
+ * **`<details>` 는 원래 움직이지 않는다** — 열리는 순간 내용이 `display` 로 나타났다
+ * 사라지므로 사이 값이 없다. `::details-content` 가 그 내용을 가리킬 수 있게 해 주고,
+ * `interpolate-size` 가 `auto` 높이를 오갈 수 있게 해 준다.
+ *
+ * **아는 브라우저에서만 움직인다.** 모르는 브라우저에서는 지금처럼 즉시 열린다 —
+ * 기능이 빠지는 것이지 깨지는 것이 아니다.
+ */
+@supports selector(::details-content) {
+  .tx-collapsible {
+    interpolate-size: allow-keywords;
+  }
+
+  .tx-collapsible::details-content {
+    block-size: 0;
+    overflow: hidden;
+
+    /* `content-visibility` 도 함께 넘겨야 닫힐 때 사라지는 것을 기다려 준다 */
+    transition:
+      block-size var(--tx-collapsible-duration) ease,
+      content-visibility var(--tx-collapsible-duration) allow-discrete;
+  }
+
+  .tx-collapsible[open]::details-content {
+    block-size: auto;
+  }
+}
+
+/* --- 눌러도 안 열릴 때 ------------------------------------------------------ */
+
+.tx-collapsible[data-disabled] .tx-collapsible__summary {
+  opacity: var(--tx-collapsible-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.tx-collapsible[data-disabled] .tx-collapsible__summary:hover {
+  background-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-collapsible {
+    --tx-collapsible-duration: 0ms;
+  }
+}
