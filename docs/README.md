@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` — 테스트 793개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` — 테스트 866개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -86,28 +86,28 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
 `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **3차 이식 — 마지막은 `TxLayout`.** ← 여기
-   남은 12개 중 **10개를 이식하고 2개를 잘랐다**(`TxHeader` · `TxClipboardButton`).
-   그중 둘이 끝났다 — **`TxAgGrid`**(쪽 번호를 `TxPagination` 으로 갈라 루트 배럴에 뒀다)와
-   **`TxModal`**(네이티브 `<dialog>` 로 옮겨 포커스 트랩을 브라우저에 넘겼다).
-   `TxModal` 위에 **`TxDialog`**(`alert` · `confirm`)를 신규로 얹었다 — 앱이 네이티브
-   `alert` 을 15곳에서 쓰고 있었다. **`TxTabs`** 도 끝났다 — 항목이 요소를 갖도록 바꾸고
-   빠져 있던 탭 키보드 규약을 채웠다. **`TxCard`** 는 상자·슬롯·접기만 남기고 링크·로딩을
-   잘랐다. **`TxTooltip`** 은 `TxPopup` 위로 올리고 키보드·터치로 여는 길을 냈다.
-   **`TxDropMenu` · `TxContextMenu`** 로 **링크 주입이 끝났다** — 줄은 기본이 `<button>` 이고
-   링크는 `as={NavLink}` 로 갈아끼운다. 공개는 둘이되 **속(`TxMenuShell`)은 하나**라
-   메뉴 규약(원본에 아예 없던 것)을 한 번만 만들었다. 그 과정에서 `TxPopup` 이
-   **겹쳐 뜬 팝업**을 가리게 됐다 — 메뉴 안의 드롭다운에서 값을 고르면 메뉴가 닫히고 있었다.
-   **`TxSlidePanel`** 은 `TxModal` 과 같은 `<dialog>` 바탕에 얹었다 — 원본은 `aria-modal` 을
-   달아 놓고 갇히지 않았고, 크기 기본값이 Tailwind 클래스여서 위아래 서랍이 화면을 통째로 덮었다.
-   **`TxJsonTree`** 는 옮긴 것이 아니라 **목적에서 다시 짰다** — 보기·고치기·값 변화 지켜보기.
-   셋째(`watch`)는 원본에 없었고, 그것이 이 컴포넌트를 따로 둘 이유이기도 하다.
-   순서와 근거는 [001_ui](001_ui.md) 의 "3차" 표가 갖는다. 함께 정한 것 둘 —
+1. **4차 — 사이트 화면용 6개를 새로 만든다.** ← 여기
+   **여기서부터는 이식이 아니다.** 3차까지로 원본 26개 중 24개가 왔고, 그 결과 목록이
+   **업무 화면 쪽으로 쏠려 있다** — 폼 10개 · 그리드 · 드롭다운 · 모달 · 메뉴.
+   순서는 의존이 정한다: **`TxAlert`(완료) → `TxToast`(완료) → `TxCollapsible` → `TxAccordion`
+   → `TxBadge` → `TxSkeleton`.** 여섯을 끝내고 다음을 다시 정한다.
+   `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
+   그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
+   미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
+   **`--tx-color-success` 토큰 추가**는 [001_ui](001_ui.md) 의 "4차" 절이 갖는다.
+
+   지금까지 이식한 것 — 기반 4개 · Form 클러스터 10개 · `TxAgGrid`(쪽 번호를
+   `TxPagination` 으로 갈랐다) · `TxModal`(네이티브 `<dialog>`) · `TxDialog`(신규,
+   `alert`·`confirm`) · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종(속은 `TxMenuShell`
+   하나) · `TxSlidePanel` · `TxJsonTree`(목적에서 다시 짰다). 함께 정한 것 둘 —
    `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
-2. **`tailwind-merge` 를 뗄 수 있는지 본다.** Form 클러스터가 끝나면 판단하기로 한 항목이다.
+
+2. **3차의 마지막 `TxLayout` 은 4차 뒤로 미뤘다.** 사이트 화면용이 갖춰진 뒤에 셸을 짜는 것이
+   순서가 맞다 — `TxLayout` 은 슬롯 API 합의가 필요하고, 무엇을 담을지 알아야 그것을 정한다.
+3. **`tailwind-merge` 를 뗄 수 있는지 본다.** Form 클러스터가 끝나면 판단하기로 한 항목이다.
    CSS 이행이 끝나 `twMerge` 가 할 일이 거의 없고, Tailwind 를 안 쓰는 소비자에게는 순수한 무게다.
-3. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
+4. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
 
 ### 이식은 복사가 아니다
 

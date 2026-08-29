@@ -1,0 +1,156 @@
+/**
+ * TxAlert — 페이지 안에 박히는 안내 상자.
+ *
+ * 갈래(`info` · `success` · `warning` · `danger`)마다 **색 하나만 갈린다.**
+ * `--tx-alert-accent` 를 갈래가 정하고 나머지는 전부 거기서 섞어 만든다 — 그래서
+ * 갈래를 늘리거나 소비자가 색을 바꿔도 손댈 곳이 한 군데다.
+ *
+ * `TxNotify` 가 이 겉모습을 그대로 쓴다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-alert {
+  --tx-alert-accent: var(--tx-color-primary);
+
+  --tx-alert-radius: var(--tx-radius);
+  --tx-alert-padding: 0.875rem 1rem;
+  --tx-alert-gap: 0.625rem;
+  --tx-alert-font-size: 0.875rem;
+
+  /* 바탕과 테두리는 갈래색을 옅게 섞어 만든다. 라이트/다크 어느 쪽에서도 따라온다 */
+  --tx-alert-bg: color-mix(in oklab, var(--tx-alert-accent) 10%, var(--tx-color-surface));
+  --tx-alert-border-color: color-mix(in oklab, var(--tx-alert-accent) 35%, transparent);
+  --tx-alert-icon-color: var(--tx-alert-accent);
+  --tx-alert-title-weight: 700;
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tx-alert-gap);
+
+  padding: var(--tx-alert-padding);
+
+  border: 1px solid var(--tx-alert-border-color);
+  border-radius: var(--tx-alert-radius);
+  background-color: var(--tx-alert-bg);
+  color: var(--tx-color-text);
+  font-size: var(--tx-alert-font-size);
+}
+
+/* --- 갈래 ----------------------------------------------------------------- */
+
+/**
+ * `info` 는 `--tx-color-primary` 를 쓴다. 브랜드색과 안내색을 가르고 싶은 자리가 있지만,
+ * 요구가 오기 전에 전역 토큰을 늘리면 소비자가 챙길 것만 는다.
+ */
+.tx-alert[data-variant="success"] {
+  --tx-alert-accent: var(--tx-color-success);
+}
+
+.tx-alert[data-variant="warning"] {
+  --tx-alert-accent: var(--tx-color-warning);
+}
+
+.tx-alert[data-variant="danger"] {
+  --tx-alert-accent: var(--tx-color-danger);
+}
+
+/* --- 안쪽 ----------------------------------------------------------------- */
+
+.tx-alert__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+
+  /* 첫 줄 높이의 가운데에 오게 한다. 글이 여러 줄이어도 위에 붙어 있다 */
+  height: calc(1em * var(--tx-alert-line-height, 1.5));
+
+  color: var(--tx-alert-icon-color);
+  font-size: 1.125em;
+}
+
+.tx-alert__main {
+  flex: 1;
+  min-width: 0;
+}
+
+/**
+ * 갈래를 알리는 글자. **화면에서만 감춘다** — `display: none` 이나 `visibility: hidden`
+ * 은 스크린리더에서도 사라져서 색을 못 보는 사람에게 아무것도 남지 않는다.
+ */
+.tx-alert__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-alert__title {
+  margin: 0;
+  font-weight: var(--tx-alert-title-weight);
+}
+
+/* 제목이 있으면 본문이 한 칸 내려간다. 제목만 있을 땐 빈 자리를 만들지 않는다 */
+.tx-alert__title + .tx-alert__body:not(:empty) {
+  margin-top: 0.25rem;
+}
+
+.tx-alert__body:empty {
+  display: none;
+}
+
+.tx-alert__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-top: 0.75rem;
+}
+
+/* --- 닫기 ----------------------------------------------------------------- */
+
+.tx-alert__close {
+  --tx-alert-close-size: 1.5rem;
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--tx-alert-close-size);
+  height: var(--tx-alert-close-size);
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  /* 아이콘은 1em · currentColor 규약이라 놓인 자리의 색을 따라온다 */
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+
+  transition: opacity 120ms ease;
+}
+
+.tx-alert__close:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+  opacity: 1;
+}
+
+.tx-alert__close:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-alert__close {
+    transition: none;
+  }
+}

@@ -35,6 +35,18 @@
    */
   --tx-color-warning: #a16207;
 
+  /**
+   * 잘 됐음을 알리는 자리. `TxAlert` · `TxToast` · `TxBadge` 가 함께 쓴다.
+   *
+   * **`green-600` 을 쓰지 않는다.** 흰 바탕에서 대비가 3.35:1 이라 작은 글씨로는
+   * 읽히지 않는다 (AA 기준 4.5:1). 이 값은 5.01:1 이다.
+   *
+   * `info` 갈래는 따로 두지 않는다 — `--tx-color-primary` 가 겸한다. 브랜드색과
+   * 안내색을 가르고 싶은 자리가 있지만, 요구가 실제로 오기 전에 늘리면 소비자가
+   * 챙길 것만 는다.
+   */
+  --tx-color-success: #15803d;
+
   /* 표면이 있는 보조 요소 */
   --tx-color-muted: #e5e7eb;
 
@@ -100,6 +112,8 @@
   --tx-color-danger: #dc2626;
   /* 어두운 바탕에서는 밝은 노랑이 읽힌다 — 11.66:1 */
   --tx-color-warning: #facc15;
+  /* 같은 이유로 초록도 밝은 쪽으로 뒤집는다 — 8.42:1 */
+  --tx-color-success: #4ade80;
   --tx-color-muted: #374151;
   --tx-color-surface: #1f2937;
   --tx-color-border: #4b5563;
