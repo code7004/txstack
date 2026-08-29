@@ -276,6 +276,54 @@ describe("TxTooltip — 그 밖", () => {
   });
 });
 
+describe("TxTooltip — 스크롤", () => {
+  /**
+   * 페이지나 조상이 굴러가면 트리거가 움직인다. 툴팁이 제자리에 남으면 엉뚱한 곳을 가리킨다.
+   * **캡처로 듣는 것이 중요하다** — 조상 요소의 스크롤은 위로 올라오지 않는다.
+   */
+  it("열려 있는 동안 스크롤과 리사이즈를 듣는다", async () => {
+    const add = vi.spyOn(window, "addEventListener");
+    const { container } = render(<TxTooltip tip="설명">글자</TxTooltip>);
+
+    fireEvent.focus(anchorOf(container));
+    await screen.findByRole("tooltip");
+
+    const scroll = add.mock.calls.find(([type]) => type === "scroll");
+    expect(scroll, "스크롤을 안 듣는다").toBeTruthy();
+    // 세 번째 인자가 캡처 여부다
+    expect(scroll?.[2]).toBe(true);
+    expect(add.mock.calls.some(([type]) => type === "resize")).toBe(true);
+
+    add.mockRestore();
+  });
+
+  it("닫히면 그 listener 를 걷어낸다", async () => {
+    const remove = vi.spyOn(window, "removeEventListener");
+    const { container } = render(<TxTooltip tip="설명">글자</TxTooltip>);
+
+    fireEvent.focus(anchorOf(container));
+    await screen.findByRole("tooltip");
+    fireEvent.blur(anchorOf(container));
+
+    await waitFor(() => expect(remove.mock.calls.some(([type]) => type === "scroll")).toBe(true));
+    remove.mockRestore();
+  });
+
+  /** 내용이 길면 툴팁 안에서 스크롤된다. `TxPopup` 의 `maxHeight` 를 그대로 쓴다. */
+  it("maxHeight 를 팝업에 넘긴다 — 넘치면 안에서 스크롤된다", async () => {
+    const { container } = render(
+      <TxTooltip tip="긴 내용" maxHeight="8rem">
+        글자
+      </TxTooltip>
+    );
+
+    fireEvent.focus(anchorOf(container));
+    const tooltip = await screen.findByRole("tooltip");
+
+    expect(tooltip.style.maxHeight).toBe("8rem");
+  });
+});
+
 describe("TxTooltip — CSS 계약", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -307,6 +355,15 @@ describe("TxTooltip — CSS 계약", () => {
   it("쌓임 순서를 스스로 정하지 않는다 — TxPopup 의 토큰을 따른다", () => {
     expect(css).not.toContain("z-index");
     expect(source).toContain("TxPopup");
+  });
+
+  /** 넘치는 내용은 툴팁 안에서 굴린다. 그 규칙은 TxPopup 이 갖고 있다. */
+  it("넘치는 내용을 팝업이 굴린다 — 툴팁이 다시 정하지 않는다", () => {
+    const popupCss = strip(readFileSync(join(here, "..", "TxPopup", "TxPopup.css"), "utf8"));
+
+    expect(popupCss).toContain("overflow-y: auto");
+    // `overflow-wrap` 은 낱말 자르기라 다른 이야기다
+    expect(css).not.toMatch(/overflow(-y|-x)?\s*:/);
   });
 
   /** 위치·포털·바깥클릭·Escape 를 다시 만들지 않는다. */

@@ -74,6 +74,7 @@ const meta = {
     openDelay: { control: "number" },
     closeDelay: { control: "number" },
     maxWidth: { control: "text" },
+    maxHeight: { control: "text", description: "넘치면 툴팁 안에서 스크롤된다. 기본 `20rem`" },
     disabled: { control: "boolean" },
     children: { control: false },
     classNames: { control: false },
@@ -152,6 +153,65 @@ export const RichContent: Story = {
     >
       <span className="cursor-default font-mono text-sm">{"{ … }"}</span>
     </TxTooltip>
+  )
+};
+
+/**
+ * **내용이 길면 툴팁 안에서 스크롤된다.** 기본 높이는 `20rem` 이고 `maxHeight` 로 바꾼다.
+ *
+ * 툴팁 위로 마우스를 올려도 닫히지 않으므로 **끝까지 읽고 긁어 복사할 수 있다.**
+ * 올린 채로 휠을 굴려 보라.
+ */
+export const Scrollable: Story = {
+  parameters: noControls,
+  render: () => (
+    <TxFlex>
+      <TxTooltip
+        tip={
+          <ol className="m-0 flex list-decimal flex-col gap-1 pl-5">
+            {Array.from({ length: 30 }, (_, index) => (
+              <li key={index}>{index + 1}번째 줄 — 안에서 스크롤된다</li>
+            ))}
+          </ol>
+        }
+      >
+        <TxButton label="긴 내용 (기본 20rem)" variant="secondary" />
+      </TxTooltip>
+
+      <TxTooltip
+        maxHeight="8rem"
+        tip={
+          <ol className="m-0 flex list-decimal flex-col gap-1 pl-5">
+            {Array.from({ length: 30 }, (_, index) => (
+              <li key={index}>{index + 1}번째 줄</li>
+            ))}
+          </ol>
+        }
+      >
+        <TxButton label="maxHeight 8rem" variant="secondary" />
+      </TxTooltip>
+    </TxFlex>
+  )
+};
+
+/**
+ * **페이지를 굴려도 툴팁이 트리거를 따라간다.** 창 크기를 바꿔도 마찬가지다 —
+ * `TxPopup` 이 스크롤을 캡처 단계에서 듣기 때문에 조상 어디가 움직여도 따라온다.
+ *
+ * 가운데 버튼에 올린 채로 페이지를 굴려 보라.
+ */
+export const FollowsScroll: Story = {
+  parameters: noControls,
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="h-64 rounded border border-dashed p-3 text-xs text-slate-500 dark:text-slate-400">위쪽 여백 — 아래 버튼이 화면 가운데 오도록 굴려 보라</div>
+
+      <TxTooltip tip="굴려도 버튼을 따라온다">
+        <TxButton label="여기에 올린 채로 스크롤" />
+      </TxTooltip>
+
+      <div className="h-96 rounded border border-dashed p-3 text-xs text-slate-500 dark:text-slate-400">아래쪽 여백</div>
+    </div>
   )
 };
 
