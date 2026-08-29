@@ -14,6 +14,7 @@
  */
 export * from "./TxAccordion";
 export * from "./TxAlert";
+export * from "./TxBadge";
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
 export * from "./TxCard";

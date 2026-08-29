@@ -55,6 +55,7 @@
 /* 폼은 컨트롤을 칸에 앉히는 쪽이라 컨트롤 규칙 뒤에 온다 */
 @import "./TxForm/TxForm.css" layer(tx);
 @import "./TxAlert/TxAlert.css" layer(tx);
+@import "./TxBadge/TxBadge.css" layer(tx);
 /* 알림은 TxAlert 의 겉을 쓴다. 그 뒤에 와야 자리 규칙이 이긴다 */
 @import "./TxToast/TxToast.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
