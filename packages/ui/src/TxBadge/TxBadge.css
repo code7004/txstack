@@ -1,0 +1,104 @@
+/**
+ * TxBadge — 작은 이름표.
+ *
+ * `TxAlert` 과 같은 방식이다 — **갈래는 `--tx-badge-accent` 하나만 갈아 끼우고**
+ * 바탕·테두리·점 색이 전부 거기서 섞여 나온다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-badge {
+  /** 색이 뜻을 갖지 않는 기본. 본문 색을 그대로 쓴다 */
+  --tx-badge-accent: var(--tx-color-text);
+
+  --tx-badge-radius: 999px;
+  --tx-badge-padding: 0.125rem 0.5rem;
+  --tx-badge-gap: 0.3125rem;
+  --tx-badge-font-size: 0.75rem;
+  --tx-badge-font-weight: 600;
+  --tx-badge-dot-size: 0.375rem;
+
+  /* 바탕은 갈래색을 옅게 섞어 만든다. 라이트/다크 어느 쪽에서도 따라온다 */
+  --tx-badge-bg: color-mix(in oklab, var(--tx-badge-accent) 10%, var(--tx-color-surface));
+
+  /**
+   * **글자색은 갈래색을 본문 색 쪽으로 당겨서 만든다.**
+   *
+   * 갈래색을 그대로 쓰면 작은 글씨의 대비가 모자란다 — `--tx-color-primary` 와
+   * `--tx-color-danger` 는 흰 글자를 얹는 **버튼 배경용**으로 고른 값이라 다크에서도
+   * 어둡다. 다크 바탕에 그대로 얹으면 3:1 아래로 떨어진다.
+   *
+   * 본문 색은 라이트에서 어둡고 다크에서 밝으므로, 그쪽으로 섞으면 **어느 모드에서든
+   * 바탕에서 멀어진다.** 컴포넌트가 모드를 알 필요가 없다.
+   *
+   * **비율은 재서 정했다** — 65% 에서 다섯 갈래가 라이트·다크 양쪽 모두 4.5:1 을 넘는다
+   * (12px 굵은 글씨의 기준). 70% 로 두면 `info` 4.40, `danger` 4.46 으로 다크에서 모자란다.
+   */
+  --tx-badge-fg: color-mix(in oklab, var(--tx-badge-accent) 65%, var(--tx-color-text));
+  --tx-badge-border-color: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-badge-gap);
+
+  padding: var(--tx-badge-padding);
+
+  /* soft 에도 같은 두께의 투명 테두리를 둔다. 방식을 바꿔도 크기가 흔들리지 않는다 */
+  border: 1px solid var(--tx-badge-border-color);
+  border-radius: var(--tx-badge-radius);
+  background-color: var(--tx-badge-bg);
+  color: var(--tx-badge-fg);
+
+  font-size: var(--tx-badge-font-size);
+  font-weight: var(--tx-badge-font-weight);
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* --- 갈래 ----------------------------------------------------------------- */
+
+/**
+ * `info` 는 `--tx-color-primary` 를 쓴다. `TxAlert` 과 같은 어휘이므로 여기서도
+ * 따로 두지 않는다. `neutral` 은 위의 기본값이라 규칙이 없다.
+ */
+.tx-badge[data-variant="info"] {
+  --tx-badge-accent: var(--tx-color-primary);
+}
+
+.tx-badge[data-variant="success"] {
+  --tx-badge-accent: var(--tx-color-success);
+}
+
+.tx-badge[data-variant="warning"] {
+  --tx-badge-accent: var(--tx-color-warning);
+}
+
+.tx-badge[data-variant="danger"] {
+  --tx-badge-accent: var(--tx-color-danger);
+}
+
+/* --- 칠하는 방식 ------------------------------------------------------------ */
+
+/**
+ * 테두리만 두르고 바탕을 비운다. **글자색은 그대로 갈래색**이라 어느 바탕 위에 놓든
+ * 대비가 유지된다 — 배경을 갈래색으로 꽉 채우지 않는 이유가 이것이다.
+ */
+.tx-badge[data-appearance="outline"] {
+  --tx-badge-bg: transparent;
+  /* 테두리도 글자색에서 뽑는다. 갈래색 그대로면 다크에서 바탕에 묻힌다 */
+  --tx-badge-border-color: color-mix(in oklab, var(--tx-badge-fg) 45%, transparent);
+}
+
+/* --- 점 ------------------------------------------------------------------- */
+
+.tx-badge__dot {
+  flex: none;
+
+  width: var(--tx-badge-dot-size);
+  height: var(--tx-badge-dot-size);
+
+  border-radius: 50%;
+  /* 글자와 같은 색이다. 갈래색 그대로면 작은 점이 바탕에 묻힌다 */
+  background-color: var(--tx-badge-fg);
+}
