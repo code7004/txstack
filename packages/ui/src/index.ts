@@ -14,7 +14,6 @@
  */
 export * from "./TxAccordion";
 export * from "./TxAlert";
-export * from "./TxBadge";
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
 export * from "./TxCard";
@@ -35,6 +34,7 @@ export * from "./TxSlidePanel";
 export * from "./TxSkeleton";
 export * from "./TxSpinner";
 export * from "./TxTabs";
+export * from "./TxTag";
 export * from "./TxTextarea";
 export * from "./TxToast";
 export * from "./TxTooltip";

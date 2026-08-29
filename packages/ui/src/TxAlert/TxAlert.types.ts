@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
 /**
- * 알림의 갈래. **`TxToast` · `TxBadge` 가 같은 어휘를 쓴다** —
+ * 알림의 갈래. **`TxToast` · `TxTag` 가 같은 어휘를 쓴다** —
  * 하나를 익히면 셋에 통한다.
  *
  * `info` 는 `--tx-color-primary` 를 쓴다. 브랜드색과 안내색을 가르고 싶은 자리가

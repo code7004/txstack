@@ -37,7 +37,7 @@ const meta = {
           "### 뜨는 것이 아니라 자리를 차지한다",
           "",
           "나타났다 사라지는 알림은 **`TxToast`** 가 맡는다. 그쪽이 이 겉모습을 그대로 쓰고",
-          "`variant` 어휘도 같으니, 하나를 익히면 둘에 통한다. `TxBadge` 도 같은 넷을 쓴다.",
+          "`variant` 어휘도 같으니, 하나를 익히면 둘에 통한다. `TxTag` 도 같은 넷을 쓴다.",
           "",
           "### 색만으로 알리지 않는다",
           "",
@@ -83,7 +83,7 @@ const noControls = { controls: { disable: true } };
 
 export const Playground: Story = {};
 
-/** 네 갈래. **`TxToast` · `TxBadge` 가 같은 어휘를 쓴다.** */
+/** 네 갈래. **`TxToast` · `TxTag` 가 같은 어휘를 쓴다.** */
 export const Variants: Story = {
   parameters: noControls,
   render: () => (
