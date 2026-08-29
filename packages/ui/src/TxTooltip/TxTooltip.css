@@ -1,0 +1,47 @@
+/**
+ * TxTooltip — 올리면 뜨는 짧은 설명.
+ *
+ * **뜨는 층은 `TxPopup` 이 그린다** — 포털·위치·쌓임 순서(`--tx-popup-z`)가 거기 있다.
+ * 여기서는 겉모습과 감싸개만 맡는다. 원본은 이 층을 자기가 만들면서 `z-50` 과 `z-[9999]` 를
+ * 한 클래스에 둘 다 박아 두었다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+/* 감싼 내용의 크기를 그대로 따른다. 자리를 재는 기준이 되므로 inline 이면 안 된다 */
+.tx-tooltip-anchor {
+  display: inline-block;
+}
+
+.tx-tooltip-anchor:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-tooltip {
+  --tx-tooltip-bg: var(--tx-color-surface);
+  --tx-tooltip-fg: var(--tx-color-text);
+  --tx-tooltip-border-color: var(--tx-color-border);
+  --tx-tooltip-radius: var(--tx-radius);
+  --tx-tooltip-shadow: 0 4px 12px -2px rgb(0 0 0 / 15%);
+  --tx-tooltip-padding: 0.375rem 0.5rem;
+  --tx-tooltip-font-size: 0.8125rem;
+
+  border: 1px solid var(--tx-tooltip-border-color);
+  border-radius: var(--tx-tooltip-radius);
+  background-color: var(--tx-tooltip-bg);
+  color: var(--tx-tooltip-fg);
+  box-shadow: var(--tx-tooltip-shadow);
+}
+
+.tx-tooltip__body {
+  padding: var(--tx-tooltip-padding);
+  font-size: var(--tx-tooltip-font-size);
+
+  /**
+   * **줄바꿈(`\n`)을 그대로 보인다.** 안내 문구를 여러 줄로 적는 자리가 있다.
+   * 긴 낱말은 잘라서라도 상자 밖으로 안 나가게 한다 — URL 이나 해시가 그렇다.
+   */
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

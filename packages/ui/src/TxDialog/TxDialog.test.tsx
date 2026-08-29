@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -108,6 +108,19 @@ describe("TxDialog — 답하기 전에는 닫히지 않는다", () => {
 
   /** 바깥 클릭만 막는다. Escape 는 네이티브 `confirm` 처럼 취소로 친다. */
   it("Escape 는 취소로 친다", async () => {
+    const promise = TxDialog.confirm("정말?");
+    await screen.findByText("정말?");
+
+    const dialog = document.querySelector("dialog")!;
+    await act(async () => {
+      fireEvent.keyDown(dialog, { key: "Escape" });
+    });
+
+    expect(await promise).toBe(false);
+  });
+
+  /** 브라우저가 보내는 close request 로 와도 같아야 한다. */
+  it("cancel 경로로 와도 취소다", async () => {
     const promise = TxDialog.confirm("정말?");
     await screen.findByText("정말?");
 

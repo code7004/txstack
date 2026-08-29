@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, type MouseEvent, type SyntheticEvent } from "react";
+import { useCallback, useEffect, useId, useRef, type KeyboardEvent, type MouseEvent, type SyntheticEvent } from "react";
 import { TxIconClose } from "../TxIcons";
 import { cm } from "../tx-ui.utils";
 import { lockPageScroll } from "./TxModal.utils";
@@ -29,9 +29,25 @@ import { TxModalFooter } from "./TxModalFooter";
  *
  * 명세: `docs/001_ui.md`
  */
-export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size = "md", closeLabel = "닫기", hideCloseButton = false, className, classNames, children, ...props }: TxModalProps) => {
+export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size = "md", closeLabel = "닫기", hideCloseButton = false, closeOnEscape = true, className, classNames, children, ...props }: TxModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const closingRef = useRef(false);
   const titleId = useId();
+
+  /**
+   * 닫아 달라는 요청을 한 번만 흘려보낸다.
+   *
+   * Escape 는 브라우저의 close request 로도 오고 우리 `keydown` 으로도 오는데,
+   * 환경에 따라 둘 다 오는 경우가 있다. 소비자의 `onClose` 가 두 번 불리면
+   * 라우팅이나 저장 같은 일이 두 번 일어난다.
+   */
+  const requestClose = useCallback(() => {
+    if (closingRef.current) return;
+
+    closingRef.current = true;
+    queueMicrotask(() => (closingRef.current = false));
+    onClose();
+  }, [onClose]);
 
   /**
    * 여닫기는 DOM 명령이다. `showModal()` 을 불러야 top layer 와 포커스 트랩이 켜진다 —
@@ -59,15 +75,32 @@ export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size
   }, [open]);
 
   /**
-   * Escape. **기본 동작을 막는다** — 브라우저가 스스로 닫아 버리면 `open` 은 여전히 `true` 라
-   * 화면과 상태가 갈린다. 닫는 것은 소비자가 `open` 을 내려서 한다.
+   * Escape 를 **우리가 직접 받는다.**
+   *
+   * `<dialog>` 의 `cancel` 이벤트에만 기대면 환경을 탄다 — 브라우저의 close request 는
+   * DOM 이벤트가 아니라 UA 가 판단하는 것이라, 끼워 넣은 화면이나 자동화 도구에서는 오지 않는다.
+   * 포커스가 창 안에 갇혀 있으므로 `keydown` 은 반드시 여기로 올라온다.
+   *
+   * **기본 동작을 막는 것도 중요하다.** 안 막으면 브라우저가 스스로 닫아 버려서
+   * 창은 사라졌는데 `open` 은 `true` 로 남는다 — 화면과 상태가 갈린다.
    */
+  const hdKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDialogElement>) => {
+      if (event.key !== "Escape") return;
+
+      event.preventDefault();
+      if (closeOnEscape) requestClose();
+    },
+    [closeOnEscape, requestClose]
+  );
+
+  /** UA 가 close request 를 보내는 경로. 위에서 이미 막았으면 오지 않는다. */
   const hdCancel = useCallback(
     (event: SyntheticEvent<HTMLDialogElement>) => {
       event.preventDefault();
-      onClose();
+      if (closeOnEscape) requestClose();
     },
-    [onClose]
+    [closeOnEscape, requestClose]
   );
 
   /**
@@ -78,13 +111,13 @@ export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size
    */
   const hdClick = useCallback(
     (event: MouseEvent<HTMLDialogElement>) => {
-      if (closeOnBackdrop && event.target === dialogRef.current) onClose();
+      if (closeOnBackdrop && event.target === dialogRef.current) requestClose();
     },
-    [closeOnBackdrop, onClose]
+    [closeOnBackdrop, requestClose]
   );
 
   return (
-    <dialog {...props} ref={dialogRef} data-tag="TxModal" data-size={size} className={cm("tx-modal", className)} aria-labelledby={title == null ? undefined : titleId} onCancel={hdCancel} onClick={hdClick}>
+    <dialog {...props} ref={dialogRef} data-tag="TxModal" data-size={size} className={cm("tx-modal", className)} aria-labelledby={title == null ? undefined : titleId} onCancel={hdCancel} onKeyDown={hdKeyDown} onClick={hdClick}>
       {/* 바탕 클릭을 가리기 위한 한 겹. 여기부터가 모달의 내용이다 */}
       <div className={cm("tx-modal__panel", classNames?.panel)}>
         <div className={cm("tx-modal__header", classNames?.header)}>
@@ -94,7 +127,7 @@ export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size
           </h2>
 
           {!hideCloseButton && (
-            <button type="button" className="tx-modal__close" aria-label={closeLabel} onClick={onClose}>
+            <button type="button" className="tx-modal__close" aria-label={closeLabel} onClick={requestClose}>
               <TxIconClose />
             </button>
           )}
