@@ -23,6 +23,13 @@ export interface TxTooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, "c
   /** 최대 폭. 기본 `"20rem"`. 넘치면 줄을 바꾼다. */
   maxWidth?: number | string;
 
+  /**
+   * 최대 높이. 기본 `"20rem"`. **넘치면 툴팁 안에서 스크롤된다.**
+   *
+   * 툴팁 위로 마우스를 올려도 닫히지 않으므로 긴 내용도 끝까지 읽을 수 있다.
+   */
+  maxHeight?: number | string;
+
   /** 툴팁만 끈다. 감싼 내용은 그대로 나온다. */
   disabled?: boolean;
 

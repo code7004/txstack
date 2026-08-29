@@ -30,7 +30,7 @@ const LONG_PRESS = 500;
  *
  * 명세: `docs/001_ui.md`
  */
-export const TxTooltip = ({ tip, children, openDelay = 300, closeDelay = 100, maxWidth = "20rem", disabled = false, className, classNames, ...props }: TxTooltipProps) => {
+export const TxTooltip = ({ tip, children, openDelay = 300, closeDelay = 100, maxWidth = "20rem", maxHeight = "20rem", disabled = false, className, classNames, ...props }: TxTooltipProps) => {
   const anchorRef = useRef<HTMLSpanElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const focusTargetRef = useRef<HTMLElement | null>(null);
@@ -130,7 +130,7 @@ export const TxTooltip = ({ tip, children, openDelay = 300, closeDelay = 100, ma
       </span>
 
       {/* 포털·뒤집기·바깥 클릭·Escape 는 TxPopup 이 맡는다 */}
-      <TxPopup anchorRef={anchorRef} open={open && !disabled} onClose={() => setOpen(false)} matchAnchorWidth={false} id={tipId} role="tooltip" className="tx-tooltip">
+      <TxPopup anchorRef={anchorRef} open={open && !disabled} onClose={() => setOpen(false)} matchAnchorWidth={false} maxHeight={maxHeight} id={tipId} role="tooltip" className="tx-tooltip">
         <div
           className={cm("tx-tooltip__body", classNames?.tip)}
           style={{ maxWidth }}
