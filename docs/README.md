@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` — 테스트 1062개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` — 테스트 1062개 통과 · `TxBadge` 는 `TxTag` 로 이름을 바꿨다 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -90,7 +90,9 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    **여기서부터는 이식이 아니다.** 3차까지로 원본 26개 중 24개가 왔고, 그 결과 목록이
    **업무 화면 쪽으로 쏠려 있다** — 폼 10개 · 그리드 · 드롭다운 · 모달 · 메뉴.
    순서는 의존이 정한다: **`TxAlert`(완료) → `TxToast`(완료) → `TxCollapsible`(완료) → `TxAccordion`(완료)
-   → `TxBadge`(완료) → `TxSkeleton`(완료).** **여섯이 끝났다 — 다음을 다시 정할 자리다.**
+   → `TxBadge`(완료) → `TxSkeleton`(완료).** **여섯이 끝났다.** 다음 후보 18개를 [001_ui](001_ui.md) 의 "5차 후보군" 에 정리해
+   두었다 — **아직 결정이 아니라 목록이고**, 먼저 풀어야 하는 겹침 넷(`TxBadge` 이름 ·
+   `TxAppShell`↔`TxLayout` · `TxStepper` 이름 · `TxDivider` 부활)이 거기 적혀 있다.
    `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
    그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
    미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
@@ -103,8 +105,9 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
 
-2. **3차의 마지막 `TxLayout` 은 4차 뒤로 미뤘다.** 사이트 화면용이 갖춰진 뒤에 셸을 짜는 것이
-   순서가 맞다 — `TxLayout` 은 슬롯 API 합의가 필요하고, 무엇을 담을지 알아야 그것을 정한다.
+2. **3차의 마지막 `TxLayout` 은 잘랐다.** 앱 사용 0회에 447줄이고, 크기 조절되는 패널은
+   IDE 재주다. 5차의 **`TxAppShell`**(Header · GNB · LNB · SNB · Footer)이 그 자리를 대신한다 —
+   한 화면에 셸이 둘일 일이 없다. **이식은 26개 중 23개로 끝났다.**
 3. **`tailwind-merge` 를 뗐고 `TxInputLike` 는 감추기로 정했다.** 둘 다 밀려 있던 결정이다.
    `twMerge` 는 우리 컴포넌트가 Tailwind 를 한 곳도 싣지 않아 정리할 충돌이 없었다 —
    소비자 `className` 이 이기는 것은 `@layer tx` 덕분이다. **런타임 의존은 `clsx` 하나다.**

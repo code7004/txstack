@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { TxAlert } from "./TxAlert";
 
 /**
- * 신규 컴포넌트다. **`variant` 어휘를 `TxToast` · `TxBadge` 가 물려받으므로**
+ * 신규 컴포넌트다. **`variant` 어휘를 `TxToast` · `TxTag` 가 물려받으므로**
  * 여기서 정한 네 갈래가 셋의 기준이 된다.
  *
  * 가장 조심한 것은 **색만으로 뜻을 전하지 않는 것**이다 — 색을 못 보는 사람과
