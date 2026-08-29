@@ -182,6 +182,68 @@ describe("TxModal — 닫는 길은 셋, 콜백은 하나다", () => {
     expect(cancel.defaultPrevented).toBe(true);
   });
 
+  /**
+   * **`cancel` 이벤트에만 기대면 환경을 탄다.** 그건 DOM 이벤트가 아니라 브라우저가 판단해서
+   * 보내는 close request 라, 끼워 넣은 화면에서는 오지 않는다 — 실제로 Storybook 안에서
+   * Escape 가 아무 일도 하지 않았다. 그래서 keydown 을 직접 받는다.
+   */
+  it("Escape keydown 을 직접 받는다", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <TxModal open onClose={onClose}>
+        내용
+      </TxModal>
+    );
+
+    const event = fireEvent.keyDown(dialogOf(container), { key: "Escape" });
+
+    expect(onClose).toHaveBeenCalledOnce();
+    // 안 막으면 브라우저가 스스로 닫아서 창은 사라지고 open 은 true 로 남는다
+    expect(event).toBe(false);
+  });
+
+  it("다른 키는 가로채지 않는다", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <TxModal open onClose={onClose}>
+        내용
+      </TxModal>
+    );
+
+    fireEvent.keyDown(dialogOf(container), { key: "a" });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("closeOnEscape 를 끄면 Escape 가 안 먹는다", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <TxModal open onClose={onClose} closeOnEscape={false}>
+        내용
+      </TxModal>
+    );
+
+    fireEvent.keyDown(dialogOf(container), { key: "Escape" });
+    const cancel = new Event("cancel", { bubbles: false, cancelable: true });
+    fireEvent(dialogOf(container), cancel);
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  /** 두 경로가 다 오는 환경이 있다. 소비자의 onClose 가 두 번 실행되면 안 된다. */
+  it("keydown 과 cancel 이 함께 와도 onClose 는 한 번이다", () => {
+    const onClose = vi.fn();
+    const { container } = render(
+      <TxModal open onClose={onClose}>
+        내용
+      </TxModal>
+    );
+
+    fireEvent.keyDown(dialogOf(container), { key: "Escape" });
+    fireEvent(dialogOf(container), new Event("cancel", { bubbles: false, cancelable: true }));
+
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
   /** 원본은 Escape 를 `window` 에서 들어서 겹쳐 뜬 모달이 한 번에 다 닫혔다. */
   it("window 에 키 리스너를 붙이지 않는다 — 겹친 모달이 함께 닫히지 않는다", () => {
     const onClose = vi.fn();

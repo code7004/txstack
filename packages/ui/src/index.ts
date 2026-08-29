@@ -28,3 +28,4 @@ export * from "./TxPagination";
 export * from "./TxSpinner";
 export * from "./TxTabs";
 export * from "./TxTextarea";
+export * from "./TxTooltip";

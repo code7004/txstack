@@ -19,6 +19,14 @@ export interface TxModalProps extends Omit<DialogHTMLAttributes<HTMLDialogElemen
   /** 바깥(어두운 바탕)을 눌러 닫는다. 기본 `true`. */
   closeOnBackdrop?: boolean;
 
+  /**
+   * Escape 로 닫는다. 기본 `true`.
+   *
+   * **끄면 Escape 를 눌러도 아무 일이 없다.** 답을 받아야만 하는 창(`TxDialog`)이 그 자리다.
+   * 다만 닫는 길을 전부 막지는 말 것 — 버튼이든 무엇이든 하나는 남겨 둔다.
+   */
+  closeOnEscape?: boolean;
+
   /** 폭. 기본 `"md"`. */
   size?: TxModalSize;
 
