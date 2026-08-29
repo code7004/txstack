@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useId, useRef, type KeyboardEvent, type MouseEvent, type SyntheticEvent } from "react";
 import { TxIconClose } from "../TxIcons";
-import { cm } from "../tx-ui.utils";
-import { lockPageScroll } from "./TxModal.utils";
+import { cm, lockPageScroll } from "../tx-ui.utils";
 import type { TxModalProps } from "./TxModal.types";
 import { TxModalFooter } from "./TxModalFooter";
 

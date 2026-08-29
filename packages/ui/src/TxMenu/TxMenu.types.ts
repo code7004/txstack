@@ -22,7 +22,11 @@ interface TxMenuCommonProps {
 }
 
 export interface TxDropMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-  /** 눌러서 여는 것. 감싼 그대로가 버튼이 된다. */
+  /**
+   * 눌러서 여는 것. **트리거 버튼 안에 들어가는 내용이다** — 글자든 아이콘이든 온다.
+   *
+   * 버튼을 또 넣지 않는다. 감싼 것이 이미 `<button>` 이라 `<button>` 안의 `<button>` 이 된다.
+   */
   children: ReactNode;
 
   /**
