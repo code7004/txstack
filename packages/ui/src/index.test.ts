@@ -41,7 +41,10 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
   it("내부 부품이 새어 나가지 않는다", () => {
     // TxInputLike 는 aria-expanded 를 부모가 주입해야 정확하다. 열림 상태를 모르는 소비자가
     // 쓰면 접근성이 거짓이 된다. useInput·parseTxInputNumber 는 구현 세부다.
-    for (const name of ["TxInputLike", "useInput", "parseTxInputNumber", "useTxFormControl", "TxFormBase"]) {
+    //
+    // *Shell 셋은 바탕 부품이다. 특히 TxPopup 은 **포커스를 옮기지 않아서**, 그대로 공개하면
+    // 소비자가 포커스를 스스로 관리해야 하는 팝오버를 받는다. 요구가 생기면 그때 낸다.
+    for (const name of ["TxInputLike", "useInput", "parseTxInputNumber", "useTxFormControl", "TxFormBase", "TxPopup", "TxMenuShell", "TxDropdownShell"]) {
       expect(ui, `내부 부품이 공개 API 로 새어 나갔다: ${name}`).not.toHaveProperty(name);
     }
   });
