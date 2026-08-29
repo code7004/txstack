@@ -1,0 +1,173 @@
+/**
+ * TxSkeleton — 내용이 올 자리를 미리 잡아 두는 회색 덩이.
+ *
+ * 색은 **본문 색을 옅게 섞어** 만든다. 라이트에서는 어두운 회색, 다크에서는 밝은 회색이
+ * 저절로 되므로 컴포넌트가 모드를 알 필요가 없다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-skeleton {
+  --tx-skeleton-bg: color-mix(in oklab, var(--tx-color-text) 11%, transparent);
+  /* 지나가는 빛. 바탕보다 조금 더 밝(어둡)기만 하면 된다 */
+  --tx-skeleton-sheen: color-mix(in oklab, var(--tx-color-text) 6%, transparent);
+
+  --tx-skeleton-radius: var(--tx-radius);
+  --tx-skeleton-text-height: 0.75rem;
+  /** 글 **한 줄이 차지하는 높이**. 막대의 두께가 아니라 줄 사이 간격까지 포함한 값이다 */
+  --tx-skeleton-line-height: 1.25rem;
+  --tx-skeleton-circle-size: 2.5rem;
+  /** 자식에서 가져올 때, 글 한 줄의 위아래를 얼마나 비울지 */
+  --tx-skeleton-auto-inset: 0.1875rem;
+  --tx-skeleton-rect-height: 8rem;
+
+  /** `0s` 로 두면 빛이 지나가지 않고 회색으로 가만히 있는다 */
+  --tx-skeleton-duration: 1.4s;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-skeleton__bar {
+  display: block;
+
+  border-radius: var(--tx-skeleton-radius);
+  background-color: var(--tx-skeleton-bg);
+
+  /**
+   * 바탕 위로 빛이 한 번 지나간다. **요소를 하나 더 얹지 않는다** —
+   * 배경만으로 하면 안에 든 것이 없어 겹칠 것도 없다.
+   */
+  background-image: linear-gradient(90deg, transparent, var(--tx-skeleton-sheen), transparent);
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+
+  animation: tx-skeleton-sheen var(--tx-skeleton-duration) linear infinite;
+}
+
+@keyframes tx-skeleton-sheen {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* --- 모양 ----------------------------------------------------------------- */
+
+/**
+ * **N 줄이 글 N 줄만큼의 자리를 차지한다.**
+ *
+ * 막대 사이에만 간격을 두면 **간격 하나만큼 짧아져서** 내용이 도착할 때 자리가 튄다 —
+ * 자리를 잡아 두는 것이 이 컴포넌트가 하는 일의 전부이므로 그러면 안 된다.
+ * 남는 높이를 위아래로 반씩 나눠 두면 `N × 줄높이` 가 정확히 맞는다.
+ */
+.tx-skeleton[data-variant="text"] {
+  --tx-skeleton-lead: calc(var(--tx-skeleton-line-height) - var(--tx-skeleton-text-height));
+
+  gap: var(--tx-skeleton-lead);
+  padding-block: calc(var(--tx-skeleton-lead) / 2);
+}
+
+.tx-skeleton[data-variant="text"] .tx-skeleton__bar {
+  height: var(--tx-skeleton-text-height);
+}
+
+/**
+ * **마지막 줄은 짧다.** 문단은 원래 그렇게 끝나므로, 그래야 글이 올 자리처럼 보인다.
+ * 한 줄뿐이면 짧을 이유가 없다.
+ */
+.tx-skeleton[data-variant="text"] .tx-skeleton__bar:not(:only-child):last-child {
+  width: 60%;
+}
+
+.tx-skeleton[data-variant="circle"] {
+  width: var(--tx-skeleton-circle-size);
+}
+
+.tx-skeleton[data-variant="circle"] .tx-skeleton__bar {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+/* 높이는 바깥이 갖고 막대가 그것을 채운다. 소비자가 준 height 가 그대로 먹는다 */
+.tx-skeleton[data-variant="rect"] {
+  height: var(--tx-skeleton-rect-height);
+}
+
+.tx-skeleton[data-variant="rect"] .tx-skeleton__bar {
+  flex: 1;
+}
+
+/* --- 자식에서 모양을 가져올 때 ---------------------------------------------- */
+
+/**
+ * **자리를 차지하지 않는다.** 다 불러오면 이 껍데기가 사라지는데, 그때 배치가 달라지면
+ * "자리를 잡아 둔다" 는 말이 거짓이 된다. 커스텀 프로퍼티는 `display` 와 무관하게
+ * 그대로 물려 내려간다.
+ */
+.tx-skeleton[data-auto] {
+  display: contents;
+}
+
+/**
+ * **값이 아직 없는 자리만 칠한다.**
+ *
+ * 값이 안 왔으면 그 요소는 비어 있고, 붙박이 글이 든 요소는 비어 있지 않다 —
+ * `:empty` 가 그 둘을 갈라 준다. 글자를 감출 일이 없으니 소비자의 `color` 를
+ * `!important` 로 덮어쓸 필요도 없다.
+ *
+ * 높이는 그 요소의 **자기 글꼴에서** 나온다(`1lh`). 그래서 자식을 훑거나 재지 않는다.
+ */
+.tx-skeleton[data-auto] :empty {
+  position: relative;
+  min-height: 1lh;
+}
+
+.tx-skeleton[data-auto] :empty::after {
+  content: "";
+  position: absolute;
+  /* 크기를 스스로 가진 상자는 꽉 채우고 모서리도 그대로 물려받는다 */
+  inset: 0;
+
+  border-radius: inherit;
+  background-color: var(--tx-skeleton-bg);
+  background-image: linear-gradient(90deg, transparent, var(--tx-skeleton-sheen), transparent);
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+
+  animation: tx-skeleton-sheen var(--tx-skeleton-duration) linear infinite;
+}
+
+/** 글이 올 자리는 줄 사이를 띄운다. 안 띄우면 줄들이 한 덩어리로 뭉쳐 보인다 */
+.tx-skeleton[data-auto] :is(p, span, a, li, dt, dd, td, th, label, strong, em, b, i, small, h1, h2, h3, h4, h5, h6):empty::after {
+  inset: var(--tx-skeleton-auto-inset) 0;
+  border-radius: var(--tx-skeleton-radius);
+}
+
+/**
+ * **대체 요소는 가상요소를 그리지 못한다.** `<img>` · `<input>` 이 그렇다.
+ * 그쪽은 배경으로 직접 칠한다.
+ */
+.tx-skeleton[data-auto] :is(img, input, textarea, select, canvas, video, iframe, object, embed):empty {
+  background-color: var(--tx-skeleton-bg);
+  background-image: linear-gradient(90deg, transparent, var(--tx-skeleton-sheen), transparent);
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+
+  animation: tx-skeleton-sheen var(--tx-skeleton-duration) linear infinite;
+}
+
+/**
+ * 움직임을 원치 않는다고 밝힌 사람에게는 빛을 보내지 않는다.
+ * **자리는 그대로 남는다** — 그것이 이 컴포넌트가 하는 일의 전부다.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tx-skeleton__bar,
+  .tx-skeleton[data-auto] :empty,
+  .tx-skeleton[data-auto] :empty::after {
+    animation: none;
+  }
+}
