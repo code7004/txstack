@@ -1,3 +1,5 @@
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import * as ui from "./index";
 
@@ -70,5 +72,43 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
   it("모든 공개 이름이 Tx 로 시작한다", () => {
     const offenders = Object.keys(ui).filter((name) => !name.startsWith("Tx"));
     expect(offenders).toEqual([]);
+  });
+});
+
+/**
+ * **컴포넌트는 자기 `className` 에 Tailwind 를 싣지 않는다.** 전부 `tx-*` 와 CSS 변수다.
+ *
+ * 그래서 `cm()` 이 `tailwind-merge` 를 뗄 수 있었다 — 정리할 충돌이 애초에 없다.
+ * 여기서 한 곳이라도 유틸리티를 싣기 시작하면 그 판단이 무너지므로, 이 검사가 그 문을 지킨다.
+ * (소비자가 `className` 으로 주는 Tailwind 는 자기 것이라 상관없다. 그것이 이기는 것은
+ * `twMerge` 가 아니라 `@layer tx` 덕분이다.)
+ */
+describe("@txstack/ui — Tailwind 를 싣지 않는다", () => {
+  const here = import.meta.dirname;
+
+  /** 흔한 유틸리티의 머리. 이름이 이렇게 시작하면 Tailwind 것으로 본다. */
+  const UTILITY = /^(?:flex|grid|block|inline|hidden|relative|absolute|fixed|sticky|[mp][trblxy]?-|w-|h-|min-|max-|size-|text-|font-|bg-|border|rounded|shadow|gap-|space-|items-|justify-|self-|order-|z-|opacity-|overflow-|cursor-|transition|duration-|ease-|animate-|ring|outline-|leading-|tracking-|truncate|sr-only)/;
+
+  /** 주석 속 예제는 **소비자 쓰임**을 보여 주는 문서지 우리가 싣는 클래스가 아니다. */
+  const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+
+  const sources = readdirSync(here, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith("Tx"))
+    .flatMap((dir) =>
+      readdirSync(join(here, dir.name))
+        .filter((file) => file.endsWith(".tsx") && !file.endsWith(".stories.tsx") && !file.endsWith(".test.tsx"))
+        .map((file) => [`${dir.name}/${file}`, strip(readFileSync(join(here, dir.name, file), "utf8"))] as const)
+    );
+
+  it("훑을 파일을 찾았다", () => {
+    expect(sources.length).toBeGreaterThan(20);
+  });
+
+  it.each(sources)("%s", (_name, source) => {
+    // `cm("tx-…", …)` 과 className="…" 의 **문자열 리터럴**만 본다
+    const literals = [...source.matchAll(/(?:className=|cm\()\s*"([^"]*)"/g)].map((match) => match[1]);
+    const utilities = literals.flatMap((literal) => literal.split(/\s+/)).filter((name) => UTILITY.test(name));
+
+    expect(utilities).toEqual([]);
   });
 });
