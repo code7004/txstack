@@ -109,7 +109,6 @@ export function TxMenuShell({ anchorRef, anchorPoint, open, onClose, menu, menuL
 
   return (
     <TxPopup anchorRef={anchorRef} anchorPoint={anchorPoint} open={open} onClose={onClose} matchAnchorWidth={false} maxHeight={maxHeight} className="tx-menu">
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- 메뉴의 키보드 규약이 여기 산다 */}
       <div ref={menuRef} role="menu" aria-label={menuLabel} className={cm("tx-menu__list", className)} onKeyDown={hdKeyDown}>
         {menu}
       </div>

@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` — 테스트 693개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` — 테스트 793개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -86,7 +86,7 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
 `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **3차 이식 — 다음은 `TxJsonTree`.** ← 여기
+1. **3차 이식 — 마지막은 `TxLayout`.** ← 여기
    남은 12개 중 **10개를 이식하고 2개를 잘랐다**(`TxHeader` · `TxClipboardButton`).
    그중 둘이 끝났다 — **`TxAgGrid`**(쪽 번호를 `TxPagination` 으로 갈라 루트 배럴에 뒀다)와
    **`TxModal`**(네이티브 `<dialog>` 로 옮겨 포커스 트랩을 브라우저에 넘겼다).
@@ -100,6 +100,8 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    **겹쳐 뜬 팝업**을 가리게 됐다 — 메뉴 안의 드롭다운에서 값을 고르면 메뉴가 닫히고 있었다.
    **`TxSlidePanel`** 은 `TxModal` 과 같은 `<dialog>` 바탕에 얹었다 — 원본은 `aria-modal` 을
    달아 놓고 갇히지 않았고, 크기 기본값이 Tailwind 클래스여서 위아래 서랍이 화면을 통째로 덮었다.
+   **`TxJsonTree`** 는 옮긴 것이 아니라 **목적에서 다시 짰다** — 보기·고치기·값 변화 지켜보기.
+   셋째(`watch`)는 원본에 없었고, 그것이 이 컴포넌트를 따로 둘 이유이기도 하다.
    순서와 근거는 [001_ui](001_ui.md) 의 "3차" 표가 갖는다. 함께 정한 것 둘 —
    `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.

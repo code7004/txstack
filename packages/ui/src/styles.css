@@ -58,6 +58,7 @@
 /* 쪽 번호는 TxButton 의 토큰을 자기 안에서만 덮는다. 버튼 뒤에 와야 한다 */
 @import "./TxPagination/TxPagination.css" layer(tx);
 @import "./TxAgGrid/TxAgGrid.css" layer(tx);
+@import "./TxJsonTree/TxJsonTree.css" layer(tx);
 @import "./TxMenu/TxMenu.css" layer(tx);
 @import "./TxModal/TxModal.css" layer(tx);
 /* 확인창은 모달의 토큰을 자기 안에서만 덮는다. 모달 뒤에 와야 한다 */
