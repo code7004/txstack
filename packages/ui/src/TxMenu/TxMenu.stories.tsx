@@ -156,8 +156,9 @@ export const Keyboard: Story = {
   render: () => (
     <TxFlex>
       <TxButton label="앞의 버튼" variant="secondary" />
+      {/* children 은 트리거 버튼 **안에** 들어가는 내용이다. 버튼을 또 넣지 않는다 */}
       <TxDropMenu menu={BASIC_MENU} menuLabel="키보드 예제">
-        <TxButton label="메뉴 열기" />
+        메뉴 열기
       </TxDropMenu>
       <TxButton label="뒤의 버튼" variant="secondary" />
     </TxFlex>

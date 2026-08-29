@@ -1,0 +1,238 @@
+/**
+ * TxSlidePanel — 가장자리에서 밀려 나오는 패널(서랍).
+ *
+ * **`<dialog>` 라서 z-index 가 없다.** 브라우저의 top layer 에 올라가므로 층을 다툴 일이
+ * 없고, `overflow: hidden` 조상에 잘리지도 않는다. `TxModal` 과 같은 바탕이다.
+ *
+ * 밀려 나오는 움직임도 CSS 가 한다 — `@starting-style` 과 `allow-discrete` 로,
+ * 애니메이션 라이브러리 없이. 원본은 이 한 겹을 위해 framer-motion 을 peer 로 달고 있었다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-slide-panel {
+  /** 좌우면 폭, 위아래면 높이를 뜻한다. **크기를 정하는 손잡이는 이것 하나다.** */
+  --tx-slide-panel-size: 20rem;
+
+  --tx-slide-panel-bg: var(--tx-color-surface);
+  --tx-slide-panel-fg: var(--tx-color-text);
+  --tx-slide-panel-border-color: var(--tx-color-border);
+  --tx-slide-panel-shadow: 0 10px 25px -5px rgb(0 0 0 / 20%);
+
+  --tx-slide-panel-padding: 1.25rem;
+  --tx-slide-panel-header-gap: 0.75rem;
+
+  --tx-slide-panel-title-size: 1rem;
+  --tx-slide-panel-title-weight: 700;
+
+  /* 밀려 나오는 시간. 0 으로 두면 움직임 없이 즉시 뜬다 */
+  --tx-slide-panel-duration: 200ms;
+
+  /**
+   * `<dialog>` 는 기본이 `margin: auto` 로 가운데다. 서랍은 가장자리에 붙어야 하므로
+   * 자리를 방향 규칙이 직접 정한다. 여백은 안쪽 패널이 갖는다 — `<dialog>` 자신에 주면
+   * 그 여백을 눌러도 target 이 dialog 라서 바깥 클릭으로 잡힌다.
+   */
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+
+  border: 0 solid var(--tx-slide-panel-border-color);
+  background-color: var(--tx-slide-panel-bg);
+  color: var(--tx-slide-panel-fg);
+  box-shadow: var(--tx-slide-panel-shadow);
+  overflow: hidden;
+
+  /* `display` 와 `overlay` 도 함께 넘겨야 닫힐 때 밀려 들어가는 것을 기다려 준다 */
+  transition:
+    translate var(--tx-slide-panel-duration) ease,
+    display var(--tx-slide-panel-duration) allow-discrete,
+    overlay var(--tx-slide-panel-duration) allow-discrete;
+}
+
+/* --- 방향 ----------------------------------------------------------------- */
+
+/**
+ * 닫혀 있을 때의 자리이자 **닫히며 돌아갈 자리**다. `[open]` 이 아래에서 이것을 덮는다
+ * (특성도가 같으므로 순서가 정한다).
+ *
+ * **네 변을 전부 우리가 정한다.** `<dialog>` 의 UA 스타일은 `left: 0; right: 0` 을,
+ * 모달에는 `top: 0; bottom: 0` 까지 준다 — 가운데 놓으려고 그런 것이다. 붙일 변만 얹으면
+ * 반대쪽 UA 값이 살아남아 **폭·높이와 함께 과잉 제약**이 되고, 브라우저는 둘 중 하나를
+ * 버린다(LTR 에서는 `right`, 세로로는 `bottom`). 그러면 패널이 반대쪽 끝에 자리 잡고
+ * 밀려 나오는 것이 화면 가운데에서 시작한다.
+ */
+.tx-slide-panel[data-side="left"],
+.tx-slide-panel[data-side="right"] {
+  top: 0;
+  bottom: auto;
+  height: 100dvh;
+  width: min(var(--tx-slide-panel-size), 100vw);
+}
+
+.tx-slide-panel[data-side="top"],
+.tx-slide-panel[data-side="bottom"] {
+  left: 0;
+  right: auto;
+  width: 100vw;
+  height: min(var(--tx-slide-panel-size), 100dvh);
+}
+
+.tx-slide-panel[data-side="left"] {
+  left: 0;
+  right: auto;
+  border-right-width: 1px;
+  translate: -100% 0;
+}
+
+.tx-slide-panel[data-side="right"] {
+  right: 0;
+  left: auto;
+  border-left-width: 1px;
+  translate: 100% 0;
+}
+
+.tx-slide-panel[data-side="top"] {
+  top: 0;
+  bottom: auto;
+  border-bottom-width: 1px;
+  translate: 0 -100%;
+}
+
+.tx-slide-panel[data-side="bottom"] {
+  bottom: 0;
+  top: auto;
+  border-top-width: 1px;
+  translate: 0 100%;
+}
+
+/* 제자리. 방향이 무엇이든 도착점은 하나다 */
+.tx-slide-panel[open] {
+  translate: 0 0;
+}
+
+/* 열릴 때의 출발점. 이 규칙이 없으면 처음 뜰 때만 움직임이 없다 */
+@starting-style {
+  .tx-slide-panel[open][data-side="left"] {
+    translate: -100% 0;
+  }
+
+  .tx-slide-panel[open][data-side="right"] {
+    translate: 100% 0;
+  }
+
+  .tx-slide-panel[open][data-side="top"] {
+    translate: 0 -100%;
+  }
+
+  .tx-slide-panel[open][data-side="bottom"] {
+    translate: 0 100%;
+  }
+}
+
+/* --- 바탕 ----------------------------------------------------------------- */
+
+.tx-slide-panel::backdrop {
+  background-color: transparent;
+  transition:
+    background-color var(--tx-slide-panel-duration) ease,
+    display var(--tx-slide-panel-duration) allow-discrete,
+    overlay var(--tx-slide-panel-duration) allow-discrete;
+}
+
+/**
+ * 바탕색은 전역 토큰이다. 라이트든 다크든 **화면을 어둡게 덮는다는 뜻**은 같아서
+ * `--tx-color-*` 처럼 뒤집지 않는다.
+ */
+.tx-slide-panel[open]::backdrop {
+  background-color: var(--tx-color-backdrop);
+}
+
+@starting-style {
+  .tx-slide-panel[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+/* --- 안쪽 ----------------------------------------------------------------- */
+
+/**
+ * 내용을 통째로 받아 내는 한 겹. 이게 있어야 "바탕을 눌렀다" 를 target 비교로 가릴 수 있다.
+ * 안쪽에 `stopPropagation` 을 걸면 소비자의 부모 클릭 핸들러까지 죽는다.
+ */
+.tx-slide-panel__panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.tx-slide-panel__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--tx-slide-panel-header-gap);
+  padding: var(--tx-slide-panel-padding);
+  padding-bottom: 0;
+}
+
+.tx-slide-panel__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+
+  font-size: var(--tx-slide-panel-title-size);
+  font-weight: var(--tx-slide-panel-title-weight);
+}
+
+/**
+ * 진짜 `<button>` 이다. 원본은 SVG 에 `onClick` 을 걸어서 키보드로 도달할 수 없었고
+ * 스크린리더가 버튼으로 읽지도 않았다.
+ */
+.tx-slide-panel__close {
+  --tx-slide-panel-close-size: 1.75rem;
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--tx-slide-panel-close-size);
+  height: var(--tx-slide-panel-close-size);
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  /* 아이콘은 1em · currentColor 규약이라 놓인 자리의 색을 따라온다 */
+  color: inherit;
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+.tx-slide-panel__close:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-slide-panel__close:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-slide-panel__body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--tx-slide-panel-padding);
+  overflow: auto;
+}
+
+/**
+ * 움직임을 원치 않는다고 밝힌 사람에게는 밀지 않는다. 열리고 닫히는 것은 그대로다.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tx-slide-panel {
+    --tx-slide-panel-duration: 0ms;
+  }
+}

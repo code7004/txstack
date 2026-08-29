@@ -62,6 +62,7 @@
 @import "./TxModal/TxModal.css" layer(tx);
 /* 확인창은 모달의 토큰을 자기 안에서만 덮는다. 모달 뒤에 와야 한다 */
 @import "./TxDialog/TxDialog.css" layer(tx);
+@import "./TxSlidePanel/TxSlidePanel.css" layer(tx);
 @import "./TxPopup/TxPopup.css" layer(tx);
 /* 툴팁은 TxPopup 이 그린 층 위에 겉모습만 얹는다. 팝업 뒤에 와야 한다 */
 @import "./TxTooltip/TxTooltip.css" layer(tx);
