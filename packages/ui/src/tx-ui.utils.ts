@@ -1,19 +1,21 @@
 import clsx, { type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 
 /**
  * 클래스 문자열을 합친다. 모든 컴포넌트가 `cm("tx-*", className)` 형태로 쓴다 —
  * **기본 클래스를 교체하지 않고 덧붙이는** 것이 계약이다.
  *
- * `twMerge` 는 소비자가 준 Tailwind 유틸리티끼리의 충돌만 정리한다. 우리 클래스(`tx-*`)는
- * Tailwind 가 모르는 이름이라 그대로 통과한다 — **소비자 `className` 이 이기는 것은
- * `twMerge` 가 아니라 `@layer tx` 덕분이다.**
+ * **`tailwind-merge` 를 쓰지 않는다.** 그것은 Tailwind 유틸리티끼리의 충돌을 정리하는
+ * 물건인데, 우리 컴포넌트는 자기 `className` 에 Tailwind 를 하나도 싣지 않는다 —
+ * 전부 `tx-*` 와 CSS 변수다. 그러니 정리할 충돌 자체가 없었다.
  *
- * 그래서 `tailwind-merge` 를 계속 들고 갈지는 열려 있다. Tailwind 를 안 쓰는 소비자에게는
- * 순수한 무게이기 때문이다. Form 클러스터를 옮기고 나서 판단한다 (docs/001_ui.md "결정할 것").
+ * **소비자의 `className` 이 이기는 것은 `@layer tx` 덕분이다.** 레이어 밖의 규칙은
+ * 특성도와 무관하게 레이어 안을 이긴다. 그 일을 하지 않는 의존을 Tailwind 를 안 쓰는
+ * 소비자에게까지 지울 이유가 없다.
+ *
+ * 그래서 이 규칙이 깨지지 않는지를 `index.test.ts` 가 지킨다.
  */
 export function cm(...inputs: ClassValue[]) {
-  return twMerge(clsx(...inputs));
+  return clsx(...inputs);
 }
 
 /**

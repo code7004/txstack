@@ -50,8 +50,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0"
+    "clsx": "^2.1.1"
   },
   "devDependencies": {
     "@storybook/react-vite": "^10.5.9",

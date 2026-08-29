@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` — 테스트 1008개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` — 테스트 1062개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -105,8 +105,9 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 
 2. **3차의 마지막 `TxLayout` 은 4차 뒤로 미뤘다.** 사이트 화면용이 갖춰진 뒤에 셸을 짜는 것이
    순서가 맞다 — `TxLayout` 은 슬롯 API 합의가 필요하고, 무엇을 담을지 알아야 그것을 정한다.
-3. **`tailwind-merge` 를 뗄 수 있는지 본다.** Form 클러스터가 끝나면 판단하기로 한 항목이다.
-   CSS 이행이 끝나 `twMerge` 가 할 일이 거의 없고, Tailwind 를 안 쓰는 소비자에게는 순수한 무게다.
+3. **`tailwind-merge` 를 뗐고 `TxInputLike` 는 감추기로 정했다.** 둘 다 밀려 있던 결정이다.
+   `twMerge` 는 우리 컴포넌트가 Tailwind 를 한 곳도 싣지 않아 정리할 충돌이 없었다 —
+   소비자 `className` 이 이기는 것은 `@layer tx` 덕분이다. **런타임 의존은 `clsx` 하나다.**
 4. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
 
 ### 이식은 복사가 아니다
