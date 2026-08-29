@@ -197,7 +197,6 @@ describe("TxSlidePanel — 닫는 길은 셋, 콜백은 하나다", () => {
   it("안쪽 클릭이 소비자의 부모 핸들러까지 올라간다", () => {
     const onParentClick = vi.fn();
     render(
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- 버블링을 보는 테스트다
       <div onClick={onParentClick}>
         <TxSlidePanel open onClose={vi.fn()}>
           내용
