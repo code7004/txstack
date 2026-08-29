@@ -12,6 +12,7 @@
  *
  * 스타일은 `@txstack/ui/styles.css` 한 파일이다. 설계: docs/001_ui.md
  */
+export * from "./TxAccordion";
 export * from "./TxAlert";
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";

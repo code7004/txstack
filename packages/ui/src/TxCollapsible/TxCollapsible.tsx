@@ -25,7 +25,7 @@ import type { TxCollapsibleProps } from "./TxCollapsible.types";
  *
  * 명세: `docs/001_ui.md`
  */
-export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, disabled = false, hideMarker = false, className, classNames, children, ...props }: TxCollapsibleProps) => {
+export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, disabled = false, hideMarker = false, titleAs, className, classNames, children, ...props }: TxCollapsibleProps) => {
   const ref = useRef<HTMLDetailsElement>(null);
   const controlled = open !== undefined;
 
@@ -43,6 +43,9 @@ export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, 
    * 상태와 갈린다. 상태를 하나 더 두는 것으로는 안 된다 — 같은 값이면 React 가 그냥 건너뛴다.
    */
   const [, rerender] = useReducer((tick: number) => tick + 1, 0);
+
+  /** `<summary>` 는 phrasing content 하나 **또는 머리말 하나**를 품도록 규정돼 있다. */
+  const Title = titleAs ?? "span";
 
   /**
    * **controlled 일 때 DOM 을 도로 맞춘다.**
@@ -82,7 +85,7 @@ export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, 
         aria-disabled={disabled || undefined}
         onClick={hdSummaryClick}
       >
-        <span className={cm("tx-collapsible__title", classNames?.title)}>{title}</span>
+        <Title className={cm("tx-collapsible__title", classNames?.title)}>{title}</Title>
 
         {!hideMarker && (
           <span className={cm("tx-collapsible__marker", classNames?.marker)} aria-hidden>

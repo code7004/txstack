@@ -1,4 +1,4 @@
-import type { DetailsHTMLAttributes, ReactNode } from "react";
+import type { DetailsHTMLAttributes, ElementType, ReactNode } from "react";
 
 export interface TxCollapsibleProps extends Omit<DetailsHTMLAttributes<HTMLDetailsElement>, "title" | "onToggle" | "open"> {
   /** 늘 보이는 줄. 이것을 눌러 접고 편다. */
@@ -22,6 +22,14 @@ export interface TxCollapsibleProps extends Omit<DetailsHTMLAttributes<HTMLDetai
 
   /** 오른쪽 화살표를 없앤다. 직접 그릴 때 쓴다. */
   hideMarker?: boolean;
+
+  /**
+   * 제목을 감쌀 요소. 기본 `"span"`.
+   *
+   * **제목 줄에 `<h3>` 같은 머리말을 두면** 스크린리더 사용자가 머리말 목록으로 건너뛸 수
+   * 있다. `<summary>` 는 원래 그 하나를 품도록 규정돼 있다 — `TxAccordion` 이 이 길을 쓴다.
+   */
+  titleAs?: ElementType;
 
   /** 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다. */
   classNames?: { summary?: string; title?: string; marker?: string; body?: string };

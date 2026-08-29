@@ -72,4 +72,6 @@
 @import "./TxTooltip/TxTooltip.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);
 @import "./TxCollapsible/TxCollapsible.css" layer(tx);
+/* 아코디언은 접기의 겉을 그대로 쓰고 이어 붙이기만 한다. 그 뒤에 와야 한다 */
+@import "./TxAccordion/TxAccordion.css" layer(tx);
 @import "./TxTabs/TxTabs.css" layer(tx);
