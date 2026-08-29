@@ -1,0 +1,111 @@
+/**
+ * TxDropMenu · TxContextMenu — 떠오르는 메뉴.
+ *
+ * **두 메뉴가 같은 클래스를 쓴다.** 속(`TxMenuShell`)이 하나이기 때문이다 —
+ * 겉모습이 갈릴 자리가 없다. 뜨는 층 자체는 `TxPopup` 이 그린다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-menu {
+  --tx-menu-min-width: 10rem;
+  --tx-menu-padding: 0.25rem;
+
+  --tx-menu-item-padding: 0.5rem 0.75rem;
+  --tx-menu-item-radius: var(--tx-radius);
+  --tx-menu-item-font-size: 0.875rem;
+  --tx-menu-item-hover-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+
+  --tx-menu-divider-color: var(--tx-color-border);
+  --tx-menu-divider-space: 0.25rem;
+  --tx-menu-disabled-opacity: 0.45;
+
+  min-width: var(--tx-menu-min-width);
+}
+
+.tx-menu__list {
+  display: flex;
+  flex-direction: column;
+  padding: var(--tx-menu-padding);
+}
+
+/**
+ * 한 줄. **버튼일 수도 링크일 수도 있다**(`as`) — 그래서 둘 다에서 같은 모양이 나오도록
+ * 글꼴과 색을 놓인 자리에서 상속받고, 버튼의 UA 기본값을 지운다.
+ */
+.tx-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+
+  padding: var(--tx-menu-item-padding);
+  border: 0;
+  border-radius: var(--tx-menu-item-radius);
+  background-color: transparent;
+
+  color: inherit;
+  font: inherit;
+  font-size: var(--tx-menu-item-font-size);
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tx-menu__item:hover,
+/* 화살표로 옮겨 다니므로 포커스가 곧 "지금 짚은 줄" 이다. hover 와 같게 보인다 */
+.tx-menu__item:focus-visible {
+  background-color: var(--tx-menu-item-hover-bg);
+}
+
+.tx-menu__item:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+.tx-menu__item:disabled,
+.tx-menu__item[aria-disabled="true"] {
+  opacity: var(--tx-menu-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.tx-menu__divider {
+  margin: var(--tx-menu-divider-space) 0;
+  border-top: 1px solid var(--tx-menu-divider-color);
+}
+
+/* --- 트리거 --------------------------------------------------------------- */
+
+.tx-drop-menu {
+  display: inline-block;
+}
+
+/**
+ * 감싼 것을 그대로 보여 준다. 버튼의 UA 기본값(테두리·배경·글꼴)을 지워서
+ * 소비자가 넣은 아바타나 글자가 있는 그대로 나온다.
+ */
+.tx-drop-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tx-drop-menu__trigger:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/* 감싼 것의 크기를 그대로 따른다. 자리를 재는 기준이라 inline 이면 안 된다 */
+.tx-context-menu {
+  display: contents;
+}

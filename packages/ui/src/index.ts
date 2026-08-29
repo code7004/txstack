@@ -23,6 +23,7 @@ export * from "./TxFlex";
 export * from "./TxForm";
 export * from "./TxInput";
 export * from "./TxLoading";
+export * from "./TxMenu";
 export * from "./TxModal";
 export * from "./TxPagination";
 export * from "./TxSpinner";

@@ -3,8 +3,15 @@ import { createPortal } from "react-dom";
 import { cm } from "../tx-ui.utils";
 
 export interface TxPopupProps {
-  /** 이 요소 아래(또는 위)에 붙는다. */
+  /** 이 요소 아래(또는 위)에 붙는다. 바깥 클릭을 가릴 때도 쓴다. */
   anchorRef: RefObject<HTMLElement | null>;
+
+  /**
+   * 주면 **요소가 아니라 이 점**에 붙는다. 우클릭 메뉴가 마우스 자리에 뜰 때 쓴다.
+   *
+   * 뒤집기와 화면 안으로 가두기는 그대로 돈다 — 기준만 크기 0 인 점이 될 뿐이다.
+   */
+  anchorPoint?: { x: number; y: number };
   open: boolean;
   /** 바깥을 누르거나 Escape 를 눌렀을 때. */
   onClose: () => void;
@@ -26,6 +33,15 @@ export interface TxPopupProps {
 
 const GAP = 4;
 const EDGE = 8;
+
+/**
+ * 지금 열려 있는 팝업들. 나중에 열린 것이 뒤에 온다.
+ *
+ * 팝업 안에서 또 팝업이 열리면(메뉴 안의 드롭다운) **겹친 것들이 서로를 "바깥" 으로 본다** —
+ * 안쪽에서 값을 고르는 순간 바깥 메뉴가 닫히고, Escape 한 번에 둘이 함께 닫힌다.
+ * 누가 위에 있는지 알아야 그 둘을 가릴 수 있어서 여기에 쌓는다.
+ */
+const openPopups: HTMLElement[] = [];
 
 /**
  * 최대 높이를 픽셀로 읽는다. `"none"` 처럼 숫자가 아니면 **제한 없음**으로 본다 —
@@ -55,16 +71,17 @@ const toPx = (value: number | string) => {
  * **포커스는 옮기지 않는다.** 목록형 위젯은 포커스를 앵커에 두고 `aria-activedescendant` 로
  * 활성 항목을 가리키는 것이 표준이다. 포커스를 팝업으로 옮기면 타이핑이 끊긴다.
  */
-export function TxPopup({ anchorRef, open, onClose, matchAnchorWidth = true, maxHeight = "20rem", className, children, ...rest }: TxPopupProps) {
+export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidth = true, maxHeight = "20rem", className, children, ...rest }: TxPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ top: number; left: number; width?: number } | null>(null);
 
   const place = useCallback(() => {
     const anchor = anchorRef.current;
     const popup = popupRef.current;
-    if (!anchor || !popup) return;
+    if (!popup || (!anchor && !anchorPoint)) return;
 
-    const rect = anchor.getBoundingClientRect();
+    // 점을 주면 크기 0 인 사각형으로 본다. 아래 계산은 그대로 돈다
+    const rect = anchorPoint ? { top: anchorPoint.y, bottom: anchorPoint.y, left: anchorPoint.x, width: 0 } : anchor!.getBoundingClientRect();
     const height = Math.min(popup.scrollHeight, toPx(maxHeight));
     const width = matchAnchorWidth ? rect.width : popup.offsetWidth;
 
@@ -77,7 +94,7 @@ export function TxPopup({ anchorRef, open, onClose, matchAnchorWidth = true, max
     const left = Math.min(Math.max(EDGE, rect.left), Math.max(EDGE, window.innerWidth - width - EDGE));
 
     setPos({ top, left, width: matchAnchorWidth ? rect.width : undefined });
-  }, [anchorRef, matchAnchorWidth, maxHeight]);
+  }, [anchorRef, anchorPoint, matchAnchorWidth, maxHeight]);
 
   // 첫 배치는 그려지기 전에 끝내야 한다. 안 그러면 왼쪽 위에서 제자리로 튀는 것이 보인다.
   useLayoutEffect(() => {
@@ -85,16 +102,42 @@ export function TxPopup({ anchorRef, open, onClose, matchAnchorWidth = true, max
     else setPos(null);
   }, [open, place]);
 
+  /** 열려 있는 동안만 쌓아 둔다. 겹친 팝업끼리 누가 위인지는 이 순서가 답한다. */
+  useEffect(() => {
+    const popup = popupRef.current;
+    if (!open || !popup) return;
+
+    openPopups.push(popup);
+
+    return () => {
+      const at = openPopups.indexOf(popup);
+      if (at >= 0) openPopups.splice(at, 1);
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
+
+    /** 나보다 나중에 열린 팝업들. 내 위에 겹쳐 있는 것들이다. */
+    const later = () => openPopups.slice(openPopups.indexOf(popupRef.current!) + 1);
 
     const hdPointerDown = (evt: PointerEvent) => {
       const target = evt.target as Node;
       if (popupRef.current?.contains(target) || anchorRef.current?.contains(target)) return;
+
+      // 내 위에 겹쳐 뜬 팝업 안이면 바깥이 아니다. 메뉴 안의 드롭다운에서 값을 고르는 동안
+      // 메뉴가 닫혀 버리면 그 조합을 쓸 수 없다
+      if (later().some((el) => el.contains(target))) return;
+
       onClose();
     };
     const hdKey = (evt: KeyboardEvent) => {
-      if (evt.key === "Escape") onClose();
+      if (evt.key !== "Escape") return;
+
+      // 맨 위의 것만 닫는다. 겹쳐 있으면 위에서부터 하나씩 걷힌다
+      if (later().length) return;
+
+      onClose();
     };
 
     // 스크롤은 캡처로 듣는다. 조상 어디가 스크롤돼도 따라가야 한다.

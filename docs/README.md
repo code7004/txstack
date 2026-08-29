@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` — 테스트 603개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 — 테스트 645개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -86,15 +86,18 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
 `TxButton` 이 이후 전부의 레퍼런스다.
 
-1. **3차 이식 — 다음은 `TxDropMenu`.** ← 여기
+1. **3차 이식 — 다음은 `TxSlidePanel`.** ← 여기
    남은 12개 중 **10개를 이식하고 2개를 잘랐다**(`TxHeader` · `TxClipboardButton`).
    그중 둘이 끝났다 — **`TxAgGrid`**(쪽 번호를 `TxPagination` 으로 갈라 루트 배럴에 뒀다)와
    **`TxModal`**(네이티브 `<dialog>` 로 옮겨 포커스 트랩을 브라우저에 넘겼다).
    `TxModal` 위에 **`TxDialog`**(`alert` · `confirm`)를 신규로 얹었다 — 앱이 네이티브
    `alert` 을 15곳에서 쓰고 있었다. **`TxTabs`** 도 끝났다 — 항목이 요소를 갖도록 바꾸고
    빠져 있던 탭 키보드 규약을 채웠다. **`TxCard`** 는 상자·슬롯·접기만 남기고 링크·로딩을
-   잘랐다 — 그래서 **링크 주입은 메뉴 2종에만 남았다.** **`TxTooltip`** 은 `TxPopup` 위로
-   올리고 키보드·터치로 여는 길을 냈다.
+   잘랐다. **`TxTooltip`** 은 `TxPopup` 위로 올리고 키보드·터치로 여는 길을 냈다.
+   **`TxDropMenu` · `TxContextMenu`** 로 **링크 주입이 끝났다** — 줄은 기본이 `<button>` 이고
+   링크는 `as={NavLink}` 로 갈아끼운다. 공개는 둘이되 **속(`TxMenuShell`)은 하나**라
+   메뉴 규약(원본에 아예 없던 것)을 한 번만 만들었다. 그 과정에서 `TxPopup` 이
+   **겹쳐 뜬 팝업**을 가리게 됐다 — 메뉴 안의 드롭다운에서 값을 고르면 메뉴가 닫히고 있었다.
    순서와 근거는 [001_ui](001_ui.md) 의 "3차" 표가 갖는다. 함께 정한 것 둘 —
    `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
