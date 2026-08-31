@@ -1,0 +1,103 @@
+/**
+ * TxSwitch — 그 자리에서 바로 켜고 끄는 자리.
+ *
+ * `TxCheckBox` 에서 갈라져 나왔다. **겉모습이 아니라 하는 말이 달라서** 나눈 것이라,
+ * 토큰도 `--tx-switch-*` 로 따로 갖는다 — 스위치 크기를 바꾸려다 체크박스가 함께
+ * 바뀌면 안 된다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-switch {
+  --tx-switch-track-width: 2.25rem;
+  --tx-switch-track-height: 1.25rem;
+  --tx-switch-thumb-size: 1rem;
+  --tx-switch-thumb-inset: 0.125rem;
+  --tx-switch-gap: 0.5rem;
+
+  --tx-switch-track-bg: color-mix(in oklab, var(--tx-color-state) 25%, transparent);
+  --tx-switch-track-checked-bg: var(--tx-color-primary);
+  --tx-switch-thumb-bg: var(--tx-color-surface);
+  --tx-switch-disabled-opacity: 0.5;
+  --tx-switch-transition: 150ms ease;
+
+  /* 손잡이가 움직일 거리. 세 값에서 나오므로 한 곳에서 계산한다 */
+  --tx-switch-thumb-travel: calc(var(--tx-switch-track-width) - var(--tx-switch-thumb-size) - var(--tx-switch-thumb-inset) * 2);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-switch-gap);
+
+  cursor: pointer;
+}
+
+/**
+ * 진짜 `<input>` 을 눈에서만 지운다. `display: none` 이면 Tab 으로 갈 수 없고
+ * 폼에도 안 실린다.
+ */
+.tx-switch__input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-switch__track {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+
+  inline-size: var(--tx-switch-track-width);
+  block-size: var(--tx-switch-track-height);
+
+  border-radius: 9999px;
+  background-color: var(--tx-switch-track-bg);
+  transition: background-color var(--tx-switch-transition);
+}
+
+.tx-switch__input:checked + .tx-switch__track {
+  background-color: var(--tx-switch-track-checked-bg);
+}
+
+.tx-switch__thumb {
+  position: absolute;
+  inset-block-start: var(--tx-switch-thumb-inset);
+  inset-inline-start: var(--tx-switch-thumb-inset);
+
+  inline-size: var(--tx-switch-thumb-size);
+  block-size: var(--tx-switch-thumb-size);
+
+  border-radius: 9999px;
+  background-color: var(--tx-switch-thumb-bg);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
+
+  transition: translate var(--tx-switch-transition);
+}
+
+.tx-switch__input:checked + .tx-switch__track .tx-switch__thumb {
+  translate: var(--tx-switch-thumb-travel) 0;
+}
+
+/**
+ * 포커스 링을 **보이는 모양에 건다.** 진짜 `<input>` 은 눈에서 지워져 있어서
+ * 거기 링을 걸면 아무 데도 안 보인다.
+ */
+.tx-switch__input:focus-visible + .tx-switch__track {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-switch[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--tx-switch-disabled-opacity);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-switch__track,
+  .tx-switch__thumb {
+    transition: none;
+  }
+}

@@ -1,0 +1,185 @@
+/**
+ * TxFileUpload — 파일을 골라 올리는 자리.
+ *
+ * **진행률은 `TxProgress` 가, 다시 시도 버튼은 `TxButton` 이 그린다.** 여기서는
+ * 끌어다 놓는 자리와 줄의 배치만 맡는다 — 같은 것을 두 곳이 그리면 모양이 갈린다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-file-upload {
+  --tx-file-upload-gap: 0.75rem;
+  --tx-file-upload-radius: var(--tx-radius);
+  --tx-file-upload-border-color: var(--tx-color-border);
+  --tx-file-upload-dragging-color: var(--tx-color-primary);
+  --tx-file-upload-dropzone-padding: 1.75rem 1rem;
+  --tx-file-upload-hint-size: 0.875rem;
+  --tx-file-upload-meta-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+  --tx-file-upload-meta-size: 0.75rem;
+  --tx-file-upload-disabled-opacity: 0.5;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--tx-file-upload-gap);
+}
+
+/* --- 끌어다 놓는 자리 -------------------------------------------------------- */
+
+/**
+ * **진짜 `<button>` 이다.** 끌어다 놓기만 두면 키보드로는 파일을 고를 길이 없다 —
+ * 그래서 Tab 으로 닿고 Enter 로 열린다.
+ */
+.tx-file-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+
+  inline-size: 100%;
+  padding: var(--tx-file-upload-dropzone-padding);
+
+  border: 1px dashed var(--tx-file-upload-border-color);
+  border-radius: var(--tx-file-upload-radius);
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.tx-file-upload__dropzone:hover:not(:disabled),
+.tx-file-upload__dropzone[data-dragging] {
+  border-color: var(--tx-file-upload-dragging-color);
+  background-color: color-mix(in oklab, var(--tx-file-upload-dragging-color) 6%, transparent);
+}
+
+.tx-file-upload__dropzone:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-file-upload__dropzone:disabled {
+  cursor: not-allowed;
+  opacity: var(--tx-file-upload-disabled-opacity);
+}
+
+.tx-file-upload__hint {
+  font-size: var(--tx-file-upload-hint-size);
+}
+
+.tx-file-upload__accept {
+  color: var(--tx-file-upload-meta-color);
+  font-size: var(--tx-file-upload-meta-size);
+}
+
+/**
+ * 진짜 `<input type="file">` 을 눈에서만 지운다. `display: none` 이면 `<form>` 제출에
+ * 안 실리고 파일 고르기 창을 여는 표준 길도 잃는다.
+ */
+.tx-file-upload__input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* --- 목록 ----------------------------------------------------------------- */
+
+.tx-file-upload__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tx-file-upload__item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+
+  padding: 0.625rem 0.75rem;
+
+  border: 1px solid var(--tx-file-upload-border-color);
+  border-radius: var(--tx-file-upload-radius);
+}
+
+/** 실패한 줄만 테두리를 물들인다. 나머지는 조용해야 무엇이 잘못됐는지 눈에 든다 */
+.tx-file-upload__item[data-status="failed"] {
+  border-color: color-mix(in oklab, var(--tx-color-danger) 45%, transparent);
+}
+
+.tx-file-upload__info {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+/** 이름이 길어도 줄을 밀지 않는다. 가운데를 잘라 앞뒤를 남기는 대신 끝을 자른다 */
+.tx-file-upload__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tx-file-upload__meta {
+  color: var(--tx-file-upload-meta-color);
+  font-size: var(--tx-file-upload-meta-size);
+}
+
+/** 막대는 이름 아래 한 줄을 통째로 쓴다 */
+.tx-file-upload__progress {
+  grid-column: 1 / -1;
+}
+
+.tx-file-upload__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.tx-file-upload__remove {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.tx-file-upload__remove:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+  opacity: 1;
+}
+
+.tx-file-upload__remove:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-file-upload__dropzone {
+    transition: none;
+  }
+}

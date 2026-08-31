@@ -115,20 +115,22 @@ describe("TxCheckBox — 값", () => {
   });
 });
 
-describe("TxCheckBox — variant", () => {
-  it("기본은 체크박스로 읽힌다", () => {
+describe("TxCheckBox — 모양", () => {
+  /** 스위치는 `TxSwitch` 가 갖는다. 여기 남아 있으면 같은 일에 답이 둘이 된다. */
+  it("체크박스 하나뿐이다 — 모양을 고르는 prop 이 없다", () => {
     const el = box(<TxCheckBox />);
 
     expect(el.getAttribute("role")).toBeNull();
-    expect(el.closest("[data-tag]")!.getAttribute("data-variant")).toBe("checkbox");
+    expect(el.closest("[data-tag]")!.hasAttribute("data-variant")).toBe(false);
   });
 
   /** 토글은 스위치다. 스크린리더가 "선택됨" 이 아니라 "켜짐/꺼짐" 으로 안내해야 한다. */
-  it("toggle 은 스위치로 읽힌다", () => {
-    const el = box(<TxCheckBox variant="toggle" />);
+  /** 스위치는 `TxSwitch` 가 갖는다. 여기 남아 있으면 같은 일에 답이 둘이 된다. */
+  it("스위치 모양을 갖지 않는다", () => {
+    const el = box(<TxCheckBox />);
 
-    expect(el.getAttribute("role")).toBe("switch");
-    expect(el.closest("[data-tag]")!.getAttribute("data-variant")).toBe("toggle");
+    expect(el.getAttribute("role")).toBeNull();
+    expect(el.closest("[data-tag]")!.hasAttribute("data-variant")).toBe(false);
   });
 
   it("모양은 보조 요소라 스크린리더가 읽지 않는다", () => {
@@ -261,9 +263,11 @@ describe("TxCheckBox — CSS 계약", () => {
   });
 
   /** 트랙이나 손잡이 크기를 바꿔도 이동 거리가 따라와야 한다. */
-  it("손잡이 이동 거리를 매직넘버가 아니라 계산으로 낸다", () => {
-    expect(css).toMatch(/--tx-checkbox-thumb-travel:\s*calc\(/);
-    expect(css).toMatch(/translateX\(var\(--tx-checkbox-thumb-travel\)\)/);
+  /** 스위치 토큰이 여기 남아 있으면 안 쓰는 값을 공개 API 로 두는 셈이다. */
+  it("스위치 토큰을 들고 있지 않는다", () => {
+    for (const token of ["--tx-checkbox-track-width", "--tx-checkbox-thumb-size", "--tx-checkbox-thumb-travel"]) {
+      expect(css, token).not.toContain(token);
+    }
   });
 
   it("모션 저감에서 전환을 끈다", () => {

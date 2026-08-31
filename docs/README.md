@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` — 테스트 1188개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 — 테스트 1363개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
 
@@ -93,8 +93,12 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    → `TxBadge`(완료) → `TxSkeleton`(완료).** **여섯이 끝났다.** 다음 후보 18개를 [001_ui](001_ui.md) 의 "5차 후보군" 에 정리해
    두었다 — **아직 결정이 아니라 목록이고**, 겹침 넷(`TxBadge` 이름 · `TxAppShell`↔`TxLayout` ·
    `TxStepper` 이름 · `TxDivider` 부활)은 **전부 정했다.**
-   먼저 만들기로 한 다섯(**`TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` ·
-   `TxCopyButton`**)이 끝났다 — **다음을 다시 정할 자리다.**
+   먼저 만들기로 한 다섯(`TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` ·
+   `TxCopyButton`)에 이어 **폼 컨트롤 묶음 일곱**(`TxRadio`/`TxRadioGroup` · `TxSwitch` ·
+   `TxTag` Chip 흡수 · `TxBadge` · `TxNumberInput` · `TxSlider` · `TxFileUpload`)까지 끝났다.
+   `TxSwitch` 를 가르면서 **`TxCheckBox` 의 `variant` 는 걷어냈다.**
+   남은 것은 `TxTable`(경계 미확정) · `TxBreadcrumb` · **`TxAppShell`**(가장 크다) ·
+   `TxScrollArea` 다 — **다음을 다시 정할 자리다.**
    `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
    그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
    미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
