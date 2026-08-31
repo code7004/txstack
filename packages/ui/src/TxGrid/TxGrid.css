@@ -1,0 +1,45 @@
+/**
+ * TxGrid — 칸을 나눠 담는 자리.
+ *
+ * **미디어 쿼리를 쓰지 않는다.** `auto-fit` 과 `minmax` 가 칸 수를 정하므로
+ * 화면이 아니라 **놓인 자리의 폭**에 반응한다 — 사이드바 안에 넣어도 맞는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-grid {
+  /** 몇 칸까지 벌릴지. `columns` prop 이 이 값을 준다 */
+  --tx-grid-columns: 2;
+
+  /** 칸 하나의 최소 폭. 이보다 좁아질 상황이면 칸 수가 줄어든다 */
+  --tx-grid-min: 14rem;
+
+  --tx-grid-gap: 1rem;
+
+  display: grid;
+  gap: var(--tx-grid-gap);
+
+  /**
+   * **한 줄에 `--tx-grid-columns` 칸까지, 자리가 좁으면 그보다 적게.**
+   *
+   * `min()` 이 없으면 최소 폭이 자리보다 커질 때 넘쳐서 가로 스크롤이 생긴다 —
+   * 좁은 화면에서 그 일이 난다.
+   */
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--tx-grid-min), 100%), 1fr));
+  max-inline-size: 100%;
+}
+
+/**
+ * 칸 수를 `--tx-grid-columns` 로 잡아 둔다. `auto-fit` 만 두면 자리가 넓을 때
+ * **2단으로 쓰라고 했는데 4단이 되어** 버린다.
+ */
+@supports (grid-template-columns: repeat(2, 1fr)) {
+  .tx-grid {
+    max-inline-size: none;
+    grid-template-columns: repeat(auto-fit, minmax(max(var(--tx-grid-min), calc((100% - (var(--tx-grid-columns) - 1) * var(--tx-grid-gap)) / var(--tx-grid-columns))), 1fr));
+  }
+}
+
+.tx-grid__item {
+  min-inline-size: 0;
+}

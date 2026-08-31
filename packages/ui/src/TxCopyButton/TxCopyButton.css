@@ -1,0 +1,36 @@
+/**
+ * TxCopyButton — 눌러서 글자를 복사하는 버튼.
+ *
+ * **겉은 `TxButton` 이 그린다.** 여기서는 두 가지만 맡는다 —
+ * 글자가 바뀔 때 폭이 널뛰지 않게 하는 것과, 소식을 전하는 자리를 화면에서 감추는 것.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+/**
+ * **글자가 바뀌어도 버튼이 안 흔들린다.** `복사` → `복사했습니다` 로 늘었다 줄면
+ * 옆에 있는 것들이 함께 밀린다.
+ *
+ * 기본 세 글자(`복사` · `복사했습니다` · `복사 실패`)가 **전부 이 폭 안에 들도록** 재서
+ * 정했다 — 그래서 기본값으로는 폭이 아예 움직이지 않는다. 더 긴 글자를 주는 쪽은
+ * 이 값을 함께 올린다.
+ */
+.tx-copy-button {
+  min-inline-size: var(--tx-copy-button-min-width, 8rem);
+}
+
+/**
+ * 소식은 스크린리더만 듣는다. **`display: none` 이 아니라 화면에서만 감춘다** —
+ * 전자는 라이브 리전을 통째로 없애서 아무것도 안 읽힌다.
+ */
+.tx-copy-button__status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
