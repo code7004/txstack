@@ -1,6 +1,6 @@
 {
   "name": "@txstack/axios",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Thin axios policy layer — injectable auth, 401 handling, response envelope unwrapping, logging hooks",
   "keywords": [
     "axios",

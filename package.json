@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Reusable React library set — UI components, hooks, route metadata, HTTP client",
+  "description": "Reusable React library set \u2014 UI components, hooks, route metadata, HTTP client",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,10 +26,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "release": "pnpm build && changeset publish",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@changesets/cli": "^3.0.1",
     "@eslint/js": "^9.39.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
