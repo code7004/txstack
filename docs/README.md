@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 — 테스트 1363개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` — 테스트 1408개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
@@ -111,8 +111,9 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    `TxCopyButton`)에 이어 **폼 컨트롤 묶음 일곱**(`TxRadio`/`TxRadioGroup` · `TxSwitch` ·
    `TxTag` Chip 흡수 · `TxBadge` · `TxNumberInput` · `TxSlider` · `TxFileUpload`)까지 끝났다.
    `TxSwitch` 를 가르면서 **`TxCheckBox` 의 `variant` 는 걷어냈다.**
-   남은 넷의 순서를 정했다 — **`TxScrollArea` → `TxBreadcrumb` → `TxAppShell` → `TxTable`.**
-   작은 것부터 가고, `TxTable` 은 **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 마지막이다.
+   남은 넷의 순서를 정했다 — `TxScrollArea`(완료) → `TxBreadcrumb`(완료) →
+   **`TxAppShell` → `TxTable`.** `TxTable` 은 **어디까지가 `TxAgGrid` 몫인지**를
+   정해야 해서 마지막이다.
    `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
    그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
    미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한

@@ -83,7 +83,6 @@ describe("TxSwitch — 켜고 끄기", () => {
   it("stopPropagation 이면 부모로 안 올라간다", () => {
     const onParent = vi.fn();
     render(
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- 버블링을 보는 테스트다
       <div onClick={onParent}>
         <TxSwitch label="알림" stopPropagation />
       </div>
@@ -96,7 +95,6 @@ describe("TxSwitch — 켜고 끄기", () => {
   it("평소에는 부모로 올라간다", () => {
     const onParent = vi.fn();
     render(
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- 버블링을 보는 테스트다
       <div onClick={onParent}>
         <TxSwitch label="알림" />
       </div>

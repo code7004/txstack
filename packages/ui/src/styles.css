@@ -67,6 +67,7 @@
 @import "./TxEmptyState/TxEmptyState.css" layer(tx);
 @import "./TxTag/TxTag.css" layer(tx);
 @import "./TxBadge/TxBadge.css" layer(tx);
+@import "./TxBreadcrumb/TxBreadcrumb.css" layer(tx);
 /* 알림은 TxAlert 의 겉을 쓴다. 그 뒤에 와야 자리 규칙이 이긴다 */
 @import "./TxToast/TxToast.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
@@ -84,6 +85,7 @@
 @import "./TxTooltip/TxTooltip.css" layer(tx);
 @import "./TxSpinner/TxSpinner.css" layer(tx);
 @import "./TxSkeleton/TxSkeleton.css" layer(tx);
+@import "./TxScrollArea/TxScrollArea.css" layer(tx);
 @import "./TxProgress/TxProgress.css" layer(tx);
 /* 올리기는 TxProgress·TxButton 의 겉을 쓴다. 그 뒤에 와야 한다 */
 @import "./TxFileUpload/TxFileUpload.css" layer(tx);
