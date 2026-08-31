@@ -1,6 +1,6 @@
 {
   "name": "@txstack/ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Tx* React UI components — CSS custom property tokens, works with any consumer styling approach",
   "keywords": [
     "react",

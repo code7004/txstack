@@ -1,6 +1,6 @@
 {
   "name": "@txstack/hooks",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "General-purpose React hooks — object state, safe polling, URL query as state",
   "keywords": [
     "react",

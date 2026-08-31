@@ -1,6 +1,6 @@
 {
   "name": "@txstack/route-meta",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Declare routes as one metadata tree — derive React Router objects, navigation menus, and current route",
   "keywords": [
     "react",

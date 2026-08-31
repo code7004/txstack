@@ -68,16 +68,30 @@
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
 | `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 — 테스트 1363개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
-| 배포 도구     | **없음** — changesets · husky · commitlint 는 의도적으로 미뤘다                                                                                 |
+| 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
 
-### 왜 changesets·husky 를 지금 안 넣었나
+### 버전은 changesets 가 매긴다
 
-구현이 0줄이라 커밋 훅은 마찰만 된다. changesets 는 **첫 공개 API 가 생긴 뒤** 붙여도 늦지 않다.
-필요해지는 시점이 명확하다 — changesets 는 첫 `export` 가 확정될 때, husky·commitlint 는
-사람이 둘 이상 커밋하기 시작할 때.
+구현이 0줄일 때는 안 넣었다 — 커밋 훅도 버전도 그때는 마찰만 된다. **붙이는 시점을
+"첫 `export` 가 확정될 때" 로 잡아 두었고, 그때가 왔다.** 네 패키지 모두 `0.1.0` 이다.
+
+```sh
+pnpm changeset           # 무엇이 어떻게 바뀌었는지 적는다
+pnpm changeset:version   # 쌓인 것을 모아 버전을 올리고 CHANGELOG 를 쓴다
+pnpm release             # 빌드하고 배포한다 — 사용자가 명시적으로 요청할 때만
+```
+
+**커밋 메시지와 changeset 은 읽는 사람이 다르다.** 커밋은 "왜 그렇게 했나" 를 남기고
+(이 저장소의 커밋이 유난히 긴 이유다), changeset 은 **소비자에게 무엇이 달라졌는지**를
+남긴다. 자세한 것은 [.changeset/README.md](../.changeset/README.md).
+
+아직 `0.x` 라 **`minor` 가 깨지는 변경도 담는다**(semver 가 그렇다). 그래도 깨지는 것은
+`major` 로 적어 둔다 — `1.0.0` 이 되는 날 그 기록이 그대로 뜻을 갖는다.
+
+husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작할 때** 붙인다.
 
 ## 다음 할 일
 
@@ -97,8 +111,8 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
    `TxCopyButton`)에 이어 **폼 컨트롤 묶음 일곱**(`TxRadio`/`TxRadioGroup` · `TxSwitch` ·
    `TxTag` Chip 흡수 · `TxBadge` · `TxNumberInput` · `TxSlider` · `TxFileUpload`)까지 끝났다.
    `TxSwitch` 를 가르면서 **`TxCheckBox` 의 `variant` 는 걷어냈다.**
-   남은 것은 `TxTable`(경계 미확정) · `TxBreadcrumb` · **`TxAppShell`**(가장 크다) ·
-   `TxScrollArea` 다 — **다음을 다시 정할 자리다.**
+   남은 넷의 순서를 정했다 — **`TxScrollArea` → `TxBreadcrumb` → `TxAppShell` → `TxTable`.**
+   작은 것부터 가고, `TxTable` 은 **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 마지막이다.
    `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
    그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
    미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
