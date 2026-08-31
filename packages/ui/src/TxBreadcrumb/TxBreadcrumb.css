@@ -1,0 +1,91 @@
+/**
+ * TxBreadcrumb — 여기까지 온 길.
+ *
+ * 가르는 `/` 는 **CSS 가 그린다.** 글자로 넣으면 스크린리더가 칸마다 "슬래시" 를 읽어
+ * 정작 경로가 안 읽힌다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-breadcrumb {
+  --tx-breadcrumb-gap: 0.5rem;
+  --tx-breadcrumb-font-size: 0.875rem;
+
+  --tx-breadcrumb-color: color-mix(in oklab, var(--tx-color-text) 60%, transparent);
+  --tx-breadcrumb-current-color: var(--tx-color-text);
+  --tx-breadcrumb-current-weight: 600;
+  --tx-breadcrumb-separator-color: color-mix(in oklab, var(--tx-color-text) 35%, transparent);
+
+  /** 가르는 표시. 글자를 바꾸려면 `separator` prop 을 쓴다 */
+  --tx-breadcrumb-separator: "/";
+
+  font-size: var(--tx-breadcrumb-font-size);
+}
+
+.tx-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tx-breadcrumb__cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-breadcrumb-gap);
+  min-inline-size: 0;
+}
+
+/** 칸 사이에만 넣는다. 첫 칸 앞에는 가를 것이 없다 */
+.tx-breadcrumb__cell + .tx-breadcrumb__cell {
+  margin-inline-start: var(--tx-breadcrumb-gap);
+}
+
+.tx-breadcrumb__separator {
+  flex: none;
+  color: var(--tx-breadcrumb-separator-color);
+}
+
+/** `separator` 를 안 주면 CSS 가 그린다 */
+.tx-breadcrumb__separator:empty::before {
+  content: var(--tx-breadcrumb-separator);
+}
+
+/* --- 칸 ------------------------------------------------------------------- */
+
+.tx-breadcrumb__item {
+  min-inline-size: 0;
+  color: var(--tx-breadcrumb-color);
+  text-decoration: none;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/**
+ * 링크일 때만 밑줄이 뜬다. **지금 자리는 링크가 아니므로** 이 규칙이 닿지 않는다 —
+ * 누를 수 있는 것과 없는 것이 눈으로도 갈린다.
+ */
+a.tx-breadcrumb__item:hover,
+a.tx-breadcrumb__item:focus-visible {
+  color: var(--tx-breadcrumb-current-color);
+  text-decoration: underline;
+}
+
+.tx-breadcrumb__item:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-breadcrumb__item[aria-current="page"] {
+  color: var(--tx-breadcrumb-current-color);
+  font-weight: var(--tx-breadcrumb-current-weight);
+}
+
+.tx-breadcrumb__gap {
+  color: var(--tx-breadcrumb-separator-color);
+}

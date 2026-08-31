@@ -1,0 +1,90 @@
+/**
+ * TxScrollArea — 넘치는 내용을 굴려 보는 자리.
+ *
+ * **흐림은 `mask-image` 가 그린다.** 그림자를 얹는 대신 내용 자체를 흐리게 하므로,
+ * 뒤에 무슨 색이 있든 맞춘 것처럼 보인다 — 그림자 방식은 바탕색을 알아야 한다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-scroll-area {
+  --tx-scroll-area-fade: 2rem;
+  --tx-scroll-area-size: auto;
+
+  /**
+   * 스크롤바를 CSS 로만 다듬는다. **가짜 스크롤바를 그리지 않는다** —
+   * 그러면 휠 관성 · 터치 · 접근성 설정을 전부 다시 만들어야 하고, 어느 하나는 어긋난다.
+   */
+  --tx-scroll-area-bar-color: color-mix(in oklab, var(--tx-color-text) 30%, transparent);
+  --tx-scroll-area-bar-track: transparent;
+
+  overflow: auto;
+  overscroll-behavior: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--tx-scroll-area-bar-color) var(--tx-scroll-area-bar-track);
+}
+
+.tx-scroll-area:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/* --- 세로 ----------------------------------------------------------------- */
+
+.tx-scroll-area[data-orientation="vertical"] {
+  block-size: var(--tx-scroll-area-size);
+  max-block-size: 100%;
+  overflow-x: hidden;
+
+  /**
+   * 위아래를 흐린다. **끝에 닿으면 그쪽 흐림이 사라진다** — 아래 규칙이 그 자리를
+   * 검정(=그대로 보임)으로 되돌린다. 양쪽을 늘 흐리게 두면 끝에 닿았는지 알 수 없다.
+   */
+  mask-image: linear-gradient(to bottom, transparent 0, black var(--tx-scroll-area-fade), black calc(100% - var(--tx-scroll-area-fade)), transparent 100%);
+}
+
+.tx-scroll-area[data-orientation="vertical"][data-at-start] {
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--tx-scroll-area-fade)), transparent 100%);
+}
+
+.tx-scroll-area[data-orientation="vertical"][data-at-end] {
+  mask-image: linear-gradient(to bottom, transparent 0, black var(--tx-scroll-area-fade));
+}
+
+/* 넘치지 않으면 양쪽 다 끝이다. 흐릴 것이 없다 */
+.tx-scroll-area[data-orientation="vertical"][data-at-start][data-at-end] {
+  mask-image: none;
+}
+
+/* --- 가로 ----------------------------------------------------------------- */
+
+.tx-scroll-area[data-orientation="horizontal"] {
+  inline-size: var(--tx-scroll-area-size);
+  max-inline-size: 100%;
+  overflow-y: hidden;
+
+  mask-image: linear-gradient(to right, transparent 0, black var(--tx-scroll-area-fade), black calc(100% - var(--tx-scroll-area-fade)), transparent 100%);
+}
+
+.tx-scroll-area[data-orientation="horizontal"][data-at-start] {
+  mask-image: linear-gradient(to right, black calc(100% - var(--tx-scroll-area-fade)), transparent 100%);
+}
+
+.tx-scroll-area[data-orientation="horizontal"][data-at-end] {
+  mask-image: linear-gradient(to right, transparent 0, black var(--tx-scroll-area-fade));
+}
+
+.tx-scroll-area[data-orientation="horizontal"][data-at-start][data-at-end] {
+  mask-image: none;
+}
+
+/**
+ * 움직임을 원치 않는다고 밝힌 사람에게는 부드럽게 굴리지 않는다.
+ * **흐림은 그대로 남는다** — 그것은 움직임이 아니라 표시다.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tx-scroll-area {
+    scroll-behavior: auto;
+  }
+}

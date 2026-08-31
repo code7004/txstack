@@ -15,6 +15,7 @@
 export * from "./TxAccordion";
 export * from "./TxAlert";
 export * from "./TxBadge";
+export * from "./TxBreadcrumb";
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
 export * from "./TxCard";
@@ -40,6 +41,7 @@ export * from "./TxPagination";
 export * from "./TxProgress";
 export * from "./TxRadio";
 export * from "./TxSlidePanel";
+export * from "./TxScrollArea";
 export * from "./TxSkeleton";
 export * from "./TxSlider";
 export * from "./TxSwitch";
