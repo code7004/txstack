@@ -1,0 +1,67 @@
+/**
+ * TxEmptyState — 보여 줄 것이 없을 때 그 자리에 놓는 안내.
+ *
+ * **갈래는 그림 색 하나만 갈린다.** 빈 화면은 조용해야 하므로 바탕이나 테두리를 칠하지
+ * 않는다 — 알림(`TxAlert`)과 다른 점이다. 그쪽은 눈에 띄어야 하고 이쪽은 자리를 지킨다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-empty-state {
+  --tx-empty-state-accent: color-mix(in oklab, var(--tx-color-text) 40%, transparent);
+
+  --tx-empty-state-padding: 3rem 1rem;
+  --tx-empty-state-gap: 0.5rem;
+  --tx-empty-state-icon-size: 2.5rem;
+
+  --tx-empty-state-title-size: 0.9375rem;
+  --tx-empty-state-title-weight: 600;
+  --tx-empty-state-description-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+  --tx-empty-state-description-size: 0.875rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tx-empty-state-gap);
+
+  padding: var(--tx-empty-state-padding);
+
+  color: var(--tx-color-text);
+  text-align: center;
+}
+
+/**
+ * 실패한 것만 갈래색을 쓴다. 나머지 셋은 **잘못이 아니라 상태**라, 붉히거나 노랗게 하면
+ * 없는 문제를 있는 것처럼 보이게 한다.
+ */
+.tx-empty-state[data-variant="error"] {
+  --tx-empty-state-accent: var(--tx-color-danger);
+}
+
+.tx-empty-state__icon {
+  display: inline-flex;
+  color: var(--tx-empty-state-accent);
+  font-size: var(--tx-empty-state-icon-size);
+}
+
+.tx-empty-state__title {
+  margin: 0;
+  font-size: var(--tx-empty-state-title-size);
+  font-weight: var(--tx-empty-state-title-weight);
+}
+
+.tx-empty-state__description {
+  margin: 0;
+  max-inline-size: 28rem;
+  color: var(--tx-empty-state-description-color);
+  font-size: var(--tx-empty-state-description-size);
+}
+
+.tx-empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+
+  margin-block-start: 0.75rem;
+}

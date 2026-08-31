@@ -1,0 +1,95 @@
+/**
+ * TxDivider — 가르는 선.
+ *
+ * **글자가 없으면 `<hr>` 하나다.** 브라우저가 이미 "가르는 것" 으로 읽으므로 손댈 것은
+ * 겉모습뿐이다. 글자를 주면 그 글자가 내용이 되고 **선은 `::before` · `::after` 가 그린다** —
+ * 가상요소라 스크린리더에 읽히지 않는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-divider {
+  --tx-divider-color: var(--tx-color-border);
+  --tx-divider-thickness: 1px;
+
+  /** 선이 가르는 두 덩이와의 사이. 가로면 위아래, 세로면 좌우다 */
+  --tx-divider-spacing: 1rem;
+
+  --tx-divider-label-gap: 0.75rem;
+  --tx-divider-label-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+  --tx-divider-label-size: 0.8125rem;
+}
+
+/* --- 민 선 ----------------------------------------------------------------- */
+
+/**
+ * `<hr>` 의 기본 테두리를 지우고 배경으로 그린다. 테두리로 두면 두께를 바꿀 때
+ * `border-width` 와 `height` 가 함께 놀아서 값이 두 곳으로 갈린다.
+ */
+hr.tx-divider {
+  flex: none;
+  border: 0;
+  background-color: var(--tx-divider-color);
+}
+
+hr.tx-divider[data-orientation="horizontal"] {
+  margin: var(--tx-divider-spacing) 0;
+  block-size: var(--tx-divider-thickness);
+}
+
+/**
+ * 세로 선은 **놓인 자리의 높이만큼** 늘어난다. flex 줄 안에서는 `align-self` 가 늘려 주고,
+ * 그렇지 않은 자리에서는 늘릴 기준이 없으므로 한 줄 높이를 밑값으로 둔다 —
+ * 안 그러면 높이 0 이 되어 아무것도 안 보인다.
+ */
+hr.tx-divider[data-orientation="vertical"] {
+  align-self: stretch;
+  margin: 0 var(--tx-divider-spacing);
+  inline-size: var(--tx-divider-thickness);
+  min-block-size: 1lh;
+}
+
+/* --- 글자가 든 선 ----------------------------------------------------------- */
+
+.tx-divider[data-labeled] {
+  display: flex;
+  align-items: center;
+  gap: var(--tx-divider-label-gap);
+
+  color: var(--tx-divider-label-color);
+  font-size: var(--tx-divider-label-size);
+}
+
+.tx-divider[data-labeled]::before,
+.tx-divider[data-labeled]::after {
+  content: "";
+  flex: 1;
+  background-color: var(--tx-divider-color);
+}
+
+.tx-divider[data-labeled][data-orientation="horizontal"] {
+  margin: var(--tx-divider-spacing) 0;
+}
+
+.tx-divider[data-labeled][data-orientation="horizontal"]::before,
+.tx-divider[data-labeled][data-orientation="horizontal"]::after {
+  block-size: var(--tx-divider-thickness);
+}
+
+.tx-divider[data-labeled][data-orientation="vertical"] {
+  flex-direction: column;
+  align-self: stretch;
+  margin: 0 var(--tx-divider-spacing);
+  min-block-size: 4lh;
+}
+
+.tx-divider[data-labeled][data-orientation="vertical"]::before,
+.tx-divider[data-labeled][data-orientation="vertical"]::after {
+  inline-size: var(--tx-divider-thickness);
+}
+
+/** 글자는 줄어들지 않는다. 선이 대신 줄어든다 */
+.tx-divider__label {
+  flex: none;
+  white-space: nowrap;
+}
