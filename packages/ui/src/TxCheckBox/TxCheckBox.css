@@ -1,5 +1,8 @@
 /**
- * TxCheckBox — 켜고 끄는 자리. 네모(`checkbox`)와 스위치(`toggle`) 두 모양.
+ * TxCheckBox — 고르는 자리. 네모를 눌러 체크한다.
+ *
+ * **스위치는 `TxSwitch` 가 갖는다.** 겉모습이 아니라 하는 말이 달라서 갈랐다 —
+ * 체크박스는 모아 두었다가 제출하고, 스위치는 누르는 즉시 반영된다.
  *
  * **상태를 CSS 가 읽는다.** 진짜 `<input type="checkbox">` 가 안에 있으므로
  * `:checked` · `:disabled` · `:focus-visible` 을 형제 선택자로 잡는다.
@@ -25,25 +28,16 @@
   --tx-checkbox-icon-color: var(--tx-color-on-accent);
 
   /* --- 스위치 --- */
-  --tx-checkbox-track-width: 2.25rem;
-  --tx-checkbox-track-height: 1.25rem;
-  --tx-checkbox-track-bg: var(--tx-color-muted);
-  --tx-checkbox-track-checked-bg: var(--tx-color-primary);
-  --tx-checkbox-thumb-size: 1rem;
-  --tx-checkbox-thumb-inset: 0.125rem;
 
   /**
    * 꺼진 손잡이 색을 **트랙에서 파생한다.** 리터럴 회색을 적으면 다크모드에서 따로 손봐야 한다.
    * 섞는 색(`--tx-color-state`)이 라이트/다크에서 뒤집히므로 이 한 줄이 두 모드를 다 덮는다.
    */
-  --tx-checkbox-thumb-bg: color-mix(in oklab, var(--tx-color-state) 35%, var(--tx-checkbox-track-bg));
-  --tx-checkbox-thumb-checked-bg: var(--tx-color-surface);
 
   /**
    * 손잡이가 움직이는 거리. **매직넘버를 쓰지 않는다** —
    * 트랙이나 손잡이 크기를 바꾸면 이 값이 따라 계산된다.
    */
-  --tx-checkbox-thumb-travel: calc(var(--tx-checkbox-track-width) - var(--tx-checkbox-thumb-size) - var(--tx-checkbox-thumb-inset) * 2);
 
   --tx-checkbox-transition: 150ms;
 
@@ -75,9 +69,7 @@
   clip-path: inset(50%);
 }
 
-/* --- 네모 -------------------------------------------------------------- */
-
-.tx-checkbox[data-variant="checkbox"] .tx-checkbox__mark {
+.tx-checkbox__mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -112,46 +104,6 @@
 
 .tx-checkbox__input:checked + .tx-checkbox__mark .tx-checkbox__icon {
   opacity: 1;
-}
-
-/* --- 스위치 ------------------------------------------------------------ */
-
-.tx-checkbox[data-variant="toggle"] .tx-checkbox__mark {
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-
-  width: var(--tx-checkbox-track-width);
-  height: var(--tx-checkbox-track-height);
-
-  border-radius: 9999px;
-  background-color: var(--tx-checkbox-track-bg);
-  transition: background-color var(--tx-checkbox-transition);
-}
-
-.tx-checkbox[data-variant="toggle"] .tx-checkbox__input:checked + .tx-checkbox__mark {
-  background-color: var(--tx-checkbox-track-checked-bg);
-}
-
-.tx-checkbox__thumb {
-  position: absolute;
-  top: var(--tx-checkbox-thumb-inset);
-  left: var(--tx-checkbox-thumb-inset);
-
-  width: var(--tx-checkbox-thumb-size);
-  height: var(--tx-checkbox-thumb-size);
-
-  border-radius: 9999px;
-  background-color: var(--tx-checkbox-thumb-bg);
-
-  transition:
-    transform var(--tx-checkbox-transition),
-    background-color var(--tx-checkbox-transition);
-}
-
-.tx-checkbox__input:checked + .tx-checkbox__mark .tx-checkbox__thumb {
-  transform: translateX(var(--tx-checkbox-thumb-travel));
-  background-color: var(--tx-checkbox-thumb-checked-bg);
 }
 
 /* --- 공통 -------------------------------------------------------------- */

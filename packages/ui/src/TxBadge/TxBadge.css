@@ -1,0 +1,140 @@
+/**
+ * TxBadge — 무언가에 붙는 알림 점·개수.
+ *
+ * **혼자 서는 이름표는 `TxTag` 가 갖는다.** 이쪽은 감싼 것의 모서리에 겹쳐 앉으므로
+ * 그 자리를 밀지 않는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-badge-anchor {
+  /* 뱃지가 이 상자의 모서리를 기준으로 앉는다 */
+  position: relative;
+  display: inline-flex;
+}
+
+.tx-badge {
+  --tx-badge-accent: var(--tx-color-danger);
+  --tx-badge-fg: var(--tx-color-on-accent);
+
+  --tx-badge-size: 1.125rem;
+  --tx-badge-dot-size: 0.5rem;
+  --tx-badge-font-size: 0.6875rem;
+  --tx-badge-font-weight: 700;
+  --tx-badge-padding: 0 0.3125rem;
+
+  /* 감싼 것의 모서리 밖으로 얼마나 나갈지 */
+  --tx-badge-offset: -0.25rem;
+
+  /**
+   * 감싼 것과 뱃지 사이의 테두리. 아이콘 위에 겹칠 때 **경계가 없으면 뭉개져 보인다.**
+   * 배경색을 그대로 쓰므로 어느 바탕에서든 파낸 것처럼 보인다.
+   */
+  --tx-badge-ring: 2px solid var(--tx-color-surface);
+
+  position: absolute;
+  z-index: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-inline-size: var(--tx-badge-size);
+  block-size: var(--tx-badge-size);
+  padding: var(--tx-badge-padding);
+
+  border: var(--tx-badge-ring);
+  border-radius: 999px;
+  background-color: var(--tx-badge-accent);
+  color: var(--tx-badge-fg);
+
+  font-size: var(--tx-badge-font-size);
+  font-weight: var(--tx-badge-font-weight);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+
+  /* 알림 위를 눌러도 감싼 버튼이 눌려야 한다 */
+  pointer-events: none;
+}
+
+/* --- 점 ------------------------------------------------------------------- */
+
+.tx-badge[data-dot] {
+  min-inline-size: var(--tx-badge-dot-size);
+  inline-size: var(--tx-badge-dot-size);
+  block-size: var(--tx-badge-dot-size);
+  padding: 0;
+}
+
+/* --- 자리 ----------------------------------------------------------------- */
+
+/**
+ * **네 변을 전부 정한다.** 붙일 모서리만 얹으면 반대쪽이 `auto` 로 남지 않아
+ * 자리가 어긋난다 — `TxSlidePanel` · `TxToast` 에서 지나온 자리다.
+ */
+.tx-badge[data-placement="top-right"] {
+  inset-block: var(--tx-badge-offset) auto;
+  inset-inline: auto var(--tx-badge-offset);
+}
+
+.tx-badge[data-placement="top-left"] {
+  inset-block: var(--tx-badge-offset) auto;
+  inset-inline: var(--tx-badge-offset) auto;
+}
+
+.tx-badge[data-placement="bottom-right"] {
+  inset-block: auto var(--tx-badge-offset);
+  inset-inline: auto var(--tx-badge-offset);
+}
+
+.tx-badge[data-placement="bottom-left"] {
+  inset-block: auto var(--tx-badge-offset);
+  inset-inline: var(--tx-badge-offset) auto;
+}
+
+/** 홀로 설 때는 얹힐 데가 없으므로 제자리에 놓인다 */
+.tx-badge[data-standalone] {
+  position: static;
+  border: 0;
+}
+
+/* --- 갈래 ----------------------------------------------------------------- */
+
+/**
+ * **`success` · `warning` 은 라이트/다크에서 밝기가 뒤집힌다.** 그래서 흰 글자를 얹을 수
+ * 없어, 그 둘만 본문 색을 얹는다 — 갈래색 위에서 늘 읽히는 쪽을 고른다.
+ * (`TxTag` 가 배경을 꽉 채우지 않기로 한 것과 같은 사정인데, 알림 점은 눈에 띄는 것이
+ * 일이라 채우고 대신 글자색을 갈래마다 정한다.)
+ */
+.tx-badge[data-variant="info"] {
+  --tx-badge-accent: var(--tx-color-primary);
+}
+
+.tx-badge[data-variant="success"] {
+  --tx-badge-accent: var(--tx-color-success);
+  --tx-badge-fg: var(--tx-color-text);
+}
+
+.tx-badge[data-variant="warning"] {
+  --tx-badge-accent: var(--tx-color-warning);
+  --tx-badge-fg: var(--tx-color-text);
+}
+
+/* --- 스크린리더 ------------------------------------------------------------ */
+
+/**
+ * 뜻은 이 글자가 나른다. **화면에서만 감춘다** — `display: none` 은 스크린리더에서도
+ * 사라져서 숫자만 남고, 숫자만으로는 무엇의 수인지 알 수 없다.
+ */
+.tx-badge__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}

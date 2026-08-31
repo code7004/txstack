@@ -46,12 +46,17 @@
 @import "./TxCapsLockCheck/TxCapsLockCheck.css" layer(tx);
 @import "./TxCard/TxCard.css" layer(tx);
 @import "./TxCheckBox/TxCheckBox.css" layer(tx);
+@import "./TxRadio/TxRadio.css" layer(tx);
+@import "./TxSlider/TxSlider.css" layer(tx);
+@import "./TxSwitch/TxSwitch.css" layer(tx);
 @import "./TxDayPicker/TxDayPicker.css" layer(tx);
 @import "./TxDropdown/TxDropdown.css" layer(tx);
 @import "./TxFlex/TxFlex.css" layer(tx);
 @import "./TxGrid/TxGrid.css" layer(tx);
 @import "./TxDivider/TxDivider.css" layer(tx);
 @import "./TxInput/TxInput.css" layer(tx);
+/* 숫자 칸은 TxInput 의 상자를 그대로 쓴다. 그 뒤에 와야 한다 */
+@import "./TxNumberInput/TxNumberInput.css" layer(tx);
 /* .tx-textarea 와 .tx-search-input .tx-input 이 위 규칙을 덮는다. 순서가 곧 캐스케이드다 */
 @import "./TxTextarea/TxTextarea.css" layer(tx);
 @import "./TxCombobox/TxCombobox.css" layer(tx);
@@ -61,6 +66,7 @@
 @import "./TxAlert/TxAlert.css" layer(tx);
 @import "./TxEmptyState/TxEmptyState.css" layer(tx);
 @import "./TxTag/TxTag.css" layer(tx);
+@import "./TxBadge/TxBadge.css" layer(tx);
 /* 알림은 TxAlert 의 겉을 쓴다. 그 뒤에 와야 자리 규칙이 이긴다 */
 @import "./TxToast/TxToast.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
@@ -79,6 +85,8 @@
 @import "./TxSpinner/TxSpinner.css" layer(tx);
 @import "./TxSkeleton/TxSkeleton.css" layer(tx);
 @import "./TxProgress/TxProgress.css" layer(tx);
+/* 올리기는 TxProgress·TxButton 의 겉을 쓴다. 그 뒤에 와야 한다 */
+@import "./TxFileUpload/TxFileUpload.css" layer(tx);
 @import "./TxCollapsible/TxCollapsible.css" layer(tx);
 /* 아코디언은 접기의 겉을 그대로 쓰고 이어 붙이기만 한다. 그 뒤에 와야 한다 */
 @import "./TxAccordion/TxAccordion.css" layer(tx);

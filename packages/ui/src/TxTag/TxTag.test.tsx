@@ -1,7 +1,7 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { TxTag } from "./TxTag";
 
 /**
@@ -24,8 +24,8 @@ describe("TxTag — 그리기", () => {
     expect(badgeOf(container).tagName).toBe("SPAN");
   });
 
-  /** 태그는 읽는 것만 한다. */
-  it("누르는 것이 아니다", () => {
+  /** 아무것도 안 주면 읽기만 하는 이름표다. */
+  it("기본은 누르는 것이 아니다", () => {
     render(<TxTag>완료</TxTag>);
 
     expect(screen.queryByRole("button")).toBeNull();
@@ -198,5 +198,71 @@ describe("TxTag — CSS 계약", () => {
 
     expect(base).toMatch(/border:\s*1px solid/);
     expect(outline).not.toMatch(/(?:^|\s)(padding|border-width|font-size):/);
+  });
+});
+
+/**
+ * 5차에서 Chip 을 흡수했다. **누를 수 있고 지울 수 있다.**
+ *
+ * 가장 조심한 것은 **버튼 안의 버튼을 만들지 않는 것**이다 — 태그 전체를 버튼으로
+ * 감싸면 지우기(×)가 그 안에 들어가 못 쓰는 마크업이 된다.
+ */
+describe("TxTag — 누르고 지우기", () => {
+  it("onClick 을 주면 글자가 눌린다", () => {
+    const onClick = vi.fn();
+    render(<TxTag onClick={onClick}>VIP</TxTag>);
+
+    fireEvent.click(screen.getByRole("button", { name: "VIP" }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("onRemove 를 주면 지우기가 붙는다", () => {
+    const onRemove = vi.fn();
+    render(<TxTag onRemove={onRemove}>서울</TxTag>);
+
+    fireEvent.click(screen.getByRole("button", { name: "지우기" }));
+    expect(onRemove).toHaveBeenCalledTimes(1);
+  });
+
+  it("지우기 버튼의 이름을 바꿀 수 있다", () => {
+    render(
+      <TxTag onRemove={vi.fn()} removeLabel="서울 빼기">
+        서울
+      </TxTag>
+    );
+
+    expect(screen.getByRole("button", { name: "서울 빼기" })).toBeTruthy();
+  });
+
+  /** 태그 전체를 버튼으로 감싸면 지우기가 그 안에 들어가 못 쓰는 마크업이 된다. */
+  it("둘을 함께 줘도 버튼 안에 버튼이 생기지 않는다", () => {
+    const { container } = render(
+      <TxTag onClick={vi.fn()} onRemove={vi.fn()}>
+        서울
+      </TxTag>
+    );
+
+    expect(screen.getAllByRole("button")).toHaveLength(2);
+    expect(container.querySelectorAll("button button")).toHaveLength(0);
+    expect(container.querySelector('[data-tag="TxTag"]')?.tagName).toBe("SPAN");
+  });
+
+  it("누를 수 있다는 것을 표시로 남긴다", () => {
+    const { container } = render(<TxTag onClick={vi.fn()}>VIP</TxTag>);
+    expect(container.querySelector('[data-tag="TxTag"]')?.hasAttribute("data-interactive")).toBe(true);
+  });
+
+  it("지우기만 줬을 때는 그 표시가 없다", () => {
+    const { container } = render(<TxTag onRemove={vi.fn()}>서울</TxTag>);
+    expect(container.querySelector('[data-tag="TxTag"]')?.hasAttribute("data-interactive")).toBe(false);
+  });
+
+  /** 방식을 바꿔도 크기가 흔들리면 표 안에서 줄이 들썩인다. */
+  it("누를 수 있든 아니든 글자 자리는 같다", () => {
+    const { container: plain } = render(<TxTag>서울</TxTag>);
+    const { container: clickable } = render(<TxTag onClick={vi.fn()}>서울</TxTag>);
+
+    expect(plain.querySelector(".tx-tag__body")?.tagName).toBe("SPAN");
+    expect(clickable.querySelector(".tx-tag__body")?.tagName).toBe("BUTTON");
   });
 });

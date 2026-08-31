@@ -22,12 +22,11 @@ const meta = {
           'import "@txstack/ui/styles.css"; // 앱에서 한 번',
           "",
           '<TxCheckBox label="동의합니다" onChangeBool={setAgreed} />;',
-          '<TxCheckBox label="알림 받기" variant="toggle" defaultChecked />;',
           "```",
           "",
           "- `checked` 를 주면 controlled, `defaultChecked` 를 주면 uncontrolled",
           "- `onChangeBool` 은 체크 여부만 준다. `onChange` 와 함께 불린다",
-          '- `variant="toggle"` 은 스위치로 읽힌다 — 스크린리더가 "켜짐/꺼짐" 으로 안내한다',
+          '- **그 자리에서 바로 켜고 끄는 것은 `TxSwitch` 다.** 체크박스는 "이것을 고르겠다" 를 모아 두었다가 제출하는 자리고, 스위치는 누르는 즉시 반영된다 — 스크린리더도 "선택됨" 과 "켜짐/꺼짐" 으로 다르게 읽는다',
           "",
           '**안에 진짜 `<input type="checkbox">` 가 있다.** 그래서',
           "`name` · `value` · `disabled` · `required` 같은 표준 속성이 그대로 통과하고,",
@@ -41,7 +40,6 @@ const meta = {
   },
   argTypes: {
     label: { control: "text" },
-    variant: { control: "inline-radio", options: ["checkbox", "toggle"] },
     disabled: { control: "boolean" },
     defaultChecked: { control: "boolean" },
     stopPropagation: { control: "boolean", description: "클릭이 부모로 올라가지 않게 막는다" },
@@ -55,18 +53,16 @@ type Story = StoryObj<typeof meta>;
 const noControls = { controls: { disable: true } };
 
 export const Playground: Story = {
-  args: { label: "동의합니다", variant: "checkbox", disabled: false, defaultChecked: false, stopPropagation: false, className: "" }
+  args: { label: "동의합니다", disabled: false, defaultChecked: false, stopPropagation: false, className: "" }
 };
 
-/** 두 모양. 같은 컴포넌트고 `variant` 만 다르다. */
-export const Variant: Story = {
+/** 꺼짐과 켜짐. **그 자리에서 바로 켜고 끄는 것은 `TxSwitch` 다.** */
+export const Basic: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex className="flex-col items-start gap-3">
-      <TxCheckBox label="체크박스 — 꺼짐" />
-      <TxCheckBox label="체크박스 — 켜짐" defaultChecked />
-      <TxCheckBox label="스위치 — 꺼짐" variant="toggle" />
-      <TxCheckBox label="스위치 — 켜짐" variant="toggle" defaultChecked />
+      <TxCheckBox label="꺼짐" />
+      <TxCheckBox label="켜짐" defaultChecked />
     </TxFlex>
   )
 };
@@ -77,9 +73,7 @@ export const States: Story = {
     <TxFlex className="flex-col items-start gap-3">
       <TxCheckBox label="기본" />
       <TxCheckBox label="비활성 — 꺼짐" disabled />
-      <TxCheckBox label="비활성 — 켜짐" disabled defaultChecked />
-      <TxCheckBox label="비활성 스위치" variant="toggle" disabled defaultChecked />
-      <TxCheckBox label="글 없이 (스크린리더용 이름만)" aria-label="글 없는 체크박스" />
+      <TxCheckBox label="비활성 — 켜짐" disabled defaultChecked />      <TxCheckBox label="글 없이 (스크린리더용 이름만)" aria-label="글 없는 체크박스" />
     </TxFlex>
   )
 };
@@ -94,9 +88,7 @@ export const Keyboard: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex className="flex-col items-start gap-3">
-      <TxCheckBox label="Tab 으로 여기까지 오세요" />
-      <TxCheckBox label="Space 로 켜고 끕니다" variant="toggle" />
-      <TxCheckBox label="글을 눌러도 토글됩니다" />
+      <TxCheckBox label="Tab 으로 여기까지 오세요" />      <TxCheckBox label="글을 눌러도 토글됩니다" />
     </TxFlex>
   )
 };
@@ -121,7 +113,7 @@ export const InForm: Story = {
       >
         <TxFlex className="flex-col items-start gap-3">
           <TxCheckBox name="agree" value="yes" label="이용약관에 동의" />
-          <TxCheckBox name="news" value="on" label="소식 받기" variant="toggle" />
+          <TxCheckBox name="news" value="on" label="소식 받기" />
           <TxCheckBox name="ads" value="on" label="광고 수신" />
           <TxButton type="submit" label="제출" />
           <div className="font-mono text-sm text-slate-500 dark:text-slate-400">제출된 값: {result}</div>
@@ -139,7 +131,7 @@ export const Controlled: Story = {
 
     return (
       <TxFlex className="flex-col items-start gap-3">
-        <TxCheckBox label="알림 받기" variant="toggle" checked={on} onChangeBool={setOn} />
+        <TxCheckBox label="알림 받기" checked={on} onChangeBool={setOn} />
         <TxFlex>
           <TxButton variant="secondary" label="켜기" onClick={() => setOn(true)} />
           <TxButton variant="ghost" label="끄기" onClick={() => setOn(false)} />
@@ -189,7 +181,6 @@ export const CustomizingTokens: Story = {
       <TxCheckBox label="--tx-checkbox-size: 1.75rem" defaultChecked style={vars({ "--tx-checkbox-size": "1.75rem", "--tx-checkbox-icon-size": "1.4rem" })} />
       <TxCheckBox label="--tx-checkbox-radius: 9999px" defaultChecked style={vars({ "--tx-checkbox-radius": "9999px" })} />
       <TxCheckBox label="--tx-color-primary 를 바꾸면 함께 따라온다" defaultChecked style={vars({ "--tx-color-primary": "#7c3aed" })} />
-      <TxCheckBox label="스위치를 키워도 손잡이가 맞는다" variant="toggle" defaultChecked style={vars({ "--tx-checkbox-track-width": "3.5rem", "--tx-checkbox-track-height": "2rem", "--tx-checkbox-thumb-size": "1.5rem" })} />
     </TxFlex>
   )
 };

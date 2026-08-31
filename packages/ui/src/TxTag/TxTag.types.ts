@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import type { TxAlertVariant } from "../TxAlert";
 
 /**
@@ -18,7 +18,7 @@ export type TxTagVariant = TxAlertVariant | "neutral";
  */
 export type TxTagAppearance = "soft" | "outline";
 
-export interface TxTagProps extends HTMLAttributes<HTMLSpanElement> {
+export interface TxTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, "onClick"> {
   /** 어떤 갈래인가. 기본 `"neutral"`. */
   variant?: TxTagVariant;
 
@@ -27,6 +27,20 @@ export interface TxTagProps extends HTMLAttributes<HTMLSpanElement> {
 
   /** 글자 앞에 작은 점을 찍는다. 상태를 나타내는 태그에 쓴다. */
   dot?: boolean;
+
+  /**
+   * 주면 **글자가 눌리는 것**이 된다. 걸러내기 조건처럼 눌러서 쓰는 태그에 쓴다.
+   *
+   * 태그 전체가 아니라 글자만 버튼이 된다 — `onRemove` 와 함께 쓰면 지우기도 버튼이라
+   * 통째로 감싸면 `<button>` 안의 `<button>` 이 된다.
+   */
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+
+  /** 주면 오른쪽에 지우기(×) 버튼이 생긴다. */
+  onRemove?: MouseEventHandler<HTMLButtonElement>;
+
+  /** 지우기 버튼의 이름. 스크린리더가 읽는다. 기본 `"지우기"`. */
+  removeLabel?: string;
 
   children?: ReactNode;
 }

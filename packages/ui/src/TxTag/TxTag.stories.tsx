@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { TxFlex } from "../TxFlex";
 import { TxTag } from "./TxTag";
 import type { TxTagVariant } from "./TxTag.types";
@@ -43,9 +43,17 @@ const meta = {
           "다크에서 밝은 노랑 위에 흰 글자를 얹으면 읽히지 않는다.",
           "**글자는 늘 갈래색이고 바탕은 옅게만 섞는다.** 어느 모드에서도 대비가 유지된다.",
           "",
-          "### 누르는 것이 아니다",
+          "### 누를 수도, 지울 수도 있다",
           "",
-          "**태그는 읽는 것만 한다.** 누르거나 지울 수 있는 이름표가 아니다.",
+          "`onClick` 을 주면 **글자가 눌리고**, `onRemove` 를 주면 **지우기(×)** 가 붙는다.",
+          "둘 다 안 주면 읽기만 하는 이름표다.",
+          "",
+          "둘을 함께 줘도 **`<button>` 안의 `<button>` 이 되지 않는다** — 태그 전체가 아니라",
+          "글자만 버튼이 되고 지우기는 그 옆에 따로 선다. 통째로 감쌌다면 못 쓰는 마크업이 됐다.",
+          "",
+          "### 혼자 서는 이름표다",
+          "",
+          "무언가에 얹히는 알림 점·개수는 **`TxBadge`** 가 갖는다.",
           "",
           "컨트롤 패널은 `Playground` 에서만 동작한다."
         ].join("\n")
@@ -161,6 +169,60 @@ export const InText: Story = {
       결제 수단이 <TxTag variant="warning">곧 만료</TxTag> 상태입니다. 새 카드를 등록하면 <TxTag variant="success">정상</TxTag> 으로 바뀝니다.
     </p>
   )
+};
+
+/**
+ * `onRemove` 를 주면 지우기(×)가 붙는다. **걸러내기 조건처럼 넣고 빼는 자리**에 쓴다.
+ */
+export const Removable: Story = {
+  parameters: noControls,
+  render: function RemovableStory() {
+    const [tags, setTags] = useState(["서울", "경기", "부산"]);
+
+    return (
+      <div className="flex flex-col gap-3">
+        <TxFlex>
+          {tags.map((tag) => (
+            <TxTag key={tag} variant="info" onRemove={() => setTags((current) => current.filter((one) => one !== tag))} removeLabel={`${tag} 빼기`}>
+              {tag}
+            </TxTag>
+          ))}
+          {tags.length === 0 && <span className="text-sm text-slate-500 dark:text-slate-400">모두 지웠습니다</span>}
+        </TxFlex>
+
+        <TxFlex>
+          <button type="button" className="tx-button" data-variant="secondary" onClick={() => setTags(["서울", "경기", "부산"])}>
+            <span className="tx-button__label">되돌리기</span>
+          </button>
+        </TxFlex>
+      </div>
+    );
+  }
+};
+
+/**
+ * `onClick` 을 주면 글자가 눌린다. **둘을 함께 줘도 버튼 안에 버튼이 생기지 않는다** —
+ * 글자만 버튼이 되고 지우기는 그 옆에 따로 선다.
+ */
+export const Interactive: Story = {
+  parameters: noControls,
+  render: function InteractiveStory() {
+    const [picked, setPicked] = useState<string | null>(null);
+
+    return (
+      <div className="flex flex-col gap-3">
+        <TxFlex>
+          {["VIP", "신규", "휴면"].map((name) => (
+            <TxTag key={name} variant={picked === name ? "info" : "neutral"} onClick={() => setPicked(name)} onRemove={() => setPicked(null)} removeLabel={`${name} 빼기`}>
+              {name}
+            </TxTag>
+          ))}
+        </TxFlex>
+
+        <p className="font-mono text-sm text-slate-500 dark:text-slate-400">고른 것: {picked ?? "—"}</p>
+      </div>
+    );
+  }
 };
 
 /** 겉모습은 CSS 변수로 바꾼다. **`--tx-tag-accent` 하나가 바탕·글자·점을 함께 정한다.** */

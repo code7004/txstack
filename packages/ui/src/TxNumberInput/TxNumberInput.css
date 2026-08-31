@@ -1,0 +1,62 @@
+/**
+ * TxNumberInput — 숫자를 넣고 올리고 내리는 자리.
+ *
+ * **상자는 `TxInput` 것을 그대로 쓴다** (`.tx-input`). 폼에서 다른 칸과 높이·테두리·
+ * 포커스 링이 어긋나면 한 줄에 놓았을 때 바로 보인다. 여기서는 안에 든 버튼과 단위만 맡는다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-number-input {
+  --tx-number-input-step-size: 1.75rem;
+  --tx-number-input-step-color: color-mix(in oklab, var(--tx-color-text) 60%, transparent);
+  --tx-number-input-suffix-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+  --tx-number-input-gap: 0.25rem;
+
+  gap: var(--tx-number-input-gap);
+}
+
+/** 숫자는 오른쪽으로 맞춘다. 자릿수가 달라도 끝이 가지런하다 */
+.tx-number-input__field {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.tx-number-input__suffix {
+  flex: none;
+  color: var(--tx-number-input-suffix-color);
+}
+
+/**
+ * 증감 버튼은 **탭 순서에 들어가지 않는다**(`tabIndex={-1}`). 칸 안에서 ↑↓ 로 이미
+ * 움직일 수 있는데 버튼까지 밟게 하면, 칸 하나를 지나는 데 Tab 을 세 번 눌러야 한다.
+ */
+.tx-number-input__step {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: var(--tx-number-input-step-size);
+  block-size: var(--tx-number-input-step-size);
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: var(--tx-number-input-step-color);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tx-number-input__step:hover:not(:disabled) {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+  color: var(--tx-color-text);
+}
+
+/** 끝에 닿으면 눌러도 소용없다는 것을 보여 준다 */
+.tx-number-input__step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

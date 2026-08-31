@@ -90,6 +90,75 @@
   --tx-tag-border-color: color-mix(in oklab, var(--tx-tag-fg) 45%, transparent);
 }
 
+/* --- 누르고 지우기 ---------------------------------------------------------- */
+
+/**
+ * 글자 자리. `onClick` 이 없으면 `<span>`, 있으면 `<button>` 인데 **둘의 생김새가
+ * 같아야** 태그가 눌리는지 여부에 따라 크기가 달라지지 않는다.
+ */
+.tx-tag__body {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
+button.tx-tag__body {
+  cursor: pointer;
+}
+
+.tx-tag[data-interactive]:hover {
+  background-color: color-mix(in oklab, var(--tx-tag-accent) 20%, var(--tx-color-surface));
+}
+
+.tx-tag[data-interactive][data-appearance="outline"]:hover {
+  background-color: color-mix(in oklab, var(--tx-tag-accent) 10%, transparent);
+}
+
+/**
+ * 지우기는 **글자보다 조금 옅다.** 태그에서 먼저 읽혀야 하는 것은 글자고,
+ * ×가 더 또렷하면 지우라고 재촉하는 것처럼 보인다.
+ */
+.tx-tag__remove {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  /* 오른쪽 여백을 파고들어 ×가 가장자리에 붙지 않게 한다 */
+  margin-inline-end: -0.125rem;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font-size: 1em;
+  cursor: pointer;
+  opacity: 0.6;
+
+  transition: opacity 120ms ease;
+}
+
+.tx-tag__remove:hover,
+.tx-tag__remove:focus-visible {
+  opacity: 1;
+}
+
+.tx-tag__body:focus-visible,
+.tx-tag__remove:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-tag__remove {
+    transition: none;
+  }
+}
+
 /* --- 점 ------------------------------------------------------------------- */
 
 .tx-tag__dot {

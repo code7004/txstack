@@ -1,0 +1,141 @@
+/**
+ * TxRadio · TxRadioGroup — 여럿 중 하나를 고르는 자리.
+ *
+ * **방향키 이동을 CSS 도 JS 도 하지 않는다.** 같은 `name` 을 가진 네이티브 라디오끼리
+ * 브라우저가 알아서 옮겨 준다. 여기서 하는 것은 겉모습뿐이다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-radio {
+  --tx-radio-size: 1.125rem;
+  --tx-radio-dot-size: 0.5rem;
+  --tx-radio-gap: 0.5rem;
+
+  --tx-radio-border-color: var(--tx-color-border);
+  --tx-radio-checked-color: var(--tx-color-primary);
+  --tx-radio-bg: var(--tx-color-surface);
+  --tx-radio-disabled-opacity: 0.5;
+  --tx-radio-transition: 150ms ease;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tx-radio-gap);
+
+  cursor: pointer;
+}
+
+/**
+ * 진짜 `<input>` 을 눈에서만 지운다. `display: none` 이면 **방향키 이동도 폼 제출도**
+ * 안 된다 — 이 컴포넌트가 브라우저에 맡기는 것이 전부 거기 달려 있다.
+ */
+.tx-radio__input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-radio__mark {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+
+  inline-size: var(--tx-radio-size);
+  block-size: var(--tx-radio-size);
+
+  border: 1px solid var(--tx-radio-border-color);
+  border-radius: 50%;
+  background-color: var(--tx-radio-bg);
+
+  transition:
+    border-color var(--tx-radio-transition),
+    background-color var(--tx-radio-transition);
+}
+
+/** 가운데 점. 안 골랐을 때도 자리를 지킨다 — 빼면 고를 때 동그라미가 흔들린다 */
+.tx-radio__mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+
+  inline-size: var(--tx-radio-dot-size);
+  block-size: var(--tx-radio-dot-size);
+
+  border-radius: 50%;
+  background-color: var(--tx-color-on-accent);
+
+  opacity: 0;
+  transition: opacity var(--tx-radio-transition);
+}
+
+.tx-radio__input:checked + .tx-radio__mark {
+  border-color: var(--tx-radio-checked-color);
+  background-color: var(--tx-radio-checked-color);
+}
+
+.tx-radio__input:checked + .tx-radio__mark::after {
+  opacity: 1;
+}
+
+/**
+ * 포커스 링을 **보이는 모양에 건다.** 진짜 `<input>` 은 눈에서 지워져 있어서
+ * 거기 링을 걸면 아무 데도 안 보인다.
+ */
+.tx-radio__input:focus-visible + .tx-radio__mark {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-radio[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--tx-radio-disabled-opacity);
+}
+
+/* --- 묶음 ----------------------------------------------------------------- */
+
+/**
+ * `<fieldset>` 의 브라우저 기본 테두리·여백을 지운다. **요소는 바꾸지 않는다** —
+ * `<legend>` 가 묶음 이름으로 읽히는 것이 이 요소에 달려 있다.
+ */
+.tx-radio-group {
+  --tx-radio-group-gap: 0.5rem;
+  --tx-radio-group-legend-gap: 0.5rem;
+  --tx-radio-group-legend-weight: 600;
+  --tx-radio-group-legend-size: 0.875rem;
+
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.tx-radio-group__legend {
+  padding: 0;
+  margin-block-end: var(--tx-radio-group-legend-gap);
+
+  font-size: var(--tx-radio-group-legend-size);
+  font-weight: var(--tx-radio-group-legend-weight);
+}
+
+.tx-radio-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tx-radio-group-gap);
+}
+
+.tx-radio-group[data-inline] .tx-radio-group__items {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-radio {
+    --tx-radio-transition: 0ms;
+  }
+}
