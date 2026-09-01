@@ -39,6 +39,7 @@ export * from "./TxJsonTree";
 export * from "./TxLoading";
 export * from "./TxMenu";
 export * from "./TxModal";
+export * from "./TxNavBar";
 export * from "./TxNumberInput";
 export * from "./TxPagination";
 export * from "./TxProgress";
