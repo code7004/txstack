@@ -44,6 +44,7 @@ export * from "./TxNumberInput";
 export * from "./TxPagination";
 export * from "./TxProgress";
 export * from "./TxRadio";
+export * from "./TxSideNav";
 export * from "./TxSlidePanel";
 export * from "./TxScrollArea";
 export * from "./TxSkeleton";
