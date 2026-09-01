@@ -4,7 +4,7 @@
 
 이 폴더가 `ui` 패키지의 문서다. **여기는 목록과 진행 상황만 갖는다** —
 컴포넌트 하나하나의 목적 · 기능 · 개발 항목은 각자의 문서에 있고,
-컴포넌트에 속하지 않는 규약은 [900_공통규약](900_공통규약.md) 이 갖는다.
+컴포넌트에 속하지 않는 규약은 [900_공통규약](900_common.md) 이 갖는다.
 
 저장소 전체의 상태와 다음 할 일은 [docs/README](../README.md) 가 갖는다.
 
@@ -109,7 +109,7 @@ import "@txstack/ui/styles.css";
 | 무엇 | 왜 |
 | --- | --- |
 | `TxCoolTable` (1,024줄) | 표는 `TxAgGrid` 가 맡는다 |
-| `TxTheme` (29줄) | Tailwind 클래스 문자열 상수. 토큰 방식과 어긋난다 — [900_공통규약](900_공통규약.md) |
+| `TxTheme` (29줄) | Tailwind 클래스 문자열 상수. 토큰 방식과 어긋난다 — [900_공통규약](900_common.md) |
 | `TxHeader` (62줄) | 실체가 `text-xl font-semibold` 를 건 `<div>` 였다 |
 | `TxLayout` (447줄) | 앱 사용 0회. **`TxAppShell` 이 그 자리를 대신한다** — 한 화면에 셸이 둘일 일이 없다 |
 | `TxClipboardButton` | 버튼이 아니라 `<div onClick>` 이었다. **`TxCopyButton` 으로 되살렸다** |
