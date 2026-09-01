@@ -810,13 +810,26 @@ describe("TxAppShell — CSS 계약", () => {
     expect(source).not.toMatch(/displayName/);
   });
 
-  /** `display: none` 으로 감추면 Tab 이 닿지 않아 있으나 마나다. */
-  it("건너뛰기 링크를 화면 밖에 두되 지우지 않는다", () => {
+  /**
+   * `display: none` 으로 감추면 Tab 이 닿지 않아 있으나 마나다.
+   *
+   * 그리고 **화면 밖으로 밀어 감추지 않는다.** `position: fixed` + `translate: -100%` 로
+   * 두었더니 **조상 중 하나가 `transform` 을 가지면 기준이 그쪽으로 바뀌어** 문서 한가운데에
+   * 실제로 놓였다 — Storybook 문서 페이지에서 잡혔고 앱에서도 같은 일이 난다.
+   * 자리를 잘라 감추고 기준은 셸이 쥔다.
+   */
+  it("건너뛰기 링크를 잘라 감추되 지우지 않는다", () => {
     const rule = css.match(/\.tx-app-shell__skip\s*\{([^}]*)\}/)?.[1] ?? "";
 
     expect(rule).not.toMatch(/display:\s*none/);
-    expect(rule).toMatch(/translate:/);
-    expect(css).toMatch(/\.tx-app-shell__skip:focus\s*\{[^}]*translate:\s*0 0/);
+    expect(rule).toMatch(/clip-path:\s*inset\(50%\)/);
+
+    // fixed 는 조상의 transform 에 흔들린다. 기준은 셸이 쥔다
+    expect(rule).toMatch(/position:\s*absolute/);
+    expect(rule).not.toMatch(/position:\s*fixed/);
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*position:\s*relative/);
+
+    expect(css).toMatch(/\.tx-app-shell__skip:focus\s*\{[^}]*clip-path:\s*none/);
   });
 
   /**
