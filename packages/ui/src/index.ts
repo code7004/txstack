@@ -15,6 +15,7 @@
 export * from "./TxAccordion";
 export * from "./TxAppShell";
 export * from "./TxAlert";
+export * from "./TxAvatar";
 export * from "./TxBadge";
 export * from "./TxBreadcrumb";
 export * from "./TxButton";

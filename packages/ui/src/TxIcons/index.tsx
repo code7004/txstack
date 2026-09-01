@@ -57,3 +57,12 @@ export function TxIconSearch(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** 사람. 사진도 이름도 없는 `TxAvatar` 가 쓴다. */
+export function TxIconUser(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" {...props}>
+      <path fill="currentColor" d="M12 12a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0 2c-4.42 0-8 2.24-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.76-3.58-5-8-5"></path>
+    </svg>
+  );
+}

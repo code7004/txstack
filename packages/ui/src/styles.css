@@ -64,6 +64,7 @@
 /* 폼은 컨트롤을 칸에 앉히는 쪽이라 컨트롤 규칙 뒤에 온다 */
 @import "./TxForm/TxForm.css" layer(tx);
 @import "./TxAlert/TxAlert.css" layer(tx);
+@import "./TxAvatar/TxAvatar.css" layer(tx);
 @import "./TxEmptyState/TxEmptyState.css" layer(tx);
 @import "./TxTag/TxTag.css" layer(tx);
 @import "./TxBadge/TxBadge.css" layer(tx);
