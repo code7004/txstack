@@ -1,0 +1,273 @@
+/**
+ * TxCarousel — 여러 장을 옆으로 넘겨 보는 자리.
+ *
+ * **넘기는 것은 브라우저의 스크롤이다.** `scroll-snap` 이 장을 딱딱 맞춰 세우고,
+ * 스와이프 · 휠 · 관성은 브라우저가 한다. 화살표와 점은 그 스크롤을 부르는 버튼일 뿐이라
+ * **JS 가 없어도 손으로 밀어 넘길 수 있다.**
+ *
+ * 명세: docs/001_ui/047_TxCarousel.md
+ */
+
+.tx-carousel {
+  /** 한 화면에 몇 장. `perView` prop 이 이 값을 준다 */
+  --tx-carousel-per-view: 1;
+  --tx-carousel-gap: 0.75rem;
+
+  /**
+   * 한 장의 폭. **틈을 빼고 나눈다** — 그냥 `50%` 로 두면 두 장 + 틈이 자리보다 넓어져
+   * 둘째 장이 틈만큼 잘린다.
+   *
+   * 폭을 직접 정하고 싶으면(옆 장이 살짝 보이게 하는 식) 이 값을 덮는다.
+   */
+  --tx-carousel-item: calc((100% - (var(--tx-carousel-per-view) - 1) * var(--tx-carousel-gap)) / var(--tx-carousel-per-view));
+  --tx-carousel-radius: var(--tx-radius);
+
+  --tx-carousel-arrow-size: 2.25rem;
+  --tx-carousel-arrow-bg: color-mix(in oklab, var(--tx-color-surface) 82%, transparent);
+  --tx-carousel-arrow-color: var(--tx-color-text);
+
+  --tx-carousel-dot-size: 0.5rem;
+  --tx-carousel-dot-color: color-mix(in oklab, var(--tx-color-text) 25%, transparent);
+  --tx-carousel-dot-active: var(--tx-color-primary);
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* --- 넘겨 보는 자리 --------------------------------------------------------- */
+
+/**
+ * 화살표의 기준. **넘겨 보는 자리만 감싼다** — 점까지 감싸면 화살표가 점 높이의 절반만큼
+ * 위로 어긋난다.
+ */
+.tx-carousel__frame {
+  position: relative;
+}
+
+.tx-carousel__viewport {
+  overflow-x: auto;
+  /* 끝에 닿았을 때 페이지가 함께 밀리지 않는다 */
+  overscroll-behavior-inline: contain;
+
+  scroll-snap-type: x mandatory;
+
+  /**
+   * **스크롤바를 감춘다.** 점과 화살표가 "어디쯤인지" 를 대신 말하므로 두 벌이 된다.
+   * 감추는 것이지 못 굴리게 하는 것이 아니다 — 스와이프도 휠도 그대로다.
+   */
+  scrollbar-width: none;
+}
+
+.tx-carousel__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/** 끌 수 있는 자리라는 것을 커서가 말해 준다 */
+.tx-carousel__viewport[data-drag] {
+  cursor: grab;
+}
+
+/**
+ * 끄는 동안에는 **딱딱 맞춰 세우는 것을 끈다.** 켜 둔 채로 자리를 옮기면 브라우저가
+ * 매번 가까운 장으로 되돌려서 끌리지 않는다. 손을 떼면 다시 켜진다.
+ */
+.tx-carousel__viewport[data-dragging] {
+  scroll-snap-type: none;
+  cursor: grabbing;
+
+  /* 끄는 동안 글자가 긁히면 파랗게 칠해진 채로 끌린다 */
+  user-select: none;
+}
+
+/**
+ * **복제 자리에서 진짜 자리로 소리 없이 옮기는 한 프레임.** 스냅을 켜 둔 채로 옮기면
+ * 브라우저가 도로 끌어당겨 무한 루프가 그 자리에서 멈춘다.
+ */
+.tx-carousel__viewport[data-jumping] {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.tx-carousel__viewport:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-carousel__track {
+  display: flex;
+  gap: var(--tx-carousel-gap);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tx-carousel__item {
+  /* 줄어들지 않는다. 줄어들면 한 화면에 전부 들어와 넘길 것이 없어진다 */
+  flex: 0 0 var(--tx-carousel-item);
+
+  scroll-snap-align: start;
+  border-radius: var(--tx-carousel-radius);
+  overflow: hidden;
+}
+
+/** 사진 한 장을 그대로 넣는 것이 가장 흔하다. 넘치지 않게 받아 둔다 */
+.tx-carousel__item :is(img, video) {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* --- 화살표 ---------------------------------------------------------------- */
+
+.tx-carousel__arrow {
+  position: absolute;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: var(--tx-carousel-arrow-size);
+  block-size: var(--tx-carousel-arrow-size);
+
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--tx-carousel-arrow-bg);
+  color: var(--tx-carousel-arrow-color);
+
+  font-size: 1.125rem;
+  cursor: pointer;
+
+  /* 사진 위에 얹히므로 경계를 살짝 띄운다 */
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--tx-color-text) 20%, transparent);
+}
+
+.tx-carousel__arrow[data-dir="prev"] {
+  inset-inline-start: 0.5rem;
+  /* 화살촉 하나를 돌려 쓴다 — 아이콘을 둘 두지 않는다 */
+  rotate: 180deg;
+}
+
+.tx-carousel__arrow[data-dir="next"] {
+  inset-inline-end: 0.5rem;
+}
+
+.tx-carousel__arrow:hover:not(:disabled) {
+  background-color: var(--tx-color-surface);
+}
+
+.tx-carousel__arrow:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.tx-carousel__arrow:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/* --- 점과 멈춤 버튼 --------------------------------------------------------- */
+
+.tx-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tx-carousel__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.tx-carousel__dot {
+  inline-size: var(--tx-carousel-dot-size);
+  block-size: var(--tx-carousel-dot-size);
+
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--tx-carousel-dot-color);
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.tx-carousel__dot[data-active] {
+  background-color: var(--tx-carousel-dot-active);
+}
+
+.tx-carousel__dot:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: 2px;
+}
+
+.tx-carousel__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+
+  font-size: 0.875em;
+  cursor: pointer;
+}
+
+.tx-carousel__toggle:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-carousel__toggle:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/**
+ * `controls={false}` — **화면에서만 감춘다.** `TxTicker` 와 같은 방식이다.
+ *
+ * `display: none` 이면 Tab 이 닿지 않아 멈출 길이 통째로 사라진다(WCAG 2.2.2).
+ * 자리를 비워 두었다가 초점이 오면 제자리에 나타난다.
+ */
+.tx-carousel__toggle[data-hidden] {
+  position: absolute;
+
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-carousel__toggle[data-hidden]:focus {
+  position: static;
+
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  margin: 0;
+
+  clip-path: none;
+}
+
+/** 미끄러지는 것은 JS 가 그때그때 고른다. 여기서는 점 색만 멈춘다 */
+@media (prefers-reduced-motion: reduce) {
+  .tx-carousel__dot {
+    transition: none;
+  }
+}
