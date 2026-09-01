@@ -5,9 +5,9 @@
 | | |
 | --- | --- |
 | 진입점 | `@txstack/route-meta` |
-| 내보내는 것 | `getNavigableRoutes` · `CanAccess` |
+| 내보내는 것 | `getNavigableRoutes` · `CanAccess` · `NavRoute` |
 | 소스 | [`packages/route-meta/src/utils.ts`](../../packages/route-meta/src/utils.ts) |
-| 테스트 | 7개 (**node 환경**) |
+| 테스트 | 11개 (**node 환경**) |
 
 ## 개발 목적
 
@@ -21,6 +21,32 @@ import { getNavigableRoutes } from "@txstack/route-meta";
 
 const menu = getNavigableRoutes(routes, (perms) => perms.some((p) => user.roles.includes(p)));
 ```
+
+**돌아오는 것은 `NavRoute[]` 다.** 위아래가 같은 형태라 재귀가 한 갈래다.
+
+```tsx
+interface NavRoute {
+  key: string;           // 트리에 쓴 키 그대로
+  path: string;          // index route 는 메뉴에 안 오르므로 언제나 있다
+  meta?: RouteMeta;
+  children?: NavRoute[]; // 살아남은 자식이 없으면 필드가 없다
+}
+```
+
+그래서 메뉴를 그리는 쪽이 이렇게 짧다.
+
+```tsx
+const item = (n: NavRoute) => (
+  <TxSideNav.Item key={n.key} icon={n.meta?.icon} label={n.meta?.label ?? n.key} as={NavLink} to={n.path}>
+    {n.children?.map(item)}
+  </TxSideNav.Item>
+);
+
+<TxSideNav>{menu.map(item)}</TxSideNav>;
+```
+
+**`RouteNode` 를 그대로 흘리지 않는다.** 메뉴를 그리는 자리에 `element` · `loader` 같은
+실행 계층이 섞여 들어올 이유가 없다. 순서는 **트리에 쓴 순서**를 지킨다.
 
 **권한 모델은 라이브러리가 정하지 않는다.** 단일 권한이든 다중이든 계층이든, 판정 함수를
 주는 쪽이 결정한다. `canAccess` 는 **`meta.permissions` 가 있는 노드에만 호출된다** —
@@ -38,9 +64,9 @@ const publicMenu = getNavigableRoutes(routes);
 ## 개발 항목
 
 - [x] **구현** — `packages/route-meta/src/utils.ts`
-- [x] **테스트** — 7개
-- [ ] 최상위는 배열, `children` 은 키 있는 트리를 준다. 형태가 섞여 있다 —
-      메뉴를 실제로 그려 보고 다시 본다
+- [x] **테스트** — 11개
+- [x] **형태를 하나로 통일했다** — `NavRoute[]`. 최상위는 키를 버린 배열, `children` 은
+      키 있는 객체였다. 메뉴를 실제로 그려 보니 재귀가 두 형태를 다뤄야 했다
 
 ## 정한 것 · 고친 것
 
@@ -48,4 +74,5 @@ const publicMenu = getNavigableRoutes(routes);
 | --- | --- | --- |
 | `getNavigableRoutes(tree, permission?: string)` | `canAccess` 판정 함수 주입 | 사용자는 권한을 여럿 가질 수 있다. 권한 모델은 앱이 정한다 |
 | 살아남은 자식을 `path` 로 다시 묶음 | 원본 키 보존 | `detail` 이 `/users/:id` 로 바뀌어, 키로 접근하던 코드가 조용히 깨졌다 |
-| 자식이 전부 걸러지면 원본 `children` 이 그대로 남음 | `children` 을 지움 | `{ ...node }` 로 퍼뜨린 탓에 **숨긴 자식이 메뉴 데이터에 다시 나타났다** |
+| 자식이 전부 걸러지면 원본 `children` 이 그대로 남음 | `children` 을 달지 않음 | `{ ...node }` 로 퍼뜨린 탓에 **숨긴 자식이 메뉴 데이터에 다시 나타났다.** 빈 배열도 주지 않는다 — 있으면 "펼치는 항목" 으로 보인다 |
+| `RouteNode[]` 를 그대로 반환 (자식은 키 있는 객체) | `NavRoute[]` — 위아래 같은 형태 | 재귀가 두 형태를 다뤄야 했고, 메뉴 데이터에 `element` · `loader` 가 섞여 있었다 |

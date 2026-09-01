@@ -6,6 +6,19 @@ import type { ActionFunction, LoaderFunction } from "react-router-dom";
  *
  * 키는 소비자가 정하는 식별자이고(`users`, `detail` …), 값이 실제 라우트 정의다.
  * `getNavigableRoutes` 는 이 키를 그대로 보존한다.
+ *
+ * **선언할 때는 `satisfies` 로 붙인다.**
+ *
+ * ```ts
+ * export const routes = {
+ *   main: { path: "/", children: { sub1: { path: "/sub1" } } }
+ * } satisfies RouteTree;
+ *
+ * routes.main.children.sub1.path; // "/sub1" — 에디터가 키까지 짚어 준다
+ * ```
+ *
+ * 타입 주석(`const routes: RouteTree = …`)으로 붙이면 **키가 `string` 으로 넓어져**
+ * `routes.main` 부터 자동완성이 죽는다. `satisfies` 는 검사만 하고 리터럴 형태를 남긴다.
  */
 export type RouteTree = Record<string, RouteNode>;
 
@@ -20,7 +33,6 @@ export interface RouteMeta {
   hidden?: boolean;
   /** 접근 권한. 판정은 `getNavigableRoutes` 의 `canAccess` 가 한다. */
   permissions?: string[];
-  onClick?: () => void;
 }
 
 interface RouteNodeBase {
@@ -59,6 +71,29 @@ export interface IndexRouteNode extends RouteNodeBase {
 }
 
 export type RouteNode = PathRouteNode | IndexRouteNode;
+
+/**
+ * 메뉴 한 칸. `getNavigableRoutes` 가 주는 형태다.
+ *
+ * **`RouteNode` 를 그대로 흘리지 않는다.** 메뉴를 그리는 자리에 `element` · `loader` 같은
+ * 실행 계층이 섞여 들어오고, 최상위는 배열인데 자식은 키 있는 객체라 재귀가 두 형태를
+ * 다뤄야 했다. 여기서는 **위아래가 같은 형태**다 — 자식도 `NavRoute[]`.
+ *
+ * ```tsx
+ * const menu = getNavigableRoutes(routes, canAccess);
+ *
+ * menu.map((item) => <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />);
+ * ```
+ */
+export interface NavRoute {
+  /** 트리에 쓴 키 그대로. `React` 의 `key` 로도 쓰고, 트리를 되짚을 때도 쓴다. */
+  key: string;
+  /** 갈 주소. **index route 는 메뉴에 오르지 않으므로 언제나 있다.** */
+  path: string;
+  meta?: RouteMeta;
+  /** 살아남은 자식. **하나도 없으면 필드가 없다** — 있으면 펼치는 항목이 된다. */
+  children?: NavRoute[];
+}
 
 /**
  * `buildRouteObjects` 가 각 `RouteObject.handle` 에 심는 값.

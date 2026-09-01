@@ -21,7 +21,7 @@
 ```tsx
 import type { RouteTree } from "@txstack/route-meta";
 
-export const routes: RouteTree = {
+export const routes = {
   dashboard: {
     path: "/dashboard",
     element: <Dashboard />,
@@ -45,8 +45,27 @@ export const routes: RouteTree = {
     element: <Legacy />,
     enabled: false // 라우터에도 메뉴에도 없다
   }
-};
+} satisfies RouteTree;
 ```
+
+## `satisfies` 로 붙인다 — 타입 주석으로 붙이지 않는다
+
+**키가 리터럴로 남아야 에디터가 짚어 준다.**
+
+```tsx
+routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 뜬다
+```
+
+`const routes: RouteTree = { … }` 로 붙이면 타입이 `Record<string, RouteNode>` 로 넓어져
+`routes.users` 부터 자동완성이 죽고, 키를 틀려도 컴파일이 통과한다. `satisfies` 는 검사만
+하고 **리터럴 형태를 남긴다** — 잘못된 노드(예: `index` 와 `path` 를 함께 쓴 것)는 그대로 잡힌다.
+
+`path` 값 자체는 `string` 으로 넓어진다(`satisfies` 가 문맥 타입을 주기 때문). **키가 정확한
+것이 목적**이므로 이 편이 낫다 — `as const` 까지 붙이면 `permissions: string[]` 이
+`readonly` 가 되어 대입이 막힌다.
+
+이 규약은 [`utils.test.ts`](../../packages/route-meta/src/utils.test.ts) 의 `RouteTree 선언` 이
+**타입 단정으로 지킨다.** 키가 넓어지면 `pnpm typecheck` 가 멈춘다.
 
 **`RouteNode` 는 두 종류의 합집합이다.**
 
@@ -56,13 +75,17 @@ export const routes: RouteTree = {
 | `children` | 가능 | **가질 수 없다** |
 | 나머지 | `element` · `loader` · `action` · `errorElement` · `meta` · `enabled` | 동일 |
 
-`RouteMeta`: `label` · `icon` · `description` · `hidden` · `permissions` · `onClick`
+`RouteMeta`: `label` · `icon` · `description` · `hidden` · `permissions`
 
 ## 개발 항목
 
 - [x] **타입 정의** — `packages/route-meta/src/types.ts`
 - [x] **두 종류를 타입으로 갈랐다** — `{ index: true, path }` 는 React Router 런타임 에러다
-- [ ] `RouteMeta.onClick` 이 여기 있는 게 맞는지. 라우트 메타에 핸들러가 섞이면 직렬화가 안 된다
+- [x] **`RouteMeta.onClick` 을 뺐다.** 라우트 메타에 핸들러가 섞이면 직렬화가 안 되고,
+      "주소로 가는 것" 과 "함수를 실행하는 것" 이 한 타입에 겹친다. 로그아웃처럼 누르면
+      실행되는 항목은 **소비자가 메뉴에 직접 끼워 넣는다** — `TxSideNav.Item as="button"` 이
+      이미 그 자리다
+- [x] **선언은 `satisfies` 로** — 키가 리터럴로 남는 것을 타입 단정으로 못 박았다
 
 ## 정한 것 · 고친 것
 

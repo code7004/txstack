@@ -24,13 +24,13 @@ RouteTree (단일 출처)
 
 ## 개발 리스트
 
-**5개가 끝났다. 테스트 21개.** 번호는 트리를 선언하고 쓰는 차례다.
+**5개가 끝났다. 테스트 25개.** 번호는 트리를 선언하고 쓰는 차례다.
 
 | 번호 | 무엇 | 하는 일 | 테스트 |
 | --- | --- | --- | --- |
-| 001 | [`RouteTree`](001_RouteTree.md) | 트리 선언 형식 — 이 패키지의 단일 출처 | 타입 |
+| 001 | [`RouteTree`](001_RouteTree.md) | 트리 선언 형식 — 이 패키지의 단일 출처 | 2 (타입 단정) |
 | 002 | [`buildRouteObjects`](002_buildRouteObjects.md) | 트리 → React Router `RouteObject[]` | 6 |
-| 003 | [`getNavigableRoutes`](003_getNavigableRoutes.md) | 트리 → GNB · 사이드 메뉴 | 7 |
+| 003 | [`getNavigableRoutes`](003_getNavigableRoutes.md) | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`) | 11 |
 | 004 | [`useCurrentRouteNode`](004_useCurrentRouteNode.md) | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8 |
 | 005 | [`RouteRenderer`](005_RouteRenderer.md) | 002 를 감싼 얇은 포장 | — |
 
@@ -54,19 +54,31 @@ RouteTree (단일 출처)
 - **`meta` 는 실행 계층 최상위로 전달되지 않는다.** 라우터는 `meta` 를 모른다.
   다만 `RouteObject.handle` 에 원본 노드가 실린다 — 그 덕에 경로 매칭을 직접 구현하지 않아도 된다
 - **권한 모델은 라이브러리가 정하지 않는다.** 판정 함수를 주입받는다
+- **트리는 `satisfies RouteTree` 로 선언한다.** 타입 주석으로 붙이면 키가 `string` 으로
+  넓어져 `routes.users.children.detail` 자동완성이 죽는다
+- **메뉴 데이터에 실행 계층을 섞지 않는다.** `getNavigableRoutes` 는 `RouteNode` 가 아니라
+  `NavRoute`(`key` · `path` · `meta` · `children`)를 준다
 
 ## 검증
 
-테스트 21개.
+테스트 25개.
 
-- `utils.test.ts` 13개 — **node 환경**에서 돈다. 두 함수가 DOM 없이 동작한다는 증거다
+- `utils.test.ts` 17개 — **node 환경**에서 돈다. 두 함수가 DOM 없이 동작한다는 증거다.
+  마지막 둘은 **타입 단정**이다 — 트리를 `satisfies` 로 붙였을 때 키가 리터럴로 남는지를
+  `tsc` 가 지킨다 (넓어져도 런타임 값은 그대로여서 런타임 기대로는 못 잡는다)
 - `hooks.test.tsx` 8개 — jsdom + `MemoryRouter`. **정적 경로를 동적 경로보다 뒤에 선언해 두고**
   `/users/new` 가 `/users/:id` 에 가로채이지 않는지 못 박았다. 원본이라면 실패하는 테스트다
 
 ## 남은 것
 
-- [ ] `RouteMeta.onClick` 이 여기 있는 게 맞는지 — [001_RouteTree](001_RouteTree.md)
-- [ ] `getNavigableRoutes` 의 반환 형태가 섞여 있다 — [003_getNavigableRoutes](003_getNavigableRoutes.md)
+**없다.** 열려 있던 둘을 메뉴를 실제로 그려 보고 닫았다.
+
+- [x] `RouteMeta.onClick` 을 **뺐다** — [001_RouteTree](001_RouteTree.md)
+- [x] `getNavigableRoutes` 가 **`NavRoute[]` 하나로 통일** — [003_getNavigableRoutes](003_getNavigableRoutes.md)
+
+`@txstack/ui` 의 메뉴 부품과의 연결은 **소비자 몫이다.** 두 패키지는 서로를 import 하지
+않는다(의존 방향은 `ui → hooks` 하나) — 이어 붙이는 15줄은
+[`apps/storybook`](../../apps/storybook) 의 `Recipes/RouteMeta` 이야기가 보여 준다.
 
 ## 문서 규칙
 
