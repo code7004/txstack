@@ -8,7 +8,7 @@
  * 전역 싱글턴(`initHttpClient` 계열)은 `@txstack/axios/singleton` 서브패스에 있다.
  * 권장하지 않으므로 이 배럴에서 내보내지 않는다 — 이유는 그 파일 주석에 있다.
  *
- * 설계: docs/004_axios.md
+ * 설계: docs/004_axios/000_README.md
  */
 export { createHttpClient } from "./client";
 export { attachInterceptors } from "./interceptors";

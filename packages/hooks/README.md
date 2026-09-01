@@ -9,7 +9,7 @@
 
 루트를 라우터와 분리해야 Next.js·TanStack Router 를 쓰는 소비자도 설치할 수 있다.
 
-> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/003_hooks.md](../../docs/003_hooks.md).
+> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/003_hooks](../../docs/003_hooks/000_README.md).
 
 ```sh
 pnpm add @txstack/hooks react

@@ -3,7 +3,7 @@
 axios 래퍼. **인증·에러·응답봉투·로깅 정책을 옵션으로 주입받는다.**
 React 를 모른다 — Node 스크립트에서도 그대로 돌아간다.
 
-> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/004_axios.md](../../docs/004_axios.md).
+> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/004_axios](../../docs/004_axios/000_README.md).
 
 ```sh
 pnpm add @txstack/axios axios

@@ -9,7 +9,7 @@
  * ```
  *
  * 정의 계층과 실행 계층을 의도적으로 분리한다. **`meta` 는 라우터로 전달되지 않는다.**
- * 설계: docs/002_route_meta.md
+ * 설계: docs/002_route_meta/000_README.md
  */
 export { buildRouteObjects, getNavigableRoutes } from "./utils";
 export type { CanAccess } from "./utils";
