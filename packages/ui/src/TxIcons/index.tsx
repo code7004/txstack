@@ -84,3 +84,12 @@ export function TxIconPlay(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** 오른쪽을 가리키는 화살촉. 왼쪽은 CSS 로 뒤집어 쓴다 — `TxCarousel` 이 그렇게 쓴다. */
+export function TxIconChevron(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" {...props}>
+      <path fill="currentColor" d="M8.6 5.6L15 12l-6.4 6.4L7.2 17l5-5l-5-5z"></path>
+    </svg>
+  );
+}

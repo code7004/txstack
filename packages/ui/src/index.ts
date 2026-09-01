@@ -21,6 +21,7 @@ export * from "./TxBreadcrumb";
 export * from "./TxButton";
 export * from "./TxCapsLockCheck";
 export * from "./TxCard";
+export * from "./TxCarousel";
 export * from "./TxCheckBox";
 export * from "./TxCollapsible";
 export * from "./TxCombobox";

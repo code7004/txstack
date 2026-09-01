@@ -45,6 +45,7 @@
 @import "./TxCopyButton/TxCopyButton.css" layer(tx);
 @import "./TxCapsLockCheck/TxCapsLockCheck.css" layer(tx);
 @import "./TxCard/TxCard.css" layer(tx);
+@import "./TxCarousel/TxCarousel.css" layer(tx);
 @import "./TxCheckBox/TxCheckBox.css" layer(tx);
 @import "./TxRadio/TxRadio.css" layer(tx);
 @import "./TxSlider/TxSlider.css" layer(tx);

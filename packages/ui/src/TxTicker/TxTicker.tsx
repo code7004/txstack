@@ -1,7 +1,8 @@
 import { Children, useEffect, useRef, useState, type CSSProperties, type Ref } from "react";
 import { TxIconPause, TxIconPlay } from "../TxIcons";
 import { cm } from "../tx-ui.utils";
-import { slideMs, useFlowDuration, usePauseWhenReduced } from "./TxTicker.hook";
+import { usePauseWhenReduced } from "../tx-ui.hooks";
+import { slideMs, useFlowDuration } from "./TxTicker.hook";
 import type { TxTickerProps } from "./TxTicker.types";
 
 /**
