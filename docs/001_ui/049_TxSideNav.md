@@ -148,5 +148,7 @@ rail 은 **줄의 폭**을 줄인다. 그런데 셸의 `left` 는 `--tx-app-shel
       셸 안에서 헤더의 ☰ 로 접으면 **`left` 자리가 함께 줄고** 본문이 넓어지는 것
       (줄 56px · 자리 57px 로 따라온다)
 - [ ] 확인 — Storybook 에서 **사용자가** 직접 본다
-- [ ] `route-meta` 와의 연결 — `RouteTree` 의 `children` 이 이 트리와 맞는다.
-      **`getNavigableRoutes` 의 반환 형태를 다시 보기로 한 것**과 함께 판단한다
+- [x] `route-meta` 와의 연결 — `getNavigableRoutes` 가 `NavRoute[]` 하나로 통일되어
+      **`NavRoute` 한 칸이 `TxSideNav.Item` 한 칸**이 됐다. 두 패키지는 서로를 import 하지
+      않으므로 잇는 코드는 소비자 몫이고, 그 15줄은 `apps/storybook` 의 `Recipes/RouteMeta`
+      이야기에 있다 ([002_route_meta/003](../002_route_meta/003_getNavigableRoutes.md))

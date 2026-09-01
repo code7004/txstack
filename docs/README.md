@@ -65,9 +65,9 @@
 | 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                                                                        |
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
-| `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
+| `route-meta`  | **완료** — 테스트 25개 통과. 열려 있던 결정 둘을 닫았고 `ui` 의 메뉴 부품과 이어 붙였다                                                                                                                |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 컴포넌트 테스트 1,567개. 남은 하나는 아래 "다음 할 일" |
-| `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
+| `apps/*`      | **storybook 있음** — 부품 카탈로그 + `Recipes/RouteMeta`(두 패키지를 잇는 자리). 문서·포폴 사이트(`apps/site`)는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를

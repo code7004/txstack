@@ -189,4 +189,7 @@ const ProductPanel = () => (
 - [x] 브라우저 확인 — 패널이 줄 폭과 정확히 맞는 것(left 40 / width 1200 = 줄의 rect) ·
       얹어서 갈아타는 것 · 항목 폭 패널 · **셸 안에서 패널이 본문과 사이드 위로 덮는 것**
       (셸의 `header` · `top` 이 `overflow: visible` 이라 잘리지 않는다)
+- [x] `route-meta` 와의 연결 — `NavRoute` 한 칸이 항목 하나이고, **자식이 있으면 그 자식들이
+      패널의 링크가 된다.** 두 패키지는 서로를 import 하지 않으므로 잇는 코드는 소비자 몫이다 —
+      `apps/storybook` 의 `Recipes/RouteMeta` 이야기에 있다
 - [ ] 확인 — Storybook 에서 **사용자가** 직접 본다
