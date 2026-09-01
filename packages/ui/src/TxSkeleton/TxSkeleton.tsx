@@ -28,7 +28,7 @@ import type { TxSkeletonProps } from "./TxSkeleton.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-skeleton { --tx-skeleton-duration: 0s }` 로 멈춘다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/030_TxSkeleton.md`
  */
 export const TxSkeleton = ({ variant, lines, width, height, loading = true, className, style, children, ...props }: TxSkeletonProps) => {
   // 껍데기를 남기지 않는다. 남기면 소비자가 준 className·flex 자리가 한 겹 더 생겨 놀란다

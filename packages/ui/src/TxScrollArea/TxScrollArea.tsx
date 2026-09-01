@@ -24,7 +24,7 @@ const EDGE = 1;
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-scroll-area { --tx-scroll-area-fade: 3rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/043_TxScrollArea.md`
  */
 export const TxScrollArea = ({ orientation = "vertical", size, focusable = true, label, className, style, children, ...props }: TxScrollAreaProps) => {
   const ref = useRef<HTMLDivElement>(null);

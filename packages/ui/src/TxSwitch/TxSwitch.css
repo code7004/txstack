@@ -5,7 +5,7 @@
  * 토큰도 `--tx-switch-*` 로 따로 갖는다 — 스위치 크기를 바꾸려다 체크박스가 함께
  * 바뀌면 안 된다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/041_TxSwitch.md
  */
 
 .tx-switch {

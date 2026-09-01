@@ -19,7 +19,7 @@ import type { TxRadioProps } from "./TxRadio.types";
  *
  * 진짜 `<input type="radio">` 라 `<form>` 안에서 그냥 제출된다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/039_TxRadio.md`
  */
 export const TxRadio = forwardRef<HTMLInputElement, TxRadioProps>(function TxRadio({ label, children, className, style, classNames, onChange, onChangeValue, ...props }, ref) {
   const group = useTxRadioGroup();

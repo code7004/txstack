@@ -4,7 +4,7 @@
  * `TxAlert` 과 같은 방식이다 — **갈래는 `--tx-tag-accent` 하나만 갈아 끼우고**
  * 바탕·테두리·점 색이 전부 거기서 섞여 나온다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/029_TxTag.md
  */
 
 .tx-tag {

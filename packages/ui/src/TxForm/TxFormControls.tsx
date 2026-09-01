@@ -13,7 +13,7 @@ import type { TxFormFieldSlots } from "./TxForm.types";
  * **감싼 컴포넌트의 props 를 전부 그대로 받는다.** `className` 하나만 필드 상자가 가져간다 —
  * 그리드에 놓는 자리라서다. 컨트롤 자체는 CSS 로 겨냥한다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/014_TxForm.md`
  */
 
 /** 필드가 가져가는 것 + aria 를 손수 주고 싶을 때의 통로. */

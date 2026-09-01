@@ -29,7 +29,7 @@ const HOVER_CLOSE_DELAY = 120;
  * 키보드는 메뉴 규약을 따른다 — ↓ 로 열고, ↑↓ 로 옮기고, Home·End 로 양 끝,
  * Escape 로 닫으면 **포커스가 트리거로 돌아온다.**
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/022_TxMenu.md`
  */
 export const TxDropMenuBase = ({ children, menu, trigger = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
   const triggerRef = useRef<HTMLButtonElement>(null);

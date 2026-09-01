@@ -24,7 +24,7 @@ import type { TxFormProps } from "./TxForm.types";
  * </TxForm>
  * ```
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/014_TxForm.md`
  */
 export const TxFormBase = ({ labelWidth, className, style, onSubmit, children, ...props }: TxFormProps) => {
   /*

@@ -27,7 +27,7 @@ import { TxAlertActions } from "./TxAlertActions";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-alert { --tx-alert-radius: 0 }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/025_TxAlert.md`
  */
 export const TxAlertBase = ({ variant = "info", title, icon, onClose, closeLabel = "닫기", announce = false, variantLabel, className, classNames, children, ...props }: TxAlertProps) => {
   const Icon = TX_ALERT_ICONS[variant];

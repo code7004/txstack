@@ -20,7 +20,7 @@ import type { TxAvatarGroupProps } from "./TxAvatar.types";
  *
  * 겹치는 정도는 토큰이다 — `.tx-avatar-group { --tx-avatar-overlap: 0.5rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/045_TxAvatar.md`
  */
 export function TxAvatarGroup({ max, size = "md", shape = "circle", moreLabel = (rest) => `외 ${rest}명`, className, children, ...props }: TxAvatarGroupProps) {
   const items = Children.toArray(children);

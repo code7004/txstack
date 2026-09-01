@@ -17,7 +17,7 @@ import type { TxDividerProps } from "./TxDivider.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-divider { --tx-divider-spacing: 2rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/033_TxDivider.md`
  */
 export const TxDivider = ({ orientation = "horizontal", className, children, ...props }: TxDividerProps) => {
   // 글자가 없으면 <hr> 로 끝난다. void 요소라 자식을 담지 못하므로 있을 때만 갈린다

@@ -17,7 +17,7 @@ import type { TxProgressProps } from "./TxProgress.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-progress { --tx-progress-height: 0.5rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/036_TxProgress.md`
  */
 export const TxProgress = ({ value, max = 100, variant = "info", label, showValue = false, className, classNames, ...props }: TxProgressProps) => {
   // 끝값이 0 이하면 비율을 낼 수 없다. 0% 로 두고 화면이 깨지지 않게 한다

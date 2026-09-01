@@ -27,7 +27,7 @@ const toValue = (input: number | TxAccordionValue | undefined): TxAccordionValue
  * `TxTabs` 와 형제다. 같은 정보를 **한 번에 하나만 보여 준다**는 점이 같고,
  * 탭은 자리를 나란히 두고 이쪽은 위아래로 편다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/028_TxAccordion.md`
  */
 export const TxAccordion = ({ items, multiple = false, value, defaultValue, onChange, headingLevel, hideMarker = false, className, classNames, ...props }: TxAccordionProps) => {
   const controlled = value !== undefined;

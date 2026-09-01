@@ -22,7 +22,7 @@ import type { TxTextareaProps, TxTextareaRef } from "./TxTextarea.types";
  * 폼 안에 나란히 놓았을 때 테두리·배경·포커스 링이 어긋나면 안 되기 때문이다.
  * 원본은 각자 그려서 **텍스트영역만 배경이 없었다** (다크모드에서 부모가 비쳤다).
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/007_TxTextarea.md`
  */
 export const TxTextarea = forwardRef<TxTextareaRef, TxTextareaProps>(function TxTextarea(
   { id, name, className, style, value, defaultValue, readOnly = false, focusOnMount, autoGrow = false, onChange, onBlur, onChangeText, onBlurText, ...props },

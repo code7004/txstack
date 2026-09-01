@@ -22,7 +22,7 @@ import { clamp, formatNumber, parseNumber, precisionOf, stepBy } from "./TxNumbe
  *
  * 겉은 `TxInput` 의 상자를 그대로 쓴다 — 폼에서 다른 칸과 높이가 어긋나지 않는다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/038_TxNumberInput.md`
  */
 export const TxNumberInput = forwardRef<HTMLInputElement, TxNumberInputProps>(function TxNumberInput(
   { value, defaultValue, onChange, min, max, step = 1, precision, thousandSeparator = true, suffix, hideStepper = false, className, style, disabled, readOnly, onBlur, onKeyDown, ...props },

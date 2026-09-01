@@ -24,8 +24,9 @@ import type { TxTickerProps } from "./TxTicker.types";
  *
  * **자식 하나가 항목 하나다.** 링크든 글자든 그대로 넣는다.
  *
- * **멈출 수 있어야 저절로 움직여도 된다** (WCAG 2.2.2). 그래서 멈춤 버튼은 늘 있고
- * 끌 수 없다. 얹거나 초점이 가도 멈춘다 — 읽는 동안 지나가 버리면 안 된다.
+ * **멈출 수 있어야 저절로 움직여도 된다** (WCAG 2.2.2). 그래서 멈춤 버튼은 없앨 수 없다 —
+ * `controls={false}` 는 화면에서 감출 뿐이고 Tab 이 닿으면 나타난다.
+ * 얹거나 초점이 가도 멈춘다 — 읽는 동안 지나가 버리면 안 된다.
  *
  * **움직임을 줄여 달라고 한 사람에게는 멈춘 채로 시작한다.** 첫 항목이 그대로 서 있고,
  * 보고 싶으면 재생을 누른다.
@@ -37,7 +38,7 @@ import type { TxTickerProps } from "./TxTicker.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-ticker { --tx-ticker-line: 2rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/046_TxTicker.md`
  */
 export function TxTicker({ flow = false, interval = 4000, speed = 40, controls = true, pauseLabel = "멈춤", playLabel = "재생", className, children, ...props }: TxTickerProps) {
   const items = Children.toArray(children);

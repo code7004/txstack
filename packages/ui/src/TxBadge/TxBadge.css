@@ -4,7 +4,7 @@
  * **혼자 서는 이름표는 `TxTag` 가 갖는다.** 이쪽은 감싼 것의 모서리에 겹쳐 앉으므로
  * 그 자리를 밀지 않는다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/031_TxBadge.md
  */
 
 .tx-badge-anchor {

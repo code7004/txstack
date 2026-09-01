@@ -3,7 +3,7 @@
  *
  * 갈래는 `--tx-progress-accent` 하나만 갈아 끼운다 — `TxAlert` · `TxTag` 와 같은 방식이다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/036_TxProgress.md
  */
 
 .tx-progress {

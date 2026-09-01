@@ -23,7 +23,7 @@ import type { TxBadgeProps } from "./TxBadge.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-badge { --tx-badge-size: 1.25rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/031_TxBadge.md`
  */
 export const TxBadge = ({ count, max = 99, showZero = false, dot = false, variant = "danger", placement = "top-right", label, className, children, ...props }: TxBadgeProps) => {
   // 수가 없으면 점이다. 0 은 알릴 것이 없으므로 기본으로 감춘다

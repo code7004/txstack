@@ -54,7 +54,7 @@ function open(kind: "alert" | "confirm", input: TxDialogInput) {
  *
  * 여러 번 연달아 불러도 **겹치지 않고 차례로** 뜬다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/018_TxDialog.md`
  */
 export const TxDialog = {
   /** 알리고 확인만 받는다. */

@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { TxFlex } from "./TxFlex";
 
 /**
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/002_TxFlex.md`
  *
  * **이 컴포넌트의 결함 둘은 전부 CSS 쪽에서 났다.**
  *
@@ -15,7 +15,7 @@ import { TxFlex } from "./TxFlex";
  *
  * jsdom 에는 스타일시트가 없어 둘 다 렌더 결과로는 안 보인다. 그래서 아래쪽 "CSS 계약" 블록이
  * `TxFlex.css` 를 **텍스트로 읽어** 검사한다 (`TxSpinner` 2차에서 만든 방식,
- * docs/001_ui.md).
+ * docs/001_ui/002_TxFlex.md).
  */
 
 // RTL 자동 cleanup 은 afterEach 가 전역일 때만 등록된다. 이 저장소는 globals 를 켜지 않았다.
@@ -117,7 +117,7 @@ describe("TxFlex — 그 밖의 계약", () => {
  *
  * 이 컴포넌트가 하는 일이 `display` 와 `gap` 둘뿐이라, **그 두 줄이 곧 계약이다.**
  * 값은 검사하지 않는다 — 간격을 고칠 때마다 테스트를 고치게 되면 안 된다
- * (docs/001_ui.md).
+ * (docs/001_ui/002_TxFlex.md).
  */
 describe("TxFlex — CSS 계약", () => {
   const here = import.meta.dirname;

@@ -18,7 +18,7 @@ const same = (a: readonly unknown[], b: readonly unknown[]) => a.length === b.le
  * 여러 개를 고르는 동안 값이 바뀔 때마다 서버를 치지 않으려는 자리에 쓴다 — 버튼을 누를 때 한 번만 온다.
  * 확인하지 않고 닫으면 열기 전 상태로 되돌아간다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/010_TxDropdown.md`
  */
 export function TxDropdownMulti<TData extends TxDropdownData>(props: TxDropdownMultiProps<TData>) {
   const {

@@ -18,7 +18,7 @@ import { TxCardFooter } from "./TxCardFooter";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-card { --tx-card-padding: 2rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/020_TxCard.md`
  */
 export const TxCardBase = ({ title, collapsible = false, collapsed, defaultCollapsed = false, onChangeCollapsed, collapseLabel = "접기", expandLabel = "펼치기", className, classNames, children, ...props }: TxCardProps) => {
   const bodyId = useId();

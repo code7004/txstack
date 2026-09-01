@@ -21,7 +21,7 @@ import type { TxRadioGroupProps } from "./TxRadio.types";
  * 다니고 Tab 은 묶음을 한 번만 밟는다 — 그것이 이 컴포넌트가 손으로 roving tabindex 를
  * 짜지 않는 이유다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/039_TxRadio.md`
  */
 export const TxRadioGroup = ({ name, legend, value, defaultValue, onChange, inline = false, disabled, className, children, ...props }: TxRadioGroupProps) => {
   const autoName = useId();

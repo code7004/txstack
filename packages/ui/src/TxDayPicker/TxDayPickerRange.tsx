@@ -33,7 +33,7 @@ const toDateRange = (range: TxDateRange): DateRange | undefined => (range[0] || 
  * `ref` 로 값을 넣을 수 있다. `header` 에 "최근 7일" 같은 버튼을 두고 거기서 부른다.
  * **넣은 기간이 안 보이는 달이면 달력이 그 달로 따라간다** — `value` 로 넣어도 같다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/013_TxDayPicker.md`
  */
 export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRangeProps>(function TxDayPickerRange(
   {

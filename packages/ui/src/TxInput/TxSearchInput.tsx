@@ -18,7 +18,7 @@ import type { TxInputRef, TxSearchInputProps, TxSearchInputRef } from "./TxInput
  * 겉모습은 `TxInput` 의 토큰을 그대로 쓴다 — 안쪽 입력의 테두리는 CSS 가 지운다
  * (`.tx-search-input .tx-input`). 원본은 `theme` prop 으로 지웠는데 그 prop 은 폐기됐다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/006_TxInput.md`
  */
 export const TxSearchInput = forwardRef<TxSearchInputRef, TxSearchInputProps>(function TxSearchInput({ className, onClear, onSubmitText, onChangeText, onEnter, ...props }, ref) {
   const inputRef = useRef<TxInputRef>(null);

@@ -19,7 +19,7 @@ import type { TxCapsLockCheckProps } from "./TxCapsLockCheck.types";
  *
  * 색·글자 크기는 CSS 변수로 바꾼다 — `.tx-capslock { --tx-capslock-color: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/009_TxCapsLockCheck.md`
  */
 export function TxCapsLockCheck({ children, text = "Caps Lock 이 켜져 있습니다.", icon = "⚠️", preserveSpace = true, className, style, classNames }: TxCapsLockCheckProps) {
   const [on, setOn] = useState(false);

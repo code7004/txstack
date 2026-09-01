@@ -25,7 +25,7 @@ export interface TxSpinnerProps extends Omit<SVGProps<SVGSVGElement>, "children"
  *
  * 회전 속도는 CSS 변수로 바꾼다 — `.tx-spinner { --tx-spinner-duration: 2s }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/004_TxSpinner.md`
  */
 export const TxSpinner = ({ size = "1em", decorative = false, className, role, "aria-label": ariaLabel, ...props }: TxSpinnerProps) => {
   // 장식용인데 role="status" + aria-label 을 남겨두면 옆의 문구와 중복 안내된다.

@@ -5,7 +5,7 @@
  * 가로는 끊임없이 흐른다(animation).** 도는지 멈췄는지는 둘 다 `[data-moving]` 하나가 쥔다 —
  * 세로의 타이머는 JS 가 끊고, 가로는 여기서 `animation-play-state` 로 세운다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/046_TxTicker.md
  */
 
 .tx-ticker {

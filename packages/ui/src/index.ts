@@ -10,7 +10,7 @@
  * **default export 를 두지 않는다.** 배럴의 `export *` 는 default 를 실어 나르지 않아서,
  * 파일 경로로 직접 import 하던 습관이 패키지에서는 조용히 깨진다.
  *
- * 스타일은 `@txstack/ui/styles.css` 한 파일이다. 설계: docs/001_ui.md
+ * 스타일은 `@txstack/ui/styles.css` 한 파일이다. 설계: docs/001_ui/000_README.md
  */
 export * from "./TxAccordion";
 export * from "./TxAppShell";

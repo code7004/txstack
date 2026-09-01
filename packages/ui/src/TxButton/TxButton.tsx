@@ -38,7 +38,7 @@ const isThenable = (value: unknown): value is Promise<unknown> => typeof (value 
  * 색·반경은 CSS 변수로 바꾼다 — 앱 전체는 `:root { --tx-color-primary: … }`,
  * 이 컴포넌트만은 `.tx-button { --tx-button-bg: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/001_TxButton.md`
  */
 export const TxButton = ({ label, variant = "primary", className, classNames, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
   const [isLoading, _isLoading] = useState(false);

@@ -9,7 +9,7 @@ import { TxIconCheck, TxIconClose, TxIconSearch } from ".";
  * 둘 중 하나라도 깨지면 `TxInput` 안에서 아이콘만 따로 노는데, 그건 아이콘을 넣은 자리에서
  * 원인을 찾기 어렵다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/005_TxIcons.md`
  */
 
 afterEach(cleanup);

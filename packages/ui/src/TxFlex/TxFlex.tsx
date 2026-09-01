@@ -22,7 +22,7 @@ export interface TxFlexProps extends HTMLAttributes<HTMLDivElement> {}
  *
  * 화면 골격은 이 컴포넌트가 하지 않는다 → `TxLayout`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/002_TxFlex.md`
  */
 export const TxFlex = ({ className, children, ...props }: TxFlexProps) => (
   // 스타일은 TxFlex.css 가 소유한다. 여기서는 기본 클래스만 걸고 className 을 덧붙인다.
