@@ -1,0 +1,132 @@
+/**
+ * TxNavBar — 가로로 도는 내비게이션 줄.
+ *
+ * **가로만 한다.** 세로로 세우는 것(아이콘 rail · 하위메뉴 트리)은 `TxSideNav` 가 갖는다.
+ *
+ * 명세: docs/001_ui/048_TxNavBar.md
+ */
+
+.tx-nav-bar {
+  --tx-nav-bar-gap: 0.25rem;
+  --tx-nav-bar-item-padding: 0.625rem 0.75rem;
+  --tx-nav-bar-radius: var(--tx-radius);
+
+  --tx-nav-bar-color: var(--tx-color-text);
+  --tx-nav-bar-hover-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+
+  --tx-nav-bar-panel-bg: var(--tx-color-surface);
+  --tx-nav-bar-panel-border: var(--tx-color-border);
+  --tx-nav-bar-panel-padding: 1.25rem;
+  --tx-nav-bar-panel-shadow: 0 8px 24px color-mix(in oklab, var(--tx-color-text) 12%, transparent);
+
+  /**
+   * **패널의 기준이 여기다.** `panelWidth="bar"` 는 이 줄 전체 폭으로 펼쳐진다 —
+   * 항목이 기준이면 그 폭을 낼 수 없다.
+   */
+  position: relative;
+  color: var(--tx-nav-bar-color);
+}
+
+.tx-nav-bar__list {
+  display: flex;
+  gap: var(--tx-nav-bar-gap);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tx-nav-bar__item {
+  /** `panelWidth="item"` 일 때 패널의 기준이 된다. 아래에서 켠다 */
+  display: flex;
+}
+
+/* --- 항목 ----------------------------------------------------------------- */
+
+.tx-nav-bar :is(.tx-nav-bar__link, .tx-nav-bar__trigger) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  padding: var(--tx-nav-bar-item-padding);
+
+  border: 0;
+  border-radius: var(--tx-nav-bar-radius);
+  background-color: transparent;
+  color: inherit;
+
+  font: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tx-nav-bar :is(.tx-nav-bar__link, .tx-nav-bar__trigger):hover {
+  background-color: var(--tx-nav-bar-hover-bg);
+}
+
+.tx-nav-bar :is(.tx-nav-bar__link, .tx-nav-bar__trigger):focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+/** 지금 있는 자리. 라우터가 `aria-current` 를 붙여 주므로 그것을 그대로 읽는다 */
+.tx-nav-bar__link[aria-current]:not([aria-current="false"]) {
+  background-color: var(--tx-nav-bar-hover-bg);
+  font-weight: 600;
+}
+
+.tx-nav-bar__chevron {
+  font-size: 0.75em;
+  transition: rotate 0.15s ease;
+}
+
+.tx-nav-bar__item[data-open] .tx-nav-bar__chevron {
+  rotate: 180deg;
+}
+
+.tx-nav-bar__item[data-open] .tx-nav-bar__trigger {
+  background-color: var(--tx-nav-bar-hover-bg);
+}
+
+/* --- 패널 ----------------------------------------------------------------- */
+
+.tx-nav-bar__panel {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 100%;
+
+  box-sizing: border-box;
+  padding: var(--tx-nav-bar-panel-padding);
+
+  border: 1px solid var(--tx-nav-bar-panel-border);
+  border-radius: var(--tx-nav-bar-radius);
+  background-color: var(--tx-nav-bar-panel-bg);
+  box-shadow: var(--tx-nav-bar-panel-shadow);
+}
+
+/** 줄 전체 폭. 기준이 `.tx-nav-bar` 라 항목이 어디 있든 같은 자리에 펼쳐진다 */
+.tx-nav-bar[data-panel-width="bar"] .tx-nav-bar__panel {
+  inset-inline: 0;
+}
+
+/**
+ * 항목 폭. 이때만 항목이 기준을 쥔다 — `"bar"` 에서 쥐면 줄 폭을 낼 수 없다.
+ * 자리가 좁으면 왼쪽으로 붙여 화면 밖으로 나가지 않게 한다.
+ */
+.tx-nav-bar[data-panel-width="item"] .tx-nav-bar__item {
+  position: relative;
+}
+
+.tx-nav-bar[data-panel-width="item"] .tx-nav-bar__panel {
+  inset-inline-start: 0;
+  min-inline-size: max-content;
+  max-inline-size: min(28rem, 90vw);
+}
+
+/** 움직임을 줄여 달라고 한 사람에게는 화살촉을 돌리지 않는다 */
+@media (prefers-reduced-motion: reduce) {
+  .tx-nav-bar__chevron {
+    transition: none;
+  }
+}

@@ -80,6 +80,7 @@
 @import "./TxJsonTree/TxJsonTree.css" layer(tx);
 @import "./TxMenu/TxMenu.css" layer(tx);
 @import "./TxModal/TxModal.css" layer(tx);
+@import "./TxNavBar/TxNavBar.css" layer(tx);
 /* 확인창은 모달의 토큰을 자기 안에서만 덮는다. 모달 뒤에 와야 한다 */
 @import "./TxDialog/TxDialog.css" layer(tx);
 @import "./TxSlidePanel/TxSlidePanel.css" layer(tx);
