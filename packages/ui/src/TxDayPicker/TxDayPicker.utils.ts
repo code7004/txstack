@@ -34,6 +34,15 @@ export function startOfDay(date: Date): Date {
   return next;
 }
 
+/**
+ * 그 달 1일 00:00. `offset` 을 주면 그만큼 앞뒤 달로 간다.
+ *
+ * 날짜를 그대로 두고 달만 더하지 않는다 — 1월 31일에 한 달을 더하면 3월 3일이 되어 버린다.
+ */
+export function startOfMonth(date: Date, offset = 0): Date {
+  return new Date(date.getFullYear(), date.getMonth() + offset, 1);
+}
+
 /** 그날 23:59:59.999 */
 export function endOfDay(date: Date): Date {
   const next = new Date(date);

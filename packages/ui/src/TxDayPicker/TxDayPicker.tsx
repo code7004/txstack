@@ -4,6 +4,7 @@ import { TxInputLike } from "../TxInput/TxInputLike";
 import { TxPopup } from "../TxPopup";
 import { cm } from "../tx-ui.utils";
 import { CALENDAR_CLASS_NAMES } from "./TxDayPicker.calendar";
+import { useVisibleMonth } from "./TxDayPicker.month";
 import type { TxDayPickerProps } from "./TxDayPicker.types";
 import { formatDate, startOfDay } from "./TxDayPicker.utils";
 
@@ -17,6 +18,9 @@ import { formatDate, startOfDay } from "./TxDayPicker.utils";
  * ```
  *
  * `value` 를 주면 controlled 다. 고른 날짜는 **그날 00:00** 으로 맞춰서 준다.
+ *
+ * 달력은 **고른 날의 달**로 열린다. 아직 고른 것이 없으면 이번 달이다.
+ * 열어 둔 채 밖에서 값을 바꿔도 그 날이 안 보이는 달이면 **그 달로 따라간다.**
  *
  * 달력은 화면 맨 위 층으로 뜬다 — `overflow: hidden` 안에 넣어도 잘리지 않고,
  * 아래가 좁으면 위로 뒤집고, **스크롤해도 따라간다.**
@@ -32,6 +36,8 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
+  const [month, setMonth] = useVisibleMonth(selected, open);
 
   const hdSelect = (date: Date | undefined) => {
     const next = date ? startOfDay(date) : undefined;
@@ -67,7 +73,8 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
       />
 
       <TxPopup anchorRef={anchorRef} open={open} onClose={() => setOpen(false)} id={panelId} role="dialog" aria-label={placeholder} matchAnchorWidth={false} maxHeight="none" className="tx-daypicker__panel">
-        <DayPicker mode="single" selected={selected} onSelect={hdSelect} autoFocus classNames={CALENDAR_CLASS_NAMES} />
+        {/* 펴 놓을 달은 우리가 쥔다 — 안 쥐면 고른 날이 언제든 늘 오늘 달로 열린다. */}
+        <DayPicker mode="single" selected={selected} onSelect={hdSelect} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
       </TxPopup>
     </div>
   );

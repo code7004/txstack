@@ -188,6 +188,9 @@ export const SubmitMode: StoryObj = {
 /**
  * **`header` 에 프리셋 버튼을 둔다.** 값은 `ref` 로 넣는다 —
  * 달력 안에서 값을 읽어 넘겨주는 복잡한 render prop 이 필요 없다.
+ *
+ * **넣은 기간이 안 보이는 달이면 달력이 그 달로 따라간다.** "최근 90일" 을 눌러 보면
+ * 시작한 달이 펼쳐진다.
  */
 export const Presets: StoryObj = {
   parameters: noControls,

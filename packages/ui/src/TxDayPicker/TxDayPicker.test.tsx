@@ -35,6 +35,14 @@ const dayButton = (day: string, monthIndex = 0) => {
   return found;
 };
 
+/**
+ * 지금 펼쳐 놓은 달들을 `YYYY-MM` 으로 읽는다.
+ *
+ * 캡션 글자("August 2026")는 환경 로케일을 타지만 셀의 `data-day` 는 늘 `YYYY-MM-DD` 다.
+ * 옆 달에서 흘러온 날은 빼고 그 달의 첫 칸을 본다.
+ */
+const shownMonths = () => [...document.querySelectorAll<HTMLElement>(".tx-daypicker__month")].map((month) => month.querySelector<HTMLElement>(".tx-daypicker__day:not(.tx-daypicker__day--outside)")?.dataset.day?.slice(0, 7));
+
 describe("날짜 유틸", () => {
   it("긴 토큰부터 바꾼다 — YYYY 가 YY 두 번으로 쪼개지지 않는다", () => {
     const date = new Date(2026, 7, 27, 13, 5, 9);
@@ -90,6 +98,68 @@ describe("TxDayPicker — 하나 고르기", () => {
     expect(trigger().getAttribute("aria-haspopup")).toBe("dialog");
     open();
     expect(trigger().getAttribute("aria-controls")).toBe(panel()!.id);
+  });
+
+  /**
+   * 달력이 늘 **오늘 달**로 열렸다. 8월 15일을 들고 열어도 9월이 펼쳐져서,
+   * 20일을 누르면 9월 20일이 들어왔다. 오늘이 8월인 동안에만 우연히 맞던 자리다.
+   */
+  it("고른 날의 달로 연다 — 오늘 달이 아니다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} />);
+
+    open();
+    expect(shownMonths()).toEqual(["2026-08"]);
+    expect(dayButton("20").closest<HTMLElement>(".tx-daypicker__day")?.dataset.day).toBe("2026-08-20");
+  });
+
+  it("고른 것이 없으면 이번 달로 연다", () => {
+    render(<TxDayPicker />);
+
+    open();
+    expect(shownMonths()).toEqual([formatDate(new Date(), "YYYY-MM")]);
+  });
+
+  /**
+   * 좌우 버튼은 **달 캡션 안이 아니라 달들 옆에 한 벌만** 붙는다. 아래 CSS 계약이
+   * 그 자리를 기준으로 위치를 잡으므로, `react-day-picker` 가 이 모양을 바꾸면 여기서 먼저 걸린다.
+   */
+  it("좌우 버튼으로 달을 넘긴다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} />);
+
+    open();
+    expect(document.querySelector(".tx-daypicker__nav")?.parentElement?.className).toContain("tx-daypicker__months");
+
+    const [prev, next] = [...document.querySelectorAll<HTMLButtonElement>(".tx-daypicker__nav-button")];
+
+    fireEvent.click(prev!);
+    expect(shownMonths()).toEqual(["2026-07"]);
+
+    fireEvent.click(next!);
+    fireEvent.click(next!);
+    expect(shownMonths()).toEqual(["2026-09"]);
+  });
+
+  it("넘겨 놓고 닫았다 열면 값의 달로 돌아온다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} />);
+
+    open();
+    fireEvent.click(document.querySelector<HTMLButtonElement>(".tx-daypicker__nav-button")!);
+    expect(shownMonths()).toEqual(["2026-07"]);
+
+    open(); // 닫고
+    open(); // 다시 연다
+    expect(shownMonths()).toEqual(["2026-08"]);
+  });
+
+  /** 열어 둔 채 밖에서 값을 바꾸는 자리 — 폼의 "오늘" 버튼 같은 것이 이 길로 온다. */
+  it("열어 둔 채 밖에서 값을 바꾸면 그 달로 따라간다", () => {
+    const { rerender } = render(<TxDayPicker value={new Date(2026, 7, 15)} onChange={() => {}} />);
+
+    open();
+    expect(shownMonths()).toEqual(["2026-08"]);
+
+    rerender(<TxDayPicker value={new Date(2026, 2, 3)} onChange={() => {}} />);
+    expect(shownMonths()).toEqual(["2026-03"]);
   });
 
   it("고르면 그날 00:00 으로 준다", () => {
@@ -196,6 +266,42 @@ describe("TxDayPickerRange — 기간 고르기", () => {
     expect(onChange).toHaveBeenCalled();
     expect(onChangeNums).toHaveBeenCalled();
     expect(typeof (onChangeNums.mock.calls.at(-1)![0] as number[])[0]).toBe("number");
+  });
+
+  it("시작한 달부터 편다 — 오늘 달이 아니다", () => {
+    render(<TxDayPickerRange {...between(new Date(2026, 1, 10), new Date(2026, 1, 20))} />);
+
+    open();
+    expect(shownMonths()).toEqual(["2026-02", "2026-03"]);
+  });
+
+  /**
+   * `header` 의 프리셋 버튼("최근 7일")이 이 길로 온다. 넣은 기간이 안 보이는 달이면
+   * 달력이 따라가지 않아 **고른 것이 화면에 없는** 상태가 됐다.
+   */
+  it("ref 로 넣은 기간이 안 보이는 달이면 그 달로 따라간다", () => {
+    const ref = createRef<TxDayPickerRangeRef>();
+    render(<TxDayPickerRange ref={ref} />);
+
+    open();
+    act(() => ref.current?.setValue([new Date(2026, 1, 10), new Date(2026, 1, 20)]));
+
+    expect(shownMonths()).toEqual(["2026-02", "2026-03"]);
+  });
+
+  /**
+   * 두 달을 펴 놓고 오른쪽 달에서 시작일을 고르면, 따라가느라 화면이 옆으로 밀려
+   * **고르던 자리가 사라진다.** 이미 보이는 달은 옮기지 않는다.
+   */
+  it("달력 안에서 고른 것은 화면을 옮기지 않는다", () => {
+    render(<TxDayPickerRange defaultValue={[new Date(2026, 7, 10), new Date(2026, 7, 12)]} />);
+
+    open();
+    expect(shownMonths()).toEqual(["2026-08", "2026-09"]);
+
+    // 오른쪽(9월) 달에서 새로 시작일을 고른다
+    fireEvent.click(dayButton("20", 1));
+    expect(shownMonths()).toEqual(["2026-08", "2026-09"]);
   });
 
   it("고른 기간을 글자로 보여 준다", () => {
@@ -378,6 +484,25 @@ describe("TxDayPicker — CSS 계약과 경계", () => {
 
     const unreachable = [...usedInPopup].filter((name) => !declaredOnPopup.has(name) && declaredOnAnchor.has(name));
     expect(unreachable, "앵커에만 선언돼 팝업에 닿지 않는 토큰").toEqual([]);
+  });
+
+  /**
+   * **버튼이 보이는데 눌리지 않던 원인이 여기였다.**
+   *
+   * 좌우 버튼 띠는 캡션 줄 위에 겹쳐 놓는다. 그런데 캡션이 자리를 쥐면(`position`)
+   * 띠보다 뒤에 그려져 **버튼을 통째로 덮는다** — 클릭이 캡션에 먹힌다.
+   * jsdom 에는 배치가 없어 렌더 결과로는 안 보이므로 CSS 를 글자로 읽어 잡는다.
+   */
+  it("좌우 버튼의 기준은 __months 가 쥐고, 캡션은 자리를 쥐지 않는다", () => {
+    const body = (selector: string) => css.match(new RegExp(`${selector.replace(/\./g, "\\.")}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+
+    expect(body(".tx-daypicker__nav")).toContain("position: absolute");
+    expect(body(".tx-daypicker__months")).toContain("position: relative");
+    expect(body(".tx-daypicker__caption")).not.toContain("position:");
+
+    // 띠의 빈 가운데가 캡션을 덮지 않게, 띠는 통과시키고 버튼만 받는다.
+    expect(body(".tx-daypicker__nav")).toContain("pointer-events: none");
+    expect(body(".tx-daypicker__nav-button")).toContain("pointer-events: auto");
   });
 
   it("styles.css 에 실려 나간다 — 안 실리면 소비자에게 도달하지 않는다", () => {

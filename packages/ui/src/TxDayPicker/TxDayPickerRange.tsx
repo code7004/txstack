@@ -4,6 +4,7 @@ import { TxInputLike } from "../TxInput/TxInputLike";
 import { TxPopup } from "../TxPopup";
 import { cm } from "../tx-ui.utils";
 import { CALENDAR_CLASS_NAMES } from "./TxDayPicker.calendar";
+import { useVisibleMonth } from "./TxDayPicker.month";
 import type { TxDateRange, TxDayPickerRangeProps, TxDayPickerRangeRef } from "./TxDayPicker.types";
 import { addDays, endOfDay, formatDate, startOfDay } from "./TxDayPicker.utils";
 
@@ -30,6 +31,7 @@ const toDateRange = (range: TxDateRange): DateRange | undefined => (range[0] || 
  * 기간을 고치는 동안 서버를 치지 않으려는 자리에 쓴다.
  *
  * `ref` 로 값을 넣을 수 있다. `header` 에 "최근 7일" 같은 버튼을 두고 거기서 부른다.
+ * **넣은 기간이 안 보이는 달이면 달력이 그 달로 따라간다** — `value` 로 넣어도 같다.
  *
  * 명세: `docs/001_ui.md`
  */
@@ -71,6 +73,8 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
+  const [month, setMonth] = useVisibleMonth(current[0], open, numberOfMonths);
 
   const close = () => {
     setOpen(false);
@@ -164,7 +168,7 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
       <TxPopup anchorRef={anchorRef} open={open} onClose={close} id={panelId} role="dialog" aria-label={placeholder} matchAnchorWidth={false} maxHeight="none" className="tx-daypicker__panel">
         {header && <div className="tx-daypicker__header">{header}</div>}
 
-        <DayPicker mode="range" selected={toDateRange(current)} onSelect={hdSelect} disabled={blocked} numberOfMonths={numberOfMonths} defaultMonth={current[0]} autoFocus classNames={CALENDAR_CLASS_NAMES} />
+        <DayPicker mode="range" selected={toDateRange(current)} onSelect={hdSelect} disabled={blocked} numberOfMonths={numberOfMonths} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
 
         {footer && <div className="tx-daypicker__footer">{footer}</div>}
 

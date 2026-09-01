@@ -512,7 +512,7 @@ describe("TxAppShell — 크기 조절", () => {
   it("sizes 를 주면 밖이 정한다", () => {
     const onPanelChange = vi.fn();
     render(
-      <TxAppShell {...SLOTS} panels={{ left: { resize: true } }} panels={{ left: { resize: true, size: 300 } }} onPanelChange={onPanelChange}>
+      <TxAppShell {...SLOTS} panels={{ left: { resize: true, size: 300 } }} onPanelChange={onPanelChange}>
         본문
       </TxAppShell>
     );

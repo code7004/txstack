@@ -57,7 +57,14 @@
   font-size: var(--tx-daypicker-font-size);
 }
 
+/**
+ * 좌우 버튼(`__nav`)의 **기준이 여기다.** `react-day-picker` 는 그 버튼들을 달 캡션 안이
+ * 아니라 **달들 옆에 한 벌만** 놓는다 — 달을 둘 펴도 버튼은 양 끝에 하나씩이다.
+ * 기준을 안 쥐면 버튼이 팝업 기준으로 떠서 헤더 위나 엉뚱한 자리에 얹힌다.
+ */
 .tx-daypicker__months {
+  position: relative;
+
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -70,11 +77,12 @@
 }
 
 /**
- * 달 이름과 좌우 버튼이 같은 줄에 있다. 버튼을 절대 배치로 양끝에 두면
- * 달 이름 길이가 바뀌어도 버튼이 흔들리지 않는다.
+ * 달 이름. 좌우 버튼과 **같은 줄을 나눠 쓴다** — 버튼이 양 끝에 얹히고 이름은 가운데다.
+ *
+ * **자리를 쥐지 않는다(`position` 없음).** 쥐면 뒤에 그려져 버튼을 덮는다 —
+ * 버튼이 보이는데도 눌리지 않던 원인이다.
  */
 .tx-daypicker__caption {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,15 +91,28 @@
   font-weight: 600;
 }
 
+/**
+ * 캡션 줄 위에 겹쳐 양 끝에 둔다. 달 이름 길이가 바뀌어도 버튼이 흔들리지 않는다.
+ *
+ * 띠 자체는 **클릭을 통과시킨다.** 안 그러면 가운데 빈자리가 캡션을 덮어
+ * 달 이름을 긁어 고를 수 없다.
+ */
 .tx-daypicker__nav {
   position: absolute;
+  inset-block-start: 0;
   inset-inline: 0;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  height: var(--tx-daypicker-cell-size);
+  pointer-events: none;
 }
 
 .tx-daypicker__nav-button {
+  pointer-events: auto;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
