@@ -34,8 +34,9 @@
 
 - [x] **구현** — `packages/ui/src/TxIcons/`
 - [x] **테스트** — 18개
-- [x] **스토리** — `TxIcons.stories.tsx`
-- [ ] **CSS** — 없다
+- [x] **스토리** — `TxIcons.stories.tsx` (`Internal/` 묶음)
+- [x] **CSS 없음** — 아이콘은 `1em` + `currentColor` 라 놓인 자리를 따라간다. 스타일시트가 필요 없다
+- [x] **배럴에 내보내지 않는다** — `index.test.ts` 가 이 문을 지킨다
 
 ## 정한 것 · 고친 것
 
