@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` · `TxAvatar` — 테스트 1593개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` · `TxAvatar` · `TxTicker` — 테스트 1622개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
@@ -150,14 +150,20 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
 
       함께 고친 것 하나 — `TxAppShell.test.tsx` 에 `panels` 가 두 번 적혀 있어
       **`pnpm typecheck` 가 깨져 있었다**(뒤엣것이 이기므로 테스트는 통과하고 있었다)
-   2. **미룬 5차 항목 — 순서를 정했다.** `TxAvatar`(완료) → **`TxTicker`** → `TxCarousel`
-      → 메가메뉴(`TxNavBar`). ← 여기서 이어받는다
+   2. **미룬 5차 항목 — 순서를 정했다.** `TxAvatar`(완료) → `TxTicker`(완료) →
+      **`TxCarousel`** → 메가메뉴(`TxNavBar`). ← 여기서 이어받는다
 
       넷 다 **원본이 없다** — 이식이 아니라 새로 만드는 것이라 "원본 읽기" 단계가 없다.
       메가메뉴가 맨 뒤인 이유는 `TxTable` 과 같다: **`TxAppShell` 이 `header` 를 이미 가져서
       무엇이 셸 몫이고 무엇이 남았는지부터 정해야 한다.**
       `TxAvatar` 에서 정한 것(이니셜 규칙 · `name` 하나 · 색을 만들지 않는다 ·
-      `status` 는 `TxBadge` 몫 · 크기는 토큰 하나)은 [001_ui](001_ui.md) 가 갖는다.
+      `status` 는 `TxBadge` 몫 · 크기는 토큰 하나)과 `TxTicker` 에서 정한 것(멈춤 버튼은
+      감출 수는 있어도 없앨 수는 없다 · 움직임을 줄이는 사람에게는 멈춘 채 시작 ·
+      가로는 속도로 받는다)은
+      [001_ui](001_ui.md) 가 갖는다.
+
+      `TxTicker` 를 만들며 **`vitest.config.ts` 의 `._*` 제외가 `projects` 로 내려가지
+      않는 것**도 고쳤다. 넣어 뒀는데 아무 일도 하지 않고 있었다.
    3. **마지막이 `TxTable`** — **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 맨 뒤다.
       `columns` 를 ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길이고,
       `ag-grid-community` 가 MIT 인 것은 확인해 뒀다

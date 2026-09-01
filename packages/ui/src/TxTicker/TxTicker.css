@@ -1,0 +1,186 @@
+/**
+ * TxTicker — 저절로 움직이는 공지 줄.
+ *
+ * 두 재주가 한 컴포넌트에 있다. **세로는 한 줄씩 바꾸고(transform + transition),
+ * 가로는 끊임없이 흐른다(animation).** 도는지 멈췄는지는 둘 다 `[data-moving]` 하나가 쥔다 —
+ * 세로의 타이머는 JS 가 끊고, 가로는 여기서 `animation-play-state` 로 세운다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-ticker {
+  --tx-ticker-line: 1.75rem;
+  --tx-ticker-slide: 0.5s;
+
+  /* 가로에서 항목 사이. 이어 붙인 자리의 간격도 이 값이다 */
+  --tx-ticker-gap: 2.5rem;
+  /* 폭을 못 재는 자리(서버 · 첫 프레임)의 기본값. 재고 나면 인라인으로 덮인다 */
+  --tx-ticker-duration: 20s;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  /* 좁아지면 안에서 줄인다. flex 자식의 기본 최소 크기는 내용이라 그냥 두면 넘친다 */
+  min-inline-size: 0;
+}
+
+.tx-ticker__viewport {
+  flex: 1;
+  min-inline-size: 0;
+
+  block-size: var(--tx-ticker-line);
+  overflow: hidden;
+}
+
+.tx-ticker__list {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tx-ticker__item {
+  display: flex;
+  align-items: center;
+
+  block-size: var(--tx-ticker-line);
+
+  /* 한 줄이 넘치면 줄인다. 두 줄이 되면 다음 줄이 밀려 올라간 것처럼 보인다 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/**
+ * 복제본은 **자리를 차지하지 않는 껍데기**다. `display: contents` 라 안의 목록이 그대로
+ * 트랙의 자식이 된다 — 세로에서는 다음 줄로, 가로에서는 옆 칸으로 이어진다.
+ */
+.tx-ticker__clone {
+  display: contents;
+}
+
+/* --- 세로 — 한 줄씩 -------------------------------------------------------- */
+
+/** 어디까지 올라갔는지는 컴포넌트가 인라인 `transform` 으로 준다. 여기는 속도만 정한다 */
+.tx-ticker:not([data-flow]) .tx-ticker__track {
+  transition: transform var(--tx-ticker-slide) ease;
+}
+
+/** 마지막(복제한 첫 줄)에서 처음으로 돌아가는 한 번. 위로 되감기는 것이 보이면 안 된다 */
+.tx-ticker__track[data-instant] {
+  transition: none;
+}
+
+/* --- 가로 — 끊임없이 ------------------------------------------------------- */
+
+.tx-ticker[data-flow] .tx-ticker__viewport {
+  block-size: auto;
+}
+
+.tx-ticker[data-flow] .tx-ticker__track {
+  display: flex;
+  inline-size: max-content;
+
+  animation: tx-ticker-flow var(--tx-ticker-duration) linear infinite;
+  /* 기본은 멈춤이다. 도는 것은 [data-moving] 이 켤 때뿐이다 */
+  animation-play-state: paused;
+}
+
+.tx-ticker[data-flow][data-moving] .tx-ticker__track {
+  animation-play-state: running;
+}
+
+.tx-ticker[data-flow] .tx-ticker__list {
+  flex-direction: row;
+  gap: var(--tx-ticker-gap);
+
+  /* 이어 붙는 자리에도 같은 간격을 둔다. 없으면 마지막과 첫째가 붙어 흐른다 */
+  padding-inline-end: var(--tx-ticker-gap);
+}
+
+.tx-ticker[data-flow] .tx-ticker__item {
+  block-size: auto;
+}
+
+/** 반만큼 민다. 두 벌이 나란하므로 정확히 한 벌 지나간 자리가 처음과 같다 */
+@keyframes tx-ticker-flow {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* --- 멈춤 버튼 ------------------------------------------------------------- */
+
+.tx-ticker__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  inline-size: var(--tx-ticker-line);
+  block-size: var(--tx-ticker-line);
+
+  padding: 0;
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+
+  font-size: 0.875em;
+  cursor: pointer;
+}
+
+.tx-ticker__toggle:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+/**
+ * `controls={false}` — **화면에서만 감춘다.**
+ *
+ * `display: none` 이 아니다. 그러면 Tab 이 닿지 않아 멈출 길이 통째로 사라진다 —
+ * 저절로 움직이는 것에 그런 자리를 두면 안 된다(WCAG 2.2.2). 자리도 차지하지 않게
+ * 흐름에서 빼 두었다가, 초점이 오면 제자리에 나타난다.
+ *
+ * `:focus-visible` 이 아니라 `:focus` 다 — `TxAppShell` 의 건너뛰기 링크와 같은 이유로,
+ * 화면 밖에 있는 것은 마우스로 닿을 수 없어 브라우저의 판정을 기다릴 수 없다.
+ */
+.tx-ticker__toggle[data-hidden] {
+  position: absolute;
+
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tx-ticker__toggle[data-hidden]:focus {
+  position: static;
+
+  inline-size: var(--tx-ticker-line);
+  block-size: var(--tx-ticker-line);
+  margin: 0;
+
+  clip-path: none;
+}
+
+.tx-ticker__toggle:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+/**
+ * 움직임을 줄여 달라고 한 사람에게는 **멈춘 채로 시작한다** (컴포넌트가 그렇게 켠다).
+ * 그래도 재생을 누르면 도는데, 그때는 미끄러지지 않고 바로 바뀐다.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .tx-ticker:not([data-flow]) .tx-ticker__track {
+    transition: none;
+  }
+}

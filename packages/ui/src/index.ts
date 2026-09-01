@@ -51,5 +51,6 @@ export * from "./TxSpinner";
 export * from "./TxTabs";
 export * from "./TxTag";
 export * from "./TxTextarea";
+export * from "./TxTicker";
 export * from "./TxToast";
 export * from "./TxTooltip";

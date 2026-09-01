@@ -70,6 +70,7 @@
 @import "./TxBadge/TxBadge.css" layer(tx);
 @import "./TxBreadcrumb/TxBreadcrumb.css" layer(tx);
 /* 알림은 TxAlert 의 겉을 쓴다. 그 뒤에 와야 자리 규칙이 이긴다 */
+@import "./TxTicker/TxTicker.css" layer(tx);
 @import "./TxToast/TxToast.css" layer(tx);
 @import "./TxLoading/TxLoading.css" layer(tx);
 /* 쪽 번호는 TxButton 의 토큰을 자기 안에서만 덮는다. 버튼 뒤에 와야 한다 */
