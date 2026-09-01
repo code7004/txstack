@@ -40,7 +40,11 @@ ag-grid 위에 **목록 화면에서 늘 하는 일**(열 정의 · 정렬 · �
 
 - [x] **구현** — `packages/ui/src/TxAgGrid/`
 - [x] **테스트** — 43개
-- [x] **스토리** — `TxAgGrid.stories.tsx`
+- [x] **스토리** — `TxAgGrid.stories.tsx`. **쓰는 순서로 세워 두었다** —
+      `Setup`(모듈 등록·높이) → `Columns` → `SortInBrowser` → `SortOnServer` → `Editing` →
+      `RowNumberAndPaging` → `Selection` → `Loading` → `Theme`, `Playground` 는 맨 뒤.
+      문서 머리에 **먼저 알아 둘 세 가지**(서브패스 설치 · 모듈 등록 · 감싸는 자리가 높이를
+      가져야 한다는 것)와 **안 보이거나 이상할 때** 표를 뒀다
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
 ## 정한 것 · 고친 것
