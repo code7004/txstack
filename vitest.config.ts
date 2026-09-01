@@ -19,6 +19,9 @@ export default defineConfig({
     /**
      * macOS 는 확장속성을 못 싣는 볼륨(exFAT 등)에 `._파일명` 부산물을 만든다.
      * 소스 옆에 그대로 생기므로 `._TxForm.test.tsx` 가 테스트로 잡혀 파싱 에러가 났다.
+     *
+     * **projects 는 이 exclude 를 물려받지 않는다.** 여기에만 적어 두면 아무 일도 하지
+     * 않아서, 실제로 `._TxDayPicker.test.tsx` 가 잡혀 깨졌다. 아래 둘에 각각 적는다.
      */
     exclude: [...configDefaults.exclude, "**/._*"],
     projects: [
@@ -26,6 +29,7 @@ export default defineConfig({
         test: {
           name: "node",
           environment: "node",
+          exclude: [...configDefaults.exclude, "**/._*"],
           include: ["packages/axios/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.ts"]
         }
       },
@@ -33,6 +37,7 @@ export default defineConfig({
         test: {
           name: "dom",
           environment: "jsdom",
+          exclude: [...configDefaults.exclude, "**/._*"],
           include: ["packages/hooks/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.tsx"]
         }
       }
