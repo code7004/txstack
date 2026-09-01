@@ -4,7 +4,7 @@
  * `react-router-dom` 은 **optional peerDependency** 다. 이 서브패스를 import 하는 소비자만
  * 설치하면 된다.
  *
- * 설계: docs/003_hooks.md
+ * 설계: docs/003_hooks/002_useUrlQuery.md
  */
 export { useUrlQuery } from "./useUrlQuery";
 export type { UseUrlQueryOptions } from "./useUrlQuery";
