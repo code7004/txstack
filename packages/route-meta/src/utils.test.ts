@@ -72,6 +72,10 @@ describe("getNavigableRoutes", () => {
     expect(getNavigableRoutes(TREE).map((n) => n.path)).toEqual(["/", "/group"]);
   });
 
+  it("선언 순서를 지킨다", () => {
+    expect(getNavigableRoutes(TREE).map((n) => n.key)).toEqual(["home", "group"]);
+  });
+
   it("canAccess 가 통과시키면 권한 노드도 노출된다", () => {
     const menu = getNavigableRoutes(TREE, (perms) => perms.includes("admin"));
     expect(menu.map((n) => n.path)).toEqual(["/", "/admin", "/group"]);
@@ -92,14 +96,24 @@ describe("getNavigableRoutes", () => {
     expect(seen).toEqual([["admin"]]);
   });
 
-  it("children 도 필터링하되 원본 키를 보존한다", () => {
+  /**
+   * **위아래가 같은 형태다.** 한때 최상위는 키를 버린 배열, 자식은 키 있는 객체였다 —
+   * 메뉴를 재귀로 그리는 쪽이 두 형태를 다뤄야 했다.
+   */
+  it("자식도 같은 형태의 배열이고 키를 갖는다", () => {
     const group = getNavigableRoutes(TREE).find((n) => n.path === "/group");
 
-    // 원본은 살아남은 자식을 path 로 다시 묶어 `visible` 이 `/group/a` 로 바뀌었다.
-    expect(Object.keys(group?.children ?? {})).toEqual(["visible"]);
+    expect(group?.children).toEqual([{ key: "visible", path: "/group/a", meta: { label: "A" } }]);
   });
 
-  it("자식이 전부 걸러지면 children 을 지운다", () => {
+  it("메뉴에 실행 계층을 흘리지 않는다", () => {
+    const home = getNavigableRoutes(TREE)[0];
+
+    expect(Object.keys(home)).toEqual(["key", "path", "meta"]);
+    expect("element" in home).toBe(false);
+  });
+
+  it("자식이 전부 걸러지면 children 을 달지 않는다", () => {
     const tree: RouteTree = {
       group: {
         path: "/group",
@@ -111,14 +125,48 @@ describe("getNavigableRoutes", () => {
       }
     };
 
-    const group = getNavigableRoutes(tree)[0];
-
-    // 원본은 `{ ...node }` 로 퍼뜨려 걸러낸 자식이 그대로 남았다.
-    expect(group.children).toBeUndefined();
+    // 빈 배열을 주면 "펼치는 항목" 으로 보인다. 없으면 없어야 한다.
+    expect(getNavigableRoutes(tree)[0].children).toBeUndefined();
   });
 
   it("원본 트리를 변형하지 않는다", () => {
     getNavigableRoutes(TREE);
     expect(Object.keys((TREE.group as { children: RouteTree }).children)).toEqual(["visible", "hiddenChild", "disabledChild"]);
+  });
+});
+
+/**
+ * **에디터가 키를 짚어 주는지**를 tsc 가 지킨다. `satisfies` 로 붙여야 리터럴 키가 남아
+ * `routes.main.children.sub1.path` 가 정확히 뜬다 — 타입 주석(`const routes: RouteTree = …`)
+ * 으로 붙이면 키가 `string` 으로 넓어져 자동완성이 죽는다.
+ *
+ * 아래 `Exact` 단정이 깨지면 `pnpm typecheck` 가 먼저 멈춘다. 런타임 기대만으로는
+ * 키가 넓어진 것을 못 잡는다 — 넓어져도 값은 그대로 있기 때문이다.
+ */
+type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+
+describe("RouteTree 선언", () => {
+  const routes = {
+    main: {
+      path: "/",
+      meta: { label: "홈" },
+      children: {
+        sub1: { path: "/sub1", meta: { label: "하나" } }
+      }
+    }
+  } satisfies RouteTree;
+
+  it("키가 리터럴로 남는다 — 에디터가 짚어 주는 근거다", () => {
+    const top: Exact<keyof typeof routes, "main"> = true;
+    const sub: Exact<keyof typeof routes.main.children, "sub1"> = true;
+
+    // 키를 틀리면 여기서 tsc 가 멈춘다. 그게 이 줄의 존재 이유다.
+    expect(routes.main.children.sub1.path).toBe("/sub1");
+    expect([top, sub]).toEqual([true, true]);
+  });
+
+  it("그대로 두 함수에 넘어간다", () => {
+    expect(buildRouteObjects(routes).map((r) => r.path)).toEqual(["/"]);
+    expect(getNavigableRoutes(routes).map((n) => n.key)).toEqual(["main"]);
   });
 });

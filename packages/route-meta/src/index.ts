@@ -19,4 +19,4 @@ export type { CurrentRoute } from "./hooks";
 
 export { RouteRenderer } from "./renderer";
 
-export type { IndexRouteNode, PathRouteNode, RouteHandle, RouteMeta, RouteNode, RouteTree } from "./types";
+export type { IndexRouteNode, NavRoute, PathRouteNode, RouteHandle, RouteMeta, RouteNode, RouteTree } from "./types";
