@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` — 테스트 1553개 통과 (`TxDayPicker` 하나가 빨갛다, 아래 참조) |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` — 테스트 1563개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
@@ -132,14 +132,25 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
 
-2. **다음 순서는 이렇게 정했다.** ← 여기서 이어받는다
+2. **다음 순서는 이렇게 정했다.**
 
-   1. **`TxDayPicker` 결함부터** — 달력이 **고른 날의 달이 아니라 오늘 달로 열린다.**
-      `TxDayPicker.test.tsx:108` 이 지금 빨갛다(`expected '2026-09-20' to contain '2026-08-20'`).
-      `defaultValue={new Date(2026, 7, 15)}` 를 줬는데 트리거만 8월이고 패널은 9월로 열린다.
-      **오늘이 8월일 때만 우연히 통과하던 테스트라 9월로 넘어오며 드러났다.** 날짜에
-      기대는 다른 테스트가 또 있는지도 같이 훑는다
-   2. **미룬 5차 항목** — `TxTicker` · `TxCarousel` · `TxAvatar` · 메가메뉴
+   1. ~~**`TxDayPicker` 결함**~~ — **끝났다. 결함은 셋이었다.**
+
+      - **달력이 고른 날의 달이 아니라 늘 오늘 달로 열렸다** — `defaultMonth` 가 빠져 있었다
+        (원본도 `TxDayPickerRange` 에만 줬다). **오늘이 8월일 때만 우연히 통과하던 테스트라
+        9월로 넘어오며 드러났다.** 이제 달을 로케일 없이 `data-day` 로 읽어 단독으로 검사한다.
+        날짜에 기대는 다른 테스트는 없었다 — `Date.now()` 를 쓰는 둘(`axios` 만료 판정 ·
+        `TxJsonTree` 타입 판정)은 달력과 무관하다
+      - **달을 넘기는 좌우 버튼이 보이는데 눌리지 않았다** — 캡션이 버튼을 통째로 덮고 있었다.
+        `react-day-picker` 10 의 DOM 모양을 CSS 가 잘못 알고 있던 것이다. Storybook 에서
+        직접 눌러 확인했다. 자세한 것은 [001_ui](001_ui.md)
+      - **프리셋으로 넣은 기간을 달력이 따라가지 않았다** — 값은 들어가는데 화면은 보던 달에
+        그대로라 고른 것이 안 보였다. 펴 놓을 달을 우리가 쥐고(`useVisibleMonth`),
+        **열 때는 값의 달로 맞추고 열린 채 들어온 값이 안 보이는 달이면 옮긴다**
+
+      함께 고친 것 하나 — `TxAppShell.test.tsx` 에 `panels` 가 두 번 적혀 있어
+      **`pnpm typecheck` 가 깨져 있었다**(뒤엣것이 이기므로 테스트는 통과하고 있었다)
+   2. **미룬 5차 항목** — `TxTicker` · `TxCarousel` · `TxAvatar` · 메가메뉴 ← 여기서 이어받는다
    3. **마지막이 `TxTable`** — **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 맨 뒤다.
       `columns` 를 ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길이고,
       `ag-grid-community` 가 MIT 인 것은 확인해 뒀다
