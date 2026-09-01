@@ -23,7 +23,7 @@ import { TxGridItem } from "./TxGridItem";
  *
  * 한 줄로만 늘어놓을 것이면 `TxFlex` 다. 이쪽은 **칸이 맞아떨어져야 할 때**다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/035_TxGrid.md`
  */
 export const TxGridBase = ({ columns = 2, gap, className, style, ...props }: TxGridProps) => (
   <div

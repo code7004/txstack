@@ -4,7 +4,7 @@
  * **두 메뉴가 같은 클래스를 쓴다.** 속(`TxMenuShell`)이 하나이기 때문이다 —
  * 겉모습이 갈릴 자리가 없다. 뜨는 층 자체는 `TxPopup` 이 그린다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/022_TxMenu.md
  */
 
 .tx-menu {

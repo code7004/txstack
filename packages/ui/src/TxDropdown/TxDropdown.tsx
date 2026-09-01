@@ -24,7 +24,7 @@ const NO_CHOICE: TxDropdownItem<undefined> = { name: "선택 안 함", value: un
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-dropdown { --tx-dropdown-height: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/010_TxDropdown.md`
  */
 export function TxDropdown<TData extends TxDropdownData>(props: TxDropdownProps<TData>) {
   const { data, value, addNoChoiceItem, fixedHead, placeholder = "선택", onChangeValue, onChangeText, onChangeNumber, onChangeBool, ...shell } = props;

@@ -23,7 +23,7 @@ import type { TxCollapsibleProps } from "./TxCollapsible.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-collapsible { --tx-collapsible-padding: 1rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/027_TxCollapsible.md`
  */
 export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, disabled = false, hideMarker = false, titleAs, className, classNames, children, ...props }: TxCollapsibleProps) => {
   const ref = useRef<HTMLDetailsElement>(null);

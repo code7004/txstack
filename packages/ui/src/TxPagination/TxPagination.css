@@ -6,7 +6,7 @@
  * 덮어썼다. 그러면 소비자가 `--tx-button-*` 이나 `--tx-color-primary` 를 바꿔도
  * 페이지 번호만 따라오지 않는다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/016_TxPagination.md
  */
 
 .tx-pagination {

@@ -26,7 +26,7 @@ import { TxMenuShell } from "./TxMenuShell";
  * `TxDropMenu` 와 **다른 것은 둘뿐이다** — 여는 방법(오른쪽 버튼)과 뜨는 자리(마우스 좌표).
  * 항목·키보드·포커스는 같은 속(`TxMenuShell`)이 맡으므로 갈릴 자리가 없다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/022_TxMenu.md`
  */
 export const TxContextMenuBase = ({ children, menu, button = "right", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxContextMenuProps) => {
   const anchorRef = useRef<HTMLDivElement>(null);

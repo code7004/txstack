@@ -11,7 +11,7 @@
  * 껍데기(닫혀 있을 때의 입력창)는 `TxInputLike` 가 `.tx-input` 을 걸어 준다.
  * 달력은 `TxPopup` 이 화면 맨 위 층으로 띄운다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/013_TxDayPicker.md
  */
 
 .tx-daypicker {

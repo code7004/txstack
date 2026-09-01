@@ -28,7 +28,7 @@ import { toInitials } from "./TxAvatar.utils";
  *
  * **접속 중 표시 같은 점은 `TxBadge` 로 얹는다** — `<TxBadge dot variant="success"><TxAvatar …/></TxBadge>`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/045_TxAvatar.md`
  */
 export function TxAvatar({ src, name, initials, icon, size = "md", shape = "circle", onClick, className, ...props }: TxAvatarProps) {
   const [broken, setBroken] = useState(false);

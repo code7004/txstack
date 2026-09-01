@@ -15,7 +15,7 @@ import type { TxFormFieldProps } from "./TxForm.types";
  * </TxForm.Field>
  * ```
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/014_TxForm.md`
  */
 export const TxFormField = forwardRef<HTMLDivElement, TxFormFieldProps>(function TxFormField({ caption, warning, error, htmlFor, captionId, messageId, className, children, ...props }, ref) {
   /**

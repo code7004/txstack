@@ -4,7 +4,7 @@
  * **네이티브 `<input type="range">` 다.** 키보드와 스크린리더 안내를 브라우저가 맡고,
  * 여기서는 겉모습만 그린다. 손잡이가 둘일 때는 두 `<input>` 을 겹쳐 놓는다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/040_TxSlider.md
  */
 
 .tx-slider {

@@ -30,7 +30,7 @@ import { TX_AG_GRID_INDEX_COL_ID, TX_AG_GRID_OFFSET_KEY, applyEditable, applyLoc
  * **모듈 등록은 소비 앱이 한다** — `ModuleRegistry.registerModules([AllCommunityModule])`.
  * 라이브러리가 대신 하면 필요한 모듈만 고르거나 enterprise 모듈을 쓰는 선택지를 뺏는다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/015_TxAgGrid.md`
  */
 export function TxAgGrid<TData = unknown>({
   rowData,

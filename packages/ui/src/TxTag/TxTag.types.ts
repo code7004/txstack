@@ -14,7 +14,7 @@ export type TxTagVariant = TxAlertVariant | "neutral";
  *
  * `solid`(배경을 갈래색으로 꽉 채우는 것)는 **두지 않았다** — 갈래색이 라이트/다크에서
  * 밝기가 뒤집히는 것들이 있어(`success` · `warning`) 그 위에 얹을 글자색을 한 벌로는
- * 정할 수 없다. 자세한 것은 `docs/001_ui.md`.
+ * 정할 수 없다. 자세한 것은 `docs/001_ui/029_TxTag.md`.
  */
 export type TxTagAppearance = "soft" | "outline";
 

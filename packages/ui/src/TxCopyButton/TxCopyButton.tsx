@@ -18,7 +18,7 @@ import { writeToClipboard } from "./TxCopyButton.utils";
  *
  * 겉은 `TxButton` 이 그린다 — `variant` 도 그쪽 것을 그대로 쓴다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/032_TxCopyButton.md`
  */
 export const TxCopyButton = ({ value, label = "복사", copiedLabel = "복사했습니다", failedLabel = "복사 실패", duration = 1500, onCopied, className, ...props }: TxCopyButtonProps) => {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");

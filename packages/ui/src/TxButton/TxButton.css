@@ -8,7 +8,7 @@
  * **variant 는 색만 갈아끼운다.** 여백·반경·포커스 링·disabled 처리는 `.tx-button` 이 전부 소유한다 —
  * 예전에는 `text` 만 공통 스타일을 건너뛰어 **키보드 포커스 링이 없었다** (D2).
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/001_TxButton.md
  */
 
 .tx-button {

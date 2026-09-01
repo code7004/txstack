@@ -28,7 +28,7 @@ const LONG_PRESS = 500;
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-tooltip { --tx-tooltip-bg: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/021_TxTooltip.md`
  */
 export const TxTooltip = ({ tip, children, openDelay = 300, closeDelay = 100, maxWidth = "20rem", maxHeight = "20rem", disabled = false, className, classNames, ...props }: TxTooltipProps) => {
   const anchorRef = useRef<HTMLSpanElement>(null);

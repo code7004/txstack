@@ -31,7 +31,7 @@ export interface TxLoadingProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
  *
  * 회전 아이콘 자체는 `TxSpinner` 가 소유한다. 속도는 `--tx-spinner-duration` 이다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/003_TxLoading.md`
  */
 export const TxLoading = ({ visible = true, text, fullScreen = false, className, classNames, role, ...props }: TxLoadingProps) => {
   // 표시 여부는 visible 로만 결정한다. 배열이면 "빈 배열 = 로딩 표시" 규약을 유지한다 (TxCard.isLoading 과 같다).

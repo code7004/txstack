@@ -23,7 +23,7 @@ import { parseTxInputNumber } from "./TxInput.utils";
  * 겉모습은 CSS 변수로 바꾼다 — 앱 전체는 `:root { --tx-color-surface: … }`,
  * 이 컴포넌트만은 `.tx-input { --tx-input-height: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/006_TxInput.md`
  */
 export const TxInput = forwardRef<TxInputRef, TxInputProps>(function TxInput(
   { id, name, className, style, value, defaultValue, readOnly = false, focusOnMount, onChange, onBlur, onEnter, onChangeText, onChangeNumber, onSubmitText, onSubmitNumber, onBlurNumber, ...props },

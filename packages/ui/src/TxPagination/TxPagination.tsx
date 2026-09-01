@@ -24,7 +24,7 @@ const DEFAULT_LABELS: Required<TxPaginationLabels> = {
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-pagination { --tx-pagination-gap: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/016_TxPagination.md`
  */
 export const TxPagination = ({ currentPage, totalRows, pageSize = 10, pageButtonCount = 10, maxPage, onChangePage, hideStepButtons = false, hideGroupButtons = false, labels, className, style }: TxPaginationProps) => {
   const text = { ...DEFAULT_LABELS, ...labels };

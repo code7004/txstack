@@ -23,7 +23,7 @@ import type { TxTabsProps } from "./TxTabs.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-tabs { --tx-tabs-accent: … }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/019_TxTabs.md`
  */
 export const TxTabs = ({ tabs, value, defaultValue = 0, onChange, className, classNames, "aria-label": ariaLabel, ...props }: TxTabsProps) => {
   const baseId = useId();

@@ -50,7 +50,7 @@ export interface TxInputLikeProps {
  *
  * 겉모습은 `.tx-input` 을 그대로 쓴다. 껍데기가 같아야 입력창과 나란히 놓았을 때 줄이 맞는다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/006_TxInput.md`
  */
 export function TxInputLike({ id, value, placeholder = "", className, onClick, onKeyDown, onClear, ariaLabel, ariaLabelledBy, ariaDescribedBy, ariaInvalid, ariaExpanded, ariaHasPopup = "dialog", ariaControls, children }: TxInputLikeProps) {
   const hasValue = Boolean(value);

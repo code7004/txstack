@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { TxLoading } from "./TxLoading";
 
 /**
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/003_TxLoading.md`
  *
  * **S2 에서 고친 결함을 못박는 것이 이 파일의 목적이다.** 각 테스트에 결함 ID 를 달아 두었고,
  * 그 ID 로 명세의 감사표를 찾아가면 왜 이 동작이어야 하는지가 있다.
@@ -13,7 +13,7 @@ import { TxLoading } from "./TxLoading";
  * **jsdom 에는 스타일시트가 없다.** 그래서 아래쪽 "CSS 계약" 블록은 `TxLoading.css` 를 **텍스트로 읽어**
  * 검사한다. 이 컴포넌트의 D2("딤이 문구 위에 그려진다")는 페인트 순서에서 벌어진 일이라
  * 렌더 결과만 보는 테스트는 결함을 되살려도 통과한다. **결과를 못 보면 원인을 본다** —
- * `TxSpinner` 2차에서 만든 방식이다 (docs/001_ui.md).
+ * `TxSpinner` 2차에서 만든 방식이다 (docs/001_ui/003_TxLoading.md).
  *
  * **`fullScreen` 은 `document.body` 로 포털된다.** RTL 의 `container` 안에 없으므로
  * 그쪽을 뒤지는 헬퍼(`findIn`)와 문서 전체를 뒤지는 헬퍼(`find`)를 따로 둔다 —
@@ -203,7 +203,7 @@ describe("TxLoading — 그 밖의 계약", () => {
  * 결함(D2)이 바로 거기서 났다. **결과를 못 보면 원인을 본다.**
  *
  * **값은 검사하지 않는다.** "딤이 20% 인가" 를 테스트가 잡으면 진하기를 고칠 때마다 테스트를 고치게 된다.
- * 검사하는 것은 **바뀌면 소비자가 깨지는 것**뿐이다 (docs/001_ui.md).
+ * 검사하는 것은 **바뀌면 소비자가 깨지는 것**뿐이다 (docs/001_ui/003_TxLoading.md).
  */
 describe("TxLoading — CSS 계약", () => {
   const here = import.meta.dirname;

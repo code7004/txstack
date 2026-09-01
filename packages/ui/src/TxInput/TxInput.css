@@ -9,7 +9,7 @@
  * 색을 바꾸는 길이 두 개다 — 앱 전체는 `:root { --tx-color-surface: … }`,
  * 이 컴포넌트만은 `.tx-input { --tx-input-bg: … }`.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/006_TxInput.md
  */
 
 .tx-input {

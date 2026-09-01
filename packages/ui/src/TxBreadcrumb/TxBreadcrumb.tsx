@@ -23,7 +23,7 @@ import { TxBreadcrumbCurrentContext, TxBreadcrumbItem } from "./TxBreadcrumbItem
  *
  * 라우터는 `as` 로 갈아끼운다 — `TxDropMenu.Item` 과 같은 규약이다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/042_TxBreadcrumb.md`
  */
 /**
  * 칸을 하나씩 펴낸다.

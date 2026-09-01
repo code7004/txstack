@@ -26,7 +26,7 @@ import { formatBytes, nextUploadId } from "./TxFileUpload.utils";
  * **끌어다 놓기와 눌러서 고르기가 둘 다 된다.** 숨긴 `<input type="file">` 을 함께 두는
  * 것이 그 때문이다 — 끌어다 놓기만 두면 키보드로는 파일을 고를 길이 없다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/037_TxFileUpload.md`
  */
 export const TxFileUpload = ({ uploader, accept, multiple = true, maxSize, maxFiles, disabled = false, onChange, className, classNames, children, ...props }: TxFileUploadProps) => {
   const [items, setItems] = useState<TxUploadItem[]>([]);

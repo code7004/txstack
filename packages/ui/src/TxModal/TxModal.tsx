@@ -26,7 +26,7 @@ import { TxModalFooter } from "./TxModalFooter";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-modal { --tx-modal-width: 40rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/017_TxModal.md`
  */
 export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size = "md", closeLabel = "닫기", hideCloseButton = false, closeOnEscape = true, className, classNames, children, ...props }: TxModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);

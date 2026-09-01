@@ -70,7 +70,7 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
  * 로고 · 메뉴 구조 · 로그인 상태는 **전부 슬롯이다.** 그것이 앱마다 다른 부분이고,
  * 넣는 순간 범용이 아니게 된다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/044_TxAppShell.md`
  */
 export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "main", footer, sticky = true, panels, onPanelChange, breakpoint = 960, labels, classNames, className, style, children, ...props }: TxAppShellProps) => {
   const text = { ...DEFAULT_LABELS, ...labels };

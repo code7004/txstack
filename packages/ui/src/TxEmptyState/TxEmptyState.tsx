@@ -23,7 +23,7 @@ import type { TxEmptyStateProps } from "./TxEmptyState.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-empty-state { --tx-empty-state-padding: 4rem 1rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/034_TxEmptyState.md`
  */
 export const TxEmptyState = ({ variant = "no-data", title, description, icon, className, children, ...props }: TxEmptyStateProps) => {
   const Icon = TX_EMPTY_STATE_ICONS[variant];

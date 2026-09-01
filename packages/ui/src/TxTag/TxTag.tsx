@@ -23,7 +23,7 @@ import type { TxTagProps } from "./TxTag.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-tag { --tx-tag-radius: 0.25rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/029_TxTag.md`
  */
 export const TxTag = ({ variant = "neutral", appearance = "soft", dot = false, onClick, onRemove, removeLabel = "지우기", className, children, ...props }: TxTagProps) => (
   <span {...props} data-tag="TxTag" data-variant={variant} data-appearance={appearance} data-interactive={onClick ? "" : undefined} className={cm("tx-tag", className)}>

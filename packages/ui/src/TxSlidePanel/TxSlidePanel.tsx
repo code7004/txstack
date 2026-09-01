@@ -22,7 +22,7 @@ import type { TxSlidePanelProps } from "./TxSlidePanel.types";
  * 크기는 CSS 변수 하나로 바꾼다 — `.tx-slide-panel { --tx-slide-panel-size: 28rem }`.
  * 좌우면 폭, 위아래면 높이를 뜻한다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/023_TxSlidePanel.md`
  */
 export const TxSlidePanel = ({ open, onClose, side = "right", title, closeOnBackdrop = true, closeOnEscape = true, closeLabel = "닫기", hideCloseButton = false, className, classNames, children, ...props }: TxSlidePanelProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);

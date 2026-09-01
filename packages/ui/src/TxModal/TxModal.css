@@ -8,7 +8,7 @@
  * 여닫히는 움직임도 CSS 가 한다 — `@starting-style` 과 `allow-discrete` 로,
  * 애니메이션 라이브러리 없이. 원본은 이 두 겹을 위해 framer-motion 을 peer 로 달고 있었다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/017_TxModal.md
  */
 
 .tx-modal {

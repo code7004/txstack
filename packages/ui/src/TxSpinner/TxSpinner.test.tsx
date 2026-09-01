@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { TxSpinner } from "./TxSpinner";
 
 /**
- * `001-TxSpinner-S3` (2차). 명세: `docs/001_ui.md`.
+ * `001-TxSpinner-S3` (2차). 명세: `docs/001_ui/004_TxSpinner.md`.
  *
  * **S2 에서 고친 결함을 못박는 것이 이 파일의 목적이다.** 각 테스트에 결함 ID 를 달아 두었고,
  * 그 ID 로 명세의 감사표를 찾아가면 왜 이 동작이어야 하는지가 있다.

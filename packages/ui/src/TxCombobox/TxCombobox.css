@@ -6,7 +6,7 @@
  *
  * `.tx-input` 뒤에 실려야 안쪽 입력 규칙이 이긴다 — 같은 특이도라 순서로 정해진다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/012_TxCombobox.md
  */
 
 .tx-combobox__field {

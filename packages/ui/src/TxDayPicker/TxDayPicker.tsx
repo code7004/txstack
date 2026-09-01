@@ -27,7 +27,7 @@ import { formatDate, startOfDay } from "./TxDayPicker.utils";
  *
  * 기간을 고르려면 `TxDayPickerRange` 를 쓴다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/013_TxDayPicker.md`
  */
 export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날짜 선택", format = "YYYY-MM-DD", keepOpen = false, disabled = false, id, className, style, ...rest }: TxDayPickerProps) {
   const [inner, setInner] = useState<Date | undefined>(defaultValue);

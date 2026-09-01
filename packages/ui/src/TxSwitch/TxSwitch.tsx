@@ -21,7 +21,7 @@ import type { TxSwitchProps } from "./TxSwitch.types";
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-switch { --tx-switch-track-width: 3rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/041_TxSwitch.md`
  */
 export const TxSwitch = forwardRef<HTMLInputElement, TxSwitchProps>(function TxSwitch({ label, children, className, style, classNames, stopPropagation = false, onChange, onChangeBool, ...props }, ref) {
   const hdChange = (evt: ChangeEvent<HTMLInputElement>) => {

@@ -45,7 +45,7 @@ function ensureRoot() {
  *
  * **마우스를 얹거나 키보드로 들어오면 시계가 멈춘다** — 읽는 속도는 사람마다 다르다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/026_TxToast.md`
  */
 export const TxToast = {
   /** 하나 띄우고 그 번호를 돌려준다. */

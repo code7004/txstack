@@ -4,7 +4,7 @@
  * 가르는 `/` 는 **CSS 가 그린다.** 글자로 넣으면 스크린리더가 칸마다 "슬래시" 를 읽어
  * 정작 경로가 안 읽힌다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/042_TxBreadcrumb.md
  */
 
 .tx-breadcrumb {

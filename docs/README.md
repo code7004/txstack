@@ -19,7 +19,7 @@
 
 | 번호  | 패키지                | 한 줄 목적                                             | React | 문서                                |
 | ----- | --------------------- | ------------------------------------------------------ | ----- | ----------------------------------- |
-| `001` | `@txstack/ui`         | Tx\* 컴포넌트. 쉬운 사용법, 쉬운 커스터마이징          | O     | [001_ui](001_ui.md)                 |
+| `001` | `@txstack/ui`         | Tx\* 컴포넌트. 쉬운 사용법, 쉬운 커스터마이징          | O     | [001_ui](001_ui/000_README.md)                 |
 | `002` | `@txstack/route-meta` | 라우트를 메타데이터 트리로 선언 → 라우터·메뉴·현재위치 | O     | [002_route_meta](002_route_meta.md) |
 | `003` | `@txstack/hooks`      | 의존 없는 범용 훅 + URL 쿼리를 상태처럼                | O     | [003_hooks](003_hooks.md)           |
 | `004` | `@txstack/axios`      | axios 래퍼. 인증·에러·봉투 정책을 주입받는다           | **X** | [004_axios](004_axios.md)           |
@@ -61,12 +61,12 @@
 
 | 영역          | 상태                                                                                                                                            |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 문서          | **완료** — 이 문서 + 패키지별 4장                                                                                                               |
+| 문서          | **완료** — 이 문서 + 패키지별 4장. `ui` 는 컴포넌트마다 한 장(`docs/001_ui/`)                                                                                                             |
 | 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                                                                        |
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` · `TxAvatar` · `TxTicker` — 테스트 1622개 통과 |
+| `ui`          | **컴포넌트 46개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 컴포넌트 테스트 1,464개. 남은 셋은 아래 "다음 할 일" |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
@@ -95,86 +95,26 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
 
 ## 다음 할 일
 
-**`ui` 만 남았고, 이행 계획은 [001_ui](001_ui.md) 가 소유한다.**
+**`ui` 만 남았다.** 컴포넌트 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가 소유하고,
+컴포넌트 하나하나의 기능과 정한 것은 `docs/001_ui/NNN_TxName.md` 각 장에 있다.
 
-0차(스타일 파이프라인) · 1차(기반 4개) · **2차(Form 클러스터)가 끝났다.**
-`TxButton` 이 이후 전부의 레퍼런스다.
+**46개가 끝났다. 남은 것은 셋이다.**
 
-1. **4차 · 5차 — 새로 만든 것들.** 5차 후보 18개 중 **17개가 끝났다.**
-   **여기서부터는 이식이 아니다.** 3차까지로 원본 26개 중 24개가 왔고, 그 결과 목록이
-   **업무 화면 쪽으로 쏠려 있다** — 폼 10개 · 그리드 · 드롭다운 · 모달 · 메뉴.
-   순서는 의존이 정한다: **`TxAlert`(완료) → `TxToast`(완료) → `TxCollapsible`(완료) → `TxAccordion`(완료)
-   → `TxBadge`(완료) → `TxSkeleton`(완료).** **여섯이 끝났다.** 다음 후보 18개를 [001_ui](001_ui.md) 의 "5차 후보군" 에 정리해
-   두었다 — **아직 결정이 아니라 목록이고**, 겹침 넷(`TxBadge` 이름 · `TxAppShell`↔`TxLayout` ·
-   `TxStepper` 이름 · `TxDivider` 부활)은 **전부 정했다.**
-   먼저 만들기로 한 다섯(`TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` ·
-   `TxCopyButton`)에 이어 **폼 컨트롤 묶음 일곱**(`TxRadio`/`TxRadioGroup` · `TxSwitch` ·
-   `TxTag` Chip 흡수 · `TxBadge` · `TxNumberInput` · `TxSlider` · `TxFileUpload`)까지 끝났다.
-   `TxSwitch` 를 가르면서 **`TxCheckBox` 의 `variant` 는 걷어냈다.**
-   남은 넷의 순서를 정했다 — `TxScrollArea`(완료) → `TxBreadcrumb`(완료) →
-   `TxAppShell`(완료) → **`TxTable`.** **18개 중 17개가 끝났고 `TxTable` 만 남았다.**
-   `TxAppShell` 은 **슬롯을 prop 으로 받고**(자식을 뒤지지 않는다 — `TxCard` · `TxLayout`
-   이 이미 부러진 방식이다) 이름은 **방향으로 간다** — `header` · `top` · `left` · `right` ·
-   `bottom` · `footer`. 좁아지면 **같은 `left` 노드**가 서랍으로 가고, `left`·`right`·`bottom`
-   은 **끌어서 크기를 바꾸고 접었다 편다** — 자리마다 `panels` 한 곳에 적는다.
-   크기 조절과 `visible` 은 `TxLayout` 에서 되살린 것이고, **독립 부품이 아니라 셸이
-   맡기로 정했다**(폭 소유권이 갈리고, 본문 최소 폭은 셸만 안다). `bottom` 의 폭은 **`bottomSpan` 으로 고른다** — `좌 · (본문 · 아래) · 우`(기본,
-   AWS 콘솔 쪽)이거나 좌우까지 아우르는 전체 폭(VS Code 쪽).
-   `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
-   그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
-   미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
-   **`--tx-color-success` 토큰 추가**는 [001_ui](001_ui.md) 의 "4차" 절이 갖는다.
+1. **`TxCarousel`** ← 여기서 이어받는다. CSS `scroll-snap` 으로 가면 스와이프·키보드가
+   공짜다. **무한 루프는 빼고 시작한다** — 복제와 점프가 필요해 비용이 뛴다
+2. **메가메뉴(`TxNavBar`)** — **`TxAppShell` 이 `header` 를 이미 가졌다.** 무엇이 셸 몫이고
+   무엇이 남는지부터 정한다. 드로어는 `TxSlidePanel`, hover 메뉴는 `TxDropMenu` 를 그대로 쓴다
+3. **`TxTable`** — **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 맨 뒤다. `columns` 를
+   ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길이고, `ag-grid-community` 가
+   MIT 인 것은 확인해 뒀다
 
-   지금까지 이식한 것 — 기반 4개 · Form 클러스터 10개 · `TxAgGrid`(쪽 번호를
-   `TxPagination` 으로 갈랐다) · `TxModal`(네이티브 `<dialog>`) · `TxDialog`(신규,
-   `alert`·`confirm`) · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종(속은 `TxMenuShell`
-   하나) · `TxSlidePanel` · `TxJsonTree`(목적에서 다시 짰다). 함께 정한 것 둘 —
-   `framer-motion` 은 **CSS 로 걷어내고**, 라우터 링크는 **컴포넌트를 주입받는다**(기본 `<a>`).
-   peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
+셋 다 **원본이 없다** — 이식이 아니라 새로 만드는 것이라 "원본 읽기" 단계가 없다.
+**API 는 예제 코드로 먼저 합의한다** (CLAUDE.md 의 "컴포넌트 이식 순서").
 
-2. **다음 순서는 이렇게 정했다.**
+이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는
+[001_ui](001_ui/000_README.md) 의 "자른 것" 이 갖는다.
 
-   1. ~~**`TxDayPicker` 결함**~~ — **끝났다. 결함은 셋이었다.**
-
-      - **달력이 고른 날의 달이 아니라 늘 오늘 달로 열렸다** — `defaultMonth` 가 빠져 있었다
-        (원본도 `TxDayPickerRange` 에만 줬다). **오늘이 8월일 때만 우연히 통과하던 테스트라
-        9월로 넘어오며 드러났다.** 이제 달을 로케일 없이 `data-day` 로 읽어 단독으로 검사한다.
-        날짜에 기대는 다른 테스트는 없었다 — `Date.now()` 를 쓰는 둘(`axios` 만료 판정 ·
-        `TxJsonTree` 타입 판정)은 달력과 무관하다
-      - **달을 넘기는 좌우 버튼이 보이는데 눌리지 않았다** — 캡션이 버튼을 통째로 덮고 있었다.
-        `react-day-picker` 10 의 DOM 모양을 CSS 가 잘못 알고 있던 것이다. Storybook 에서
-        직접 눌러 확인했다. 자세한 것은 [001_ui](001_ui.md)
-      - **프리셋으로 넣은 기간을 달력이 따라가지 않았다** — 값은 들어가는데 화면은 보던 달에
-        그대로라 고른 것이 안 보였다. 펴 놓을 달을 우리가 쥐고(`useVisibleMonth`),
-        **열 때는 값의 달로 맞추고 열린 채 들어온 값이 안 보이는 달이면 옮긴다**
-
-      함께 고친 것 하나 — `TxAppShell.test.tsx` 에 `panels` 가 두 번 적혀 있어
-      **`pnpm typecheck` 가 깨져 있었다**(뒤엣것이 이기므로 테스트는 통과하고 있었다)
-   2. **미룬 5차 항목 — 순서를 정했다.** `TxAvatar`(완료) → `TxTicker`(완료) →
-      **`TxCarousel`** → 메가메뉴(`TxNavBar`). ← 여기서 이어받는다
-
-      넷 다 **원본이 없다** — 이식이 아니라 새로 만드는 것이라 "원본 읽기" 단계가 없다.
-      메가메뉴가 맨 뒤인 이유는 `TxTable` 과 같다: **`TxAppShell` 이 `header` 를 이미 가져서
-      무엇이 셸 몫이고 무엇이 남았는지부터 정해야 한다.**
-      `TxAvatar` 에서 정한 것(이니셜 규칙 · `name` 하나 · 색을 만들지 않는다 ·
-      `status` 는 `TxBadge` 몫 · 크기는 토큰 하나)과 `TxTicker` 에서 정한 것(멈춤 버튼은
-      감출 수는 있어도 없앨 수는 없다 · 움직임을 줄이는 사람에게는 멈춘 채 시작 ·
-      가로는 속도로 받는다)은
-      [001_ui](001_ui.md) 가 갖는다.
-
-      `TxTicker` 를 만들며 **`vitest.config.ts` 의 `._*` 제외가 `projects` 로 내려가지
-      않는 것**도 고쳤다. 넣어 뒀는데 아무 일도 하지 않고 있었다.
-   3. **마지막이 `TxTable`** — **어디까지가 `TxAgGrid` 몫인지**를 정해야 해서 맨 뒤다.
-      `columns` 를 ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길이고,
-      `ag-grid-community` 가 MIT 인 것은 확인해 뒀다
-
-3. **3차의 마지막 `TxLayout` 은 잘랐다.** 앱 사용 0회에 447줄이고, 크기 조절되는 패널은
-   IDE 재주다. 5차의 **`TxAppShell`**(`header`·`top`·`left`·`right`·`bottom`·`footer`)이 그 자리를 대신한다 —
-   한 화면에 셸이 둘일 일이 없다. **이식은 26개 중 23개로 끝났다.**
-4. **`tailwind-merge` 를 뗐고 `TxInputLike` 는 감추기로 정했다.** 둘 다 밀려 있던 결정이다.
-   `twMerge` 는 우리 컴포넌트가 Tailwind 를 한 곳도 싣지 않아 정리할 충돌이 없었다 —
-   소비자 `className` 이 이기는 것은 `@layer tx` 덕분이다. **런타임 의존은 `clsx` 하나다.**
-5. playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
+playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
 
 ### 이식은 복사가 아니다
 

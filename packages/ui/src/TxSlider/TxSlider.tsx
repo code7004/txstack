@@ -22,7 +22,7 @@ const toPair = (value: TxSliderValue): [number, number] => (Array.isArray(value)
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-slider { --tx-slider-thumb-size: 1.5rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/040_TxSlider.md`
  */
 export const TxSlider = ({ value, defaultValue = 0, onChange, min = 0, max = 100, step = 1, disabled = false, showValue = false, label, className, style, ...props }: TxSliderProps) => {
   const controlled = value !== undefined;

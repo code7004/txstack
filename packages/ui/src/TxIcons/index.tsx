@@ -18,7 +18,7 @@ import type { SVGProps } from "react";
  * `TxSpinner` 와 같은 규약이다. 그래서 버튼이나 문단 안에 넣으면 저절로 맞는다.
  * 크기를 따로 주려면 `width`/`height` 를 넘긴다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/005_TxIcons.md`
  */
 
 /** 닫기 · 지우기. 원 안의 X. */

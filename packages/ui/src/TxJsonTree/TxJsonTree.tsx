@@ -28,7 +28,7 @@ const FLASH_MS = 1200;
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-json-tree { --tx-json-tree-indent: 1.5rem }`.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/024_TxJsonTree.md`
  */
 export function TxJsonTree({ data, onChange, watch = false, defaultExpandedDepth = Number.POSITIVE_INFINITY, locale = (text) => text, className, classNames, ...props }: TxJsonTreeProps) {
   /** 기본값(깊이)에서 벗어난 줄만 담는다. 대개 비어 있다. */

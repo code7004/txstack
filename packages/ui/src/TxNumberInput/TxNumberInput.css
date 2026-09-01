@@ -4,7 +4,7 @@
  * **상자는 `TxInput` 것을 그대로 쓴다** (`.tx-input`). 폼에서 다른 칸과 높이·테두리·
  * 포커스 링이 어긋나면 한 줄에 놓았을 때 바로 보인다. 여기서는 안에 든 버튼과 단위만 맡는다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/038_TxNumberInput.md
  */
 
 .tx-number-input {

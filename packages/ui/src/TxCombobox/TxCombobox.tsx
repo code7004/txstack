@@ -25,7 +25,7 @@ const defaultFilter = (data: readonly string[], keyword: string) => {
  *
  * 목록은 화면 맨 위 층으로 뜬다. `overflow: hidden` 안에 넣어도 잘리지 않는다.
  *
- * 명세: `docs/001_ui.md`
+ * 명세: `docs/001_ui/012_TxCombobox.md`
  */
 export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function TxCombobox(
   { data, value, defaultValue = "", onChangeText, onPick, filter = defaultFilter, limit, moreLabel = (n) => `…${n}개 더 있습니다`, maxHeight = "20rem", className, style, classNames, onChange, onFocus, onBlur, onKeyDown, ...props },

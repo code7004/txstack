@@ -8,7 +8,7 @@
  * `--tx-form-label-width` 를 세울 뿐이라, 소비자가 CSS 로 같은 변수를 덮어도 똑같이 동작한다.
  * 원본은 이 값이 Tailwind 클래스 문자열(`"w-24"`)이라 소비자에게 Tailwind 를 강요했다.
  *
- * 명세: docs/001_ui.md
+ * 명세: docs/001_ui/014_TxForm.md
  */
 
 .tx-form {
