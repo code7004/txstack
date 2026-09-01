@@ -66,3 +66,21 @@ export function TxIconUser(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** 멈춤. 세로 막대 둘. `TxTicker` 가 쓴다. */
+export function TxIconPause(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" {...props}>
+      <path fill="currentColor" d="M8 5h3v14H8zm5 0h3v14h-3z"></path>
+    </svg>
+  );
+}
+
+/** 재생. 오른쪽을 보는 삼각형. `TxTicker` 가 쓴다. */
+export function TxIconPlay(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" {...props}>
+      <path fill="currentColor" d="M8 5v14l11-7z"></path>
+    </svg>
+  );
+}
