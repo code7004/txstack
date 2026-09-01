@@ -22,6 +22,9 @@
   /** 헤더가 붙어 있을 때 그 아래 것들이 밀려나지 않게 쌓임 순서를 정한다 */
   --tx-app-shell-header-z: 20;
 
+  /** 건너뛰기 링크의 기준. **조상의 transform 에 흔들리지 않게** 셸이 쥔다 */
+  position: relative;
+
   display: flex;
   flex-direction: column;
   min-block-size: 100dvh;
@@ -30,15 +33,42 @@
 /* --- 본문으로 건너뛰기 -------------------------------------------------------- */
 
 /**
- * **첫 Tab 에 나타난다.** 평소에는 화면 밖에 있다가 포커스를 받으면 제자리로 온다 —
- * `display: none` 으로 감추면 Tab 이 닿지 않아 있으나 마나다.
+ * **첫 Tab 에 나타난다.** 평소에는 자리를 차지하지 않고 잘려 있다가 포커스를 받으면
+ * 셸의 왼쪽 위에 나온다 — `display: none` 으로 감추면 Tab 이 닿지 않아 있으나 마나다.
+ *
+ * **화면 밖으로 밀어 감추지 않는다.** `position: fixed` + `translate: -100%` 로 두었더니,
+ * **조상 중 하나가 `transform` 을 가지면 기준이 그쪽으로 바뀌어** 화면 밖이 아니라
+ * 문서 한가운데(그 조상의 위쪽)에 실제로 놓였다 — Storybook 의 문서 페이지에서 잡혔고,
+ * 애니메이션을 건 래퍼 안이라면 앱에서도 같은 일이 난다.
+ *
+ * 그래서 **자리를 잘라 감추고**(`clip-path`) 기준은 셸이 쥔다. `TxTicker` 의 멈춤 버튼과
+ * `TxSideNav` 의 접힌 글자가 쓰는 것과 같은 방식이다.
  */
 .tx-app-shell__skip {
-  position: fixed;
+  position: absolute;
+
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/**
+ * `:focus-visible` 이 아니라 `:focus` 다. 이 링크는 잘려 있어 **마우스로는 닿을 수 없고**,
+ * 브라우저가 "키보드로 온 포커스" 로 안 볼 때도 나타나야 한다.
+ */
+.tx-app-shell__skip:focus {
   inset-block-start: 0;
   inset-inline-start: 0;
   z-index: calc(var(--tx-app-shell-header-z) + 1);
 
+  inline-size: auto;
+  block-size: auto;
+  margin: 0;
   padding: 0.625rem 1rem;
 
   border-radius: 0 0 var(--tx-radius) 0;
@@ -46,15 +76,7 @@
   color: var(--tx-color-on-accent);
   text-decoration: none;
 
-  translate: 0 -100%;
-}
-
-/**
- * `:focus-visible` 이 아니라 `:focus` 다. 이 링크는 화면 밖에 있어 **마우스로는 닿을 수
- * 없고**, 브라우저가 "키보드로 온 포커스" 로 안 볼 때도 나타나야 한다.
- */
-.tx-app-shell__skip:focus {
-  translate: 0 0;
+  clip-path: none;
   outline: var(--tx-focus-ring);
   outline-offset: calc(var(--tx-focus-ring-offset) * -1);
 }
