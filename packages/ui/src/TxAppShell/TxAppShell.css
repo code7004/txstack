@@ -1,0 +1,361 @@
+/**
+ * TxAppShell — 화면 전체를 짜는 껍데기.
+ *
+ * **패널의 폭과 헤더의 높이만 정한다.** 그 안에 무엇이 놓이는지는 슬롯을 준 쪽의 일이라
+ * 색도 여백도 손대지 않는다 — 손대면 소비자의 헤더가 우리 규칙과 싸운다.
+ *
+ * 명세: docs/001_ui.md
+ */
+
+.tx-app-shell {
+  --tx-app-shell-left-width: 15rem;
+  --tx-app-shell-right-width: 14rem;
+  --tx-app-shell-bottom-height: 12rem;
+  --tx-app-shell-main-padding: 1.5rem;
+  --tx-app-shell-border-color: var(--tx-color-border);
+  --tx-app-shell-header-bg: var(--tx-color-surface);
+  --tx-app-shell-duration: 200ms;
+
+  /** 손잡이가 잡히는 폭. 보이는 선보다 넓어야 손이 닿는다 */
+  --tx-app-shell-handle-size: 0.5rem;
+
+  /** 헤더가 붙어 있을 때 그 아래 것들이 밀려나지 않게 쌓임 순서를 정한다 */
+  --tx-app-shell-header-z: 20;
+
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+
+/* --- 본문으로 건너뛰기 -------------------------------------------------------- */
+
+/**
+ * **첫 Tab 에 나타난다.** 평소에는 화면 밖에 있다가 포커스를 받으면 제자리로 온다 —
+ * `display: none` 으로 감추면 Tab 이 닿지 않아 있으나 마나다.
+ */
+.tx-app-shell__skip {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: calc(var(--tx-app-shell-header-z) + 1);
+
+  padding: 0.625rem 1rem;
+
+  border-radius: 0 0 var(--tx-radius) 0;
+  background-color: var(--tx-color-primary);
+  color: var(--tx-color-on-accent);
+  text-decoration: none;
+
+  translate: 0 -100%;
+}
+
+/**
+ * `:focus-visible` 이 아니라 `:focus` 다. 이 링크는 화면 밖에 있어 **마우스로는 닿을 수
+ * 없고**, 브라우저가 "키보드로 온 포커스" 로 안 볼 때도 나타나야 한다.
+ */
+.tx-app-shell__skip:focus {
+  translate: 0 0;
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+/* --- 헤더 ----------------------------------------------------------------- */
+
+.tx-app-shell__header {
+  z-index: var(--tx-app-shell-header-z);
+  border-block-end: 1px solid var(--tx-app-shell-border-color);
+  background-color: var(--tx-app-shell-header-bg);
+}
+
+.tx-app-shell[data-sticky] .tx-app-shell__header {
+  position: sticky;
+  inset-block-start: 0;
+}
+
+/** 내리면 숨고 올리면 나온다. 긴 글에서 화면을 돌려준다 */
+.tx-app-shell[data-sticky="hide"] .tx-app-shell__header {
+  transition: translate var(--tx-app-shell-duration) ease;
+}
+
+.tx-app-shell[data-sticky="hide"][data-hidden] .tx-app-shell__header {
+  translate: 0 -100%;
+}
+
+.tx-app-shell__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-block-size: 3.5rem;
+  padding-inline: 1rem;
+}
+
+.tx-app-shell__menu {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--tx-radius);
+  background-color: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.tx-app-shell__menu:hover {
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
+}
+
+.tx-app-shell__menu:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-app-shell__top {
+  padding-inline: 1rem;
+}
+
+/* --- 몸통 ----------------------------------------------------------------- */
+
+/**
+ * 패널과 본문이 한 줄을 이룬다. **아래 패널은 이 줄 밖이라 전체 폭을 가진다** —
+ * 좌우 패널이 바닥까지 서고 그 밑을 패널이 가로지른다.
+ */
+.tx-app-shell__body {
+  display: flex;
+  flex: 1;
+  min-block-size: 0;
+}
+
+/** 좌우 패널은 줄어들지 않는다. **손잡이와 스위치를 담으려면** 자리도 잡아야 한다 */
+.tx-app-shell__left,
+.tx-app-shell__right,
+.tx-app-shell__bottom {
+  position: relative;
+  flex: none;
+}
+
+.tx-app-shell__left {
+  inline-size: var(--tx-app-shell-left-width);
+  border-inline-end: 1px solid var(--tx-app-shell-border-color);
+}
+
+.tx-app-shell__right {
+  inline-size: var(--tx-app-shell-right-width);
+  border-inline-start: 1px solid var(--tx-app-shell-border-color);
+}
+
+.tx-app-shell__bottom {
+  block-size: var(--tx-app-shell-bottom-height);
+  border-block-start: 1px solid var(--tx-app-shell-border-color);
+}
+
+/**
+ * **넘치는 것은 안쪽이 감춘다.** 패널이 직접 `overflow` 를 가지면 경계선 위에 얹힌
+ * 스위치가 같이 잘려 나간다 — 브라우저에서 눌러 보고서야 보였다.
+ */
+.tx-app-shell__pane {
+  block-size: 100%;
+  overflow: auto;
+}
+
+/** `bottomSpan="main"` 일 때만 생긴다. 본문과 아래 패널이 한 칸을 이룬다 */
+.tx-app-shell__center {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
+/**
+ * `min-inline-size: 0` 이 없으면 안의 긴 표나 글자가 본문을 밀어내 옆 패널까지 넘친다 —
+ * flex 자식의 기본 최소 크기가 내용이기 때문이다.
+ */
+.tx-app-shell__main {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 0;
+  padding: var(--tx-app-shell-main-padding);
+}
+
+/**
+ * **접히면 완전히 사라진다.** 경계선도 같이 지운다 — 남기면 빈 줄 하나가 떠 있다.
+ * 스위치만 제자리에 남아 다시 펼 길이 된다(`overflow: visible`).
+ */
+.tx-app-shell__left[data-collapsed],
+.tx-app-shell__right[data-collapsed] {
+  inline-size: 0;
+  border-inline: 0;
+}
+
+.tx-app-shell__bottom[data-collapsed] {
+  block-size: 0;
+  border-block-start: 0;
+}
+
+/** 좁아지면 곁들이는 것부터 접는다. 본문이 먼저다 */
+.tx-app-shell[data-narrow] .tx-app-shell__right {
+  display: none;
+}
+
+.tx-app-shell__footer {
+  border-block-start: 1px solid var(--tx-app-shell-border-color);
+}
+
+/* --- 크기 조절 손잡이 --------------------------------------------------------- */
+
+/**
+ * **경계선 위에 겹쳐 놓는다.** 자리를 따로 차지하면 슬롯이 준 내용이 그만큼 밀리고,
+ * 크기 조절을 켜고 끌 때마다 화면이 움직인다.
+ */
+.tx-app-shell__handle {
+  position: absolute;
+  z-index: 1;
+  touch-action: none;
+}
+
+/**
+ * **끄는 자리라는 표시.** 손잡이는 경계선 전체지만 눈에는 안 보이므로 가운데에 짧은
+ * 막대를 둔다 — 스위치가 있는 자리는 스위치가 그 위를 덮는다.
+ */
+.tx-app-shell__handle::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  border-radius: 999px;
+  background-color: color-mix(in oklab, var(--tx-color-text) 30%, transparent);
+  translate: -50% -50%;
+}
+
+.tx-app-shell__handle--left::after,
+.tx-app-shell__handle--right::after {
+  inline-size: 0.125rem;
+  block-size: 1.5rem;
+}
+
+.tx-app-shell__handle--bottom::after {
+  inline-size: 2.5rem;
+  block-size: 0.125rem;
+}
+
+.tx-app-shell__handle:hover,
+.tx-app-shell__handle:focus-visible {
+  background-color: color-mix(in oklab, var(--tx-color-primary) 40%, transparent);
+}
+
+.tx-app-shell__handle:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+.tx-app-shell__handle--left,
+.tx-app-shell__handle--right {
+  inset-block: 0;
+  inline-size: var(--tx-app-shell-handle-size);
+  cursor: col-resize;
+}
+
+.tx-app-shell__handle--left {
+  inset-inline-end: calc(var(--tx-app-shell-handle-size) / -2);
+  inset-inline-start: auto;
+}
+
+.tx-app-shell__handle--right {
+  inset-inline-start: calc(var(--tx-app-shell-handle-size) / -2);
+  inset-inline-end: auto;
+}
+
+.tx-app-shell__handle--bottom {
+  inset-inline: 0;
+  inset-block-start: calc(var(--tx-app-shell-handle-size) / -2);
+  inset-block-end: auto;
+  block-size: var(--tx-app-shell-handle-size);
+  cursor: row-resize;
+}
+
+/* --- 접기 스위치 ------------------------------------------------------------ */
+
+/**
+ * **경계선 위에 얹힌 작은 탭이다.** 패널 안에 있으므로 접혀서 폭이 0 이 돼도
+ * 제자리에 남고, 그게 다시 펼 유일한 길이 된다.
+ */
+.tx-app-shell__toggle {
+  position: absolute;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  border: 1px solid var(--tx-app-shell-border-color);
+  background-color: var(--tx-color-surface);
+  color: color-mix(in oklab, var(--tx-color-text) 70%, transparent);
+
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/**
+ * **보이는 것보다 넓게 잡힌다.** 경계선에 얹는 탭이라 14px 보다 넓게 그릴 수가 없는데,
+ * 그대로 두면 손가락이 닿는 자리가 24px 아래로 내려간다.
+ */
+.tx-app-shell__toggle::before {
+  content: "";
+  position: absolute;
+  inset: -0.3125rem;
+}
+
+.tx-app-shell__toggle:hover {
+  color: var(--tx-color-text);
+  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
+}
+
+.tx-app-shell__toggle:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: var(--tx-focus-ring-offset);
+}
+
+.tx-app-shell__toggle--left,
+.tx-app-shell__toggle--right {
+  inset-block-start: 50%;
+  inline-size: 0.875rem;
+  block-size: 2.75rem;
+  translate: 0 -50%;
+}
+
+.tx-app-shell__toggle--left {
+  inset-inline-start: 100%;
+  border-inline-start: 0;
+  border-radius: 0 var(--tx-radius) var(--tx-radius) 0;
+}
+
+.tx-app-shell__toggle--right {
+  inset-inline-end: 100%;
+  border-inline-end: 0;
+  border-radius: var(--tx-radius) 0 0 var(--tx-radius);
+}
+
+.tx-app-shell__toggle--bottom {
+  inset-inline-start: 50%;
+  inset-block-end: 100%;
+  inline-size: 2.75rem;
+  block-size: 0.875rem;
+  translate: -50% 0;
+  border-block-end: 0;
+  border-radius: var(--tx-radius) var(--tx-radius) 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-app-shell[data-sticky="hide"] .tx-app-shell__header {
+    transition: none;
+  }
+}

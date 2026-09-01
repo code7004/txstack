@@ -66,7 +66,7 @@
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **이식 완료** — 테스트 21개 통과                                                                                                                |
-| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` — 테스트 1408개 통과 |
+| `ui`          | 기반 4개 + Form 10개 + `TxPopup` · `TxAgGrid` · `TxPagination` · `TxModal` · `TxDialog` · `TxTabs` · `TxCard` · `TxTooltip` · 메뉴 2종 · `TxSlidePanel` · `TxJsonTree` · `TxAlert` · `TxToast` · `TxCollapsible` · `TxAccordion` · `TxBadge` · `TxSkeleton` · `TxDivider` · `TxProgress` · `TxEmptyState` · `TxGrid` · `TxCopyButton` · 폼 컨트롤 7종 · `TxScrollArea` · `TxBreadcrumb` · `TxAppShell` — 테스트 1554개 통과 |
 | `apps/*`      | **storybook 있음** — playground 는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
@@ -112,8 +112,15 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    `TxTag` Chip 흡수 · `TxBadge` · `TxNumberInput` · `TxSlider` · `TxFileUpload`)까지 끝났다.
    `TxSwitch` 를 가르면서 **`TxCheckBox` 의 `variant` 는 걷어냈다.**
    남은 넷의 순서를 정했다 — `TxScrollArea`(완료) → `TxBreadcrumb`(완료) →
-   **`TxAppShell` → `TxTable`.** `TxTable` 은 **어디까지가 `TxAgGrid` 몫인지**를
+   `TxAppShell`(완료) → **`TxTable`.** `TxTable` 은 **어디까지가 `TxAgGrid` 몫인지**를
    정해야 해서 마지막이다.
+   `TxAppShell` 은 **슬롯을 prop 으로 받고**(자식을 뒤지지 않는다 — `TxCard` · `TxLayout`
+   이 이미 부러진 방식이다) 이름은 **방향으로 간다** — `header` · `top` · `left` · `right` ·
+   `bottom` · `footer`. 좁아지면 **같은 `left` 노드**가 서랍으로 가고, `left`·`right`·`bottom`
+   은 **끌어서 크기를 바꾸고 접었다 편다** — 자리마다 `panels` 한 곳에 적는다.
+   크기 조절과 `visible` 은 `TxLayout` 에서 되살린 것이고, **독립 부품이 아니라 셸이
+   맡기로 정했다**(폭 소유권이 갈리고, 본문 최소 폭은 셸만 안다). `bottom` 의 폭은 **`bottomSpan` 으로 고른다** — 전체 폭(VS Code 쪽·기본)이거나
+   좌우 패널을 비켜 본문 폭만(AWS 콘솔 쪽).
    `TxAlert` 이 **상태색 네 갈래(`info`·`success`·`warning`·`danger`)의 기준**을 세웠고,
    그 어휘를 `TxToast` · `TxBadge` 가 물려받는다.
    미룬 것(`TxTicker` · `TxCarousel` · `TxNavBar` …), 자른 것, 그리고 함께 정한
@@ -127,7 +134,7 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    peer 는 지금의 `react` · `react-dom` + optional 둘에서 늘리지 않는다.
 
 2. **3차의 마지막 `TxLayout` 은 잘랐다.** 앱 사용 0회에 447줄이고, 크기 조절되는 패널은
-   IDE 재주다. 5차의 **`TxAppShell`**(Header · GNB · LNB · SNB · Footer)이 그 자리를 대신한다 —
+   IDE 재주다. 5차의 **`TxAppShell`**(`header`·`top`·`left`·`right`·`bottom`·`footer`)이 그 자리를 대신한다 —
    한 화면에 셸이 둘일 일이 없다. **이식은 26개 중 23개로 끝났다.**
 3. **`tailwind-merge` 를 뗐고 `TxInputLike` 는 감추기로 정했다.** 둘 다 밀려 있던 결정이다.
    `twMerge` 는 우리 컴포넌트가 Tailwind 를 한 곳도 싣지 않아 정리할 충돌이 없었다 —
