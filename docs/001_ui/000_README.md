@@ -39,7 +39,7 @@ import "@txstack/ui/styles.css";
 
 ## 개발 리스트
 
-**47개가 끝났다. 컴포넌트 테스트 1,514개.** 번호는 **만든 차례**다 —
+**49개가 끝났다. 컴포넌트 테스트 1,567개.** 번호는 **만든 차례**다 —
 새로 만드는 것은 뒤에 붙고, 번호는 다시 매기지 않는다.
 
 | 번호 | 컴포넌트 | 무엇 | 테스트 |
@@ -91,6 +91,8 @@ import "@txstack/ui/styles.css";
 | 045 | [`TxAvatar`](045_TxAvatar.md) | 사람 한 명을 나타내는 동그란 칸 | 28 |
 | 046 | [`TxTicker`](046_TxTicker.md) | 저절로 움직이는 공지 줄 | 28 |
 | 047 | [`TxCarousel`](047_TxCarousel.md) | 여러 장을 옆으로 넘겨 보는 자리 | 50 |
+| 048 | [`TxNavBar`](048_TxNavBar.md) | 가로로 도는 내비게이션 · 메가메뉴 | 26 |
+| 049 | [`TxSideNav`](049_TxSideNav.md) | 세로로 서는 내비게이션 · 아이콘 rail · 하위 트리 | 27 |
 
 *(내부)* 는 배럴에서 내보내지 않는 부품이다 — 소비자가 이름을 볼 수 없다.
 `/daypicker` `/aggrid` 는 서브패스 전용이다.
@@ -99,8 +101,7 @@ import "@txstack/ui/styles.css";
 
 | 무엇 | 상태 | 먼저 정할 것 |
 | --- | --- | --- |
-| 메가메뉴 (`TxNavBar`) | **다음 차례** | **`TxAppShell` 이 `header` 를 이미 가졌다.** 무엇이 셸 몫이고 무엇이 남는지부터 |
-| `TxTable` | 예정 | **어디까지가 `TxAgGrid` 몫인지.** `columns` 를 ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길 |
+| `TxTable` | **다음 차례** | **어디까지가 `TxAgGrid` 몫인지.** `columns` 를 ag-grid `colDef` 의 부분집합으로 잡을지가 첫 갈림길 |
 
 ## 자른 것 · 안 만드는 것
 

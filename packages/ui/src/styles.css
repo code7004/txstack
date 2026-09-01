@@ -83,6 +83,7 @@
 @import "./TxNavBar/TxNavBar.css" layer(tx);
 /* 확인창은 모달의 토큰을 자기 안에서만 덮는다. 모달 뒤에 와야 한다 */
 @import "./TxDialog/TxDialog.css" layer(tx);
+@import "./TxSideNav/TxSideNav.css" layer(tx);
 @import "./TxSlidePanel/TxSlidePanel.css" layer(tx);
 /* 셸은 좁을 때 TxSlidePanel 을 쓴다. 그 뒤에 와야 한다 */
 @import "./TxAppShell/TxAppShell.css" layer(tx);
