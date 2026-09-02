@@ -80,7 +80,7 @@ const csv = await api.getText("/reports/2026.csv");`}</CodeBlock>
             <code>attachInterceptors</code> — 이미 만들어 둔 axios 인스턴스에 같은 정책만 붙인다.
           </p>
           <p>
-            <code>isTokenExpired</code> — JWT 의 <code>exp</code> 를 본다. 갱신 시점을 앱이 정할 때 쓴다.
+            <code>isTokenExpired(expiresAt)</code> — <strong>만료 시각(ms epoch)이 지났는지</strong> 본다. JWT 를 파싱하지 않는다 — 토큰을 어떻게 읽을지는 앱이 정한다. 값이 없으면 만료로 본다.
           </p>
           <p>
             <code>removeUndefined</code> — 쿼리에서 <code>undefined</code> 필드를 걷어낸다.

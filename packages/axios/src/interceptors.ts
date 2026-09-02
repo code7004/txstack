@@ -29,10 +29,11 @@ function shortUrl(url?: string): string {
 }
 
 /**
- * 최상위 키 중 `fields` 에 해당하는 값을 가린다.
+ * 최상위 키 중 `fields` 에 해당하는 값을 가린다. **요청과 응답 둘 다 거친다** —
+ * 로그인 응답이 정확히 `accessToken` 을 담는 자리이므로, 요청만 가리면 반쪽이다.
  *
  * **중첩된 객체 안까지 들어가지 않는다.** 로거가 매 요청마다 도는 자리라 깊은 순회를 피했다.
- * 민감한 값을 중첩해 보낸다면 소비자가 `onRequest` 에서 직접 처리한다.
+ * 민감한 값을 중첩해 보낸다면 소비자가 `onRequest`·`onResponse` 에서 직접 처리한다.
  */
 function maskSensitive(data: unknown, fields: string[]): unknown {
   if (!data || typeof data !== "object" || Array.isArray(data)) return data;
@@ -131,7 +132,8 @@ export function attachInterceptors(instance: AxiosInstance, options: HttpClientO
           status: response.status,
           method: response.config.method?.toUpperCase() ?? "GET",
           url: shortUrl(response.config.url),
-          data: response.data,
+          // 응답도 가린다. 주입된 로거가 값을 외부로 보낼 수 있고, 토큰은 응답에 실려 온다
+          data: maskSensitive(response.data, maskFields),
           durationMs: Date.now() - start
         });
       }

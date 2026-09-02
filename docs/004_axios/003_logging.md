@@ -24,7 +24,7 @@ const api = createHttpClient({
     // { method, url, params, data }  ← maskFields 적용된 값
   },
   onResponse: (log) => {
-    // { status, method, url, data, durationMs }
+    // { status, method, url, data, durationMs }  ← data 도 maskFields 적용된 값
     if (log.durationMs > 3000) reportSlowRequest(log);
   }
 });
@@ -38,11 +38,15 @@ const api = createHttpClient({
 `maskFields` 기본값은 `password` · `privateKey` · `token` · `accessToken` · `refreshToken` 이고,
 **훅에 넘기기 전에** 적용된다 — 주입된 로거가 값을 외부로 보낼 수 있기 때문이다.
 
-최상위 키만 본다. 중첩된 값은 소비자가 `onRequest` 에서 직접 처리한다.
+**요청과 응답 둘 다 거친다.** 처음에는 요청(`params` · `data`)만 가렸는데, **토큰은 요청이
+아니라 응답에 실려 온다** — 로그인 응답이 정확히 `accessToken` 을 담는 자리다. 그래서
+`debug: true` 면 콘솔에, 로거를 주면 외부로 그대로 나갔다. (2차에서 고쳤다)
+
+최상위 키만 본다. 중첩된 값은 소비자가 `onRequest` · `onResponse` 에서 직접 처리한다.
 
 ## 개발 항목
 
-- [x] **구현** — `onRequest` · `onResponse` · `debug` · `maskFields`
+- [x] **구현** — `onRequest` · `onResponse` · `debug` · `maskFields`(요청·응답 둘 다)
 - [x] **테스트** — 5개
 - [x] **마스킹이 훅보다 먼저 돈다** — 순서가 뒤집히면 가리는 의미가 없다
 
