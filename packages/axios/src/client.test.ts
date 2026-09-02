@@ -40,6 +40,11 @@ function makeClient(options?: Partial<HttpClientOptions>) {
       });
     }
 
+    // 응답에 토큰이 실려 오는 자리. 로그인 응답이 정확히 이 모양이다
+    if (config.url === "/session") {
+      return { data: { accessToken: "eyJhbGciOi", user: { id: 7 } }, status: 200, statusText: "OK", headers: {}, config };
+    }
+
     if (config.url === "/binary") {
       return { data: new Uint8Array([1, 2, 3]).buffer, status: 200, statusText: "OK", headers: {}, config };
     }
@@ -195,6 +200,28 @@ describe("로깅 훅", () => {
     await client.post("/login", { id: "kim", password: "secret" });
 
     expect(onRequest.mock.calls[0][0].data).toEqual({ id: "******", password: "secret" });
+  });
+
+  /**
+   * **응답도 가려야 한다.** 요청만 가리면 반쪽이다 — 토큰은 요청이 아니라 **응답**에
+   * 실려 온다. 주입된 로거가 값을 외부로 보낼 수 있으므로 훅에 넘기기 전에 가린다.
+   */
+  it("응답 로그의 토큰도 가린다", async () => {
+    const onResponse = vi.fn();
+    const { client } = makeClient({ onResponse, unwrap: undefined });
+
+    await client.get("/session");
+
+    expect(onResponse.mock.calls[0][0].data).toEqual({ accessToken: "******", user: { id: 7 } });
+  });
+
+  it("응답에서도 maskFields 를 따른다", async () => {
+    const onResponse = vi.fn();
+    const { client } = makeClient({ onResponse, unwrap: undefined, maskFields: ["user"] });
+
+    await client.get("/session");
+
+    expect(onResponse.mock.calls[0][0].data).toEqual({ accessToken: "eyJhbGciOi", user: "******" });
   });
 
   it("debug 없이 훅도 없으면 콘솔에 아무것도 찍지 않는다", async () => {
