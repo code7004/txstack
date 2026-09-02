@@ -98,7 +98,8 @@
   --tx-dropdown-item-padding: 0.5rem 0.75rem;
   --tx-dropdown-item-font-size: 0.875rem;
   --tx-dropdown-item-active-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-color-surface));
-  --tx-dropdown-check-color: var(--tx-color-primary);
+  /* 골라진 줄의 체크 표시 — 얇은 글리프라 읽히는 쪽이 필요하다 */
+  --tx-dropdown-check-color: var(--tx-color-primary-strong);
   --tx-dropdown-check-size: 1rem;
 
   padding: 0.25rem 0;

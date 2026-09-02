@@ -11,7 +11,8 @@
   --tx-file-upload-gap: 0.75rem;
   --tx-file-upload-radius: var(--tx-radius);
   --tx-file-upload-border-color: var(--tx-color-border);
-  --tx-file-upload-dragging-color: var(--tx-color-primary);
+  /* 끌어다 놓는 동안의 테두리와 글자 */
+  --tx-file-upload-dragging-color: var(--tx-color-primary-strong);
   --tx-file-upload-dropzone-padding: 1.75rem 1rem;
   --tx-file-upload-hint-size: 0.875rem;
   --tx-file-upload-meta-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);

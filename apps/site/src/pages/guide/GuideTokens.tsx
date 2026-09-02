@@ -4,7 +4,8 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
 
 const GLOBAL_TOKENS = [
-  ["--tx-color-primary", "주 동작 · 포커스 링이 이 색을 따라간다"],
+  ["--tx-color-primary", "채우는 색 — 버튼 배경 · 스위치 · 체크"],
+  ["--tx-color-primary-strong", "면 위에서 읽히는 색 — 현재 메뉴 · 탭 · 포커스 링"],
   ["--tx-color-danger", "되돌릴 수 없는 동작"],
   ["--tx-color-warning", "막지는 않지만 알려야 하는 자리"],
   ["--tx-color-success", "잘 됐음을 알리는 자리"],
@@ -149,23 +150,23 @@ export function GuideTokens() {
           부품마다 자기 토큰이 더 있다(<code>--tx-button-*</code> · <code>--tx-side-nav-*</code> …). 무엇이 있는지는 <strong>카탈로그의 각 부품 문서</strong>에 적혀 있다.
         </p>
 
-        <TxAlert variant="warning" title="밝은 브랜드색을 쓸 때 한 가지">
-          <code>--tx-color-primary</code> 는 <strong>채우는 색과 글자로 쓰는 색을 겸한다.</strong> 밝은 색을 넣으면 버튼은 살아나지만 글자·선으로 쓰는 자리(현재 메뉴 표시 · 포커스 링)가 흰 바탕에서 안 읽힌다. 이 사이트는 진한 쪽을 따로
-          두고 <strong>그 자리의 부품 토큰만</strong> 그쪽으로 돌렸다.
+        <TxAlert variant="warning" title="강조색이 둘인 이유">
+          채움과 글자는 <strong>반대 방향을 원한다.</strong> 채움은 그 위의 흰 글자를 위해 어두워야 하고, 글자로 쓰는 자리는 라이트에서 더 어둡고 다크에서 밝아야 한다. 그래서 밝은 브랜드색(민트 · 파스텔)을{" "}
+          <code>--tx-color-primary</code> 에만 넣으면 <strong>버튼은 살아나고 현재 메뉴 표시가 안 읽힌다.</strong> 이 사이트가 정확히 그 경우인데, 두 토큰을 각각 주는 것으로 끝난다.
         </TxAlert>
       </Block>
 
       <Block title="이 사이트가 그렇게 만들어졌다">
         <SideBySide>
           <CodeBlock language="css" title="apps/site/src/theme.css">{`:root {
-  --tx-color-primary: #2dd4bf;      /* 채움 — 두 모드가 같다 */
-  --tx-color-on-accent: #04231f;
-  --site-accent-strong: #0f766e;    /* 글자·선 자리 */
+  --tx-color-primary: #2dd4bf;         /* 채움 — 두 모드가 같다 */
+  --tx-color-on-accent: #04231f;       /* 밝은 채움 위에는 어두운 글자 */
+  --tx-color-primary-strong: #0f766e;  /* 면 위에서 읽히는 쪽 */
 }
 
-/* 글자로 쓰는 부품 토큰만 그쪽으로 돌린다 */
-.tx-side-nav {
-  --tx-side-nav-accent: var(--site-accent-strong);
+.dark {
+  /* 어두운 바탕에서는 민트가 글자로도 읽힌다 */
+  --tx-color-primary-strong: #2dd4bf;
 }`}</CodeBlock>
 
           <Demo>

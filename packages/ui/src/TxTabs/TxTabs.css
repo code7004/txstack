@@ -8,7 +8,8 @@
  */
 
 .tx-tabs {
-  --tx-tabs-accent: var(--tx-color-primary);
+  /* 지금 탭의 **글자와 밑줄**이다 — 채움이 아니라 면 위에 얹히는 자리 */
+  --tx-tabs-accent: var(--tx-color-primary-strong);
   --tx-tabs-fg: color-mix(in oklab, var(--tx-color-text) 60%, transparent);
   --tx-tabs-fg-hover: var(--tx-color-text);
   --tx-tabs-border-color: var(--tx-color-border);

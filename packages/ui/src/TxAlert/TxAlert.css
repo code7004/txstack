@@ -11,7 +11,8 @@
  */
 
 .tx-alert {
-  --tx-alert-accent: var(--tx-color-primary);
+  /* 아이콘 색과 테두리·바탕의 섞는 색. 면 위에 얹히므로 읽히는 쪽이다 */
+  --tx-alert-accent: var(--tx-color-primary-strong);
 
   --tx-alert-radius: var(--tx-radius);
   --tx-alert-padding: 0.875rem 1rem;

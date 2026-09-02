@@ -477,7 +477,8 @@ describe("TxJsonTree — CSS 계약", () => {
 
   it("색을 하드코딩하지 않는다 — 값이 토큰으로 나가 있다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
-    expect(css).toMatch(/--tx-json-tree-number-color:\s*var\(--tx-color-primary\)/);
+    // 숫자는 글자다 — 면 위에서 읽히는 쪽(`-strong`)을 쓴다. 채우는 `--tx-color-primary` 가 아니다
+    expect(css).toMatch(/--tx-json-tree-number-color:\s*var\(--tx-color-primary-strong\)/);
   });
 
   it(".dark 분기를 갖지 않는다", () => {
