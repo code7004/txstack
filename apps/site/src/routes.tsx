@@ -1,6 +1,10 @@
 import type { RouteTree } from "@txstack/route-meta";
 import { AboutHome } from "./pages/AboutHome";
+import { ApiAxios } from "./pages/api/ApiAxios";
 import { ApiHome } from "./pages/ApiHome";
+import { ApiHooks } from "./pages/api/ApiHooks";
+import { ApiRouteMeta } from "./pages/api/ApiRouteMeta";
+import { ApiUi } from "./pages/api/ApiUi";
 import { Components } from "./pages/Components";
 import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
@@ -12,7 +16,6 @@ import { GuideTokens } from "./pages/guide/GuideTokens";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Profile } from "./pages/Profile";
-import { Section } from "./pages/Section";
 import { SectionLayout } from "./pages/SectionLayout";
 import { Start } from "./pages/Start";
 import { Tutorial } from "./pages/Tutorial";
@@ -88,10 +91,10 @@ export const routes = {
     meta: { label: "API", description: "네 패키지가 무엇을 내보내는가" },
     children: {
       index: { index: true, element: <ApiHome /> },
-      ui: { path: "/api/ui", element: <Section title="@txstack/ui" />, meta: { label: "ui" } },
-      routeMeta: { path: "/api/route-meta", element: <Section title="@txstack/route-meta" />, meta: { label: "route-meta" } },
-      hooks: { path: "/api/hooks", element: <Section title="@txstack/hooks" />, meta: { label: "hooks" } },
-      axios: { path: "/api/axios", element: <Section title="@txstack/axios" />, meta: { label: "axios" } }
+      ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui" } },
+      routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta" } },
+      hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks" } },
+      axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios" } }
     }
   },
 
