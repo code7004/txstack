@@ -182,6 +182,30 @@ describe("useUrlQuery — 파싱 규칙", () => {
     expect(result.current.search).toBe("?ids%5B%5D=3&ids%5B%5D=4");
   });
 
+  it("같은 키를 두 번 주면 배열이다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { ids: [] as number[] } }), { wrapper: wrapper("/?ids=1&ids=2") });
+    expect(result.current.query.ids).toEqual([1, 2]);
+  });
+
+  /**
+   * **콤마는 배열이 아니다.** 한때 값에 `,` 가 있으면 쪼갰는데, `string` 으로 선언한 자리에
+   * 런타임 `string[]` 이 들어와 소비자 코드가 `query.q.trim()` 에서 터졌다(흰 화면).
+   * 배열은 `key[]` 로 선언해서 쓴다.
+   */
+  it("콤마가 있어도 문자열 그대로다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { q: "" } }), { wrapper: wrapper("/?q=react,hooks") });
+
+    expect(result.current.query.q).toBe("react,hooks");
+    expect(typeof result.current.query.q).toBe("string");
+  });
+
+  it("콤마가 든 값을 그대로 되쓴다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { q: "" } }), { wrapper: wrapper("/") });
+
+    act(() => result.current.setQuery({ q: "a,b" }));
+    expect(result.current.query.q).toBe("a,b");
+  });
+
   it("postParse 가 병합 결과를 후보정한다", () => {
     const { result } = renderHook(() => useHarness({ defaults: { keyword: "", page: 1 }, postParse: (q) => (q.keyword ? { page: 1 } : {}) }), { wrapper: wrapper("/?keyword=kim&page=7") });
 

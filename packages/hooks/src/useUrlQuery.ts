@@ -141,8 +141,14 @@ function parseSearchParams(params: URLSearchParams, encodeKey: string, queryType
       return;
     }
 
-    const value = values[0] ?? "";
-    result[cleanKey] = value.includes(",") ? value.split(",").map((item) => parseTypedValue(item.trim(), valueType)) : parseTypedValue(value, valueType);
+    /**
+     * **콤마로 쪼개지 않는다.** 한때 값에 `,` 가 있으면 배열로 나눴는데, 그러면
+     * `defaults: { q: "" }` 로 `string` 을 선언한 자리에 런타임에 `string[]` 이 들어온다 —
+     * 소비자는 타입을 믿고 `query.q.trim()` 을 쓰다가 흰 화면을 본다(실제로 그렇게 터졌다).
+     *
+     * 배열은 **선언해서 쓴다** — `?ids[]=1&ids[]=2` 나 같은 키를 두 번(`?ids=1&ids=2`).
+     */
+    result[cleanKey] = parseTypedValue(values[0] ?? "", valueType);
   });
 
   return result;

@@ -18,12 +18,12 @@
 
 ## 개발 리스트
 
-**2개가 끝났다. 테스트 25개.** 번호는 만든 차례다.
+**2개가 끝났다. 테스트 28개.** 번호는 만든 차례다.
 
 | 번호 | 훅 | 무엇 | 테스트 |
 | --- | --- | --- | --- |
 | 001 | [`useStateForObject`](001_useStateForObject.md) | 객체 상태를 부분 병합으로 다룬다 | 6 |
-| 002 | [`useUrlQuery`](002_useUrlQuery.md) `/router` | URL 쿼리스트링을 화면 상태처럼 쓴다 | 19 |
+| 002 | [`useUrlQuery`](002_useUrlQuery.md) `/router` | URL 쿼리스트링을 화면 상태처럼 쓴다 | 22 |
 
 ## 가져오지 않은 것
 
@@ -34,7 +34,7 @@
 
 ## 검증
 
-테스트 25개. `vitest` 의 `dom` 프로젝트(jsdom)에서 `MemoryRouter` 로 실제 주소 변화를
+테스트 28개. `vitest` 의 `dom` 프로젝트(jsdom)에서 `MemoryRouter` 로 실제 주소 변화를
 관찰한다. 무한 반복으로 이어지던 두 지점이 회귀 테스트로 박혀 있다 —
 [002_useUrlQuery](002_useUrlQuery.md) 의 "정한 것 · 고친 것".
 
