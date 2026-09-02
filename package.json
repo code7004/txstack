@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Reusable React library set \u2014 UI components, hooks, route metadata, HTTP client",
+  "description": "Reusable React library set — UI components, hooks, route metadata, HTTP client",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,6 +20,8 @@
     "build": "pnpm --filter \"./packages/*\" -r build",
     "storybook:dev": "pnpm --filter @txstack/storybook dev",
     "storybook:build": "pnpm --filter @txstack/storybook build",
+    "site:dev": "pnpm --filter @txstack/site dev",
+    "site:build": "pnpm --filter @txstack/site build",
     "lint": "eslint packages apps --no-error-on-unmatched-pattern",
     "lint:fix": "eslint packages apps --fix --no-error-on-unmatched-pattern",
     "typecheck": "pnpm -r typecheck",

@@ -1,0 +1,114 @@
+/**
+ * 사이트의 겉모습. **부품 CSS 를 한 줄도 덮어쓰지 않는다** — `--tx-*` 토큰만 다시 정의한다.
+ *
+ * 그래서 이 파일이 곧 `Guide › Tokens` 의 실물 예제다. "쉬운 커스터마이징" 이라는 주장을
+ * 사이트가 스스로 증명하는 자리이므로, 부품 클래스(`.tx-button` 등)에 손대고 싶어지면
+ * **토큰이 부족하다는 신호**로 읽고 그쪽을 고친다.
+ *
+ * 톤은 **개발자 도구** 쪽이다 — 저채도 바탕, 얇은 선, 조밀한 간격, 모노스페이스 억양.
+ */
+
+/* Pretendard — 한글과 라틴이 한 가족으로 돈다. 자체 호스팅은 배포 때로 미룬다 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+:root {
+  /* --- 색 ---------------------------------------------------------------- */
+
+  /**
+   * 브랜드는 청록이다. 기본 파랑과 거리가 있어 기억에 남고, **다크모드에서 밝은 쪽으로
+   * 뒤집어야** 어두운 바탕에서 명암비가 선다(4.5:1 이상).
+   */
+  --tx-color-primary: #0f766e;
+  --tx-color-on-accent: #ffffff;
+
+  --tx-color-surface: #ffffff;
+  --tx-color-border: #dfe3e8;
+  --tx-color-text: #14202b;
+  --tx-color-muted: #eef1f4;
+
+  /* 상태(hover·pressed)로 섞이는 색. 글자색과 같은 계열이라 바탕을 가리지 않는다 */
+  --tx-color-state: #14202b;
+
+  /* --- 모양 -------------------------------------------------------------- */
+
+  /** 도구 느낌은 반경에서 온다. 둥글수록 소비자 앱, 각질수록 도구다 */
+  --tx-radius: 0.375rem;
+
+  --tx-focus-ring: 2px solid var(--tx-color-primary);
+  --tx-focus-ring-offset: 2px;
+
+  /* --- 사이트가 쓰는 것 ---------------------------------------------------- */
+
+  /** 본문 한 줄의 길이. 65자 근처가 읽기 편하다 */
+  --site-measure: 68ch;
+
+  --site-page-bg: color-mix(in oklab, var(--tx-color-state) 3%, var(--tx-color-surface));
+  --site-code-bg: #0f1720;
+  --site-code-text: #dbe3ea;
+
+  --site-font: "Pretendard Variable", Pretendard, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --site-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.dark {
+  --tx-color-primary: #2dd4bf;
+
+  /** 어두운 청록 위에는 검은 글자가 읽힌다. 흰 글자를 얹으면 눈이 아프다 */
+  --tx-color-on-accent: #05201d;
+
+  --tx-color-surface: #131b24;
+  --tx-color-border: #26323e;
+  --tx-color-text: #e6edf3;
+  --tx-color-muted: #1c2530;
+  --tx-color-state: #e6edf3;
+
+  --site-page-bg: #0c1219;
+  --site-code-bg: #0a1017;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+
+    background-color: var(--site-page-bg);
+    color: var(--tx-color-text);
+
+    font-family: var(--site-font);
+
+    /* 한글은 자간을 조금 좁히면 덩어리로 읽힌다 */
+    letter-spacing: -0.01em;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--site-font-mono);
+  }
+
+  /** 본문 속 인라인 코드. 도구 느낌의 억양이 여기서 나온다 */
+  :not(pre) > code {
+    padding: 0.125rem 0.3rem;
+    border: 1px solid var(--tx-color-border);
+    border-radius: 0.25rem;
+    background-color: var(--tx-color-muted);
+    font-size: 0.875em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /** 문단은 폭을 제한한다. 넓은 화면에서 한 줄이 길어지면 눈이 줄을 놓친다 */
+  p {
+    max-inline-size: var(--site-measure);
+    text-wrap: pretty;
+  }
+}
