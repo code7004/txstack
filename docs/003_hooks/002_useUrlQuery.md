@@ -7,7 +7,7 @@
 | 진입점 | `@txstack/hooks/router` — 서브패스. peer `react-router-dom` |
 | 내보내는 것 | `useUrlQuery` · `UseUrlQueryOptions` |
 | 소스 | [`packages/hooks/src/useUrlQuery.ts`](../../packages/hooks/src/useUrlQuery.ts) |
-| 테스트 | 19개 |
+| 테스트 | 22개 |
 
 ## 개발 목적
 
@@ -53,6 +53,9 @@ const [query, setQuery] = useUrlQuery({
 ```
 
 배열은 `key[]` 로 읽고 쓴다 — `?ids[]=1&ids[]=2` → `{ ids: [1, 2] }`.
+같은 키를 두 번 준 것(`?ids=1&ids=2`)도 배열로 읽는다.
+
+**콤마는 배열이 아니다.** `?q=a,b` 는 문자열 `"a,b"` 그대로다 — 배열은 선언해서 쓴다.
 
 ### 반환값 identity
 
@@ -75,6 +78,18 @@ const [query, setQuery] = useUrlQuery({
 - [ ] `urlKeys` 로 읽은 키는 `T` 에 없어 타입이 따라오지 않는다. 쓰는 자리가 생기면 다시 본다
 
 ## 정한 것 · 고친 것
+
+### 콤마 분해를 없앴다 (2차)
+
+한때 값에 `,` 가 있으면 배열로 쪼갰다. **선언된 타입을 무시하는 동작이었다** —
+`defaults: { q: "" }` 로 `string` 을 선언한 자리에 런타임에 `string[]` 이 들어온다.
+
+`apps/site` 의 검색 화면에서 실제로 터졌다: 주소창에 `?q=react,hooks` 를 넣으면
+소비자 코드의 `query.q.trim()` 이 `TypeError` 를 던지고 **화면이 하얘졌다.** 반환 타입이
+`string` 이라고 말하면서 배열을 주면 소비자는 방어할 이유가 없다.
+
+문서에도 없고 테스트도 없던 동작이라 지웠다. 배열은 `key[]` 나 반복 키로 **선언해서** 쓴다.
+
 
 ### URL 이 단일 출처다
 
