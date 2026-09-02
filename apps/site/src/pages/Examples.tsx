@@ -112,7 +112,7 @@ export function Examples() {
                 </div>
               ))
             : rows.map((repo) => (
-                <article key={repo.id} className="flex flex-col gap-2 rounded-lg border p-4 transition-colors hover:border-[color:var(--site-accent-strong)]" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+                <article key={repo.id} className="flex flex-col gap-2 rounded-lg border p-4 transition-colors hover:border-[color:var(--tx-color-primary-strong)]" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
                   <div className="flex flex-wrap items-center gap-2">
                     <a href={repo.html_url} className="font-mono text-sm font-semibold hover:underline" target="_blank" rel="noreferrer">
                       {repo.full_name}

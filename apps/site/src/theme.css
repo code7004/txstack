@@ -25,13 +25,14 @@
   --tx-color-on-accent: #04231f;
 
   /**
-   * **글자·선으로 쓰는 자리의 강조색.** 밝은 민트는 흰 바탕에서 1.7:1 이라 글자로는 못 쓴다
+   * **면 위에서 읽히는 강조색.** 밝은 민트는 흰 바탕에서 1.7:1 이라 글자로는 못 쓴다
    * (WCAG 는 글자 4.5:1, 테두리·포커스 같은 비텍스트는 3:1 을 요구한다).
    *
-   * 그래서 **채우는 색과 글자로 쓰는 색을 가른다.** 아래에서 그 자리의 부품 토큰만 이쪽으로
-   * 돌려 둔다. 다크모드에서는 민트가 그대로 읽히므로 같은 값으로 되돌린다.
+   * 라이브러리가 이 자리를 토큰으로 갖고 있어서 **한 줄이면 된다** — 현재 메뉴 표시 ·
+   * 포커스 링 · 탭 · 태그 · 안내 아이콘이 전부 이것을 따라간다.
+   * (처음에는 부품 토큰을 하나씩 돌려 놨는데, 그건 토큰이 부족하다는 신호였다.)
    */
-  --site-accent-strong: #0f766e;
+  --tx-color-primary-strong: #0f766e;
 
   --tx-color-surface: #ffffff;
   --tx-color-border: #dfe3e8;
@@ -46,8 +47,8 @@
   /** 도구 느낌은 반경에서 온다. 둥글수록 소비자 앱, 각질수록 도구다 */
   --tx-radius: 0.375rem;
 
-  /* 포커스 표시는 밝은 민트로는 약하다. 진한 쪽을 쓴다 */
-  --tx-focus-ring: 2px solid var(--site-accent-strong);
+  /* 포커스 링은 라이브러리가 이미 읽히는 쪽을 쓴다. 두께만 우리 값이다 */
+  --tx-focus-ring: 2px solid var(--tx-color-primary-strong);
   --tx-focus-ring-offset: 2px;
 
   /* --- 사이트가 쓰는 것 ---------------------------------------------------- */
@@ -64,8 +65,8 @@
 }
 
 .dark {
-  /* 브랜드색은 그대로. 어두운 바탕에서는 민트가 글자로도 읽히므로 갈라 둔 것을 되돌린다 */
-  --site-accent-strong: #2dd4bf;
+  /* 어두운 바탕에서는 민트가 글자로도 읽힌다(6.8:1). 그래서 채움과 같은 값으로 되돌린다 */
+  --tx-color-primary-strong: #2dd4bf;
 
   --tx-color-surface: #131b24;
   --tx-color-border: #26323e;
@@ -75,35 +76,6 @@
 
   --site-page-bg: #0c1219;
   --site-code-bg: #0a1017;
-}
-
-/**
- * **채우는 색과 글자로 쓰는 색을 가른 결과.** 부품 CSS 를 덮는 것이 아니라 **그 부품이
- * 내보내는 토큰**만 다시 가리킨다 — 문서의 "② 부품 한 종류" 가 이 자리다.
- *
- * 라이브러리에는 `--tx-color-primary` 하나가 채움과 글자를 겸하고 있어서, 밝은 브랜드색을
- * 쓰는 소비자는 이 손질을 각자 해야 한다. `docs/005_site.md` 에 남겨 둔 열린 질문이다.
- */
-.tx-side-nav {
-  --tx-side-nav-accent: var(--site-accent-strong);
-}
-
-/* 갈래(success·warning·danger)는 자기 색을 갖는다. 기본(info)만 바뀐다 */
-.tx-alert,
-.tx-toast {
-  --tx-alert-accent: var(--site-accent-strong);
-}
-
-.tx-dropdown {
-  --tx-dropdown-check-color: var(--site-accent-strong);
-}
-
-.tx-json-tree {
-  --tx-json-tree-number-color: var(--site-accent-strong);
-}
-
-.tx-file-upload {
-  --tx-file-upload-dragging-color: var(--site-accent-strong);
 }
 
 @layer base {

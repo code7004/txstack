@@ -15,7 +15,8 @@
   --tx-slider-track-bg: color-mix(in oklab, var(--tx-color-state) 20%, transparent);
   --tx-slider-fill-bg: var(--tx-color-primary);
   --tx-slider-thumb-bg: var(--tx-color-surface);
-  --tx-slider-thumb-border: 2px solid var(--tx-color-primary);
+  /* 손잡이 테두리는 선이다 — 채움(`--tx-slider-fill-bg`)과 다른 자리 */
+  --tx-slider-thumb-border: 2px solid var(--tx-color-primary-strong);
   --tx-slider-disabled-opacity: 0.5;
 
   --tx-slider-value-size: 0.8125rem;

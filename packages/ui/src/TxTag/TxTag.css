@@ -63,7 +63,8 @@
  * 따로 두지 않는다. `neutral` 은 위의 기본값이라 규칙이 없다.
  */
 .tx-tag[data-variant="info"] {
-  --tx-tag-accent: var(--tx-color-primary);
+  /* 태그의 글자색이 이 값에서 파생된다(`--tx-tag-fg`) — 면 위에 얹히는 자리다 */
+  --tx-tag-accent: var(--tx-color-primary-strong);
 }
 
 .tx-tag[data-variant="success"] {

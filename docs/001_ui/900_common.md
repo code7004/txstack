@@ -23,9 +23,29 @@
 `hover` · `focus` · `.dark` 가 저절로 따라온다 — 상태별로 하나씩 덮을 필요가 없다.
 
 **토큰 이름은 공개 API 다.** 지우거나 바꾸면 major 다. 그래서 **안 쓰는 토큰을 미리 만들지 않는다.**
+
+### 강조색은 둘이다 — 채움과 읽히는 쪽
+
+`--tx-color-primary` 하나가 **버튼 배경**과 **현재 메뉴 글자**를 겸하고 있었다. 두 요구가
+반대로 당긴다: 채움은 그 위의 흰 글자를 위해 어두워야 하고, 글자로 쓰는 자리는 라이트에서
+더 어둡고 다크에서 밝아야 한다.
+
+겸하던 동안 기본 팔레트가 **AA 를 못 넘었다** — 흰 글자를 `blue-500` 위에 얹으면 3.68:1,
+그 색을 글자로 쓰면 라이트 3.68:1 · 다크 2.84:1(AA 는 4.5:1).
+
+| 토큰 | 무엇 | 라이트 / 다크 |
+| --- | --- | --- |
+| `--tx-color-primary` | **채우는 색** — 버튼 배경 · 스위치 트랙 · 체크 · 진행 막대 | `#2563eb` (다크도 같다) |
+| `--tx-color-primary-strong` | **면 위에서 읽히는 색** — 현재 메뉴 · 탭 · 태그 글자 · 포커스 링 · 안내 아이콘 | `#1d4ed8` / `#60a5fa` |
+
+**밝은 브랜드색(민트 · 파스텔)을 쓰는 소비자에게 특히 필요하다.** `--tx-color-primary` 만
+바꾸면 버튼은 살아나고 메뉴 표시가 안 읽힌다 — `apps/site` 가 그 경우이고, 지금은 두 줄로 끝난다.
+
+**어느 쪽인지는 계약이 지킨다.** `packages/ui/src/index.test.ts` 가 부품 토큰마다
+채움/읽히는 쪽을 못 박아 두어서, 새 부품이 글자에 `--tx-color-primary` 를 쓰면 거기서 걸린다.
 실제로 쓰는 컴포넌트가 생길 때 한 줄씩 늘린다.
 
-temp 기준 전역 토큰은 11개다 — `--tx-color-{primary,danger,muted,state,text,on-accent}` ·
+전역 토큰은 12개다 (temp 기준 11개 + `--tx-color-primary-strong`) — `--tx-color-{primary,danger,muted,state,text,on-accent}` ·
 `--tx-state-{hover,pressed}` · `--tx-focus-ring` · `--tx-focus-ring-offset` · `--tx-radius`.
 
 ### 2. 스타일시트는 하나만 낸다

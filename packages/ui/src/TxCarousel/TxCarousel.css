@@ -28,7 +28,8 @@
 
   --tx-carousel-dot-size: 0.5rem;
   --tx-carousel-dot-color: color-mix(in oklab, var(--tx-color-text) 25%, transparent);
-  --tx-carousel-dot-active: var(--tx-color-primary);
+  /* 지금 보고 있는 장을 짚는 점 */
+  --tx-carousel-dot-active: var(--tx-color-primary-strong);
 
   position: relative;
 

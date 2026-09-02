@@ -83,6 +83,67 @@ describe("@txstack/ui 배럴 — 공개 표면", () => {
  * (소비자가 `className` 으로 주는 Tailwind 는 자기 것이라 상관없다. 그것이 이기는 것은
  * `twMerge` 가 아니라 `@layer tx` 덕분이다.)
  */
+/**
+ * **강조색은 둘이다 — 채우는 색과 면 위에서 읽히는 색.**
+ *
+ * 하나로 겸하던 동안 두 요구가 반대로 당겼다: 채움은 그 위의 글자를 위해 어두워야 하고,
+ * 글자로 쓰는 자리는 라이트에서 더 어둡고 다크에서 밝아야 한다. 그래서 `--tx-color-primary`
+ * 를 글자로 쓰는 자리가 라이트 3.68:1 · 다크 2.84:1 이었다(AA 는 4.5:1).
+ *
+ * **어느 쪽인지 헷갈리기 쉬운 자리라 계약으로 못 박는다.** 새 부품이 글자·선에
+ * `--tx-color-primary` 를 쓰면 여기서 걸린다.
+ */
+describe("@txstack/ui — 채우는 강조색과 읽히는 강조색", () => {
+  const here = import.meta.dirname;
+  const read = (path: string) => readFileSync(join(here, path), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+
+  const tokens = read("tokens.css");
+
+  it("둘 다 정의돼 있고 읽히는 쪽은 다크에서 뒤집힌다", () => {
+    const light = tokens.slice(tokens.indexOf(":root"), tokens.indexOf(".dark"));
+    const dark = tokens.slice(tokens.indexOf(".dark"));
+
+    expect(light).toMatch(/--tx-color-primary:\s*#[0-9a-f]{6}/i);
+    expect(light).toMatch(/--tx-color-primary-strong:\s*#[0-9a-f]{6}/i);
+
+    /*
+      **채우는 색은 다크에서 다시 정의하지 않는다** — 어두운 면에서도 그 위의 흰 글자가
+      읽힌다. 뒤집어야 하는 것은 면 위에 얹히는 쪽뿐이다.
+    */
+    expect(dark).toMatch(/--tx-color-primary-strong:\s*#[0-9a-f]{6}/i);
+  });
+
+  it("포커스 링은 읽히는 쪽을 쓴다", () => {
+    expect(tokens).toMatch(/--tx-focus-ring:[^;]*var\(--tx-color-primary-strong\)/);
+  });
+
+  /** 글자·선·아이콘으로 쓰이는 부품 토큰들. 채움과 섞이면 안 읽힌다 */
+  it.each([
+    ["TxSideNav/TxSideNav.css", "--tx-side-nav-accent"],
+    ["TxAlert/TxAlert.css", "--tx-alert-accent"],
+    ["TxTabs/TxTabs.css", "--tx-tabs-accent"],
+    ["TxTag/TxTag.css", "--tx-tag-accent"],
+    ["TxJsonTree/TxJsonTree.css", "--tx-json-tree-number-color"],
+    ["TxDropdown/TxDropdown.css", "--tx-dropdown-check-color"]
+  ])("%s 의 %s 는 읽히는 쪽을 쓴다", (file, token) => {
+    const css = read(file);
+
+    expect(css).toMatch(new RegExp(`${token}:\\s*var\\(--tx-color-primary-strong\\)`));
+    // 채우는 쪽을 같은 토큰에 다시 물리면 안 된다(갈래별 색은 각자 토큰을 갖는다)
+    expect(css).not.toMatch(new RegExp(`${token}:\\s*var\\(--tx-color-primary\\)`));
+  });
+
+  /** 반대로 채우는 자리는 `--tx-color-primary` 그대로여야 한다 — 그 위에 흰 글자가 얹힌다 */
+  it.each([
+    ["TxButton/TxButton.css", "--tx-button-bg"],
+    ["TxSwitch/TxSwitch.css", "--tx-switch-track-checked-bg"],
+    ["TxCheckBox/TxCheckBox.css", "--tx-checkbox-checked-bg"],
+    ["TxProgress/TxProgress.css", "--tx-progress-accent"]
+  ])("%s 의 %s 는 채우는 쪽을 쓴다", (file, token) => {
+    expect(read(file)).toMatch(new RegExp(`${token}:\\s*var\\(--tx-color-primary\\)`));
+  });
+});
+
 describe("@txstack/ui — Tailwind 를 싣지 않는다", () => {
   const here = import.meta.dirname;
 

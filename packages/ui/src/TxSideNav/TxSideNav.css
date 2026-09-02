@@ -19,7 +19,8 @@
   --tx-side-nav-hover-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
 
   /** 지금 있는 자리를 짚는 색. 액센트 막대와 글자에 함께 쓴다 */
-  --tx-side-nav-accent: var(--tx-color-primary);
+  /* 글자와 막대로 쓰인다 — 면 위에서 읽히는 쪽이다 */
+  --tx-side-nav-accent: var(--tx-color-primary-strong);
   --tx-side-nav-accent-bg: color-mix(in oklab, var(--tx-color-primary) 12%, transparent);
   --tx-side-nav-accent-size: 3px;
 

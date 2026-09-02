@@ -25,7 +25,8 @@
    * 덮을 때 챙길 것이 늘어난다. 문자열은 따옴표가 이미 구분해 주므로 본문 색 그대로 둔다.
    */
   --tx-json-tree-string-color: var(--tx-color-text);
-  --tx-json-tree-number-color: var(--tx-color-primary);
+  /* 숫자 값의 글자색 */
+  --tx-json-tree-number-color: var(--tx-color-primary-strong);
   --tx-json-tree-boolean-color: var(--tx-color-warning);
   --tx-json-tree-null-color: color-mix(in oklab, var(--tx-color-text) 45%, transparent);
 
