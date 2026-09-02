@@ -67,7 +67,7 @@
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
 | `route-meta`  | **완료** — 테스트 25개 통과. 열려 있던 결정 둘을 닫았고 `ui` 의 메뉴 부품과 이어 붙였다                                                                                                                |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 컴포넌트 테스트 1,567개. 남은 하나는 아래 "다음 할 일" |
-| `apps/*`      | **storybook 있음** — 부품 카탈로그 + `소개/시작하기`(MDX) + `Recipes/RouteMeta`. 글로 된 안내는 `apps/storybook/src/*.mdx` 에 둔다 (GFM 켜 둠 — 안 켜면 표가 글자로 나온다). 문서·포폴 사이트(`apps/site`)는 아직 없다                                                                                                    |
+| `apps/*`      | **storybook 있음** — 부품 카탈로그 + `소개/시작하기`(MDX) + `Recipes` 5종. 글로 된 안내는 `apps/storybook/src/*.mdx`, 조립 레시피는 `apps/storybook/src/*.stories.tsx` 에 둔다(공용 조각은 `src/recipes/`). 문서·포폴 사이트(`apps/site`)는 아직 없다                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
@@ -107,7 +107,8 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    있지만 **처음 쓰는 사람이 따라갈 길**이 없었다.
    - [x] `소개/시작하기` — 설치 · 토큰 · 다크모드 · Tailwind · 서브패스 · 화면 골격
    - [x] `TxAgGrid` 를 **쓰는 순서**로 다시 세웠다 (모듈 등록 → 열 → 정렬 둘 → 편집 → 순번·쪽번호 → 테마)
-   - [ ] 한 화면 조립 레시피 — 로그인 · 검색+표+쪽번호 목록
+   - [x] 한 화면 조립 레시피 — `LoginForm` · `RegisterForm` · `ListScreen` · `EditInPanel`.
+         가짜 서버(`recipes/members.ts`) 하나로 흉내 내고 **폼·목록 조각을 레시피끼리 재사용한다**
 2. **`apps/site`** — 문서 · 예제 · 개발자 소개를 담는 사이트. 여러 장을 넘나드는 샘플
    (로그인 · 게시판 목록·등록)은 부품 카탈로그가 아니라 그 앱이 맡는다
 
