@@ -21,6 +21,8 @@
     "@storybook/react-vite": "^10.5.9",
     "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-react": "^5.1.2",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-react": "^35.0.0",
     "remark-gfm": "^4.0.1",
     "storybook": "^10.5.9",
     "tailwindcss": "^4.2.1",
