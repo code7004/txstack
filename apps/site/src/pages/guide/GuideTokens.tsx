@@ -24,7 +24,7 @@ const GLOBAL_TOKENS = [
  * 이 판(`div`)에만 변수를 얹었으므로 사이트의 나머지는 그대로다.
  */
 function Playground() {
-  const [primary, setPrimary] = useState("#0f766e");
+  const [primary, setPrimary] = useState("#2dd4bf");
   const [radius, setRadius] = useState(6);
   const [hover, setHover] = useState(16);
 
@@ -83,7 +83,8 @@ export function GuideTokens() {
 
         <CodeBlock language="css" title="app.css">{`/* ① 앱 전체 */
 :root {
-  --tx-color-primary: #0f766e;
+  --tx-color-primary: #2dd4bf;
+  --tx-color-on-accent: #04231f;   /* 밝은 색을 채우면 글자는 어둡게 */
   --tx-radius: 0.375rem;
 }
 
@@ -147,18 +148,24 @@ export function GuideTokens() {
         <p className="text-slate-600 dark:text-slate-300">
           부품마다 자기 토큰이 더 있다(<code>--tx-button-*</code> · <code>--tx-side-nav-*</code> …). 무엇이 있는지는 <strong>카탈로그의 각 부품 문서</strong>에 적혀 있다.
         </p>
+
+        <TxAlert variant="warning" title="밝은 브랜드색을 쓸 때 한 가지">
+          <code>--tx-color-primary</code> 는 <strong>채우는 색과 글자로 쓰는 색을 겸한다.</strong> 밝은 색을 넣으면 버튼은 살아나지만 글자·선으로 쓰는 자리(현재 메뉴 표시 · 포커스 링)가 흰 바탕에서 안 읽힌다. 이 사이트는 진한 쪽을 따로
+          두고 <strong>그 자리의 부품 토큰만</strong> 그쪽으로 돌렸다.
+        </TxAlert>
       </Block>
 
       <Block title="이 사이트가 그렇게 만들어졌다">
         <SideBySide>
           <CodeBlock language="css" title="apps/site/src/theme.css">{`:root {
-  --tx-color-primary: #0f766e;
-  --tx-radius: 0.375rem;
+  --tx-color-primary: #2dd4bf;      /* 채움 — 두 모드가 같다 */
+  --tx-color-on-accent: #04231f;
+  --site-accent-strong: #0f766e;    /* 글자·선 자리 */
 }
 
-.dark {
-  --tx-color-primary: #2dd4bf;
-  --tx-color-on-accent: #05201d;
+/* 글자로 쓰는 부품 토큰만 그쪽으로 돌린다 */
+.tx-side-nav {
+  --tx-side-nav-accent: var(--site-accent-strong);
 }`}</CodeBlock>
 
           <Demo>

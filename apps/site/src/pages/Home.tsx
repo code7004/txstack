@@ -59,7 +59,7 @@ export function Home() {
         </div>
 
         <h1 className="max-w-3xl text-4xl leading-tight font-semibold sm:text-5xl">
-          같은 화면을 <span style={{ color: "var(--tx-color-primary)" }}>다시 짓지 않는다</span>
+          같은 화면을 <span style={{ color: "var(--site-accent-strong)" }}>다시 짓지 않는다</span>
         </h1>
 
         <p className="text-lg text-slate-600 dark:text-slate-300">
@@ -101,7 +101,7 @@ export function Home() {
 
         <TxGrid columns={2} className="gap-4">
           {PACKAGES.map((item) => (
-            <TxCard key={item.name} title={<span className="font-mono text-sm">{item.name}</span>} className="transition-colors hover:border-[color:var(--tx-color-primary)]">
+            <TxCard key={item.name} title={<span className="font-mono text-sm">{item.name}</span>} className="transition-colors hover:border-[color:var(--site-accent-strong)]">
               <div className="flex flex-col items-start gap-3">
                 <p className="text-sm text-slate-600 dark:text-slate-300">{item.what}</p>
                 <div className="flex items-center gap-2">
@@ -127,12 +127,10 @@ export function Home() {
 
         <div className="grid items-start gap-4 lg:grid-cols-2">
           <CodeBlock title="theme.css" language="css">{`:root {
-  --tx-color-primary: #0f766e;   /* 브랜드 색 하나 */
-  --tx-radius: 0.375rem;          /* 도구 느낌은 반경에서 온다 */
-}
-
-.dark {
-  --tx-color-primary: #2dd4bf;   /* 어두운 바탕에서는 밝은 쪽으로 */
+  --tx-color-primary: #2dd4bf;      /* 채우는 색 — 라이트·다크 같다 */
+  --tx-color-on-accent: #04231f;    /* 그 위의 글자는 어둡게 */
+  --site-accent-strong: #0f766e;    /* 글자·선으로 쓸 때는 진한 쪽 */
+  --tx-radius: 0.375rem;            /* 도구 느낌은 반경에서 온다 */
 }`}</CodeBlock>
 
           <TxAlert variant="info" title="토큰을 못 바꾸면 그건 우리 잘못이다">
