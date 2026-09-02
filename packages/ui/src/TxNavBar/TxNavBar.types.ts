@@ -36,7 +36,10 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
 export type TxNavBarItemProps<E extends ElementType = "a"> = {
   /**
    * 링크로 쓸 것. 기본 `<a>` 이고 `as={NavLink}` 로 갈아끼운다.
-   * **패키지가 라우터를 알지 못한다.** `panel` 을 주면 쓰이지 않는다 — 그때는 `<button>` 이다.
+   * **패키지가 라우터를 알지 못한다.**
+   *
+   * `panel` 과 함께 주면 **제목이 링크이고 옆의 `▾` 버튼이 패널을 연다.**
+   * `panel` 만 주고 이것을 안 주면 제목 자체가 여는 버튼이다.
    */
   as?: E;
 
@@ -48,6 +51,17 @@ export type TxNavBarItemProps<E extends ElementType = "a"> = {
    *
    * 안의 배치는 소비자 것이다. 그 배치가 곧 그 사이트의 정보 구조라, 라이브러리가 정하면
    * 도메인 지식이 들어온다.
+   *
+   * **`as` 를 함께 주면 제목이 링크가 되고 여는 일은 옆의 `▾` 버튼이 맡는다.**
+   * 안 주면 제목 자체가 여는 버튼이다.
    */
   panel?: ReactNode;
+
+  /**
+   * `panel` 과 `as` 를 함께 줬을 때 생기는 `▾` 버튼의 이름. 기본 `"하위 메뉴"`.
+   *
+   * 스크린리더는 `"<항목 이름> 하위 메뉴"` 로 읽는다. **번역된 글자를 그대로 준다** —
+   * 키를 넘기고 안에서 번역하지 않는다.
+   */
+  toggleLabel?: string;
 } & Omit<ComponentPropsWithoutRef<E>, "children" | "as">;

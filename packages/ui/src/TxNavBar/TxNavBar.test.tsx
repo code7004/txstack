@@ -57,6 +57,76 @@ describe("TxNavBar — 항목", () => {
   });
 });
 
+/**
+ * **제목이 링크이면서 패널도 여는 모양.** 사이트 내비게이션에서 흔한데, 한때 `panel` 이 있으면
+ * 소비자가 준 `as`·`to`·`onClick` 이 **조용히 버려졌다** — 제목을 눌러도 아무 일이 없었다.
+ */
+describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
+  const linked = (
+    <TxNavBar>
+      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+    </TxNavBar>
+  );
+
+  it("제목은 진짜 링크다 — 새 탭·주소 복사가 된다", () => {
+    render(linked);
+
+    const link = screen.getByRole("link", { name: "문서" });
+    expect(link.tagName).toBe("A");
+    expect(link.getAttribute("href")).toBe("/docs");
+  });
+
+  it("여는 것은 옆의 버튼이고 aria-expanded 는 그 버튼이 갖는다", () => {
+    render(linked);
+
+    const toggle = screen.getByRole("button", { name: "문서 하위 메뉴" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.getByRole("link", { name: "문서" }).getAttribute("aria-expanded")).toBeNull();
+
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByRole("link", { name: "시작하기" })).not.toBeNull();
+  });
+
+  it("제목을 눌러도 패널이 열리지 않는다 — 이동하는 자리다", () => {
+    render(linked);
+
+    fireEvent.click(screen.getByRole("link", { name: "문서" }));
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("얹으면 열린다 — 링크가 있어도 마찬가지다", () => {
+    render(linked);
+
+    fireEvent.pointerEnter(screen.getByRole("link", { name: "문서" }).closest("li")!, { pointerType: "mouse" });
+    expect(screen.getByRole("button", { name: "문서 하위 메뉴" }).getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("버튼 이름을 소비자가 바꾼다", () => {
+    render(
+      <TxNavBar>
+        <TxNavBar.Item label="Docs" as="a" href="/docs" toggleLabel="submenu" panel={<a href="/docs/start">Start</a>} />
+      </TxNavBar>
+    );
+
+    expect(screen.getByRole("button", { name: "Docs submenu" })).not.toBeNull();
+  });
+
+  it("화살표는 그 버튼도 찾아간다", () => {
+    render(
+      <TxNavBar>
+        <TxNavBar.Item label="제품" panel={<a href="/crm">CRM</a>} />
+        <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+      </TxNavBar>
+    );
+
+    trigger("제품").focus();
+    fireEvent.keyDown(trigger("제품"), { key: "ArrowRight" });
+
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "문서 하위 메뉴" }));
+  });
+});
+
 describe("TxNavBar — 열고 닫기", () => {
   it("누르면 열리고 다시 누르면 닫힌다", () => {
     render(<TxNavBar>{menu}</TxNavBar>);
