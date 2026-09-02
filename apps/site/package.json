@@ -1,0 +1,31 @@
+{
+  "name": "@txstack/site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Docs and showcase site for txstack. Not published.",
+  "scripts": {
+    "dev": "vite --port 6410",
+    "build": "vite build",
+    "preview": "vite preview --port 6410",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@txstack/axios": "workspace:*",
+    "@txstack/hooks": "workspace:*",
+    "@txstack/route-meta": "workspace:*",
+    "@txstack/ui": "workspace:*",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.1.2",
+    "prism-react-renderer": "^2.4.1",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.2.7"
+  }
+}

@@ -1,0 +1,19 @@
+/* 레이어 우선순위. tx 는 preflight(base) 보다 뒤, 유틸리티보다 앞 — 소비자도 이 한 줄이 필요하다. */
+@layer theme, base, tx, components, utilities;
+
+@import "tailwindcss";
+
+/* 부품의 스타일. 소비자는 `@txstack/ui/styles.css` 한 줄이고, 여기서는 소스를 직접 본다. */
+@import "../../../packages/ui/src/styles.css";
+
+/**
+ * **사이트의 겉모습은 토큰으로만 만든다.** 부품 스타일 뒤에 와야 우리 토큰이 이긴다.
+ * 무엇을 어떻게 정했는지는 그 파일의 머리에 적혀 있다.
+ */
+@import "./theme.css";
+
+/* 부품 소스에 남아 있는 Tailwind 클래스가 purge 되지 않게 한다. */
+@source "../../../packages/ui/src";
+
+/* 다크모드는 class 전략 — <html class="dark"> 토글. */
+@custom-variant dark (&:where(.dark, .dark *));

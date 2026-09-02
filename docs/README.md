@@ -65,9 +65,9 @@
 | 모노레포 설정 | **완료** — pnpm workspace · tsconfig · eslint · prettier · vitest · tsup                                                                        |
 | `axios`       | **이식 완료** — 테스트 29개 통과                                                                                                                |
 | `hooks`       | **이식 완료** — 테스트 25개 통과                                                                                                                |
-| `route-meta`  | **완료** — 테스트 25개 통과. 열려 있던 결정 둘을 닫았고 `ui` 의 메뉴 부품과 이어 붙였다                                                                                                                |
+| `route-meta`  | **완료** — 테스트 25개 통과. `ui` 의 메뉴 부품과 이어 붙였고, **실사용 검증은 `apps/site` 가 한다**                                                                                                                |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 컴포넌트 테스트 1,567개. 남은 하나는 아래 "다음 할 일" |
-| `apps/*`      | **storybook 있음** — 부품 카탈로그 + `소개/시작하기`(MDX) + `Recipes` 5종. 글로 된 안내는 `apps/storybook/src/*.mdx`, 조립 레시피는 `apps/storybook/src/*.stories.tsx` 에 둔다(공용 조각은 `src/recipes/`). 문서·포폴 사이트(`apps/site`)는 아직 없다                                                                                                    |
+| `apps/*`      | **storybook** — 부품 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트, 뼈대까지 섰다 ([005_site](005_site.md)). `pnpm storybook:dev` · `pnpm site:dev`                                                                                                    |
 | 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                          |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
@@ -109,8 +109,12 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    - [x] `TxAgGrid` 를 **쓰는 순서**로 다시 세웠다 (모듈 등록 → 열 → 정렬 둘 → 편집 → 순번·쪽번호 → 테마)
    - [x] 한 화면 조립 레시피 — `LoginForm` · `RegisterForm` · `ListScreen` · `EditInPanel`.
          가짜 서버(`recipes/members.ts`) 하나로 흉내 내고 **폼·목록 조각을 레시피끼리 재사용한다**
-2. **`apps/site`** — 문서 · 예제 · 개발자 소개를 담는 사이트. 여러 장을 넘나드는 샘플
-   (로그인 · 게시판 목록·등록)은 부품 카탈로그가 아니라 그 앱이 맡는다
+2. **`apps/site`** ← **지금 여기** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
+   뼈대(A)가 섰고 `Guide`·`Tutorial`(B) → `Examples`·`API`(C) → 배포(D) 순으로 간다.
+   계획과 진행은 [005_site](005_site.md) 가 갖는다.
+
+   **`route-meta` · `hooks` · `axios` 의 남은 검증을 이 앱이 끌고 간다** — 주소창 ·
+   새로고침 · 딥링크 · 진짜 요청은 테스트와 카탈로그가 못 겪는 것들이다
 
 이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는
 [001_ui](001_ui/000_README.md) 의 "자른 것" 이 갖는다.
