@@ -81,10 +81,13 @@ routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 
 
 - [x] **타입 정의** — `packages/route-meta/src/types.ts`
 - [x] **두 종류를 타입으로 갈랐다** — `{ index: true, path }` 는 React Router 런타임 에러다
-- [x] **`RouteMeta.onClick` 을 뺐다.** 라우트 메타에 핸들러가 섞이면 직렬화가 안 되고,
-      "주소로 가는 것" 과 "함수를 실행하는 것" 이 한 타입에 겹친다. 로그아웃처럼 누르면
-      실행되는 항목은 **소비자가 메뉴에 직접 끼워 넣는다** — `TxSideNav.Item as="button"` 이
-      이미 그 자리다
+- [x] **`RouteMeta.onClick` 을 뺐다.** **"주소로 가는 것" 과 "함수를 실행하는 것" 이 한
+      타입에 겹치기 때문**이다. 로그아웃처럼 누르면 실행되는 항목은 라우트가 아니므로,
+      소비자가 메뉴에 직접 끼워 넣는다 — `TxSideNav.Item as="button"` 이 이미 그 자리다.
+
+      > 한때 이유를 "직렬화가 안 된다" 로 적었는데 그건 정확하지 않다 — `meta.icon` 도
+      > `ReactNode` 라 직렬화되지 않는다. **아이콘은 그려야 하는 데이터이고 핸들러는
+      > 동작이다.** 트리는 애초에 `element` 를 들고 있어서 직렬화 대상이 아니다
 - [x] **선언은 `satisfies` 로** — 키가 리터럴로 남는 것을 타입 단정으로 못 박았다
 
 ## 정한 것 · 고친 것
