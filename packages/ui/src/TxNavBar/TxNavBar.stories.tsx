@@ -86,6 +86,19 @@ const meta = {
           "<TxAppShell header={<Brand />} top={<TxNavBar>{menu}</TxNavBar>}>…</TxAppShell>",
           "```",
           "",
+          "### 항목은 세 모양이다",
+          "",
+          "| 준 것 | 나오는 것 |",
+          "| --- | --- |",
+          "| `as` 만 | 그냥 링크 |",
+          "| `panel` 만 | 제목 자체가 **여는 버튼** |",
+          "| `panel` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |",
+          "",
+          "셋째가 사이트 내비게이션에서 흔한 모양이다(`TitleAsLink`). 제목이 진짜 링크라",
+          "새 탭으로 열기 · 주소 복사가 되고, **여는 일은 버튼이 맡아 `aria-expanded` 가 거짓이",
+          "되지 않는다** — APG *Disclosure Navigation with Top-Level Links* 다.",
+          "`▾` 버튼의 이름은 `toggleLabel` 로 바꾼다(기본 `\"하위 메뉴\"`).",
+          "",
           "### 가로만 한다",
           "",
           "세로로 세우는 것 — **아이콘만 남기고 접히거나 하위메뉴가 트리로 접히는 것** — 은",
@@ -165,6 +178,53 @@ export const Default: Story = {
     return (
       <div style={room}>
         <TxNavBar label="주 메뉴">{items(setPicked, picked)}</TxNavBar>
+        <Body picked={picked} />
+      </div>
+    );
+  }
+};
+
+/**
+ * **제목이 링크이면서 패널도 연다.** `panel` 과 `as` 를 함께 주면 제목은 그 요소가 되고,
+ * 옆에 생긴 `▾` 버튼이 패널을 맡는다.
+ *
+ * 사이트 내비게이션에서 흔한 모양이다 — 제목을 눌러 그 묶음의 첫 화면으로 가고, `▾` 로
+ * 하위를 훑는다. 제목이 진짜 링크라 **새 탭으로 열기 · 주소 복사**가 되고, `aria-expanded` 는
+ * 여는 버튼이 가져서 거짓이 되지 않는다.
+ *
+ * ```tsx
+ * <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<Panel />} />
+ * ```
+ *
+ * 여기서는 라우터가 없어 제목이 `as="button"` 이다 — 누르면 본문이 바뀐다.
+ */
+export const TitleAsLink: Story = {
+  parameters: noControls,
+  render: function TitleAsLinkStory() {
+    const [picked, setPicked] = useState("문서");
+
+    return (
+      <div style={room}>
+        <TxNavBar label="주 메뉴">
+          <TxNavBar.Item
+            label="제품"
+            as="button"
+            type="button"
+            aria-current={picked === "제품" ? "page" : undefined}
+            onClick={() => setPicked("제품")}
+            panel={<Panel groups={PRODUCT} pick={setPicked} />}
+          />
+          <TxNavBar.Item
+            label="문서"
+            as="button"
+            type="button"
+            aria-current={picked === "문서" ? "page" : undefined}
+            onClick={() => setPicked("문서")}
+            panel={<Panel groups={DOCS} pick={setPicked} />}
+          />
+          <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
+        </TxNavBar>
+
         <Body picked={picked} />
       </div>
     );

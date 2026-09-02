@@ -177,11 +177,32 @@ const ProductPanel = () => (
 두 번 알린다.** 마지막으로 알린 것을 ref 에 두고 달라졌을 때만 부른다 —
 `TxCarousel` 과 같은 방식이다.
 
+### 항목은 세 모양이다
+
+| 준 것 | 나오는 것 |
+| --- | --- |
+| `as` 만 | 그냥 링크 |
+| `panel` 만 | 제목 자체가 **여는 버튼**(`<button aria-expanded>`) |
+| `panel` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |
+
+```tsx
+<TxNavBar.Item label="Documents" as={NavLink} to="/docs" panel={<Panel />} />
+```
+
+셋째는 **`apps/site` 를 만들면서 요구된 것**이다. 그전에는 `panel` 이 있으면 소비자가 준
+`as` · `to` · `onClick` 이 **조용히 버려졌다** — 제목을 눌러도 아무 일이 없었다.
+
+제목이 진짜 링크라 새 탭으로 열기 · 주소 복사 · 가운데 클릭이 되고, **여는 일은 버튼이
+맡아 `aria-expanded` 가 거짓이 되지 않는다**(APG *Disclosure Navigation with Top-Level Links*).
+`▾` 버튼은 `"<항목 이름> 하위 메뉴"` 로 읽히고, 그 문구는 `toggleLabel` 로 바꾼다.
+
+화살표 키는 `▾` 버튼도 찾아간다 — 여는 항목만 옮겨 다니고 링크는 `Tab` 이 맡는 규칙 그대로다.
+
 ## 개발 항목
 
 - [x] S1 설계 · 합의
 - [x] S2 구현 — `TxNavBar` + `TxNavBar.Item`
-- [x] S3 테스트 — 26개. 열고 닫기 · 갈아타기 · 키보드 · CSS 계약
+- [x] S3 테스트 — 32개. 열고 닫기 · 갈아타기 · 키보드 · **링크이면서 패널을 여는 항목** · CSS 계약
 - [x] S4 스토리 — 메가 패널 · 항목 폭 · 링크만 · **With Shell**(`top` + `left` 조립).
       **카탈로그에는 라우터가 없어 항목을 `as="button"` 으로 둔다** — 누르면 주소가 아니라
       본문 글자가 바뀐다. 이야기마다 패널이 펼쳐질 자리를 미리 비워 둔다(`min-block-size`) —
