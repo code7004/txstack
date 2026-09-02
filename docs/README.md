@@ -110,7 +110,7 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    - [x] 한 화면 조립 레시피 — `LoginForm` · `RegisterForm` · `ListScreen` · `EditInPanel`.
          가짜 서버(`recipes/members.ts`) 하나로 흉내 내고 **폼·목록 조각을 레시피끼리 재사용한다**
 2. **`apps/site`** ← **지금 여기** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
-   뼈대(A)가 섰고 `Guide`·`Tutorial`(B) → `Examples`·`API`(C) → 배포(D) 순으로 간다.
+   뼈대(A)와 내용(B)이 섰고 `Example`·`API`(C) → 배포(D) 가 남았다.
    계획과 진행은 [005_site](005_site.md) 가 갖는다.
 
    **`route-meta` · `hooks` · `axios` 의 남은 검증을 이 앱이 끌고 간다** — 주소창 ·

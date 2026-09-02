@@ -5,13 +5,17 @@ import { Components } from "./pages/Components";
 import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
 import { Examples } from "./pages/Examples";
-import { Guide } from "./pages/Guide";
+import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
+import { GuideHome } from "./pages/guide/GuideHome";
+import { GuideLayout } from "./pages/guide/GuideLayout";
+import { GuideTokens } from "./pages/guide/GuideTokens";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { Profile } from "./pages/Profile";
 import { Section } from "./pages/Section";
 import { SectionLayout } from "./pages/SectionLayout";
 import { Start } from "./pages/Start";
+import { Tutorial } from "./pages/Tutorial";
 
 /**
  * **이 사이트의 단일 출처.** 라우터도 메뉴도 브레드크럼도 여기서 나온다.
@@ -54,13 +58,13 @@ export const routes = {
 
       guide: {
         path: "/docs/guide",
-        element: <Guide />,
+        element: <SectionLayout />,
         meta: { label: "Guide", description: "겉모습 · 다크모드 · 화면 골격" },
         children: {
-          index: { index: true, element: <Section title="Guide" /> },
-          tokens: { path: "/docs/guide/tokens", element: <Section title="Tokens" />, meta: { label: "Tokens" } },
-          darkMode: { path: "/docs/guide/dark-mode", element: <Section title="Dark mode" />, meta: { label: "Dark mode" } },
-          layout: { path: "/docs/guide/layout", element: <Section title="Layout" />, meta: { label: "Layout" } }
+          index: { index: true, element: <GuideHome /> },
+          tokens: { path: "/docs/guide/tokens", element: <GuideTokens />, meta: { label: "Tokens" } },
+          darkMode: { path: "/docs/guide/dark-mode", element: <GuideDarkMode />, meta: { label: "Dark mode" } },
+          layout: { path: "/docs/guide/layout", element: <GuideLayout />, meta: { label: "Layout" } }
         }
       },
 
@@ -72,7 +76,7 @@ export const routes = {
 
       tutorial: {
         path: "/docs/tutorial",
-        element: <Section title="Tutorial" />,
+        element: <Tutorial />,
         meta: { label: "Tutorial", description: "한 화면을 처음부터 끝까지" }
       }
     }
