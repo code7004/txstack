@@ -28,22 +28,17 @@ pnpm install
 ## 3. 이전 구현 꺼내기
 
 이식할 원본은 **원격의 `legacy` 브랜치**에 53개 커밋과 함께 들어 있다.
-압축 파일을 옮길 필요가 없다.
+**이식이 끝났으므로 클론해 두지 않는다** — 별도 작업 트리를 두면 관리할 것만 늘고,
+필요한 것은 파일 몇 개다.
 
 ```sh
-git clone --branch legacy https://github.com/code7004/txstack.git ../txstack_temp
+git fetch origin legacy:refs/remotes/origin/legacy   # 한 번만
+git show origin/legacy:packages/hooks/src/useSafePolling.ts
+git ls-tree --name-only origin/legacy:packages/ui/src
+git log --oneline origin/legacy | head              # 53개 커밋도 그대로 읽힌다
 ```
 
-**워크트리로 붙이지 않는다.** 자기 `.git` 을 가진 독립 클론이어야 이 저장소의 도구가
-그 폴더를 아예 보지 않는다. `../txstack_temp` 에 옛 작업 트리가 통째로 생기고
-`git log` 도 그대로 동작한다. **읽기만 한다 — 거기에 커밋하지 않는다.**
-
-이식이 다 끝나면 정리한다.
-
-```sh
-rm -rf ../txstack_temp
-git push origin --delete legacy        # 더 볼 일이 없을 때
-```
+**`legacy` 는 읽기만 한다.** 커밋하지 않고, **지우지 않는다** — 이식 이전의 유일한 사본이다.
 
 ## 4. 확인
 
@@ -72,8 +67,20 @@ JS 도구는 실행할 때마다 `node_modules` 의 파일 5만 개를 훑으므
 | 하드링크                  | **안 됨**   | 됨         |
 | `node_modules`            | **14GB**    | 수백 MB    |
 
-**작업 저장소는 내장 디스크에 두는 편이 낫다.** 외장은 보관용으로 쓰고,
-읽기 전용인 `../txstack_temp` 만 외장에 둬도 된다 — 도구가 훑지 않는 폴더다.
+**작업 저장소는 내장 디스크에 두는 편이 낫다.** 외장은 보관용으로 쓴다.
+
+**2026-09-03 에 그렇게 옮겼다** — 작업 저장소는 이제 `~/work` 에 있고 외장은 쓰지 않는다.
+같이 옮긴 세 소비자 프로젝트에서 **줄바꿈 문제**가 하나 드러났다. Windows 에서 체크아웃한
+트리라 디스크가 CRLF 인데 커밋된 원본은 LF 여서, 옮기자마자 `git status` 가 파일 400개를
+"수정됨" 으로 띄웠다(내용 변경은 0). 저장소마다 한 번 정리한다.
+
+```sh
+git config core.autocrlf input   # macOS 에서는 변환하지 않는다
+git reset --hard                 # 인덱스에서 작업 트리를 다시 쓴다 (LF)
+```
+
+**`reset --hard` 전에 잃을 것이 없는지 본다** — `git diff --ignore-cr-at-eol` 이 비어 있고,
+추적 안 되는 파일과 stash 가 없으면 줄바꿈 차이뿐이다.
 
 ## 알아둘 차이
 

@@ -12,7 +12,7 @@ txstack 작업 시 지켜야 할 핵심 규약. **상세는 `docs/` 가 소유�
 | 전체 파악 · 다음 할 일 찾기 | [docs/README.md](docs/README.md)                         |
 | 패키지 하나의 공개 API      | `docs/00X_<패키지>/` — 컴포넌트·API 마다 한 장, `000_README.md` 가 목차다                                   |
 | 기존 프로젝트에 적용        | [docs/006_adoption.md](docs/006_adoption.md) — 절차 · 붙이는 방법 · 기록할 곳 |
-| 이전 구현 참고              | `../txstack_temp` — 리셋 전 상태의 별도 클론 (읽기 전용) |
+| 이전 구현 참고              | 원격의 `legacy` 브랜치 — `git show origin/legacy:<경로>` |
 
 ## 프로젝트 개요
 
@@ -33,14 +33,16 @@ pnpm workspace 모노레포. `packages/*` 4종이 각각 독립 배포되고, `a
 ([docs/006_adoption.md](docs/006_adoption.md)). 어디까지 왔는지는 [docs/README.md](docs/README.md) 가 갖는다 —
 **상태를 이 문서에 쓰지 않는다.**
 
-읽을 원본은 **`../txstack_temp` 에 별도 클론으로 놓는다.** 워크트리가 아니다 —
-자기 `.git` 을 가진 독립 저장소라 이 저장소의 `git status` 나 도구가 그 폴더를 아예 보지 않는다.
+**옛 코드를 클론해 두지 않는다.** 이식이 끝났으므로 별도 작업 트리를 둘 이유가 없다 —
+필요한 파일만 그 자리에서 꺼내 읽는다.
 
 ```sh
-git clone --branch legacy https://github.com/code7004/txstack.git ../txstack_temp
+git fetch origin legacy:refs/remotes/origin/legacy   # 한 번만
+git show origin/legacy:packages/hooks/src/useSafePolling.ts
+git ls-tree --name-only origin/legacy:packages/ui/src
 ```
 
-**`../txstack_temp` 는 읽기만 한다.** 거기에 커밋하지 않는다.
+**`legacy` 는 읽기만 한다.** 거기에 커밋하거나 지우지 않는다.
 
 ## 절대 규칙
 
@@ -53,7 +55,7 @@ git clone --branch legacy https://github.com/code7004/txstack.git ../txstack_tem
 - **판단이 필요한 작업은 사용자 승인 없이 넘어가지 않는다. 공개 API 형태는 예제 코드로 먼저 합의한다.**
 - **커밋 / 푸시는 사용자가 명시적으로 요청할 때만.** 자동 커밋 금지.
 - **`npm publish` 는 사용자가 명시적으로 요청할 때만.** 되돌릴 수 없다.
-- **`txstack_temp` 는 읽기만 한다.** 수정·삭제하지 않는다.
+- **`legacy` 브랜치는 읽기만 한다.** 커밋하거나 지우지 않는다 — 이식 이전의 유일한 사본이다.
 - 기존 사용자 변경사항을 되돌리지 않는다. 관련 없는 diff 는 건드리지 않는다.
 - **작업 단위는 컴포넌트·기능 하나다.** 계층별로 몰아서 하지 않는다.
 - **vitest = 자동 검증 / Storybook = 사용자가 직접 보는 자리.** Storybook 에 `play` 함수나 `addon-vitest` 를 넣지 않는다.
