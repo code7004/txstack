@@ -109,7 +109,7 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    - [x] `TxAgGrid` 를 **쓰는 순서**로 다시 세웠다 (모듈 등록 → 열 → 정렬 둘 → 편집 → 순번·쪽번호 → 테마)
    - [x] 한 화면 조립 레시피 — `LoginForm` · `RegisterForm` · `ListScreen` · `EditInPanel`.
          가짜 서버(`recipes/members.ts`) 하나로 흉내 내고 **폼·목록 조각을 레시피끼리 재사용한다**
-2. **`apps/site` 의 배포(D)** ← **지금 여기** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
+2. **`apps/site` 의 배포(D)** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
    뼈대(A) · 내용(B) · 진짜 데이터(C)까지 섰다. 계획과 진행은 [005_site](005_site.md) 가 갖는다.
    - [ ] `Profile` · `Contact` — **사용자만 쓸 수 있는 내용**이다 (경력 · 왜 만들었나 · 연락처)
    - [ ] GitHub Pages — 사이트가 루트, Storybook 정적 빌드가 `/storybook/`
@@ -117,8 +117,11 @@ husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작
    **`route-meta` · `hooks` · `axios` 의 남은 검증을 이 앱이 끌고 간다** — 주소창 ·
    새로고침 · 딥링크 · 진짜 요청은 테스트와 카탈로그가 못 겪는 것들이다. 실제로
    여기서 결함 셋이 나왔다 (콤마 분해 · 로그로 새던 토큰 · AA 미달 강조색)
-3. **npm 배포 — 그 전에 정해야 하는 것이 있다.** `0.1.0` 을 올리고 나면 이름을 바꾸는 것이
-   깨는 변경이 된다.
+3. **기존 프로젝트에 적용한다** ← **지금 여기** — `black-message` · `usertics` · `chain-wallet-service`.
+   **배포 전에 완성도를 올리는 단계다.** 절차 · 붙이는 방법 · 기록할 곳은
+   [006_adoption](006_adoption.md) 이 갖는다. 세 저장소는 이제 원본이 아니라 **소비자**다.
+4. **npm 배포 — 그 전에 정해야 하는 것이 있다.** `0.1.0` 을 올리고 나면 이름을 바꾸는 것이
+   깨는 변경이 된다. **위 3번이 그 답을 준다.**
    - [ ] `removeUndefined` 의 이름 · `isTokenExpired` 의 자리 · `IApiError` 의 `I` 접두사 —
          [004_axios/005_utils](004_axios/005_utils.md)
    - [ ] `urlKeys` 로 읽은 키에 타입이 안 따라온다 — [003_hooks/002](003_hooks/002_useUrlQuery.md)
