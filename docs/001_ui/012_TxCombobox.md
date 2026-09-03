@@ -67,7 +67,7 @@
 - **후보 개수 제한을 알리기** — 잘라서 보여 준다면 더 있다는 표시가 필요하다
 - 색은 전부 토큰으로
 
-`TxModal` 도 포털을 안 쓴다 — temp 에서 `TxDropMenu`·`TxContextMenu`·`TxSlidePanel`·`TxToolTip`
+`TxModal` 도 포털을 안 쓴다 — `legacy` 에서 `TxDropMenu`·`TxContextMenu`·`TxSlidePanel`·`TxToolTip`
 은 `createPortal` 을 쓰는데 `TxDropdown`(고쳤다)과 `TxModal` 만 빠져 있었다. `TxModal` 은
 3차에서 `TxPopup` 을 쓸지 함께 본다.
 

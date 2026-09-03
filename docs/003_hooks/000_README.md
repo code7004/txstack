@@ -30,7 +30,8 @@
 - **`useObjectChanged`** — 객체가 바뀌면 바뀐 필드만 콜백으로 주던 훅
 - **`useSafePolling`** — 이전 호출이 끝나기 전에 겹치지 않는 폴링
 
-둘 다 temp 에 남아 있다. 필요해지면 그때 같은 방식으로 옮긴다.
+둘 다 `legacy` 브랜치에 남아 있다(`git show origin/legacy:packages/hooks/src/useSafePolling.ts`).
+필요해지면 그때 같은 방식으로 옮긴다.
 
 ## 검증
 

@@ -62,7 +62,7 @@ kebab-case DOM 속성(React 콘솔 경고), `SVGRepo_*` 껍데기 `<g>` 3중첩(
 
 `TxForm.DayPicker` / `DayPickerRange` 는 **루트 배럴에 없다.** `@txstack/ui/daypicker` 가
 가져간다 — 코어가 `react-day-picker` 를 import 하면 optional peer 가 성립하지 않는다.
-이 분리는 temp 에서 이미 지켜져 있다.
+이 분리는 `legacy` 에서 이미 지켜져 있다.
 
 ### 아이콘을 `TxIcons` 에 넣지 않았다 (판단)
 
