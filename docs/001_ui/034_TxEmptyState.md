@@ -2,12 +2,12 @@
 
 > 보여 줄 것이 없을 때 그 자리에 놓는 안내.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxEmptyState` |
-| 소스 | [`packages/ui/src/TxEmptyState/`](../../packages/ui/src/TxEmptyState) |
-| 테스트 | 27개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxEmptyState`                                                        |
+| 소스        | [`packages/ui/src/TxEmptyState/`](../../packages/ui/src/TxEmptyState) |
+| 테스트      | 27개                                                                  |
 
 ## 개발 목적
 
@@ -18,11 +18,13 @@
 ### 쓰는 법
 
 ```tsx
-{rows.length === 0 && (
-  <TxEmptyState variant="no-result">
-    <TxButton label="조건 지우기" variant="secondary" onClick={reset} />
-  </TxEmptyState>
-)}
+{
+  rows.length === 0 && (
+    <TxEmptyState variant="no-result">
+      <TxButton label="조건 지우기" variant="secondary" onClick={reset} />
+    </TxEmptyState>
+  );
+}
 ```
 
 **왜 비었는지를 넷으로 가른다** — `no-data`(아직 안 만듦) · `no-result`(찾았는데 없음) ·

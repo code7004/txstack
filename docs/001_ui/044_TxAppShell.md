@@ -2,12 +2,12 @@
 
 > 화면 전체를 짜는 껍데기. **여섯 자리를 한 자리에서 맡는다** —
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxAppShell` |
-| 소스 | [`packages/ui/src/TxAppShell/`](../../packages/ui/src/TxAppShell) |
-| 테스트 | 71개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxAppShell`                                                      |
+| 소스        | [`packages/ui/src/TxAppShell/`](../../packages/ui/src/TxAppShell) |
+| 테스트      | 71개                                                              |
 
 ## 개발 목적
 

@@ -7,8 +7,7 @@ import { cm } from "../tx-ui.utils";
  * 메뉴 안에 드롭다운을 하나 놓았을 때 화살표가 그것을 건너뛰면 키보드로는 닿을 길이 없다.
  * (`role="combobox"` 는 `TxDropdown` · `TxCombobox` 의 헤드다.)
  */
-const FOCUSABLE =
-  '[role="menuitem"]:not([aria-disabled="true"]), [role="combobox"], a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled)';
+const FOCUSABLE = '[role="menuitem"]:not([aria-disabled="true"]), [role="combobox"], a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled)';
 
 export interface TxMenuShellProps {
   anchorRef: RefObject<HTMLElement | null>;

@@ -2,12 +2,12 @@
 
 > 로딩 중임을 알리는 회전 아이콘.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxSpinner` |
-| 소스 | [`packages/ui/src/TxSpinner/`](../../packages/ui/src/TxSpinner) |
-| 테스트 | 20개 |
+|             |                                                                 |
+| ----------- | --------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                   |
+| 내보내는 것 | `TxSpinner`                                                     |
+| 소스        | [`packages/ui/src/TxSpinner/`](../../packages/ui/src/TxSpinner) |
+| 테스트      | 20개                                                            |
 
 ## 개발 목적
 

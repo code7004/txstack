@@ -114,7 +114,7 @@ export const Labels: Story = {
 export const LatestValue: Story = {
   parameters: noControls,
   render: function LatestValueStory() {
-    const [text, setText] = useState("{ \"theme\": \"dark\" }");
+    const [text, setText] = useState('{ "theme": "dark" }');
     const [copied, setCopied] = useState<string | null>(null);
 
     return (

@@ -177,7 +177,12 @@ export const SideNav: Story = {
   render: () => (
     <MemoryRouter initialEntries={["/"]}>
       <div style={frame}>
-        <TxAppShell header={<strong className="px-1">IDK</strong>} breakpoint={360} left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>} style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}>
+        <TxAppShell
+          header={<strong className="px-1">IDK</strong>}
+          breakpoint={360}
+          left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}
+          style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}
+        >
           <TxFlex className="flex-col gap-4">
             <Screen />
             <Crumbs />
@@ -250,7 +255,12 @@ export const HiddenRoute: Story = {
   render: () => (
     <MemoryRouter initialEntries={["/boards/write"]}>
       <div style={frame}>
-        <TxAppShell header={<strong className="px-1">IDK</strong>} breakpoint={360} left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>} style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}>
+        <TxAppShell
+          header={<strong className="px-1">IDK</strong>}
+          breakpoint={360}
+          left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}
+          style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}
+        >
           <TxFlex className="flex-col gap-4">
             <Screen />
             <Crumbs />

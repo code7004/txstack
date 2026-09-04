@@ -2,12 +2,12 @@
 
 > 넘치는 내용을 굴려 보는 자리. **양 끝이 흐려져 더 있다는 것을 알린다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxScrollArea` |
-| 소스 | [`packages/ui/src/TxScrollArea/`](../../packages/ui/src/TxScrollArea) |
-| 테스트 | 18개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxScrollArea`                                                        |
+| 소스        | [`packages/ui/src/TxScrollArea/`](../../packages/ui/src/TxScrollArea) |
+| 테스트      | 18개                                                                  |
 
 ## 개발 목적
 

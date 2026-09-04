@@ -2,12 +2,12 @@
 
 > 그 자리에서 바로 켜고 끄는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxSwitch` |
-| 소스 | [`packages/ui/src/TxSwitch/`](../../packages/ui/src/TxSwitch) |
-| 테스트 | 24개 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                 |
+| 내보내는 것 | `TxSwitch`                                                    |
+| 소스        | [`packages/ui/src/TxSwitch/`](../../packages/ui/src/TxSwitch) |
+| 테스트      | 24개                                                          |
 
 ## 개발 목적
 

@@ -2,12 +2,12 @@
 
 > 계층 경로. `<nav>` 안의 `<ol>` 이다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxBreadcrumb` |
-| 소스 | [`packages/ui/src/TxBreadcrumb/`](../../packages/ui/src/TxBreadcrumb) |
-| 테스트 | 24개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxBreadcrumb`                                                        |
+| 소스        | [`packages/ui/src/TxBreadcrumb/`](../../packages/ui/src/TxBreadcrumb) |
+| 테스트      | 24개                                                                  |
 
 ## 개발 목적
 
@@ -28,8 +28,12 @@
 
 ```tsx
 <TxBreadcrumb>
-  <TxBreadcrumb.Item as={NavLink} to="/">홈</TxBreadcrumb.Item>
-  <TxBreadcrumb.Item as={NavLink} to="/orders">주문</TxBreadcrumb.Item>
+  <TxBreadcrumb.Item as={NavLink} to="/">
+    홈
+  </TxBreadcrumb.Item>
+  <TxBreadcrumb.Item as={NavLink} to="/orders">
+    주문
+  </TxBreadcrumb.Item>
   <TxBreadcrumb.Item>8213</TxBreadcrumb.Item>
 </TxBreadcrumb>
 ```

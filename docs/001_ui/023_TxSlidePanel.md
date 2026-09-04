@@ -2,12 +2,12 @@
 
 > 가장자리에서 밀려 나오는 패널(서랍). 상세 보기나 필터 패널에 쓴다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxSlidePanel` |
-| 소스 | [`packages/ui/src/TxSlidePanel/`](../../packages/ui/src/TxSlidePanel) |
-| 테스트 | 48개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxSlidePanel`                                                        |
+| 소스        | [`packages/ui/src/TxSlidePanel/`](../../packages/ui/src/TxSlidePanel) |
+| 테스트      | 48개                                                                  |
 
 ## 개발 목적
 

@@ -2,12 +2,12 @@
 
 > 숫자를 넣고 올리고 내리는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxNumberInput` |
-| 소스 | [`packages/ui/src/TxNumberInput/`](../../packages/ui/src/TxNumberInput) |
-| 테스트 | 38개 |
+|             |                                                                         |
+| ----------- | ----------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                           |
+| 내보내는 것 | `TxNumberInput`                                                         |
+| 소스        | [`packages/ui/src/TxNumberInput/`](../../packages/ui/src/TxNumberInput) |
+| 테스트      | 38개                                                                    |
 
 ## 개발 목적
 

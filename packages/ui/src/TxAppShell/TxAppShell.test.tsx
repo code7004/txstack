@@ -478,7 +478,7 @@ describe("TxAppShell — 크기 조절", () => {
 
   it("끌어서 바꾼다", () => {
     const onPanelChange = vi.fn();
-        render(
+    render(
       <TxAppShell {...SLOTS} panels={{ left: { resize: true } }} onPanelChange={onPanelChange}>
         본문
       </TxAppShell>

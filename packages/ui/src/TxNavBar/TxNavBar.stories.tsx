@@ -97,7 +97,7 @@ const meta = {
           "셋째가 사이트 내비게이션에서 흔한 모양이다(`TitleAsLink`). 제목이 진짜 링크라",
           "새 탭으로 열기 · 주소 복사가 되고, **여는 일은 버튼이 맡아 `aria-expanded` 가 거짓이",
           "되지 않는다** — APG *Disclosure Navigation with Top-Level Links* 다.",
-          "`▾` 버튼의 이름은 `toggleLabel` 로 바꾼다(기본 `\"하위 메뉴\"`).",
+          '`▾` 버튼의 이름은 `toggleLabel` 로 바꾼다(기본 `"하위 메뉴"`).',
           "",
           "### 가로만 한다",
           "",
@@ -132,11 +132,11 @@ const meta = {
           "**열려 있으면 옮긴 항목이 열린 채로 이어진다.** `Escape` 는 닫고 포커스를 그 항목으로 되돌린다.",
           "",
           "**`Tab` 은 패널 안으로 들어간다** — 메뉴 규약(`Tab` = 닫기)과 다른 점이다.",
-          "패널은 메뉴가 아니라 문서 조각이라 `role=\"menu\"` 를 쓰지 않는다.",
+          '패널은 메뉴가 아니라 문서 조각이라 `role="menu"` 를 쓰지 않는다.',
           "",
           "---",
           "",
-          "아래 이야기들은 **라우터 없이 도는 카탈로그**라 항목이 `as=\"button\"` 이다 —",
+          '아래 이야기들은 **라우터 없이 도는 카탈로그**라 항목이 `as="button"` 이다 —',
           "누르면 주소가 아니라 **본문 글자가 바뀐다.** 컨트롤 패널은 `Playground` 에서만 동작한다."
         ].join("\n")
       }
@@ -206,22 +206,8 @@ export const TitleAsLink: Story = {
     return (
       <div style={room}>
         <TxNavBar label="주 메뉴">
-          <TxNavBar.Item
-            label="제품"
-            as="button"
-            type="button"
-            aria-current={picked === "제품" ? "page" : undefined}
-            onClick={() => setPicked("제품")}
-            panel={<Panel groups={PRODUCT} pick={setPicked} />}
-          />
-          <TxNavBar.Item
-            label="문서"
-            as="button"
-            type="button"
-            aria-current={picked === "문서" ? "page" : undefined}
-            onClick={() => setPicked("문서")}
-            panel={<Panel groups={DOCS} pick={setPicked} />}
-          />
+          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")} panel={<Panel groups={PRODUCT} pick={setPicked} />} />
+          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")} panel={<Panel groups={DOCS} pick={setPicked} />} />
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
 
@@ -283,9 +269,7 @@ export const WithShell: StoryObj = {
   parameters: noControls,
   render: function WithShellStory() {
     const [picked, setPicked] = useState("개요");
-    const side = (name: string) => (
-      <TxSideNav.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} />
-    );
+    const side = (name: string) => <TxSideNav.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} />;
 
     return (
       <div style={{ border: "1px solid var(--tx-color-border)", borderRadius: "var(--tx-radius)", overflow: "hidden", resize: "horizontal", minInlineSize: "20rem" }}>

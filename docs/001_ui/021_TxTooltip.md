@@ -2,12 +2,12 @@
 
 > 올리면 뜨는 짧은 설명.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxTooltip` |
-| 소스 | [`packages/ui/src/TxTooltip/`](../../packages/ui/src/TxTooltip) |
-| 테스트 | 31개 |
+|             |                                                                 |
+| ----------- | --------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                   |
+| 내보내는 것 | `TxTooltip`                                                     |
+| 소스        | [`packages/ui/src/TxTooltip/`](../../packages/ui/src/TxTooltip) |
+| 테스트      | 31개                                                            |
 
 ## 개발 목적
 

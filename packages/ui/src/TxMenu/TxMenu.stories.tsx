@@ -48,7 +48,7 @@ const meta = {
           "",
           "### 라우터를 알지 못한다",
           "",
-          "줄은 기본이 `<button>` 이고 링크는 `as` 로 갈아끼운다 — `as={NavLink}` · `as={Link}` · `as=\"a\"`.",
+          '줄은 기본이 `<button>` 이고 링크는 `as` 로 갈아끼운다 — `as={NavLink}` · `as={Link}` · `as="a"`.',
           "그래서 이 패키지의 peer 에 라우터가 없고, **Next.js 든 TanStack Router 든 그대로 쓴다.**",
           "",
           "### 키보드",

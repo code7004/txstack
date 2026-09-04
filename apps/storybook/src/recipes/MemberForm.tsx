@@ -68,12 +68,14 @@ export function MemberForm({ value, labelWidth, single = false, onDone, onCancel
   const dirty = JSON.stringify(draft) !== JSON.stringify(value ?? EMPTY_MEMBER);
   const { errors: found, warnings } = validate(draft);
 
-  const set = <K extends keyof Member>(key: K) => (next: Member[K]) => {
-    setDraft((prev) => ({ ...prev, [key]: next }));
+  const set =
+    <K extends keyof Member>(key: K) =>
+    (next: Member[K]) => {
+      setDraft((prev) => ({ ...prev, [key]: next }));
 
-    // 고치기 시작하면 그 칸의 에러는 지운다. 고치는 중에 빨간 글자가 남아 있으면 방해만 된다
-    setErrors((prev) => (key in prev ? { ...prev, [key]: undefined } : prev));
-  };
+      // 고치기 시작하면 그 칸의 에러는 지운다. 고치는 중에 빨간 글자가 남아 있으면 방해만 된다
+      setErrors((prev) => (key in prev ? { ...prev, [key]: undefined } : prev));
+    };
 
   const hdSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

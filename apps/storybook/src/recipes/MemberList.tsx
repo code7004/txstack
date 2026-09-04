@@ -44,13 +44,7 @@ export function MemberList({ onPick, actions }: MemberListProps) {
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
         {/* Enter 로 찾는다. 글자마다 서버를 부르면 조회가 화면보다 빨리 쌓인다 */}
-        <TxSearchInput
-          placeholder="이름 · 메일로 찾기"
-          className="w-64"
-          aria-label="회원 검색"
-          onSubmitText={(value) => search({ keyword: value })}
-          onClear={() => search({ keyword: "" })}
-        />
+        <TxSearchInput placeholder="이름 · 메일로 찾기" className="w-64" aria-label="회원 검색" onSubmitText={(value) => search({ keyword: value })} onClear={() => search({ keyword: "" })} />
 
         <TxDropdown data={ROLE_OPTIONS} value={role || undefined} placeholder="권한 전체" aria-label="권한 필터" className="w-36" onChangeText={(value) => search({ role: (value ?? "") as Role | "" })} />
 

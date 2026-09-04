@@ -2,12 +2,12 @@
 
 > 요청 · 응답을 **콘솔 밖으로** 내보낸다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/axios` (`createHttpClient` 의 옵션) |
-| 내보내는 것 | `RequestLog` · `ResponseLog` (타입) |
-| 소스 | [`packages/axios/src/interceptors.ts`](../../packages/axios/src/interceptors.ts) |
-| 테스트 | 5개 |
+|             |                                                                                  |
+| ----------- | -------------------------------------------------------------------------------- |
+| 진입점      | `@txstack/axios` (`createHttpClient` 의 옵션)                                    |
+| 내보내는 것 | `RequestLog` · `ResponseLog` (타입)                                              |
+| 소스        | [`packages/axios/src/interceptors.ts`](../../packages/axios/src/interceptors.ts) |
+| 테스트      | 5개                                                                              |
 
 ## 개발 목적
 
@@ -52,7 +52,7 @@ const api = createHttpClient({
 
 ## 정한 것 · 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
+| 원본                        | 지금                             | 왜                                      |
+| --------------------------- | -------------------------------- | --------------------------------------- |
 | `debug` 가 `console` 출력만 | `onRequest`/`onResponse` 훅 추가 | 수집(모니터링·Sentry·파일)이 불가능했다 |
-| `data` 만 가림 | `params` 도 가림 | **쿼리스트링에 토큰이 실릴 수 있다** |
+| `data` 만 가림              | `params` 도 가림                 | **쿼리스트링에 토큰이 실릴 수 있다**    |

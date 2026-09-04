@@ -2,12 +2,12 @@
 
 > 여러 줄 입력.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxTextarea` |
-| 소스 | [`packages/ui/src/TxTextarea/`](../../packages/ui/src/TxTextarea) |
-| 테스트 | 29개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxTextarea`                                                      |
+| 소스        | [`packages/ui/src/TxTextarea/`](../../packages/ui/src/TxTextarea) |
+| 테스트      | 29개                                                              |
 
 ## 개발 목적
 

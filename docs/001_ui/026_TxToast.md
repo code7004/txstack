@@ -2,12 +2,12 @@
 
 > 떴다 사라지는 알림. **어디서든 부른다** — 컴포넌트 안이든, axios 인터셉터든,
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxToast` |
-| 소스 | [`packages/ui/src/TxToast/`](../../packages/ui/src/TxToast) |
-| 테스트 | 35개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxToast`                                                   |
+| 소스        | [`packages/ui/src/TxToast/`](../../packages/ui/src/TxToast) |
+| 테스트      | 35개                                                        |
 
 ## 개발 목적
 

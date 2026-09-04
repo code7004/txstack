@@ -2,12 +2,12 @@
 
 > 객체 상태를 **부분 병합(patch)** 으로 다룬다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/hooks` |
-| 내보내는 것 | `useStateForObject` |
-| 소스 | [`packages/hooks/src/useStateForObject.ts`](../../packages/hooks/src/useStateForObject.ts) |
-| 테스트 | 6개 |
+|             |                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/hooks`                                                                           |
+| 내보내는 것 | `useStateForObject`                                                                        |
+| 소스        | [`packages/hooks/src/useStateForObject.ts`](../../packages/hooks/src/useStateForObject.ts) |
+| 테스트      | 6개                                                                                        |
 
 ## 개발 목적
 
@@ -21,7 +21,7 @@ import { useStateForObject } from "@txstack/hooks";
 
 const [filter, setFilter] = useStateForObject({ keyword: "", page: 1 });
 
-setFilter({ keyword: "kim" });                  // page 는 유지된다
+setFilter({ keyword: "kim" }); // page 는 유지된다
 setFilter((prev) => ({ page: prev.page + 1 })); // 함수형 업데이트
 ```
 

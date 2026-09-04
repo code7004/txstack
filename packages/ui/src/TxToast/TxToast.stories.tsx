@@ -103,12 +103,7 @@ export const Persistent: Story = {
 
     return (
       <TxFlex>
-        <TxButton
-          label="연결 끊김 알리기"
-          variant="danger"
-          disabled={id !== null}
-          onClick={() => setId(TxToast.show({ variant: "danger", title: "연결이 끊겼습니다", message: "다시 연결될 때까지 이 알림은 사라지지 않습니다.", duration: 0 }))}
-        />
+        <TxButton label="연결 끊김 알리기" variant="danger" disabled={id !== null} onClick={() => setId(TxToast.show({ variant: "danger", title: "연결이 끊겼습니다", message: "다시 연결될 때까지 이 알림은 사라지지 않습니다.", duration: 0 }))} />
         <TxButton
           label="다시 연결됨"
           variant="secondary"

@@ -26,10 +26,7 @@ beforeEach(() => {
   setReducedMotion(false);
   vi.useFakeTimers();
   // requestAnimationFrame 도 가짜 시계를 따르게 둔다
-  vi.stubGlobal(
-    "requestAnimationFrame",
-    (fn: FrameRequestCallback) => setTimeout(() => fn(0), 16) as unknown as number
-  );
+  vi.stubGlobal("requestAnimationFrame", (fn: FrameRequestCallback) => setTimeout(() => fn(0), 16) as unknown as number);
   vi.stubGlobal("cancelAnimationFrame", (id: number) => clearTimeout(id));
 });
 

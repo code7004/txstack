@@ -50,10 +50,7 @@ const activeDot = () => dots().findIndex((dot) => dot.dataset.active === "");
 const prev = () => screen.getByRole("button", { name: "이전" }) as HTMLButtonElement;
 
 /** jsdom 은 폭이 0 이라 장의 자리가 전부 겹친다. 실제 배치를 대신 세워 둔다. */
-const place = (step = 300) =>
-  [...viewport().querySelectorAll<HTMLElement>(".tx-carousel__item")].forEach((item, at) =>
-    Object.defineProperty(item, "offsetLeft", { value: at * step, configurable: true })
-  );
+const place = (step = 300) => [...viewport().querySelectorAll<HTMLElement>(".tx-carousel__item")].forEach((item, at) => Object.defineProperty(item, "offsetLeft", { value: at * step, configurable: true }));
 const next = () => screen.getByRole("button", { name: "다음" }) as HTMLButtonElement;
 
 describe("TxCarousel — 넘기기", () => {

@@ -2,12 +2,12 @@
 
 > 전역 함수로 쓰던 코드를 **옮겨오는 동안**의 호환 계층. **권장하지 않는다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/axios/singleton` — 서브패스 |
-| 내보내는 것 | `initHttpClient` · `getHttpClient` · `resetHttpClient` |
-| 소스 | [`packages/axios/src/singleton.ts`](../../packages/axios/src/singleton.ts) |
-| 테스트 | 4개 |
+|             |                                                                            |
+| ----------- | -------------------------------------------------------------------------- |
+| 진입점      | `@txstack/axios/singleton` — 서브패스                                      |
+| 내보내는 것 | `initHttpClient` · `getHttpClient` · `resetHttpClient`                     |
+| 소스        | [`packages/axios/src/singleton.ts`](../../packages/axios/src/singleton.ts) |
+| 테스트      | 4개                                                                        |
 
 ## 개발 목적
 
@@ -23,7 +23,7 @@ import { initHttpClient, getHttpClient, resetHttpClient } from "@txstack/axios/s
 
 initHttpClient({ baseURL: "/api" }); // 다시 부르면 새 클라이언트로 교체된다
 const api = getHttpClient();
-resetHttpClient();                   // 테스트 teardown
+resetHttpClient(); // 테스트 teardown
 ```
 
 새로 짜는 앱은 이것 대신 모듈 하나를 둔다 — [002_HttpClient](002_HttpClient.md) 의
@@ -37,7 +37,7 @@ resetHttpClient();                   // 테스트 teardown
 
 ## 정한 것 · 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
-| 싱글턴이 루트 배럴 | `/singleton` 서브패스 | 권장하지 않는 것이 구조로 드러난다 |
-| `initHttpClient` 재호출 시 baseURL 만 갱신 | 새 클라이언트로 교체 | 다른 옵션을 조용히 버려서 원인 추적이 어려웠다 |
+| 원본                                       | 지금                  | 왜                                             |
+| ------------------------------------------ | --------------------- | ---------------------------------------------- |
+| 싱글턴이 루트 배럴                         | `/singleton` 서브패스 | 권장하지 않는 것이 구조로 드러난다             |
+| `initHttpClient` 재호출 시 baseURL 만 갱신 | 새 클라이언트로 교체  | 다른 옵션을 조용히 버려서 원인 추적이 어려웠다 |

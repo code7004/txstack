@@ -35,7 +35,15 @@ export const TxBadge = ({ count, max = 99, showZero = false, dot = false, varian
   const visible = dot || hasCount;
 
   const mark = visible ? (
-    <span data-tag="TxBadge" data-variant={variant} data-placement={placement} data-dot={asDot ? "" : undefined} data-standalone={children == null ? "" : undefined} className={cm("tx-badge", children == null && className)} {...(children == null ? props : {})}>
+    <span
+      data-tag="TxBadge"
+      data-variant={variant}
+      data-placement={placement}
+      data-dot={asDot ? "" : undefined}
+      data-standalone={children == null ? "" : undefined}
+      className={cm("tx-badge", children == null && className)}
+      {...(children == null ? props : {})}
+    >
       {/* 보이는 숫자는 장식이다. 뜻은 아래 글자가 나른다 — 둘 다 읽히면 두 번 듣는다 */}
       {!asDot && <span aria-hidden>{shown}</span>}
 

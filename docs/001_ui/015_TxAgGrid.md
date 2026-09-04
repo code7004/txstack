@@ -2,12 +2,12 @@
 
 > ag-grid 위에 **목록 화면에서 늘 하는 일**을 얹은 표.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui/aggrid` — 서브패스. peer `ag-grid-community` · `ag-grid-react` |
-| 내보내는 것 | `TxAgGrid, TxAgGridProvider` |
-| 소스 | [`packages/ui/src/TxAgGrid/`](../../packages/ui/src/TxAgGrid) |
-| 테스트 | 43개 |
+|             |                                                                             |
+| ----------- | --------------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui/aggrid` — 서브패스. peer `ag-grid-community` · `ag-grid-react` |
+| 내보내는 것 | `TxAgGrid, TxAgGridProvider`                                                |
+| 소스        | [`packages/ui/src/TxAgGrid/`](../../packages/ui/src/TxAgGrid)               |
+| 테스트      | 43개                                                                        |
 
 ## 개발 목적
 
@@ -23,14 +23,7 @@ ag-grid 위에 **목록 화면에서 늘 하는 일**(열 정의 · 정렬 · �
 ### 쓰는 법
 
 ```tsx
-<TxAgGrid
-  rowData={data?.rows}
-  isLoading={isLoading}
-  offset={offset}
-  defaultColDef={{ flex: 1 }}
-  option={{ headers: ["id", "name"], editColumns: ["name"] }}
-  pagination={{ currentPage, totalRows, pageSize: 50, onChangePage }}
-/>
+<TxAgGrid rowData={data?.rows} isLoading={isLoading} offset={offset} defaultColDef={{ flex: 1 }} option={{ headers: ["id", "name"], editColumns: ["name"] }} pagination={{ currentPage, totalRows, pageSize: 50, onChangePage }} />
 ```
 
 **모듈 등록은 소비 앱이 한다** — `ModuleRegistry.registerModules([AllCommunityModule])`.

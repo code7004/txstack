@@ -2,12 +2,12 @@
 
 > 가르는 선.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxDivider` |
-| 소스 | [`packages/ui/src/TxDivider/`](../../packages/ui/src/TxDivider) |
-| 테스트 | 20개 |
+|             |                                                                 |
+| ----------- | --------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                   |
+| 내보내는 것 | `TxDivider`                                                     |
+| 소스        | [`packages/ui/src/TxDivider/`](../../packages/ui/src/TxDivider) |
+| 테스트      | 20개                                                            |
 
 ## 개발 목적
 

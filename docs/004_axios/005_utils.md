@@ -2,12 +2,12 @@
 
 > 클라이언트 밖에서도 쓰는 순수 함수 셋과 공개 타입.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/axios` |
-| 내보내는 것 | `removeUndefined` · `isTokenExpired` · `parseApiError` · 타입 6개 |
-| 소스 | [`packages/axios/src/utils.ts`](../../packages/axios/src/utils.ts) · [`types.ts`](../../packages/axios/src/types.ts) |
-| 테스트 | 4개 |
+|             |                                                                                                                      |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| 진입점      | `@txstack/axios`                                                                                                     |
+| 내보내는 것 | `removeUndefined` · `isTokenExpired` · `parseApiError` · 타입 6개                                                    |
+| 소스        | [`packages/axios/src/utils.ts`](../../packages/axios/src/utils.ts) · [`types.ts`](../../packages/axios/src/types.ts) |
+| 테스트      | 4개                                                                                                                  |
 
 ## 개발 목적
 
@@ -20,8 +20,8 @@
 import { removeUndefined, isTokenExpired, parseApiError } from "@txstack/axios";
 
 removeUndefined({ a: 1, b: undefined, c: "  " }); // → { a: 1 }  (공백 문자열도 지운다)
-isTokenExpired(expiresAt);                        // → boolean
-parseApiError(err);                               // unknown → IApiError
+isTokenExpired(expiresAt); // → boolean
+parseApiError(err); // unknown → IApiError
 ```
 
 ### 타입

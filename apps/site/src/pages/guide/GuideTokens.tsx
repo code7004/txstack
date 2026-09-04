@@ -151,8 +151,8 @@ export function GuideTokens() {
         </p>
 
         <TxAlert variant="warning" title="강조색이 둘인 이유">
-          채움과 글자는 <strong>반대 방향을 원한다.</strong> 채움은 그 위의 흰 글자를 위해 어두워야 하고, 글자로 쓰는 자리는 라이트에서 더 어둡고 다크에서 밝아야 한다. 그래서 밝은 브랜드색(민트 · 파스텔)을{" "}
-          <code>--tx-color-primary</code> 에만 넣으면 <strong>버튼은 살아나고 현재 메뉴 표시가 안 읽힌다.</strong> 이 사이트가 정확히 그 경우인데, 두 토큰을 각각 주는 것으로 끝난다.
+          채움과 글자는 <strong>반대 방향을 원한다.</strong> 채움은 그 위의 흰 글자를 위해 어두워야 하고, 글자로 쓰는 자리는 라이트에서 더 어둡고 다크에서 밝아야 한다. 그래서 밝은 브랜드색(민트 · 파스텔)을 <code>--tx-color-primary</code> 에만 넣으면{" "}
+          <strong>버튼은 살아나고 현재 메뉴 표시가 안 읽힌다.</strong> 이 사이트가 정확히 그 경우인데, 두 토큰을 각각 주는 것으로 끝난다.
         </TxAlert>
       </Block>
 

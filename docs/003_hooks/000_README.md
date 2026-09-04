@@ -11,19 +11,19 @@
 
 ## 진입점
 
-| 진입점 | 내용 | 추가 peer |
-| --- | --- | --- |
-| `@txstack/hooks` | `useStateForObject` | 없음 |
-| `@txstack/hooks/router` | `useUrlQuery` | `react-router-dom` |
+| 진입점                  | 내용                | 추가 peer          |
+| ----------------------- | ------------------- | ------------------ |
+| `@txstack/hooks`        | `useStateForObject` | 없음               |
+| `@txstack/hooks/router` | `useUrlQuery`       | `react-router-dom` |
 
 ## 개발 리스트
 
 **2개가 끝났다. 테스트 28개.** 번호는 만든 차례다.
 
-| 번호 | 훅 | 무엇 | 테스트 |
-| --- | --- | --- | --- |
-| 001 | [`useStateForObject`](001_useStateForObject.md) | 객체 상태를 부분 병합으로 다룬다 | 6 |
-| 002 | [`useUrlQuery`](002_useUrlQuery.md) `/router` | URL 쿼리스트링을 화면 상태처럼 쓴다 | 22 |
+| 번호 | 훅                                              | 무엇                                | 테스트 |
+| ---- | ----------------------------------------------- | ----------------------------------- | ------ |
+| 001  | [`useStateForObject`](001_useStateForObject.md) | 객체 상태를 부분 병합으로 다룬다    | 6      |
+| 002  | [`useUrlQuery`](002_useUrlQuery.md) `/router`   | URL 쿼리스트링을 화면 상태처럼 쓴다 | 22     |
 
 ## 가져오지 않은 것
 

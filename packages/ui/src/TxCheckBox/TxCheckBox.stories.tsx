@@ -73,7 +73,7 @@ export const States: Story = {
     <TxFlex className="flex-col items-start gap-3">
       <TxCheckBox label="기본" />
       <TxCheckBox label="비활성 — 꺼짐" disabled />
-      <TxCheckBox label="비활성 — 켜짐" disabled defaultChecked />      <TxCheckBox label="글 없이 (스크린리더용 이름만)" aria-label="글 없는 체크박스" />
+      <TxCheckBox label="비활성 — 켜짐" disabled defaultChecked /> <TxCheckBox label="글 없이 (스크린리더용 이름만)" aria-label="글 없는 체크박스" />
     </TxFlex>
   )
 };
@@ -88,7 +88,7 @@ export const Keyboard: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex className="flex-col items-start gap-3">
-      <TxCheckBox label="Tab 으로 여기까지 오세요" />      <TxCheckBox label="글을 눌러도 토글됩니다" />
+      <TxCheckBox label="Tab 으로 여기까지 오세요" /> <TxCheckBox label="글을 눌러도 토글됩니다" />
     </TxFlex>
   )
 };

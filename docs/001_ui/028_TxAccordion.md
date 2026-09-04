@@ -2,12 +2,12 @@
 
 > 여러 덩이를 이어 붙이고 **하나씩만 열리게** 한다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxAccordion` |
-| 소스 | [`packages/ui/src/TxAccordion/`](../../packages/ui/src/TxAccordion) |
-| 테스트 | 37개 |
+|             |                                                                     |
+| ----------- | ------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                       |
+| 내보내는 것 | `TxAccordion`                                                       |
+| 소스        | [`packages/ui/src/TxAccordion/`](../../packages/ui/src/TxAccordion) |
+| 테스트      | 37개                                                                |
 
 ## 개발 목적
 

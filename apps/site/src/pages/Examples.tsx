@@ -78,14 +78,7 @@ export function Examples() {
     <Page title="Example" lead="공개 API 를 실제로 부르는 화면. 조회 조건은 주소에 실려 뒤로가기가 동작한다.">
       <Block title="GitHub 저장소 검색">
         <div className="flex flex-wrap items-center gap-2">
-          <TxSearchInput
-            placeholder="검색어를 넣고 Enter"
-            aria-label="저장소 검색"
-            className="w-64"
-            defaultValue={query.q}
-            onSubmitText={(value) => search({ q: value })}
-            onClear={() => search({ q: "" })}
-          />
+          <TxSearchInput placeholder="검색어를 넣고 Enter" aria-label="저장소 검색" className="w-64" defaultValue={query.q} onSubmitText={(value) => search({ q: value })} onClear={() => search({ q: "" })} />
 
           <TxDropdown data={SORTS} value={query.sort} aria-label="정렬" className="w-40" onChangeText={(value) => search({ sort: (value ?? "best-match") as RepoSort })} />
 
@@ -102,7 +95,11 @@ export function Examples() {
           </TxAlert>
         )}
 
-        {!error && !query.q && <TxAlert variant="info" title="검색어를 넣어 보라">GitHub 는 빈 검색어를 받지 않는다. 그래서 이 화면은 요청을 아예 보내지 않는다.</TxAlert>}
+        {!error && !query.q && (
+          <TxAlert variant="info" title="검색어를 넣어 보라">
+            GitHub 는 빈 검색어를 받지 않는다. 그래서 이 화면은 요청을 아예 보내지 않는다.
+          </TxAlert>
+        )}
 
         <div className="flex flex-col gap-2">
           {loading
@@ -112,7 +109,11 @@ export function Examples() {
                 </div>
               ))
             : rows.map((repo) => (
-                <article key={repo.id} className="flex flex-col gap-2 rounded-lg border p-4 transition-colors hover:border-[color:var(--tx-color-primary-strong)]" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+                <article
+                  key={repo.id}
+                  className="flex flex-col gap-2 rounded-lg border p-4 transition-colors hover:border-[color:var(--tx-color-primary-strong)]"
+                  style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}
+                >
                   <div className="flex flex-wrap items-center gap-2">
                     <a href={repo.html_url} className="font-mono text-sm font-semibold hover:underline" target="_blank" rel="noreferrer">
                       {repo.full_name}
@@ -146,8 +147,7 @@ export function Examples() {
 const search = (patch) => setQuery({ ...patch, page: 1 });`}</CodeBlock>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>기본은 히스토리를 쌓지 않는다</strong>(<code>replace: true</code>). 그래서 조건을 열 번 만져도 <strong>뒤로가기 한 번이면 이 화면을 벗어난다</strong> — 쌓으면 이전 화면으로 나가려고 열
-          번을 눌러야 한다.
+          <strong>기본은 히스토리를 쌓지 않는다</strong>(<code>replace: true</code>). 그래서 조건을 열 번 만져도 <strong>뒤로가기 한 번이면 이 화면을 벗어난다</strong> — 쌓으면 이전 화면으로 나가려고 열 번을 눌러야 한다.
         </p>
 
         <p className="text-slate-600 dark:text-slate-300">
@@ -176,8 +176,7 @@ const search = (patch) => setQuery({ ...patch, page: 1 });`}</CodeBlock>
 const data = await github.get<RepoSearch>("/search/repositories", { q, page, per_page: 10 });`}</CodeBlock>
 
         <TxAlert variant="warning" title="에러도 한 형태로 온다">
-          <code>parseApiError</code> 는 네트워크 끊김 · 시간 초과 · 서버 본문을 전부 <code>{"{ statusCode, message }"}</code> 로 정규화한다. 위 검색을 분당 10회 넘게 하면 GitHub 이 403 을 주는데, 그
-          자리에서 이 안내가 뜬다 — 직접 눌러 보라.
+          <code>parseApiError</code> 는 네트워크 끊김 · 시간 초과 · 서버 본문을 전부 <code>{"{ statusCode, message }"}</code> 로 정규화한다. 위 검색을 분당 10회 넘게 하면 GitHub 이 403 을 주는데, 그 자리에서 이 안내가 뜬다 — 직접 눌러 보라.
         </TxAlert>
       </Block>
     </Page>

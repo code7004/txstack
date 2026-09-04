@@ -39,14 +39,7 @@ export function TxToastItem({ item, onDismiss }: TxToastItemProps) {
   }, [item.duration, paused, dismiss]);
 
   return (
-    <div
-      className="tx-toast__item"
-      data-tag="TxToast.Item"
-      onPointerEnter={() => setPaused(true)}
-      onPointerLeave={() => setPaused(false)}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
-    >
+    <div className="tx-toast__item" data-tag="TxToast.Item" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={() => setPaused(false)}>
       {/* 떴다 사라지는 것이라 나타나는 순간 읽혀야 한다. 갈래에 따라 즉시/나중이 갈린다 */}
       <TxAlert announce variant={item.variant} title={item.title} closeLabel={item.closeLabel ?? "닫기"} onClose={dismiss}>
         {item.message}

@@ -2,12 +2,12 @@
 
 > 하나를 고르는 드롭다운.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxDropdown, TxDropdownMulti` |
-| 소스 | [`packages/ui/src/TxDropdown/`](../../packages/ui/src/TxDropdown) |
-| 테스트 | 41개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxDropdown, TxDropdownMulti`                                     |
+| 소스        | [`packages/ui/src/TxDropdown/`](../../packages/ui/src/TxDropdown) |
+| 테스트      | 41개                                                              |
 
 ## 개발 목적
 

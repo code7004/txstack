@@ -134,12 +134,7 @@ import { TxDayPicker, TxFormDayPicker } from "@txstack/ui/daypicker";
 ```tsx
 import { TxAppShell, TxNavBar, TxSideNav } from "@txstack/ui";
 
-<TxAppShell
-  header={<Brand />}
-  top={<TxNavBar>{gnb}</TxNavBar>}
-  left={<TxSideNav>{snb}</TxSideNav>}
-  panels={{ left: { resize: true, collapse: true, defaultSize: 280 } }}
->
+<TxAppShell header={<Brand />} top={<TxNavBar>{gnb}</TxNavBar>} left={<TxSideNav>{snb}</TxSideNav>} panels={{ left: { resize: true, collapse: true, defaultSize: 280 } }}>
   <Outlet />
 </TxAppShell>;
 ```
@@ -166,14 +161,14 @@ const menu = getNavigableRoutes(routes, canAccess);
 
 ## 8. 어디를 볼까
 
-| 묶음 | 무엇이 있나 |
-| --- | --- |
-| **Form** | 입력 · 고르기 · 폼 계층 — `TxInput` `TxTextarea` `TxDropdown` `TxCombobox` `TxCheckBox` `TxRadioGroup` `TxSwitch` `TxSlider` `TxDayPicker` `TxFileUpload` `TxForm` |
-| **Data** | 보여주기 — `TxAgGrid` `TxPagination` `TxAvatar` `TxCarousel` `TxJsonTree` |
-| **Layout** | 자리 잡기 — `TxAppShell` `TxNavBar` `TxSideNav` `TxCard` `TxTabs` `TxAccordion` `TxFlex` `TxGrid` `TxScrollArea` |
-| **Overlay** | 위에 뜨는 것 — `TxModal` `TxDialog` `TxSlidePanel` `TxDropMenu` `TxTooltip` |
-| **Feedback** | 알리기 — `TxAlert` `TxToast` `TxTag` `TxBadge` `TxProgress` `TxSkeleton` `TxSpinner` `TxLoading` `TxTicker` `TxEmptyState` |
-| **Recipes** | 부품을 이어 붙인 이야기 |
+| 묶음         | 무엇이 있나                                                                                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Form**     | 입력 · 고르기 · 폼 계층 — `TxInput` `TxTextarea` `TxDropdown` `TxCombobox` `TxCheckBox` `TxRadioGroup` `TxSwitch` `TxSlider` `TxDayPicker` `TxFileUpload` `TxForm` |
+| **Data**     | 보여주기 — `TxAgGrid` `TxPagination` `TxAvatar` `TxCarousel` `TxJsonTree`                                                                                          |
+| **Layout**   | 자리 잡기 — `TxAppShell` `TxNavBar` `TxSideNav` `TxCard` `TxTabs` `TxAccordion` `TxFlex` `TxGrid` `TxScrollArea`                                                   |
+| **Overlay**  | 위에 뜨는 것 — `TxModal` `TxDialog` `TxSlidePanel` `TxDropMenu` `TxTooltip`                                                                                        |
+| **Feedback** | 알리기 — `TxAlert` `TxToast` `TxTag` `TxBadge` `TxProgress` `TxSkeleton` `TxSpinner` `TxLoading` `TxTicker` `TxEmptyState`                                         |
+| **Recipes**  | 부품을 이어 붙인 이야기                                                                                                                                            |
 
 ## 알아 두면 편한 것들
 
@@ -185,9 +180,9 @@ const menu = getNavigableRoutes(routes, canAccess);
 
 ## 함께 있는 패키지
 
-| 패키지 | 무엇 | React |
-| --- | --- | --- |
-| `@txstack/ui` | 이 카탈로그의 부품들 | O |
-| `@txstack/route-meta` | 라우트를 메타데이터 트리 하나로 | O |
-| `@txstack/hooks` | 범용 훅 + URL 쿼리 상태 | O |
-| `@txstack/axios` | 정책 주입식 HTTP 클라이언트 | **X** |
+| 패키지                | 무엇                            | React |
+| --------------------- | ------------------------------- | ----- |
+| `@txstack/ui`         | 이 카탈로그의 부품들            | O     |
+| `@txstack/route-meta` | 라우트를 메타데이터 트리 하나로 | O     |
+| `@txstack/hooks`      | 범용 훅 + URL 쿼리 상태         | O     |
+| `@txstack/axios`      | 정책 주입식 HTTP 클라이언트     | **X** |

@@ -2,12 +2,12 @@
 
 > 만들어진 클라이언트로 **요청을 보낸다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/axios` |
-| 내보내는 것 | `HttpClient` · `DeleteOptions` (타입) |
-| 소스 | [`packages/axios/src/client.ts`](../../packages/axios/src/client.ts) |
-| 테스트 | [001_createHttpClient](001_createHttpClient.md) 의 15개가 함께 지킨다 (`getBlob` 1개 포함) |
+|             |                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/axios`                                                                           |
+| 내보내는 것 | `HttpClient` · `DeleteOptions` (타입)                                                      |
+| 소스        | [`packages/axios/src/client.ts`](../../packages/axios/src/client.ts)                       |
+| 테스트      | [001_createHttpClient](001_createHttpClient.md) 의 15개가 함께 지킨다 (`getBlob` 1개 포함) |
 
 ## 개발 목적
 
@@ -59,8 +59,8 @@ export const api = createHttpClient({ baseURL: import.meta.env.VITE_API_URL });
 
 ## 정한 것 · 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
-| `getBlob` 이 `responseType: "blob"` 고정 | 환경 판별 후 Node 는 arraybuffer → Blob | `blob` 은 XHR 전용이라 **Node 에서 안 돌았다** |
-| `del()` | `delete()` | `delete` 는 객체 메서드명으로 유효하다. `Map.prototype.delete` 가 그 예 |
-| `getAxios`/`changeAxiosConfig`/`~BaseUrl` | 삭제 | `instance` · `setConfig()` · `setBaseURL()` 의 별칭이었다 |
+| 원본                                      | 지금                                    | 왜                                                                      |
+| ----------------------------------------- | --------------------------------------- | ----------------------------------------------------------------------- |
+| `getBlob` 이 `responseType: "blob"` 고정  | 환경 판별 후 Node 는 arraybuffer → Blob | `blob` 은 XHR 전용이라 **Node 에서 안 돌았다**                          |
+| `del()`                                   | `delete()`                              | `delete` 는 객체 메서드명으로 유효하다. `Map.prototype.delete` 가 그 예 |
+| `getAxios`/`changeAxiosConfig`/`~BaseUrl` | 삭제                                    | `instance` · `setConfig()` · `setBaseURL()` 의 별칭이었다               |

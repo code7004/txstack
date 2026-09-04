@@ -2,12 +2,12 @@
 
 > 저절로 움직이는 공지 줄.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxTicker` |
-| 소스 | [`packages/ui/src/TxTicker/`](../../packages/ui/src/TxTicker) |
-| 테스트 | 28개 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                 |
+| 내보내는 것 | `TxTicker`                                                    |
+| 소스        | [`packages/ui/src/TxTicker/`](../../packages/ui/src/TxTicker) |
+| 테스트      | 28개                                                          |
 
 ## 개발 목적
 

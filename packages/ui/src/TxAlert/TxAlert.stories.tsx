@@ -137,7 +137,13 @@ export const Closable: Story = {
 
     return (
       <div className="flex max-w-xl flex-col gap-3">
-        {shown ? <TxAlert variant="info" onClose={() => setShown(false)}>이 안내는 닫을 수 있습니다.</TxAlert> : <TxButton label="다시 보이기" variant="secondary" onClick={() => setShown(true)} />}
+        {shown ? (
+          <TxAlert variant="info" onClose={() => setShown(false)}>
+            이 안내는 닫을 수 있습니다.
+          </TxAlert>
+        ) : (
+          <TxButton label="다시 보이기" variant="secondary" onClick={() => setShown(true)} />
+        )}
 
         <TxAlert variant="danger">이쪽은 닫기 버튼이 없습니다.</TxAlert>
       </div>

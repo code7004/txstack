@@ -15,16 +15,7 @@ const Icon = ({ glyph }: { glyph: string }) => <span className="text-base leadin
 
 const items = (pick: Pick, picked: string) => {
   const item = (name: string, glyph?: string, badge?: ReactNode) => (
-    <TxSideNav.Item
-      key={name}
-      label={name}
-      icon={glyph ? <Icon glyph={glyph} /> : undefined}
-      badge={badge}
-      as="button"
-      type="button"
-      aria-current={picked === name ? "page" : undefined}
-      onClick={() => pick(name)}
-    />
+    <TxSideNav.Item key={name} label={name} icon={glyph ? <Icon glyph={glyph} /> : undefined} badge={badge} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => pick(name)} />
   );
 
   return (
@@ -57,9 +48,7 @@ const Body = ({ picked, children }: { picked: string; children?: ReactNode }) =>
   </div>
 );
 
-const Frame = ({ children }: { children: ReactNode }) => (
-  <div className="inline-block rounded-lg border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900">{children}</div>
-);
+const Frame = ({ children }: { children: ReactNode }) => <div className="inline-block rounded-lg border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900">{children}</div>;
 
 /** 줄과 본문을 나란히 놓는다. 하위메뉴를 펴도 잘리지 않게 자리를 미리 비워 둔다. */
 const room: CSSProperties = { display: "flex", alignItems: "flex-start", gap: "1.5rem", minBlockSize: "24rem" };
@@ -120,7 +109,7 @@ const meta = {
           "",
           "---",
           "",
-          "아래 이야기들은 **라우터 없이 도는 카탈로그**라 항목이 `as=\"button\"` 이다 —",
+          '아래 이야기들은 **라우터 없이 도는 카탈로그**라 항목이 `as="button"` 이다 —',
           "누르면 주소가 아니라 **본문 글자가 바뀐다.** 컨트롤 패널은 `Playground` 에서만 동작한다."
         ].join("\n")
       }
@@ -223,9 +212,7 @@ export const TextOnly: Story = {
   parameters: noControls,
   render: function TextOnlyStory() {
     const [picked, setPicked] = useState("인증");
-    const item = (name: string) => (
-      <TxSideNav.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} />
-    );
+    const item = (name: string) => <TxSideNav.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} />;
 
     return (
       <div style={{ ...room, minBlockSize: "18rem" }}>

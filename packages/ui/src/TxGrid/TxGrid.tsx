@@ -25,13 +25,6 @@ import { TxGridItem } from "./TxGridItem";
  *
  * 명세: `docs/001_ui/035_TxGrid.md`
  */
-export const TxGridBase = ({ columns = 2, gap, className, style, ...props }: TxGridProps) => (
-  <div
-    {...props}
-    data-tag="TxGrid"
-    className={cm("tx-grid", className)}
-    style={{ "--tx-grid-columns": columns, gap, ...style } as CSSProperties}
-  />
-);
+export const TxGridBase = ({ columns = 2, gap, className, style, ...props }: TxGridProps) => <div {...props} data-tag="TxGrid" className={cm("tx-grid", className)} style={{ "--tx-grid-columns": columns, gap, ...style } as CSSProperties} />;
 
 export const TxGrid = Object.assign(TxGridBase, { Item: TxGridItem });

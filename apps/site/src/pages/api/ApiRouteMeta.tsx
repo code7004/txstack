@@ -34,8 +34,7 @@ export function ApiRouteMeta() {
 } satisfies RouteTree;`}</CodeBlock>
 
         <TxAlert variant="warning" title="satisfies 로 붙인다">
-          타입 주석(<code>const routes: RouteTree = …</code>)으로 붙이면 키가 <code>string</code> 으로 넓어져 <code>routes.docs.children.start</code> 자동완성이 죽는다. <code>satisfies</code> 는 검사만
-          하고 리터럴 형태를 남긴다.
+          타입 주석(<code>const routes: RouteTree = …</code>)으로 붙이면 키가 <code>string</code> 으로 넓어져 <code>routes.docs.children.start</code> 자동완성이 죽는다. <code>satisfies</code> 는 검사만 하고 리터럴 형태를 남긴다.
         </TxAlert>
       </Block>
 
@@ -96,8 +95,7 @@ function App() {
 );`}</CodeBlock>
 
         <TxAlert variant="info" title="두 패키지는 서로를 모른다">
-          <code>@txstack/ui</code> 와 <code>route-meta</code> 는 서로를 import 하지 않는다. <strong>잇는 코드는 소비자 몫</strong>이고, 부품 쪽은 <code>as={"{NavLink}"}</code> 하나만 열어 두면 된다 —
-          이 사이트의 메뉴가 그 15줄이다.
+          <code>@txstack/ui</code> 와 <code>route-meta</code> 는 서로를 import 하지 않는다. <strong>잇는 코드는 소비자 몫</strong>이고, 부품 쪽은 <code>as={"{NavLink}"}</code> 하나만 열어 두면 된다 — 이 사이트의 메뉴가 그 15줄이다.
         </TxAlert>
       </Block>
 

@@ -2,12 +2,12 @@
 
 > 파일을 골라 올리는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxFileUpload` |
-| 소스 | [`packages/ui/src/TxFileUpload/`](../../packages/ui/src/TxFileUpload) |
-| 테스트 | 24개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxFileUpload`                                                        |
+| 소스        | [`packages/ui/src/TxFileUpload/`](../../packages/ui/src/TxFileUpload) |
+| 테스트      | 24개                                                                  |
 
 ## 개발 목적
 

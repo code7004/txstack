@@ -2,12 +2,12 @@
 
 > 여럿 중 하나를 고르는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxRadio, TxRadioGroup` |
-| 소스 | [`packages/ui/src/TxRadio/`](../../packages/ui/src/TxRadio) |
-| 테스트 | 24개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxRadio, TxRadioGroup`                                     |
+| 소스        | [`packages/ui/src/TxRadio/`](../../packages/ui/src/TxRadio) |
+| 테스트      | 24개                                                        |
 
 ## 개발 목적
 

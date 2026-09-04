@@ -2,12 +2,12 @@
 
 > 임의의 객체를 접을 수 있는 트리로 그린다. **보기 · 고치기 · 변화 지켜보기** 셋을 한다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxJsonTree` |
-| 소스 | [`packages/ui/src/TxJsonTree/`](../../packages/ui/src/TxJsonTree) |
-| 테스트 | 100개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxJsonTree`                                                      |
+| 소스        | [`packages/ui/src/TxJsonTree/`](../../packages/ui/src/TxJsonTree) |
+| 테스트      | 100개                                                             |
 
 ## 개발 목적
 

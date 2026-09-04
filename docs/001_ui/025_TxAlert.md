@@ -2,12 +2,12 @@
 
 > 페이지 안에 박히는 안내 상자.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxAlert` |
-| 소스 | [`packages/ui/src/TxAlert/`](../../packages/ui/src/TxAlert) |
-| 테스트 | 38개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxAlert`                                                   |
+| 소스        | [`packages/ui/src/TxAlert/`](../../packages/ui/src/TxAlert) |
+| 테스트      | 38개                                                        |
 
 ## 개발 목적
 

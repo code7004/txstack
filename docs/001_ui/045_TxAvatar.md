@@ -2,12 +2,12 @@
 
 > 사람 한 명을 나타내는 동그란 칸.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxAvatar, TxAvatarGroup` |
-| 소스 | [`packages/ui/src/TxAvatar/`](../../packages/ui/src/TxAvatar) |
-| 테스트 | 28개 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                 |
+| 내보내는 것 | `TxAvatar, TxAvatarGroup`                                     |
+| 소스        | [`packages/ui/src/TxAvatar/`](../../packages/ui/src/TxAvatar) |
+| 테스트      | 28개                                                          |
 
 ## 개발 목적
 
