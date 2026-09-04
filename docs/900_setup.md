@@ -139,6 +139,45 @@ CORS_ORIGINS=http://localhost:5173,...
 **주소도 `http://localhost:5173` 로 바뀌었다.** 윈도우에서는 80 도 되던 자리라
 북마크와 습관이 남아 있을 수 있다.
 
+### 6. SSH 키와 호스트 등록도 머신마다 따로다
+
+**이 저장소는 GitHub 이고 HTTPS 라 해당이 없다.** 소비자 셋은 자체 git 서버를 SSH 로
+쓰므로 새 머신에서 **push 가 안 되는 상태로 시작한다.** 두 가지를 각각 해야 한다.
+
+**키.** 개인 키는 git 에 없고, 있어서도 안 된다. 새 머신에 옮기거나(권한 `600`)
+거기서 새로 만들어 서버에 공개키를 등록한다.
+
+**호스트 등록.** 처음 붙는 서버는 `known_hosts` 에 없어서 `Host key verification failed`
+가 난다. **지문을 확인하고 수락한다** — `ssh-keyscan` 으로 자동 등록하면 호스트 검증이라는
+장치 자체가 무의미해진다.
+
+```sh
+ssh -T git@<서버>   # 지문을 보고 수락한다
+```
+
+#### `.git/config` 는 따라온다 — 함정이 여기 있다
+
+**작업 폴더를 통째로 복사해 옮기면 `.git/config` 도 같이 온다.** 커밋되지는 않지만
+사본에는 들어 있다. 그 안에 머신에 매인 경로가 있으면 **다른 OS 에서 조용히 깨진다.**
+
+2026-09-03 에 실제로 그랬다. 소비자 세 저장소에 Windows 드라이브 경로를 가리키는
+설정이 남아 있었다.
+
+```
+core.sshcommand = ssh -i W:/Security/.ssh/<키> -o IdentitiesOnly=yes
+```
+
+맥에 `W:` 드라이브가 없으니 `Identity file ... not accessible` 이 뜬다.
+**저장소마다 로컬 설정이라 한 번에 안 보인다** — 아래로 훑는다.
+
+```sh
+git config --local --get-regexp 'ssh'    # 저장소마다
+git config --local --unset core.sshcommand
+```
+
+키를 기본 이름(`~/.ssh/id_ed25519`)으로 두거나 `~/.ssh/config` 에 호스트별로 적으면
+`core.sshcommand` 자체가 필요 없다. **그게 머신을 옮겨도 안 깨지는 모양이다.**
+
 ## 외장 드라이브(exFAT)에 두면 느리다
 
 `/Volumes/Workspace` 는 exFAT 이다. 대역폭은 문제가 없는데(순차 쓰기 826MB/s)
