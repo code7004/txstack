@@ -40,6 +40,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "build:watch": "tsup --watch src",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

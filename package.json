@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "pnpm --filter \"./packages/*\" -r build",
+    "build:watch": "pnpm --filter \"./packages/*\" -r --parallel build:watch",
     "storybook:dev": "pnpm --filter @txstack/storybook dev",
     "storybook:build": "pnpm --filter @txstack/storybook build",
     "site:dev": "pnpm --filter @txstack/site dev",
