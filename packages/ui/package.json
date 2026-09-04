@@ -47,6 +47,7 @@
   },
   "scripts": {
     "build": "tsup && node scripts/build-css.mjs",
+    "build:watch": "tsup --watch src --onSuccess \"node scripts/build-css.mjs\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
