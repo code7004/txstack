@@ -1,6 +1,9 @@
 # 900 · 새 PC 에서 세팅하기
 
-작업 PC 를 옮길 때 밟는 절차. **git 에 다 들어 있어서 옮길 파일이 따로 없다.**
+작업 PC 를 옮길 때 밟는 절차. **이 저장소는 git 에 다 들어 있어서 옮길 파일이 없다.**
+
+두 대(Mac · Windows PC)를 오가며 쓰거나 소비자 프로젝트까지 붙일 거면
+[5. 두 대에서 쓸 때](#5-두-대에서-쓸-때--윈도우-pc-쪽) 로 간다 — 거기는 옮길 것이 있다.
 
 ## 1. 도구
 
@@ -49,6 +52,92 @@ pnpm storybook:dev   # http://localhost:6310
 ```
 
 셋 다 통과하면 옮기기 끝이다.
+
+## 5. 두 대에서 쓸 때 — 윈도우 PC 쪽
+
+**Mac 과 Windows PC 를 오가며 개발한다.** 위 1~4는 txstack 한 저장소 이야기고,
+적용 단계에 들어가면 **저장소 넷이 서로를 참조**하므로 배치와 순서가 생긴다.
+
+### 0. Mac 에서 push 가 먼저다
+
+윈도우 쪽에서 할 수 있는 것이 없다. 네 저장소 모두 올리고 시작한다 —
+`black-message` 의 적용 브랜치는 `-u` 로 업스트림까지 잡아 준다.
+
+### 1. 저장소를 형제로 둔다
+
+```
+<작업폴더>/txstack                이 저장소
+<작업폴더>/black-message
+<작업폴더>/usertics
+<작업폴더>/chain-wallet-service
+```
+
+**이 배치가 규약이다.** 소비자가 txstack 을 `link:../../../txstack/packages/ui` 로
+참조하므로, 형제가 아니면 설치가 깨진다. 폴더 이름과 깊이가 Mac 과 같아야 한다
+(`~/work` 든 `C:\work` 든 상관없지만 **그 안의 구조는 같아야 한다**).
+
+### 2. 줄바꿈을 다시 받는다
+
+**`.gitattributes` 를 pull 한 것만으로는 디스크가 안 바뀐다.** 기존 워킹 트리는
+CRLF 그대로이고, `git status` 가 파일 전체를 "수정됨" 으로 띄운다. 저장소마다 한 번씩:
+
+```sh
+git pull
+git rm --cached -r .    # 인덱스를 비우고
+git reset --hard        # 새 attributes 로 전부 다시 체크아웃한다 (LF)
+```
+
+**`reset --hard` 는 커밋 안 한 것을 지운다.** 윈도우 쪽에 작업 중인 것이 있으면
+먼저 커밋하거나 stash 한다. 끝나면 `git status` 가 깨끗해야 한다.
+
+`core.autocrlf` 는 따로 건드리지 않는다 — `.gitattributes` 의 `eol=lf` 가 이긴다.
+
+### 3. txstack — 설치하면 훅이 걸린다
+
+```sh
+cd txstack && pnpm install
+```
+
+`prepare` 스크립트가 husky 를 걸어서, 커밋할 때 스테이징된 파일의 포맷이 자동으로
+맞춰진다. **설치를 건너뛰면 훅이 없는 채로 커밋하게 된다.**
+
+### 4. black-message — 링크로 붙어 있다
+
+```sh
+cd black-message
+git checkout feat/txstack-adoption
+pnpm install
+```
+
+`@txstack/*` 가 `link:` 로 걸려 있어 **1번의 배치가 맞아야 설치가 된다.** pnpm 은
+Windows 에서 디렉터리를 junction 으로 링크하므로 관리자 권한이 필요 없다.
+
+txstack 소스를 고칠 거면 **watch 를 띄워 둔다.** 안 띄우면 소비자가 옛 `dist` 를 본다.
+
+```sh
+cd txstack && pnpm build:watch
+```
+
+### 5. git 에 없는 설정은 따로 맞춘다
+
+**이 문서 첫 줄의 "옮길 파일이 따로 없다" 는 txstack 에만 해당한다.** 소비자
+프로젝트의 환경 파일은 `.gitignore` 대상이라 **머신마다 따로 있고, 따로 틀어진다.**
+
+| 파일                                         | 무엇                         |
+| -------------------------------------------- | ---------------------------- |
+| `black-message/apps/backend/src/config/.env` | DB · 비밀값 · `CORS_ORIGINS` |
+| `black-message/apps/frontend/.env.*`         | `VITE_*`                     |
+
+**2026-09-03 에 `CORS_ORIGINS` 가 바뀌었다.** dev 서버 포트를 80 에서 5173 으로
+옮겼기 때문이다(macOS 는 1024 미만 포트를 root 에게만 허용한다). 윈도우 쪽 `.env` 도
+같이 고치지 않으면 화면은 뜨는데 API 가 전부 막힌다.
+
+```
+CORS_ORIGINS=http://localhost:5173,...
+```
+
+**주소도 `http://localhost:5173` 로 바뀌었다.** 윈도우에서는 80 도 되던 자리라
+북마크와 습관이 남아 있을 수 있다.
 
 ## 외장 드라이브(exFAT)에 두면 느리다
 
