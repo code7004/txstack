@@ -68,7 +68,7 @@
 | `route-meta`  | **완료** — 테스트 25개 통과. `ui` 의 메뉴 부품과 이어 붙였고, **실사용 검증은 `apps/site` 가 한다**                                                                                                                          |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 테스트 1,674개                                                                                                                                          |
 | `apps/*`      | **storybook** — 부품 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트. 뼈대·내용·진짜 데이터까지 섰고 **배포(D)가 남았다** ([005_site](005_site.md)). `pnpm storybook:dev` · `pnpm site:dev` |
-| 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. husky · commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                                                                        |
+| 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. **husky 도 붙였다**(커밋할 때 포맷 자동 정리). commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                                 |
 
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
@@ -91,7 +91,15 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 아직 `0.x` 라 **`minor` 가 깨지는 변경도 담는다**(semver 가 그렇다). 그래도 깨지는 것은
 `major` 로 적어 둔다 — `1.0.0` 이 되는 날 그 기록이 그대로 뜻을 갖는다.
 
-husky · commitlint 는 아직이다. **사람이 둘 이상 커밋하기 시작할 때** 붙인다.
+**husky 는 붙였다 — 다만 포맷 때문이지 사람이 늘어서가 아니다.** `pnpm check` 에
+`format:check` 가 없어서 prettier 미준수 파일이 **122개까지 조용히 쌓인 적이 있다.**
+`check` 에 넣으면 작업 도중에 포맷 때문에 실패하므로, 커밋 시점에 스테이징된 파일만
+자동으로 맞추는 쪽을 골랐다 (`.husky/pre-commit` → `lint-staged`).
+
+전체 검사는 넣지 않았다. 테스트가 26초라 커밋마다 기다리면 훅을 끄게 된다 —
+`lint` · `typecheck` · `test` 는 `pnpm check` 가 계속 갖는다.
+
+**commitlint 는 아직이다.** 그건 여전히 **사람이 둘 이상 커밋하기 시작할 때** 붙인다.
 
 ## 다음 할 일
 
