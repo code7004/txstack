@@ -1,0 +1,14 @@
+# 스테이징된 파일만 eslint --fix + prettier --write 한다.
+#
+# 전체 검사(pnpm check)를 여기 두지 않는다 — 테스트가 26초라 커밋마다 그걸 기다리면
+# 훅을 끄게 된다. 포맷은 사람이 판단할 것이 없으므로 커밋 시점에 자동으로 맞추고,
+# lint · typecheck · test 는 pnpm check 로 따로 돌린다.
+#
+# 이걸 붙인 이유: format:check 가 pnpm check 에 없어서 미준수 파일이 122개까지
+# 조용히 쌓인 적이 있다.
+
+if [ -n "$VSCODE_GIT_IPC_HANDLE" ]; then
+  NO_COLOR=1 FORCE_COLOR=0 pnpm lint-staged
+else
+  pnpm lint-staged
+fi
