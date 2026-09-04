@@ -67,9 +67,7 @@ describe("TxAlert — 갈래", () => {
   });
 
   it("아이콘을 끌 수 있다", () => {
-    const { container } = render(
-      <TxAlert icon={false}>내용</TxAlert>
-    );
+    const { container } = render(<TxAlert icon={false}>내용</TxAlert>);
     expect(container.querySelector(".tx-alert__icon")).toBeNull();
   });
 

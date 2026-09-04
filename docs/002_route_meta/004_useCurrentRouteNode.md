@@ -2,12 +2,12 @@
 
 > 지금 어느 노드에 있는지 — 타이틀 · 브레드크럼이 여기서 나온다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/route-meta` |
-| 내보내는 것 | `useCurrentRouteNode` · `CurrentRoute` |
-| 소스 | [`packages/route-meta/src/hooks.ts`](../../packages/route-meta/src/hooks.ts) |
-| 테스트 | 8개 (jsdom + `MemoryRouter`) |
+|             |                                                                              |
+| ----------- | ---------------------------------------------------------------------------- |
+| 진입점      | `@txstack/route-meta`                                                        |
+| 내보내는 것 | `useCurrentRouteNode` · `CurrentRoute`                                       |
+| 소스        | [`packages/route-meta/src/hooks.ts`](../../packages/route-meta/src/hooks.ts) |
+| 테스트      | 8개 (jsdom + `MemoryRouter`)                                                 |
 
 ## 개발 목적
 

@@ -2,12 +2,12 @@
 
 > 얼마나 왔는지 보여 주는 막대.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxProgress` |
-| 소스 | [`packages/ui/src/TxProgress/`](../../packages/ui/src/TxProgress) |
-| 테스트 | 32개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxProgress`                                                      |
+| 소스        | [`packages/ui/src/TxProgress/`](../../packages/ui/src/TxProgress) |
+| 테스트      | 32개                                                              |
 
 ## 개발 목적
 

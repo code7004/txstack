@@ -2,12 +2,12 @@
 
 > 클라이언트를 만든다. **정책은 전부 여기서 주입받는다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/axios` |
-| 내보내는 것 | `createHttpClient` · `HttpClientOptions` |
-| 소스 | [`packages/axios/src/client.ts`](../../packages/axios/src/client.ts) · [`interceptors.ts`](../../packages/axios/src/interceptors.ts) |
-| 테스트 | 15개 (**node 환경**) |
+|             |                                                                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/axios`                                                                                                                     |
+| 내보내는 것 | `createHttpClient` · `HttpClientOptions`                                                                                             |
+| 소스        | [`packages/axios/src/client.ts`](../../packages/axios/src/client.ts) · [`interceptors.ts`](../../packages/axios/src/interceptors.ts) |
+| 테스트      | 15개 (**node 환경**)                                                                                                                 |
 
 ## 개발 목적
 
@@ -28,7 +28,7 @@ const api = createHttpClient({
   // 인증 — 매 요청마다 호출된다. 반환값이 없으면 헤더를 붙이지 않는다
   getToken: () => localStorage.getItem("accessToken"),
   authHeader: "Authorization", // 기본값
-  authScheme: "Bearer",        // 기본값. "" 이면 토큰만 넣는다
+  authScheme: "Bearer", // 기본값. "" 이면 토큰만 넣는다
 
   // 에러 정책 — 앱이 결정한다
   onUnauthorized: () => logout(),
@@ -58,9 +58,9 @@ const api = createHttpClient({
 
 ## 정한 것 · 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
-| `withCredentials` 기본 `true` | `false` (axios 기본값) | 라이브러리가 크로스오리진 쿠키 정책을 몰래 뒤집으면 안 된다 |
-| `Content-Type: application/json` 기본 헤더 | 넣지 않음 + FormData 면 비켜줌 | boundary 가 빠져 **파일 업로드가 깨진다** |
-| 요청 에러에서 무조건 `console.error` | 제거 (`debug` 뒤로) | 라이브러리가 소비자 콘솔을 오염시킨다 |
-| `IApiResponse<T>` | 삭제 | 특정 서비스의 봉투 모양. `unwrap` 을 주입받는 패키지가 들 이유가 없다 |
+| 원본                                       | 지금                           | 왜                                                                    |
+| ------------------------------------------ | ------------------------------ | --------------------------------------------------------------------- |
+| `withCredentials` 기본 `true`              | `false` (axios 기본값)         | 라이브러리가 크로스오리진 쿠키 정책을 몰래 뒤집으면 안 된다           |
+| `Content-Type: application/json` 기본 헤더 | 넣지 않음 + FormData 면 비켜줌 | boundary 가 빠져 **파일 업로드가 깨진다**                             |
+| 요청 에러에서 무조건 `console.error`       | 제거 (`debug` 뒤로)            | 라이브러리가 소비자 콘솔을 오염시킨다                                 |
+| `IApiResponse<T>`                          | 삭제                           | 특정 서비스의 봉투 모양. `unwrap` 을 주입받는 패키지가 들 이유가 없다 |

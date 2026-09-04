@@ -117,13 +117,7 @@ export function TxTicker({ flow = false, interval = 4000, speed = 40, controls =
         멈춤은 **읽는 자리**에만 건다. 버튼까지 여기 들어오면 버튼에 손을 얹는 것만으로
         멈춰서, 눌러도 아무 일이 없는 것처럼 보인다.
       */}
-      <div
-        className="tx-ticker__viewport"
-        onPointerEnter={() => setHeld(true)}
-        onPointerLeave={() => setHeld(false)}
-        onFocus={() => setHeld(true)}
-        onBlur={() => setHeld(false)}
-      >
+      <div className="tx-ticker__viewport" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
         {/*
           세로가 어디까지 올라갔는지는 **인라인 `transform`** 이 쥔다. 커스텀 프로퍼티만
           바꾸면 전이가 걸리는지가 브라우저마다 다르다 — 속성이 바뀌면 어디서나 미끄러진다.

@@ -2,12 +2,12 @@
 
 > 무언가에 붙는 알림 점·개수.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxBadge` |
-| 소스 | [`packages/ui/src/TxBadge/`](../../packages/ui/src/TxBadge) |
-| 테스트 | 26개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxBadge`                                                   |
+| 소스        | [`packages/ui/src/TxBadge/`](../../packages/ui/src/TxBadge) |
+| 테스트      | 26개                                                        |
 
 ## 개발 목적
 

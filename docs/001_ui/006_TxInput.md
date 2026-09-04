@@ -2,12 +2,12 @@
 
 > 한 줄 입력. **문자열과 숫자를 한 자리에서 다룬다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxInput, TxSearchInput` |
-| 소스 | [`packages/ui/src/TxInput/`](../../packages/ui/src/TxInput) |
-| 테스트 | 43개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxInput, TxSearchInput`                                    |
+| 소스        | [`packages/ui/src/TxInput/`](../../packages/ui/src/TxInput) |
+| 테스트      | 43개                                                        |
 
 ## 개발 목적
 

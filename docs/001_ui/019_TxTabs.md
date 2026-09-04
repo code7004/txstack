@@ -2,12 +2,12 @@
 
 > 탭. **머리말 한 줄과 그 아래 본문 한 칸.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxTabs` |
-| 소스 | [`packages/ui/src/TxTabs/`](../../packages/ui/src/TxTabs) |
-| 테스트 | 29개 |
+|             |                                                           |
+| ----------- | --------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                             |
+| 내보내는 것 | `TxTabs`                                                  |
+| 소스        | [`packages/ui/src/TxTabs/`](../../packages/ui/src/TxTabs) |
+| 테스트      | 29개                                                      |
 
 ## 개발 목적
 

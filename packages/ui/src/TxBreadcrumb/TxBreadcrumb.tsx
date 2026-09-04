@@ -55,7 +55,11 @@ export const TxBreadcrumbBase = ({ children, maxItems, itemsAfterCollapse = 2, s
         {shown.map((node, index) => (
           <li key={index} className={cm("tx-breadcrumb__cell", classNames?.item)}>
             {/* 가르는 표시는 장식이다. 스크린리더가 칸마다 읽으면 경로가 안 읽힌다 */}
-            {index > 0 && <span className="tx-breadcrumb__separator" aria-hidden>{separator}</span>}
+            {index > 0 && (
+              <span className="tx-breadcrumb__separator" aria-hidden>
+                {separator}
+              </span>
+            )}
 
             {node === "gap" ? (
               <span className="tx-breadcrumb__gap" aria-hidden>

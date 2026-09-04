@@ -2,12 +2,12 @@
 
 > 여러 장을 옆으로 넘겨 보는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCarousel` |
-| 소스 | [`packages/ui/src/TxCarousel/`](../../packages/ui/src/TxCarousel) |
-| 테스트 | 50개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxCarousel`                                                      |
+| 소스        | [`packages/ui/src/TxCarousel/`](../../packages/ui/src/TxCarousel) |
+| 테스트      | 50개                                                              |
 
 ## 개발 목적
 

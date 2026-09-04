@@ -21,7 +21,7 @@ const meta = {
           "```tsx",
           "<MemberList onPick={setEditing} />",
           "",
-          "<TxSlidePanel open={!!editing} title=\"회원 수정\" onClose={() => setEditing(undefined)}>",
+          '<TxSlidePanel open={!!editing} title="회원 수정" onClose={() => setEditing(undefined)}>',
           "  <MemberForm value={editing} single onDone={close} onCancel={close} />",
           "</TxSlidePanel>",
           "```",

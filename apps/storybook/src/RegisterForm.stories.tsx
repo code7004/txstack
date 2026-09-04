@@ -63,7 +63,7 @@ const meta = {
           "",
           "**폼에 `noValidate` 를 준다.** 안 주면 브라우저가 먼저 나서서 `required` 인 칸에 자기",
           "말풍선을 띄우고 제출을 막는다 — 우리 메시지는 뜨지도 않고, 그 말풍선은 문구도 겉모습도",
-          "손댈 수 없다. `required` 자체는 남긴다: 스크린리더에 \"필수\" 로 전달된다.",
+          '손댈 수 없다. `required` 자체는 남긴다: 스크린리더에 "필수" 로 전달된다.',
           "",
           "### 저장 흐름",
           "",
@@ -82,9 +82,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** 저장된 것을 보여 주는 자리. 실제 앱이라면 목록으로 돌아가거나 상세로 간다. */
-const Result = ({ saved }: { saved?: Member }) => (
-  <p className="text-sm text-slate-500 dark:text-slate-400">{saved ? `저장됨 — ${saved.id} · ${saved.name} · ${saved.email}` : "아직 저장하지 않았다."}</p>
-);
+const Result = ({ saved }: { saved?: Member }) => <p className="text-sm text-slate-500 dark:text-slate-400">{saved ? `저장됨 — ${saved.id} · ${saved.name} · ${saved.email}` : "아직 저장하지 않았다."}</p>;
 
 /** **기본 배치.** 넓으면 두 칸, 좁아지면 한 칸으로 접힌다(모서리를 끌어 좁혀 보라). */
 export const Default: Story = {

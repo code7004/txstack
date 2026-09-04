@@ -2,12 +2,12 @@
 
 > 고르는 자리. 네모를 눌러 체크한다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCheckBox` |
-| 소스 | [`packages/ui/src/TxCheckBox/`](../../packages/ui/src/TxCheckBox) |
-| 테스트 | 32개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxCheckBox`                                                      |
+| 소스        | [`packages/ui/src/TxCheckBox/`](../../packages/ui/src/TxCheckBox) |
+| 테스트      | 32개                                                              |
 
 ## 개발 목적
 

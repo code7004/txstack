@@ -61,7 +61,6 @@ export const TxCollapsible = ({ title, open, defaultOpen = false, onOpenChange, 
     if (details.open !== open) details.open = open;
   });
 
-
   /** 브라우저가 여닫은 뒤에 온다. 우리가 여는 것이 아니라 **열렸다는 소식**이다. */
   const hdToggle = (event: SyntheticEvent<HTMLDetailsElement>) => {
     const next = event.currentTarget.open;

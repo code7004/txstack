@@ -2,12 +2,12 @@
 
 > 라우트를 **메타데이터 트리 하나로 선언한다.** 이 패키지의 단일 출처다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/route-meta` (타입만) |
+|             |                                                                                              |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| 진입점      | `@txstack/route-meta` (타입만)                                                               |
 | 내보내는 것 | `RouteTree` · `RouteNode` · `PathRouteNode` · `IndexRouteNode` · `RouteMeta` · `RouteHandle` |
-| 소스 | [`packages/route-meta/src/types.ts`](../../packages/route-meta/src/types.ts) |
-| 테스트 | 타입이라 없다 — 쓰는 세 함수의 테스트가 지킨다 |
+| 소스        | [`packages/route-meta/src/types.ts`](../../packages/route-meta/src/types.ts)                 |
+| 테스트      | 타입이라 없다 — 쓰는 세 함수의 테스트가 지킨다                                               |
 
 ## 개발 목적
 
@@ -34,9 +34,9 @@ export const routes = {
     children: {
       home: { index: true, element: <UserList /> }, // 기본 화면. path 를 가질 수 없다
       detail: {
-        path: "/users/:id",                          // 절대경로로 쓴다
+        path: "/users/:id", // 절대경로로 쓴다
         element: <UserDetail />,
-        meta: { label: "회원 상세", hidden: true }   // 메뉴에는 안 나온다
+        meta: { label: "회원 상세", hidden: true } // 메뉴에는 안 나온다
       }
     }
   },
@@ -69,11 +69,11 @@ routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 
 
 **`RouteNode` 는 두 종류의 합집합이다.**
 
-| | `PathRouteNode` | `IndexRouteNode` |
-| --- | --- | --- |
-| `path` | **필수** | **가질 수 없다** |
-| `children` | 가능 | **가질 수 없다** |
-| 나머지 | `element` · `loader` · `action` · `errorElement` · `meta` · `enabled` | 동일 |
+|            | `PathRouteNode`                                                       | `IndexRouteNode` |
+| ---------- | --------------------------------------------------------------------- | ---------------- |
+| `path`     | **필수**                                                              | **가질 수 없다** |
+| `children` | 가능                                                                  | **가질 수 없다** |
+| 나머지     | `element` · `loader` · `action` · `errorElement` · `meta` · `enabled` | 동일             |
 
 `RouteMeta`: `label` · `icon` · `description` · `hidden` · `permissions`
 
@@ -85,9 +85,10 @@ routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 
       타입에 겹치기 때문**이다. 로그아웃처럼 누르면 실행되는 항목은 라우트가 아니므로,
       소비자가 메뉴에 직접 끼워 넣는다 — `TxSideNav.Item as="button"` 이 이미 그 자리다.
 
-      > 한때 이유를 "직렬화가 안 된다" 로 적었는데 그건 정확하지 않다 — `meta.icon` 도
-      > `ReactNode` 라 직렬화되지 않는다. **아이콘은 그려야 하는 데이터이고 핸들러는
-      > 동작이다.** 트리는 애초에 `element` 를 들고 있어서 직렬화 대상이 아니다
+  > 한때 이유를 "직렬화가 안 된다" 로 적었는데 그건 정확하지 않다 — `meta.icon` 도
+  > `ReactNode` 라 직렬화되지 않는다. **아이콘은 그려야 하는 데이터이고 핸들러는
+  > 동작이다.** 트리는 애초에 `element` 를 들고 있어서 직렬화 대상이 아니다
+
 - [x] **선언은 `satisfies` 로** — 키가 리터럴로 남는 것을 타입 단정으로 못 박았다
 
 ## 정한 것 · 고친 것

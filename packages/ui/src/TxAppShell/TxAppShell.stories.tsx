@@ -73,9 +73,7 @@ const Right = () => (
 );
 
 const Bottom = () => (
-  <pre style={{ margin: 0, padding: "0.75rem 1rem", fontSize: "0.8125rem", lineHeight: 1.7, color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>
-    {["> build 시작", "  38개 파일 확인", "  0 오류", "> 준비됨 (1.2s)"].join("\n")}
-  </pre>
+  <pre style={{ margin: 0, padding: "0.75rem 1rem", fontSize: "0.8125rem", lineHeight: 1.7, color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>{["> build 시작", "  38개 파일 확인", "  0 오류", "> 준비됨 (1.2s)"].join("\n")}</pre>
 );
 
 const Footer = () => <div style={{ padding: "1rem", fontSize: "0.8125rem", color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>© 2026 Acme</div>;
@@ -133,12 +131,12 @@ const meta = {
           "```",
           "",
           "**`좌 · (본문 · 아래) · 우` 다** — 좌우 패널이 바닥까지 서고 아래 패널은 본문 안에서",
-          "올라온다. `bottomSpan=\"screen\"` 을 주면 **좌우까지 아우르는 전체 폭**이 된다 —",
+          '올라온다. `bottomSpan="screen"` 을 주면 **좌우까지 아우르는 전체 폭**이 된다 —',
           "그때는 좌우가 그 위에서 끝나고 그 밑을 아래 패널이 가로지른다.",
           "",
           "이름은 방향이지만 **역할은 셸이 붙인다** — `top` · `left` 는 `<nav>`, `right` 는",
           "`<aside>`, `bottom` 은 `<section>` 이고 **각각 다른 이름이 간다.** 이름이 없으면",
-          "스크린리더가 \"탐색\" 여럿을 구분하지 못한다. 이름은 `labels` 로 바꾼다.",
+          '스크린리더가 "탐색" 여럿을 구분하지 못한다. 이름은 `labels` 로 바꾼다.',
           "",
           "좌우는 글 방향을 따른다 — RTL 에서는 `left` 가 오른쪽에 선다.",
           "",
@@ -188,7 +186,7 @@ const meta = {
           "",
           "### 헤더가 머무는 방식은 셋",
           "",
-          "`sticky` 가 `true`(기본)면 위에 붙어 있고, `\"hide\"` 면 **내리면 숨고 올리면 나온다**,",
+          '`sticky` 가 `true`(기본)면 위에 붙어 있고, `"hide"` 면 **내리면 숨고 올리면 나온다**,',
           "`false` 면 내용과 같이 굴러간다. `top` 은 헤더와 한 덩어리라 같이 따라간다.",
           "",
           "### 색과 여백은 슬롯이 정한다",
@@ -276,9 +274,7 @@ export const 끌어서크기바꾸기: Story = {
 
       return (
         <div style={{ display: "grid", gap: "0.5rem" }}>
-          <code style={{ fontSize: "0.8125rem", color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>
-            onPanelChange → {JSON.stringify(sizes)}
-          </code>
+          <code style={{ fontSize: "0.8125rem", color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>onPanelChange → {JSON.stringify(sizes)}</code>
           <div style={frame}>
             <TxAppShell
               header={<Brand />}
@@ -428,10 +424,7 @@ export const 폭바꾸기: Story = {
   args: { header: <Brand />, left: <Left />, right: <Right />, children: <Article /> },
   render: (args) => (
     <div style={frame}>
-      <TxAppShell
-        {...args}
-        style={{ minBlockSize: "24rem", ...vars({ "--tx-app-shell-left-width": "11rem", "--tx-app-shell-right-width": "18rem", "--tx-app-shell-main-padding": "2.5rem" }) }}
-      />
+      <TxAppShell {...args} style={{ minBlockSize: "24rem", ...vars({ "--tx-app-shell-left-width": "11rem", "--tx-app-shell-right-width": "18rem", "--tx-app-shell-main-padding": "2.5rem" }) }} />
     </div>
   )
 };

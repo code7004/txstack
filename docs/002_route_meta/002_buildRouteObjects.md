@@ -2,12 +2,12 @@
 
 > 트리를 React Router 의 `RouteObject[]` 로 바꾼다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/route-meta` |
-| 내보내는 것 | `buildRouteObjects` |
-| 소스 | [`packages/route-meta/src/utils.ts`](../../packages/route-meta/src/utils.ts) |
-| 테스트 | 6개 (**node 환경** — DOM 없이 돈다) |
+|             |                                                                              |
+| ----------- | ---------------------------------------------------------------------------- |
+| 진입점      | `@txstack/route-meta`                                                        |
+| 내보내는 것 | `buildRouteObjects`                                                          |
+| 소스        | [`packages/route-meta/src/utils.ts`](../../packages/route-meta/src/utils.ts) |
+| 테스트      | 6개 (**node 환경** — DOM 없이 돈다)                                          |
 
 ## 개발 목적
 
@@ -27,12 +27,12 @@ function App() {
 
 **라우터 계층의 필터 규칙은 메뉴와 다르다.**
 
-| | 라우터 | 메뉴 |
-| --- | --- | --- |
-| `enabled: false` | 제외 | 제외 |
-| `meta.hidden` | **등록** | 제외 |
-| `meta.permissions` | **등록** | `canAccess` 판정 |
-| index route | 등록 | 제외 (경로가 없다) |
+|                    | 라우터   | 메뉴               |
+| ------------------ | -------- | ------------------ |
+| `enabled: false`   | 제외     | 제외               |
+| `meta.hidden`      | **등록** | 제외               |
+| `meta.permissions` | **등록** | `canAccess` 판정   |
+| index route        | 등록     | 제외 (경로가 없다) |
 
 **`hidden` 인 라우트도 주소로는 접근돼야 한다.** 메뉴에 안 보일 뿐이다.
 권한도 라우터는 등록만 하고, 막는 것은 앱의 가드가 한다.

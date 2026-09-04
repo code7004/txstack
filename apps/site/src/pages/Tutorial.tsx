@@ -148,8 +148,7 @@ export function Tutorial() {
 
       <Block title="2. 검색은 Enter 로">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>TxSearchInput</code> 은 <strong>칠 때마다</strong>(<code>onChangeText</code>)와 <strong>Enter</strong>(<code>onSubmitText</code>)를 갈라 준다. 조회는 Enter 쪽에 붙인다 — 글자마다 서버를
-          부르면 응답이 화면보다 빨리 쌓인다.
+          <code>TxSearchInput</code> 은 <strong>칠 때마다</strong>(<code>onChangeText</code>)와 <strong>Enter</strong>(<code>onSubmitText</code>)를 갈라 준다. 조회는 Enter 쪽에 붙인다 — 글자마다 서버를 부르면 응답이 화면보다 빨리 쌓인다.
         </p>
 
         <CodeBlock title="조건이 바뀌면 1쪽으로">{`const search = (next: string) => {
@@ -162,8 +161,7 @@ export function Tutorial() {
 
       <Block title="3. 등록 폼">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>TxForm</code> 은 <strong>캡션 · 메시지를 컨트롤과 잇는 배선</strong>을 한다(<code>label for</code> · <code>aria-invalid</code> · <code>aria-describedby</code>). 무엇이 잘못인지 판정하는
-          것은 앱의 일이다.
+          <code>TxForm</code> 은 <strong>캡션 · 메시지를 컨트롤과 잇는 배선</strong>을 한다(<code>label for</code> · <code>aria-invalid</code> · <code>aria-describedby</code>). 무엇이 잘못인지 판정하는 것은 앱의 일이다.
         </p>
 
         <CodeBlock title="MemberForm.tsx">{`<TxForm noValidate labelWidth="3.5rem" onSubmit={submit}>
@@ -183,8 +181,7 @@ export function Tutorial() {
 
       <Block title="4. 지우기는 되돌릴 수 없다">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>TxDialog.confirm</code> 은 <strong>답을 기다린다</strong> — 네이티브 <code>confirm</code> 을 <code>await</code> 로 바꾼 것이다. <code>tone=&quot;danger&quot;</code> 는 색만 바꾸는 것이
-          아니라 "이건 파괴적이다" 를 알리는 자리다.
+          <code>TxDialog.confirm</code> 은 <strong>답을 기다린다</strong> — 네이티브 <code>confirm</code> 을 <code>await</code> 로 바꾼 것이다. <code>tone=&quot;danger&quot;</code> 는 색만 바꾸는 것이 아니라 "이건 파괴적이다" 를 알리는 자리다.
         </p>
 
         <CodeBlock title="지우기">{`const remove = async (member: Member) => {
@@ -212,7 +209,9 @@ export function Tutorial() {
 <TxPagination currentPage={page} totalRows={total} pageSize={5} onChangePage={setPage} />`}</CodeBlock>
 
           <div className="flex flex-col gap-3">
-            <p className="text-slate-600 dark:text-slate-300">머리글만 남은 표는 <strong>조회가 안 된 것인지 결과가 없는 것인지</strong> 알려 주지 않는다.</p>
+            <p className="text-slate-600 dark:text-slate-300">
+              머리글만 남은 표는 <strong>조회가 안 된 것인지 결과가 없는 것인지</strong> 알려 주지 않는다.
+            </p>
             <p className="text-slate-600 dark:text-slate-300">
               <code>TxPagination</code> 은 그리드와 무관해서 루트 배럴에 있다 — 카드 목록이나 손수 짠 표에도 같은 부품을 쓴다.
             </p>
@@ -230,8 +229,7 @@ export function Tutorial() {
         </Demo>
 
         <p className="text-slate-600 dark:text-slate-300">
-          수천 행을 굴리고 셀을 고쳐 넣어야 하면 표를 <code>TxAgGrid</code> 로 바꾼다 — 검색 · 등록 · 쪽 번호 코드는 그대로 두고 표만 갈아끼운다. 그 모양은 카탈로그의{" "}
-          <strong>Recipes › ListScreen</strong> 에 있다.
+          수천 행을 굴리고 셀을 고쳐 넣어야 하면 표를 <code>TxAgGrid</code> 로 바꾼다 — 검색 · 등록 · 쪽 번호 코드는 그대로 두고 표만 갈아끼운다. 그 모양은 카탈로그의 <strong>Recipes › ListScreen</strong> 에 있다.
         </p>
       </Block>
     </Page>

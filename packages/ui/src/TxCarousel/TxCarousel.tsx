@@ -439,12 +439,7 @@ export function TxCarousel({
               const clone = looping && (at < edge || at >= edge + count);
 
               return (
-                <li
-                  key={at}
-                  className="tx-carousel__item"
-                  data-clone={clone ? "" : undefined}
-                  {...(clone ? { "aria-hidden": true, inert: true } : { role: "group", "aria-roledescription": "slide", "aria-label": `${realOf(at) + 1} / ${count}` })}
-                >
+                <li key={at} className="tx-carousel__item" data-clone={clone ? "" : undefined} {...(clone ? { "aria-hidden": true, inert: true } : { role: "group", "aria-roledescription": "slide", "aria-label": `${realOf(at) + 1} / ${count}` })}>
                   {item}
                 </li>
               );

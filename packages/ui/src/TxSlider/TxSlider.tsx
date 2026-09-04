@@ -59,9 +59,7 @@ export const TxSlider = ({ value, defaultValue = 0, onChange, min = 0, max = 100
         {/* 고른 구간. 값에서 나온 두 비율로 그린다 */}
         <div className="tx-slider__fill" aria-hidden />
 
-        {dual && (
-          <input type="range" className="tx-slider__input" aria-label={labels[0]} min={min} max={max} step={step} value={start} disabled={disabled} onChange={(evt) => move(0, Number(evt.target.value))} />
-        )}
+        {dual && <input type="range" className="tx-slider__input" aria-label={labels[0]} min={min} max={max} step={step} value={start} disabled={disabled} onChange={(evt) => move(0, Number(evt.target.value))} />}
 
         <input type="range" className="tx-slider__input" aria-label={dual ? labels[1] : (label as string | undefined)} min={min} max={max} step={step} value={end} disabled={disabled} onChange={(evt) => move(1, Number(evt.target.value))} />
       </div>

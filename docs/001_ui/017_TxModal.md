@@ -2,12 +2,12 @@
 
 > 화면을 덮고 뜨는 창.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxModal` |
-| 소스 | [`packages/ui/src/TxModal/`](../../packages/ui/src/TxModal) |
-| 테스트 | 35개 |
+|             |                                                             |
+| ----------- | ----------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                               |
+| 내보내는 것 | `TxModal`                                                   |
+| 소스        | [`packages/ui/src/TxModal/`](../../packages/ui/src/TxModal) |
+| 테스트      | 35개                                                        |
 
 ## 개발 목적
 

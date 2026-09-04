@@ -2,12 +2,12 @@
 
 > "로딩 중" 을 화면에 세우는 자리. **언제 보일지**와 **옆에 붙는 문구**, **전체화면 딤**을 맡는다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxLoading` |
-| 소스 | [`packages/ui/src/TxLoading/`](../../packages/ui/src/TxLoading) |
-| 테스트 | 30개 |
+|             |                                                                 |
+| ----------- | --------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                   |
+| 내보내는 것 | `TxLoading`                                                     |
+| 소스        | [`packages/ui/src/TxLoading/`](../../packages/ui/src/TxLoading) |
+| 테스트      | 30개                                                            |
 
 ## 개발 목적
 

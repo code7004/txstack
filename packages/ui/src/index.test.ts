@@ -148,7 +148,8 @@ describe("@txstack/ui — Tailwind 를 싣지 않는다", () => {
   const here = import.meta.dirname;
 
   /** 흔한 유틸리티의 머리. 이름이 이렇게 시작하면 Tailwind 것으로 본다. */
-  const UTILITY = /^(?:flex|grid|block|inline|hidden|relative|absolute|fixed|sticky|[mp][trblxy]?-|w-|h-|min-|max-|size-|text-|font-|bg-|border|rounded|shadow|gap-|space-|items-|justify-|self-|order-|z-|opacity-|overflow-|cursor-|transition|duration-|ease-|animate-|ring|outline-|leading-|tracking-|truncate|sr-only)/;
+  const UTILITY =
+    /^(?:flex|grid|block|inline|hidden|relative|absolute|fixed|sticky|[mp][trblxy]?-|w-|h-|min-|max-|size-|text-|font-|bg-|border|rounded|shadow|gap-|space-|items-|justify-|self-|order-|z-|opacity-|overflow-|cursor-|transition|duration-|ease-|animate-|ring|outline-|leading-|tracking-|truncate|sr-only)/;
 
   /** 주석 속 예제는 **소비자 쓰임**을 보여 주는 문서지 우리가 싣는 클래스가 아니다. */
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");

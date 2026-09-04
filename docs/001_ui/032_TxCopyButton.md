@@ -2,12 +2,12 @@
 
 > 눌러서 글자를 복사하는 버튼.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCopyButton` |
-| 소스 | [`packages/ui/src/TxCopyButton/`](../../packages/ui/src/TxCopyButton) |
-| 테스트 | 21개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxCopyButton`                                                        |
+| 소스        | [`packages/ui/src/TxCopyButton/`](../../packages/ui/src/TxCopyButton) |
+| 테스트      | 21개                                                                  |
 
 ## 개발 목적
 

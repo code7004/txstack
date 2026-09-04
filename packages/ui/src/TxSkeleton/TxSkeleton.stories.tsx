@@ -81,7 +81,7 @@ const meta = {
           "### 빈 상자를 읽어 주지 않는다",
           "",
           "우리가 그린 막대는 `aria-hidden` 이라 스크린리더가 세지 않고, 바깥이",
-          "**`aria-busy`** 로 \"지금 이 자리를 채우는 중\" 을 한 번만 알린다.",
+          '**`aria-busy`** 로 "지금 이 자리를 채우는 중" 을 한 번만 알린다.',
           "",
           "자식에서 가져올 때는 **`inert`** 로 그 가지를 통째로 뺀다 — 값이 없는 동안에는",
           "빈 버튼·입력이 남아 있는데, **이름도 내용도 없는 것에 Tab 이 멈추면 막다른 길**이다.",
@@ -237,7 +237,13 @@ export const List: Story = {
   render: function ListStory() {
     const [loading, setLoading] = useState(true);
 
-    const users = loading ? undefined : [{ name: "홍길동", email: "hong@example.com" }, { name: "임꺽정", email: "im@example.com" }, { name: "장길산", email: "jang@example.com" }];
+    const users = loading
+      ? undefined
+      : [
+          { name: "홍길동", email: "hong@example.com" },
+          { name: "임꺽정", email: "im@example.com" },
+          { name: "장길산", email: "jang@example.com" }
+        ];
 
     // 불러오는 동안 보일 빈 줄. 값이 없는 행을 그리면 auto 가 그 자리를 칠한다
     const rows = users ?? Array.from({ length: 3 }, () => undefined);

@@ -2,12 +2,12 @@
 
 > 직접 쳐 넣으면서 후보도 고르는 입력창.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCombobox` |
-| 소스 | [`packages/ui/src/TxCombobox/`](../../packages/ui/src/TxCombobox) |
-| 테스트 | 35개 |
+|             |                                                                   |
+| ----------- | ----------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                     |
+| 내보내는 것 | `TxCombobox`                                                      |
+| 소스        | [`packages/ui/src/TxCombobox/`](../../packages/ui/src/TxCombobox) |
+| 테스트      | 35개                                                              |
 
 ## 개발 목적
 

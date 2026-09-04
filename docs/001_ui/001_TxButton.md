@@ -2,12 +2,12 @@
 
 > 누르면 뭔가 일어나는 자리.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxButton` |
-| 소스 | [`packages/ui/src/TxButton/`](../../packages/ui/src/TxButton) |
-| 테스트 | 41개 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                 |
+| 내보내는 것 | `TxButton`                                                    |
+| 소스        | [`packages/ui/src/TxButton/`](../../packages/ui/src/TxButton) |
+| 테스트      | 41개                                                          |
 
 ## 개발 목적
 

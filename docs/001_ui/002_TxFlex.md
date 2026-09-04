@@ -2,12 +2,12 @@
 
 > 가로로 늘어놓는 자리. `display: flex` 와 **간격 기본값**을 준다. 그게 전부다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxFlex` |
-| 소스 | [`packages/ui/src/TxFlex/`](../../packages/ui/src/TxFlex) |
-| 테스트 | 16개 |
+|             |                                                           |
+| ----------- | --------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                             |
+| 내보내는 것 | `TxFlex`                                                  |
+| 소스        | [`packages/ui/src/TxFlex/`](../../packages/ui/src/TxFlex) |
+| 테스트      | 16개                                                      |
 
 ## 개발 목적
 

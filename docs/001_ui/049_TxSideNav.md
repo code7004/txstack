@@ -2,13 +2,13 @@
 
 > 세로로 서는 내비게이션. **아이콘만 남기고 접히고, 하위메뉴는 트리로 접힌다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxSideNav` · `TxSideNav.Item` · `TxSideNav.Group` |
-| 소스 | [`packages/ui/src/TxSideNav/`](../../packages/ui/src/TxSideNav) |
-| 테스트 | 27개 |
-| 짝 | 가로는 [048_TxNavBar](048_TxNavBar.md) 가 갖는다 |
+|             |                                                                 |
+| ----------- | --------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                   |
+| 내보내는 것 | `TxSideNav` · `TxSideNav.Item` · `TxSideNav.Group`              |
+| 소스        | [`packages/ui/src/TxSideNav/`](../../packages/ui/src/TxSideNav) |
+| 테스트      | 27개                                                            |
+| 짝          | 가로는 [048_TxNavBar](048_TxNavBar.md) 가 갖는다                |
 
 ## 개발 목적
 
@@ -52,10 +52,10 @@ import { TxAppShell, TxSideNav } from "@txstack/ui";
 
 ### 접기는 두 가지가 있고 서로 다르다
 
-| 무엇 | 누가 | 결과 |
-| --- | --- | --- |
-| 패널을 감춘다 | `TxAppShell` 의 `panels.left.collapse` | 폭 `0` — 자리가 사라진다 |
-| **아이콘만 남긴다** | **이 부품의 `collapsed`** | 폭이 rail 로 줄고 **아이콘 줄이 남는다** |
+| 무엇                | 누가                                   | 결과                                     |
+| ------------------- | -------------------------------------- | ---------------------------------------- |
+| 패널을 감춘다       | `TxAppShell` 의 `panels.left.collapse` | 폭 `0` — 자리가 사라진다                 |
+| **아이콘만 남긴다** | **이 부품의 `collapsed`**              | 폭이 rail 로 줄고 **아이콘 줄이 남는다** |
 
 **둘 중 하나만 쓴다.** 접는 길이 둘이면 소비자가 무엇을 눌러야 하는지 모른다 —
 `TxLayout` 을 자를 때 세운 기준이 그것이었다.
@@ -74,7 +74,11 @@ rail 은 **줄의 폭**을 줄인다. 그런데 셸의 `left` 는 `--tx-app-shel
 
 ```tsx
 <TxAppShell
-  left={<TxSideNav collapsed={rail} onCollapsedChange={setRail}>{items}</TxSideNav>}
+  left={
+    <TxSideNav collapsed={rail} onCollapsedChange={setRail}>
+      {items}
+    </TxSideNav>
+  }
   style={{ "--tx-app-shell-left-width": "fit-content" }}
 />
 ```
@@ -89,10 +93,10 @@ rail 은 **줄의 폭**을 줄인다. 그런데 셸의 `left` 는 `--tx-app-shel
 
 두 갈래를 놓고 봤다.
 
-| 안 | 왜 아닌가 |
-| --- | --- |
-| 셸이 rail 을 안다 (`panels.left.collapse: "rail"`) | 아이콘 줄은 **`TxSideNav` 에만 뜻이 있다.** 셸은 슬롯에 무엇이 오는지 모르는 것이 원칙이고("색과 여백은 슬롯이 정한다"), 그 모드를 넣는 순간 셸이 특정 부품을 알게 된다 |
-| `TxSideNav` 가 자리째 갖는다 (테두리 · 크기 조절 · 기억까지) | 셸이 **이미 가진 것을 두 번 만든다.** `TxLayout` 을 자른 이유가 그것이었다 |
+| 안                                                           | 왜 아닌가                                                                                                                                                               |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 셸이 rail 을 안다 (`panels.left.collapse: "rail"`)           | 아이콘 줄은 **`TxSideNav` 에만 뜻이 있다.** 셸은 슬롯에 무엇이 오는지 모르는 것이 원칙이고("색과 여백은 슬롯이 정한다"), 그 모드를 넣는 순간 셸이 특정 부품을 알게 된다 |
+| `TxSideNav` 가 자리째 갖는다 (테두리 · 크기 조절 · 기억까지) | 셸이 **이미 가진 것을 두 번 만든다.** `TxLayout` 을 자른 이유가 그것이었다                                                                                              |
 
 **셸은 "내용에 맞춘다" 만 알면 되고, 줄은 자기 폭만 알면 된다.** 서로를 모르는 채로 맞물린다.
 

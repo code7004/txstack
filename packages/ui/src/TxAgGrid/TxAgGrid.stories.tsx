@@ -254,7 +254,9 @@ export const SortOnServer: Story = {
     return (
       <Frame>
         <TxAgGrid<Member> rowData={rows} defaultColDef={{ flex: 1 }} option={{ headers: ["id", "name", "role"], serverSortColumns: "*" }} sortState={sort} onChangeSort={setSort} />
-        <Note>서버로 보낼 것 — key: {sort.key ?? "-"} / value: {sort.value}</Note>
+        <Note>
+          서버로 보낼 것 — key: {sort.key ?? "-"} / value: {sort.value}
+        </Note>
       </Frame>
     );
   }

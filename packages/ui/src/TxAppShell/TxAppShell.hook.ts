@@ -197,15 +197,7 @@ export function useResize({ panels, onChange }: Pick<TxAppShellProps, "panels"> 
       const grow = slot === "left" ? ["ArrowRight", "ArrowDown"] : ["ArrowLeft", "ArrowUp"];
       const shrink = slot === "left" ? ["ArrowLeft", "ArrowUp"] : ["ArrowRight", "ArrowDown"];
 
-      const next = grow.includes(event.key)
-        ? size + STEP
-        : shrink.includes(event.key)
-          ? size - STEP
-          : event.key === "Home"
-            ? min
-            : event.key === "End"
-              ? max
-              : null;
+      const next = grow.includes(event.key) ? size + STEP : shrink.includes(event.key) ? size - STEP : event.key === "Home" ? min : event.key === "End" ? max : null;
 
       if (next == null) return;
 

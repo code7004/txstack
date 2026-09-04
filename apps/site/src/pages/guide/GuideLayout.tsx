@@ -89,13 +89,15 @@ export function GuideLayout() {
 
       <Block title="좁아지면 서랍으로 옮긴다">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>breakpoint</code>(기본 960px)보다 좁아지면 헤더에 햄버거가 생기고 <code>left</code> 가 서랍으로 들어간다. <strong>그 안에 서는 것이 <code>TxSideNav</code></strong> 라, 가로 줄(<code>TxNavBar</code>)은
-          스스로 접히지 않는다 — 상황이 하나만 남는다.
+          <code>breakpoint</code>(기본 960px)보다 좁아지면 헤더에 햄버거가 생기고 <code>left</code> 가 서랍으로 들어간다.{" "}
+          <strong>
+            그 안에 서는 것이 <code>TxSideNav</code>
+          </strong>{" "}
+          라, 가로 줄(<code>TxNavBar</code>)은 스스로 접히지 않는다 — 상황이 하나만 남는다.
         </p>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>접기는 두 가지가 있고 서로 다르다.</strong> 셸의 <code>left.collapse</code> 는 패널을 폭 0 으로 감추고, <code>TxSideNav</code> 의 <code>collapsed</code> 는 아이콘 줄로 남긴다. 둘 중
-          하나만 쓴다.
+          <strong>접기는 두 가지가 있고 서로 다르다.</strong> 셸의 <code>left.collapse</code> 는 패널을 폭 0 으로 감추고, <code>TxSideNav</code> 의 <code>collapsed</code> 는 아이콘 줄로 남긴다. 둘 중 하나만 쓴다.
         </p>
 
         <CodeBlock language="css" title="자리가 줄에 맞춰 줄게 하려면">{`/* 셸이 내용에 맞춰 폭을 잡으면 rail 이 그대로 셸을 움직인다 */
@@ -105,7 +107,9 @@ export function GuideLayout() {
       <Block title="가로냐 세로냐로 갈랐다">
         <SideBySide>
           <TxCard title="TxNavBar — 가로">
-            <p className="text-sm text-slate-600 dark:text-slate-300">항목에 <code>panel</code> 을 주면 메가메뉴가 된다. <code>as</code> 를 함께 주면 제목이 링크가 되고 옆의 <code>▾</code> 가 패널을 연다.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              항목에 <code>panel</code> 을 주면 메가메뉴가 된다. <code>as</code> 를 함께 주면 제목이 링크가 되고 옆의 <code>▾</code> 가 패널을 연다.
+            </p>
           </TxCard>
 
           <TxCard title="TxSideNav — 세로">

@@ -2,12 +2,12 @@
 
 > 비밀번호를 칠 때 Caps Lock 이 켜져 있으면 알려 준다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCapsLockCheck` |
-| 소스 | [`packages/ui/src/TxCapsLockCheck/`](../../packages/ui/src/TxCapsLockCheck) |
-| 테스트 | 22개 |
+|             |                                                                             |
+| ----------- | --------------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                               |
+| 내보내는 것 | `TxCapsLockCheck`                                                           |
+| 소스        | [`packages/ui/src/TxCapsLockCheck/`](../../packages/ui/src/TxCapsLockCheck) |
+| 테스트      | 22개                                                                        |
 
 ## 개발 목적
 

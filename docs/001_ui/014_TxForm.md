@@ -2,12 +2,12 @@
 
 > 폼 한 줄을 짜는 계층. 캡션 · 에러 · 필수 표시를 컨트롤과 **잇는다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxForm, TxFormField` |
-| 소스 | [`packages/ui/src/TxForm/`](../../packages/ui/src/TxForm) |
-| 테스트 | 39개 |
+|             |                                                           |
+| ----------- | --------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                             |
+| 내보내는 것 | `TxForm, TxFormField`                                     |
+| 소스        | [`packages/ui/src/TxForm/`](../../packages/ui/src/TxForm) |
+| 테스트      | 39개                                                      |
 
 ## 개발 목적
 

@@ -2,12 +2,12 @@
 
 > 날짜 하나를 고른다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui/daypicker` — 서브패스. peer `react-day-picker` |
-| 내보내는 것 | `TxDayPicker, TxDayPickerRange` |
-| 소스 | [`packages/ui/src/TxDayPicker/`](../../packages/ui/src/TxDayPicker) |
-| 테스트 | 43개 |
+|             |                                                                     |
+| ----------- | ------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui/daypicker` — 서브패스. peer `react-day-picker`         |
+| 내보내는 것 | `TxDayPicker, TxDayPickerRange`                                     |
+| 소스        | [`packages/ui/src/TxDayPicker/`](../../packages/ui/src/TxDayPicker) |
+| 테스트      | 43개                                                                |
 
 ## 개발 목적
 
@@ -18,7 +18,7 @@
 ```tsx
 import { TxDayPicker } from "@txstack/ui/daypicker";
 
-<TxDayPicker value={date} onChange={setDate} />
+<TxDayPicker value={date} onChange={setDate} />;
 ```
 
 `value` 를 주면 controlled 다. 고른 날짜는 **그날 00:00** 으로 맞춰서 준다.

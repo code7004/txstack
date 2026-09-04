@@ -2,12 +2,12 @@
 
 > 네이티브 `alert` · `confirm` 을 대신하는 확인창. **어디서든 부른다** —
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxDialog` |
-| 소스 | [`packages/ui/src/TxDialog/`](../../packages/ui/src/TxDialog) |
-| 테스트 | 21개 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                 |
+| 내보내는 것 | `TxDialog`                                                    |
+| 소스        | [`packages/ui/src/TxDialog/`](../../packages/ui/src/TxDialog) |
+| 테스트      | 21개                                                          |
 
 ## 개발 목적
 

@@ -2,12 +2,12 @@
 
 > 쪽 번호. **그리드와 무관하다** — 카드 목록이든 표든 서버가 `offset`·`total` 로 주는 자리면 쓴다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxPagination` |
-| 소스 | [`packages/ui/src/TxPagination/`](../../packages/ui/src/TxPagination) |
-| 테스트 | 20개 |
+|             |                                                                       |
+| ----------- | --------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                         |
+| 내보내는 것 | `TxPagination`                                                        |
+| 소스        | [`packages/ui/src/TxPagination/`](../../packages/ui/src/TxPagination) |
+| 테스트      | 20개                                                                  |
 
 ## 개발 목적
 

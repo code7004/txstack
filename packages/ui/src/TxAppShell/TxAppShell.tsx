@@ -167,7 +167,14 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
         {left != null && !inDrawer && panel("left", left, classNames?.left)}
 
         {/* 아래 패널이 본문 폭만 덮으면 둘이 한 칸을 이룬다 */}
-        {bottomSpan === "main" ? <div className="tx-app-shell__center">{main}{bottomPanel}</div> : main}
+        {bottomSpan === "main" ? (
+          <div className="tx-app-shell__center">
+            {main}
+            {bottomPanel}
+          </div>
+        ) : (
+          main
+        )}
 
         {right != null && panel("right", right, classNames?.right)}
       </div>

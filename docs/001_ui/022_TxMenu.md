@@ -2,12 +2,12 @@
 
 > 눌러서 펼치는 메뉴와 우클릭 메뉴. **공개는 둘, 속은 하나다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxContextMenu, TxDropMenu` |
-| 소스 | [`packages/ui/src/TxMenu/`](../../packages/ui/src/TxMenu) |
-| 테스트 | 33개 |
+|             |                                                           |
+| ----------- | --------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                             |
+| 내보내는 것 | `TxContextMenu, TxDropMenu`                               |
+| 소스        | [`packages/ui/src/TxMenu/`](../../packages/ui/src/TxMenu) |
+| 테스트      | 33개                                                      |
 
 ## 개발 목적
 

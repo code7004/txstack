@@ -33,8 +33,8 @@ export function GuideDarkMode() {
         <CodeBlock title="theme.ts">{`document.documentElement.classList.toggle("dark", isDark);`}</CodeBlock>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>언제 켜는지는 앱이 정한다.</strong> 시스템 설정을 따를지, 사용자가 고른 값을 기억할지, 시간대로 바꿀지 — 라이브러리가 정하면 그 판단을 뺏는다. 이 사이트는 저장된 값이 있으면 그것을, 없으면{" "}
-          <code>prefers-color-scheme</code> 을 따른다.
+          <strong>언제 켜는지는 앱이 정한다.</strong> 시스템 설정을 따를지, 사용자가 고른 값을 기억할지, 시간대로 바꿀지 — 라이브러리가 정하면 그 판단을 뺏는다. 이 사이트는 저장된 값이 있으면 그것을, 없으면 <code>prefers-color-scheme</code> 을
+          따른다.
         </p>
       </Block>
 
@@ -55,8 +55,7 @@ export function GuideDarkMode() {
 
           <div className="flex flex-col gap-3">
             <p className="text-slate-600 dark:text-slate-300">
-              부품 CSS 안에 <code>.dark</code> 분기를 흩뿌리지 않는다. 색 하나를 바꿀 때 라이트·다크를 따로 찾아다녀야 하기 때문이다 — <strong>그것을 테스트가 지킨다</strong>(부품 CSS 에{" "}
-              <code>.dark</code> 가 있으면 실패한다).
+              부품 CSS 안에 <code>.dark</code> 분기를 흩뿌리지 않는다. 색 하나를 바꿀 때 라이트·다크를 따로 찾아다녀야 하기 때문이다 — <strong>그것을 테스트가 지킨다</strong>(부품 CSS 에 <code>.dark</code> 가 있으면 실패한다).
             </p>
 
             <TxAlert variant="warning" title="ag-grid 는 예외다">
@@ -79,8 +78,8 @@ export function GuideDarkMode() {
 
       <Block title="페이지 바탕은 앱이 칠한다">
         <p className="text-slate-600 dark:text-slate-300">
-          라이브러리는 부품의 면(<code>--tx-color-surface</code>)만 갖고 <strong>페이지 바탕 토큰은 내보내지 않는다.</strong> 안 칠하면 브라우저의 기본 캔버스가 그대로 보인다 — 시스템이 다크인 채로 라이트로
-          바꿨을 때 <strong>본문만 검게 남는다.</strong>
+          라이브러리는 부품의 면(<code>--tx-color-surface</code>)만 갖고 <strong>페이지 바탕 토큰은 내보내지 않는다.</strong> 안 칠하면 브라우저의 기본 캔버스가 그대로 보인다 — 시스템이 다크인 채로 라이트로 바꿨을 때{" "}
+          <strong>본문만 검게 남는다.</strong>
         </p>
 
         <CodeBlock language="css" title="app.css">{`html {
@@ -103,8 +102,7 @@ html.dark {
         <SideBySide>
           <TxCard title="어두운 바탕에서는 강조색을 밝게">
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              같은 청록을 두 모드에서 쓰면 한쪽이 반드시 읽히지 않는다. 라이트 <code>#0f766e</code> / 다크 <code>#2dd4bf</code> 로 뒤집고, 그 위에 얹는 글자색(<code>--tx-color-on-accent</code>)도 함께
-              바꾼다.
+              같은 청록을 두 모드에서 쓰면 한쪽이 반드시 읽히지 않는다. 라이트 <code>#0f766e</code> / 다크 <code>#2dd4bf</code> 로 뒤집고, 그 위에 얹는 글자색(<code>--tx-color-on-accent</code>)도 함께 바꾼다.
             </p>
           </TxCard>
 

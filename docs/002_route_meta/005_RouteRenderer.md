@@ -2,12 +2,12 @@
 
 > `buildRouteObjects` + `useRoutes` 를 감싼 **얇은 포장**.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/route-meta` |
-| 내보내는 것 | `RouteRenderer` |
-| 소스 | [`packages/route-meta/src/renderer.tsx`](../../packages/route-meta/src/renderer.tsx) |
-| 테스트 | 없다 — 감싸는 `buildRouteObjects` 의 테스트가 지킨다 |
+|             |                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/route-meta`                                                                |
+| 내보내는 것 | `RouteRenderer`                                                                      |
+| 소스        | [`packages/route-meta/src/renderer.tsx`](../../packages/route-meta/src/renderer.tsx) |
+| 테스트      | 없다 — 감싸는 `buildRouteObjects` 의 테스트가 지킨다                                 |
 
 ## 개발 목적
 

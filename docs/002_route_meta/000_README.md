@@ -26,24 +26,24 @@ RouteTree (단일 출처)
 
 **5개가 끝났다. 테스트 25개.** 번호는 트리를 선언하고 쓰는 차례다.
 
-| 번호 | 무엇 | 하는 일 | 테스트 |
-| --- | --- | --- | --- |
-| 001 | [`RouteTree`](001_RouteTree.md) | 트리 선언 형식 — 이 패키지의 단일 출처 | 2 (타입 단정) |
-| 002 | [`buildRouteObjects`](002_buildRouteObjects.md) | 트리 → React Router `RouteObject[]` | 6 |
-| 003 | [`getNavigableRoutes`](003_getNavigableRoutes.md) | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`) | 11 |
-| 004 | [`useCurrentRouteNode`](004_useCurrentRouteNode.md) | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8 |
-| 005 | [`RouteRenderer`](005_RouteRenderer.md) | 002 를 감싼 얇은 포장 | — |
+| 번호 | 무엇                                                | 하는 일                                  | 테스트        |
+| ---- | --------------------------------------------------- | ---------------------------------------- | ------------- |
+| 001  | [`RouteTree`](001_RouteTree.md)                     | 트리 선언 형식 — 이 패키지의 단일 출처   | 2 (타입 단정) |
+| 002  | [`buildRouteObjects`](002_buildRouteObjects.md)     | 트리 → React Router `RouteObject[]`      | 6             |
+| 003  | [`getNavigableRoutes`](003_getNavigableRoutes.md)   | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`)  | 11            |
+| 004  | [`useCurrentRouteNode`](004_useCurrentRouteNode.md) | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8             |
+| 005  | [`RouteRenderer`](005_RouteRenderer.md)             | 002 를 감싼 얇은 포장                    | —             |
 
 ## 두 계층의 필터 규칙이 다르다
 
 이게 이 패키지의 핵심이다.
 
-| | 라우터 | 메뉴 |
-| --- | --- | --- |
-| `enabled: false` | 제외 | 제외 |
-| `meta.hidden` | **등록** | 제외 |
-| `meta.permissions` | **등록** | `canAccess` 판정 |
-| index route | 등록 | 제외 (경로가 없다) |
+|                    | 라우터   | 메뉴               |
+| ------------------ | -------- | ------------------ |
+| `enabled: false`   | 제외     | 제외               |
+| `meta.hidden`      | **등록** | 제외               |
+| `meta.permissions` | **등록** | `canAccess` 판정   |
+| index route        | 등록     | 제외 (경로가 없다) |
 
 `hidden` 인 라우트도 **주소로는 접근돼야 한다.** 메뉴에 안 보일 뿐이다.
 

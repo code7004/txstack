@@ -2,12 +2,12 @@
 
 > 눌러서 접고 펴는 한 덩이.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/ui` |
-| 내보내는 것 | `TxCollapsible` |
-| 소스 | [`packages/ui/src/TxCollapsible/`](../../packages/ui/src/TxCollapsible) |
-| 테스트 | 32개 |
+|             |                                                                         |
+| ----------- | ----------------------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                                           |
+| 내보내는 것 | `TxCollapsible`                                                         |
+| 소스        | [`packages/ui/src/TxCollapsible/`](../../packages/ui/src/TxCollapsible) |
+| 테스트      | 32개                                                                    |
 
 ## 개발 목적
 

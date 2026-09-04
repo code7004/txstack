@@ -2,12 +2,12 @@
 
 > 같은 트리에서 **GNB · 사이드 메뉴**를 뽑는다.
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/route-meta` |
-| 내보내는 것 | `getNavigableRoutes` · `CanAccess` · `NavRoute` |
-| 소스 | [`packages/route-meta/src/utils.ts`](../../packages/route-meta/src/utils.ts) |
-| 테스트 | 11개 (**node 환경**) |
+|             |                                                                              |
+| ----------- | ---------------------------------------------------------------------------- |
+| 진입점      | `@txstack/route-meta`                                                        |
+| 내보내는 것 | `getNavigableRoutes` · `CanAccess` · `NavRoute`                              |
+| 소스        | [`packages/route-meta/src/utils.ts`](../../packages/route-meta/src/utils.ts) |
+| 테스트      | 11개 (**node 환경**)                                                         |
 
 ## 개발 목적
 
@@ -26,8 +26,8 @@ const menu = getNavigableRoutes(routes, (perms) => perms.some((p) => user.roles.
 
 ```tsx
 interface NavRoute {
-  key: string;           // 트리에 쓴 키 그대로
-  path: string;          // index route 는 메뉴에 안 오르므로 언제나 있다
+  key: string; // 트리에 쓴 키 그대로
+  path: string; // index route 는 메뉴에 안 오르므로 언제나 있다
   meta?: RouteMeta;
   children?: NavRoute[]; // 살아남은 자식이 없으면 필드가 없다
 }
@@ -70,9 +70,9 @@ const publicMenu = getNavigableRoutes(routes);
 
 ## 정한 것 · 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
-| `getNavigableRoutes(tree, permission?: string)` | `canAccess` 판정 함수 주입 | 사용자는 권한을 여럿 가질 수 있다. 권한 모델은 앱이 정한다 |
-| 살아남은 자식을 `path` 로 다시 묶음 | 원본 키 보존 | `detail` 이 `/users/:id` 로 바뀌어, 키로 접근하던 코드가 조용히 깨졌다 |
-| 자식이 전부 걸러지면 원본 `children` 이 그대로 남음 | `children` 을 달지 않음 | `{ ...node }` 로 퍼뜨린 탓에 **숨긴 자식이 메뉴 데이터에 다시 나타났다.** 빈 배열도 주지 않는다 — 있으면 "펼치는 항목" 으로 보인다 |
-| `RouteNode[]` 를 그대로 반환 (자식은 키 있는 객체) | `NavRoute[]` — 위아래 같은 형태 | 재귀가 두 형태를 다뤄야 했고, 메뉴 데이터에 `element` · `loader` 가 섞여 있었다 |
+| 원본                                                | 지금                            | 왜                                                                                                                                 |
+| --------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `getNavigableRoutes(tree, permission?: string)`     | `canAccess` 판정 함수 주입      | 사용자는 권한을 여럿 가질 수 있다. 권한 모델은 앱이 정한다                                                                         |
+| 살아남은 자식을 `path` 로 다시 묶음                 | 원본 키 보존                    | `detail` 이 `/users/:id` 로 바뀌어, 키로 접근하던 코드가 조용히 깨졌다                                                             |
+| 자식이 전부 걸러지면 원본 `children` 이 그대로 남음 | `children` 을 달지 않음         | `{ ...node }` 로 퍼뜨린 탓에 **숨긴 자식이 메뉴 데이터에 다시 나타났다.** 빈 배열도 주지 않는다 — 있으면 "펼치는 항목" 으로 보인다 |
+| `RouteNode[]` 를 그대로 반환 (자식은 키 있는 객체)  | `NavRoute[]` — 위아래 같은 형태 | 재귀가 두 형태를 다뤄야 했고, 메뉴 데이터에 `element` · `loader` 가 섞여 있었다                                                    |

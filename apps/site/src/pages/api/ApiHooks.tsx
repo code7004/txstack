@@ -14,8 +14,11 @@ setForm({ name: "홍길동" });          // 나머지는 그대로
 setForm((prev) => ({ agree: !prev.agree }));`}</CodeBlock>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <code>useState</code> 로 객체를 다루면 <code>setForm(prev =&gt; ({"{"} ...prev, name {"}"}))</code> 를 매번 쓰게 된다. <strong>퍼뜨리는 것을 잊으면 나머지 필드가 조용히 사라진다</strong> — 그
-          자리를 없앤 훅이다.
+          <code>useState</code> 로 객체를 다루면{" "}
+          <code>
+            setForm(prev =&gt; ({"{"} ...prev, name {"}"}))
+          </code>{" "}
+          를 매번 쓰게 된다. <strong>퍼뜨리는 것을 잊으면 나머지 필드가 조용히 사라진다</strong> — 그 자리를 없앤 훅이다.
         </p>
       </Block>
 
@@ -31,8 +34,7 @@ setQuery((prev) => ({ page: prev.page + 1 }));`}</CodeBlock>
 
         <div className="flex flex-col gap-2 text-slate-600 dark:text-slate-300">
           <p>
-            <strong>기본값의 타입이 복원 규칙이다.</strong> <code>page: 1</code> 이면 <code>?page=2</code> 를 숫자 <code>2</code> 로 읽는다. 기본값이 <code>undefined</code> 라 타입을 정할 수 없으면{" "}
-            <code>queryTypes</code> 로 준다.
+            <strong>기본값의 타입이 복원 규칙이다.</strong> <code>page: 1</code> 이면 <code>?page=2</code> 를 숫자 <code>2</code> 로 읽는다. 기본값이 <code>undefined</code> 라 타입을 정할 수 없으면 <code>queryTypes</code> 로 준다.
           </p>
           <p>
             <strong>반환 상태의 키 집합은 기본값이 정한다.</strong> 주소에 없는 키가 런타임에 생기지 않는다.
@@ -61,8 +63,7 @@ setQuery((prev) => ({ page: prev.page + 1 }));`}</CodeBlock>
 
       <Block title="가져오지 않은 것">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>useDebounce</code> · <code>useLocalStorage</code> 같은 것은 담지 않았다. <strong>어디에나 있는 것을 우리 이름으로 다시 파는 일</strong>이고, 앱마다 원하는 동작이 조금씩 달라서 결국
-          각자 짜게 된다.
+          <code>useDebounce</code> · <code>useLocalStorage</code> 같은 것은 담지 않았다. <strong>어디에나 있는 것을 우리 이름으로 다시 파는 일</strong>이고, 앱마다 원하는 동작이 조금씩 달라서 결국 각자 짜게 된다.
         </p>
       </Block>
     </Page>

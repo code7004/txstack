@@ -2,12 +2,12 @@
 
 > **URL 쿼리스트링을 화면 상태처럼 쓴다.**
 
-| | |
-| --- | --- |
-| 진입점 | `@txstack/hooks/router` — 서브패스. peer `react-router-dom` |
-| 내보내는 것 | `useUrlQuery` · `UseUrlQueryOptions` |
-| 소스 | [`packages/hooks/src/useUrlQuery.ts`](../../packages/hooks/src/useUrlQuery.ts) |
-| 테스트 | 22개 |
+|             |                                                                                |
+| ----------- | ------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/hooks/router` — 서브패스. peer `react-router-dom`                    |
+| 내보내는 것 | `useUrlQuery` · `UseUrlQueryOptions`                                           |
+| 소스        | [`packages/hooks/src/useUrlQuery.ts`](../../packages/hooks/src/useUrlQuery.ts) |
+| 테스트      | 22개                                                                           |
 
 ## 개발 목적
 
@@ -21,7 +21,7 @@ import { useUrlQuery } from "@txstack/hooks/router";
 
 const [query, setQuery] = useUrlQuery({ defaults: { a: 10, b: 20 } });
 
-query.a;             // 10 — 문자열이 아니라 숫자로 복원된다
+query.a; // 10 — 문자열이 아니라 숫자로 복원된다
 setQuery({ a: 20 }); // 주소창이 ?a=20&b=20 으로 바뀐다
 ```
 
@@ -42,13 +42,13 @@ setQuery({ a: 20 }); // 주소창이 ?a=20&b=20 으로 바뀐다
 const [query, setQuery] = useUrlQuery({
   defaults: { page: 1, size: 20, keyword: "" },
 
-  urlKeys: ["status"],              // defaults 에 없지만 URL 에서 읽을 키
+  urlKeys: ["status"], // defaults 에 없지만 URL 에서 읽을 키
   queryTypes: { status: "number" }, // 기본값이 없어 복원 규칙을 직접 줘야 하는 키
   postParse: (q) => (q.keyword ? { page: 1 } : {}),
 
-  encode: true,    // 쿼리 전체를 base64url 한 덩어리로 감춘다 → ?_q=eyJ...
+  encode: true, // 쿼리 전체를 base64url 한 덩어리로 감춘다 → ?_q=eyJ...
   encodeKey: "_q", // 그때 쓸 키 이름. 기본 "_q"
-  replace: true    // 기본값. false 면 필터를 만질 때마다 히스토리가 쌓인다
+  replace: true // 기본값. false 면 필터를 만질 때마다 히스토리가 쌓인다
 });
 ```
 
@@ -90,7 +90,6 @@ const [query, setQuery] = useUrlQuery({
 
 문서에도 없고 테스트도 없던 동작이라 지웠다. 배열은 `key[]` 나 반복 키로 **선언해서** 쓴다.
 
-
 ### URL 이 단일 출처다
 
 상태를 따로 들지 않고 `useSearchParams` 에서 매번 파생시킨다. **URL 로 되쓰는 `useEffect` 가
@@ -111,14 +110,14 @@ URL 을 단일 출처로 만들면 이 effect 자체가 필요 없어진다. 쓰
 
 ### 그 밖에 고친 것
 
-| 원본 | 지금 | 왜 |
-| --- | --- | --- |
-| 마운트 시 `defaults` 를 전부 URL 에 기록 | 마운트 시 주소를 건드리지 않음 | 들어가기만 해도 히스토리가 replace 되고 기본값이 주소창에 노출됐다 |
-| 옵션이 매 렌더 새 객체 → 반환값 identity 불안정 | 옵션을 ref 로 붙잡음 | 소비자는 `defaults` 를 거의 항상 인라인으로 넘긴다. 소비자 쪽 루프의 원인 |
-| `searchQuery`·`getUrlQuery`·`pushUrlQuery`·`updateUrlQuery` | 삭제 | `window.history` 를 직접 만져 라우터 상태와 어긋난다. 요청 범위에도 없었다 |
-| `decodeObject` 실패 시 `console.error` | 조용히 defaults 로 | 주소를 손으로 고친 것뿐인데 라이브러리가 앱 콘솔을 더럽힐 이유가 없다 |
-| `afterParse` | 삭제 | 원본에서 이미 `@deprecated` 였다 |
-| `ENCODED_QUERY_KEY = "encioesode"` | `encodeKey` 옵션 (기본 `_q`) | 오타처럼 보이는 매직 문자열이 공개 URL 에 노출되는데 소비자가 못 바꿨다 |
+| 원본                                                        | 지금                           | 왜                                                                         |
+| ----------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------- |
+| 마운트 시 `defaults` 를 전부 URL 에 기록                    | 마운트 시 주소를 건드리지 않음 | 들어가기만 해도 히스토리가 replace 되고 기본값이 주소창에 노출됐다         |
+| 옵션이 매 렌더 새 객체 → 반환값 identity 불안정             | 옵션을 ref 로 붙잡음           | 소비자는 `defaults` 를 거의 항상 인라인으로 넘긴다. 소비자 쪽 루프의 원인  |
+| `searchQuery`·`getUrlQuery`·`pushUrlQuery`·`updateUrlQuery` | 삭제                           | `window.history` 를 직접 만져 라우터 상태와 어긋난다. 요청 범위에도 없었다 |
+| `decodeObject` 실패 시 `console.error`                      | 조용히 defaults 로             | 주소를 손으로 고친 것뿐인데 라이브러리가 앱 콘솔을 더럽힐 이유가 없다      |
+| `afterParse`                                                | 삭제                           | 원본에서 이미 `@deprecated` 였다                                           |
+| `ENCODED_QUERY_KEY = "encioesode"`                          | `encodeKey` 옵션 (기본 `_q`)   | 오타처럼 보이는 매직 문자열이 공개 URL 에 노출되는데 소비자가 못 바꿨다    |
 
 **회귀 테스트로 못 박은 둘** — "마운트만으로 주소를 건드리지 않는다" 와
 "인라인 `defaults` 에도 identity 가 유지된다". 둘 다 무한 반복으로 이어지던 지점이다.

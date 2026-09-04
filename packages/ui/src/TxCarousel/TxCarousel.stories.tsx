@@ -44,7 +44,7 @@ const meta = {
           "`scroll-snap` 이 장을 딱딱 맞춰 세운다. 그래서 **스와이프 · 휠 · 관성 · 키보드가 공짜**고,",
           "화살표와 점은 그 스크롤을 부르는 버튼일 뿐이다. 손으로 밀어 넘겨도 점이 따라온다.",
           "",
-          "스크롤바는 감춰 두었다 — 점과 화살표가 \"어디쯤인지\" 를 이미 말하므로 두 벌이 된다.",
+          '스크롤바는 감춰 두었다 — 점과 화살표가 "어디쯤인지" 를 이미 말하므로 두 벌이 된다.',
           "",
           "### 마우스로도 끌어 넘긴다",
           "",
@@ -73,7 +73,7 @@ const meta = {
           "### 폭은 소비자가 정한다",
           "",
           "이 컴포넌트는 **자기 폭을 정하지 않는다.** 놓인 자리를 그대로 채우므로",
-          "`className=\"w-full\"` 은 대개 하는 일이 없다 — 좁히거나 한계를 두려면",
+          '`className="w-full"` 은 대개 하는 일이 없다 — 좁히거나 한계를 두려면',
           "`max-w-*` 를 주거나 감싼 자리의 폭을 정한다. `className` 은 **덧붙는다**(교체 아님).",
           "",
           "### 한 화면에 여러 장",
@@ -200,14 +200,7 @@ export const Controlled: StoryObj = {
 
         <div className="flex gap-2">
           {TONES.map((tone, i) => (
-            <button
-              key={tone}
-              type="button"
-              onClick={() => setAt(i)}
-              className="h-10 w-10 rounded"
-              style={{ backgroundColor: tone, outline: i === at ? "2px solid currentColor" : undefined, outlineOffset: 2 }}
-              aria-label={`${i + 1}번째 장`}
-            />
+            <button key={tone} type="button" onClick={() => setAt(i)} className="h-10 w-10 rounded" style={{ backgroundColor: tone, outline: i === at ? "2px solid currentColor" : undefined, outlineOffset: 2 }} aria-label={`${i + 1}번째 장`} />
           ))}
         </div>
       </div>
