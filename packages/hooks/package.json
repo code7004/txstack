@@ -27,13 +27,13 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+    "./useObjectState": {
+      "types": "./dist/useObjectState.d.ts",
+      "import": "./dist/useObjectState.js"
     },
-    "./router": {
-      "types": "./dist/router.d.ts",
-      "import": "./dist/router.js"
+    "./useUrlQuery": {
+      "types": "./dist/useUrlQuery.d.ts",
+      "import": "./dist/useUrlQuery.js"
     },
     "./package.json": "./package.json"
   },

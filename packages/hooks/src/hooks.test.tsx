@@ -2,26 +2,26 @@ import { act, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { useStateForObject } from "./useStateForObject";
+import { useObjectState } from "./useObjectState";
 import { useUrlQuery, type UseUrlQueryOptions } from "./useUrlQuery";
 
-describe("useStateForObject", () => {
+describe("useObjectState", () => {
   it("지정하지 않은 필드는 유지한 채 부분 병합한다", () => {
-    const { result } = renderHook(() => useStateForObject({ keyword: "", page: 3 }));
+    const { result } = renderHook(() => useObjectState({ keyword: "", page: 3 }));
 
     act(() => result.current[1]({ keyword: "kim" }));
     expect(result.current[0]).toEqual({ keyword: "kim", page: 3 });
   });
 
   it("함수형 업데이트를 받는다", () => {
-    const { result } = renderHook(() => useStateForObject({ page: 1 }));
+    const { result } = renderHook(() => useObjectState({ page: 1 }));
 
     act(() => result.current[1]((prev) => ({ page: prev.page + 1 })));
     expect(result.current[0]).toEqual({ page: 2 });
   });
 
   it("값이 그대로면 같은 참조를 돌려 리렌더를 막는다", () => {
-    const { result } = renderHook(() => useStateForObject({ page: 1 }));
+    const { result } = renderHook(() => useObjectState({ page: 1 }));
     const before = result.current[0];
 
     act(() => result.current[1]({ page: 1 }));
@@ -29,20 +29,20 @@ describe("useStateForObject", () => {
   });
 
   it("postParse 는 초기값에도 적용된다", () => {
-    const { result } = renderHook(() => useStateForObject({ keyword: "kim", page: 5 }, (next) => (next.keyword ? { page: 1 } : {})));
+    const { result } = renderHook(() => useObjectState({ keyword: "kim", page: 5 }, (next) => (next.keyword ? { page: 1 } : {})));
 
     expect(result.current[0]).toEqual({ keyword: "kim", page: 1 });
   });
 
   it("postParse 는 병합 결과를 후보정한다", () => {
-    const { result } = renderHook(() => useStateForObject({ keyword: "", page: 5 }, (next) => (next.keyword ? { page: 1 } : {})));
+    const { result } = renderHook(() => useObjectState({ keyword: "", page: 5 }, (next) => (next.keyword ? { page: 1 } : {})));
 
     act(() => result.current[1]({ keyword: "kim" }));
     expect(result.current[0]).toEqual({ keyword: "kim", page: 1 });
   });
 
   it("postParse 를 인라인으로 넘겨도 update 의 identity 가 고정이다", () => {
-    const { result, rerender } = renderHook(() => useStateForObject({ page: 1 }, (next) => next));
+    const { result, rerender } = renderHook(() => useObjectState({ page: 1 }, (next) => next));
     const first = result.current[1];
 
     rerender();

@@ -1,13 +1,13 @@
-# 001 · useStateForObject
+# 001 · useObjectState
 
 > 객체 상태를 **부분 병합(patch)** 으로 다룬다.
 
-|             |                                                                                            |
-| ----------- | ------------------------------------------------------------------------------------------ |
-| 진입점      | `@txstack/hooks`                                                                           |
-| 내보내는 것 | `useStateForObject`                                                                        |
-| 소스        | [`packages/hooks/src/useStateForObject.ts`](../../packages/hooks/src/useStateForObject.ts) |
-| 테스트      | 6개                                                                                        |
+|             |                                                                                      |
+| ----------- | ------------------------------------------------------------------------------------ |
+| 진입점      | `@txstack/hooks/useObjectState`                                                      |
+| 내보내는 것 | `useObjectState`                                                                     |
+| 소스        | [`packages/hooks/src/useObjectState.ts`](../../packages/hooks/src/useObjectState.ts) |
+| 테스트      | 6개                                                                                  |
 
 ## 개발 목적
 
@@ -17,9 +17,9 @@ form · filter · 검색 조건처럼 **일부 필드만 고치는 자리**에�
 ## 기능
 
 ```ts
-import { useStateForObject } from "@txstack/hooks";
+import { useObjectState } from "@txstack/hooks/useObjectState";
 
-const [filter, setFilter] = useStateForObject({ keyword: "", page: 1 });
+const [filter, setFilter] = useObjectState({ keyword: "", page: 1 });
 
 setFilter({ keyword: "kim" }); // page 는 유지된다
 setFilter((prev) => ({ page: prev.page + 1 })); // 함수형 업데이트
@@ -28,7 +28,7 @@ setFilter((prev) => ({ page: prev.page + 1 })); // 함수형 업데이트
 두 번째 인자 `postParse` 는 병합 직후 호출되어 **추가 패치**를 반환한다.
 
 ```ts
-const [filter, setFilter] = useStateForObject(
+const [filter, setFilter] = useObjectState(
   { keyword: "", page: 1 },
   (next) => (next.keyword ? { page: 1 } : {}) // 검색어가 바뀌면 첫 페이지로
 );
@@ -40,7 +40,7 @@ const [filter, setFilter] = useStateForObject(
 
 ## 개발 항목
 
-- [x] **구현** — `packages/hooks/src/useStateForObject.ts`
+- [x] **구현** — `packages/hooks/src/useObjectState.ts`
 - [x] **테스트** — 6개 (node 아닌 jsdom 프로젝트에서 돈다)
 - [x] **의존 없음** — `react` 만 쓴다. 루트 배럴에 있는 유일한 훅이다
 

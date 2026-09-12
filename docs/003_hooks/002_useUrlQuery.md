@@ -4,7 +4,7 @@
 
 |             |                                                                                |
 | ----------- | ------------------------------------------------------------------------------ |
-| 진입점      | `@txstack/hooks/router` — 서브패스. peer `react-router-dom`                    |
+| 진입점      | `@txstack/hooks/useUrlQuery` — 서브패스. peer `react-router-dom`               |
 | 내보내는 것 | `useUrlQuery` · `UseUrlQueryOptions`                                           |
 | 소스        | [`packages/hooks/src/useUrlQuery.ts`](../../packages/hooks/src/useUrlQuery.ts) |
 | 테스트      | 22개                                                                           |
@@ -17,7 +17,7 @@
 ## 기능
 
 ```tsx
-import { useUrlQuery } from "@txstack/hooks/router";
+import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 
 const [query, setQuery] = useUrlQuery({ defaults: { a: 10, b: 20 } });
 
