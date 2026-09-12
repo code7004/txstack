@@ -1,3 +1,12 @@
+/**
+ * `@txstack/hooks/useUrlQuery` — **`react-router-dom` 을 필요로 한다.**
+ *
+ * 그쪽은 optional peerDependency 라 이 진입점을 import 하는 소비자만 설치하면 된다.
+ * 훅마다 진입점을 가른 덕에, 다른 라우터(Next.js · TanStack Router)를 쓰는 소비자도
+ * 이 패키지의 나머지 훅을 그대로 쓸 수 있다.
+ *
+ * 설계: docs/003_hooks/002_useUrlQuery.md
+ */
 import { useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 

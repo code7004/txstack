@@ -27,8 +27,8 @@ export default defineConfig({
       { find: /^@txstack\/ui\/daypicker$/, replacement: pkg("ui/src/daypicker.ts") },
       { find: /^@txstack\/ui$/, replacement: pkg("ui/src/index.ts") },
       { find: /^@txstack\/route-meta$/, replacement: pkg("route-meta/src/index.ts") },
-      { find: /^@txstack\/hooks\/router$/, replacement: pkg("hooks/src/router.ts") },
-      { find: /^@txstack\/hooks$/, replacement: pkg("hooks/src/index.ts") },
+      { find: /^@txstack\/hooks\/useUrlQuery$/, replacement: pkg("hooks/src/useUrlQuery.ts") },
+      { find: /^@txstack\/hooks\/useObjectState$/, replacement: pkg("hooks/src/useObjectState.ts") },
       { find: /^@txstack\/axios$/, replacement: pkg("axios/src/index.ts") }
     ]
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUrlQuery } from "@txstack/hooks/router";
+import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxAlert, TxDropdown, TxPagination, TxSearchInput, TxSkeleton, TxTag } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
 import { Block, Page } from "../components/Page";

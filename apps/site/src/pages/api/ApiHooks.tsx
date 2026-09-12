@@ -4,11 +4,11 @@ import { Block, Page } from "../../components/Page";
 
 export function ApiHooks() {
   return (
-    <Page title="@txstack/hooks" lead="범용 훅 둘. 화면마다 다시 짜게 되는 것만 담았다.">
-      <Block title="useStateForObject — 객체 상태를 부분 병합으로">
-        <CodeBlock title="import">{`import { useStateForObject } from "@txstack/hooks";`}</CodeBlock>
+    <Page title="@txstack/hooks" lead="범용 훅 둘. 화면마다 다시 짜게 되는 것만 담았다. 훅마다 진입점이 하나라 경로가 곧 이름이다.">
+      <Block title="useObjectState — 객체 상태를 부분 병합으로">
+        <CodeBlock title="import">{`import { useObjectState } from "@txstack/hooks/useObjectState";`}</CodeBlock>
 
-        <CodeBlock title="쓰는 법">{`const [form, setForm] = useStateForObject({ name: "", email: "", agree: false });
+        <CodeBlock title="쓰는 법">{`const [form, setForm] = useObjectState({ name: "", email: "", agree: false });
 
 setForm({ name: "홍길동" });          // 나머지는 그대로
 setForm((prev) => ({ agree: !prev.agree }));`}</CodeBlock>
@@ -23,7 +23,7 @@ setForm((prev) => ({ agree: !prev.agree }));`}</CodeBlock>
       </Block>
 
       <Block title="useUrlQuery — 주소를 화면 상태처럼">
-        <CodeBlock title="import">{`import { useUrlQuery } from "@txstack/hooks/router";   // peer: react-router-dom`}</CodeBlock>
+        <CodeBlock title="import">{`import { useUrlQuery } from "@txstack/hooks/useUrlQuery";   // peer: react-router-dom`}</CodeBlock>
 
         <CodeBlock title="쓰는 법">{`const [query, setQuery] = useUrlQuery({
   defaults: { q: "", page: 1, sort: "stars" }

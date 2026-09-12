@@ -1,3 +1,12 @@
+/**
+ * `@txstack/hooks/useObjectState` — `react` 만 있으면 된다.
+ *
+ * **훅마다 진입점이 하나다.** 배럴을 두지 않으므로 경로가 곧 훅 이름이고,
+ * 소비자는 어느 묶음에 들었는지 외울 것이 없다. 라우터가 필요한 훅을 함께
+ * 실어 보내지 않는 효과도 같이 얻는다.
+ *
+ * 설계: docs/003_hooks/001_useObjectState.md
+ */
 import { useCallback, useRef, useState } from "react";
 
 /**
@@ -30,18 +39,18 @@ function shallowEqual<T extends object>(a: T, b: T): boolean {
  * @param postParse    병합 직후 호출되어 추가 패치를 반환한다.
  *
  * @example
- * const [filter, setFilter] = useStateForObject({ keyword: "", page: 1 });
+ * const [filter, setFilter] = useObjectState({ keyword: "", page: 1 });
  *
  * setFilter({ keyword: "kim" });                  // page 는 유지된다
  * setFilter((prev) => ({ page: prev.page + 1 })); // 함수형 업데이트
  *
  * @example 상호 의존 필드 — 검색어가 바뀌면 페이지를 되돌린다
- * const [filter, setFilter] = useStateForObject(
+ * const [filter, setFilter] = useObjectState(
  *   { keyword: "", page: 1 },
  *   (next) => (next.keyword !== "" ? { page: 1 } : {})
  * );
  */
-export function useStateForObject<T extends object>(initialValue: T, postParse?: (next: T) => Partial<T>) {
+export function useObjectState<T extends object>(initialValue: T, postParse?: (next: T) => Partial<T>) {
   // 인라인으로 넘어오는 postParse 가 update 의 identity 를 흔들지 않도록 ref 로 붙잡는다.
   const postParseRef = useRef(postParse);
   postParseRef.current = postParse;

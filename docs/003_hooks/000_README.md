@@ -11,19 +11,23 @@
 
 ## 진입점
 
-| 진입점                  | 내용                | 추가 peer          |
-| ----------------------- | ------------------- | ------------------ |
-| `@txstack/hooks`        | `useStateForObject` | 없음               |
-| `@txstack/hooks/router` | `useUrlQuery`       | `react-router-dom` |
+| 진입점                          | 내용             | 추가 peer          |
+| ------------------------------- | ---------------- | ------------------ |
+| `@txstack/hooks/useObjectState` | `useObjectState` | 없음               |
+| `@txstack/hooks/useUrlQuery`    | `useUrlQuery`    | `react-router-dom` |
+
+**훅마다 진입점이 하나고 루트 배럴은 없다.** 경로가 곧 훅 이름이라 어느 묶음에 들었는지
+외울 것이 없고, 라우터가 필요한 훅이 그것을 안 쓰는 소비자에게 실려 가지 않는다.
+`@txstack/hooks` 를 그냥 import 하면 해결되지 않는다 — 의도된 것이다.
 
 ## 개발 리스트
 
 **2개가 끝났다. 테스트 28개.** 번호는 만든 차례다.
 
-| 번호 | 훅                                              | 무엇                                | 테스트 |
-| ---- | ----------------------------------------------- | ----------------------------------- | ------ |
-| 001  | [`useStateForObject`](001_useStateForObject.md) | 객체 상태를 부분 병합으로 다룬다    | 6      |
-| 002  | [`useUrlQuery`](002_useUrlQuery.md) `/router`   | URL 쿼리스트링을 화면 상태처럼 쓴다 | 22     |
+| 번호 | 훅                                        | 무엇                                | 테스트 |
+| ---- | ----------------------------------------- | ----------------------------------- | ------ |
+| 001  | [`useObjectState`](001_useObjectState.md) | 객체 상태를 부분 병합으로 다룬다    | 6      |
+| 002  | [`useUrlQuery`](002_useUrlQuery.md)       | URL 쿼리스트링을 화면 상태처럼 쓴다 | 22     |
 
 ## 가져오지 않은 것
 
@@ -41,8 +45,6 @@
 
 ## 남은 것
 
-- [ ] 훅이 두 개고 루트 배럴에는 하나뿐이다. 이대로 독립 패키지를 유지할지, 아니면
-      `useStateForObject` 를 `ui` 로 넣고 `useUrlQuery` 만 남길지는 다시 본다
 - [ ] `urlKeys` 로 읽은 키는 타입이 따라오지 않는다 — [002_useUrlQuery](002_useUrlQuery.md)
 
 ## 문서 규칙
