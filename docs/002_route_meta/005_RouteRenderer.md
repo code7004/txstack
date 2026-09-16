@@ -19,7 +19,7 @@
 ```tsx
 import { RouteRenderer } from "@txstack/route-meta";
 
-<RouteRenderer data={routes} />;
+<RouteRenderer tree={routes} />;
 ```
 
 직접 쓰고 싶으면 [`buildRouteObjects`](002_buildRouteObjects.md) 를 그대로 부른다 —
