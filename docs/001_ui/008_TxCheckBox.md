@@ -51,7 +51,16 @@
 상태를 CSS 가 `:checked` 로 읽으므로 **컴포넌트가 체크 상태를 들지 않는다.** 원본은 `value` 를
 내부 state 로 복사하고 effect 로 동기화해서, controlled 로 쓰는데 콜백을 안 주면 어긋났다.
 
-`variant="toggle"` 에는 `role="switch"` 를 준다 — 스크린리더가 "선택됨" 이 아니라 "켜짐/꺼짐" 으로 안내한다.
+원본의 `variant="toggle"` 은 **`TxSwitch` 로 갈라냈고, 이 컴포넌트에서는 `variant` 를 걷어냈다.**
+즉시 반영되는 켜고 끄기는 뜻이 달라서다 — 근거는 [041_TxSwitch](041_TxSwitch.md).
+
+체크 여부는 **`value` 가 아니라 `checked`** 다. 원본은 `value` 에 boolean 을 받았는데, 표준
+체크박스에서 `value` 는 폼 제출 때 실리는 문자열이다. 표준 속성을 그대로 통과시키므로 뜻도 표준을 따른다.
+
+```tsx
+<TxCheckBox value={agreed} />    // 원본 — 타입 에러
+<TxCheckBox checked={agreed} />  // 지금
+```
 
 죽은 prop 세 개(`borderColor` · `fillColor` · `cursorColor`)를 걷어냈다. 타입에 선언만 있고
 구현에서 꺼내 쓰지도 않았다. 대신 `disabled` 가 없던 것을 채웠다.
