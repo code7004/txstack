@@ -91,6 +91,11 @@
       **`@txstack/axios` 가 테스트 밖에서 처음 돌았고**, 조회 조건은 `useUrlQuery` 로 주소에
       실린다(`?q=…&page=3&sort=stars`). 403(분당 10회 한계)까지 화면에서 확인된다
 - [ ] **D. 마무리** — `Profile` · `Contact` · 배포(GitHub Pages, 스토리북 정적 빌드와 한 도메인)
+  - [x] **배포** — `code7004.github.io/txstack/` · `/storybook/`. 하위 경로라 셋을 맞췄다 —
+        `SITE_BASE=/txstack/`, Storybook 링크는 `BASE_URL` 을 앞에 붙인다(`src/lib/links.ts`),
+        파비콘은 상대경로(`./`)가 딥링크에서 깨져 `/` 로 바꿨다(Vite 가 base 를 붙인다).
+        Pages 에 SPA 폴백이 없어 `404.html` 을 `index.html` 사본으로 둔다
+  - [ ] `Profile` · `Contact` — 사용자만 쓸 수 있는 내용
 
 ## 내용을 쓰는 방식
 
