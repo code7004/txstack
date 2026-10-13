@@ -67,6 +67,9 @@ const SLOTS = {
   footer: <span>회사 소개</span>
 };
 
+/** 라우터가 하는 일 — 문서를 바꾸지 않는다. jsdom 은 이동을 못 해서 그대로 두면 경고를 낸다 */
+const stay = (evt: { preventDefault: () => void }) => evt.preventDefault();
+
 const root = () => document.querySelector('[data-tag="TxAppShell"]') as HTMLElement;
 const widthVar = (slot: "left" | "right") => root().style.getPropertyValue(`--tx-app-shell-${slot}-width`);
 
@@ -310,6 +313,108 @@ describe("TxAppShell — 좁아지면 서랍으로", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
     expect(screen.getAllByRole("link", { name: "설정" })).toHaveLength(1);
+  });
+
+  /**
+   * SPA 에서는 링크가 문서를 바꾸지 않는다. 닫지 않으면 새 화면을 서랍이 가린 채 남는다.
+   * jsdom 은 `<a>` 를 눌러도 이동하지 않으므로 라우터가 하는 일(`preventDefault`)도 흉내 낸다.
+   */
+  it("서랍 안의 링크를 누르면 닫힌다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell
+        left={
+          <a href="/settings" onClick={stay}>
+            설정
+          </a>
+        }
+      >
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
+    fireEvent.click(screen.getByRole("link", { name: "설정" }));
+
+    expect(screen.getByRole("button", { name: "메뉴 열기" }).getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("링크 안쪽 글자를 눌러도 닫힌다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell
+        left={
+          <a onClick={stay} href="/settings">
+            <span>설정</span>
+          </a>
+        }
+      >
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
+    fireEvent.click(screen.getByText("설정"));
+
+    expect(screen.getByRole("button", { name: "메뉴 열기" }).getAttribute("aria-expanded")).toBe("false");
+  });
+
+  /** 이 화면을 떠나지 않는 클릭이다 — 서랍에서 이어서 고를 수 있어야 한다. */
+  it.each([
+    [
+      "새 탭",
+      <a key="a" onClick={stay} href="/docs" target="_blank">
+        설정
+      </a>,
+      {}
+    ],
+    [
+      "내려받기",
+      <a key="a" onClick={stay} href="/report.csv" download>
+        설정
+      </a>,
+      {}
+    ],
+    [
+      "⌘ 클릭",
+      <a key="a" onClick={stay} href="/settings">
+        설정
+      </a>,
+      { metaKey: true }
+    ],
+    [
+      "Ctrl 클릭",
+      <a key="a" onClick={stay} href="/settings">
+        설정
+      </a>,
+      { ctrlKey: true }
+    ],
+    [
+      "Shift 클릭",
+      <a key="a" onClick={stay} href="/settings">
+        설정
+      </a>,
+      { shiftKey: true }
+    ]
+  ])("%s 은 서랍을 닫지 않는다", (_, link, init) => {
+    setViewport(true);
+    render(<TxAppShell left={link}>본문</TxAppShell>);
+
+    fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
+    fireEvent.click(screen.getByRole("link", { name: "설정" }), init);
+
+    expect(screen.getByRole("button", { name: "메뉴 열기" }).getAttribute("aria-expanded")).toBe("true");
+  });
+
+  /** 묶음을 펼치는 버튼 같은 것. 누를 때마다 닫히면 하위 항목에 닿을 수 없다. */
+  it("링크가 아닌 것을 누르면 열린 채로 둔다", () => {
+    setViewport(true);
+    render(<TxAppShell left={<button type="button">펼치기</button>}>본문</TxAppShell>);
+
+    fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
+    fireEvent.click(screen.getByRole("button", { name: "펼치기" }));
+
+    expect(screen.getByRole("button", { name: "메뉴 열기" }).getAttribute("aria-expanded")).toBe("true");
   });
 
   it("left 가 없으면 햄버거도 없다", () => {

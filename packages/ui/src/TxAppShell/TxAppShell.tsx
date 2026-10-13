@@ -1,4 +1,4 @@
-import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import { useId, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { TxSlidePanel } from "../TxSlidePanel";
 import { cm } from "../tx-ui.utils";
 import { useCollapse, useHideOnScroll, useNarrow, useResize } from "./TxAppShell.hook";
@@ -88,6 +88,22 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
 
   // 좁을 때만 서랍이 있다. 서랍의 폭은 서랍 것이라 손잡이도 스위치도 같이 사라진다
   const inDrawer = narrow && left != null;
+
+  /**
+   * **서랍 안의 링크를 누르면 닫는다.** SPA 에서는 링크가 문서를 바꾸지 않아, 닫지 않으면
+   * 새 화면을 서랍이 가린 채 남는다. 라우터를 몰라도 되게 `<a href>` 만 본다 — 라우터가
+   * `preventDefault` 를 부르므로 `defaultPrevented` 로는 가리지 않는다.
+   *
+   * 이 화면을 떠나지 않는 클릭(새 탭 · 내려받기 · 보조키)과 링크가 아닌 것은 그대로 둔다.
+   */
+  const hdDrawerClick = (evt: MouseEvent<HTMLElement>) => {
+    const link = evt.target instanceof Element ? evt.target.closest("a[href]") : null;
+    if (!link || !evt.currentTarget.contains(link)) return;
+    if (evt.button !== 0 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey) return;
+    if (link.getAttribute("target") === "_blank" || link.hasAttribute("download")) return;
+
+    setDrawer(false);
+  };
 
   /**
    * 세 패널이 같은 부품으로 이뤄진다 — 내용 · 크기 손잡이 · 접기 스위치.
@@ -190,7 +206,9 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
       */}
       {inDrawer && (
         <TxSlidePanel open={drawer} onClose={() => setDrawer(false)} side="left" title={text.left}>
-          <nav aria-label={text.left}>{left}</nav>
+          <nav aria-label={text.left} onClick={hdDrawerClick}>
+            {left}
+          </nav>
         </TxSlidePanel>
       )}
     </div>
