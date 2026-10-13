@@ -99,6 +99,24 @@ const meta = {
           "되지 않는다** — APG *Disclosure Navigation with Top-Level Links* 다.",
           '`▾` 버튼의 이름은 `toggleLabel` 로 바꾼다(기본 `"하위 메뉴"`).',
           "",
+          "### 줄이 패널 하나를 함께 쓸 수도 있다",
+          "",
+          "항목 대신 **줄에 `panel` 을 주면** 어느 항목에 얹어도 같은 패널이 줄 폭으로 열린다 —",
+          "사이트 메뉴 전체를 한눈에 펼쳐 보이는 모양이다(`SharedPanel`). 항목은 그냥 링크로 둔다.",
+          "",
+          "```tsx",
+          "<TxNavBar panel={<SiteMap />}>",
+          '  <TxNavBar.Item label="Documents" as={NavLink} to="/docs" />',
+          '  <TxNavBar.Item label="API" as={NavLink} to="/api" />',
+          "</TxNavBar>",
+          "```",
+          "",
+          "**마우스로 얹을 때만 열린다** — 여는 버튼이 없어 키보드 · 터치로는 열 수 없다. 그래서 이",
+          "패널은 **지름길**이다. 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다.",
+          "키보드 · 터치로도 열려야 하면 항목마다 `panel` 을 준다.",
+          "",
+          "패널 안의 링크를 누르면 패널이 닫힌다 — 줄의 패널이든 항목의 패널이든 같다.",
+          "",
           "### 가로만 한다",
           "",
           "세로로 세우는 것 — **아이콘만 남기고 접히거나 하위메뉴가 트리로 접히는 것** — 은",
@@ -211,6 +229,68 @@ export const TitleAsLink: Story = {
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
 
+        <Body picked={picked} />
+      </div>
+    );
+  }
+};
+
+const SITE: [string, string[]][] = [
+  ["제품", ["CRM", "ERP", "그룹웨어"]],
+  ["문서", ["설치", "첫 화면 만들기", "인증"]],
+  ["가격", ["요금제", "견적 문의"]],
+  ["회사", ["소개", "채용"]]
+];
+
+/**
+ * **줄이 패널 하나를 함께 쓴다.** 어느 항목에 얹어도 사이트 메뉴 전체가 줄 폭으로 펼쳐진다 —
+ * 항목은 그냥 링크라 `▾` 가 없다.
+ *
+ * ```tsx
+ * <TxNavBar panel={<SiteMap />}>
+ *   <TxNavBar.Item label="제품" as={NavLink} to="/products" />
+ * </TxNavBar>
+ * ```
+ *
+ * **마우스 전용 지름길이다.** 키보드 · 터치로는 열리지 않으니, 패널 안의 링크는 전부 제목이
+ * 가리키는 화면에서도 닿아야 한다. 패널 안의 링크를 누르면 닫힌다.
+ */
+/** 패널 속 항목이 진짜 `<a href>` 인 판 — 누르면 패널이 닫히는 것을 볼 수 있다. 이동은 막고 본문만 바꾼다 */
+const LinkPanel = ({ groups, pick }: { groups: [string, string[]][]; pick: Pick }) => (
+  <TxGrid columns={groups.length}>
+    {groups.map(([title, links]) => (
+      <section key={title} className="flex flex-col items-start gap-1">
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400">{title}</h3>
+        {links.map((link) => (
+          <a
+            key={link}
+            href={`#${link}`}
+            className="rounded px-1 py-0.5 hover:underline"
+            onClick={(event) => {
+              event.preventDefault();
+              pick(link);
+            }}
+          >
+            {link}
+          </a>
+        ))}
+      </section>
+    ))}
+  </TxGrid>
+);
+
+export const SharedPanel: Story = {
+  parameters: noControls,
+  render: function SharedPanelStory() {
+    const [picked, setPicked] = useState("제품");
+
+    return (
+      <div style={room}>
+        <TxNavBar label="주 메뉴" panel={<LinkPanel groups={SITE} pick={setPicked} />}>
+          {SITE.map(([name]) => (
+            <TxNavBar.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} />
+          ))}
+        </TxNavBar>
         <Body picked={picked} />
       </div>
     );

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type FocusEvent as ReactFocusEvent, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { cm } from "../tx-ui.utils";
 import { TxNavBarContext } from "./TxNavBar.context";
 import { TxNavBarItem } from "./TxNavBarItem";
@@ -9,6 +9,9 @@ import type { TxNavBarProps } from "./TxNavBar.types";
  * 항목과 패널 사이를 지나가는 순간 닫히면 쓸 수 없다.
  */
 const HOVER_CLOSE_DELAY = 120;
+
+/** 줄의 `panel` 이 열렸을 때의 `openId`. 항목의 id(`useId`)와 겹치지 않는다 */
+const BAR = "tx-nav-bar";
 
 /**
  * 가로로 도는 내비게이션 줄. **항목에 `panel` 을 주면 메가메뉴가 된다.**
@@ -35,13 +38,17 @@ const HOVER_CLOSE_DELAY = 120;
  *
  * **열림은 줄이 하나로 쥔다.** 그래서 항목 사이를 지나가도 깜빡이지 않고 갈아탄다.
  *
+ * 줄에 `panel` 을 주면 **모든 항목이 패널 하나를 함께 쓴다** — 어느 항목에 얹어도 같은
+ * 패널이 줄 폭으로 열린다. 마우스 전용 지름길이라 항목은 그대로 링크다.
+ *
  * `role="menu"` 를 쓰지 않는다. 패널 안에는 링크 목록 · 설명 · 그림이 오는데 메뉴 규약
  * 안에서는 그것들이 제대로 읽히지 않는다 — 여는 항목은 `<button aria-expanded>` 다.
  *
  * 명세: `docs/001_ui/048_TxNavBar.md`
  */
-export function TxNavBar({ label, panelWidth = "bar", openOn = "hover", onOpenChange, className, children, ...props }: TxNavBarProps) {
+export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", onOpenChange, className, children, ...props }: TxNavBarProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelId = useId();
 
   const [openId, setOpenId] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -125,6 +132,37 @@ export function TxNavBar({ label, panelWidth = "bar", openOn = "hover", onOpenCh
     }
   };
 
+  /**
+   * **줄의 패널은 항목에 얹으면 열린다.** 항목 사이의 빈틈이나 줄 오른쪽의 빈자리에서는
+   * 열지 않는다 — 머리 줄을 가로지르기만 해도 패널이 덮이면 성가시다.
+   *
+   * 자기 `panel` 을 가진 항목은 건너뛴다. 그 항목은 스스로 자기 패널을 연다.
+   */
+  const hdPointerOver = (event: ReactPointerEvent<HTMLUListElement>) => {
+    if (!panel || openOn !== "hover" || event.pointerType !== "mouse") return;
+
+    const item = (event.target as Element).closest(".tx-nav-bar__item");
+    if (!item || item.querySelector("[data-nav-trigger]")) return;
+
+    open(BAR, item.textContent ?? "");
+  };
+
+  /**
+   * **패널 안의 링크를 누르면 닫는다.** SPA 에서는 링크가 문서를 바꾸지 않아, 닫지 않으면
+   * 새 화면을 패널이 덮은 채 남는다. `TxAppShell` 의 서랍과 같은 규칙이다 — 이 화면을
+   * 떠나지 않는 클릭(새 탭 · 내려받기 · 보조키)은 그대로 둔다.
+   */
+  const hdClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (openId === null) return;
+
+    const link = (event.target as Element).closest("a[href]");
+    if (!link?.closest(".tx-nav-bar__panel")) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (link.getAttribute("target") === "_blank" || link.hasAttribute("download")) return;
+
+    open(null, null);
+  };
+
   /** 줄 밖으로 포커스가 나가면 닫는다. **패널 안에 있는 동안은 열려 있어야 한다.** */
   const hdBlur = (event: ReactFocusEvent<HTMLDivElement>) => {
     if (openId === null) return;
@@ -142,6 +180,7 @@ export function TxNavBar({ label, panelWidth = "bar", openOn = "hover", onOpenCh
       className={cm("tx-nav-bar", className)}
       onKeyDown={hdKeyDown}
       onBlur={hdBlur}
+      onClick={hdClick}
       // 얹은 손이 줄 밖으로 나가면 닫는다. 항목과 패널 사이를 지나는 순간은 살려 둔다
       onPointerLeave={(event) => {
         if (event.pointerType !== "mouse" || openId === null) return;
@@ -152,8 +191,17 @@ export function TxNavBar({ label, panelWidth = "bar", openOn = "hover", onOpenCh
       onPointerEnter={() => clearTimeout(closeTimer.current)}
     >
       <TxNavBarContext.Provider value={shared}>
-        <ul className="tx-nav-bar__list">{children}</ul>
+        <ul className="tx-nav-bar__list" onPointerOver={hdPointerOver}>
+          {children}
+        </ul>
       </TxNavBarContext.Provider>
+
+      {/* 열릴 때만 그린다 — 항목의 패널과 같은 이유다. 감춘 채로 두면 안의 링크가 Tab 에 잡힌다 */}
+      {panel && openId === BAR && (
+        <div id={panelId} className="tx-nav-bar__panel" data-shared="">
+          {panel}
+        </div>
+      )}
     </div>
   );
 

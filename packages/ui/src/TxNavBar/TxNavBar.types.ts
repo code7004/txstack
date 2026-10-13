@@ -13,7 +13,28 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
   label?: string;
 
   /**
+   * **줄 전체가 함께 쓰는 패널 하나.** 주면 어느 항목에 얹어도 이 패널이 줄 폭으로 열린다 —
+   * 사이트의 메뉴 전체를 한눈에 펼쳐 보이는 모양이다. 항목은 그냥 링크로 둔다.
+   *
+   * ```tsx
+   * <TxNavBar panel={<SiteMap />}>
+   *   <TxNavBar.Item label="Documents" as={NavLink} to="/docs" />
+   *   <TxNavBar.Item label="API" as={NavLink} to="/api" />
+   * </TxNavBar>
+   * ```
+   *
+   * **마우스로 얹을 때만 열린다** — 여는 버튼이 없으므로 키보드 · 터치로는 열 수 없다.
+   * 그래서 이 패널은 **지름길**이다. 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다.
+   * 키보드 · 터치로도 열려야 하면 항목마다 `panel` 을 준다.
+   *
+   * 자기 `panel` 을 가진 항목에 얹으면 그 항목의 패널이 열린다. `openOn="click"` 이면
+   * 이 패널은 열리지 않는다.
+   */
+  panel?: ReactNode;
+
+  /**
    * 패널이 어디까지 펼쳐지는가. 기본 `"bar"` — 메뉴 줄 전체 폭이다.
+   * 줄의 `panel` 은 이 값과 상관없이 늘 줄 폭이다.
    *
    * `"item"` 은 항목 아래에만 붙는다. 항목이 많고 패널이 작을 때 쓴다.
    */
@@ -26,7 +47,10 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
    */
   openOn?: "hover" | "click";
 
-  /** 열린 항목이 바뀔 때마다. 닫히면 `null` 이 온다. */
+  /**
+   * 열린 항목이 바뀔 때마다. 닫히면 `null` 이 온다.
+   * 줄의 `panel` 이 열리면 **처음 얹은 항목의 글자**가 온다 — 그 안에서 옮겨 다니는 동안은 다시 오지 않는다.
+   */
   onOpenChange?: (label: string | null) => void;
 
   /** `TxNavBar.Item` 들. */
