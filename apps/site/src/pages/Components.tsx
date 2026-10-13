@@ -1,4 +1,5 @@
 import { TxAlert } from "@txstack/ui";
+import { STORYBOOK_URL } from "../lib/links";
 
 /**
  * 부품 레퍼런스는 **스토리북이 갖는다.** 여기서 다시 쓰지 않는다 —
@@ -13,7 +14,7 @@ export function Components() {
       </header>
 
       <div className="flex flex-wrap gap-3">
-        <a href="/storybook/" className="tx-button" data-variant="primary" target="_blank" rel="noreferrer">
+        <a href={STORYBOOK_URL} className="tx-button" data-variant="primary" target="_blank" rel="noreferrer">
           <span className="tx-button__label">카탈로그 열기</span>
         </a>
       </div>
