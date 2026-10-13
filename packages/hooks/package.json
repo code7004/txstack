@@ -24,8 +24,6 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     "./useObjectState": {
       "types": "./dist/useObjectState.d.ts",

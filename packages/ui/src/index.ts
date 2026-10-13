@@ -5,7 +5,7 @@
  * `ag-grid-*` / `react-day-picker` 는 로드되지 않으므로, 설치하지 않아도 동작한다.
  *
  * - `@txstack/ui/aggrid`    → TxAgGrid        (peer: ag-grid-community, ag-grid-react)
- * - `@txstack/ui/daypicker` → TxDayPicker 계열 (peer: react-day-picker, dayjs)
+ * - `@txstack/ui/daypicker` → TxDayPicker 계열 (peer: react-day-picker)
  *
  * **default export 를 두지 않는다.** 배럴의 `export *` 는 default 를 실어 나르지 않아서,
  * 파일 경로로 직접 import 하던 습관이 패키지에서는 조용히 깨진다.

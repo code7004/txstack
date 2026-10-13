@@ -2,30 +2,39 @@
 
 의존이 거의 없는 범용 React 훅.
 
-| 진입점                  | 내용                | 추가 peer 의존     |
-| ----------------------- | ------------------- | ------------------ |
-| `@txstack/hooks`        | `useStateForObject` | 없음               |
-| `@txstack/hooks/router` | `useUrlQuery`       | `react-router-dom` |
-
-루트를 라우터와 분리해야 Next.js·TanStack Router 를 쓰는 소비자도 설치할 수 있다.
-
-> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/003_hooks](../../docs/003_hooks/000_README.md).
-
 ```sh
 pnpm add @txstack/hooks react
 ```
 
-## `useStateForObject`
+**훅마다 진입점이 하나다.** 경로가 곧 훅 이름이라 어느 묶음에 들었는지 외울 것이 없고,
+쓰지 않는 훅의 의존은 설치하지 않아도 된다.
+
+| 진입점                          | 내용             | 추가 peer 의존     |
+| ------------------------------- | ---------------- | ------------------ |
+| `@txstack/hooks/useObjectState` | `useObjectState` | 없음               |
+| `@txstack/hooks/useUrlQuery`    | `useUrlQuery`    | `react-router-dom` |
+
+루트(`@txstack/hooks`)는 없다. `react-router-dom` 은 `useUrlQuery` 를 쓸 때만 필요하다 —
+Next.js · TanStack Router 를 쓰는 앱도 `useObjectState` 는 그대로 설치해 쓴다.
+
+## `useObjectState`
 
 객체 상태를 부분 병합으로 다룬다. form · filter 처럼 일부 필드만 고치는 자리에 쓴다.
 
 ```ts
-import { useStateForObject } from "@txstack/hooks";
+import { useObjectState } from "@txstack/hooks/useObjectState";
 
-const [filter, setFilter] = useStateForObject({ keyword: "", page: 1 });
+const [filter, setFilter] = useObjectState({ keyword: "", page: 1 });
 
 setFilter({ keyword: "kim" }); // page 는 유지된다
 setFilter((prev) => ({ page: prev.page + 1 }));
+```
+
+두 번째 인자로 **서로 얽힌 필드**를 맞춘다. 병합할 때마다 불린다.
+
+```ts
+// 검색어가 바뀌면 페이지를 1로 되돌린다
+const [filter, setFilter] = useObjectState({ keyword: "", page: 1 }, (next) => (next.keyword !== "" ? { page: 1 } : {}));
 ```
 
 병합 결과가 이전 상태와 얕은 비교로 같으면 리렌더를 건너뛴다.
@@ -36,7 +45,7 @@ setFilter((prev) => ({ page: prev.page + 1 }));
 **URL 쿼리스트링을 화면 상태처럼 쓴다.** 필터 값이 주소에 남아 새로고침·공유가 그대로 복원된다.
 
 ```tsx
-import { useUrlQuery } from "@txstack/hooks/router";
+import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 
 const [query, setQuery] = useUrlQuery({ defaults: { a: 10, b: 20 } });
 
@@ -61,3 +70,12 @@ const [query, setQuery] = useUrlQuery({
 ```
 
 배열은 `key[]` 로 읽고 쓴다 — `?ids[]=1&ids[]=2` → `{ ids: [1, 2] }`.
+콤마는 쪼개지 않는다 — `?q=a,b` 는 문자열 `"a,b"` 그대로다.
+
+## 문서
+
+[docs/003_hooks](https://github.com/code7004/txstack/blob/main/docs/003_hooks/000_README.md)
+
+## 라이선스
+
+MIT
