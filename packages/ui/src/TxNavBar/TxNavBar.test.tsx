@@ -310,6 +310,174 @@ describe("TxNavBar — 자리와 랜드마크", () => {
   });
 });
 
+/**
+ * **줄의 패널 하나를 모든 항목이 함께 쓴다.** 어느 항목에 얹어도 사이트 메뉴 전체가 펼쳐지는
+ * 모양이다. 마우스 전용 지름길이라 항목은 그대로 링크다.
+ */
+describe("TxNavBar — 줄이 함께 쓰는 패널", () => {
+  /** 라우터가 하는 일 — 문서를 바꾸지 않는다. jsdom 은 이동을 못 해서 그대로 두면 경고를 낸다 */
+  const stay = (evt: { preventDefault: () => void }) => evt.preventDefault();
+
+  const shared = (
+    <>
+      <TxNavBar.Item label="Documents" href="/docs" onClick={stay} />
+      <TxNavBar.Item label="API" href="/api" onClick={stay} />
+    </>
+  );
+  const sitemap = (
+    <div>
+      <a href="/docs/start" onClick={stay}>
+        Getting Started
+      </a>
+      <a href="/api/ui" onClick={stay}>
+        ui
+      </a>
+    </div>
+  );
+
+  const item = (name: string) => screen.getByRole("link", { name }).closest("li")!;
+  const over = (el: Element, pointerType = "mouse") => fireEvent.pointerOver(el, { pointerType });
+
+  it("항목은 그냥 링크다 — 여는 버튼이 없다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    expect(screen.getByRole("link", { name: "Documents" }).getAttribute("href")).toBe("/docs");
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("어느 항목에 얹어도 같은 패널 하나가 열린다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"));
+    expect(panels()).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "ui" })).toBeTruthy();
+
+    over(item("API"));
+    expect(panels()).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "Getting Started" })).toBeTruthy();
+  });
+
+  /** 머리 줄을 가로지르기만 해도 패널이 덮이면 성가시다. */
+  it("항목 밖의 빈자리에서는 열지 않는다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(root().querySelector("ul")!);
+    expect(panels()).toHaveLength(0);
+  });
+
+  /** 여는 버튼이 없으니 손가락으로는 열 수 없다. 누르면 제목의 화면으로 간다. */
+  it("마우스로만 열린다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"), "touch");
+    expect(panels()).toHaveLength(0);
+  });
+
+  it('openOn="click" 이면 열리지 않는다', () => {
+    render(
+      <TxNavBar panel={sitemap} openOn="click">
+        {shared}
+      </TxNavBar>
+    );
+
+    over(item("Documents"));
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("줄 밖으로 나가면 잠시 뒤 닫힌다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"));
+    fireEvent.pointerLeave(root(), { pointerType: "mouse" });
+    expect(panels()).toHaveLength(1);
+
+    act(() => vi.advanceTimersByTime(200));
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("Escape 로 닫힌다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"));
+    fireEvent.keyDown(screen.getByRole("link", { name: "ui" }), { key: "Escape" });
+    expect(panels()).toHaveLength(0);
+  });
+
+  /** SPA 에서는 링크가 문서를 바꾸지 않는다. 닫지 않으면 새 화면을 패널이 덮은 채 남는다. */
+  it("패널 안의 링크를 누르면 닫힌다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"));
+    fireEvent.click(screen.getByRole("link", { name: "ui" }));
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("보조키를 누른 클릭은 열린 채로 둔다 — 새 탭으로 여러 개를 열 수 있다", () => {
+    render(<TxNavBar panel={sitemap}>{shared}</TxNavBar>);
+
+    over(item("Documents"));
+    fireEvent.click(screen.getByRole("link", { name: "ui" }), { metaKey: true });
+    expect(panels()).toHaveLength(1);
+  });
+
+  it("처음 얹은 항목의 이름을 알린다 — 그 안에서 옮겨 다니는 동안은 다시 오지 않는다", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <TxNavBar panel={sitemap} onOpenChange={onOpenChange}>
+        {shared}
+      </TxNavBar>
+    );
+
+    over(item("Documents"));
+    over(item("API"));
+    fireEvent.keyDown(screen.getByRole("link", { name: "ui" }), { key: "Escape" });
+
+    expect(onOpenChange.mock.calls).toEqual([["Documents"], [null]]);
+  });
+
+  /** 조용히 버리지 않는다. 자기 패널을 가진 항목은 자기 것을 연다. */
+  it("자기 panel 을 가진 항목은 자기 패널을 연다", () => {
+    render(
+      <TxNavBar panel={sitemap}>
+        {shared}
+        <TxNavBar.Item label="제품" panel={<a href="/crm">CRM</a>} />
+      </TxNavBar>
+    );
+
+    fireEvent.pointerEnter(trigger("제품").parentElement!, { pointerType: "mouse" });
+    over(trigger("제품"));
+
+    expect(panels()).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "CRM" })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "ui" })).toBeNull();
+  });
+});
+
+/** 항목의 패널에도 같은 규칙이 걸린다 — 패널 안의 링크로 이동하면 패널이 닫힌다. */
+describe("TxNavBar — 항목 패널의 링크", () => {
+  it("패널 안의 링크를 누르면 닫힌다", () => {
+    render(
+      <TxNavBar>
+        <TxNavBar.Item
+          label="제품"
+          panel={
+            <a href="/crm" onClick={(evt) => evt.preventDefault()}>
+              CRM
+            </a>
+          }
+        />
+      </TxNavBar>
+    );
+
+    fireEvent.click(trigger("제품"));
+    fireEvent.click(screen.getByRole("link", { name: "CRM" }));
+
+    expect(panels()).toHaveLength(0);
+    expect(trigger("제품").getAttribute("aria-expanded")).toBe("false");
+  });
+});
+
 describe("TxNavBar — CSS 계약과 경계", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -339,6 +507,10 @@ describe("TxNavBar — CSS 계약과 경계", () => {
     expect(css).toMatch(/\.tx-nav-bar\s*\{[^}]*position:\s*relative/);
     expect(css).toMatch(/\[data-panel-width="bar"\][^{]*__panel\s*\{[^}]*inset-inline:\s*0/);
     expect(css).toMatch(/\[data-panel-width="item"\][^{]*__item\s*\{[^}]*position:\s*relative/);
+  });
+
+  it("줄이 함께 쓰는 패널은 panelWidth 와 상관없이 줄 폭이다", () => {
+    expect(css).toMatch(/__panel\[data-shared\]\s*\{[^}]*inset-inline:\s*0[^}]*max-inline-size:\s*none/);
   });
 
   it("패널은 떠오른다 — 자리를 밀지 않는다", () => {

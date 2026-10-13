@@ -142,6 +142,16 @@
   max-inline-size: min(28rem, 90vw);
 }
 
+/**
+ * 줄이 함께 쓰는 패널은 `panelWidth` 와 상관없이 **늘 줄 폭이다.** 항목 폭 규칙 뒤에 두고
+ * 같은 무게로 써서, `"item"` 일 때 걸리는 폭 제한을 되돌린다.
+ */
+.tx-nav-bar .tx-nav-bar__panel[data-shared] {
+  inset-inline: 0;
+  min-inline-size: 0;
+  max-inline-size: none;
+}
+
 /** 움직임을 줄여 달라고 한 사람에게는 화살촉을 돌리지 않는다 */
 @media (prefers-reduced-motion: reduce) {
   .tx-nav-bar__chevron {
