@@ -120,7 +120,9 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 2. **`apps/site` 의 배포(D)** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
    뼈대(A) · 내용(B) · 진짜 데이터(C)까지 섰다. 계획과 진행은 [005_site](005_site.md) 가 갖는다.
    - [ ] `Profile` · `Contact` — **사용자만 쓸 수 있는 내용**이다 (경력 · 왜 만들었나 · 연락처)
-   - [ ] GitHub Pages — 사이트가 루트, Storybook 정적 빌드가 `/storybook/`
+   - [x] GitHub Pages — `https://code7004.github.io/txstack/`, Storybook 은 그 아래 `/storybook/`.
+         `main` 에 푸시하면 [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) 이 다시 올린다.
+         **npm 배포보다 먼저 올렸다** — 소비자 프로젝트에 적용하며 볼 문서 자리가 필요했다
 
    **`route-meta` · `hooks` · `axios` 의 남은 검증을 이 앱이 끌고 간다** — 주소창 ·
    새로고침 · 딥링크 · 진짜 요청은 테스트와 카탈로그가 못 겪는 것들이다. 실제로
