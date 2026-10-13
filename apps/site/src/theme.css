@@ -190,3 +190,36 @@ h2[id] {
   color: var(--tx-color-primary-strong);
   font-weight: 600;
 }
+
+/* --- 가로 줄의 사이트 지도 ------------------------------------------------- */
+
+/** 열 제목. 작은 대문자 억양 — 도구 톤. 지금 있는 묶음이면 강조색 */
+.site-map__title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--tx-color-text) 60%, transparent);
+}
+
+.site-map__link {
+  display: inline-block;
+  padding-block: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.site-map__nest {
+  border-color: var(--tx-color-border);
+}
+
+.site-map__title:hover,
+.site-map__link:hover {
+  color: var(--tx-color-primary-strong);
+}
+
+/** 라우터가 붙여 주는 지금 자리 표시를 그대로 읽는다 */
+.site-map__title.active,
+.site-map__link[aria-current="page"] {
+  color: var(--tx-color-primary-strong);
+  font-weight: 600;
+}
