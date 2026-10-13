@@ -3,8 +3,6 @@
 axios 래퍼. **인증·에러·응답봉투·로깅 정책을 옵션으로 주입받는다.**
 React 를 모른다 — Node 스크립트에서도 그대로 돌아간다.
 
-> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/004_axios](../../docs/004_axios/000_README.md).
-
 ```sh
 pnpm add @txstack/axios axios
 ```
@@ -59,9 +57,29 @@ createHttpClient({
 민감한 필드(`password` · `privateKey` · `token` · `accessToken` · `refreshToken`)는
 **훅에 넘기기 전에** 가려진다. `maskFields` 로 바꿀 수 있다.
 
-## 서브패스
+## 에러
+
+```ts
+import { parseApiError } from "@txstack/axios";
+
+try {
+  await api.post("/users", form);
+} catch (err) {
+  const { statusCode, message } = parseApiError(err); // axios 에러 · Error · 그 외를 한 모양으로
+}
+```
+
+## 진입점
 
 | 진입점                     | 내용                                                            |
 | -------------------------- | --------------------------------------------------------------- |
 | `@txstack/axios`           | `createHttpClient` · `attachInterceptors` · 유틸 · 타입         |
 | `@txstack/axios/singleton` | `initHttpClient` 계열. 기존 `getAxios` 패턴 이행용 — 권장 안 함 |
+
+## 문서
+
+[docs/004_axios](https://github.com/code7004/txstack/blob/main/docs/004_axios/000_README.md)
+
+## 라이선스
+
+MIT

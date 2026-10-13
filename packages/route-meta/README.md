@@ -5,8 +5,6 @@
 라우트 정의와 메뉴 정의를 따로 들고 있으면 경로를 바꿀 때 두 곳을 고쳐야 하고,
 한 곳을 잊으면 메뉴만 죽은 링크가 된다. 그래서 단일 출처를 둔다.
 
-> **아직 npm 에 배포되지 않았다.** 전체 설계는 [docs/002_route_meta](../../docs/002_route_meta/000_README.md).
-
 ```sh
 pnpm add @txstack/route-meta react react-router-dom
 ```
@@ -35,7 +33,8 @@ export const routes: RouteTree = {
 ```
 
 ```tsx
-// 실행 — 라우터
+// 실행 — 라우터. 둘은 같다
+<RouteRenderer tree={routes} />;
 useRoutes(buildRouteObjects(routes));
 
 // 내비게이션 — 메뉴. 권한 판정은 앱이 정한다
@@ -64,3 +63,11 @@ const { node, meta, matches, params } = useCurrentRouteNode(routes);
 
 `useCurrentRouteNode` 에 넘기는 트리는 **모듈 상수로 둔다.** 그러면 주소가 그대로일 때
 같은 객체를 돌려주므로 `useEffect` 의존성에 넣어도 된다.
+
+## 문서
+
+[docs/002_route_meta](https://github.com/code7004/txstack/blob/main/docs/002_route_meta/000_README.md)
+
+## 라이선스
+
+MIT
