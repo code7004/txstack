@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { TxCard, TxGrid } from "@txstack/ui";
+import { LinkCard, LinkCardGrid } from "../../components/LinkCard";
+import { Page } from "../../components/Page";
 
 const TOPICS = [
   { to: "/docs/guide/tokens", title: "Tokens", what: "겉모습을 CSS 변수로 바꾼다. 값을 직접 돌려 볼 수 있다" },
@@ -9,24 +9,14 @@ const TOPICS = [
 
 export function GuideHome() {
   return (
-    <>
-      <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold">Guide</h1>
-        <p className="text-slate-600 dark:text-slate-300">부품을 어떻게 쓰는지가 아니라, 부품을 내 화면에 맞추는 법. 셋 다 예제가 실제로 돈다.</p>
-      </header>
-
-      <TxGrid columns={3} className="gap-4">
+    <Page title="Guide" lead="부품을 어떻게 쓰는지가 아니라, 부품을 내 화면에 맞추는 법. 셋 다 예제가 실제로 돈다.">
+      <LinkCardGrid>
         {TOPICS.map((item) => (
-          <TxCard key={item.to} title={item.title} className="transition-colors hover:border-[color:var(--tx-color-primary)]">
-            <div className="flex flex-col items-start gap-3">
-              <p className="text-sm text-slate-600 dark:text-slate-300">{item.what}</p>
-              <Link to={item.to} className="text-sm underline">
-                보기
-              </Link>
-            </div>
-          </TxCard>
+          <LinkCard key={item.to} to={item.to} title={item.title}>
+            {item.what}
+          </LinkCard>
         ))}
-      </TxGrid>
-    </>
+      </LinkCardGrid>
+    </Page>
   );
 }

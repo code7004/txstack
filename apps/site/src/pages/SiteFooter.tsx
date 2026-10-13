@@ -10,9 +10,9 @@ const PACKAGES = [
 
 const DOCS = [
   ["Getting Started", "/docs/start"],
+  ["Tutorial", "/docs/tutorial"],
   ["Guide", "/docs/guide"],
-  ["Components", "/docs/components"],
-  ["Tutorial", "/docs/tutorial"]
+  ["Components", "/docs/components"]
 ] as const;
 
 const Column = ({ title, links }: { title: string; links: readonly (readonly [string, string])[] }) => (

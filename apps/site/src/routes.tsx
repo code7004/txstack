@@ -59,6 +59,16 @@ export const routes = {
         meta: { label: "Getting Started", description: "설치하고 첫 화면을 세우기까지" }
       },
 
+      /**
+       * **메뉴 차례가 곧 읽는 차례다** — 장 끝의 "다음" 도 이 순서를 따른다.
+       * 설치 → 한 화면 만들기 → 내 화면에 맞추기 → 부품 찾아보기.
+       */
+      tutorial: {
+        path: "/docs/tutorial",
+        element: <Tutorial />,
+        meta: { label: "Tutorial", description: "한 화면을 처음부터 끝까지" }
+      },
+
       guide: {
         path: "/docs/guide",
         element: <SectionLayout />,
@@ -75,12 +85,6 @@ export const routes = {
         path: "/docs/components",
         element: <Components />,
         meta: { label: "Components", description: "부품 카탈로그(Storybook)" }
-      },
-
-      tutorial: {
-        path: "/docs/tutorial",
-        element: <Tutorial />,
-        meta: { label: "Tutorial", description: "한 화면을 처음부터 끝까지" }
       }
     }
   },

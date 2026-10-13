@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
  * 문서 한 장의 골격. **제목 · 한 줄 설명 · 본문**의 리듬을 한 곳에서 정한다 —
  * 페이지마다 여백이 다르면 사이트가 흔들려 보인다.
  */
-export function Page({ title, lead, children }: { title: string; lead?: ReactNode; children: ReactNode }) {
+export function Page({ title, lead, children }: { title: string; lead?: ReactNode; children?: ReactNode }) {
   return (
     <article className="flex flex-col gap-8">
       <header className="flex flex-col gap-2">

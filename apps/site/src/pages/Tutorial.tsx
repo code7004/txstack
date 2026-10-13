@@ -1,134 +1,23 @@
-import { useMemo, useState } from "react";
-import { TxAlert, TxButton, TxCard, TxDialog, TxEmptyState, TxForm, TxPagination, TxSearchInput, TxToast } from "@txstack/ui";
+import { Link } from "react-router-dom";
+import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../components/Page";
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-  joinedAt: string;
-}
-
-const NAMES = ["김하늘", "박도윤", "이서아", "최민준", "정유나", "한지호", "오세린"];
-
-const SEED: Member[] = Array.from({ length: 23 }, (_, index) => ({
-  id: `M-${1041 + index}`,
-  name: `${NAMES[index % NAMES.length]}${index < NAMES.length ? "" : ` ${Math.floor(index / NAMES.length) + 1}`}`,
-  email: `user${index + 1}@example.com`,
-  joinedAt: `2025-${String((index % 12) + 1).padStart(2, "0")}-1${index % 9}`
-}));
-
-const PAGE_SIZE = 5;
-
-/** 마지막 단계에서 완성되는 화면. 여기서는 앞단만 있고 데이터는 이 파일 안에 있다. */
-function Screen() {
-  const [rows, setRows] = useState(SEED);
-  const [keyword, setKeyword] = useState("");
-  const [page, setPage] = useState(1);
-  const [adding, setAdding] = useState(false);
-  const [draft, setDraft] = useState({ name: "", email: "" });
-  const [error, setError] = useState<string>();
-
-  const found = useMemo(() => rows.filter((row) => `${row.name} ${row.email}`.toLowerCase().includes(keyword.toLowerCase())), [rows, keyword]);
-  const shown = found.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  const search = (next: string) => {
-    setKeyword(next);
-    setPage(1);
-  };
-
-  const submit = () => {
-    if (!draft.name.trim()) return setError("이름을 넣어야 한다");
-
-    const member: Member = { id: `M-${1041 + rows.length}`, name: draft.name, email: draft.email || "—", joinedAt: "2026-09-02" };
-    setRows((prev) => [member, ...prev]);
-    setAdding(false);
-    setDraft({ name: "", email: "" });
-    setError(undefined);
-    TxToast.show({ variant: "success", title: "등록했다", message: `${member.name} (${member.id})` });
-  };
-
-  const remove = async (member: Member) => {
-    if (!(await TxDialog.confirm({ title: "지울까", message: `${member.name} 을(를) 지운다.`, tone: "danger", confirmLabel: "지운다" }))) return;
-
-    setRows((prev) => prev.filter((row) => row.id !== member.id));
-    TxToast.show({ variant: "info", title: "지웠다" });
-  };
-
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <TxSearchInput placeholder="이름 · 메일로 찾기" aria-label="회원 검색" className="w-56" onSubmitText={search} onClear={() => search("")} />
-        <span className="text-sm text-slate-500 dark:text-slate-400">{found.length}명</span>
-        <TxButton label={adding ? "닫기" : "회원 등록"} variant={adding ? "secondary" : "primary"} className="ms-auto" onClick={() => setAdding((prev) => !prev)} />
-      </div>
-
-      {adding && (
-        <TxCard title="회원 등록">
-          <TxForm
-            noValidate
-            labelWidth="3.5rem"
-            onSubmit={(event) => {
-              event.preventDefault();
-              submit();
-            }}
-          >
-            <TxForm.Input caption="이름" placeholder="홍길동" value={draft.name} onChangeText={(name) => setDraft((prev) => ({ ...prev, name }))} error={error} required />
-            <TxForm.Input caption="메일" type="email" placeholder="you@company.com" value={draft.email} onChangeText={(email) => setDraft((prev) => ({ ...prev, email }))} />
-
-            <div className="flex justify-end gap-2">
-              <TxButton type="button" label="취소" variant="secondary" onClick={() => setAdding(false)} />
-              <TxButton type="submit" label="저장" />
-            </div>
-          </TxForm>
-        </TxCard>
-      )}
-
-      {shown.length === 0 ? (
-        <TxEmptyState variant="no-result" title="찾은 회원이 없다" description="검색어를 바꿔 보라">
-          <TxButton label="조건 지우기" variant="secondary" onClick={() => search("")} />
-        </TxEmptyState>
-      ) : (
-        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ backgroundColor: "var(--tx-color-muted)" }}>
-                <th className="px-3 py-2 text-start font-semibold">이름</th>
-                <th className="px-3 py-2 text-start font-semibold">메일</th>
-                <th className="px-3 py-2 text-start font-semibold">가입일</th>
-                <th className="px-3 py-2" />
-              </tr>
-            </thead>
-            <tbody>
-              {shown.map((row) => (
-                <tr key={row.id} className="border-t" style={{ borderColor: "var(--tx-color-border)" }}>
-                  <td className="px-3 py-2">{row.name}</td>
-                  <td className="px-3 py-2">{row.email}</td>
-                  <td className="px-3 py-2">{row.joinedAt}</td>
-                  <td className="px-3 py-2 text-end">
-                    <TxButton label="지우기" variant="text" onClick={() => remove(row)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      <div className="flex justify-center">
-        <TxPagination currentPage={page} totalRows={found.length} pageSize={PAGE_SIZE} onChangePage={setPage} />
-      </div>
-    </div>
-  );
-}
+import { MemberScreen } from "./tutorial/MemberScreen";
+import MEMBER_SCREEN_SOURCE from "./tutorial/MemberScreen.tsx?raw";
 
 export function Tutorial() {
   return (
     <Page title="Tutorial" lead="목록과 등록이 있는 화면 하나를 처음부터 끝까지 만든다. 마지막에 나오는 화면은 이 페이지 안에서 실제로 돈다.">
       <TxAlert variant="info" title="이 화면이 목표다">
-        아래 다섯 단계를 지나면 <strong>검색 · 목록 · 쪽 번호 · 등록 · 삭제 확인 · 알림</strong>이 붙은 화면이 된다. 부품은 여섯 개뿐이다.
+        아래 다섯 단계를 지나면 <strong>검색 · 목록 · 쪽 번호 · 등록 · 삭제 확인 · 알림</strong>이 붙은 화면이 된다. 부품은 여섯 개뿐이다. 맨 아래에 <strong>통째로 붙여 넣을 수 있는 전체 코드</strong>가 있다.
       </TxAlert>
+
+      <p className="text-slate-600 dark:text-slate-300">
+        <Link to="/docs/start" className="underline">
+          Getting Started
+        </Link>{" "}
+        를 마쳐 <code>@txstack/ui</code> 가 설치되고 스타일시트가 연결된 앱에서 시작한다. 단계마다 보이는 코드는 그 단계에서 늘어나는 부분만이다.
+      </p>
 
       <Block title="1. 화면 껍데기">
         <p className="text-slate-600 dark:text-slate-300">
@@ -225,12 +114,21 @@ export function Tutorial() {
         </p>
 
         <Demo>
-          <Screen />
+          <MemberScreen />
         </Demo>
 
         <p className="text-slate-600 dark:text-slate-300">
           수천 행을 굴리고 셀을 고쳐 넣어야 하면 표를 <code>TxAgGrid</code> 로 바꾼다 — 검색 · 등록 · 쪽 번호 코드는 그대로 두고 표만 갈아끼운다. 그 모양은 카탈로그의 <strong>Recipes › ListScreen</strong> 에 있다.
         </p>
+      </Block>
+
+      <Block title="전체 코드">
+        <p className="text-slate-600 dark:text-slate-300">
+          위에서 도는 화면의 소스 그대로다. <code>src/MemberScreen.tsx</code> 로 붙여 넣고 <code>App.tsx</code> 에서 <code>&lt;MemberScreen /&gt;</code> 를 그리면 같은 화면이 뜬다. 배치는 Tailwind 클래스로 잡았다 — Tailwind 가 없는 앱이면{" "}
+          <code>className</code> 만 바꾸면 된다.
+        </p>
+
+        <CodeBlock title="src/MemberScreen.tsx">{MEMBER_SCREEN_SOURCE}</CodeBlock>
       </Block>
     </Page>
   );
