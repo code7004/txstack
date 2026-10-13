@@ -1,7 +1,9 @@
 import { buildRouteObjects, getNavigableRoutes, useCurrentRouteNode, type NavRoute } from "@txstack/route-meta";
-import { useEffect, useState, type ReactNode } from "react";
-import { NavLink, useRoutes } from "react-router-dom";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
+import { DocPager } from "./components/DocPager";
+import { PageToc } from "./components/PageToc";
 import { SiteFooter } from "./pages/SiteFooter";
 import { routes } from "./routes";
 
@@ -71,17 +73,75 @@ const sideItem = (item: NavRoute): ReactNode =>
     <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />
   );
 
-/** 지금 있는 자리의 하위 항목. 없으면 왼쪽 줄을 세우지 않는다. */
-function useSubMenu(): NavRoute[] | undefined {
+/**
+ * **화면이 바뀌면 맨 위에서 시작한다.** 브라우저는 SPA 의 주소 변경을 새 문서로 보지 않아
+ * 앞 화면의 스크롤 위치를 그대로 둔다 — "다음 장" 을 누르면 다음 장의 중간에 떨어진다.
+ * 주소에 조각(`#…`)이 있으면 그 제목으로 간다.
+ */
+function useScrollReset() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    const target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (target) target.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }, [pathname, hash]);
+}
+
+/**
+ * 셸이 왼쪽 줄을 서랍으로 넣는 폭. **셸의 `breakpoint` 기본값과 같아야 한다** — 어긋나면
+ * 가로 줄이 사라졌는데 서랍은 아직 안 생기는 틈이 생긴다.
+ */
+const NARROW = 960;
+
+function useNarrow() {
+  const query = `(max-width: ${NARROW - 1}px)`;
+  const [narrow, setNarrow] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setNarrow(media.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [query]);
+
+  return narrow;
+}
+
+const SITE_NAME = "txstack";
+
+/**
+ * 지금 자리. 하위 항목(왼쪽 줄)과 탭 제목이 여기서 나온다.
+ *
+ * **탭 제목은 트리의 `label` 을 쓴다** — 탭이 여럿 열려 있으면 제목만으로 구분해야 한다.
+ * 인덱스 화면은 자기 `meta` 가 없으므로 그 묶음의 이름을 쓴다. 없는 주소(`hidden`)도 제목은 갖는다.
+ */
+function useCurrentPlace() {
   const { matches } = useCurrentRouteNode(routes);
   const top = matches[0];
 
-  return MENU.find((item) => item.path === top?.path)?.children;
+  // 가까운 쪽부터 이름 둘 — 자기 이름과 바로 위 묶음의 이름
+  const [label, section] = [...matches]
+    .reverse()
+    .map((node) => node.meta?.label)
+    .filter((name, index, all): name is string => !!name && all.indexOf(name) === index);
+  const home = top?.path === "/";
+
+  useEffect(() => {
+    // `ui` 처럼 짧은 이름은 묶음을 붙여야 탭에서 읽힌다 — "ui · API"
+    const place = section ? `${label} · ${section}` : label;
+    document.title = !place || home ? `${SITE_NAME} — 같은 화면을 다시 짓지 않는다` : `${place} — ${SITE_NAME}`;
+  }, [label, section, home]);
+
+  return { home, sub: MENU.find((item) => item.path === top?.path)?.children };
 }
 
 function Layout({ children }: { children: ReactNode }) {
   const { dark, toggle } = useTheme();
-  const sub = useSubMenu();
+  const { home, sub } = useCurrentPlace();
+  const narrow = useNarrow();
+  const body = useRef<HTMLDivElement>(null);
+  useScrollReset();
 
   return (
     <TxAppShell
@@ -89,7 +149,7 @@ function Layout({ children }: { children: ReactNode }) {
         <div className="flex w-full items-center gap-3">
           {/* 이름은 모노스페이스로 — 도구라는 신호가 여기서 먼저 온다 */}
           <NavLink to="/" className="font-mono text-base font-semibold tracking-tight">
-            txstack
+            TXSTACK
           </NavLink>
 
           <div className="ms-auto flex items-center gap-1">
@@ -101,19 +161,41 @@ function Layout({ children }: { children: ReactNode }) {
           </div>
         </div>
       }
-      top={<TxNavBar>{MENU.map(barItem)}</TxNavBar>}
-      /* 하위 항목이 있는 섹션에서만 왼쪽 줄이 선다 — 없는 화면에서 빈 기둥이 남지 않는다 */
+      /*
+       * **좁은 화면에서는 가로 줄을 내리고 서랍 하나로 모은다.** 셸은 왼쪽 줄만 서랍으로 넣고
+       * 가로 줄은 그대로 두는데, 다섯 칸이 폰 폭에 안 들어가 옆으로 넘친다. 그래서 서랍에
+       * 트리 전체를 그린다 — Home 처럼 하위 항목이 없는 화면에서도 ☰ 가 생긴다.
+       */
+      top={!narrow && <TxNavBar>{MENU.map(barItem)}</TxNavBar>}
+      /* 넓을 때는 하위 항목이 있는 섹션에서만 왼쪽 줄이 선다 — 없는 화면에서 빈 기둥이 남지 않는다 */
       left={
-        sub && (
-          /* 셸의 `left` 는 여백을 정하지 않는다 — 무엇이 들어올지 모르기 때문이다. 여기서 준다 */
-          <TxSideNav className="p-3">{sub.map(sideItem)}</TxSideNav>
+        narrow ? (
+          <TxSideNav className="p-3">{MENU.map(sideItem)}</TxSideNav>
+        ) : (
+          sub && (
+            /* 셸의 `left` 는 여백을 정하지 않는다 — 무엇이 들어올지 모르기 때문이다. 여기서 준다 */
+            <TxSideNav className="p-3">{sub.map(sideItem)}</TxSideNav>
+          )
         )
       }
       /* 맨 아래 줄. 셸이 자리와 경계선을 주고, 안의 배치는 사이트가 정한다 */
+      /* 좁을 때 서랍에는 하위가 아니라 전체 메뉴가 든다. 이름도 그에 맞춘다 */
+      labels={narrow ? { left: "메뉴" } : undefined}
       footer={<SiteFooter />}
       style={{ "--tx-app-shell-left-width": "13rem" } as React.CSSProperties}
     >
-      <div className="px-6 py-8">{children}</div>
+      {/* 본문 + 넓은 화면에서만 서는 "이 페이지에서". 목차는 본문의 h2 를 읽어 만든다 */}
+      {/*
+       * **글의 폭은 여기 한 곳에서 정한다.** 페이지마다 따로 주면 장을 넘길 때 본문이 출렁인다.
+       * Home 은 보여 주는 화면이라 넓게, 문서는 읽는 화면이라 좁게.
+       */}
+      <div className={`mx-auto flex w-full gap-10 px-4 py-8 sm:px-6 sm:py-10 ${home ? "max-w-6xl" : "max-w-[76rem]"}`}>
+        <div ref={body} className={`min-w-0 flex-1 ${home ? "" : "max-w-4xl"}`}>
+          {children}
+          <DocPager menu={MENU} />
+        </div>
+        <PageToc root={body} />
+      </div>
     </TxAppShell>
   );
 }

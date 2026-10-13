@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TxAlert, TxButton, TxCard, TxCopyButton, TxForm, TxGrid, TxTag } from "@txstack/ui";
+import { TxAlert, TxButton, TxCard, TxCopyButton, TxForm, TxTag } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
+import { LinkCard, LinkCardGrid } from "../components/LinkCard";
 
 const PACKAGES = [
   { name: "@txstack/ui", what: "Tx* 컴포넌트 49종. 스타일시트 한 줄, 겉모습은 CSS 변수로 바꾼다", to: "/api/ui", tag: "React" },
@@ -72,8 +73,8 @@ export function Home() {
           </Link>
 
           {/* 설치 한 줄. 복사는 우리 부품이 한다 */}
-          <div className="flex items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
-            <code className="font-mono text-sm">pnpm add @txstack/ui</code>
+          <div className="flex max-w-full min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+            <code className="min-w-0 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
             <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="text-xs" />
           </div>
         </div>
@@ -99,21 +100,13 @@ export function Home() {
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-semibold">Packages</h2>
 
-        <TxGrid columns={2} className="gap-4">
+        <LinkCardGrid>
           {PACKAGES.map((item) => (
-            <TxCard key={item.name} title={<span className="font-mono text-sm">{item.name}</span>} className="transition-colors hover:border-[color:var(--tx-color-primary-strong)]">
-              <div className="flex flex-col items-start gap-3">
-                <p className="text-sm text-slate-600 dark:text-slate-300">{item.what}</p>
-                <div className="flex items-center gap-2">
-                  <TxTag>{item.tag}</TxTag>
-                  <Link to={item.to} className="text-sm underline">
-                    API
-                  </Link>
-                </div>
-              </div>
-            </TxCard>
+            <LinkCard key={item.name} to={item.to} title={<span className="font-mono text-sm">{item.name}</span>} aside={<TxTag>{item.tag}</TxTag>}>
+              {item.what}
+            </LinkCard>
           ))}
-        </TxGrid>
+        </LinkCardGrid>
       </section>
 
       {/* --- 이 사이트가 증거다 ---------------------------------------------- */}

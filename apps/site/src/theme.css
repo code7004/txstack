@@ -89,6 +89,13 @@
 
     /* 한글은 자간을 조금 좁히면 덩어리로 읽힌다 */
     letter-spacing: -0.01em;
+
+    /**
+     * **한글은 어절 단위로 줄을 바꾼다.** 기본값은 글자 아무 데서나 끊어 "다 / 시 짓지" 처럼
+     * 낱말이 쪼개진다. 긴 주소 · 코드처럼 끊을 곳이 없는 것만 마지막 수단으로 자른다.
+     */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   html.dark {
@@ -123,4 +130,63 @@
     max-inline-size: var(--site-measure);
     text-wrap: pretty;
   }
+}
+
+/* --- 문서 길잡이 ---------------------------------------------------------- */
+
+/**
+ * 셸 머리(이름 줄 + 가로 줄)가 붙어 있어서, 제목으로 건너뛰면 그 밑에 가려진다.
+ * 그 높이만큼 비워 두고 멈춘다.
+ */
+h2[id] {
+  scroll-margin-top: 7.5rem;
+}
+
+/**
+ * 통째로 눌리는 카드 — 장 끝의 "이전 · 다음", 인덱스 화면의 칸. 눌러야 할 자리가 넓다.
+ * 가리키면 테두리가 강조색으로, 화살표가 한 칸 나아간다.
+ */
+.site-card {
+  border-color: var(--tx-color-border);
+  background-color: var(--tx-color-surface);
+  transition:
+    border-color 120ms,
+    box-shadow 120ms;
+}
+
+.site-card:hover,
+.site-card:focus-visible {
+  border-color: var(--tx-color-primary-strong);
+  box-shadow: 0 1px 0 0 var(--tx-color-primary-strong);
+}
+
+.site-card__arrow {
+  color: var(--tx-color-primary-strong);
+  transition: translate 120ms;
+}
+
+.site-card:hover .site-card__arrow {
+  translate: 0.2rem 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-card__arrow {
+    transition: none;
+  }
+}
+
+/** "이 페이지에서". 지금 읽는 제목만 강조색 막대를 단다 */
+.site-toc__link {
+  border-color: var(--tx-color-border);
+  color: color-mix(in oklab, var(--tx-color-text) 65%, transparent);
+}
+
+.site-toc__link:hover {
+  color: var(--tx-color-text);
+}
+
+.site-toc__link[aria-current] {
+  border-color: var(--tx-color-primary-strong);
+  color: var(--tx-color-primary-strong);
+  font-weight: 600;
 }
