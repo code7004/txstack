@@ -33,30 +33,37 @@ function useTheme() {
   return { dark, toggle: () => setDark((prev) => !prev) };
 }
 
-/** 가로 줄 한 칸. 자식이 있으면 그 자식들이 패널의 링크가 된다. */
+/** 가로 줄 한 칸. 그냥 링크다 — 하위는 줄이 함께 쓰는 패널(`SITE_MAP`)이 한꺼번에 보여 준다. */
+const barItem = (item: NavRoute) => <TxNavBar.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />;
+
+/** 패널 속 링크 한 줄. 자식이 있으면 그 아래로 한 단 들여 이어 간다(`Guide › Tokens`) */
+const mapLink = (item: NavRoute): ReactNode => (
+  <li key={item.key} className="flex flex-col gap-0.5">
+    <NavLink to={item.path} className="site-map__link">
+      {item.meta?.label ?? item.key}
+    </NavLink>
+    {item.children && <ul className="flex flex-col gap-0.5 border-s ps-3 site-map__nest">{item.children.map(mapLink)}</ul>}
+  </li>
+);
+
 /**
- * 가로 줄 한 칸. **제목은 링크이고 `▾` 버튼이 패널을 연다** — 그래서 `Documents` 를 눌러도
- * 그 묶음의 인덱스 화면으로 간다. 자식이 없으면 그냥 링크다.
+ * **어느 칸에 얹어도 사이트 전체가 한 판에 펼쳐진다** — 줄의 `panel` 이다. 묶음 하나가 한 열이고,
+ * 제목도 링크다. 하위가 없는 묶음(`Example`)은 설명을 대신 둔다.
+ *
+ * 이 판은 **마우스 전용 지름길**이다. 키보드 · 터치로는 열리지 않으므로, 여기 있는 링크는 전부
+ * 각 묶음의 인덱스 화면(`/docs` 등)에서도 닿는다 — 그 규칙을 지키는 것은 사이트 몫이다.
  */
-const barItem = (item: NavRoute) => (
-  <TxNavBar.Item
-    key={item.key}
-    label={item.meta?.label ?? item.key}
-    as={NavLink}
-    to={item.path}
-    toggleLabel="하위 메뉴"
-    panel={
-      item.children && (
-        <div className="flex flex-col items-start gap-1">
-          {item.children.map((child) => (
-            <NavLink key={child.key} to={child.path} className="rounded px-1 py-0.5 hover:underline">
-              {child.meta?.label ?? child.key}
-            </NavLink>
-          ))}
-        </div>
-      )
-    }
-  />
+const SITE_MAP = (
+  <div className="grid grid-cols-4 gap-8">
+    {MENU.filter((section) => section.path !== "/").map((section) => (
+      <section key={section.key} className="flex flex-col gap-2">
+        <NavLink to={section.path} className="site-map__title">
+          {section.meta?.label ?? section.key}
+        </NavLink>
+        {section.children ? <ul className="flex flex-col gap-0.5">{section.children.map(mapLink)}</ul> : <p className="text-sm text-slate-500 dark:text-slate-400">{section.meta?.description}</p>}
+      </section>
+    ))}
+  </div>
 );
 
 /**
@@ -166,7 +173,7 @@ function Layout({ children }: { children: ReactNode }) {
        * 가로 줄은 그대로 두는데, 다섯 칸이 폰 폭에 안 들어가 옆으로 넘친다. 그래서 서랍에
        * 트리 전체를 그린다 — Home 처럼 하위 항목이 없는 화면에서도 ☰ 가 생긴다.
        */
-      top={!narrow && <TxNavBar>{MENU.map(barItem)}</TxNavBar>}
+      top={!narrow && <TxNavBar panel={SITE_MAP}>{MENU.map(barItem)}</TxNavBar>}
       /* 넓을 때는 하위 항목이 있는 섹션에서만 왼쪽 줄이 선다 — 없는 화면에서 빈 기둥이 남지 않는다 */
       left={
         narrow ? (
