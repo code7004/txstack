@@ -35,13 +35,13 @@
 **가로 줄은 다섯 칸이다.** 처음에 아홉 칸으로 뒀더니 눈이 한 번에 못 읽어서, 성격이 같은
 것을 묶어 아래로 내렸다. **깊이는 셋까지만** 간다.
 
-| 가로 줄     | 그 아래                                                                                    | 어느 패키지를 쓰나    |
-| ----------- | ------------------------------------------------------------------------------------------ | --------------------- |
-| `Home`      | —                                                                                          | `ui`                  |
-| `Documents` | `Getting Started` · `Guide`(`Tokens` · `Dark mode` · `Layout`) · `Components` · `Tutorial` | `ui`                  |
-| `API`       | `ui` · `route-meta` · `hooks` · `axios`                                                    | 넷 다                 |
-| `Example`   | —                                                                                          | **`axios` · `hooks`** |
-| `About`     | `Profile` · `Contact`                                                                      | `ui`                  |
+| 가로 줄     | 그 아래                                                                                                                                     | 어느 패키지를 쓰나    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `Home`      | —                                                                                                                                           | `ui`                  |
+| `Documents` | `Getting Started` · `Tutorial` · `Guide`(`Tokens` · `Dark mode` · `Layout` · `Routing & Menu` · `URL State` · `HTTP Client`) · `Components` | **넷 다**             |
+| `API`       | `ui` · `route-meta` · `hooks` · `axios`                                                                                                     | 넷 다                 |
+| `Example`   | —                                                                                                                                           | **`axios` · `hooks`** |
+| `About`     | `Profile` · `Contact`                                                                                                                       | `ui`                  |
 
 `Contact` 를 묶음 이름으로 두면 **`Contact > Contact`** 가 되므로 `About` 이다.
 `Components` 는 스토리북으로 보내는 자리다 — 부품 레퍼런스를 두 곳에서 관리하지 않는다.
@@ -109,6 +109,14 @@
         (문서 `max-w-4xl` · Home `max-w-6xl`), 인덱스 화면 넷을 `Page` + 통째로 눌리는 `LinkCard` 로
         맞췄다. 한글은 `word-break: keep-all`. `Contact` 는 이슈 창구 셋 + 버그 양식, `Profile` 은
         **틀만** — `PROFILE` 을 채우면 그려지고, 빈 칸은 배포판에서 사라지고 개발 서버에서만 점선으로 보인다
+  - [x] **사이트의 정체성 — txstack 전체** (2026-10-13). Home 은 네 패키지를 소개하는데 `Documents` 는
+        `ui` 전용이었다. 패키지별로 나누면 깊이가 넷이 되므로 **하려는 일 기준**으로 묶었다 —
+        `Getting Started` 는 "어떤 패키지가 필요한가" 부터, `Tutorial` 은 네 패키지를 한 화면에 쓰고
+        (검색어 · 페이지는 이 페이지의 진짜 주소에, 요청은 `memberApi.ts` 의 가짜 서버로),
+        `Guide` 에 `Routing & Menu` · `URL State` · `HTTP Client` 를 더했다. 가짜 서버는 axios 의
+        `adapter` 자리에 끼운다 — 클라이언트 쪽 코드는 진짜 서버일 때와 똑같이 돈다.
+        사이트가 `axios` 를 peer 로 선언하지 않고 있던 것도 이때 바로잡았다
+  - [ ] 한글 문구 정리(합니다체) — Home · Getting Started · Tutorial · 새 Guide 3장은 끝. 나머지 장이 남았다
   - [ ] ③ 영문
 
 ## 내용을 쓰는 방식

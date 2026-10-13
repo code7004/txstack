@@ -3,16 +3,16 @@ import { Page } from "../components/Page";
 
 /** **읽는 차례 그대로다.** 트리의 순서와 같아서 장 끝의 "다음" 을 따라가도 같은 길이 된다. */
 const STEPS = [
-  { to: "/docs/start", title: "Getting Started", time: "5분", what: "설치하고 첫 화면을 띄운다. 여기까지만 따라와도 쓸 수 있다" },
-  { to: "/docs/tutorial", title: "Tutorial", time: "15분", what: "검색 · 목록 · 등록 · 삭제가 붙은 화면 하나를 끝까지 만든다" },
-  { to: "/docs/guide", title: "Guide", time: "필요할 때", what: "겉모습을 토큰으로 바꾸고, 다크모드를 켜고, 화면 골격을 세운다" },
-  { to: "/docs/components", title: "Components", time: "찾아볼 때", what: "부품 49종의 레퍼런스 — 카탈로그(Storybook)로 간다" }
+  { to: "/docs/start", title: "Getting Started", time: "5분", what: "필요한 패키지를 고르고, 설치해서 첫 화면을 띄웁니다" },
+  { to: "/docs/tutorial", title: "Tutorial", time: "15분", what: "네 패키지를 모두 써서 검색, 등록, 삭제가 있는 목록 화면을 끝까지 만듭니다" },
+  { to: "/docs/guide", title: "Guide", time: "필요할 때", what: "디자인 바꾸기, 다크 모드, 화면 틀, 라우팅과 메뉴, URL 상태, API 클라이언트" },
+  { to: "/docs/components", title: "Components", time: "찾아볼 때", what: "컴포넌트 49종을 직접 움직여 보는 카탈로그(Storybook)" }
 ];
 
 /** `/docs` 의 인덱스 화면. 트리에서 `index: true` 로 선언돼 있다. */
 export function DocsHome() {
   return (
-    <Page title="Documents" lead={'처음이라면 1 부터 차례로. 각 장 끝의 "다음" 을 누르면 이 순서대로 이어진다.'}>
+    <Page title="Documents" lead={'처음이라면 1번부터 차례로 읽어 보세요. 각 장 끝의 "다음"을 누르면 이 순서대로 이어집니다.'}>
       <ol className="flex flex-col gap-3">
         {STEPS.map((step, index) => (
           <li key={step.to}>

@@ -1,64 +1,70 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { parseApiError } from "@txstack/axios";
+import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxButton, TxCard, TxDialog, TxEmptyState, TxForm, TxPagination, TxSearchInput, TxToast } from "@txstack/ui";
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-  joinedAt: string;
-}
-
-const NAMES = ["김하늘", "박도윤", "이서아", "최민준", "정유나", "한지호", "오세린"];
-
-const SEED: Member[] = Array.from({ length: 23 }, (_, index) => ({
-  id: `M-${1041 + index}`,
-  name: `${NAMES[index % NAMES.length]}${index < NAMES.length ? "" : ` ${Math.floor(index / NAMES.length) + 1}`}`,
-  email: `user${index + 1}@example.com`,
-  joinedAt: `2025-${String((index % 12) + 1).padStart(2, "0")}-1${index % 9}`
-}));
+import { api, type Member, type MemberPage } from "./memberApi";
 
 const PAGE_SIZE = 5;
 
-/** 예제라 데이터는 이 파일 안에 있다. 실제 앱에서는 `rows` 를 API 에서 받는다 */
 export function MemberScreen() {
-  const [rows, setRows] = useState(SEED);
-  const [keyword, setKeyword] = useState("");
-  const [page, setPage] = useState(1);
+  // 검색어와 페이지는 주소에 둔다 — 새로고침하거나 주소를 보내도 같은 화면이 열린다
+  const [query, setQuery] = useUrlQuery({ defaults: { q: "", page: 1 } });
+
+  const [data, setData] = useState<MemberPage>({ rows: [], total: 0 });
+  const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(0);
+
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState({ name: "", email: "" });
   const [error, setError] = useState<string>();
 
-  const found = useMemo(() => rows.filter((row) => `${row.name} ${row.email}`.toLowerCase().includes(keyword.toLowerCase())), [rows, keyword]);
-  const shown = found.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  // 조건이 바뀔 때마다 목록을 다시 불러온다
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
 
-  const search = (next: string) => {
-    setKeyword(next);
-    setPage(1);
-  };
+    api
+      .get<MemberPage>("/members", { q: query.q, page: query.page, size: PAGE_SIZE })
+      .then((page) => alive && setData(page))
+      .catch((err) => TxToast.show({ variant: "danger", title: "목록을 불러오지 못했습니다", message: parseApiError(err).message }))
+      .finally(() => alive && setLoading(false));
 
-  const submit = () => {
-    if (!draft.name.trim()) return setError("이름을 넣어야 한다");
+    return () => {
+      alive = false;
+    };
+  }, [query.q, query.page, reload]);
 
-    const member: Member = { id: `M-${1041 + rows.length}`, name: draft.name, email: draft.email || "—", joinedAt: "2026-09-02" };
-    setRows((prev) => [member, ...prev]);
-    setAdding(false);
-    setDraft({ name: "", email: "" });
-    setError(undefined);
-    TxToast.show({ variant: "success", title: "등록했다", message: `${member.name} (${member.id})` });
+  const search = (q: string) => setQuery({ q, page: 1 });
+
+  const submit = async () => {
+    if (!draft.name.trim()) return setError("이름을 입력해 주세요");
+
+    try {
+      const member = await api.post<Member>("/members", draft);
+      setAdding(false);
+      setDraft({ name: "", email: "" });
+      setError(undefined);
+      TxToast.show({ variant: "success", title: "등록했습니다", message: `${member.name} (${member.id})` });
+      setReload((n) => n + 1);
+    } catch (err) {
+      setError(parseApiError(err).message);
+    }
   };
 
   const remove = async (member: Member) => {
-    if (!(await TxDialog.confirm({ title: "지울까", message: `${member.name} 을(를) 지운다.`, tone: "danger", confirmLabel: "지운다" }))) return;
+    const yes = await TxDialog.confirm({ title: "회원을 삭제할까요?", message: `${member.name} 님의 정보가 삭제됩니다.`, tone: "danger", confirmLabel: "삭제" });
+    if (!yes) return;
 
-    setRows((prev) => prev.filter((row) => row.id !== member.id));
-    TxToast.show({ variant: "info", title: "지웠다" });
+    await api.delete(`/members/${member.id}`);
+    TxToast.show({ variant: "info", title: "삭제했습니다" });
+    setReload((n) => n + 1);
   };
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <TxSearchInput placeholder="이름 · 메일로 찾기" aria-label="회원 검색" className="w-56" onSubmitText={search} onClear={() => search("")} />
-        <span className="text-sm text-slate-500 dark:text-slate-400">{found.length}명</span>
+        <TxSearchInput placeholder="이름, 메일로 검색" aria-label="회원 검색" defaultValue={query.q} className="w-56" onSubmitText={search} onClear={() => search("")} />
+        <span className="text-sm text-slate-500 dark:text-slate-400">{loading ? "불러오는 중…" : `${data.total}명`}</span>
         <TxButton label={adding ? "닫기" : "회원 등록"} variant={adding ? "secondary" : "primary"} className="ms-auto" onClick={() => setAdding((prev) => !prev)} />
       </div>
 
@@ -69,7 +75,7 @@ export function MemberScreen() {
             labelWidth="3.5rem"
             onSubmit={(event) => {
               event.preventDefault();
-              submit();
+              void submit();
             }}
           >
             <TxForm.Input caption="이름" placeholder="홍길동" value={draft.name} onChangeText={(name) => setDraft((prev) => ({ ...prev, name }))} error={error} required />
@@ -83,12 +89,12 @@ export function MemberScreen() {
         </TxCard>
       )}
 
-      {shown.length === 0 ? (
-        <TxEmptyState variant="no-result" title="찾은 회원이 없다" description="검색어를 바꿔 보라">
+      {!loading && data.rows.length === 0 ? (
+        <TxEmptyState variant="no-result" title="검색 결과가 없습니다" description="검색어를 바꿔 보세요">
           <TxButton label="조건 지우기" variant="secondary" onClick={() => search("")} />
         </TxEmptyState>
       ) : (
-        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
+        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)", opacity: loading ? 0.6 : 1 }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: "var(--tx-color-muted)" }}>
@@ -99,13 +105,13 @@ export function MemberScreen() {
               </tr>
             </thead>
             <tbody>
-              {shown.map((row) => (
+              {data.rows.map((row) => (
                 <tr key={row.id} className="border-t" style={{ borderColor: "var(--tx-color-border)" }}>
                   <td className="px-3 py-2">{row.name}</td>
                   <td className="px-3 py-2">{row.email}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{row.joinedAt}</td>
                   <td className="px-3 py-2 text-end">
-                    <TxButton label="지우기" variant="text" onClick={() => remove(row)} />
+                    <TxButton label="삭제" variant="text" onClick={() => remove(row)} />
                   </td>
                 </tr>
               ))}
@@ -115,7 +121,7 @@ export function MemberScreen() {
       )}
 
       <div className="flex justify-center">
-        <TxPagination currentPage={page} totalRows={found.length} pageSize={PAGE_SIZE} onChangePage={setPage} />
+        <TxPagination currentPage={query.page} totalRows={data.total} pageSize={PAGE_SIZE} onChangePage={(page) => setQuery({ page })} />
       </div>
     </div>
   );

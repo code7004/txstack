@@ -101,6 +101,9 @@ importers:
       '@txstack/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      axios:
+        specifier: ^1.20.0
+        version: 1.20.0
       react:
         specifier: ^19.2.8
         version: 19.2.8

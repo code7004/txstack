@@ -36,7 +36,7 @@ export function SiteFooter() {
       <div className="flex flex-wrap gap-10">
         <div className="flex min-w-56 flex-col gap-2">
           <span className="font-mono text-sm font-semibold">txstack</span>
-          <p className="text-sm text-slate-500 dark:text-slate-400">여러 프로젝트에서 다시 쓰는 React 라이브러리. 부품은 쉽게 쓰고 쉽게 바꾸며, 정책은 앱이 정한다.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">서비스 개발에 필요한 React 라이브러리. 여러 프로젝트에서 재사용할 수 있도록 쓰기 쉽고 바꾸기 쉽게 만들었습니다.</p>
         </div>
 
         <Column title="Packages" links={PACKAGES} />
@@ -59,7 +59,7 @@ export function SiteFooter() {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
         <span>MIT License</span>
         <span aria-hidden>·</span>
-        <span>이 사이트도 txstack 으로 만들었다</span>
+        <span>Built with txstack</span>
       </div>
     </div>
   );
