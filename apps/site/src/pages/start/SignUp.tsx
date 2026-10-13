@@ -10,8 +10,8 @@ export function SignUp() {
     event.preventDefault();
 
     const next = {
-      name: name.trim() ? undefined : "이름을 넣어 주세요",
-      email: email.includes("@") ? undefined : "메일 형식이 아닙니다"
+      name: name.trim() ? undefined : "이름을 입력해 주세요",
+      email: email.includes("@") ? undefined : "올바른 메일 형식이 아닙니다"
     };
     setErrors(next);
 

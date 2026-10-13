@@ -137,7 +137,7 @@ function useCurrentPlace() {
   useEffect(() => {
     // `ui` 처럼 짧은 이름은 묶음을 붙여야 탭에서 읽힌다 — "ui · API"
     const place = section ? `${label} · ${section}` : label;
-    document.title = !place || home ? `${SITE_NAME} — 같은 화면을 다시 짓지 않는다` : `${place} — ${SITE_NAME}`;
+    document.title = !place || home ? `${SITE_NAME} — 서비스 개발에 필요한 React 라이브러리` : `${place} — ${SITE_NAME}`;
   }, [label, section, home]);
 
   return { home, sub: MENU.find((item) => item.path === top?.path)?.children };
@@ -201,7 +201,8 @@ function Layout({ children }: { children: ReactNode }) {
           {children}
           <DocPager menu={MENU} />
         </div>
-        <PageToc root={body} />
+        {/* Home 은 둘러보는 화면이라 목차가 오히려 군더더기다 */}
+        {!home && <PageToc root={body} />}
       </div>
     </TxAppShell>
   );
