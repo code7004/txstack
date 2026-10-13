@@ -1,6 +1,7 @@
 import { TxAlert, TxCard, TxGrid } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Page } from "../../components/Page";
+import { STORYBOOK_URL } from "../../lib/links";
 
 const GROUPS = [
   ["Form", "TxInput · TxTextarea · TxNumberInput · TxSearchInput · TxDropdown · TxDropdownMulti · TxCombobox · TxCheckBox · TxRadioGroup · TxSwitch · TxSlider · TxFileUpload · TxCapsLockCheck · TxForm"],
@@ -44,7 +45,7 @@ import { TxDayPicker } from "@txstack/ui/daypicker"; // peer: react-day-picker`}
           부품 하나하나의 props · 토큰 · 스토리는 <strong>Storybook</strong> 에 있다. 여기서 다시 쓰지 않는다 — 같은 내용을 두 곳에서 관리하면 반드시 어긋난다.
         </p>
 
-        <a href="/storybook/" className="tx-button self-start" data-variant="primary" target="_blank" rel="noreferrer">
+        <a href={STORYBOOK_URL} className="tx-button self-start" data-variant="primary" target="_blank" rel="noreferrer">
           <span className="tx-button__label">카탈로그 열기</span>
         </a>
       </Block>

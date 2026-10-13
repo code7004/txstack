@@ -1,0 +1,64 @@
+# 소개 사이트(apps/site)와 Storybook 정적 빌드를 GitHub Pages 에 올린다.
+#
+#   https://code7004.github.io/txstack/            ← 사이트
+#   https://code7004.github.io/txstack/storybook/  ← Storybook
+#
+# npm 배포와는 별개다. 둘 다 패키지를 소스로 잇기 때문에(vite alias) 패키지 빌드 없이 돈다.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 연달아 푸시하면 앞의 배포는 버린다. 마지막 것만 의미가 있다.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # 저장소 이름이 하위 경로가 된다. basename · 자산 경로가 이 값을 따른다
+      - run: pnpm site:build
+        env:
+          SITE_BASE: /txstack/
+
+      - run: pnpm storybook:build
+
+      - name: 사이트 안에 Storybook 을 싣고, 딥링크를 살린다
+        run: |
+          cp -R apps/storybook/dist apps/site/dist/storybook
+          # Pages 에는 SPA 폴백이 없다. 없는 경로에 404.html 을 주므로 그것을 index.html 로 둔다
+          cp apps/site/dist/index.html apps/site/dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
