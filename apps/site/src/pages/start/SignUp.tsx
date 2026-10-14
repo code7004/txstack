@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { TxButton, TxForm, TxToast } from "@txstack/ui";
 
 export function SignUp() {
@@ -6,9 +6,8 @@ export function SignUp() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
 
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-
+  // 제출할 때 페이지가 새로고침되는 것은 TxForm이 막아 줍니다. preventDefault를 부르지 않아도 됩니다
+  const submit = () => {
     const next = {
       name: name.trim() ? undefined : "이름을 입력해 주세요",
       email: email.includes("@") ? undefined : "올바른 메일 형식이 아닙니다"

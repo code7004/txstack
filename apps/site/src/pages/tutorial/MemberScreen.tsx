@@ -70,14 +70,7 @@ export function MemberScreen() {
 
       {adding && (
         <TxCard title="회원 등록">
-          <TxForm
-            noValidate
-            labelWidth="3.5rem"
-            onSubmit={(event) => {
-              event.preventDefault();
-              void submit();
-            }}
-          >
+          <TxForm noValidate labelWidth="3.5rem" onSubmit={() => void submit()}>
             <TxForm.Input caption="이름" placeholder="홍길동" value={draft.name} onChangeText={(name) => setDraft((prev) => ({ ...prev, name }))} error={error} required />
             <TxForm.Input caption="메일" type="email" placeholder="you@company.com" value={draft.email} onChangeText={(email) => setDraft((prev) => ({ ...prev, email }))} />
 

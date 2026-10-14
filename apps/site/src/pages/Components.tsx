@@ -76,8 +76,7 @@ function FormDemo() {
       noValidate
       labelWidth="5rem"
       className="max-w-lg"
-      onSubmit={(event) => {
-        event.preventDefault();
+      onSubmit={() => {
         TxToast.show({ variant: "success", title: "저장했습니다", message: `좌석 ${seats ?? 0}석` });
       }}
     >
