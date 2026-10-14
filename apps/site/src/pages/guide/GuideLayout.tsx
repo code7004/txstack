@@ -19,6 +19,7 @@ function ShellDemo() {
   return (
     <div className="overflow-hidden rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
       <TxAppShell
+        panelSticky={false}
         header={
           <div className="flex w-full items-center gap-2">
             <strong className="px-1 text-sm">Console</strong>
