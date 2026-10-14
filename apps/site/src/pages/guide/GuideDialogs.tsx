@@ -94,7 +94,7 @@ export function GuideDialogs() {
 
       <Block title="Which one to use">
         <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-          <table className="w-full text-sm">
+          <table className="site-stack-table w-full text-sm">
             <tbody className={muted}>
               {[
                 ["TxDialog.confirm", "예 · 아니오를 물을 때", "삭제, 로그아웃, 저장하지 않고 나가기"],

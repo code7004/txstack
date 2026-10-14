@@ -259,3 +259,30 @@ h3[id] {
     background-color: color-mix(in oklab, var(--tx-color-primary) 28%, transparent);
   }
 }
+
+/*
+ * 좁은 화면의 비교 표 — 칸을 옆으로 늘어놓으면 한 칸에 한두 글자씩 끊긴다. 줄마다 칸을 위아래로 쌓는다.
+ * 머리 줄이 없어지므로, 무엇인지 알아야 하는 칸은 `data-label` 로 이름을 앞에 붙인다.
+ */
+@media (max-width: 639px) {
+  .site-stack-table thead {
+    display: none;
+  }
+
+  .site-stack-table tr {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-block: 0.625rem;
+  }
+
+  .site-stack-table td {
+    padding-block: 0 !important;
+    white-space: normal !important;
+  }
+
+  .site-stack-table td[data-label]::before {
+    content: attr(data-label) " · ";
+    font-family: var(--site-font);
+  }
+}

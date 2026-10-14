@@ -110,7 +110,7 @@ export function GuideForms() {
           <code>TxForm.*</code> 필드는 모두 <code>caption</code>, <code>error</code>, <code>warning</code>을 받습니다. 입력란 종류에 맞는 필드를 고르면, 캡션을 눌렀을 때 포커스가 가고 화면 낭독기가 오류까지 읽도록 연결이 저절로 됩니다.
         </p>
         <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-          <table className="w-full text-sm">
+          <table className="site-stack-table w-full text-sm">
             <tbody className={muted}>
               {[
                 ["TxForm.Input · Textarea · SearchInput", "한 줄 · 여러 줄 · 검색 입력"],
