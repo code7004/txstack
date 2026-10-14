@@ -1,11 +1,17 @@
-import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type FocusEvent, type KeyboardEvent } from "react";
+import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type FocusEvent, type KeyboardEvent, type ReactElement, type RefAttributes } from "react";
 import { cm } from "../tx-ui.utils";
 import { TxPopup } from "../TxPopup";
-import type { TxComboboxProps } from "./TxCombobox.types";
+import type { TxComboboxItem, TxComboboxProps } from "./TxCombobox.types";
 
-const defaultFilter = (data: readonly string[], keyword: string) => {
+/** 보이는 글자. 객체 후보는 `label`, 없으면 `value` */
+const labelOf = (item: TxComboboxItem) => (typeof item === "string" ? item : (item.label ?? item.value));
+
+/** 고르면 오는 값. 글자 후보는 그 글자 */
+const valueOf = (item: TxComboboxItem) => (typeof item === "string" ? item : item.value);
+
+const defaultFilter = <T extends TxComboboxItem>(data: readonly T[], keyword: string): T[] => {
   const q = keyword.trim().toLowerCase();
-  return q ? data.filter((entry) => entry.toLowerCase().includes(q)) : [...data];
+  return q ? data.filter((item) => labelOf(item).toLowerCase().includes(q)) : [...data];
 };
 
 /**
@@ -25,9 +31,16 @@ const defaultFilter = (data: readonly string[], keyword: string) => {
  *
  * 목록은 화면 맨 위 층으로 뜬다. `overflow: hidden` 안에 넣어도 잘리지 않는다.
  *
+ * 후보는 글자이거나 객체다. 객체면 보이는 이름(`label`)과 고르면 오는 값(`value`)이 갈리고,
+ * 설명(`description`) · 흐린 글자(`hint`)를 함께 그린다.
+ *
+ * ```tsx
+ * <TxCombobox data={[{ value: "/docs/start", label: "Getting Started", hint: "Documents" }]} onPick={(to) => navigate(to)} />
+ * ```
+ *
  * 명세: `docs/001_ui/012_TxCombobox.md`
  */
-export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function TxCombobox(
+const TxComboboxBase = forwardRef<HTMLInputElement, TxComboboxProps<TxComboboxItem>>(function TxCombobox(
   { data, value, defaultValue = "", onChangeText, onPick, filter = defaultFilter, limit, moreLabel = (n) => `…${n}개 더 있습니다`, maxHeight = "20rem", className, style, classNames, onChange, onFocus, onBlur, onKeyDown, ...props },
   ref
 ) {
@@ -76,17 +89,18 @@ export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function
     setActive((i) => (i >= shown.length ? -1 : i));
   }, [shown.length]);
 
-  const commit = (next: string, picked: boolean) => {
+  const commit = (next: string) => {
     if (value === undefined) setInner(next);
     onChangeText?.(next);
-    if (picked) onPick?.(next);
   };
 
+  /** 고르면 입력란에는 보이는 글자가, `onPick` 에는 값이 간다 — 글자 후보면 둘이 같다 */
   const pick = (index: number) => {
-    const next = shown[index];
-    if (next == null) return;
+    const item = shown[index];
+    if (item == null) return;
 
-    commit(next, true);
+    commit(labelOf(item));
+    onPick?.(valueOf(item), item);
     setTyped(false);
     close();
   };
@@ -96,7 +110,7 @@ export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function
     setTyped(true);
     setOpen(true);
     setActive(-1);
-    commit(evt.target.value, false);
+    commit(evt.target.value);
   };
 
   const hdFocus = (evt: FocusEvent<HTMLInputElement>) => {
@@ -183,19 +197,28 @@ export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function
         <div ref={listRef}>
           {shown.map((entry, index) => (
             <div
-              key={`${entry}-${index}`}
+              key={`${valueOf(entry)}-${index}`}
               id={optionId(index)}
               role="option"
-              aria-selected={entry === text}
+              aria-selected={labelOf(entry) === text}
               data-tag="TxCombobox.Item"
               data-active={index === active ? "" : undefined}
+              data-rich={typeof entry === "string" ? undefined : ""}
               className={cm("tx-combobox__item", classNames?.item)}
               // 누를 때 입력창의 포커스를 뺏기지 않아야 한다. 뺏기면 blur 로 목록이 먼저 닫힌다.
               onPointerDown={(e) => e.preventDefault()}
               onClick={() => pick(index)}
               onPointerEnter={() => setActive(index)}
             >
-              {entry}
+              {typeof entry === "string" ? (
+                entry
+              ) : (
+                <>
+                  <span className="tx-combobox__label">{labelOf(entry)}</span>
+                  {entry.hint != null && <span className="tx-combobox__hint">{entry.hint}</span>}
+                  {entry.description != null && <span className="tx-combobox__description">{entry.description}</span>}
+                </>
+              )}
             </div>
           ))}
 
@@ -210,3 +233,9 @@ export const TxCombobox = forwardRef<HTMLInputElement, TxComboboxProps>(function
     </div>
   );
 });
+
+/**
+ * 후보 타입으로 제네릭이 되게 겉을 씌운다. `forwardRef` 는 제네릭을 잃어서 그대로 두면 `data` 를 객체로
+ * 줘도 `onPick` 의 둘째 인자가 `TxComboboxItem` 으로 넓어진다.
+ */
+export const TxCombobox = TxComboboxBase as <T extends TxComboboxItem = string>(props: TxComboboxProps<T> & RefAttributes<HTMLInputElement>) => ReactElement | null;

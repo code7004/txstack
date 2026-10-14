@@ -1,2 +1,2 @@
 export { TxCombobox } from "./TxCombobox";
-export type { TxComboboxProps } from "./TxCombobox.types";
+export type { TxComboboxItem, TxComboboxOption, TxComboboxProps } from "./TxCombobox.types";
