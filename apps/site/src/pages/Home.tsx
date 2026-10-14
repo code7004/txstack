@@ -56,15 +56,7 @@ function HeroDemo() {
   const error = tried && !email.includes("@") ? "메일 형식이 아닙니다" : undefined;
 
   return (
-    <TxForm
-      noValidate
-      labelWidth="4rem"
-      className="w-full"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setTried(true);
-      }}
-    >
+    <TxForm noValidate labelWidth="4rem" className="w-full" onSubmit={() => setTried(true)}>
       <TxForm.Input caption="이름" placeholder="홍길동" required />
       <TxForm.Input caption="메일" type="email" placeholder="you@company.com" value={email} onChangeText={setEmail} error={error} />
       <TxButton type="submit" label="가입" />
