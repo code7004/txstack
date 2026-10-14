@@ -88,7 +88,7 @@ export const App = () => useRoutes(ROUTE_OBJECTS);`}</CodeBlock>
 type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signature>
         <p className={muted}>메뉴에 보일 항목만 골라 같은 모양의 배열로 돌려줍니다. 선언 순서를 지킵니다.</p>
 
-        <RefLabel>라우터와 메뉴의 필터 규칙</RefLabel>
+        <RefLabel>Router vs. menu filtering</RefLabel>
         <RefTable head={["Node", "Router", "Menu", "Note"]} rows={TABLES.routeMeta.filterRules.rows} anchor={tableAnchor(TABLES.routeMeta.filterRules)} />
         <p className={muted}>
           <code>canAccess</code>는 <code>meta.permissions</code>가 있는 노드에서만 불립니다. 넘기지 않으면 권한이 걸린 노드는 모두 빠집니다. 권한 모델(단일 · 다중 · 계층)은 앱이 이 함수로 정합니다.

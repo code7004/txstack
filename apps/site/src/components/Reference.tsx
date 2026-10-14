@@ -47,7 +47,16 @@ export function RefTable({ rows, head = ["Name", "Type", "Default", "Description
   );
 }
 
-/** 표 위의 작은 제목 — 옵션 · 반환값 · 필드 구분 */
+/**
+ * 표 위의 작은 제목 — 옵션 · 반환값 · 필드 구분. **"이 페이지에서" 목차에 소제목으로 오른다**(`data-toc`).
+ * "RequestLog — onRequest가 받는 값" 처럼 설명이 붙은 제목은 목차에 앞부분만 보인다.
+ */
 export function RefLabel({ children }: { children: ReactNode }) {
-  return <h3 className="text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">{children}</h3>;
+  const short = typeof children === "string" ? children.split(" — ")[0] : undefined;
+
+  return (
+    <h3 data-toc data-toc-label={short} className="site-anchor text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
+      {children}
+    </h3>
+  );
 }
