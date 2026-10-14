@@ -122,7 +122,14 @@
         뺀다) `urlKeys` 는 "적을 키" 가 아니라 "기본값에 없지만 읽을 키" 다 · `replace: true` 라 Example 에서
         뒤로 가기는 조건이 아니라 페이지를 되돌린다 · 다크에서 바뀌는 것은 `primary-strong` 이고 `on-accent` 는
         한 번만 정한다 · `removeUndefined` 는 공백 문자열도 뺀다 · `daypicker` 서브패스는 넷 다다
-  - [ ] ③ 영문
+  - [x] **API 를 레퍼런스로** — Guide 가 "어떻게 쓰나" 를 맡게 되자 API 네 장이 짧은 사용 설명으로 남아
+        역할이 겹치고, 찾아볼 표는 없었다(`RouteRenderer` · `IApiError` · `setConfig` · `encodeKey` 등이 아예 없었다).
+        route-meta · hooks · axios 는 export 마다 시그니처 + 옵션 표(이름 · 타입 · 기본값 · 설명)로 다시 썼다 —
+        표의 내용은 패키지 소스의 JSDoc 과 구현에서 옮겼다. ui 는 props 를 여전히 Storybook 에 두고, 대신
+        **49종 목록 + 각 Storybook 문서로 가는 링크**를 둔다(TxToast 는 autodocs 가 없어 첫 이야기로 보낸다).
+        `src/pages/api/api.test.ts` 가 **각 패키지의 export 가 API 페이지에 전부 나오는지** 본다 —
+        진입 파일을 글자로 읽어 `export *` · `export { }` 를 따라간다. 이름 하나를 빼면 그 이름을 짚으며 깨진다
+  - [ ] ③ 영문 — 급하지 않아 미뤘다(2026-10-14)
 
 ## 내용을 쓰는 방식
 

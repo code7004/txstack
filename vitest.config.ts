@@ -30,7 +30,7 @@ export default defineConfig({
           name: "node",
           environment: "node",
           exclude: [...configDefaults.exclude, "**/._*"],
-          include: ["packages/axios/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.ts"]
+          include: ["packages/axios/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.ts", "apps/site/src/**/*.test.ts"]
         }
       },
       {
