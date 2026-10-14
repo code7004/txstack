@@ -111,31 +111,12 @@
   padding-inline: 1rem;
 }
 
+/**
+ * 메뉴 버튼은 `TxButton icon` 이 그린다 — 크기는 `--tx-button-icon-size`, 색 · hover · 포커스 링은
+ * ghost variant 의 것이다. 여기서는 기호만 키운다.
+ */
 .tx-app-shell__menu {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
-  padding: 0;
-
-  border: 0;
-  border-radius: var(--tx-radius);
-  background-color: transparent;
-  color: inherit;
   font-size: 1.25rem;
-  cursor: pointer;
-}
-
-.tx-app-shell__menu:hover {
-  background-color: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), transparent);
-}
-
-.tx-app-shell__menu:focus-visible {
-  outline: var(--tx-focus-ring);
-  outline-offset: var(--tx-focus-ring-offset);
 }
 
 .tx-app-shell__top {

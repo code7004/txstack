@@ -282,6 +282,17 @@ describe("TxAppShell — 좁아지면 서랍으로", () => {
     expect(screen.getByRole("button", { name: "메뉴 열기" })).toBeTruthy();
   });
 
+  /** 머리 줄의 다른 아이콘 버튼과 크기 · 색이 같아야 한다. 따로 그리면 둘이 어긋난다 */
+  it("햄버거는 TxButton icon 이다", () => {
+    setViewport(true);
+    render(<TxAppShell {...SLOTS}>본문</TxAppShell>);
+
+    const button = screen.getByRole("button", { name: "메뉴 열기" });
+    expect(button.getAttribute("data-tag")).toBe("TxButton");
+    expect(button.hasAttribute("data-icon")).toBe(true);
+    expect(button.getAttribute("data-variant")).toBe("ghost");
+  });
+
   it("눌러서 연다", () => {
     setViewport(true);
     render(<TxAppShell {...SLOTS}>본문</TxAppShell>);

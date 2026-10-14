@@ -1,4 +1,5 @@
 import { useId, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { TxButton } from "../TxButton";
 import { TxSlidePanel } from "../TxSlidePanel";
 import { cm } from "../tx-ui.utils";
 import { useCollapse, useElementHeight, useHideOnScroll, useNarrow, useResize } from "./TxAppShell.hook";
@@ -166,9 +167,8 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
         <header ref={headerRef} className={cm("tx-app-shell__header", classNames?.header)}>
           <div className="tx-app-shell__bar">
             {inDrawer && (
-              <button type="button" className="tx-app-shell__menu" aria-label={text.menu} aria-expanded={drawer} onClick={() => setDrawer(true)}>
-                <span aria-hidden>☰</span>
-              </button>
+              // 머리 줄의 다른 아이콘 버튼과 같은 크기 · 색이 되도록 TxButton icon 으로 그린다
+              <TxButton icon variant="ghost" label="☰" aria-label={text.menu} aria-expanded={drawer} className="tx-app-shell__menu" onClick={() => setDrawer(true)} />
             )}
 
             {header}
