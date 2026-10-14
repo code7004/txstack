@@ -86,6 +86,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);`}</CodeBlock>
   />
 </div>`}</CodeBlock>
         <p className={muted}>
+          <code>{"<TxAgGrid<Member>"}</code>는 제네릭 컴포넌트에 행의 타입을 직접 넘기는 TSX 문법입니다(<code>{"useState<Member[]>()"}</code>와 같은 원리). 그러면 <code>headers</code> · <code>customColumnDefs</code>의 필드 이름이 그 타입으로 검사되고
+          자동완성됩니다. <code>rowData</code>에서 추론되므로 생략해도 됩니다.
+        </p>
+        <p className={muted}>
           <code>columnDefs</code>를 직접 넘기면 그쪽이 이기고 <code>option.headers</code>는 무시됩니다. 그 밖의 props(<code>getRowId</code>, <code>onSelectionChanged</code> 등)는 ag-grid로 그대로 전달됩니다.
         </p>
       </Block>
