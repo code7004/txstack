@@ -167,7 +167,7 @@ function Layout({ children }: { children: ReactNode }) {
               GitHub
             </a>
             {/* 아이콘 하나로 줄여 헤더가 붐비지 않게 한다. 이름은 스크린리더가 읽는다 */}
-            <TxButton label={dark ? "☀" : "☾"} aria-label={dark ? "밝게" : "어둡게"} variant="ghost" onClick={toggle} />
+            <TxButton icon label={dark ? "☀" : "☾"} aria-label={dark ? "밝게" : "어둡게"} variant="ghost" onClick={toggle} />
           </div>
         </div>
       }

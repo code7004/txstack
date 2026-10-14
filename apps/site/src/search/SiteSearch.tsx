@@ -101,7 +101,7 @@ export function SiteSearch({ narrow }: { narrow: boolean }) {
 
   return (
     <>
-      <TxButton label="⌕" aria-label="검색" variant="ghost" onClick={() => setOpen(true)} />
+      <TxButton icon label="⌕" aria-label="검색" variant="ghost" onClick={() => setOpen(true)} />
       <TxModal open={open} onClose={() => setOpen(false)} title="검색">
         <div className="min-h-72">
           <SearchBox inputRef={modalInputRef} onDone={() => setOpen(false)} />
