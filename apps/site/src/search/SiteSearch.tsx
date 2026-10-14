@@ -1,28 +1,19 @@
-import { TxButton, TxCombobox, TxModal } from "@txstack/ui";
+import { TxButton, TxCombobox, TxModal, type TxComboboxOption } from "@txstack/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { currentIndex, loadIndex, search, type SearchEntry } from "./searchIndex";
 
+/** 결과 한 줄. 이름 · 위치(흐리게) · 설명(둘째 줄)을 `TxCombobox` 가 그린다. `entry` 는 고른 뒤 갈 곳을 찾는 데 쓴다 */
+interface ResultOption extends TxComboboxOption {
+  entry: SearchEntry;
+}
+
 const KIND: Record<SearchEntry["kind"], string> = { page: "페이지", section: "섹션", api: "API", component: "컴포넌트" };
 
-/**
- * 결과 한 줄의 글자. **`TxCombobox` 의 후보는 글자 그 자체라** 위치를 글자에 담는다 —
- * "maskFields — axios › HttpClientOptions". 같은 글자가 둘이면 뒤에 번호를 붙여 가른다.
- */
-function labelled(entries: SearchEntry[]) {
-  const byLabel = new Map<string, SearchEntry>();
+/** 맨 위 묶음(Documents · API)은 아래 칸이 있으면 뺀다 — 흐린 글자 칸이 좁다 */
+const where = (item: SearchEntry) => (item.trail.length > 1 ? item.trail.slice(1) : item.trail).join(" › ") || KIND[item.kind];
 
-  for (const item of entries) {
-    // 맨 위 묶음(Documents · API)은 아래 칸이 있으면 뺀다 — 목록 폭이 좁아 뒤가 잘린다
-    const trail = item.trail.length > 1 ? item.trail.slice(1) : item.trail;
-    const base = trail.length ? `${item.title} — ${trail.join(" › ")}` : `${item.title} — ${KIND[item.kind]}`;
-    let label = base;
-    for (let n = 2; byLabel.has(label); n++) label = `${base} (${n})`;
-    byLabel.set(label, item);
-  }
-
-  return byLabel;
-}
+const toOption = (entry: SearchEntry, index: number): ResultOption => ({ value: `${index}:${entry.to}`, label: entry.title, hint: where(entry), description: entry.summary, entry });
 
 const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
 
@@ -32,30 +23,27 @@ function SearchBox({ onDone, inputRef }: { onDone?: () => void; inputRef?: React
   const [entries, setEntries] = useState(currentIndex);
   const [value, setValue] = useState("");
 
-  const byLabel = useMemo(() => labelled(entries), [entries]);
-  const labels = useMemo(() => [...byLabel.keys()], [byLabel]);
-  const toLabel = useMemo(() => new Map([...byLabel].map(([label, item]) => [item, label])), [byLabel]);
+  // 후보는 객체다 — 글자가 같은 결과(여러 장의 "Try it")도 value 로 갈린다
+  const options = useMemo(() => entries.map(toOption), [entries]);
+  const optionOf = useMemo(() => new Map(options.map((option) => [option.entry, option])), [options]);
 
   // 처음 손을 대면 섹션까지 넣은 색인을 받는다
   const warm = () => void loadIndex().then(setEntries);
 
-  const go = (label: string) => {
-    const item = byLabel.get(label);
-    if (!item) return;
-
+  const go = (_: string, option: ResultOption) => {
     setValue("");
     onDone?.();
-    navigate(item.to);
+    navigate(option.entry.to);
   };
 
   return (
     <TxCombobox
       ref={inputRef}
-      data={labels}
+      data={options}
       value={value}
       onChangeText={setValue}
       onPick={go}
-      filter={(_, keyword) => search(keyword, 12, entries).map((item) => toLabel.get(item)!)}
+      filter={(_, keyword) => search(keyword, 12, entries).map((item) => optionOf.get(item)!)}
       placeholder={`검색 (${isMac ? "⌘" : "Ctrl+"}K)`}
       aria-label="사이트 검색"
       onFocus={warm}
