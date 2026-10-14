@@ -12,6 +12,11 @@ export interface TxButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
   variant?: TxButtonVariant;
   /** 로딩 중 보여줄 엘리먼트. 기본은 장식용 스피너 */
   loading?: ReactElement;
+  /**
+   * 아이콘 하나만 담는 정사각형 버튼. 크기는 `--tx-button-icon-size`(기본 2.5rem).
+   * **보이는 글자가 없으므로 `aria-label` 을 함께 준다** — 스크린리더가 읽을 이름이다.
+   */
+  icon?: boolean;
   /** 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다 */
   classNames?: { label?: string };
   /** Promise 를 반환하면 해제될 때까지 자동으로 로딩 상태가 되고 중복 클릭이 막힌다 */
@@ -33,6 +38,7 @@ const isThenable = (value: unknown): value is Promise<unknown> => typeof (value 
  * <TxButton label="확인" />
  * <TxButton label="삭제" variant="danger" onClick={async () => { await remove(); }} />
  * <TxButton type="submit" label="제출" />
+ * <TxButton icon label="⌕" aria-label="검색" variant="ghost" />
  * ```
  *
  * 색·반경은 CSS 변수로 바꾼다 — 앱 전체는 `:root { --tx-color-primary: … }`,
@@ -40,7 +46,7 @@ const isThenable = (value: unknown): value is Promise<unknown> => typeof (value 
  *
  * 명세: `docs/001_ui/001_TxButton.md`
  */
-export const TxButton = ({ label, variant = "primary", className, classNames, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
+export const TxButton = ({ label, variant = "primary", icon = false, className, classNames, children, loading = <TxSpinner decorative />, disabled, onClick, type = "button", ...props }: TxButtonProps) => {
   const [isLoading, _isLoading] = useState(false);
 
   const hdClick = (evt: MouseEvent<HTMLButtonElement>) => {
@@ -68,6 +74,7 @@ export const TxButton = ({ label, variant = "primary", className, classNames, ch
       {...props}
       data-tag="TxButton"
       data-variant={variant}
+      data-icon={icon ? "" : undefined}
       // 값 없는 불리언 속성. CSS 는 `[data-loading]` 으로 잡는다 (20_design §3)
       data-loading={isLoading ? "" : undefined}
       type={type}

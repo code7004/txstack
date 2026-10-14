@@ -31,6 +31,8 @@
   --tx-button-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
   --tx-button-font-weight: 500;
   --tx-button-transition: background-color 150ms;
+  /* `icon` 버튼의 한 변. 터치 화면 위주라면 2.75rem(44px)으로 올린다 */
+  --tx-button-icon-size: 2.5rem;
 
   /* 로딩 표시가 라벨 위에 겹쳐 앉는다. 그 기준점이다 */
   position: relative;
@@ -114,6 +116,17 @@
 .tx-button[data-variant="text"] {
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+/**
+ * `icon` — 아이콘 하나만 담는 정사각형. 글자 하나짜리 버튼이 글자 폭만큼 좁아져
+ * 누르기 어려워지는 것을 막는다. 크기 외에는 아무것도 바꾸지 않는다 — 색은 variant 가 정한다.
+ */
+.tx-button[data-icon] {
+  flex-shrink: 0;
+  inline-size: var(--tx-button-icon-size);
+  block-size: var(--tx-button-icon-size);
+  padding: 0;
 }
 
 /* --- 안쪽 요소 ------------------------------------------------------------ */

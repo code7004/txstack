@@ -173,6 +173,33 @@ describe("TxButton — 접근성", () => {
   });
 });
 
+describe("TxButton — icon", () => {
+  it("icon 이 data-icon 으로 나간다 — CSS 가 정사각형으로 잡는 자리다", () => {
+    const btn = renderButton(<TxButton icon label="⌕" aria-label="검색" />);
+    expect(btn.hasAttribute("data-icon")).toBe(true);
+  });
+
+  it("icon 을 주지 않으면 data-icon 이 없다", () => {
+    expect(renderButton(<TxButton label="저장" />).hasAttribute("data-icon")).toBe(false);
+  });
+
+  it("aria-label 이 이름이 되고 기호는 그대로 그린다", () => {
+    const btn = renderButton(<TxButton icon label="⌕" aria-label="검색" />);
+    expect(btn.getAttribute("aria-label")).toBe("검색");
+    expect(btn.textContent).toBe("⌕");
+  });
+
+  it("variant 와 함께 쓴다 — 색은 variant 가 정한다", () => {
+    const btn = renderButton(<TxButton icon variant="ghost" label="☀" aria-label="밝게" />);
+    expect(btn.getAttribute("data-variant")).toBe("ghost");
+  });
+
+  it("통과 props 가 data-icon 을 덮지 못한다", () => {
+    const btn = renderButton(<TxButton {...({ "data-icon": "x" } as object)} label="저장" />);
+    expect(btn.hasAttribute("data-icon")).toBe(false);
+  });
+});
+
 describe("TxButton — 커스터마이징", () => {
   it("className 은 기본 클래스를 교체하지 않고 덧붙는다", () => {
     const cls = renderButton(<TxButton label="확인" className="my-cta" />).getAttribute("class") ?? "";
@@ -269,6 +296,15 @@ describe("TxButton — CSS 계약", () => {
     for (const { selector, body } of variantRules) {
       expect(body, `${selector} 가 공통 레이아웃을 다시 정한다`).not.toMatch(/^\s*(padding|border-radius|display|position|cursor|outline|font-weight)\s*:/m);
     }
+  });
+
+  /** icon 은 크기만 정한다. 색을 건드리면 variant 와 두 갈래가 된다. */
+  it("icon 은 크기만 정한다 — 색 · 포커스 링은 기본 클래스와 variant 의 것이다", () => {
+    const iconRules = rules.filter((rule) => rule.selector.includes("[data-icon]"));
+    expect(iconRules.map((rule) => rule.selector)).toEqual([".tx-button[data-icon]"]);
+    expect(iconRules[0]!.body).toMatch(/inline-size:\s*var\(--tx-button-icon-size\)/);
+    expect(iconRules[0]!.body).toMatch(/block-size:\s*var\(--tx-button-icon-size\)/);
+    expect(iconRules[0]!.body).not.toMatch(/color|outline|--tx-button-(bg|fg)/);
   });
 
   it("다크모드 분기를 컴포넌트가 갖지 않는다 — 토큰만 재정의하면 따라온다 (D7)", () => {
