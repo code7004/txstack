@@ -16,8 +16,8 @@ export function ExampleAccounts() {
     <Page title="Accounts" lead="계정을 찾고, 만들고, 고치고, 여러 개를 한꺼번에 지우는 관리 화면입니다. 관리 도구에서 가장 자주 만드는 화면을 처음부터 끝까지 txstack으로 만들었습니다.">
       <Block title="Try it">
         <p className={muted}>
-          역할이나 상태로 거르고, 아이디 · 이름 머리를 눌러 정렬해 보세요. 이름을 누르면 옆 패널에서 고칩니다. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다. 줄 앞의 칸을 골라 한꺼번에 지울 수 있는데, 첫 줄의 소유자 계정을 함께 고르면 서버가
-          거절합니다. 이미 있는 아이디로 새 계정을 만들면 서버의 오류가 폼 위에 뜹니다.
+          역할이나 상태로 거르고, 아이디 · 이름 머리를 눌러 정렬해 보세요. 줄 끝의 수정을 누르면 옆 패널에서 고칩니다. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다. 줄 앞의 칸을 골라 한꺼번에 지울 수 있는데, 첫 줄의 소유자 계정을 함께 고르면
+          서버가 거절합니다. 이미 있는 아이디로 새 계정을 만들면 서버의 오류가 폼 위에 뜹니다.
         </p>
         <Demo>
           <Suspense fallback={<DemoLoading />}>
@@ -47,7 +47,7 @@ export function ExampleAccounts() {
             <strong>골라서 한꺼번에.</strong> <code>rowSelection</code>으로 줄을 고르고 <code>onSelectionChanged</code>로 받습니다. 지우기 전에 <code>TxDialog.confirm</code>으로 묻고, 지운 뒤에는 <code>invalidateQueries</code>로 목록을 다시 부릅니다.
           </li>
           <li>
-            <strong>목록을 둔 채 옆에서 편집.</strong> 새 계정 버튼과 이름 칸은 같은 폼을 <code>TxSlidePanel</code>에 엽니다. 비밀번호 칸은 새로 만들 때만 보이고, 열 때마다 <code>key</code>를 바꿔 이전 입력이 남지 않게 합니다.
+            <strong>목록을 둔 채 옆에서 편집.</strong> 새 계정 버튼과 줄 끝의 수정 버튼은 같은 폼을 <code>TxSlidePanel</code>에 엽니다. 비밀번호 칸은 새로 만들 때만 보이고, 열 때마다 <code>key</code>를 바꿔 이전 입력이 남지 않게 합니다.
           </li>
           <li>
             <strong>서버의 거절은 알맞은 자리에.</strong> <code>parseApiError</code>가 오류를 한 형태로 바꿔 줍니다. 아이디 중복(409)은 <code>useMutation</code>의 <code>error</code>로 폼 위에, 소유자 삭제 거절(403)은 <code>onError</code>에서 알림으로

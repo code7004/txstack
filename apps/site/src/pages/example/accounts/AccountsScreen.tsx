@@ -84,18 +84,12 @@ export function AccountsScreen() {
           getRowId={({ data: row }) => row.id}
           defaultColDef={{ flex: 1, minWidth: 110 }}
           option={{
-            headers: ["username", "name", "email", "role", "status", "teams", "lastLoginAt"],
+            headers: ["username", "name", "email", "role", "status", "teams", "lastLoginAt", "actions"],
             serverSortColumns: ["username", "name", "role", "lastLoginAt"],
             rowSelection: { mode: "multiRow" },
             customColumnDefs: [
               { field: "username", headerName: "아이디", minWidth: 140 },
-              {
-                field: "name",
-                headerName: "이름",
-                // 이름을 누르면 옆 패널에서 고칩니다. 버튼이 줄 높이에 맞도록 칸을 세로 가운데로 둡니다
-                cellStyle: { display: "flex", alignItems: "center" },
-                cellRenderer: ({ data: row }: { data: Account }) => <TxButton label={row.name} variant="text" onClick={() => setEditing(row)} />
-              },
+              { field: "name", headerName: "이름" },
               { field: "email", headerName: "메일", minWidth: 200 },
               { field: "role", headerName: "역할", valueFormatter: ({ value }) => roleName(String(value)) },
               {
@@ -108,7 +102,17 @@ export function AccountsScreen() {
                 )
               },
               { field: "teams", headerName: "팀", valueFormatter: ({ value }) => (value as string[]).join(", ") },
-              { field: "lastLoginAt", headerName: "마지막 접속", valueFormatter: ({ value }) => (value as string | null) ?? "—" }
+              { field: "lastLoginAt", headerName: "마지막 접속", valueFormatter: ({ value }) => (value as string | null) ?? "—" },
+              {
+                // 행 데이터에 없는 열은 field 대신 colId 로 줍니다. headers 의 "actions" 자리를 이 정의가 채웁니다
+                colId: "actions",
+                headerName: "",
+                maxWidth: 90,
+                sortable: false,
+                pinned: "right",
+                cellStyle: { display: "flex", alignItems: "center" },
+                cellRenderer: ({ data: row }: { data: Account }) => <TxButton label="수정" variant="text" onClick={() => setEditing(row)} />
+              }
             ]
           }}
           sortState={{ key: query.sort || undefined, value: query.order as "asc" | "desc" | "none" }}
