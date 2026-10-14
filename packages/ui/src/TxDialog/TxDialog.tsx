@@ -67,7 +67,7 @@ export const TxDialog = {
    * 앱 전체의 기본 문구를 한 번에 바꾼다.
    *
    * ```ts
-   * TxDialog.configure({ labels: { confirm: "OK", cancel: "Cancel", close: "Close" } });
+   * TxDialog.configure({ labels: { confirm: "OK", cancel: "Cancel" } });
    * ```
    */
   configure: (config: TxDialogConfig) => configure(config)
