@@ -54,6 +54,8 @@ export interface TxAgGridPagination {
   pageSize: number;
   pageButtonCount?: number;
   maxPage?: number;
+  /** 좁은 자리에서 `‹ 3 / 12 ›` 로 줄인다. 기본 `"auto"`. `TxPagination` 의 `compact` 와 같다. */
+  compact?: boolean | "auto";
   onChangePage?: (page: number) => void;
 }
 

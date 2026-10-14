@@ -133,6 +133,59 @@ describe("TxPagination — 스크린리더", () => {
   });
 });
 
+/**
+ * 좁은 자리에서는 번호 대신 `‹ 3 / 12 ›`. `"auto"` 는 둘 다 그리고 CSS 가 고르므로
+ * jsdom 에서는 "무엇이 DOM 에 있는가" 와 "CSS 가 어떻게 고르는가" 를 따로 본다.
+ */
+describe("TxPagination — 줄인 모양 (compact)", () => {
+  const status = () => document.querySelector(".tx-pagination__status");
+
+  it("기본은 auto — 번호와 3 / 12 를 둘 다 그리고 CSS 가 고른다", () => {
+    render(<TxPagination currentPage={3} totalRows={120} pageSize={10} />);
+    expect(screen.getByRole("navigation").getAttribute("data-compact")).toBe("auto");
+    expect(pageButtons()).toHaveLength(10);
+    expect(status()?.textContent).toContain("3 / 12");
+  });
+
+  it("compact 면 번호와 « » 없이 ‹ 3 / 12 › 만 그린다", () => {
+    render(<TxPagination compact currentPage={3} totalRows={120} pageSize={10} />);
+    expect(pageButtons()).toEqual([]);
+    expect(screen.queryByRole("button", { name: "이전 묶음" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "다음 묶음" })).toBeNull();
+    expect(screen.getAllByRole("button").map((button) => button.getAttribute("aria-label"))).toEqual(["이전", "다음"]);
+    expect(status()?.textContent).toContain("3 / 12");
+  });
+
+  it("compact 에서도 ‹ › 로 한 쪽씩 옮긴다", () => {
+    const onChangePage = vi.fn();
+    render(<TxPagination compact currentPage={3} totalRows={120} pageSize={10} onChangePage={onChangePage} />);
+    fireEvent.click(screen.getByRole("button", { name: "다음" }));
+    expect(onChangePage).toHaveBeenLastCalledWith(4);
+  });
+
+  it("compact={false} 면 3 / 12 를 그리지 않는다 — 지금까지의 모양", () => {
+    render(<TxPagination compact={false} currentPage={3} totalRows={120} pageSize={10} />);
+    expect(status()).toBeNull();
+    expect(pageButtons()).toHaveLength(10);
+  });
+
+  it("maxPage 가 있으면 전체 쪽수도 그 상한을 따른다", () => {
+    render(<TxPagination compact currentPage={2} totalRows={100000} pageSize={10} maxPage={5} />);
+    expect(status()?.textContent).toContain("2 / 5");
+  });
+
+  it("스크린리더에는 숫자 기호 대신 문장으로 읽힌다", () => {
+    render(<TxPagination compact currentPage={3} totalRows={120} pageSize={10} />);
+    expect(status()?.querySelector("[aria-hidden]")?.textContent).toBe("3 / 12");
+    expect(status()?.textContent).toContain("12쪽 중 3쪽");
+  });
+
+  it("그 문장도 바꿀 수 있다", () => {
+    render(<TxPagination compact currentPage={3} totalRows={120} pageSize={10} labels={{ status: (page, total) => `Page ${page} of ${total}` }} />);
+    expect(status()?.textContent).toContain("Page 3 of 12");
+  });
+});
+
 describe("TxPagination — CSS 계약", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -161,6 +214,18 @@ describe("TxPagination — CSS 계약", () => {
     expect(css).not.toContain("background-color");
     expect(css).not.toContain("--tx-button-bg");
     expect(source).toContain("variant=");
+  });
+
+  /** 화면 폭(@media)이 아니라 놓인 자리의 폭으로 고른다 — 옆 패널 안에서도 맞아야 한다. */
+  it("auto 는 container query 로 고른다", () => {
+    expect(css).toContain("container: tx-pagination / inline-size");
+    expect(css).toMatch(/@container tx-pagination \(max-width: [\d.]+rem\)/);
+    expect(css).not.toContain("@media");
+  });
+
+  it("줄인 모양을 강제할 때(true/false)는 container query 에 걸리지 않는다", () => {
+    const query = css.slice(css.indexOf("@container"));
+    expect(query).not.toMatch(/\.tx-pagination(?!\[data-compact="auto"\])[ .]/);
   });
 
   it("TxButton 뒤에 실린다 — 토큰을 덮으려면 순서가 뒤여야 한다", () => {

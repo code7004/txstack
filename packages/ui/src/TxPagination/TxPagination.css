@@ -14,11 +14,13 @@
   --tx-pagination-size: 2rem;
   --tx-pagination-font-size: 0.75rem;
   --tx-pagination-padding-x: 0.5rem;
+  --tx-pagination-justify: center;
+  --tx-pagination-status-color: var(--tx-color-text);
 
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: var(--tx-pagination-justify);
   gap: var(--tx-pagination-gap);
 }
 
@@ -33,4 +35,55 @@
   min-width: var(--tx-pagination-size);
   height: var(--tx-pagination-size);
   font-size: var(--tx-pagination-font-size);
+}
+
+/** 줄인 모양의 `3 / 12`. 버튼이 아니라 글자다 — 누를 것이 아니다. */
+.tx-pagination__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tx-pagination-size);
+  padding: 0 var(--tx-pagination-padding-x);
+  font-size: var(--tx-pagination-font-size);
+  font-variant-numeric: tabular-nums;
+  color: var(--tx-pagination-status-color);
+  white-space: nowrap;
+}
+
+/** 화면에는 `3 / 12`, 스크린리더에는 "12쪽 중 3쪽" 이 읽힌다. */
+.tx-pagination__status-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/**
+ * `compact="auto"` — 화면 폭이 아니라 **놓인 자리의 폭**으로 고른다. 옆 패널 안에서도 맞는다.
+ *
+ * 자리를 재려면 이 요소가 그 폭을 가져야 해서 `width: 100%` 다. 32rem 은 기본 모양
+ * (번호 10개 + 화살표 4개)이 한 줄에 들어가는 폭이다. container query 에는 변수를 쓸 수 없다.
+ */
+.tx-pagination[data-compact="auto"] {
+  container: tx-pagination / inline-size;
+  width: 100%;
+}
+
+.tx-pagination[data-compact="auto"] .tx-pagination__status {
+  display: none;
+}
+
+@container tx-pagination (max-width: 32rem) {
+  .tx-pagination[data-compact="auto"] .tx-pagination__status {
+    display: inline-flex;
+  }
+
+  .tx-pagination[data-compact="auto"] .tx-pagination__page,
+  .tx-pagination[data-compact="auto"] .tx-pagination__group {
+    display: none;
+  }
 }
