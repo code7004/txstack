@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui/aggrid` — 서브패스. peer `ag-grid-community` · `ag-grid-react` |
 | 내보내는 것 | `TxAgGrid, TxAgGridProvider`                                                |
 | 소스        | [`packages/ui/src/TxAgGrid/`](../../packages/ui/src/TxAgGrid)               |
-| 테스트      | 43개                                                                        |
+| 테스트      | 48개                                                                        |
 
 ## 개발 목적
 
@@ -32,7 +32,7 @@ ag-grid 위에 **목록 화면에서 늘 하는 일**(열 정의 · 정렬 · �
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxAgGrid/`
-- [x] **테스트** — 43개
+- [x] **테스트** — 48개
 - [x] **스토리** — `TxAgGrid.stories.tsx`. **쓰는 순서로 세워 두었다** —
       `Setup`(모듈 등록·높이) → `Columns` → `SortInBrowser` → `SortOnServer` → `Editing` →
       `RowNumberAndPaging` → `Selection` → `Loading` → `Theme`, `Playground` 는 맨 뒤.
@@ -48,6 +48,23 @@ ag-grid 위에 **목록 화면에서 늘 하는 일**(열 정의 · 정렬 · �
 `colWidths: [4, 20, 42, 10, 14, 6, 13]` 을 넘기고 있었다 — 소비자는 폭이 먹는다고 믿는 중이었다.
 쓸 일이 없다고 확인받아 지웠다. `data?: TData` 도 같은 상태였는데 이쪽은 더 나빴다 —
 구조분해에 없어서 `{...props}` 를 타고 `<AgGridReact data={…}>` 로 흘러갔다.
+
+### 동작 버튼 열은 `colId` 로
+
+**행 데이터에 없는 열을 더할 길이 없었다** — 사이트의 `Accounts` 예제에서 드러났다. `headers` 는 아무 이름이나
+받아 `"actions"` 열 자체는 생겼지만, 거기에 렌더러를 줄 `customColumnDefs` 는 `field` 로만 찾았고 그 `field` 는
+ag-grid 타입 그대로 행 타입의 키만 받는다. 세 소비자 프로젝트 모두 줄 끝에 "수정 · 삭제" 를 둔다.
+
+`customColumnDefs` 가 **`field` 없이 `colId` 만 준 정의**를 `headers` 의 같은 이름 자리에 채우도록 했다.
+그 열에서는 `field` 를 뺀다 — 읽을 값이 없다. 새 prop 은 없다. 버튼 묶음을 컴포넌트가 대신 그리는
+`rowActions` 같은 편의는 반복이 쌓이면 이 위에 얹는다.
+
+```tsx
+option={{
+  headers: ["id", "name", "role", "actions"],
+  customColumnDefs: [{ colId: "actions", headerName: "", pinned: "right", cellRenderer: ({ data }) => <TxButton label="수정" onClick={() => edit(data)} /> }]
+}}
+```
 
 ### 쪽 번호는 그리드의 것이 아니다
 

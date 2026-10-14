@@ -28,7 +28,12 @@ export interface TxAgGridOption<TData = unknown> {
   /** 빼고 싶은 필드. `headers` 보다 세다. */
   hiddenHeaders?: TxAgGridField<TData>[];
 
-  /** 만들어진 열을 `field` 로 찾아 덮어쓴다. 폭·렌더러·포맷을 여기서 준다. */
+  /**
+   * 만들어진 열을 `field` 로 찾아 덮어쓴다. 폭·렌더러·포맷을 여기서 준다.
+   *
+   * **행 데이터에 없는 열(동작 버튼 등)은 `field` 대신 `colId` 를 준다.** `headers` 에 같은 이름을 적으면
+   * 그 자리를 이 정의가 채운다 — `headers: [..., "actions"]` + `{ colId: "actions", cellRenderer }`.
+   */
   customColumnDefs?: TxAgGridColumnDef<TData>;
 
   /** 헤더 줄을 숨긴다. */

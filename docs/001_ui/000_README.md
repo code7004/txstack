@@ -58,7 +58,7 @@ import "@txstack/ui/styles.css";
 | 012  | [`TxCombobox`](012_TxCombobox.md)                | 직접 쳐 넣으면서 후보도 고르는 입력창               | 35     |
 | 013  | [`TxDayPicker`](013_TxDayPicker.md) `/daypicker` | 날짜 하나를 고른다                                  | 43     |
 | 014  | [`TxForm`](014_TxForm.md)                        | 폼 한 줄을 짜는 계층                                | 39     |
-| 015  | [`TxAgGrid`](015_TxAgGrid.md) `/aggrid`          | ag-grid 위에 목록 화면에서 늘 하는 일을 얹은 표     | 43     |
+| 015  | [`TxAgGrid`](015_TxAgGrid.md) `/aggrid`          | ag-grid 위에 목록 화면에서 늘 하는 일을 얹은 표     | 48     |
 | 016  | [`TxPagination`](016_TxPagination.md)            | 쪽 번호                                             | 29     |
 | 017  | [`TxModal`](017_TxModal.md)                      | 화면을 덮고 뜨는 창                                 | 35     |
 | 018  | [`TxDialog`](018_TxDialog.md)                    | 네이티브 alert · confirm 을 대신하는 확인창         | 21     |

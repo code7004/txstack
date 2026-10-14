@@ -196,6 +196,59 @@ export const Columns: Story = {
 };
 
 /**
+ * ### 동작 버튼 열
+ *
+ * **행 데이터에 없는 열은 `field` 대신 `colId` 로 준다.** `headers` 에 같은 이름을 적으면 그 자리를
+ * 이 정의가 채운다. 자리는 다른 열과 똑같이 `headers` 순서가 정한다 — `pinned: "right"` 로 오른쪽에 붙일 수도 있다.
+ *
+ * ```tsx
+ * option={{
+ *   headers: ["id", "name", "role", "actions"],
+ *   customColumnDefs: [
+ *     { colId: "actions", headerName: "", cellRenderer: ({ data }) => <TxButton label="수정" onClick={() => edit(data)} /> }
+ *   ]
+ * }}
+ * ```
+ */
+export const ActionColumn: Story = {
+  parameters: noControls,
+  render: function ActionColumnStory() {
+    const [last, setLast] = useState("버튼을 눌러 보라");
+
+    return (
+      <div className="flex flex-col gap-2">
+        <Frame>
+          <TxAgGrid<Member>
+            rowData={pageOf(1)}
+            defaultColDef={{ flex: 1 }}
+            option={{
+              headers: ["id", "name", "role", "actions"],
+              customColumnDefs: [
+                {
+                  colId: "actions",
+                  headerName: "",
+                  minWidth: 150,
+                  sortable: false,
+                  pinned: "right",
+                  cellStyle: { display: "flex", alignItems: "center", gap: "0.25rem" },
+                  cellRenderer: ({ data }: { data: Member }) => (
+                    <>
+                      <TxButton label="수정" variant="text" onClick={() => setLast(`수정 → ${data.name}`)} />
+                      <TxButton label="삭제" variant="text" onClick={() => setLast(`삭제 → ${data.name}`)} />
+                    </>
+                  )
+                }
+              ]
+            }}
+          />
+        </Frame>
+        <div className="px-4 font-mono text-sm text-slate-500 dark:text-slate-400">{last}</div>
+      </div>
+    );
+  }
+};
+
+/**
  * ## 3. 브라우저가 정렬한다
  *
  * **지금 화면에 있는 데이터를 세운다.** 한 번에 다 받아 오는 목록이면 이쪽이다 — 서버를 다시
