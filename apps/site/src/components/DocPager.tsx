@@ -24,7 +24,7 @@ export function DocPager({ menu }: { menu: NavRoute[] }) {
   if (!prev && !next) return null;
 
   return (
-    <nav aria-label="이전 · 다음 장" className="mt-16 grid gap-3 border-t pt-6 sm:grid-cols-2" style={{ borderColor: "var(--tx-color-border)" }}>
+    <nav aria-label="이전 · 다음 페이지" className="mt-16 grid gap-3 border-t pt-6 sm:grid-cols-2" style={{ borderColor: "var(--tx-color-border)" }}>
       {prev ? <PagerLink item={prev} dir="prev" /> : <span />}
       {next && <PagerLink item={next} dir="next" />}
     </nav>

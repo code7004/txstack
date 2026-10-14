@@ -24,7 +24,7 @@ const muted = "text-slate-600 dark:text-slate-300";
 export function Start() {
   return (
     <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 5분이면 충분합니다.">
-      <Block title="어떤 패키지가 필요한가요">
+      <Block title="Which packages do you need">
         <p className={muted}>
           txstack은 네 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
         </p>
@@ -57,7 +57,7 @@ export function Start() {
         <p className="text-sm text-slate-500 dark:text-slate-400">&quot;함께 설치&quot;는 peer 의존성입니다. 앱에 이미 있다면 따로 설치하지 않아도 됩니다.</p>
       </Block>
 
-      <Block title="준비 사항">
+      <Block title="Prerequisites">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
             <strong>Node 20 이상</strong>, <strong>pnpm</strong> (npm·yarn도 쓸 수 있지만 이 문서는 pnpm 기준으로 설명합니다)
@@ -70,7 +70,7 @@ export function Start() {
 pnpm -v     # 없다면: npm i -g pnpm`}</CodeBlock>
       </Block>
 
-      <Block title="1. 앱 만들기">
+      <Block title="1. Create an app">
         <p className={muted}>이미 React 앱이 있다면 건너뛰세요. 없다면 Vite로 새로 만듭니다.</p>
         <CodeBlock language="bash" title="sh">{`pnpm create vite my-app --template react-ts
 cd my-app
@@ -82,7 +82,7 @@ pnpm install`}</CodeBlock>
 rm src/App.css`}</CodeBlock>
       </Block>
 
-      <Block title="2. 설치">
+      <Block title="2. Install">
         <TxAlert variant="warning" title="아직 npm에 배포되지 않았습니다">
           지금은 저장소에서 직접 빌드한 패키지 파일(<code>.tgz</code>)로 설치합니다. npm에 배포된 뒤에는 아래의 한 줄로 바뀌고, 이후 단계는 같습니다.
         </TxAlert>
@@ -107,14 +107,14 @@ pnpm add @txstack/axios axios`}</CodeBlock>
         </p>
       </Block>
 
-      <Block title="3. 스타일시트 연결 (ui)">
+      <Block title="3. Import the stylesheet (ui)">
         <p className={muted}>
           앱 진입점에서 <strong>한 번만</strong> 불러옵니다. 이 줄이 없으면 컴포넌트에 스타일이 적용되지 않습니다.
         </p>
         <CodeBlock title="src/main.tsx">{`import "@txstack/ui/styles.css";`}</CodeBlock>
       </Block>
 
-      <Block title="4. 첫 화면 (ui)">
+      <Block title="4. Your first screen (ui)">
         <p className={muted}>
           아래 코드를 그대로 <code>src/SignUp.tsx</code>로 저장합니다. 바로 아래 예제는 이 코드가 지금 이 페이지에서 실제로 동작하는 모습입니다. 입력란을 비워 둔 채 <strong>가입</strong>을 눌러 보세요.
         </p>
@@ -141,7 +141,7 @@ export default function App() {
 }`}</CodeBlock>
       </Block>
 
-      <Block title="5. 실행하기">
+      <Block title="5. Run it">
         <CodeBlock language="bash" title="sh">{`pnpm dev`}</CodeBlock>
         <p className={muted}>
           <code>http://localhost:5173</code>을 열어 위 예제와 같은 폼이 보이면 완료입니다. 오류 메시지는 입력란 아래에 나타나고, 모두 채워서 제출하면 화면 오른쪽 위에 알림이 뜹니다.
@@ -151,7 +151,7 @@ export default function App() {
         </TxAlert>
       </Block>
 
-      <Block title="Tailwind와 함께 쓴다면">
+      <Block title="Using with Tailwind">
         <p className={muted}>
           Tailwind v4를 쓰는 앱이라면 3단계 대신 CSS 파일에서 불러오고, <strong>레이어 순서를 한 줄</strong> 지정합니다. 그래야 <code>className</code>으로 준 유틸리티 클래스가 컴포넌트 스타일보다 우선 적용됩니다.
         </p>
@@ -164,7 +164,7 @@ export default function App() {
         </TxAlert>
       </Block>
 
-      <Block title="다음 단계">
+      <Block title="Next steps">
         <p className={muted}>
           첫 화면이 떴다면{" "}
           <Link to="/docs/tutorial" className="underline">
@@ -174,7 +174,7 @@ export default function App() {
         </p>
       </Block>
 
-      <Block title="문제 해결">
+      <Block title="Troubleshooting">
         <dl className={`flex flex-col gap-4 ${muted}`}>
           <div>
             <dt className="font-semibold text-[color:var(--tx-color-text)]">컴포넌트에 스타일이 적용되지 않습니다</dt>

@@ -13,7 +13,7 @@ export interface MemberPage {
   total: number;
 }
 
-/** 서버가 { body: ... } 로 감싸 보낸다고 가정한다. 실제 서비스의 응답 형식에 맞춰 바꾼다 */
+/** 서버가 { body: ... } 형식으로 보낸다고 가정합니다. 실제 서비스의 응답 형식에 맞춰 바꿔 주세요 */
 export const api = createHttpClient({
   baseURL: "/api",
   timeout: 10_000,

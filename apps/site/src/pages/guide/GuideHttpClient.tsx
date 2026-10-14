@@ -127,21 +127,21 @@ export function GuideHttpClient() {
         </>
       }
     >
-      <Block title="무엇을 대신해 주나요">
+      <Block title="What it handles for you">
         <p className={muted}>
           API를 부를 때마다 토큰 붙이기, 401이 오면 로그아웃, 오류 메시지 꺼내기, 응답에서 실제 데이터 꺼내기를 반복하게 됩니다. 이 반복을 클라이언트 한 곳에 모읍니다. 다만{" "}
           <strong>토큰을 어디에 저장하는지, 401에 무엇을 할지는 서비스마다 다르므로</strong> 라이브러리가 정하지 않고 앱이 함수로 넘깁니다.
         </p>
       </Block>
 
-      <Block title="직접 해 보기">
+      <Block title="Try it">
         <p className={muted}>이 예제는 페이지 안의 가짜 서버에 요청합니다. 클라이언트 설정은 아래 1단계 코드와 같습니다.</p>
         <Demo>
           <ClientDemo />
         </Demo>
       </Block>
 
-      <Block title="1. 클라이언트 만들기">
+      <Block title="1. Create a client">
         <CodeBlock title="src/lib/api.ts">{`import { createHttpClient } from "@txstack/axios";
 
 export const api = createHttpClient({
@@ -163,7 +163,7 @@ export const api = createHttpClient({
         </p>
       </Block>
 
-      <Block title="2. 요청 보내기">
+      <Block title="2. Send requests">
         <CodeBlock title="어디서든">{`const user = await api.get<User>("/users/1");
 const list = await api.get<Page<User>>("/users", { page: 2 });   // 두 번째 인자는 쿼리
 await api.post<User>("/users", { name: "kim" });
@@ -173,7 +173,7 @@ await api.delete("/users/1");`}</CodeBlock>
         </p>
       </Block>
 
-      <Block title="3. 오류 보여 주기">
+      <Block title="3. Show errors">
         <p className={muted}>
           서버마다 오류 응답 모양이 조금씩 다릅니다. <code>parseApiError</code>는 어떤 오류든 <code>{"{ statusCode, message }"}</code> 형태로 맞춰 주므로, 화면에서는 이것만 보여 주면 됩니다.
         </p>
@@ -187,7 +187,7 @@ try {
 }`}</CodeBlock>
       </Block>
 
-      <Block title="4. 로그 남기기">
+      <Block title="4. Log requests">
         <p className={muted}>
           <code>onRequest</code>, <code>onResponse</code>에 함수를 넘기면 모든 요청과 응답이 그 함수로 갑니다. 콘솔 대신 모니터링 도구로 보낼 때 씁니다. <code>password</code>, <code>accessToken</code> 같은 값은 넘기기 전에 가려집니다.
         </p>

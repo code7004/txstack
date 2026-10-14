@@ -116,7 +116,12 @@
         `Guide` 에 `Routing & Menu` · `URL State` · `HTTP Client` 를 더했다. 가짜 서버는 axios 의
         `adapter` 자리에 끼운다 — 클라이언트 쪽 코드는 진짜 서버일 때와 똑같이 돈다.
         사이트가 `axios` 를 peer 로 선언하지 않고 있던 것도 이때 바로잡았다
-  - [ ] 한글 문구 정리(합니다체) — Home · Getting Started · Tutorial · 새 Guide 3장은 끝. 나머지 장이 남았다
+  - [x] **한글 문구 정리(합니다체)** — 사이트에 보이는 글 전부. 용어는 부품 → 컴포넌트, 조사는 붙여 쓴다.
+        Tutorial 의 전체 코드처럼 **`?raw` 로 화면에 나가는 소스의 주석도 읽는 사람 것**이라 함께 맞췄다.
+        고치며 사실과 다른 설명 여섯을 바로잡았다 — `useUrlQuery` 는 빈 문자열도 주소에 적고(`null`·`undefined` 만
+        뺀다) `urlKeys` 는 "적을 키" 가 아니라 "기본값에 없지만 읽을 키" 다 · `replace: true` 라 Example 에서
+        뒤로 가기는 조건이 아니라 페이지를 되돌린다 · 다크에서 바뀌는 것은 `primary-strong` 이고 `on-accent` 는
+        한 번만 정한다 · `removeUndefined` 는 공백 문자열도 뺀다 · `daypicker` 서브패스는 넷 다다
   - [ ] ③ 영문
 
 ## 내용을 쓰는 방식

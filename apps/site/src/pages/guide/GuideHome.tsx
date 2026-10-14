@@ -17,7 +17,7 @@ const APP = [
 export function GuideHome() {
   return (
     <Page title="Guide" lead="네 패키지로 무엇을 만드는지 주제별로 정리했습니다. 각 장의 예제는 페이지 안에서 실제로 동작합니다.">
-      <Block title="화면 디자인 — @txstack/ui">
+      <Block title="Design — @txstack/ui">
         <LinkCardGrid>
           {DESIGN.map((item) => (
             <LinkCard key={item.to} to={item.to} title={item.title}>
@@ -27,7 +27,7 @@ export function GuideHome() {
         </LinkCardGrid>
       </Block>
 
-      <Block title="앱 구조 — route-meta · hooks · axios">
+      <Block title="App structure — route-meta · hooks · axios">
         <LinkCardGrid>
           {APP.map((item) => (
             <LinkCard key={item.to} to={item.to} title={item.title} aside={<span className="font-mono text-xs text-slate-500 dark:text-slate-400">{item.pkg}</span>}>

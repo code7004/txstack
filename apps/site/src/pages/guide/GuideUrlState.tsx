@@ -52,20 +52,20 @@ export function GuideUrlState() {
         </>
       }
     >
-      <Block title="왜 주소에 담나요">
+      <Block title="Why keep it in the URL">
         <p className={muted}>
           조건을 컴포넌트 상태(<code>useState</code>)에만 두면 새로고침하거나 상세 화면에 갔다가 돌아왔을 때 조건이 사라집니다. 주소에 담아 두면 그대로 남고, 주소를 복사해 다른 사람에게 보내도 같은 화면이 열립니다.
         </p>
       </Block>
 
-      <Block title="직접 해 보기">
+      <Block title="Try it">
         <p className={muted}>아래 조건을 바꾸면 이 페이지의 주소창이 함께 바뀝니다. 바꾼 뒤 새로고침해 보세요.</p>
         <Demo>
           <FilterDemo />
         </Demo>
       </Block>
 
-      <Block title="1. 기본값 정하기">
+      <Block title="1. Set defaults">
         <p className={muted}>
           <code>useState</code>처럼 쓰되, 기본값을 객체로 넘깁니다. 주소에 값이 없으면 기본값을 씁니다. 처음 들어왔을 때는 주소를 건드리지 않고, <code>setQuery</code>를 부를 때만 주소에 적습니다.
         </p>
@@ -81,7 +81,7 @@ query.page;   // 숫자 — 기본값이 숫자라서 주소의 "3"을 3으로 �
         </TxAlert>
       </Block>
 
-      <Block title="2. 바꾸기">
+      <Block title="2. Update the query">
         <p className={muted}>바꿀 값만 넘깁니다. 나머지 조건은 그대로 남습니다.</p>
         <CodeBlock title="조건을 바꾸면 1페이지로">{`setQuery({ q: "kim", page: 1 });                 // ?q=kim&status=all&page=1
 setQuery({ status: "active", page: 1 });         // ?q=kim&status=active&page=1
@@ -89,7 +89,7 @@ setQuery((prev) => ({ page: prev.page + 1 }));   // ?q=kim&status=active&page=2`
         <p className={muted}>검색 조건을 바꿀 때는 페이지를 1로 함께 돌려 주세요. 3페이지를 보다가 조건을 바꾸면 결과가 3페이지보다 적어 빈 화면이 나올 수 있습니다.</p>
       </Block>
 
-      <Block title="3. 조건이 바뀌면 다시 불러오기">
+      <Block title="3. Reload when the query changes">
         <p className={muted}>
           <code>query</code>를 의존성으로 두고 목록을 불러옵니다. 뒤로 가기를 눌러 주소가 바뀌어도 같은 경로로 다시 불러옵니다.
         </p>
@@ -98,13 +98,13 @@ setQuery((prev) => ({ page: prev.page + 1 }));   // ?q=kim&status=active&page=2`
 }, [query]);`}</CodeBlock>
       </Block>
 
-      <Block title="뒤로 가기는 어떻게 되나요">
+      <Block title="What about the back button">
         <p className={muted}>
           기본으로 조건을 바꿀 때 방문 기록을 새로 쌓지 않고 현재 주소를 바꿉니다. 필터를 여러 번 바꾼 뒤 뒤로 가기를 누르면 이전 화면으로 바로 돌아갑니다. 조건마다 기록을 남기려면 <code>replace: false</code>를 넘깁니다.
         </p>
       </Block>
 
-      <Block title="객체 상태를 다룰 때 — useObjectState">
+      <Block title="Object state — useObjectState">
         <p className={muted}>
           주소에 담을 필요가 없는 입력 폼 같은 상태에는 <code>useObjectState</code>를 씁니다. 바꿀 필드만 넘기면 나머지는 그대로 유지됩니다.
         </p>

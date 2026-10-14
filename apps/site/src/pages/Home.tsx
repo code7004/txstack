@@ -13,26 +13,26 @@ const PACKAGES = [
 
 /** 왜 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
 const STORY = [
-  { title: "같은 코드를 여러 번 복사했습니다", body: "여러 서비스가 같은 UI 컴포넌트와 HTTP 설정을 각자 복사해 썼습니다. 고칠 일이 생기면 프로젝트마다 다시 고쳐야 했고, 조금씩 서로 달라졌습니다." },
-  { title: "공통된 부분만 분리했습니다", body: "어느 서비스에도 묶이지 않도록 도메인 지식을 걷어 내고, 공통된 부분만 네 개의 패키지로 나눴습니다." },
-  { title: "새 프로젝트가 기준입니다", body: "다음 프로젝트가 설치만으로 그대로 쓸 수 있는지를 기준으로 삼았습니다. 그렇지 않다면 라이브러리가 아니라 앱 코드입니다." }
+  { title: "Copied code, again and again", body: "여러 서비스가 같은 UI 컴포넌트와 HTTP 설정을 각자 복사해 썼습니다. 고칠 일이 생기면 프로젝트마다 다시 고쳐야 했고, 조금씩 서로 달라졌습니다." },
+  { title: "Extract only what is shared", body: "어느 서비스에도 묶이지 않도록 도메인 지식을 걷어 내고, 공통된 부분만 네 개의 패키지로 나눴습니다." },
+  { title: "The next project is the test", body: "다음 프로젝트가 설치만으로 그대로 쓸 수 있는지를 기준으로 삼았습니다. 그렇지 않다면 라이브러리가 아니라 앱 코드입니다." }
 ];
 
 /** 세 가지 원칙. 각각 그 원칙을 보여 주는 문서로 간다 */
 const PRINCIPLES = [
-  { title: "쓰기 쉽게", body: "설치하고 스타일시트 한 줄이면 바로 씁니다. 확인 창이나 알림도 Provider 없이 호출만 하면 됩니다.", to: "/docs/start" },
-  { title: "바꾸기 쉽게", body: "디자인은 CSS 변수만 바꾸면 됩니다. 컴포넌트를 직접 고칠 필요가 없고, 다크 모드도 같은 방식으로 바뀝니다.", to: "/docs/guide/tokens" },
-  { title: "정책은 앱이 정합니다", body: "인증 토큰, 401 처리, 응답 형식처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 옵션으로 넘깁니다.", to: "/api/axios" }
+  { title: "Easy to use", body: "설치하고 스타일시트 한 줄이면 바로 씁니다. 확인 창이나 알림도 Provider 없이 호출만 하면 됩니다.", to: "/docs/start" },
+  { title: "Easy to customize", body: "디자인은 CSS 변수만 바꾸면 됩니다. 컴포넌트를 직접 고칠 필요가 없고, 다크 모드도 같은 방식으로 바뀝니다.", to: "/docs/guide/tokens" },
+  { title: "The app owns the policy", body: "인증 토큰, 401 처리, 응답 형식처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 옵션으로 넘깁니다.", to: "/api/axios" }
 ];
 
 /** 주요 기능. 원칙이 "어떤 생각으로" 라면 이쪽은 "무엇을 할 수 있나" 다. 각각 그 기능의 가이드로 간다 */
 const FEATURES = [
-  { pkg: "ui", title: "컴포넌트 49종", body: "입력 폼, 표, 날짜 선택, 확인 창, 알림, 탭, 파일 업로드까지 서비스 화면에 필요한 컴포넌트를 갖췄습니다.", to: "/docs/components" },
-  { pkg: "ui", title: "디자인 변경과 다크 모드", body: "색, 모서리, 간격을 CSS 변수로 바꾸고, 클래스 하나로 모든 컴포넌트를 다크 모드로 전환합니다.", to: "/docs/guide/tokens" },
-  { pkg: "ui", title: "화면 틀", body: "헤더, 위쪽 메뉴, 왼쪽 메뉴, 본문 자리를 한 번에 잡고, 좁은 화면에서는 메뉴가 서랍으로 들어갑니다.", to: "/docs/guide/layout" },
-  { pkg: "route-meta", title: "라우트로 메뉴 만들기", body: "라우트를 한 곳에 선언하면 메뉴, 현재 위치 표시, 권한별 메뉴가 모두 거기서 만들어집니다.", to: "/docs/guide/routing" },
-  { pkg: "hooks", title: "검색 조건을 주소에", body: "목록의 검색어, 필터, 페이지를 주소에 담아 새로고침하거나 링크를 공유해도 같은 화면이 열립니다.", to: "/docs/guide/url-state" },
-  { pkg: "axios", title: "API 클라이언트", body: "토큰 첨부, 401 처리, 오류 메시지 정리, 민감한 값을 가린 요청 로그를 한 곳에서 설정합니다.", to: "/docs/guide/http-client" }
+  { pkg: "ui", title: "49 components", body: "입력 폼, 표, 날짜 선택, 확인 창, 알림, 탭, 파일 업로드까지 서비스 화면에 필요한 컴포넌트를 갖췄습니다.", to: "/docs/components" },
+  { pkg: "ui", title: "Theming and dark mode", body: "색, 모서리, 간격을 CSS 변수로 바꾸고, 클래스 하나로 모든 컴포넌트를 다크 모드로 전환합니다.", to: "/docs/guide/tokens" },
+  { pkg: "ui", title: "App shell", body: "헤더, 위쪽 메뉴, 왼쪽 메뉴, 본문 자리를 한 번에 잡고, 좁은 화면에서는 메뉴가 서랍으로 들어갑니다.", to: "/docs/guide/layout" },
+  { pkg: "route-meta", title: "Menus from routes", body: "라우트를 한 곳에 선언하면 메뉴, 현재 위치 표시, 권한별 메뉴가 모두 거기서 만들어집니다.", to: "/docs/guide/routing" },
+  { pkg: "hooks", title: "Search state in the URL", body: "목록의 검색어, 필터, 페이지를 주소에 담아 새로고침하거나 링크를 공유해도 같은 화면이 열립니다.", to: "/docs/guide/url-state" },
+  { pkg: "axios", title: "API client", body: "토큰 첨부, 401 처리, 오류 메시지 정리, 민감한 값을 가린 요청 로그를 한 곳에서 설정합니다.", to: "/docs/guide/http-client" }
 ];
 
 const HERO_CODE = `import { TxButton, TxForm } from "@txstack/ui";
@@ -103,7 +103,7 @@ export function Home() {
           </div>
 
           {/* 아직 npm 에 없다. 그대로 따라 치면 실패하므로 지금 설치하는 길로 보낸다 */}
-          <Link to="/docs/start#2-설치" className="text-sm text-slate-500 underline dark:text-slate-400">
+          <Link to="/docs/start#2-install" className="text-sm text-slate-500 underline dark:text-slate-400">
             npm 배포 준비 중 — 지금 설치하는 방법
           </Link>
         </div>
@@ -112,7 +112,7 @@ export function Home() {
       {/* --- 왜 만들었나 ---------------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">왜 만들었나요</h2>
+          <h2 className="text-xl font-semibold">Why txstack</h2>
           <p className="text-slate-600 dark:text-slate-300">실제 서비스를 개발하면서 반복되던 코드에서 출발했습니다.</p>
         </header>
 
@@ -129,7 +129,7 @@ export function Home() {
 
       {/* --- 원칙 ------------------------------------------------------------ */}
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold">세 가지 원칙</h2>
+        <h2 className="text-xl font-semibold">Three principles</h2>
 
         <div className="grid gap-3 md:grid-cols-3">
           {PRINCIPLES.map((item) => (
@@ -143,7 +143,7 @@ export function Home() {
       {/* --- 주요 기능 -------------------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">주요 기능</h2>
+          <h2 className="text-xl font-semibold">Key features</h2>
           <p className="text-slate-600 dark:text-slate-300">카드를 누르면 해당 기능의 가이드로 이동합니다. 가이드의 예제는 페이지 안에서 직접 써 볼 수 있습니다.</p>
         </header>
 
@@ -159,7 +159,7 @@ export function Home() {
       {/* --- 코드와 결과를 나란히 --------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">@txstack/ui 예제</h2>
+          <h2 className="text-xl font-semibold">@txstack/ui example</h2>
           <p className="text-slate-600 dark:text-slate-300">
             <code>TxForm</code>으로 입력란, 오류 메시지, 제출 버튼을 묶은 가입 폼입니다.
           </p>
@@ -190,7 +190,7 @@ export function Home() {
       {/* --- 이 사이트가 증거다 ---------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">이 사이트도 txstack으로 만들었습니다</h2>
+          <h2 className="text-xl font-semibold">This site is built with txstack</h2>
           <p className="text-slate-600 dark:text-slate-300">
             지금 보고 계신 화면의 틀, 메뉴, 버튼, 카드가 모두 txstack 컴포넌트입니다. 사이트의 색과 모서리 모양은 컴포넌트를 고치지 않고, <strong>아래처럼 CSS 변수 몇 줄만 지정해서</strong> 바꿨습니다.
           </p>

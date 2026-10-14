@@ -10,7 +10,7 @@ import { TxEmptyState } from "@txstack/ui";
 export function NotFound() {
   return (
     <div className="py-16">
-      <TxEmptyState variant="no-result" title="여기에는 아무것도 없다" description="주소가 바뀌었거나 잘못 들어왔다. 처음으로 가거나 문서에서 찾는다.">
+      <TxEmptyState variant="no-result" title="페이지를 찾을 수 없습니다" description="주소가 바뀌었거나 잘못 입력되었을 수 있습니다. 홈으로 이동하거나 문서에서 찾아보세요.">
         <div className="flex flex-wrap justify-center gap-2">
           <Link to="/" className="tx-button" data-variant="primary">
             <span className="tx-button__label">Home</span>

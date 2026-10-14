@@ -7,7 +7,7 @@ import { api, type Member, type MemberPage } from "./memberApi";
 const PAGE_SIZE = 5;
 
 export function MemberScreen() {
-  // 검색어와 페이지는 주소에 둔다 — 새로고침하거나 주소를 보내도 같은 화면이 열린다
+  // 검색어와 페이지는 주소에 담습니다. 새로고침하거나 주소를 공유해도 같은 화면이 열립니다
   const [query, setQuery] = useUrlQuery({ defaults: { q: "", page: 1 } });
 
   const [data, setData] = useState<MemberPage>({ rows: [], total: 0 });
@@ -18,7 +18,7 @@ export function MemberScreen() {
   const [draft, setDraft] = useState({ name: "", email: "" });
   const [error, setError] = useState<string>();
 
-  // 조건이 바뀔 때마다 목록을 다시 불러온다
+  // 조건이 바뀔 때마다 목록을 다시 불러옵니다
   useEffect(() => {
     let alive = true;
     setLoading(true);

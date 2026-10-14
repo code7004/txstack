@@ -78,8 +78,8 @@ export function toMessage(error: unknown): IApiError {
   const parsed = parseApiError(error);
 
   // GitHub 는 한계를 넘으면 403 에 안내 문구를 담아 준다. 그대로 보여 주면 무슨 일인지 읽힌다
-  if (parsed.statusCode === 403) return { ...parsed, message: "요청이 너무 잦다 (GitHub 는 인증 없이 분당 10회). 잠시 뒤에 다시 눌러 보라." };
-  if (parsed.statusCode === 422) return { ...parsed, message: "검색어를 다시 확인해 보라." };
+  if (parsed.statusCode === 403) return { ...parsed, message: "요청이 너무 많습니다. GitHub은 인증 없이 1분에 10번까지 검색할 수 있으니 잠시 후 다시 시도해 주세요." };
+  if (parsed.statusCode === 422) return { ...parsed, message: "검색어를 확인한 뒤 다시 시도해 주세요." };
 
   return parsed;
 }
