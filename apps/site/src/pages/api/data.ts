@@ -21,13 +21,26 @@ export interface ApiPage {
   label: string;
 }
 
-export const API_PAGES: Record<"axios" | "hooks" | "routeMeta", ApiPage> = {
+export const API_PAGES: Record<"ui" | "axios" | "hooks" | "routeMeta", ApiPage> = {
+  ui: { path: "/api/ui", label: "ui" },
   axios: { path: "/api/axios", label: "axios" },
   hooks: { path: "/api/hooks", label: "hooks" },
   routeMeta: { path: "/api/route-meta", label: "route-meta" }
 };
 
 export const TABLES = {
+  ui: {
+    installEntry: {
+      section: "Install",
+      searchable: true,
+      rows: [
+        ["@txstack/ui", "Tx* 컴포넌트 (아래 목록)", "react · react-dom >=18", "기본 진입점. 런타임 의존성은 clsx 하나뿐입니다"],
+        ["@txstack/ui/styles.css", "스타일시트", "—", "앱 진입점에서 한 번만 불러옵니다. 없으면 컴포넌트에 스타일이 적용되지 않습니다"],
+        ["@txstack/ui/aggrid", "TxAgGrid · TxAgGridProvider", "ag-grid-community · ag-grid-react ^35", "표를 쓸 때만 peer를 함께 설치합니다"],
+        ["@txstack/ui/daypicker", "TxDayPicker · TxDayPickerRange · TxFormDayPicker · TxFormDayPickerRange", "react-day-picker ^10", "날짜 선택을 쓸 때만 peer를 함께 설치합니다"]
+      ] as Row[]
+    }
+  },
   axios: {
     installEntry: {
       section: "Install",
@@ -181,7 +194,7 @@ export const TABLES = {
     },
     urlRules: {
       section: "useUrlQuery",
-      label: "주소에 쓰고 읽는 규칙",
+      label: "URL read · write rules",
       searchable: false,
       rows: [
         ["setQuery 호출", "합친 결과의 모든 키", "—", "기본값과 같은 값도 적습니다. 결과가 이전과 같으면 주소를 바꾸지 않습니다"],
@@ -232,7 +245,7 @@ export const TABLES = {
     },
     filterRules: {
       section: "getNavigableRoutes",
-      label: "라우터와 메뉴의 필터 규칙",
+      label: "Router vs. menu filtering",
       searchable: false,
       rows: [
         ["enabled: false", "제외", "제외", ""],

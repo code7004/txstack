@@ -61,7 +61,7 @@ setFilter((prev) => ({ page: prev.page + 1 }));`}</CodeBlock>
         <RefLabel>Returns</RefLabel>
         <RefTable head={["Index", "Type", "Identity", "Description"]} rows={TABLES.hooks.urlQueryReturns.rows} anchor={tableAnchor(TABLES.hooks.urlQueryReturns)} />
 
-        <RefLabel>주소에 쓰고 읽는 규칙</RefLabel>
+        <RefLabel>URL read · write rules</RefLabel>
         <RefTable head={["Case", "Written as", "Read as", "Note"]} rows={TABLES.hooks.urlRules.rows} anchor={tableAnchor(TABLES.hooks.urlRules)} />
 
         <CodeBlock title="example">{`const [query, setQuery] = useUrlQuery({
