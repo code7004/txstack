@@ -6,7 +6,7 @@ const STEPS = [
   { to: "/docs/start", title: "Getting Started", time: "5분", what: "필요한 패키지를 고르고, 설치해서 첫 화면을 띄웁니다" },
   { to: "/docs/tutorial", title: "Tutorial", time: "15분", what: "네 패키지를 모두 써서 검색, 등록, 삭제가 있는 목록 화면을 끝까지 만듭니다" },
   { to: "/docs/guide", title: "Guide", time: "필요할 때", what: "디자인 바꾸기, 다크 모드, 화면 틀, 라우팅과 메뉴, URL 상태, API 클라이언트" },
-  { to: "/docs/components", title: "Components", time: "찾아볼 때", what: "컴포넌트 49종을 직접 움직여 보는 카탈로그(Storybook)" }
+  { to: "/docs/components", title: "Components", time: "찾아볼 때", what: "분류마다 실제로 동작하는 작은 화면으로 컴포넌트를 둘러봅니다" }
 ];
 
 /** `/docs` 의 인덱스 화면. 트리에서 `index: true` 로 선언돼 있다. */

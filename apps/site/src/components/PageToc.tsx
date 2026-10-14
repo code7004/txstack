@@ -28,7 +28,8 @@ export function PageToc({ root }: { root: RefObject<HTMLElement | null> }) {
 
   // 화면이 바뀌면 제목을 다시 읽는다. 앵커는 사이트 검색과 같은 규칙으로 만든다(lib/slug)
   useEffect(() => {
-    const nodes = Array.from(root.current?.querySelectorAll<HTMLHeadingElement>("h2, h3[data-toc]") ?? []);
+    // 창(모달 · 서랍) 안의 제목은 뺀다. 닫혀 있어도 그 제목이 문서에 남아 있어서 목차에 끼어든다
+    const nodes = Array.from(root.current?.querySelectorAll<HTMLHeadingElement>("h2, h3[data-toc]") ?? []).filter((node) => !node.closest("dialog, [role='dialog']"));
 
     // 제목(h2)의 앵커는 사이트 검색과 똑같이 h2 끼리만 센다. 소제목은 따로 세고, 겹치면 뒤에 붙여 가른다
     const titles = nodes.filter((node) => node.tagName === "H2");
