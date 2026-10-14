@@ -1,7 +1,7 @@
-import { useId, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { TxSlidePanel } from "../TxSlidePanel";
 import { cm } from "../tx-ui.utils";
-import { useCollapse, useHideOnScroll, useNarrow, useResize } from "./TxAppShell.hook";
+import { useCollapse, useElementHeight, useHideOnScroll, useNarrow, useResize } from "./TxAppShell.hook";
 import type { TxAppShellPanelSlot, TxAppShellProps } from "./TxAppShell.types";
 
 const DEFAULT_LABELS = {
@@ -72,12 +72,16 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
  *
  * 명세: `docs/001_ui/044_TxAppShell.md`
  */
-export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "main", footer, sticky = true, panels, onPanelChange, breakpoint = 960, labels, classNames, className, style, children, ...props }: TxAppShellProps) => {
+export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "main", footer, sticky = true, panelSticky = true, panels, onPanelChange, breakpoint = 960, labels, classNames, className, style, children, ...props }: TxAppShellProps) => {
   const text = { ...DEFAULT_LABELS, ...labels };
   const mainId = useId();
 
   const narrow = useNarrow(breakpoint);
   const hidden = useHideOnScroll(sticky === "hide");
+
+  /** 좌우 패널이 붙을 자리. 헤더가 붙어 있을 때만 그 높이를 잰다 — 같이 굴러가면 화면 맨 위다 */
+  const headerRef = useRef<HTMLElement>(null);
+  const headerHeight = useElementHeight(headerRef, panelSticky && sticky !== false);
   /**
    * **접힌 자리에는 손잡이가 없다.** 그래서 크기가 바뀌는 순간은 늘 펴져 있고,
    * 두 훅이 서로를 알 필요가 없다 — 크기 쪽은 `collapsed: false` 를 그대로 실어 보낸다.
@@ -144,10 +148,11 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
       {...props}
       data-tag="TxAppShell"
       data-sticky={sticky === false ? undefined : sticky === "hide" ? "hide" : ""}
+      data-panel-sticky={panelSticky ? "" : undefined}
       data-hidden={hidden ? "" : undefined}
       data-narrow={narrow ? "" : undefined}
       className={cm("tx-app-shell", className)}
-      style={{ "--tx-app-shell-breakpoint": `${breakpoint}px`, ...resize.style(), ...style } as CSSProperties}
+      style={{ "--tx-app-shell-breakpoint": `${breakpoint}px`, "--tx-app-shell-header-height": `${headerHeight}px`, ...resize.style(), ...style } as CSSProperties}
     >
       {/*
         첫 Tab 에 나타난다. 메뉴가 스무 줄이면 키보드로 본문에 닿는 데 스무 번을 눌러야 하고,
@@ -158,7 +163,7 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
       </a>
 
       {(header != null || top != null || inDrawer) && (
-        <header className={cm("tx-app-shell__header", classNames?.header)}>
+        <header ref={headerRef} className={cm("tx-app-shell__header", classNames?.header)}>
           <div className="tx-app-shell__bar">
             {inDrawer && (
               <button type="button" className="tx-app-shell__menu" aria-label={text.menu} aria-expanded={drawer} onClick={() => setDrawer(true)}>

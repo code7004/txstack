@@ -137,6 +137,18 @@ export interface TxAppShellProps extends HTMLAttributes<HTMLDivElement> {
   sticky?: TxAppShellSticky;
 
   /**
+   * 좌우 패널이 화면에 붙는가. 기본 `true`.
+   *
+   * 켜져 있으면 패널이 **헤더 바로 아래부터 화면 끝까지**를 차지하고 본문을 내려도 따라온다.
+   * 내용이 그보다 길면 패널 안에서 스크롤된다. 경계선 · 손잡이 · 접기 스위치가 함께 따라온다.
+   * 헤더 높이는 셸이 재고, `sticky="hide"` 로 헤더가 숨으면 맨 위로 따라 올라간다.
+   * `footer` 에 닿으면 거기서 멈춘다.
+   *
+   * `false` 면 예전처럼 본문과 같이 굴러간다.
+   */
+  panelSticky?: boolean;
+
+  /**
    * 자리마다 무엇을 할 수 있는지. **크기 조절 · 접기 · 처음 값 · 밖에서 쥐기가 한 곳이다.**
    *
    * @example
