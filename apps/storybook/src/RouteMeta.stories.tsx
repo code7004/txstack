@@ -178,6 +178,7 @@ export const SideNav: Story = {
     <MemoryRouter initialEntries={["/"]}>
       <div style={frame}>
         <TxAppShell
+          panelSticky={false}
           header={<strong className="px-1">IDK</strong>}
           breakpoint={360}
           left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}
@@ -198,7 +199,7 @@ export const NavBar: Story = {
   render: () => (
     <MemoryRouter initialEntries={["/"]}>
       <div style={frame}>
-        <TxAppShell header={<strong className="px-1">IDK</strong>} breakpoint={360} top={<TxNavBar>{getNavigableRoutes(routes).map(barItem)}</TxNavBar>} style={{ minBlockSize: "26rem" }}>
+        <TxAppShell panelSticky={false} header={<strong className="px-1">IDK</strong>} breakpoint={360} top={<TxNavBar>{getNavigableRoutes(routes).map(barItem)}</TxNavBar>} style={{ minBlockSize: "26rem" }}>
           <TxFlex className="flex-col gap-4">
             <Screen />
             <Crumbs />
@@ -223,6 +224,7 @@ export const Permissions: Story = {
       <MemoryRouter initialEntries={["/"]}>
         <div style={frame}>
           <TxAppShell
+            panelSticky={false}
             header={
               <TxFlex className="items-center px-1">
                 <strong>IDK</strong>
@@ -256,6 +258,7 @@ export const HiddenRoute: Story = {
     <MemoryRouter initialEntries={["/boards/write"]}>
       <div style={frame}>
         <TxAppShell
+          panelSticky={false}
           header={<strong className="px-1">IDK</strong>}
           breakpoint={360}
           left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}

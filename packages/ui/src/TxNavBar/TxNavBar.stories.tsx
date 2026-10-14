@@ -354,6 +354,7 @@ export const WithShell: StoryObj = {
     return (
       <div style={{ border: "1px solid var(--tx-color-border)", borderRadius: "var(--tx-radius)", overflow: "hidden", resize: "horizontal", minInlineSize: "20rem" }}>
         <TxAppShell
+          panelSticky={false}
           header={<strong className="px-1">IDK</strong>}
           top={<TxNavBar>{items(setPicked, picked)}</TxNavBar>}
           left={

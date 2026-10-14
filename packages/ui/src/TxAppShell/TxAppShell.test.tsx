@@ -31,7 +31,8 @@ const SIZES: Record<string, { width: number; height: number }> = {
   "tx-app-shell__bottom": { width: 1264, height: 192 },
   "tx-app-shell__body": { width: 1264, height: 600 },
   "tx-app-shell__center": { width: 800, height: 600 },
-  "tx-app-shell__main": { width: 800, height: 408 }
+  "tx-app-shell__main": { width: 800, height: 408 },
+  "tx-app-shell__header": { width: 1264, height: 105 }
 };
 
 const stubLayout = () => {
@@ -880,6 +881,65 @@ describe("TxAppShell — 겉", () => {
   });
 });
 
+/**
+ * **좌우 패널이 화면에 붙는다**(`panelSticky`, 기본 켜짐). 셸은 창이 스크롤되는 구조라 그대로 두면
+ * 패널이 본문과 같이 올라간다. 붙는 자리는 헤더 높이이고, 셸이 그것을 잰다.
+ * jsdom 에는 sticky 가 없어 위치는 CSS 계약으로 본다.
+ */
+describe("TxAppShell — 붙는 패널", () => {
+  it("기본으로 켜져 있다", () => {
+    render(<TxAppShell {...SLOTS}>본문</TxAppShell>);
+    expect(root().hasAttribute("data-panel-sticky")).toBe(true);
+  });
+
+  it("panelSticky={false} 면 끈다 — 본문과 같이 굴러간다", () => {
+    render(
+      <TxAppShell {...SLOTS} panelSticky={false}>
+        본문
+      </TxAppShell>
+    );
+    expect(root().hasAttribute("data-panel-sticky")).toBe(false);
+  });
+
+  /** 헤더에 무엇이 들어올지는 소비자가 정한다. 그래서 높이를 정해 두지 않고 잰다. */
+  it("헤더 높이를 재서 패널이 붙을 자리로 내려 준다", () => {
+    render(<TxAppShell {...SLOTS}>본문</TxAppShell>);
+    expect(root().style.getPropertyValue("--tx-app-shell-header-height")).toBe("105px");
+  });
+
+  it("헤더가 같이 굴러가면 재지 않는다 — 패널은 화면 맨 위에 붙는다", () => {
+    render(
+      <TxAppShell {...SLOTS} sticky={false}>
+        본문
+      </TxAppShell>
+    );
+    expect(root().style.getPropertyValue("--tx-app-shell-header-height")).toBe("0px");
+  });
+
+  it("헤더 높이가 바뀌면 다시 잰다", () => {
+    let observed: ResizeObserverCallback | undefined;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: ResizeObserverCallback) {
+          observed = callback;
+        }
+        observe() {}
+        disconnect() {}
+      }
+    );
+
+    render(<TxAppShell {...SLOTS}>본문</TxAppShell>);
+    expect(root().style.getPropertyValue("--tx-app-shell-header-height")).toBe("105px");
+
+    SIZES["tx-app-shell__header"] = { width: 1264, height: 56 };
+    act(() => observed?.([], {} as ResizeObserver));
+    expect(root().style.getPropertyValue("--tx-app-shell-header-height")).toBe("56px");
+
+    SIZES["tx-app-shell__header"] = { width: 1264, height: 105 };
+  });
+});
+
 describe("TxAppShell — CSS 계약", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -891,6 +951,17 @@ describe("TxAppShell — CSS 계약", () => {
 
   it("색을 하드코딩하지 않는다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+  });
+
+  /** 안쪽 내용만 붙이면 패널 가운데의 접기 스위치가 긴 페이지에서 화면 밖으로 밀려난다. */
+  it("패널 전체가 헤더 아래에 붙고 보이는 높이만 차지한다", () => {
+    expect(css).toMatch(/\[data-panel-sticky\][^{]*__left[^{]*__right[^{]*\{[^}]*position:\s*sticky[^}]*inset-block-start:\s*var\(--tx-app-shell-panel-top\)[^}]*block-size:\s*calc\(100dvh - var\(--tx-app-shell-panel-top\)\)/);
+  });
+
+  it("붙는 자리는 헤더가 붙어 있을 때만 헤더 높이이고, 숨거나 같이 굴러가면 0 이다", () => {
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-panel-top:\s*0px/);
+    expect(css).toMatch(/\.tx-app-shell\[data-sticky\]\s*\{[^}]*--tx-app-shell-panel-top:\s*var\(--tx-app-shell-header-height/);
+    expect(css).toMatch(/\[data-sticky="hide"\]\[data-hidden\]\s*\{[^}]*--tx-app-shell-panel-top:\s*0px/);
   });
 
   it(".dark 분기를 갖지 않는다", () => {

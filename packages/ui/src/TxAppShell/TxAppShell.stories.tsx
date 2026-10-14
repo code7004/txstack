@@ -213,8 +213,14 @@ const meta = {
     labels: { control: false },
     classNames: { control: false },
     panels: { control: false },
-    bottomSpan: { control: false }
-  }
+    bottomSpan: { control: false },
+    panelSticky: { control: "boolean" }
+  },
+  /**
+   * **이야기 대부분은 셸을 상자 안에 넣어 보인다.** 그 자리에서는 패널이 화면 높이를 잡으면 상자가
+   * 화면만큼 길어지므로 끈다. 붙는 모양은 `붙는 패널` · `내리면 숨는 헤더` 에서 화면 전체로 본다.
+   */
+  args: { panelSticky: false }
 } satisfies Meta<typeof TxAppShell>;
 
 export default meta;
@@ -277,6 +283,7 @@ export const 끌어서크기바꾸기: Story = {
           <code style={{ fontSize: "0.8125rem", color: "color-mix(in oklab, var(--tx-color-text) 60%, transparent)" }}>onPanelChange → {JSON.stringify(sizes)}</code>
           <div style={frame}>
             <TxAppShell
+              panelSticky={false}
               header={<Brand />}
               left={<Left />}
               right={<Right />}
@@ -313,7 +320,7 @@ export const 크기를밖에서쥐기: Story = {
             <input type="range" min={140} max={420} value={left} onChange={(event) => setLeft(Number(event.target.value))} />
           </label>
           <div style={frame}>
-            <TxAppShell header={<Brand />} left={<Left />} panels={{ left: { resize: true, size: left } }} onPanelChange={(_, { size }) => size != null && setLeft(size)} style={{ minBlockSize: "24rem" }}>
+            <TxAppShell panelSticky={false} header={<Brand />} left={<Left />} panels={{ left: { resize: true, size: left } }} onPanelChange={(_, { size }) => size != null && setLeft(size)} style={{ minBlockSize: "24rem" }}>
               <Article />
             </TxAppShell>
           </div>
@@ -358,7 +365,7 @@ export const 아래패널의폭: Story = {
         <div key={span} style={{ display: "grid", gap: "0.5rem" }}>
           <code style={{ fontSize: "0.8125rem" }}>bottomSpan=&quot;{span}&quot;</code>
           <div style={{ ...frame, resize: "none" }}>
-            <TxAppShell header={<Brand />} left={<Left />} right={<Right />} bottom={<Bottom />} bottomSpan={span} panels={{ bottom: { resize: true } }} style={{ minBlockSize: "22rem" }}>
+            <TxAppShell panelSticky={false} header={<Brand />} left={<Left />} right={<Right />} bottom={<Bottom />} bottomSpan={span} panels={{ bottom: { resize: true } }} style={{ minBlockSize: "22rem" }}>
               <Article />
             </TxAppShell>
           </div>
@@ -382,7 +389,7 @@ export const 스위치를직접그리기: Story = {
             왼쪽 패널 접기
           </label>
           <div style={frame}>
-            <TxAppShell header={<Brand />} left={<Left />} panels={{ left: { collapsed: off } }} style={{ minBlockSize: "24rem" }}>
+            <TxAppShell panelSticky={false} header={<Brand />} left={<Left />} panels={{ left: { collapsed: off } }} style={{ minBlockSize: "24rem" }}>
               <Article />
             </TxAppShell>
           </div>
@@ -400,8 +407,29 @@ export const 스위치를직접그리기: Story = {
  */
 export const 내리면숨는헤더: Story = {
   name: "내리면 숨는 헤더",
-  args: { header: <Brand />, top: <Top />, left: <Left />, sticky: "hide", children: <Article long /> },
+  args: { header: <Brand />, top: <Top />, left: <Left />, sticky: "hide", panelSticky: true, children: <Article long /> },
   parameters: { docs: { story: { inline: false, height: "22rem" } } }
+};
+
+const LongNav = () => <Nav items={Array.from({ length: 30 }, (_, index) => `메뉴 ${index + 1}`)} style={{ padding: "0.75rem" }} />;
+
+/**
+ * **좌우 패널이 화면에 붙는다**(`panelSticky`, 기본 켜짐). 본문을 내려도 왼쪽 메뉴가 헤더 바로 아래에
+ * 남고, 메뉴가 화면보다 길면 **메뉴 안에서만** 굴러간다. 경계선의 접기 스위치도 늘 보이는 자리의
+ * 가운데에 있다. 맨 아래까지 내리면 footer 앞에서 멈춘다.
+ *
+ * ```tsx
+ * <TxAppShell header={<Brand />} left={<SideNav />}>…</TxAppShell>                     // 기본 — 붙는다
+ * <TxAppShell header={<Brand />} left={<SideNav />} panelSticky={false}>…</TxAppShell> // 같이 굴러간다
+ * ```
+ *
+ * 화면 전체를 쓰는 셸의 동작이라 캔버스에서 열어 굴려 본다. 다른 이야기들은 셸을 상자 안에 넣어
+ * 보이므로 이것을 꺼 둔다 — 상자 안의 셸이 화면 높이를 잡을 이유가 없다.
+ */
+export const 붙는패널: Story = {
+  name: "붙는 패널",
+  args: { header: <Brand />, top: <Top />, left: <LongNav />, footer: <Footer />, panels: { left: { collapse: true } }, panelSticky: true, children: <Article long /> },
+  parameters: { docs: { story: { inline: false, height: "26rem" } } }
 };
 
 /**

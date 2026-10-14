@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type RefObject } from "react";
 import type { TxAppShellPanel, TxAppShellPanelSlot, TxAppShellProps, TxAppShellResizeLimit } from "./TxAppShell.types";
 
 /**
@@ -26,6 +26,34 @@ export function useNarrow(breakpoint: number) {
   }, [breakpoint]);
 
   return narrow;
+}
+
+/**
+ * **내부 전용.** 헤더의 높이. 좌우 패널이 그 아래에 붙는다.
+ *
+ * 높이를 CSS 로 정해 두지 않는다 — 헤더에 무엇이 들어오는지(가로 메뉴가 있는지, 몇 줄인지)는
+ * 소비자가 정한다. 그래서 **잰다.** 내용이 바뀌어 높이가 달라지면 다시 잰다.
+ *
+ * `ResizeObserver` 가 없는 환경(서버 · jsdom)에서는 한 번만 잰다.
+ */
+export function useElementHeight(ref: RefObject<HTMLElement | null>, enabled: boolean) {
+  const [height, setHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (!enabled || !node) return;
+
+    const measure = () => setHeight(Math.round(node.getBoundingClientRect().height));
+    measure();
+
+    if (typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref, enabled]);
+
+  return height;
 }
 
 /**

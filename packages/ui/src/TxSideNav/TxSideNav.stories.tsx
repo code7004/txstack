@@ -256,6 +256,7 @@ export const WithShell: StoryObj = {
     return (
       <div style={{ border: "1px solid var(--tx-color-border)", borderRadius: "var(--tx-radius)", overflow: "hidden", resize: "horizontal", minInlineSize: "20rem" }}>
         <TxAppShell
+          panelSticky={false}
           header={
             <div className="flex items-center gap-2">
               <TxButton variant="ghost" label="☰" onClick={() => setRail((prev) => !prev)} aria-label={rail ? "메뉴 펼치기" : "메뉴 접기"} />
