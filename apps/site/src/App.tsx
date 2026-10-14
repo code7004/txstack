@@ -37,7 +37,7 @@ function useTheme() {
 /** 가로 줄 한 칸. 그냥 링크다 — 하위는 줄이 함께 쓰는 패널(`SITE_MAP`)이 한꺼번에 보여 준다. */
 const barItem = (item: NavRoute) => <TxNavBar.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />;
 
-/** 패널 속 링크 한 줄. 자식이 있으면 그 아래로 한 단 들여 이어 간다(`Guide › Tokens`) */
+/** 패널 속 링크 한 줄. 자식이 있으면 그 아래로 한 단 들여 이어 간다(`Guide › Styling`) */
 const mapLink = (item: NavRoute): ReactNode => (
   <li key={item.key} className="flex flex-col gap-0.5">
     <NavLink to={item.path} className="site-map__link">
@@ -68,7 +68,7 @@ const SITE_MAP = (
 );
 
 /**
- * 왼쪽 줄 한 칸. **자식이 있으면 펼치는 항목**이 된다 — `Documents › Guide › Tokens` 처럼
+ * 왼쪽 줄 한 칸. **자식이 있으면 펼치는 항목**이 된다 — `Documents › Guide › Styling` 처럼
  * 세 단까지 간다. 자식을 가진 항목은 스스로 링크가 되지 않으므로, 그 화면으로 가는 길은
  * 가로 줄의 패널이 맡는다.
  */

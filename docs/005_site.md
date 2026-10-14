@@ -35,13 +35,13 @@
 **가로 줄은 다섯 칸이다.** 처음에 아홉 칸으로 뒀더니 눈이 한 번에 못 읽어서, 성격이 같은
 것을 묶어 아래로 내렸다. **깊이는 셋까지만** 간다.
 
-| 가로 줄     | 그 아래                                                                                                                                     | 어느 패키지를 쓰나    |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `Home`      | —                                                                                                                                           | `ui`                  |
-| `Documents` | `Getting Started` · `Tutorial` · `Guide`(`Tokens` · `Dark mode` · `Layout` · `Routing & Menu` · `URL State` · `HTTP Client`) · `Components` | **넷 다**             |
-| `API`       | `ui` · `route-meta` · `hooks` · `axios`                                                                                                     | 넷 다                 |
-| `Example`   | —                                                                                                                                           | **`axios` · `hooks`** |
-| `About`     | `Profile` · `Contact`                                                                                                                       | `ui`                  |
+| 가로 줄     | 그 아래                                                                                                                                      | 어느 패키지를 쓰나    |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `Home`      | —                                                                                                                                            | `ui`                  |
+| `Documents` | `Getting Started` · `Tutorial` · `Guide`(`Styling` · `Dark mode` · `Layout` · `Routing & Menu` · `URL State` · `HTTP Client`) · `Components` | **넷 다**             |
+| `API`       | `ui` · `route-meta` · `hooks` · `axios`                                                                                                      | 넷 다                 |
+| `Example`   | —                                                                                                                                            | **`axios` · `hooks`** |
+| `About`     | `Profile` · `Contact`                                                                                                                        | `ui`                  |
 
 `Contact` 를 묶음 이름으로 두면 **`Contact > Contact`** 가 되므로 `About` 이다.
 `Components` 는 스토리북으로 보내는 자리다 — 부품 레퍼런스를 두 곳에서 관리하지 않는다.
@@ -84,7 +84,7 @@
       `Home` · `Getting Started` · 나머지 섹션 자리 · 404 · **다섯 칸으로 묶은 가로 줄**
 - [x] **A+. 디자인** — 토큰 한 장(청록 · Pretendard · 도구 톤) · 히어로(코드와 살아 있는 결과를
       나란히) · 코드 하이라이팅 · 셸 `footer` · 파비콘 · OG 메타
-- [x] **B. 내용** — `Guide`(`Tokens` · `Dark mode` · `Layout`) · `Tutorial`.
+- [x] **B. 내용** — `Guide`(`Styling` · `Dark mode` · `Layout`) · `Tutorial`.
       **예제가 글이 아니라 실제로 돈다** — 토큰을 손으로 돌려 보는 판, 한 화면에 나란히 놓은
       라이트/다크, 작게 넣은 진짜 셸, 다섯 단계를 지나 완성되는 목록·등록 화면
 - [x] **C. 진짜 데이터** — `Example`(GitHub 저장소 검색) · `API` 네 장.
@@ -105,7 +105,7 @@
         `Documents` 순서를 **Start → Tutorial → Guide → Components** 로 바꿨다(배우는 차례).
         **새 Vite 앱에서 문서대로 따라 쳐서 빌드·실행까지 확인했다**
   - [x] **② 디자인 마감** — 좁은 화면(<960px)은 가로 줄을 내리고 **서랍에 트리 전체**를 그린다.
-        탭 제목은 트리의 `label`(`Tokens · Guide — txstack`). 글 폭은 레이아웃 한 곳이 정하고
+        탭 제목은 트리의 `label`(`Styling · Guide — txstack`). 글 폭은 레이아웃 한 곳이 정하고
         (문서 `max-w-4xl` · Home `max-w-6xl`), 인덱스 화면 넷을 `Page` + 통째로 눌리는 `LinkCard` 로
         맞췄다. 한글은 `word-break: keep-all`. `Contact` 는 이슈 창구 셋 + 버그 양식, `Profile` 은
         **틀만** — `PROFILE` 을 채우면 그려지고, 빈 칸은 배포판에서 사라지고 개발 서버에서만 점선으로 보인다
@@ -145,7 +145,7 @@
 
 | 장          | 살아 있는 것                                                                             |
 | ----------- | ---------------------------------------------------------------------------------------- |
-| `Tokens`    | 색·반경·상태 비율을 **직접 돌리는 판.** 그 판에만 변수를 얹어 사이트의 나머지는 그대로다 |
+| `Styling`   | 색·반경·상태 비율을 **직접 돌리는 판.** 그 판에만 변수를 얹어 사이트의 나머지는 그대로다 |
 | `Dark mode` | **같은 마크업 두 판**을 나란히 — 오른쪽만 `class="dark"` 다                              |
 | `Layout`    | 작은 `TxAppShell` 하나. ☰ 로 접으면 자리까지 함께 줄어든다                              |
 | `Tutorial`  | 다섯 단계를 지나 **검색·등록·삭제 확인·알림이 붙은 화면**이 완성된다                     |
