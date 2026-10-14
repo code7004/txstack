@@ -24,10 +24,6 @@ export function ApiRouteMeta() {
       <Block title="Install">
         <CodeBlock language="bash" title="sh">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.routeMeta.installEntry.rows} anchor={tableAnchor(TABLES.routeMeta.installEntry)} />
-        <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`RouteTree
- ├─ buildRouteObjects / RouteRenderer → 라우터
- ├─ getNavigableRoutes                → 메뉴 (NavRoute[])
- └─ useCurrentRouteNode               → 현재 위치 · 경로 표시`}</CodeBlock>
       </Block>
 
       <Block title="RouteTree">

@@ -39,6 +39,30 @@ export const TABLES = {
         ["@txstack/ui/aggrid", "TxAgGrid · TxAgGridProvider", "ag-grid-community · ag-grid-react ^35", "표를 쓸 때만 peer를 함께 설치합니다"],
         ["@txstack/ui/daypicker", "TxDayPicker · TxDayPickerRange · TxFormDayPicker · TxFormDayPickerRange", "react-day-picker ^10", "날짜 선택을 쓸 때만 peer를 함께 설치합니다"]
       ] as Row[]
+    },
+    /** 전역 토큰. 값은 packages/ui/src/tokens.css 에서 옮겼다 — 둘째 칸이 기본값, 셋째 칸이 다크 모드 값 */
+    tokens: {
+      section: "Design tokens",
+      searchable: true,
+      rows: [
+        ["--tx-color-primary", "#2563eb", "—", "채우는 색. 버튼 배경, 스위치, 체크박스"],
+        ["--tx-color-primary-strong", "#1d4ed8", "#60a5fa", "배경 위에서 글자로 읽히는 강조색. 현재 메뉴, 탭, 포커스 링"],
+        ["--tx-color-on-accent", "#ffffff", "—", "강조색 배경 위의 글자색"],
+        ["--tx-color-danger", "#ef4444", "#dc2626", "되돌릴 수 없는 동작(삭제 등)"],
+        ["--tx-color-warning", "#a16207", "#facc15", "막지는 않지만 주의를 줘야 하는 상황"],
+        ["--tx-color-success", "#15803d", "#4ade80", "성공을 알리는 상황"],
+        ["--tx-color-surface", "#ffffff", "#1f2937", "카드, 입력창처럼 배경 위에 올라온 면"],
+        ["--tx-color-muted", "#e5e7eb", "#374151", "보조 버튼처럼 배경에 가라앉은 면"],
+        ["--tx-color-border", "#d1d5db", "#4b5563", "테두리"],
+        ["--tx-color-text", "#111827", "#f3f4f6", "글자색"],
+        ["--tx-color-backdrop", "rgb(0 0 0 / 40%)", "—", "모달 · 서랍 뒤를 덮는 막"],
+        ["--tx-color-state", "#111827", "#f3f4f6", "hover · pressed 상태에서 섞는 색"],
+        ["--tx-state-hover", "16%", "—", "hover 때 섞는 비율"],
+        ["--tx-state-pressed", "28%", "—", "누를 때 섞는 비율"],
+        ["--tx-radius", "0.375rem", "—", "모서리 둥글기"],
+        ["--tx-focus-ring", "2px solid var(--tx-color-primary-strong)", "—", "키보드 포커스 표시"],
+        ["--tx-focus-ring-offset", "2px", "—", "포커스 표시와 요소 사이 간격"]
+      ] as Row[]
     }
   },
   axios: {
