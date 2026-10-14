@@ -12,7 +12,19 @@ import { describe, expect, it } from "vitest";
 
 const root = join(import.meta.dirname, "../../../../..");
 const pkg = (path: string) => join(root, "packages", path);
-const page = (name: string) => readFileSync(join(import.meta.dirname, `${name}.tsx`), "utf8");
+/** 페이지와 그 표의 내용(`data.ts`)을 함께 본다 — 표의 이름은 데이터에 있고 페이지는 그것을 그린다 */
+const data = readFileSync(join(import.meta.dirname, "data.ts"), "utf8");
+
+/** `data.ts` 에서 그 패키지 몫만 잘라 낸다 — 다른 패키지의 표에 이름이 있다고 통과하면 안 된다 */
+function slice(key: string): string {
+  const tables = data.slice(data.indexOf("export const TABLES"));
+  const start = tables.indexOf(`\n  ${key}: {`);
+  if (start < 0) throw new Error(`data.ts 에 ${key} 가 없다`);
+  const end = tables.indexOf("\n  }", start + 1);
+  return tables.slice(start, end);
+}
+
+const page = (name: string, key: string) => readFileSync(join(import.meta.dirname, `${name}.tsx`), "utf8") + (key === "ui" ? data.slice(data.indexOf("export const CATALOG")) : slice(key));
 
 const stripComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 
@@ -61,21 +73,21 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
     const names = [...exportsOf(pkg("axios/src/index.ts")), ...exportsOf(pkg("axios/src/singleton.ts"))];
 
     expect(names.length).toBeGreaterThan(10);
-    expect(missing(names, page("ApiAxios"))).toEqual([]);
+    expect(missing(names, page("ApiAxios", "axios"))).toEqual([]);
   });
 
   it("@txstack/route-meta", () => {
     const names = exportsOf(pkg("route-meta/src/index.ts"));
 
     expect(names.length).toBeGreaterThan(10);
-    expect(missing(names, page("ApiRouteMeta"))).toEqual([]);
+    expect(missing(names, page("ApiRouteMeta", "routeMeta"))).toEqual([]);
   });
 
   it("@txstack/hooks — 훅마다 진입점", () => {
     const names = [...exportsOf(pkg("hooks/src/useObjectState.ts")), ...exportsOf(pkg("hooks/src/useUrlQuery.ts"))];
 
     expect(names).toContain("useUrlQuery");
-    expect(missing(names, page("ApiHooks"))).toEqual([]);
+    expect(missing(names, page("ApiHooks", "hooks"))).toEqual([]);
   });
 
   /** props 는 Storybook 이 갖는다. 여기서는 컴포넌트(값 export)가 목록에 다 있는지만 본다 */
@@ -83,6 +95,6 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
     const names = [...exportsOf(pkg("ui/src/index.ts"), true), ...exportsOf(pkg("ui/src/aggrid.ts"), true), ...exportsOf(pkg("ui/src/daypicker.ts"), true)].filter((name) => name.startsWith("Tx"));
 
     expect(names.length).toBeGreaterThan(40);
-    expect(missing(names, page("ApiUi"))).toEqual([]);
+    expect(missing(names, page("ApiUi", "ui"))).toEqual([]);
   });
 });

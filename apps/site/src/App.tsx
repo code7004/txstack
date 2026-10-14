@@ -5,6 +5,7 @@ import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { DocPager } from "./components/DocPager";
 import { PageToc } from "./components/PageToc";
 import { SiteFooter } from "./pages/SiteFooter";
+import { SiteSearch } from "./search/SiteSearch";
 import { routes } from "./routes";
 
 /**
@@ -160,6 +161,8 @@ function Layout({ children }: { children: ReactNode }) {
           </NavLink>
 
           <div className="ms-auto flex items-center gap-1">
+            {/* 사이트 검색 — 페이지 · 섹션 · API 항목. 색인은 코드에 이미 있는 것을 모은다(search/searchIndex) */}
+            <SiteSearch narrow={narrow} />
             <a href="https://github.com/code7004/txstack" className="rounded px-3 py-2 text-sm hover:underline" target="_blank" rel="noreferrer">
               GitHub
             </a>
