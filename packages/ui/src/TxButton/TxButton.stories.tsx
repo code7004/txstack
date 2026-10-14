@@ -60,7 +60,7 @@ const noControls = { controls: { disable: true } };
 
 /** 컨트롤 패널에서 값을 바꿔가며 확인한다. */
 export const Playground: Story = {
-  args: { label: "확인", variant: "primary", disabled: false, type: "button", className: "" },
+  args: { label: "확인", variant: "primary", icon: false, disabled: false, type: "button", className: "" },
   render: (args) => <TxButton {...args} />
 };
 
@@ -76,6 +76,44 @@ export const Variant: Story = {
       {VARIANTS.map((v) => (
         <TxButton key={v} variant={v} label={v} />
       ))}
+    </div>
+  )
+};
+
+/**
+ * `icon` — 아이콘 하나만 담는 정사각형. 글자 하나짜리 버튼이 글자 폭만큼 좁아지지 않는다.
+ *
+ * **보이는 글자가 없으므로 `aria-label` 을 함께 준다.** 크기는 `--tx-button-icon-size`(기본 2.5rem)로
+ * 바꾼다 — 터치 화면 위주라면 `.tx-button { --tx-button-icon-size: 2.75rem; }`.
+ */
+export const Icon: Story = {
+  parameters: noControls,
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <TxButton icon label="⌕" aria-label="검색" variant="ghost" />
+        <TxButton icon label="☀" aria-label="밝게" variant="ghost" />
+        <TxButton icon label="✎" aria-label="고치기" variant="secondary" />
+        <TxButton icon label="+" aria-label="추가" />
+        <TxButton icon label="✕" aria-label="삭제" variant="danger" />
+        <TxButton icon aria-label="설정" variant="secondary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" />
+          </svg>
+        </TxButton>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">icon 없이 →</span>
+        <TxButton label="⌕" aria-label="검색" variant="ghost" />
+        <TxButton label="☀" aria-label="밝게" variant="ghost" />
+        <TxButton label="+" aria-label="추가" />
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold text-slate-500 dark:text-slate-400">--tx-button-icon-size: 2.75rem →</span>
+        <TxButton icon label="⌕" aria-label="검색" variant="ghost" style={vars({ "--tx-button-icon-size": "2.75rem" })} />
+        <TxButton icon label="+" aria-label="추가" style={vars({ "--tx-button-icon-size": "2.75rem" })} />
+      </div>
     </div>
   )
 };
