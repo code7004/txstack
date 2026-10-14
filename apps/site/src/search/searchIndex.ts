@@ -1,7 +1,7 @@
 import type { RouteNode, RouteTree } from "@txstack/route-meta";
 import { isValidElement } from "react";
 import { anchorsOf } from "../lib/slug";
-import { API_PAGES, CATALOG, TABLES, type ApiTable } from "../pages/api/data";
+import { API_PAGES, CATALOG, TABLES, componentAnchor, rowAnchor, type ApiTable } from "../pages/api/data";
 import { routes } from "../routes";
 import { entry, type SearchEntry } from "./rank";
 
@@ -53,13 +53,12 @@ const apiEntries = (): SearchEntry[] => [
     (Object.values(TABLES[key]) as ApiTable[])
       .filter((table) => table.searchable)
       .flatMap((table) => {
-        const [anchor] = anchorsOf([table.section]);
         const where = ["API", API_PAGES[key].label, table.label ?? table.section];
 
-        return table.rows.map(([name, , , description]) => entry(name, where, `${API_PAGES[key].path}#${anchor}`, "api", typeof description === "string" ? description : undefined));
+        return table.rows.map(([name, , , description]) => entry(name, where, `${API_PAGES[key].path}#${rowAnchor(table, name)}`, "api", typeof description === "string" ? description : undefined));
       })
   ),
-  ...CATALOG.flatMap(([category, items]) => items.flatMap((item) => [item.name, ...(item.also ?? [])].map((name) => entry(name, ["API", "ui", category], "/api/ui#components-by-category", "component", item.desc))))
+  ...CATALOG.flatMap(([category, items]) => items.flatMap((item) => [item.name, ...(item.also ?? [])].map((name) => entry(name, ["API", "ui", category], `/api/ui#${componentAnchor(item.name)}`, "component", item.desc))))
 ];
 
 /* --- 2. 섹션 ------------------------------------------------------------------------------ */

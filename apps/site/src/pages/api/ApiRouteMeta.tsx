@@ -3,7 +3,7 @@ import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
-import { TABLES } from "./data";
+import { TABLES, tableAnchor } from "./data";
 
 const muted = "text-slate-600 dark:text-slate-300";
 
@@ -23,7 +23,7 @@ export function ApiRouteMeta() {
     >
       <Block title="Install">
         <CodeBlock language="bash" title="sh">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
-        <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.routeMeta.installEntry.rows} />
+        <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.routeMeta.installEntry.rows} anchor={tableAnchor(TABLES.routeMeta.installEntry)} />
         <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`RouteTree
  ├─ buildRouteObjects / RouteRenderer → 라우터
  ├─ getNavigableRoutes                → 메뉴 (NavRoute[])
@@ -38,13 +38,13 @@ type RouteNode = PathRouteNode | IndexRouteNode;`}</Signature>
         </p>
 
         <RefLabel>PathRouteNode — 주소가 있는 화면</RefLabel>
-        <RefTable rows={TABLES.routeMeta.pathroutenode.rows} />
+        <RefTable rows={TABLES.routeMeta.pathroutenode.rows} anchor={tableAnchor(TABLES.routeMeta.pathroutenode)} />
 
         <RefLabel>IndexRouteNode — 부모 주소의 첫 화면</RefLabel>
-        <RefTable rows={TABLES.routeMeta.indexroutenode.rows} />
+        <RefTable rows={TABLES.routeMeta.indexroutenode.rows} anchor={tableAnchor(TABLES.routeMeta.indexroutenode)} />
 
         <RefLabel>RouteMeta</RefLabel>
-        <RefTable rows={TABLES.routeMeta.routemeta.rows} />
+        <RefTable rows={TABLES.routeMeta.routemeta.rows} anchor={tableAnchor(TABLES.routeMeta.routemeta)} />
 
         <CodeBlock title="src/routes.tsx">{`export const routes = {
   home: { path: "/", element: <Home />, meta: { label: "홈" } },
@@ -89,13 +89,13 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
         <p className={muted}>메뉴에 보일 항목만 골라 같은 모양의 배열로 돌려줍니다. 선언 순서를 지킵니다.</p>
 
         <RefLabel>라우터와 메뉴의 필터 규칙</RefLabel>
-        <RefTable head={["Node", "Router", "Menu", "Note"]} rows={TABLES.routeMeta.filterRules.rows} />
+        <RefTable head={["Node", "Router", "Menu", "Note"]} rows={TABLES.routeMeta.filterRules.rows} anchor={tableAnchor(TABLES.routeMeta.filterRules)} />
         <p className={muted}>
           <code>canAccess</code>는 <code>meta.permissions</code>가 있는 노드에서만 불립니다. 넘기지 않으면 권한이 걸린 노드는 모두 빠집니다. 권한 모델(단일 · 다중 · 계층)은 앱이 이 함수로 정합니다.
         </p>
 
         <RefLabel>NavRoute</RefLabel>
-        <RefTable rows={TABLES.routeMeta.navroute.rows} />
+        <RefTable rows={TABLES.routeMeta.navroute.rows} anchor={tableAnchor(TABLES.routeMeta.navroute)} />
         <CodeBlock title="example">{`const menu = getNavigableRoutes(routes, (permissions) =>
   permissions.some((p) => user.roles.includes(p))
 );`}</CodeBlock>
@@ -110,11 +110,11 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
           지금 주소에 맞는 노드와, 맨 위에서 거기까지 이어지는 경로를 돌려줍니다. 트리와 주소가 그대로면 같은 객체를 돌려주므로 <code>useEffect</code> 의존성에 넣어도 됩니다. 라우터 안에서 써야 합니다.
         </p>
         <RefLabel>CurrentRoute</RefLabel>
-        <RefTable rows={TABLES.routeMeta.currentroute.rows} />
+        <RefTable rows={TABLES.routeMeta.currentroute.rows} anchor={tableAnchor(TABLES.routeMeta.currentroute)} />
       </Block>
 
       <Block title="Types">
-        <RefTable head={["Type", "Shape", "", "Description"]} rows={TABLES.routeMeta.typeList.rows} />
+        <RefTable head={["Type", "Shape", "", "Description"]} rows={TABLES.routeMeta.typeList.rows} anchor={tableAnchor(TABLES.routeMeta.typeList)} />
       </Block>
     </Page>
   );

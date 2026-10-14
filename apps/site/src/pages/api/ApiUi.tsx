@@ -2,7 +2,7 @@ import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Page } from "../../components/Page";
 import { STORYBOOK_URL } from "../../lib/links";
-import { CATALOG, storyUrl } from "./data";
+import { CATALOG, componentAnchor, storyUrl } from "./data";
 
 export function ApiUi() {
   return (
@@ -30,7 +30,7 @@ import { TxDayPicker } from "@txstack/ui/daypicker"; // peer: react-day-picker`}
               <table className="w-full text-sm">
                 <tbody>
                   {items.map((item) => (
-                    <tr key={item.name} className="border-t align-top first:border-t-0" style={{ borderColor: "var(--tx-color-border)" }}>
+                    <tr key={item.name} id={componentAnchor(item.name)} className="site-anchor border-t align-top first:border-t-0" style={{ borderColor: "var(--tx-color-border)" }}>
                       <td className="w-56 px-3 py-2 whitespace-nowrap">
                         <a href={storyUrl(category, item)} target="_blank" rel="noreferrer" className="font-mono text-xs font-semibold underline">
                           {item.name}

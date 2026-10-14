@@ -3,7 +3,7 @@ import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
-import { TABLES } from "./data";
+import { TABLES, tableAnchor } from "./data";
 
 const muted = "text-slate-600 dark:text-slate-300";
 
@@ -23,7 +23,7 @@ export function ApiAxios() {
     >
       <Block title="Install">
         <CodeBlock language="bash" title="sh">{`pnpm add @txstack/axios axios`}</CodeBlock>
-        <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.axios.installEntry.rows} />
+        <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.axios.installEntry.rows} anchor={tableAnchor(TABLES.axios.installEntry)} />
       </Block>
 
       <Block title="createHttpClient">
@@ -39,7 +39,7 @@ export function ApiAxios() {
 });`}</CodeBlock>
 
         <RefLabel>HttpClientOptions</RefLabel>
-        <RefTable rows={TABLES.axios.httpClientOptions.rows} />
+        <RefTable rows={TABLES.axios.httpClientOptions.rows} anchor={tableAnchor(TABLES.axios.httpClientOptions)} />
         <TxAlert variant="warning" title="Content-Type을 고정하지 마세요">
           <code>headers</code>에 <code>Content-Type</code>을 넣으면 파일 업로드(<code>FormData</code>)에서 필요한 boundary 값이 빠져 서버가 본문을 읽지 못합니다. 보내는 데이터에 맞게 axios가 정하도록 두세요.
         </TxAlert>
@@ -49,7 +49,7 @@ export function ApiAxios() {
         <p className={muted}>
           <code>createHttpClient</code>가 돌려주는 객체입니다. 요청 메서드는 <code>unwrap</code>을 거친 데이터를 돌려줍니다.
         </p>
-        <RefTable head={["Member", "Signature", "Returns", "Description"]} rows={TABLES.axios.httpClientMembers.rows} />
+        <RefTable head={["Member", "Signature", "Returns", "Description"]} rows={TABLES.axios.httpClientMembers.rows} anchor={tableAnchor(TABLES.axios.httpClientMembers)} />
         <p className={muted}>
           모든 요청 메서드의 마지막 인자 <code>config</code>는 axios의 <code>AxiosRequestConfig</code>입니다. 요청 하나에만 다른 <code>timeout</code>이나 헤더를 줄 때 씁니다.
         </p>
@@ -60,9 +60,9 @@ export function ApiAxios() {
         <p className={muted}>
           어떤 오류든 <code>IApiError</code> 한 가지 모양으로 맞춰 줍니다. 화면에서는 이것의 <code>statusCode</code>와 <code>message</code>만 보여 주면 됩니다.
         </p>
-        <RefTable head={["Input", "statusCode", "message", "Note"]} rows={TABLES.axios.parseApiErrorCases.rows} />
+        <RefTable head={["Input", "statusCode", "message", "Note"]} rows={TABLES.axios.parseApiErrorCases.rows} anchor={tableAnchor(TABLES.axios.parseApiErrorCases)} />
         <RefLabel>IApiError</RefLabel>
-        <RefTable rows={TABLES.axios.iapierror.rows} />
+        <RefTable rows={TABLES.axios.iapierror.rows} anchor={tableAnchor(TABLES.axios.iapierror)} />
       </Block>
 
       <Block title="removeUndefined">
@@ -91,11 +91,11 @@ export function ApiAxios() {
 
       <Block title="Types">
         <RefLabel>RequestLog — onRequest가 받는 값</RefLabel>
-        <RefTable rows={TABLES.axios.requestlog.rows} />
+        <RefTable rows={TABLES.axios.requestlog.rows} anchor={tableAnchor(TABLES.axios.requestlog)} />
         <RefLabel>ResponseLog — onResponse가 받는 값</RefLabel>
-        <RefTable rows={TABLES.axios.responselog.rows} />
+        <RefTable rows={TABLES.axios.responselog.rows} anchor={tableAnchor(TABLES.axios.responselog)} />
         <RefLabel>DeleteOptions — delete의 두 번째 인자</RefLabel>
-        <RefTable rows={TABLES.axios.deleteoptions.rows} />
+        <RefTable rows={TABLES.axios.deleteoptions.rows} anchor={tableAnchor(TABLES.axios.deleteoptions)} />
       </Block>
 
       <Block title="Singleton (@txstack/axios/singleton)">
