@@ -67,7 +67,7 @@ export default function MemberGrid() {
       <div className="flex h-[30rem] flex-col">
         <TxAgGrid<Member>
           rowData={rows}
-          defaultColDef={{ flex: 1 }}
+          defaultColDef={{ flex: 1, minWidth: 110 }}
           option={{ headers: ["id", "name", "role", "team", "joinedAt"], serverSortColumns: ["name", "team", "joinedAt"], editColumns: ["role"] }}
           sortState={sort}
           onChangeSort={(next) => setQuery({ sort: next.key ?? "", order: next.value, page: 1 })}

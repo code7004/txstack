@@ -29,7 +29,7 @@ export function Tutorial() {
         </p>
         <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios react-router-dom axios`}</CodeBlock>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="site-stack-table w-full text-sm">
             <tbody className={muted}>
               {[
                 ["route-meta", "화면을 라우트에 등록하고 메뉴에 띄웁니다", "1단계"],

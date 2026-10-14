@@ -29,7 +29,7 @@ export function Start() {
           txstack은 네 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
         </p>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="site-stack-table w-full text-sm">
             <thead>
               <tr className="border-b text-start" style={{ borderColor: "var(--tx-color-border)" }}>
                 <th className="py-2 pe-4 text-start font-semibold">패키지</th>
@@ -43,7 +43,9 @@ export function Start() {
                 <tr key={item.name} className="border-b align-top" style={{ borderColor: "var(--tx-color-border)" }}>
                   <td className="py-2 pe-4 font-mono text-xs whitespace-nowrap text-[color:var(--tx-color-text)]">{item.name}</td>
                   <td className="py-2 pe-4">{item.when}</td>
-                  <td className="py-2 pe-4 font-mono text-xs">{item.peer}</td>
+                  <td className="py-2 pe-4 font-mono text-xs" data-label="함께 설치">
+                    {item.peer}
+                  </td>
                   <td className="py-2 whitespace-nowrap">
                     <Link to={item.guide} className="underline">
                       {item.guideLabel}

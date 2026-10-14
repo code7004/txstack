@@ -49,7 +49,7 @@ function SearchBox({ onDone, inputRef }: { onDone?: () => void; inputRef?: React
       onChangeText={setValue}
       onPick={go}
       filter={(_, keyword) => search(keyword, 12, entries).map((item) => optionOf.get(item)!)}
-      placeholder={`검색 (${isMac ? "⌘" : "Ctrl+"}K)`}
+      placeholder={onDone ? "페이지 · 컴포넌트 · API 검색" : `검색 (${isMac ? "⌘" : "Ctrl+"}K)`}
       aria-label="사이트 검색"
       onFocus={warm}
       maxHeight="24rem"

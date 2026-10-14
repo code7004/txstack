@@ -14,7 +14,7 @@ export function GuideTables() {
     <Page title="Tables & Lists" lead="목록을 보여 주는 방법을 고르고, 큰 표는 TxAgGrid로 만듭니다. 정렬 · 페이지 · 편집을 서버와 주소에 맞물리는 방법까지 다룹니다.">
       <Block title="Pick the right list">
         <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-          <table className="w-full text-sm">
+          <table className="site-stack-table w-full text-sm">
             <tbody className={muted}>
               {[
                 ["직접 그린 표 · 카드 목록 + TxPagination", "한 페이지에 수십 줄, 정렬이나 편집이 필요 없을 때. 추가 설치가 없습니다", "Tutorial의 회원 목록"],
