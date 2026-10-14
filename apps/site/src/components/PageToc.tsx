@@ -1,18 +1,11 @@
 import { useEffect, useState, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
+import { anchorsOf } from "../lib/slug";
 
 interface Heading {
   id: string;
   text: string;
 }
-
-/** 제목 글자를 주소 조각으로. 한글은 그대로 둔다 — 브라우저가 알아서 인코딩한다 */
-const slug = (text: string) =>
-  text
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, "-")
-    .replace(/^-|-$/g, "");
 
 /** 세 개 미만이면 목차가 오히려 군더더기다 */
 const MIN_HEADINGS = 3;
@@ -28,18 +21,14 @@ export function PageToc({ root }: { root: RefObject<HTMLElement | null> }) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState<string>();
 
-  // 화면이 바뀌면 제목을 다시 읽는다. 같은 글자의 제목이 둘이면 뒤에 번호를 붙인다
+  // 화면이 바뀌면 제목을 다시 읽는다. 앵커는 사이트 검색과 같은 규칙으로 만든다(lib/slug)
   useEffect(() => {
-    const seen = new Map<string, number>();
     const nodes = Array.from(root.current?.querySelectorAll<HTMLHeadingElement>("h2") ?? []);
+    const ids = anchorsOf(nodes.map((node) => node.textContent ?? ""));
 
     setHeadings(
-      nodes.map((node) => {
-        const base = slug(node.textContent ?? "") || "section";
-        const count = seen.get(base) ?? 0;
-        seen.set(base, count + 1);
-
-        node.id ||= count ? `${base}-${count + 1}` : base;
+      nodes.map((node, index) => {
+        node.id ||= ids[index]!;
         return { id: node.id, text: node.textContent ?? "" };
       })
     );
