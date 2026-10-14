@@ -13,6 +13,7 @@ import { ExampleDashboard } from "./pages/example/ExampleDashboard";
 import { ExampleErrorLogs } from "./pages/example/ExampleErrorLogs";
 import { ExampleGithub } from "./pages/example/ExampleGithub";
 import { ExampleHome } from "./pages/example/ExampleHome";
+import { ExampleLayout } from "./pages/example/ExampleLayout";
 import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
 import { GuideDialogs } from "./pages/guide/GuideDialogs";
 import { GuideForms } from "./pages/guide/GuideForms";
@@ -121,7 +122,7 @@ export const routes = {
 
   example: {
     path: "/example",
-    element: <SectionLayout />,
+    element: <ExampleLayout />,
     meta: { label: "Example", description: "txstack으로 끝까지 만든 화면" },
     children: {
       index: { index: true, element: <ExampleHome /> },

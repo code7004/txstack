@@ -164,6 +164,12 @@
    - [x] `Dashboard` — 숫자 카드 · 지난 7일 막대 · 자주 나는 경로(`TxProgress`) · 확인 필요 목록. 링크의 경로는
          **라우트 트리에서 꺼낸다**(`routes.example.children.errorLogs.path`) — 누르면 조건이 걸린 `Error Logs` 로 간다.
          두 예제는 같은 가짜 서버를 쓴다. 표를 쓰는 예제의 ag-grid 등록 · 테마는 `GridFrame` 하나가 맡는다
+   - [x] **TanStack Query 로** — 세 소비자 프로젝트가 모두 쓰므로 예제도 맞췄다. 조건은 `useUrlQuery`(주소) →
+         쿼리 키, 요청은 `createHttpClient`, 캐시 · 다시 부르기 · 로딩은 `useQuery` · `useMutation` ·
+         `invalidateQueries`. `QueryClientProvider` 는 `/example` 묶음의 껍데기(`ExampleLayout`) 하나 — 캐시를
+         함께 쓰므로 `Error Logs` 에서 상태를 바꾸면 `Dashboard` 의 숫자가 따라온다. **Tutorial · Guide 는 그대로
+         `useEffect`** 다(처음 따라 하는 사람에게 설치할 것을 늘리지 않는다). `HTTP Client` 장에 "5. With TanStack Query".
+         **패키지는 TanStack 에 의존하지 않는다** — 사이트에만 더했다
 2. **영문** — 위 ③
 3. **`Profile`** — 사용자만 쓸 수 있는 내용(`PROFILE` 을 채운다)
 4. **npm 배포 뒤 정리** — 설치 안내가 `.tgz` 기준이고 Home 에 "npm 배포 준비 중" 링크가 있다. 배포하면 `pnpm add` 로 바꾼다

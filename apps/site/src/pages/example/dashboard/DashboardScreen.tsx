@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { parseApiError } from "@txstack/axios";
-import { TxButton, TxCard, TxEmptyState, TxProgress, TxSkeleton, TxTag, TxToast } from "@txstack/ui";
+import { TxAlert, TxButton, TxCard, TxEmptyState, TxProgress, TxSkeleton, TxTag } from "@txstack/ui";
 import { routes } from "../../../routes";
-import { logApi, type LogSummary } from "../error-logs/logApi";
+import { logApi } from "../error-logs/logApi";
 
 /**
  * 오류 로그 화면으로 가는 주소. **경로는 라우트 트리에서 가져옵니다** — 경로를 바꿔도 이 링크가 따라옵니다.
@@ -14,21 +14,24 @@ const logsUrl = (query: Record<string, string>) => `${routes.example.children.er
 const card = "block rounded-lg transition hover:-translate-y-0.5 focus-visible:outline-2";
 
 export function DashboardScreen() {
-  const [summary, setSummary] = useState<LogSummary>();
-  const [updatedAt, setUpdatedAt] = useState<Date>();
+  // Error Logs 와 같은 "logs" 키 아래에 둡니다. 거기서 상태를 바꾸면 이 요약도 낡은 것으로 표시돼 다시 불립니다
+  const {
+    data: summary,
+    error,
+    refetch,
+    dataUpdatedAt
+  } = useQuery({
+    queryKey: ["logs", "summary"],
+    queryFn: logApi.summary
+  });
 
-  const load = useCallback(async () => {
-    try {
-      setSummary(await logApi.summary());
-      setUpdatedAt(new Date());
-    } catch (error) {
-      TxToast.show({ variant: "danger", title: "요약을 불러오지 못했습니다", message: parseApiError(error).message });
-    }
-  }, []);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  if (error) {
+    return (
+      <TxAlert variant="danger" title="요약을 불러오지 못했습니다">
+        {parseApiError(error).message}
+      </TxAlert>
+    );
+  }
 
   if (!summary) {
     return (
@@ -52,9 +55,15 @@ export function DashboardScreen() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2 text-sm text-slate-500 dark:text-slate-400">
-        <span>마지막 갱신 {updatedAt?.toLocaleTimeString("ko-KR")}</span>
+        <span>마지막 갱신 {new Date(dataUpdatedAt).toLocaleTimeString("ko-KR")}</span>
         {/* Promise 를 돌려주므로 끝날 때까지 버튼이 잠깁니다 */}
-        <TxButton label="새로고침" variant="secondary" onClick={load} />
+        <TxButton
+          label="새로고침"
+          variant="secondary"
+          onClick={async () => {
+            await refetch();
+          }}
+        />
       </div>
 
       {/* 숫자 카드. 누르면 그 조건이 걸린 오류 로그로 갑니다 */}

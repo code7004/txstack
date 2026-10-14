@@ -202,6 +202,30 @@ try {
         </TxAlert>
       </Block>
 
+      <Block title="5. With TanStack Query">
+        <p className={muted}>
+          클라이언트는 요청을 보내고 응답을 꺼내는 데까지만 합니다. 캐시 · 다시 부르기 · 로딩 상태는 TanStack Query 같은 데이터 라이브러리에 맡기면 됩니다. 클라이언트의 메서드는 <code>unwrap</code>을 거친 본문을 돌려주는 Promise라서{" "}
+          <code>queryFn</code>에 그대로 들어갑니다. 오류도 그대로 던지므로 <code>parseApiError</code>로 읽습니다.
+        </p>
+        <CodeBlock title="src/MemberList.tsx">{`const { data, error } = useQuery({
+  queryKey: ["members", query],
+  queryFn: () => api.get<MemberPage>("/members", query)
+});
+
+const remove = useMutation({
+  mutationFn: (id: string) => api.delete(\`/members/\${id}\`),
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ["members"] }),
+  onError: (cause) => TxToast.show({ variant: "danger", message: parseApiError(cause).message })
+});`}</CodeBlock>
+        <p className={muted}>
+          조건을 <code>useUrlQuery</code>로 주소에 두고 그 값을 쿼리 키로 쓰면, 주소가 바뀔 때 다시 부르는 일까지 저절로 됩니다.{" "}
+          <Link to="/example" className="underline">
+            Example
+          </Link>
+          의 Accounts · Error Logs · Dashboard가 이 방식으로 만들어져 있습니다.
+        </p>
+      </Block>
+
       <p className={muted}>
         이 클라이언트로 GitHub API를 부르는 예제는{" "}
         <Link to="/example/github" className="underline">

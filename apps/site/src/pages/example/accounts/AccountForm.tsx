@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { parseApiError } from "@txstack/axios";
 import { TxAlert, TxButton, TxForm, TxSlidePanel, TxToast } from "@txstack/ui";
 import { ROLES, STATUSES, TEAMS, accountApi, type Account, type AccountDraft } from "./accountApi";
@@ -41,7 +42,6 @@ function AccountFormBody({ target, onClose, onSaved }: { target: Account | "new"
   const [draft, setDraft] = useState<AccountDraft>(creating ? EMPTY : { ...target, password: undefined });
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState<Errors>({});
-  const [serverError, setServerError] = useState<string>();
 
   const set = <K extends keyof AccountDraft>(key: K, value: AccountDraft[K]) => {
     const next = { ...draft, [key]: value };
@@ -50,26 +50,29 @@ function AccountFormBody({ target, onClose, onSaved }: { target: Account | "new"
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: validate(next, confirm, creating)[key] }));
   };
 
-  const save = async () => {
+  const queryClient = useQueryClient();
+  const save = useMutation({
+    mutationFn: (next: AccountDraft) => (creating ? accountApi.create(next) : accountApi.update(target.id, next)),
+    onSuccess: (saved) => {
+      TxToast.show({ variant: "success", title: creating ? "계정을 만들었습니다" : "저장했습니다", message: `${saved.name} (${saved.username})` });
+      // 목록이 다시 불리도록 낡은 것으로 표시합니다
+      void queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      onSaved();
+    }
+  });
+
+  const submit = () => {
     const found = validate(draft, confirm, creating);
     setErrors(found);
-    if (Object.values(found).some(Boolean)) return;
-
-    try {
-      const saved = creating ? await accountApi.create(draft) : await accountApi.update(target.id, draft);
-      TxToast.show({ variant: "success", title: creating ? "계정을 만들었습니다" : "저장했습니다", message: `${saved.name} (${saved.username})` });
-      onSaved();
-    } catch (error) {
-      // 409(아이디 중복) 같은 서버의 거절은 폼 위에 그대로 보여 줍니다
-      setServerError(parseApiError(error).message);
-    }
+    if (!Object.values(found).some(Boolean)) save.mutate(draft);
   };
 
   return (
-    <TxForm noValidate onSubmit={save}>
-      {serverError && (
+    <TxForm noValidate onSubmit={submit}>
+      {/* 409(아이디 중복) 같은 서버의 거절은 폼 위에 그대로 보여 줍니다 */}
+      {save.error && (
         <TxAlert variant="danger" title="저장하지 못했습니다">
-          {serverError}
+          {parseApiError(save.error).message}
         </TxAlert>
       )}
 
@@ -90,7 +93,7 @@ function AccountFormBody({ target, onClose, onSaved }: { target: Account | "new"
 
       <TxForm.Flex>
         <TxButton type="button" label="취소" variant="secondary" onClick={onClose} />
-        <TxButton type="submit" label={creating ? "만들기" : "저장"} />
+        <TxButton type="submit" label={creating ? "만들기" : "저장"} disabled={save.isPending} />
       </TxForm.Flex>
     </TxForm>
   );

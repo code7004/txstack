@@ -44,16 +44,18 @@ export function ExampleErrorLogs() {
             의 카드는 이 주소에 조건을 붙여 이리로 보냅니다.
           </li>
           <li>
-            <strong>표 안에서 바로 고치기.</strong> <code>editColumns</code>에 상태 열을 적고 ag-grid의 선택 편집기를 씁니다. 바뀐 값은 <code>onCellValueChanged</code>로 받아 서버에 저장하고, 실패하면 다시 불러와 표를 서버 값으로 되돌립니다.
+            <strong>표 안에서 바로 고치기.</strong> <code>editColumns</code>에 상태 열을 적고 ag-grid의 선택 편집기를 씁니다. 바뀐 값은 <code>onCellValueChanged</code>로 받아 <code>useMutation</code>으로 저장합니다. 성공하든 실패하든{" "}
+            <code>onSettled</code>에서 <code>["logs"]</code>를 무효화해 표를 서버 값으로 맞춥니다.
           </li>
           <li>
-            <strong>무거운 것은 열 때만.</strong> 목록에는 스택 트레이스가 없습니다. 줄을 누르면 <code>TxModal</code>을 열고 그때 상세를 따로 불러옵니다. 기다리는 동안은 <code>TxSkeleton</code>이 자리를 지킵니다.
+            <strong>무거운 것은 열 때만.</strong> 목록에는 스택 트레이스가 없습니다. 줄을 누르면 <code>TxModal</code>을 열고 그때 상세를 따로 불러옵니다(<code>enabled</code>). 한 번 연 로그는 캐시에 남아 다시 열면 바로 뜹니다. 기다리는 동안은{" "}
+            <code>TxSkeleton</code>이 자리를 지킵니다.
           </li>
           <li>
             <strong>막을 때는 이유를 함께.</strong> 지울 수 없는 로그는 삭제 버튼을 막고 옆에 이유를 적습니다. 같은 규칙(<code>canRemove</code>)을 서버도 검사하므로 화면을 우회해도 409로 거절됩니다.
           </li>
           <li>
-            <strong>자동 새로고침.</strong> <code>setInterval</code>로 다시 부르기만 합니다. 조건은 주소에 있으므로 새로 부를 때 따로 챙길 것이 없습니다.
+            <strong>자동 새로고침.</strong> <code>refetchInterval: live ? 10_000 : false</code> 한 줄입니다. 조건은 쿼리 키(주소)에 있으므로 새로 부를 때 따로 챙길 것이 없습니다.
           </li>
         </ol>
       </Block>
