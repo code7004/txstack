@@ -91,7 +91,7 @@ export const routes = {
       components: {
         path: "/docs/components",
         element: <Components />,
-        meta: { label: "Components", description: "컴포넌트 카탈로그(Storybook)" }
+        meta: { label: "Components", description: "분류별 컴포넌트 갤러리" }
       }
     }
   },
