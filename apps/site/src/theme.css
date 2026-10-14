@@ -223,3 +223,38 @@ h2[id] {
   color: var(--tx-color-primary-strong);
   font-weight: 600;
 }
+
+/* --- 검색으로 고른 자리 --------------------------------------------------------- */
+
+/** 표의 줄 · 목록의 줄도 제목처럼 머리 줄 아래에서 멈춘다 */
+.site-anchor[id] {
+  scroll-margin-top: 7.5rem;
+}
+
+/**
+ * **검색으로 고른 자리를 잠깐 밝힌다**(`lib/reveal`). 강조색으로 칠했다가 천천히 빠진다 —
+ * 눈이 그 줄을 찾을 만큼만 머문다.
+ */
+[data-revealed] {
+  animation: site-reveal 2.4s ease-out;
+}
+
+@keyframes site-reveal {
+  0%,
+  35% {
+    background-color: color-mix(in oklab, var(--tx-color-primary) 28%, transparent);
+    box-shadow: inset 3px 0 0 var(--tx-color-primary-strong);
+  }
+
+  100% {
+    background-color: transparent;
+    box-shadow: inset 3px 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-revealed] {
+    animation: none;
+    background-color: color-mix(in oklab, var(--tx-color-primary) 28%, transparent);
+  }
+}

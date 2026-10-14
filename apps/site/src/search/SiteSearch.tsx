@@ -1,6 +1,7 @@
 import { TxButton, TxCombobox, TxModal, type TxComboboxOption } from "@txstack/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { revealAnchor } from "../lib/reveal";
 import { currentIndex, loadIndex, search, type SearchEntry } from "./searchIndex";
 
 /** 결과 한 줄. 이름 · 위치(흐리게) · 설명(둘째 줄)을 `TxCombobox` 가 그린다. `entry` 는 고른 뒤 갈 곳을 찾는 데 쓴다 */
@@ -34,6 +35,10 @@ function SearchBox({ onDone, inputRef }: { onDone?: () => void; inputRef?: React
     setValue("");
     onDone?.();
     navigate(option.entry.to);
+
+    // 지금 주소와 같아도 그 자리로 가서 밝힌다. 페이지만 고른 결과(앵커 없음)는 맨 위에서 시작한다
+    const [, anchor] = option.entry.to.split("#");
+    if (anchor) revealAnchor(decodeURIComponent(anchor));
   };
 
   return (

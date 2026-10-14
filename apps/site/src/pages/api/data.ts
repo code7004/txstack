@@ -1,4 +1,5 @@
 import type { Row } from "../../components/Reference";
+import { slug } from "../../lib/slug";
 import { STORYBOOK_URL } from "../../lib/links";
 
 /**
@@ -379,3 +380,15 @@ export const storyUrl = (category: string, item: CatalogItem) => {
   const id = `${category}-${item.name}`.toLowerCase();
   return `${STORYBOOK_URL}?path=${item.story ? `/story/${id}--${item.story}` : `/docs/${id}--docs`}`;
 };
+
+/**
+ * **표의 한 줄 · 목록의 한 컴포넌트마다 앵커가 있다.** 검색 결과가 섹션이 아니라 그 줄로 바로 가고,
+ * 같은 섹션의 두 항목(`timeout` · `maskFields`)도 서로 다른 주소를 갖는다. 페이지와 검색 색인이
+ * 같은 함수로 만든다 — 다르게 만들면 결과를 눌러도 그 줄을 못 찾는다.
+ */
+export const rowAnchor = (table: ApiTable, name: string) => `row-${slug(table.label ?? table.section)}-${slug(name)}`;
+
+/** 검색에 오르는 표만 줄마다 앵커를 단다 */
+export const tableAnchor = (table: ApiTable) => (table.searchable ? (name: string) => rowAnchor(table, name) : undefined);
+
+export const componentAnchor = (name: string) => `component-${slug(name)}`;
