@@ -21,7 +21,7 @@ export default defineConfig({
      * **React 사본이 둘이 되면 훅이 터진다.** 패키지를 소스로 잇는 순간 그 소스의 `react` 는
      * pnpm 이 패키지 쪽 `node_modules` 에서 찾아 준다 — 앱이 쓰는 것과 다른 사본이다.
      */
-    dedupe: ["react", "react-dom", "react-router-dom"],
+    dedupe: ["react", "react-dom", "react-router-dom", "ag-grid-community", "ag-grid-react"],
     alias: [
       { find: /^@txstack\/ui\/aggrid$/, replacement: pkg("ui/src/aggrid.ts") },
       { find: /^@txstack\/ui\/daypicker$/, replacement: pkg("ui/src/daypicker.ts") },

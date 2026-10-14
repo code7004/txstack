@@ -6,7 +6,9 @@ const DESIGN = [
   { to: "/docs/guide/tokens", title: "Tokens", what: "색, 모서리, 간격 같은 디자인 값을 CSS 변수로 바꿉니다. 값을 직접 바꿔 볼 수 있습니다" },
   { to: "/docs/guide/dark-mode", title: "Dark mode", what: "클래스 하나로 모든 컴포넌트가 다크 모드로 바뀝니다" },
   { to: "/docs/guide/layout", title: "Layout", what: "헤더, 메뉴, 본문 자리를 잡는 화면 틀과 좁은 화면 대응" },
-  { to: "/docs/guide/forms", title: "Forms", what: "캡션 · 오류를 입력란과 잇고, 검사하고, 두 칸으로 배치하는 입력 폼" }
+  { to: "/docs/guide/forms", title: "Forms", what: "캡션 · 오류를 입력란과 잇고, 검사하고, 두 칸으로 배치하는 입력 폼" },
+  { to: "/docs/guide/dialogs", title: "Dialogs & Toasts", what: "await로 답을 기다리는 확인 창, 어디서든 띄우는 알림, 모달과 옆 패널" },
+  { to: "/docs/guide/tables", title: "Tables & Lists", what: "목록 방식 고르기, TxAgGrid의 정렬 · 페이지 · 편집을 서버와 주소에 맞물리기" }
 ];
 
 const APP = [
