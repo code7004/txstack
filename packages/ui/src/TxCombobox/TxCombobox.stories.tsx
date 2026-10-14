@@ -142,6 +142,42 @@ export const Filter: Story = {
  * `limit` 을 주면 잘라내고 **몇 개가 더 있는지 알리는 줄**이 붙는다 — 없으면 사용자는
  * 이게 전부인 줄 안다.
  */
+const DOCS = [
+  { value: "/docs/start", label: "Getting Started", hint: "Documents", description: "필요한 패키지를 고르고 설치합니다" },
+  { value: "/docs/tutorial", label: "Tutorial", hint: "Documents", description: "목록 화면 하나를 끝까지 만듭니다" },
+  { value: "/api/axios#timeout", label: "timeout", hint: "axios › HttpClientOptions", description: "응답을 기다리는 최대 시간(ms)" },
+  { value: "/api/hooks#replace", label: "replace", hint: "hooks › UseUrlQueryOptions", description: "방문 기록을 쌓지 않고 지금 주소를 바꿉니다" },
+  { value: "/api/axios#maskFields", label: "maskFields", hint: "axios › HttpClientOptions", description: "로그에서 값을 가릴 필드 이름" }
+];
+
+/**
+ * **후보를 객체로 준다.** 이름 오른쪽에 흐린 글자(`hint`), 아래에 설명(`description`)이 붙는다.
+ * 보이는 이름(`label`)과 고르면 오는 값(`value`)이 갈려서, 글자가 같은 후보도 가를 수 있다.
+ *
+ * ```tsx
+ * <TxCombobox data={[{ value: "/docs/start", label: "Getting Started", hint: "Documents", description: "…" }]} onPick={(to) => navigate(to)} />
+ * ```
+ *
+ * 고르면 입력란에는 `label` 이 들어가고 `onPick` 에는 `value` 가 온다 — 아래 줄에 보인다.
+ * 직접 친 글자에는 값이 없다. 입력란의 값은 여전히 글자다.
+ */
+export const WithOptions: Story = {
+  parameters: noControls,
+  args: { data: [] },
+  render: function WithOptionsStory() {
+    const [picked, setPicked] = useState("(아직 고르지 않음)");
+
+    return (
+      <div style={{ minBlockSize: "22rem" }} className="flex flex-col gap-3">
+        <TxCombobox data={DOCS} placeholder="문서 검색" className="w-96" onPick={(value) => setPicked(value)} />
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          onPick: <code>{picked}</code>
+        </p>
+      </div>
+    );
+  }
+};
+
 export const ManyItems: Story = {
   parameters: noControls,
   render: () => {

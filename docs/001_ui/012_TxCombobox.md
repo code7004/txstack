@@ -29,6 +29,28 @@
 
 목록은 화면 맨 위 층으로 뜬다. `overflow: hidden` 안에 넣어도 잘리지 않는다.
 
+### 후보를 객체로도 받는다
+
+```tsx
+<TxCombobox
+  data={[
+    { value: "/api/axios#timeout", label: "timeout", description: "응답을 기다리는 최대 시간(ms)", hint: "axios › HttpClientOptions" },
+    { value: "/api/axios#maskFields", label: "maskFields", description: "로그에서 값을 가릴 필드 이름", hint: "axios › HttpClientOptions" }
+  ]}
+  onPick={(value, option) => navigate(value)}
+/>
+```
+
+| 필드          | 필수 | 하는 일                                                                          |
+| ------------- | ---- | -------------------------------------------------------------------------------- |
+| `value`       | O    | 고르면 `onPick` 으로 오는 값. 보이는 글자와 따로라 **글자가 같은 후보도 가른다** |
+| `label`       |      | 목록과 입력란에 보이는 이름. 없으면 `value`                                      |
+| `description` |      | 이름 아래 작은 둘째 줄                                                           |
+| `hint`        |      | 이름 오른쪽의 흐린 글자 — 위치 · 분류                                            |
+
+글자 후보(`string[]`)는 그대로다 — 그리는 법도, 고를 때도, 타입도 같다. 컴포넌트가 후보 타입에 대해
+제네릭이라 `data` · `filter` · `onPick` 의 타입이 서로 맞는다.
+
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxCombobox/`
@@ -48,6 +70,12 @@
 
 **값은 보이는 글자 그 자체다.** `TxDropdown` 처럼 `{ name, value }` 를 받지 않는다 —
 목록에 없는 글자를 쳤을 때 대응할 코드값이 없기 때문이다. 코드값이 필요하면 그건 `TxDropdown` 의 일이다.
+
+**객체 후보를 더하면서도 이 규칙은 그대로다** (`apps/site` 의 사이트 검색에서 요구됐다 — 결과에
+설명을 두 줄로 두고, 글자가 같은 후보를 가려야 했다). 입력란의 값은 여전히 글자이고
+(`onChangeText` 로 `label` 이 온다), `value` 는 **목록에서 골랐을 때만** `onPick` 에 실려 온다.
+친 글자에 코드값을 지어내지 않는다. 기본 거르기는 `label` 을 본다 — `description` · `hint` 까지
+보려면 `filter` 를 준다.
 
 `Home`·`End` 를 **가로채지 않는 것**이 `TxDropdown` 과 다른 점이다. 글자 안에서 커서를 옮기는
 키라 목록 이동에 뺏기면 편집이 불편해진다.

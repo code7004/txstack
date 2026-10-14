@@ -91,7 +91,8 @@ describe("TxCombobox — 후보 목록", () => {
 
     expect(field().value).toBe("부산");
     expect(onChangeText).toHaveBeenCalledWith("부산");
-    expect(onPick).toHaveBeenCalledWith("부산");
+    // 둘째 인자는 고른 후보 그대로다. 글자 후보면 첫째와 같다 — 첫째만 읽던 코드는 그대로 돈다
+    expect(onPick).toHaveBeenCalledWith("부산", "부산");
     expect(list()).toBeNull();
   });
 
@@ -275,6 +276,102 @@ describe("TxCombobox — 접근성과 구조", () => {
   });
 });
 
+/**
+ * **객체 후보.** 보이는 글자와 고르면 오는 값이 갈린다. 입력란의 값은 여전히 글자다 —
+ * 친 글자에 코드값을 지어내지 않고, `value` 는 목록에서 골랐을 때만 `onPick` 으로 온다.
+ */
+describe("TxCombobox — 객체 후보", () => {
+  const PAGES = [
+    { value: "/docs/start", label: "Getting Started", description: "필요한 패키지를 고르고 설치합니다", hint: "Documents" },
+    { value: "/api/axios#timeout", label: "timeout", description: "응답을 기다리는 최대 시간", hint: "axios › Options" },
+    { value: "/api/hooks#timeout", label: "timeout", hint: "hooks" },
+    { value: "/about" }
+  ];
+
+  it("이름 · 흐린 글자 · 설명을 함께 그린다", () => {
+    render(<TxCombobox data={PAGES} />);
+    fireEvent.focus(field());
+
+    const first = options()[0]!;
+    expect(first.hasAttribute("data-rich")).toBe(true);
+    expect(first.querySelector(".tx-combobox__label")?.textContent).toBe("Getting Started");
+    expect(first.querySelector(".tx-combobox__hint")?.textContent).toBe("Documents");
+    expect(first.querySelector(".tx-combobox__description")?.textContent).toBe("필요한 패키지를 고르고 설치합니다");
+  });
+
+  it("없는 칸은 그리지 않고, label 이 없으면 value 를 보인다", () => {
+    render(<TxCombobox data={PAGES} />);
+    fireEvent.focus(field());
+
+    const last = options()[3]!;
+    expect(last.querySelector(".tx-combobox__label")?.textContent).toBe("/about");
+    expect(last.querySelector(".tx-combobox__hint")).toBeNull();
+    expect(last.querySelector(".tx-combobox__description")).toBeNull();
+  });
+
+  it("고르면 입력란에는 label 이, onPick 에는 value 와 후보가 온다", () => {
+    const onChangeText = vi.fn();
+    const onPick = vi.fn();
+    render(<TxCombobox data={PAGES} onChangeText={onChangeText} onPick={onPick} />);
+
+    fireEvent.focus(field());
+    fireEvent.click(options()[1]!);
+
+    expect(field().value).toBe("timeout");
+    expect(onChangeText).toHaveBeenCalledWith("timeout");
+    expect(onPick).toHaveBeenCalledWith("/api/axios#timeout", PAGES[1]);
+  });
+
+  /** 사이트 검색에서 드러났다 — 글자만으로는 같은 이름의 두 항목을 가를 수 없었다. */
+  it("글자가 같은 후보도 value 로 갈린다", () => {
+    const onPick = vi.fn();
+    render(<TxCombobox data={PAGES} onPick={onPick} />);
+
+    type("timeout");
+    expect(options()).toHaveLength(2);
+
+    fireEvent.keyDown(field(), { key: "ArrowDown" });
+    fireEvent.keyDown(field(), { key: "ArrowDown" });
+    fireEvent.keyDown(field(), { key: "Enter" });
+
+    expect(onPick).toHaveBeenCalledWith("/api/hooks#timeout", PAGES[2]);
+  });
+
+  it("기본 거르기는 label 을 본다 — 설명과 value 는 보지 않는다", () => {
+    render(<TxCombobox data={PAGES} />);
+
+    type("설치");
+    expect(options()).toHaveLength(0);
+
+    type("getting");
+    expect(options()).toHaveLength(1);
+  });
+
+  it("filter 는 객체를 받고 객체를 돌려준다", () => {
+    render(<TxCombobox data={PAGES} filter={(data, keyword) => data.filter((page) => page.hint?.toString().includes(keyword))} />);
+
+    type("hooks");
+    expect(options().map((option) => option.querySelector(".tx-combobox__label")?.textContent)).toEqual(["timeout"]);
+  });
+
+  it("직접 친 글자는 그대로 남고 onPick 은 오지 않는다", () => {
+    const onPick = vi.fn();
+    render(<TxCombobox data={PAGES} onPick={onPick} />);
+
+    type("새로운 글자");
+    expect(field().value).toBe("새로운 글자");
+    expect(onPick).not.toHaveBeenCalled();
+  });
+
+  it("글자 후보는 예전처럼 글자만 그린다", () => {
+    render(<TxCombobox data={CITIES} />);
+    fireEvent.focus(field());
+
+    expect(options()[0]!.hasAttribute("data-rich")).toBe(false);
+    expect(options()[0]!.textContent).toBe("서울");
+  });
+});
+
 describe("TxCombobox — CSS 계약", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -307,7 +404,7 @@ describe("TxCombobox — CSS 계약", () => {
   });
 
   /** 목록과 안내 줄은 팝업 안에 있다. 입력창은 앵커 쪽이다. */
-  const POPUP_SIDE = /__(list|item|more)/;
+  const POPUP_SIDE = /__(list|item|more|label|hint|description)/;
 
   /**
    * 팝업은 `document.body` 로 포털되므로 앵커의 자손이 아니다. CSS 변수는 DOM 을 따라
