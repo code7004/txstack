@@ -6,9 +6,9 @@ import { Block, Page } from "../components/Page";
 import { searchRepos, toMessage, type Repo, type RepoSort } from "../lib/github";
 
 const SORTS = [
-  { name: "관련도", value: "best-match" },
+  { name: "관련도순", value: "best-match" },
   { name: "스타 많은 순", value: "stars" },
-  { name: "최근 갱신", value: "updated" }
+  { name: "최근 업데이트순", value: "updated" }
 ] as const;
 
 const PER_PAGE = 10;
@@ -75,14 +75,14 @@ export function Examples() {
   const search = (patch: { q?: string; sort?: RepoSort }) => setQuery({ ...patch, page: 1 });
 
   return (
-    <Page title="Example" lead="공개 API 를 실제로 부르는 화면. 조회 조건은 주소에 실려 뒤로가기가 동작한다.">
-      <Block title="GitHub 저장소 검색">
+    <Page title="Example" lead="GitHub 검색 API를 실제로 호출하는 예제입니다. 검색어와 정렬을 바꾸고 페이지를 넘겨 보세요. 인증 없이 호출하므로 1분에 10번 넘게 검색하면 GitHub이 요청을 막는데, 이때 나오는 오류 화면도 일부러 그대로 보여 줍니다.">
+      <Block title="GitHub repository search">
         <div className="flex flex-wrap items-center gap-2">
-          <TxSearchInput placeholder="검색어를 넣고 Enter" aria-label="저장소 검색" className="w-64" defaultValue={query.q} onSubmitText={(value) => search({ q: value })} onClear={() => search({ q: "" })} />
+          <TxSearchInput placeholder="검색어 입력 후 Enter" aria-label="저장소 검색" className="w-64" defaultValue={query.q} onSubmitText={(value) => search({ q: value })} onClear={() => search({ q: "" })} />
 
           <TxDropdown data={SORTS} value={query.sort} aria-label="정렬" className="w-40" onChangeText={(value) => search({ sort: (value ?? "best-match") as RepoSort })} />
 
-          <span className="text-sm text-slate-500 dark:text-slate-400">{loading ? "찾는 중…" : `${total.toLocaleString()}개`}</span>
+          <span className="text-sm text-slate-500 dark:text-slate-400">{loading ? "검색 중…" : `${total.toLocaleString()}개`}</span>
 
           <code className="ms-auto font-mono text-xs text-slate-500 dark:text-slate-400">
             ?q={query.q || "—"}&amp;page={query.page}&amp;sort={query.sort}
@@ -90,14 +90,14 @@ export function Examples() {
         </div>
 
         {error && (
-          <TxAlert variant="danger" title="요청이 실패했다">
+          <TxAlert variant="danger" title="요청에 실패했습니다">
             {error}
           </TxAlert>
         )}
 
         {!error && !query.q && (
-          <TxAlert variant="info" title="검색어를 넣어 보라">
-            GitHub 는 빈 검색어를 받지 않는다. 그래서 이 화면은 요청을 아예 보내지 않는다.
+          <TxAlert variant="info" title="검색어를 입력해 주세요">
+            GitHub은 빈 검색어로 검색할 수 없어서, 검색어가 없으면 요청을 보내지 않습니다.
           </TxAlert>
         )}
 
@@ -133,31 +133,33 @@ export function Examples() {
         </div>
       </Block>
 
-      <Block title="주소가 상태다">
+      <Block title="Query conditions in the URL">
         <p className="text-slate-600 dark:text-slate-300">
-          위에서 검색어를 바꾸고 쪽을 넘겨 보라 — <strong>주소가 함께 바뀐다.</strong> 새로고침해도, 이 주소를 남에게 보내도 같은 화면이 뜬다. 조건을 담아 둘 곳을 따로 만들지 않아도 된다.
+          위에서 검색어를 바꾸거나 페이지를 넘기면 <strong>주소도 함께 바뀝니다.</strong> 새로고침하거나 이 주소를 다른 사람에게 보내도 같은 화면이 열립니다. <code>useUrlQuery</code>가 주소의 쿼리를 상태처럼 다루므로 조건을 저장할 상태를 따로 만들
+          필요가 없습니다.
         </p>
 
         <CodeBlock title="Example.tsx">{`const [query, setQuery] = useUrlQuery({
   defaults: { q: "react hooks", page: 1, sort: "stars" as RepoSort }
 });
 
-// 기본값의 타입이 복원 규칙이다 — page: 1 이라 ?page=2 를 숫자로 읽는다
-// 조건이 바뀌면 늘 1쪽으로
+// 기본값의 타입대로 값을 읽습니다 — page: 1이므로 ?page=2를 숫자로 읽습니다
+// 조건이 바뀌면 1페이지로 돌아갑니다
 const search = (patch) => setQuery({ ...patch, page: 1 });`}</CodeBlock>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>기본은 히스토리를 쌓지 않는다</strong>(<code>replace: true</code>). 그래서 조건을 열 번 만져도 <strong>뒤로가기 한 번이면 이 화면을 벗어난다</strong> — 쌓으면 이전 화면으로 나가려고 열 번을 눌러야 한다.
+          <strong>기본적으로 히스토리를 쌓지 않습니다</strong>(<code>replace: true</code>). 그래서 조건을 열 번 바꿔도 <strong>뒤로 가기 한 번이면 이 페이지를 벗어납니다</strong>. 히스토리를 쌓으면 이전 페이지로 돌아가기 위해 뒤로 가기를 열 번 눌러야
+          합니다.
         </p>
 
         <p className="text-slate-600 dark:text-slate-300">
-          조건 하나하나를 되돌릴 수 있게 하려면 <code>replace: false</code> 다. 그때는 뒤로가기가 <strong>직전 조건</strong>으로 돌아간다 — 어느 쪽이 맞는지는 화면이 정한다.
+          조건을 하나씩 되돌릴 수 있게 하려면 <code>replace: false</code>를 넘기세요. 이때는 뒤로 가기를 누르면 <strong>직전 조건</strong>으로 돌아갑니다. 어느 방식이 맞는지는 화면에 따라 정하면 됩니다.
         </p>
       </Block>
 
-      <Block title="요청은 정책을 주입받는다">
+      <Block title="The app sets the request policy">
         <p className="text-slate-600 dark:text-slate-300">
-          이 화면의 요청은 <code>@txstack/axios</code> 로 만든 클라이언트가 보낸다. <strong>토큰 · 401 처리 · 응답 봉투를 라이브러리가 정하지 않는다</strong> — 앱이 옵션으로 준다.
+          이 페이지의 요청은 <code>@txstack/axios</code>로 만든 클라이언트가 보냅니다. <strong>토큰, 401 처리, 응답 형식은 라이브러리가 정하지 않고</strong> 앱이 옵션으로 넘깁니다.
         </p>
 
         <CodeBlock title="lib/github.ts">{`export const github = createHttpClient({
@@ -165,18 +167,19 @@ const search = (patch) => setQuery({ ...patch, page: 1 });`}</CodeBlock>
   timeout: 10_000,
   headers: { Accept: "application/vnd.github+json" },
 
-  // 회사 API 가 { body: T } 봉투면 이 자리에
+  // API 응답이 { body: T } 형식이라면 여기서 실제 데이터만 꺼냅니다
   // unwrap: (data) => data.body,
 
-  // 토큰을 어디에 두는지도 앱이 정한다
+  // 토큰을 어디에 저장할지도 앱이 정합니다
   getToken: () => undefined,
   onUnauthorized: () => logout()
 });
 
 const data = await github.get<RepoSearch>("/search/repositories", { q, page, per_page: 10 });`}</CodeBlock>
 
-        <TxAlert variant="warning" title="에러도 한 형태로 온다">
-          <code>parseApiError</code> 는 네트워크 끊김 · 시간 초과 · 서버 본문을 전부 <code>{"{ statusCode, message }"}</code> 로 정규화한다. 위 검색을 분당 10회 넘게 하면 GitHub 이 403 을 주는데, 그 자리에서 이 안내가 뜬다 — 직접 눌러 보라.
+        <TxAlert variant="warning" title="오류는 한 가지 형태로 받습니다">
+          <code>parseApiError</code>는 네트워크 끊김, 시간 초과, 서버의 오류 응답을 모두 <code>{"{ statusCode, message }"}</code> 형태로 맞춰 줍니다. 위에서 1분에 10번 넘게 검색하면 GitHub이 403을 돌려주고, 검색 결과 자리에 오류 안내가 표시됩니다.
+          직접 확인해 보세요.
         </TxAlert>
       </Block>
     </Page>

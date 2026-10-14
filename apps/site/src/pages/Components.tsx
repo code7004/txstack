@@ -8,24 +8,24 @@ import { STORYBOOK_URL } from "../lib/links";
  */
 export function Components() {
   return (
-    <Page title="Components" lead="부품 하나하나의 props · 토큰 · 조립 예제는 카탈로그(Storybook)에 있다. 49종 전부 실제로 움직여 볼 수 있다.">
+    <Page title="Components" lead="컴포넌트별 props, 토큰, 조합 예제는 Storybook 카탈로그에 있습니다. 49종 모두 직접 조작해 볼 수 있습니다.">
       <div className="flex flex-wrap gap-3">
         <a href={STORYBOOK_URL} className="tx-button" data-variant="primary" target="_blank" rel="noreferrer">
           <span className="tx-button__label">카탈로그 열기</span>
         </a>
       </div>
 
-      <TxAlert variant="info" title="개발 중에는 따로 띄운다">
-        <code>pnpm storybook:dev</code> 로 띄우면 <code>localhost:6310</code> 이다. 배포하면 이 사이트의 <code>/storybook/</code> 아래에 함께 올라간다.
+      <TxAlert variant="info" title="로컬에서 실행하기">
+        저장소에서 <code>pnpm storybook:dev</code>를 실행하면 <code>localhost:6310</code>에서 열립니다. 배포된 카탈로그는 이 사이트의 <code>/storybook/</code> 경로에 있습니다.
       </TxAlert>
 
-      <Block title="카탈로그에 있는 것">
+      <Block title="What's in the catalog">
         <ul className="list-inside list-disc text-slate-600 dark:text-slate-300">
-          <li>묶음별 부품 — Form · Data · Layout · Overlay · Feedback · Action</li>
+          <li>카테고리별 컴포넌트 — Form · Data · Layout · Overlay · Feedback · Action</li>
           <li>
-            <strong>Recipes</strong> — 로그인 · 등록 · 목록 · 슬라이드 편집처럼 <strong>한 화면을 조립한 이야기</strong>
+            <strong>Recipes</strong> — 로그인, 등록, 목록, 슬라이드 편집처럼 <strong>컴포넌트를 조합해 만든 화면 예제</strong>
           </li>
-          <li>Introduction — 설치 · 토큰 · 다크모드 · Tailwind 와 함께 쓰기</li>
+          <li>Introduction — 설치, 토큰, 다크 모드, Tailwind와 함께 쓰기</li>
         </ul>
       </Block>
     </Page>

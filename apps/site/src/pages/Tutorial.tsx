@@ -20,7 +20,7 @@ export function Tutorial() {
         검색, 목록, 페이지 이동, 회원 등록, 삭제 확인, 알림이 있는 화면입니다. 맨 아래에 <strong>그대로 붙여 넣을 수 있는 전체 코드</strong>가 있습니다.
       </TxAlert>
 
-      <Block title="준비">
+      <Block title="Before you start">
         <p className={muted}>
           <Link to="/docs/start" className="underline">
             Getting Started
@@ -48,7 +48,7 @@ export function Tutorial() {
         </div>
       </Block>
 
-      <Block title="1. 화면 등록하기 — route-meta">
+      <Block title="1. Register the screen — route-meta">
         <p className={muted}>
           라우트 트리에 화면을 추가합니다. <code>meta.label</code>을 적으면 메뉴에 자동으로 나타나고, 경로 표시와 탭 제목에도 쓰입니다. 라우트와 메뉴를 따로 고칠 필요가 없습니다.
         </p>
@@ -65,7 +65,7 @@ export function Tutorial() {
         </p>
       </Block>
 
-      <Block title="2. API 클라이언트 만들기 — axios">
+      <Block title="2. Create an API client — axios">
         <p className={muted}>클라이언트를 한 번 만들어 두고 화면마다 가져다 씁니다. 토큰을 붙이는 방법과 응답에서 데이터를 꺼내는 방법을 여기서 정합니다.</p>
         <CodeBlock title="src/memberApi.ts">{`import { createHttpClient } from "@txstack/axios";
 
@@ -76,7 +76,7 @@ export const api = createHttpClient({
 });`}</CodeBlock>
       </Block>
 
-      <Block title="3. 검색 조건을 주소에 담기 — hooks">
+      <Block title="3. Keep the search in the URL — hooks">
         <p className={muted}>
           검색어와 페이지를 <code>useState</code> 대신 <code>useUrlQuery</code>로 둡니다. 상세 화면에 갔다가 돌아오거나 새로고침해도 조건이 그대로 남습니다.
         </p>
@@ -86,7 +86,7 @@ export const api = createHttpClient({
 const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
       </Block>
 
-      <Block title="4. 목록 불러오기">
+      <Block title="4. Load the list">
         <p className={muted}>
           조건이 바뀔 때마다 2단계의 클라이언트로 목록을 불러옵니다. 실패하면 <code>parseApiError</code>로 메시지를 꺼내 알림으로 보여 줍니다.
         </p>
@@ -103,7 +103,7 @@ const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
         </p>
       </Block>
 
-      <Block title="5. 등록 폼 — ui">
+      <Block title="5. Registration form — ui">
         <p className={muted}>
           <code>TxForm</code>은 라벨, 입력란, 오류 메시지를 서로 연결해 줍니다. 무엇이 잘못됐는지 판단하는 것은 앱이 하고, 오류 문구를 <code>error</code>로 넘기면 입력란 아래에 표시됩니다.
         </p>
@@ -117,7 +117,7 @@ const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
         </TxAlert>
       </Block>
 
-      <Block title="6. 삭제 확인과 알림 — ui">
+      <Block title="6. Confirm and notify — ui">
         <p className={muted}>
           <code>TxDialog.confirm</code>은 사용자가 고를 때까지 기다렸다가 결과를 돌려줍니다. <code>TxDialog</code>와 <code>TxToast</code>는 호출하면 스스로 화면에 자리를 만들어서, 앱에 Provider를 따로 둘 필요가 없습니다.
         </p>
@@ -133,7 +133,7 @@ const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
         </p>
       </Block>
 
-      <Block title="완성된 화면">
+      <Block title="The finished screen">
         <p className={muted}>
           검색하고, 등록하고, 삭제해 보세요. 검색어나 페이지를 바꾸면 <strong>이 페이지의 주소</strong>가 바뀌고, 새로고침해도 같은 조건으로 열립니다. 데이터는 예제용 가짜 서버에 있어서 새로고침하면 처음 상태로 돌아갑니다.
         </p>
@@ -143,7 +143,7 @@ const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
         </Demo>
       </Block>
 
-      <Block title="전체 코드">
+      <Block title="Full code">
         <p className={muted}>
           위 화면의 소스 그대로입니다. 두 파일을 <code>src/</code>에 넣고, 1단계처럼 라우트에 <code>MemberScreen</code>을 등록하면 같은 화면이 뜹니다. 화면 배치는 Tailwind 클래스로 잡았습니다.
         </p>

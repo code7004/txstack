@@ -31,14 +31,14 @@ function Slot({ filled, hint, children }: { filled: boolean; hint: string; child
   if (filled) return children;
   if (!DRAFT) return null;
 
-  return <div className="rounded-lg border border-dashed px-4 py-3 text-sm text-slate-500 dark:text-slate-400" style={{ borderColor: "var(--tx-color-border)" }}>{`PROFILE.${hint} 를 채운다 — src/pages/Profile.tsx`}</div>;
+  return <div className="rounded-lg border border-dashed px-4 py-3 text-sm text-slate-500 dark:text-slate-400" style={{ borderColor: "var(--tx-color-border)" }}>{`PROFILE.${hint} 값을 채워 주세요 — src/pages/Profile.tsx`}</div>;
 }
 
 export function Profile() {
   const { name, role, avatar, intro, why, skills, links } = PROFILE;
 
   if (!name && !DRAFT) {
-    return <Page title="Profile" lead="준비 중이다." />;
+    return <Page title="Profile" lead="준비 중입니다." />;
   }
 
   return (
@@ -64,7 +64,7 @@ export function Profile() {
       </Slot>
 
       <Slot filled={why.length > 0} hint="why">
-        <Block title="왜 txstack 인가">
+        <Block title="Why I built txstack">
           {why.map((line) => (
             <p key={line} className="text-slate-600 dark:text-slate-300">
               {line}
@@ -74,7 +74,7 @@ export function Profile() {
       </Slot>
 
       <Slot filled={skills.length > 0} hint="skills">
-        <Block title="다루는 것">
+        <Block title="Tech stack">
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
               <TxTag key={skill}>{skill}</TxTag>
@@ -84,7 +84,7 @@ export function Profile() {
       </Slot>
 
       <Slot filled={links.length > 0} hint="links">
-        <Block title="링크">
+        <Block title="Links">
           <ul className="flex flex-wrap gap-x-5 gap-y-2">
             {links.map((link) => (
               <li key={link.href}>

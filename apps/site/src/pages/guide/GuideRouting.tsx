@@ -96,7 +96,7 @@ export function GuideRouting() {
         </>
       }
     >
-      <Block title="왜 한 곳에 모으나요">
+      <Block title="Why one route tree">
         <p className={muted}>라우트 정의와 메뉴 정의를 따로 관리하면, 주소를 하나 바꿀 때 두 곳을 고쳐야 합니다. 한 곳을 잊으면 메뉴가 없는 페이지를 가리키게 됩니다. 라우트 트리 하나만 두고 나머지는 모두 거기서 만들면 이런 일이 생기지 않습니다.</p>
         <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`routes (라우트 트리)
  ├─ buildRouteObjects   → 라우터에 넘길 라우트 목록
@@ -104,14 +104,14 @@ export function GuideRouting() {
  └─ useCurrentRouteNode → 현재 위치 (경로 표시, 탭 제목)`}</CodeBlock>
       </Block>
 
-      <Block title="이 사이트가 예제입니다">
+      <Block title="This site is the example">
         <p className={muted}>이 사이트의 위쪽 메뉴, 왼쪽 메뉴, 메뉴에 마우스를 올리면 펼쳐지는 사이트 지도, 브라우저 탭 제목이 모두 라우트 트리 하나에서 만들어집니다. 아래 경로 표시도 같은 트리에서 지금 위치를 읽은 것입니다.</p>
         <Demo>
           <CurrentPlace />
         </Demo>
       </Block>
 
-      <Block title="1. 라우트 선언하기">
+      <Block title="1. Declare routes">
         <p className={muted}>
           화면마다 주소(<code>path</code>), 화면(<code>element</code>), 메뉴에 보일 정보(<code>meta</code>)를 함께 적습니다. 하위 화면은 <code>children</code>에 넣습니다.
         </p>
@@ -137,7 +137,7 @@ export const routes = {
         </TxAlert>
       </Block>
 
-      <Block title="2. 라우터에 연결하기">
+      <Block title="2. Connect the router">
         <p className={muted}>
           <code>buildRouteObjects</code>가 트리를 React Router가 읽는 형식으로 바꿉니다. 렌더링할 때마다 다시 만들지 않도록 모듈 상수로 둡니다.
         </p>
@@ -151,7 +151,7 @@ export function App() {
 }`}</CodeBlock>
       </Block>
 
-      <Block title="3. 메뉴 그리기">
+      <Block title="3. Render the menu">
         <p className={muted}>
           <code>getNavigableRoutes</code>는 메뉴에 보일 항목만 골라 줍니다. 숨긴 화면(<code>hidden</code>)과 첫 화면(<code>index</code>)은 빠집니다. 결과는 <code>{"{ key, path, meta, children }"}</code> 모양이라 <code>TxSideNav</code>나{" "}
           <code>TxNavBar</code>로 바로 그릴 수 있습니다.
@@ -175,7 +175,7 @@ export const Menu = () => <TxSideNav>{MENU.map(item)}</TxSideNav>;`}</CodeBlock>
         </p>
       </Block>
 
-      <Block title="4. 현재 위치 표시하기">
+      <Block title="4. Show the current location">
         <p className={muted}>
           <code>useCurrentRouteNode</code>는 지금 주소에 맞는 라우트와, 맨 위부터 이어지는 경로(<code>matches</code>)를 돌려줍니다. 경로 표시나 탭 제목을 만들 때 씁니다.
         </p>
@@ -188,7 +188,7 @@ export const Menu = () => <TxSideNav>{MENU.map(item)}</TxSideNav>;`}</CodeBlock>
 </TxBreadcrumb>`}</CodeBlock>
       </Block>
 
-      <Block title="5. 권한에 따라 메뉴 거르기">
+      <Block title="5. Filter the menu by permission">
         <p className={muted}>
           <code>meta.permissions</code>가 있는 항목은 앱이 넘긴 판정 함수로 보일지 말지 정합니다. 권한을 어떻게 나눌지는 앱이 정하고, 라이브러리는 함수를 부르기만 합니다. 판정 함수를 넘기지 않으면 권한이 걸린 항목은 모두 숨겨집니다.
         </p>

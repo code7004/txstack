@@ -6,14 +6,14 @@ const REPO = "https://github.com/code7004/txstack";
 
 /** 무엇을 들고 어디로 가는가. **창구는 저장소 하나다** — 흩어지면 답이 흩어진다 */
 const CHANNELS = [
-  { title: "버그", what: "부품이 문서대로 동작하지 않는다", href: `${REPO}/issues/new?labels=bug`, action: "이슈 열기" },
-  { title: "제안", what: "이런 부품 · 이런 prop · 이런 토큰이 있으면 좋겠다", href: `${REPO}/issues/new?labels=enhancement`, action: "이슈 열기" },
-  { title: "질문", what: "쓰는 법을 모르겠다 · 이 경우엔 어떻게 하나", href: `${REPO}/issues`, action: "이슈 둘러보기" }
+  { title: "Bug", what: "컴포넌트가 문서대로 동작하지 않을 때", href: `${REPO}/issues/new?labels=bug`, action: "이슈 열기" },
+  { title: "Feature request", what: "필요한 컴포넌트, prop, 토큰이 있을 때", href: `${REPO}/issues/new?labels=enhancement`, action: "이슈 열기" },
+  { title: "Question", what: "사용법이나 특정 상황의 해결 방법이 궁금할 때", href: `${REPO}/issues`, action: "이슈 둘러보기" }
 ];
 
 export function Contact() {
   return (
-    <Page title="Contact" lead="질문 · 제안 · 버그는 전부 GitHub 저장소의 이슈로 받는다. 다른 사람이 같은 것을 찾을 때 답이 그 자리에 남는다.">
+    <Page title="Contact" lead="질문, 제안, 버그 제보는 모두 GitHub 저장소의 이슈로 받습니다. 이슈로 남기면 같은 문제를 겪는 다른 사람도 답을 찾을 수 있습니다.">
       <div className="grid gap-3 sm:grid-cols-3">
         {CHANNELS.map((item) => (
           <a key={item.title} href={item.href} target="_blank" rel="noreferrer" className="site-card flex flex-col gap-2 rounded-lg border p-4">
@@ -29,22 +29,22 @@ export function Contact() {
         ))}
       </div>
 
-      <Block title="버그를 알릴 때">
+      <Block title="Reporting a bug">
         <p className="text-slate-600 dark:text-slate-300">
-          아래 셋이 있으면 대부분 바로 재현된다. <strong>가장 빠른 것은 최소 재현 코드</strong>다 — 화면 전체보다 부품 하나가 낫다.
+          아래 세 가지를 적어 주시면 대부분 바로 재현할 수 있습니다. <strong>가장 도움이 되는 것은 최소 재현 코드</strong>입니다. 화면 전체보다 문제가 되는 컴포넌트 하나로 줄인 코드가 좋습니다.
         </p>
-        <CodeBlock language="markdown" title="이슈 본문">{`## 무엇이
-TxForm.Input 에 error 를 주면 메시지는 뜨는데 칸 테두리가 안 바뀐다
+        <CodeBlock language="markdown" title="이슈 본문">{`## 문제
+TxForm.Input에 error를 넘기면 메시지는 나오지만 입력 칸 테두리가 바뀌지 않습니다
 
 ## 재현
-<TxForm.Input caption="메일" error="형식이 아니다" />
+<TxForm.Input caption="메일" error="메일 형식이 아닙니다" />
 
 ## 환경
-@txstack/ui 0.1.0 · react 19.2 · Chrome 141 · Tailwind 4 와 함께`}</CodeBlock>
+@txstack/ui 0.1.0 · react 19.2 · Chrome 141 · Tailwind 4 함께 사용`}</CodeBlock>
       </Block>
 
-      <TxAlert variant="info" title="보안 문제는 공개 이슈로 올리지 않는다">
-        악용될 수 있는 결함이라면 저장소의 <strong>Security › Report a vulnerability</strong> 로 비공개로 알린다.
+      <TxAlert variant="info" title="보안 문제는 공개 이슈로 올리지 마세요">
+        악용될 수 있는 결함이라면 저장소의 <strong>Security › Report a vulnerability</strong>에서 비공개로 알려 주세요.
       </TxAlert>
     </Page>
   );

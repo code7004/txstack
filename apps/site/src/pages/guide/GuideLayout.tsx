@@ -4,11 +4,11 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
 
 const SLOTS = [
-  ["header", "맨 위 줄. 브랜드 · 계정 · 검색이 오는 자리. sticky 를 탄다"],
-  ["top", "헤더 아래 줄. 헤더와 한 덩어리로 붙어 있는다 — 주 메뉴 자리다"],
-  ["left / right", "옆 패널. 크기 조절 · 접기를 panels 로 켠다"],
-  ["bottom", "아래 패널. 콘솔 · 로그 · 미리보기. 폭은 bottomSpan 이 정한다"],
-  ["footer", "맨 아래 줄"],
+  ["header", "맨 위 영역. 로고, 계정, 검색이 들어갑니다. 스크롤해도 위에 고정됩니다"],
+  ["top", "헤더 바로 아래의 메뉴 바. 헤더와 함께 고정되며, 주 메뉴가 들어갑니다"],
+  ["left / right", "양옆 패널. panels로 크기 조절과 접기를 켤 수 있습니다"],
+  ["bottom", "아래쪽 패널. 콘솔, 로그, 미리보기 등이 들어갑니다. 폭은 bottomSpan으로 정합니다"],
+  ["footer", "맨 아래 영역"],
   ["children", "본문"]
 ];
 
@@ -22,7 +22,7 @@ function ShellDemo() {
         header={
           <div className="flex w-full items-center gap-2">
             <strong className="px-1 text-sm">Console</strong>
-            <TxButton label="☰" aria-label="왼쪽 줄 접기" variant="ghost" className="ms-auto" onClick={() => setRail((prev) => !prev)} />
+            <TxButton label="☰" aria-label="왼쪽 메뉴 접기" variant="ghost" className="ms-auto" onClick={() => setRail((prev) => !prev)} />
           </div>
         }
         top={
@@ -38,14 +38,14 @@ function ShellDemo() {
             <TxSideNav.Item icon="⚙" label="Settings" as="button" type="button" />
           </TxSideNav>
         }
-        footer={<div className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">footer 자리</div>}
+        footer={<div className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">footer 영역</div>}
         breakpoint={360}
         style={{ minBlockSize: "22rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}
       >
         <div className="flex flex-col gap-2 p-4">
           <h3 className="font-semibold">본문</h3>
           <p className="text-sm text-slate-600 dark:text-slate-300">
-            헤더의 ☰ 를 눌러 보라 — 왼쪽 줄이 아이콘만 남고 <strong>자리도 함께 줄어든다.</strong>
+            헤더의 ☰를 눌러 보세요. 왼쪽 메뉴가 아이콘만 남기고 접히면서 <strong>차지하던 폭도 함께 줄어듭니다.</strong>
           </p>
         </div>
       </TxAppShell>
@@ -55,8 +55,8 @@ function ShellDemo() {
 
 export function GuideLayout() {
   return (
-    <Page title="Layout" lead="화면 골격은 셸이 잡고, 그 안의 자리마다 무엇을 넣을지는 앱이 정한다.">
-      <Block title="자리를 슬롯으로 준다">
+    <Page title="Layout" lead="화면 틀은 TxAppShell이 잡고, 각 영역에 무엇을 넣을지는 앱이 정합니다.">
+      <Block title="Fill areas with slots">
         <SideBySide>
           <CodeBlock title="App.tsx">{`<TxAppShell
   header={<Brand />}
@@ -78,51 +78,51 @@ export function GuideLayout() {
           </div>
         </SideBySide>
 
-        <TxAlert variant="info" title="랜드마크는 셸이 붙인다">
-          <code>top</code> · <code>left</code> 는 셸이 <code>&lt;nav&gt;</code> 로 감싼다. 그래서 그 안의 내비게이션 부품에는 <code>label</code> 을 주지 않는다 — 주면 랜드마크가 둘로 읽힌다.
+        <TxAlert variant="info" title="랜드마크는 TxAppShell이 붙입니다">
+          <code>top</code>과 <code>left</code>는 TxAppShell이 <code>&lt;nav&gt;</code>로 감쌉니다. 그러니 그 안에 넣는 내비게이션 컴포넌트에는 <code>label</code>을 주지 마세요. 주면 스크린 리더가 랜드마크를 두 번 읽습니다.
         </TxAlert>
       </Block>
 
-      <Block title="직접 만져 보기">
+      <Block title="Try it">
         <ShellDemo />
       </Block>
 
-      <Block title="좁아지면 서랍으로 옮긴다">
+      <Block title="Drawer menu on narrow screens">
         <p className="text-slate-600 dark:text-slate-300">
-          <code>breakpoint</code>(기본 960px)보다 좁아지면 헤더에 햄버거가 생기고 <code>left</code> 가 서랍으로 들어간다.{" "}
+          화면이 <code>breakpoint</code>(기본 960px)보다 좁아지면 헤더에 햄버거 버튼이 생기고 <code>left</code>가 서랍 메뉴로 들어갑니다.{" "}
           <strong>
-            그 안에 서는 것이 <code>TxSideNav</code>
-          </strong>{" "}
-          라, 가로 줄(<code>TxNavBar</code>)은 스스로 접히지 않는다 — 상황이 하나만 남는다.
+            서랍 안에 들어가는 것은 <code>TxSideNav</code>
+          </strong>
+          이므로, 메뉴 바(<code>TxNavBar</code>)는 스스로 접히지 않습니다. 좁은 화면을 처리하는 곳이 한 군데로 정리됩니다.
         </p>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>접기는 두 가지가 있고 서로 다르다.</strong> 셸의 <code>left.collapse</code> 는 패널을 폭 0 으로 감추고, <code>TxSideNav</code> 의 <code>collapsed</code> 는 아이콘 줄로 남긴다. 둘 중 하나만 쓴다.
+          <strong>접는 방법은 두 가지이고 동작이 다릅니다.</strong> TxAppShell의 <code>left.collapse</code>는 패널을 폭 0으로 감추고, <code>TxSideNav</code>의 <code>collapsed</code>는 아이콘만 남깁니다. 둘 중 하나만 사용하세요.
         </p>
 
-        <CodeBlock language="css" title="자리가 줄에 맞춰 줄게 하려면">{`/* 셸이 내용에 맞춰 폭을 잡으면 rail 이 그대로 셸을 움직인다 */
+        <CodeBlock language="css" title="메뉴를 접을 때 패널 폭도 줄이려면">{`/* 왼쪽 패널 폭을 내용에 맞추면, 메뉴를 접을 때 패널도 함께 줄어듭니다 */
 .tx-app-shell { --tx-app-shell-left-width: fit-content; }`}</CodeBlock>
       </Block>
 
-      <Block title="가로냐 세로냐로 갈랐다">
+      <Block title="Horizontal and vertical menus">
         <SideBySide>
-          <TxCard title="TxNavBar — 가로">
+          <TxCard title="TxNavBar: 가로 메뉴">
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              항목에 <code>panel</code> 을 주면 메가메뉴가 된다. <code>as</code> 를 함께 주면 제목이 링크가 되고 옆의 <code>▾</code> 가 패널을 연다.
+              항목에 <code>panel</code>을 주면 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
             </p>
           </TxCard>
 
-          <TxCard title="TxSideNav — 세로">
-            <p className="text-sm text-slate-600 dark:text-slate-300">아이콘만 남기고 접히고, 하위메뉴는 트리로 접힌다. 이 사이트의 왼쪽 줄이 그것이다.</p>
+          <TxCard title="TxSideNav: 세로 메뉴">
+            <p className="text-sm text-slate-600 dark:text-slate-300">아이콘만 남기고 접을 수 있고, 하위 메뉴는 트리 형태로 펼치고 접습니다. 이 사이트의 왼쪽 메뉴가 TxSideNav입니다.</p>
           </TxCard>
         </SideBySide>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>자리(GNB · SNB)를 주장하지 않고 방향만 주장한다.</strong> 1차 내비게이션을 세로로 두는 화면이 흔하므로, 이름이 쓰임을 막지 않게 했다.
+          <strong>이름은 위치(GNB, SNB)가 아니라 방향을 나타냅니다.</strong> 주 메뉴를 세로로 두는 화면도 흔하므로, 이름 때문에 쓰임새가 제한되지 않도록 했습니다.
         </p>
       </Block>
 
-      <Block title="줄 세우기는 가벼운 것으로">
+      <Block title="Simple layouts with TxFlex and TxGrid">
         <SideBySide>
           <CodeBlock title="Screen.tsx">{`<TxFlex className="items-center">
   <TxButton label="저장" />
@@ -150,7 +150,7 @@ export function GuideLayout() {
         </SideBySide>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <code>TxFlex</code> · <code>TxGrid</code> 는 <strong>간격 기본값만</strong> 준다. 방향·정렬은 <code>className</code> 으로 소비자가 정한다 — 기본 클래스를 교체하지 않고 덧붙기 때문이다.
+          <code>TxFlex</code>와 <code>TxGrid</code>는 <strong>기본 간격만</strong> 정해 둡니다. 방향과 정렬은 <code>className</code>으로 직접 지정하세요. 넘긴 클래스는 기본 클래스를 대체하지 않고 덧붙습니다.
         </p>
       </Block>
     </Page>

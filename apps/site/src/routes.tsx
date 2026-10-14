@@ -46,20 +46,20 @@ export const routes = {
   home: {
     path: "/",
     element: <Home />,
-    meta: { label: "Home", description: "txstack 이 무엇이고 왜 있는가" }
+    meta: { label: "Home", description: "txstack 소개와 만든 이유" }
   },
 
   docs: {
     path: "/docs",
     element: <SectionLayout />,
-    meta: { label: "Documents", description: "설치부터 한 화면 만들기까지" },
+    meta: { label: "Documents", description: "설치부터 화면 하나 만들기까지" },
     children: {
       index: { index: true, element: <DocsHome /> },
 
       start: {
         path: "/docs/start",
         element: <Start />,
-        meta: { label: "Getting Started", description: "설치하고 첫 화면을 세우기까지" }
+        meta: { label: "Getting Started", description: "설치하고 첫 화면 띄우기" }
       },
 
       /**
@@ -69,13 +69,13 @@ export const routes = {
       tutorial: {
         path: "/docs/tutorial",
         element: <Tutorial />,
-        meta: { label: "Tutorial", description: "한 화면을 처음부터 끝까지" }
+        meta: { label: "Tutorial", description: "화면 하나를 처음부터 끝까지 만들기" }
       },
 
       guide: {
         path: "/docs/guide",
         element: <SectionLayout />,
-        meta: { label: "Guide", description: "디자인 · 화면 골격 · 라우팅 · URL 상태 · HTTP" },
+        meta: { label: "Guide", description: "디자인 · 레이아웃 · 라우팅 · URL 상태 · HTTP" },
         children: {
           index: { index: true, element: <GuideHome /> },
           tokens: { path: "/docs/guide/tokens", element: <GuideTokens />, meta: { label: "Tokens" } },
@@ -91,7 +91,7 @@ export const routes = {
       components: {
         path: "/docs/components",
         element: <Components />,
-        meta: { label: "Components", description: "부품 카탈로그(Storybook)" }
+        meta: { label: "Components", description: "컴포넌트 카탈로그(Storybook)" }
       }
     }
   },
@@ -99,7 +99,7 @@ export const routes = {
   api: {
     path: "/api",
     element: <SectionLayout />,
-    meta: { label: "API", description: "네 패키지가 무엇을 내보내는가" },
+    meta: { label: "API", description: "네 패키지의 API 레퍼런스" },
     children: {
       index: { index: true, element: <ApiHome /> },
       ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui" } },
@@ -112,7 +112,7 @@ export const routes = {
   example: {
     path: "/example",
     element: <Examples />,
-    meta: { label: "Example", description: "진짜 데이터를 부르는 화면들" }
+    meta: { label: "Example", description: "GitHub API로 만든 검색 화면" }
   },
 
   /**
@@ -122,7 +122,7 @@ export const routes = {
   about: {
     path: "/about",
     element: <SectionLayout />,
-    meta: { label: "About", description: "만든 사람과 묻는 자리" },
+    meta: { label: "About", description: "만든 사람과 문의 방법" },
     children: {
       index: { index: true, element: <AboutHome /> },
       profile: { path: "/about/profile", element: <Profile />, meta: { label: "Profile" } },
