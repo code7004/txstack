@@ -67,16 +67,33 @@ export function buildColumnDefs<TData>(headers: TxAgGridField<TData>[] | undefin
   return [...new Set(fields)].map((field) => ({ field }) as ColDef<TData>);
 }
 
-/** `field` 가 같은 열을 찾아 덮어쓴다. 없는 `field` 는 무시한다. */
+/**
+ * `field` 가 같은 열을 찾아 덮어쓴다. 없는 `field` 는 무시한다.
+ *
+ * **`field` 없이 `colId` 만 준 정의는 그 이름의 열을 찾아 대신한다** — 동작 버튼처럼 행 데이터에 없는 열이다.
+ * 그 열에서는 `field` 를 뺀다. 행에서 값을 읽을 것이 없고, `field` 가 남으면 ag-grid 가 없는 키를 찾는다.
+ */
 export function mergeColumnDefs<TData>(columnDefs: TxAgGridColumnDef<TData>, customColumnDefs?: TxAgGridColumnDef<TData>): TxAgGridColumnDef<TData> {
   if (!customColumnDefs?.length) return columnDefs;
 
-  const custom = new Map<string, ColDef<TData>>();
+  const byField = new Map<string, ColDef<TData>>();
+  const byColId = new Map<string, ColDef<TData>>();
   customColumnDefs.forEach((column) => {
-    if (hasField(column)) custom.set(column.field, column);
+    if (hasField(column)) byField.set(column.field, column);
+    else if ("colId" in column && typeof column.colId === "string") byColId.set(column.colId, column);
   });
 
-  return columnDefs.map((column) => (hasField(column) ? { ...column, ...custom.get(column.field) } : column));
+  return columnDefs.map((column) => {
+    if (!hasField(column)) return column;
+
+    const virtual = byColId.get(column.field);
+    if (virtual) {
+      const { field: _, ...rest } = column;
+      return { ...rest, ...virtual };
+    }
+
+    return { ...column, ...byField.get(column.field) };
+  });
 }
 
 const matcher = <TData>(filter?: TxAgGridColumnFilter<TData> | "*" | TxAgGridField<TData>[]) => {

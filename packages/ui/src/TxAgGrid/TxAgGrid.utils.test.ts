@@ -59,6 +59,39 @@ describe("mergeColumnDefs — field 로 찾아 덮어쓴다", () => {
   });
 });
 
+/** 동작 버튼처럼 행 데이터에 없는 열. 소비자 프로젝트마다 줄 끝에 "수정 · 삭제" 를 둔다 */
+describe("mergeColumnDefs — colId 로 데이터에 없는 열을 채운다", () => {
+  const renderer = () => null;
+
+  it("headers 의 이름과 같은 colId 의 정의로 그 자리를 채운다", () => {
+    const merged = mergeColumnDefs<Row>(buildColumnDefs<Row>(["name", "actions"], undefined, undefined, ROWS), [{ colId: "actions", headerName: "", cellRenderer: renderer }]);
+
+    expect(merged[1]).toEqual({ colId: "actions", headerName: "", cellRenderer: renderer });
+  });
+
+  it("그 열에서는 field 를 뺀다 — 행에서 읽을 값이 없다", () => {
+    const [column] = mergeColumnDefs<Row>(buildColumnDefs<Row>(["actions"], undefined, undefined, ROWS), [{ colId: "actions", cellRenderer: renderer }]);
+    expect(column).not.toHaveProperty("field");
+  });
+
+  it("자리는 headers 가 정한다 — 순서 · addHeaders · hiddenHeaders 가 그대로 통한다", () => {
+    const custom = [{ colId: "actions", cellRenderer: renderer }];
+
+    expect(fields(mergeColumnDefs<Row>(buildColumnDefs<Row>(["actions", "id"], undefined, undefined, ROWS), custom))).toEqual(["actions", "id"]);
+    expect(fields(mergeColumnDefs<Row>(buildColumnDefs<Row>(["id"], ["actions"], undefined, ROWS), custom))).toEqual(["id", "actions"]);
+    expect(fields(mergeColumnDefs<Row>(buildColumnDefs<Row>(["id", "actions"], undefined, ["actions"], ROWS), custom))).toEqual(["id"]);
+  });
+
+  it("headers 에 없는 colId 는 새 열을 만들지 않는다", () => {
+    expect(fields(mergeColumnDefs<Row>([{ field: "id" }], [{ colId: "actions", cellRenderer: renderer }]))).toEqual(["id"]);
+  });
+
+  it("field 와 colId 를 함께 준 정의는 지금처럼 field 로 찾는다", () => {
+    const [column] = mergeColumnDefs<Row>([{ field: "name" }], [{ field: "name", colId: "person", width: 120 }]);
+    expect(column).toEqual({ field: "name", colId: "person", width: 120 });
+  });
+});
+
 describe("순번 열 — 행 데이터도 클로저도 건드리지 않는다", () => {
   const valueOf = (rowIndex: number | null, offset?: number) => {
     const valueGetter = createIndexColumn<Row>(true).valueGetter as (params: { node: { rowIndex: number | null }; context: unknown }) => unknown;
