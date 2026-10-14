@@ -6,7 +6,7 @@ import { Block, Demo, Page, SideBySide } from "../../components/Page";
 const SLOTS = [
   ["header", "맨 위 영역. 로고, 계정, 검색이 들어갑니다. 스크롤해도 위에 고정됩니다"],
   ["top", "헤더 바로 아래의 메뉴 바. 헤더와 함께 고정되며, 주 메뉴가 들어갑니다"],
-  ["left / right", "양옆 패널. panels로 크기 조절과 접기를 켤 수 있습니다"],
+  ["left / right", "양옆 패널. 본문을 내려도 헤더 아래에 붙어 따라오고, panels로 크기 조절과 접기를 켤 수 있습니다"],
   ["bottom", "아래쪽 패널. 콘솔, 로그, 미리보기 등이 들어갑니다. 폭은 bottomSpan으로 정합니다"],
   ["footer", "맨 아래 영역"],
   ["children", "본문"]
@@ -97,6 +97,8 @@ export function GuideLayout() {
           이므로, 메뉴 바(<code>TxNavBar</code>)는 스스로 접히지 않습니다. 좁은 화면을 처리하는 곳이 한 군데로 정리됩니다.
         </p>
 
+        <p className="text-slate-600 dark:text-slate-300">서랍 안의 링크를 누르면 서랍이 저절로 닫힙니다. 새 탭으로 열거나 ⌘ · Ctrl을 누른 채 누르면 열린 채로 남습니다. 이 사이트는 좁은 화면에서 메뉴 바를 내리고 서랍에 메뉴 전체를 넣습니다.</p>
+
         <p className="text-slate-600 dark:text-slate-300">
           <strong>접는 방법은 두 가지이고 동작이 다릅니다.</strong> TxAppShell의 <code>left.collapse</code>는 패널을 폭 0으로 감추고, <code>TxSideNav</code>의 <code>collapsed</code>는 아이콘만 남깁니다. 둘 중 하나만 사용하세요.
         </p>
@@ -105,11 +107,27 @@ export function GuideLayout() {
 .tx-app-shell { --tx-app-shell-left-width: fit-content; }`}</CodeBlock>
       </Block>
 
+      <Block title="Side panels stay in view">
+        <p className="text-slate-600 dark:text-slate-300">
+          본문을 내려도 양옆 패널은 <strong>헤더 바로 아래에 붙어 따라옵니다</strong>(<code>panelSticky</code>, 기본 켜짐). 패널은 헤더 아래부터 화면 끝까지를 차지하고, 메뉴가 그보다 길면 패널 안에서만 스크롤됩니다. 헤더 높이는 셸이 직접 재고, 페이지
+          맨 아래에서는 footer 앞에서 멈춥니다. 이 사이트의 왼쪽 메뉴가 그렇게 동작합니다.
+        </p>
+        <CodeBlock title="App.tsx">{`<TxAppShell header={<Brand />} left={<SideNav />}>…</TxAppShell>                     // 기본 — 패널이 붙어서 따라온다
+<TxAppShell header={<Brand />} left={<SideNav />} panelSticky={false}>…</TxAppShell> // 본문과 같이 굴러간다`}</CodeBlock>
+        <TxAlert variant="info" title="상자 안에 넣는 셸은 끄세요">
+          패널이 화면 높이를 잡으므로, 위 예제처럼 셸을 페이지 안의 작은 상자에 넣을 때는 <code>panelSticky={"{false}"}</code>를 넘겨야 상자가 화면만큼 길어지지 않습니다. 화면 전체를 쓰는 앱 셸에서는 그대로 두면 됩니다.
+        </TxAlert>
+      </Block>
+
       <Block title="Horizontal and vertical menus">
         <SideBySide>
           <TxCard title="TxNavBar: 가로 메뉴">
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              항목에 <code>panel</code>을 주면 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
+              항목에 <code>panel</code>을 주면 그 항목의 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
+            </p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              메뉴 바 자체에 <code>panel</code>을 주면 <strong>모든 항목이 패널 하나를 함께 씁니다</strong>. 어느 항목에 마우스를 올려도 메뉴 전체가 펼쳐집니다. 이 사이트의 위쪽 메뉴가 그렇게 동작합니다(마우스 전용이라, 패널 안의 링크는 각 항목의
+              페이지에서도 닿아야 합니다).
             </p>
           </TxCard>
 

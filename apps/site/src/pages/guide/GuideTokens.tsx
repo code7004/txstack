@@ -1,24 +1,8 @@
 import { useState, type CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import { TxAlert, TxButton, TxCard, TxCheckBox, TxInput, TxTag } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
-
-const GLOBAL_TOKENS = [
-  ["--tx-color-primary", "채우는 색. 버튼 배경, 스위치, 체크박스"],
-  ["--tx-color-primary-strong", "배경 위에서 글자로 읽히는 강조색. 현재 메뉴, 탭, 포커스 링"],
-  ["--tx-color-danger", "되돌릴 수 없는 동작(삭제 등)"],
-  ["--tx-color-warning", "막지는 않지만 주의를 줘야 하는 상황"],
-  ["--tx-color-success", "성공을 알리는 상황"],
-  ["--tx-color-surface", "카드, 입력창처럼 배경 위에 올라온 면"],
-  ["--tx-color-muted", "보조 버튼처럼 배경에 가라앉은 면"],
-  ["--tx-color-border", "테두리"],
-  ["--tx-color-text", "글자색"],
-  ["--tx-color-on-accent", "강조색 배경 위의 글자색"],
-  ["--tx-color-state", "hover, pressed 상태에서 섞는 색"],
-  ["--tx-state-hover / --tx-state-pressed", "섞는 비율(16% / 28%)"],
-  ["--tx-radius", "모서리 둥글기"],
-  ["--tx-focus-ring / --tx-focus-ring-offset", "키보드 포커스 표시"]
-];
 
 /**
  * **토큰을 손으로 돌려 보는 자리.** 값을 바꾸면 아래 부품이 전부 따라온다 —
@@ -127,27 +111,12 @@ export function GuideTokens() {
       </Block>
 
       <Block title="Global tokens">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b" style={{ borderColor: "var(--tx-color-border)" }}>
-                <th className="py-2 pe-4 text-start font-semibold">토큰</th>
-                <th className="py-2 text-start font-semibold">용도</th>
-              </tr>
-            </thead>
-            <tbody>
-              {GLOBAL_TOKENS.map(([name, what]) => (
-                <tr key={name} className="border-b" style={{ borderColor: "var(--tx-color-border)" }}>
-                  <td className="py-2 pe-4 align-top font-mono text-xs whitespace-nowrap">{name}</td>
-                  <td className="py-2 align-top text-slate-600 dark:text-slate-300">{what}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
         <p className="text-slate-600 dark:text-slate-300">
-          컴포넌트마다 전용 토큰도 있습니다(<code>--tx-button-*</code>, <code>--tx-side-nav-*</code> 등). 어떤 토큰이 있는지는 <strong>카탈로그의 각 컴포넌트 문서</strong>에서 확인하세요.
+          모든 컴포넌트가 따르는 전역 토큰은 색, 상태 비율, 모서리, 포커스 표시를 합쳐 17개입니다. 이름 · 기본값 · 다크 모드 값은{" "}
+          <Link to="/api/ui#design-tokens" className="underline">
+            API › ui › Design tokens
+          </Link>
+          에 정리해 두었습니다. 컴포넌트마다 전용 토큰도 있습니다(<code>--tx-button-*</code>, <code>--tx-side-nav-*</code> 등).
         </p>
 
         <TxAlert variant="warning" title="강조색 토큰이 두 개인 이유">

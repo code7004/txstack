@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Page } from "../../components/Page";
@@ -49,6 +50,20 @@ export function ApiUi() {
         <a href={STORYBOOK_URL} className="tx-button self-start" data-variant="primary" target="_blank" rel="noreferrer">
           <span className="tx-button__label">Storybook 열기</span>
         </a>
+      </Block>
+
+      <Block title="Design tokens">
+        <p className="text-slate-600 dark:text-slate-300">
+          모든 컴포넌트가 따르는 전역 CSS 변수입니다. <code>:root</code>에서 값을 바꾸면 사이트 전체에 적용되고, <code>.dark</code>는 표의 다크 모드 값으로 바꿉니다. 바꾸는 방법은{" "}
+          <Link to="/docs/guide/tokens" className="underline">
+            Guide › Tokens
+          </Link>
+          에 있습니다.
+        </p>
+        <RefTable head={["Token", "Default", "Dark mode", "Description"]} rows={TABLES.ui.tokens.rows} anchor={tableAnchor(TABLES.ui.tokens)} />
+        <p className="text-slate-600 dark:text-slate-300">
+          컴포넌트마다 전용 토큰도 있습니다(<code>--tx-button-*</code>, <code>--tx-side-nav-*</code> 등). 컴포넌트별 토큰은 위 목록에서 이름을 눌러 Storybook 문서에서 확인하세요.
+        </p>
       </Block>
 
       <Block title="Common rules">
