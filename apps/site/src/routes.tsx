@@ -10,6 +10,7 @@ import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
 import { Examples } from "./pages/Examples";
 import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
+import { GuideForms } from "./pages/guide/GuideForms";
 import { GuideHttpClient } from "./pages/guide/GuideHttpClient";
 import { GuideHome } from "./pages/guide/GuideHome";
 import { GuideLayout } from "./pages/guide/GuideLayout";
@@ -75,12 +76,13 @@ export const routes = {
       guide: {
         path: "/docs/guide",
         element: <SectionLayout />,
-        meta: { label: "Guide", description: "디자인 · 레이아웃 · 라우팅 · URL 상태 · HTTP" },
+        meta: { label: "Guide", description: "디자인 · 레이아웃 · 폼 · 라우팅 · URL 상태 · HTTP" },
         children: {
           index: { index: true, element: <GuideHome /> },
           tokens: { path: "/docs/guide/tokens", element: <GuideTokens />, meta: { label: "Tokens" } },
           darkMode: { path: "/docs/guide/dark-mode", element: <GuideDarkMode />, meta: { label: "Dark mode" } },
           layout: { path: "/docs/guide/layout", element: <GuideLayout />, meta: { label: "Layout" } },
+          forms: { path: "/docs/guide/forms", element: <GuideForms />, meta: { label: "Forms" } },
           // 여기부터는 ui 밖의 세 패키지 — 화면 구조 · 주소 · 서버
           routing: { path: "/docs/guide/routing", element: <GuideRouting />, meta: { label: "Routing & Menu" } },
           urlState: { path: "/docs/guide/url-state", element: <GuideUrlState />, meta: { label: "URL State" } },
