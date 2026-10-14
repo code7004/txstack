@@ -134,6 +134,8 @@ function useCurrentPlace() {
     .map((node) => node.meta?.label)
     .filter((name, index, all): name is string => !!name && all.indexOf(name) === index);
   const home = top?.path === "/";
+  // 예제는 완성된 화면을 보여 주는 자리라 표가 들어갈 만큼 넓게 쓴다. 목차는 남긴다 — 앵커를 목차가 붙인다
+  const showcase = top?.path === "/example";
 
   useEffect(() => {
     // `ui` 처럼 짧은 이름은 묶음을 붙여야 탭에서 읽힌다 — "ui · API"
@@ -141,12 +143,12 @@ function useCurrentPlace() {
     document.title = !place || home ? `${SITE_NAME} — 서비스 개발에 필요한 React 라이브러리` : `${place} — ${SITE_NAME}`;
   }, [label, section, home]);
 
-  return { home, sub: MENU.find((item) => item.path === top?.path)?.children };
+  return { home, showcase, sub: MENU.find((item) => item.path === top?.path)?.children };
 }
 
 function Layout({ children }: { children: ReactNode }) {
   const { dark, toggle } = useTheme();
-  const { home, sub } = useCurrentPlace();
+  const { home, showcase, sub } = useCurrentPlace();
   const narrow = useNarrow();
   const body = useRef<HTMLDivElement>(null);
   useScrollReset();
@@ -197,10 +199,10 @@ function Layout({ children }: { children: ReactNode }) {
       {/* 본문 + 넓은 화면에서만 서는 "이 페이지에서". 목차는 본문의 h2 를 읽어 만든다 */}
       {/*
        * **글의 폭은 여기 한 곳에서 정한다.** 페이지마다 따로 주면 장을 넘길 때 본문이 출렁인다.
-       * Home 은 보여 주는 화면이라 넓게, 문서는 읽는 화면이라 좁게.
+       * Home 과 Example 은 보여 주는 화면이라 넓게, 문서는 읽는 화면이라 좁게.
        */}
       <div className={`mx-auto flex w-full gap-10 px-4 py-8 sm:px-6 sm:py-10 ${home ? "max-w-6xl" : "max-w-[76rem]"}`}>
-        <div ref={body} className={`min-w-0 flex-1 ${home ? "" : "max-w-4xl"}`}>
+        <div ref={body} className={`min-w-0 flex-1 ${home || showcase ? "" : "max-w-4xl"}`}>
           {children}
           <DocPager menu={MENU} />
         </div>

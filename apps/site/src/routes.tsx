@@ -8,7 +8,9 @@ import { ApiUi } from "./pages/api/ApiUi";
 import { Components } from "./pages/Components";
 import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
-import { Examples } from "./pages/Examples";
+import { ExampleAccounts } from "./pages/example/ExampleAccounts";
+import { ExampleGithub } from "./pages/example/ExampleGithub";
+import { ExampleHome } from "./pages/example/ExampleHome";
 import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
 import { GuideDialogs } from "./pages/guide/GuideDialogs";
 import { GuideForms } from "./pages/guide/GuideForms";
@@ -117,8 +119,13 @@ export const routes = {
 
   example: {
     path: "/example",
-    element: <Examples />,
-    meta: { label: "Example", description: "GitHub API로 만든 검색 화면" }
+    element: <SectionLayout />,
+    meta: { label: "Example", description: "txstack으로 끝까지 만든 화면" },
+    children: {
+      index: { index: true, element: <ExampleHome /> },
+      accounts: { path: "/example/accounts", element: <ExampleAccounts />, meta: { label: "Accounts", description: "계정 목록 · 옆 패널 편집 · 일괄 삭제" } },
+      github: { path: "/example/github", element: <ExampleGithub />, meta: { label: "GitHub Search", description: "GitHub API로 만든 검색 화면" } }
+    }
   },
 
   /**

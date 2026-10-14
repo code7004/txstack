@@ -32,7 +32,7 @@ import {
 } from "@txstack/ui";
 import { Block, Demo, Page } from "../components/Page";
 import { STORYBOOK_URL } from "../lib/links";
-import { componentAnchor } from "./api/data";
+import { Used } from "../components/Used";
 
 /**
  * **갤러리.** 분류마다 컴포넌트 몇 개로 짠 작은 화면 하나를 실제로 돌린다 — "무엇을 만들 수 있나" 를
@@ -41,20 +41,6 @@ import { componentAnchor } from "./api/data";
  */
 
 const muted = "text-slate-600 dark:text-slate-300";
-
-/** 이 예제에 쓴 컴포넌트. 누르면 API › ui 의 그 줄로 간다 */
-function Used({ names }: { names: string[] }) {
-  return (
-    <div className="flex flex-wrap items-center gap-1.5 text-xs">
-      <span className="text-slate-500 dark:text-slate-400">쓴 컴포넌트</span>
-      {names.map((name) => (
-        <Link key={name} to={`/api/ui#${componentAnchor(name)}`} className="site-card rounded border px-1.5 py-0.5 font-mono">
-          {name}
-        </Link>
-      ))}
-    </div>
-  );
-}
 
 function Section({ title, lead, used, children }: { title: string; lead: ReactNode; used: string[]; children: ReactNode }) {
   return (
