@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseApiError } from "@txstack/axios";
 import { TxButton, TxCopyButton, TxDialog, TxModal, TxSkeleton, TxToast } from "@txstack/ui";
-import { LOG_STATUSES, canRemove, logApi, type ErrorLogDetail } from "./logApi";
+import { LOG_STATUSES, canRemove, logApi } from "./logApi";
 
 interface Props {
   /** 열 로그의 id. `null` 이면 닫힘 */
@@ -12,35 +12,30 @@ interface Props {
 
 /** 로그 한 건의 상세. 목록에는 없는 스택 트레이스를 여기서 따로 불러옵니다 */
 export function LogDetail({ id, onClose, onRemoved }: Props) {
-  const [log, setLog] = useState<ErrorLogDetail>();
+  // 열 때만 부릅니다. 같은 로그를 다시 열면 캐시에서 바로 보여 줍니다
+  const { data: log } = useQuery({
+    queryKey: ["logs", "detail", id],
+    queryFn: () => logApi.detail(id!),
+    enabled: id !== null
+  });
 
-  useEffect(() => {
-    if (!id) return;
-    let alive = true;
-    setLog(undefined);
-
-    logApi
-      .detail(id)
-      .then((detail) => alive && setLog(detail))
-      .catch((error) => TxToast.show({ variant: "danger", title: "상세를 불러오지 못했습니다", message: parseApiError(error).message }));
-
-    return () => {
-      alive = false;
-    };
-  }, [id]);
+  const queryClient = useQueryClient();
+  const removeLog = useMutation({
+    mutationFn: logApi.remove,
+    onSuccess: (_, removedId) => {
+      TxToast.show({ variant: "info", title: "지웠습니다", message: removedId });
+      onRemoved();
+      // 지운 로그의 상세는 버리고, 목록과 요약은 다시 부릅니다
+      queryClient.removeQueries({ queryKey: ["logs", "detail", removedId] });
+      void queryClient.invalidateQueries({ queryKey: ["logs"] });
+    },
+    onError: (cause) => TxToast.show({ variant: "danger", title: "지우지 못했습니다", message: parseApiError(cause).message })
+  });
 
   const remove = async () => {
     if (!log) return;
     const yes = await TxDialog.confirm({ title: "로그를 지울까요?", message: `${log.id} · ${log.message}`, tone: "danger", confirmLabel: "삭제" });
-    if (!yes) return;
-
-    try {
-      await logApi.remove(log.id);
-      TxToast.show({ variant: "info", title: "지웠습니다", message: log.id });
-      onRemoved();
-    } catch (error) {
-      TxToast.show({ variant: "danger", title: "지우지 못했습니다", message: parseApiError(error).message });
-    }
+    if (yes) await removeLog.mutateAsync(log.id).catch(() => undefined);
   };
 
   const removable = log ? canRemove(log) : false;

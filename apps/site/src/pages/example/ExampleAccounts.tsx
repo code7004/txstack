@@ -37,19 +37,21 @@ export function ExampleAccounts() {
       <Block title="How it's built">
         <ol className={`flex list-inside list-decimal flex-col gap-2 ${muted}`}>
           <li>
-            <strong>조건은 주소에.</strong> 검색어 · 역할 · 상태 · 정렬 · 페이지를 <code>useUrlQuery</code> 하나로 다룹니다. 필터가 바뀌면 1페이지로 돌아갑니다.
+            <strong>조건은 주소에, 요청은 TanStack Query에.</strong> 검색어 · 역할 · 상태 · 정렬 · 페이지를 <code>useUrlQuery</code> 하나로 다루고, 그 값을 그대로 <code>useQuery</code>의 쿼리 키로 씁니다. 주소가 바뀌면 다시 부르고, 받는 동안에는{" "}
+            <code>keepPreviousData</code>로 이전 페이지를 그대로 보여 줍니다.
           </li>
           <li>
             <strong>정렬은 서버가.</strong> 페이지로 나눠 받으므로 <code>serverSortColumns</code>로 정렬 화살표만 표가 그리고, 바뀐 정렬로 다시 조회합니다.
           </li>
           <li>
-            <strong>골라서 한꺼번에.</strong> <code>rowSelection</code>으로 줄을 고르고 <code>onSelectionChanged</code>로 받습니다. 지우기 전에 <code>TxDialog.confirm</code>으로 묻습니다.
+            <strong>골라서 한꺼번에.</strong> <code>rowSelection</code>으로 줄을 고르고 <code>onSelectionChanged</code>로 받습니다. 지우기 전에 <code>TxDialog.confirm</code>으로 묻고, 지운 뒤에는 <code>invalidateQueries</code>로 목록을 다시 부릅니다.
           </li>
           <li>
             <strong>목록을 둔 채 옆에서 편집.</strong> 새 계정 버튼과 이름 칸은 같은 폼을 <code>TxSlidePanel</code>에 엽니다. 비밀번호 칸은 새로 만들 때만 보이고, 열 때마다 <code>key</code>를 바꿔 이전 입력이 남지 않게 합니다.
           </li>
           <li>
-            <strong>서버의 거절은 알맞은 자리에.</strong> <code>parseApiError</code>가 오류를 한 형태로 바꿔 줍니다. 아이디 중복(409)은 폼 위에, 소유자 삭제 거절(403)은 알림으로 보여 줍니다.
+            <strong>서버의 거절은 알맞은 자리에.</strong> <code>parseApiError</code>가 오류를 한 형태로 바꿔 줍니다. 아이디 중복(409)은 <code>useMutation</code>의 <code>error</code>로 폼 위에, 소유자 삭제 거절(403)은 <code>onError</code>에서 알림으로
+            보여 줍니다.
           </li>
         </ol>
       </Block>

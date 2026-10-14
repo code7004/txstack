@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { parseApiError } from "@txstack/axios";
 import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxButton, TxDialog, TxDropdown, TxSearchInput, TxTag, TxToast, type TxTagVariant } from "@txstack/ui";
 import { TxAgGrid } from "@txstack/ui/aggrid";
 import { AccountForm } from "./AccountForm";
-import { ROLES, STATUSES, accountApi, type Account, type AccountPage, type Status } from "./accountApi";
+import { ROLES, STATUSES, accountApi, type Account, type Status } from "./accountApi";
 
 const PAGE_SIZE = 10;
 
@@ -18,31 +19,33 @@ const STATUS_TAG: Record<Status, { name: string; variant: TxTagVariant }> = {
 export function AccountsScreen() {
   // 검색어 · 필터 · 정렬 · 페이지는 모두 주소에 담습니다. 새로고침하거나 주소를 보내도 같은 화면이 열립니다
   const [query, setQuery] = useUrlQuery({ defaults: { q: "", role: "", status: "", page: 1, sort: "", order: "none" } });
+  const listQuery = { ...query, order: query.order as "asc" | "desc" | "none", size: PAGE_SIZE };
 
-  const [data, setData] = useState<AccountPage>({ rows: [], total: 0 });
-  const [loading, setLoading] = useState(true);
-  const [reload, setReload] = useState(0);
+  // 주소가 곧 쿼리 키입니다. 조건이 바뀌면 다시 부르고, 받는 동안에는 이전 페이지를 그대로 보여 줍니다
+  const {
+    data = { rows: [], total: 0 },
+    isFetching,
+    error
+  } = useQuery({
+    queryKey: ["accounts", listQuery],
+    queryFn: () => accountApi.list(listQuery),
+    placeholderData: keepPreviousData
+  });
+
+  const queryClient = useQueryClient();
+  const remove = useMutation({
+    mutationFn: accountApi.remove,
+    // "accounts" 로 시작하는 쿼리를 모두 낡은 것으로 표시합니다. 지금 보는 목록은 바로 다시 불립니다
+    onSuccess: ({ removed }) => {
+      TxToast.show({ variant: "info", title: `${removed}개를 삭제했습니다` });
+      void queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
+    // 소유자 계정을 함께 고르면 서버가 403 으로 거절합니다
+    onError: (cause) => TxToast.show({ variant: "danger", title: "삭제하지 못했습니다", message: parseApiError(cause).message })
+  });
+
   const [selected, setSelected] = useState<Account[]>([]);
   const [editing, setEditing] = useState<Account | "new" | null>(null);
-
-  useEffect(() => {
-    let alive = true;
-    setLoading(true);
-
-    accountApi
-      .list({ q: query.q, role: query.role, status: query.status, page: query.page, sort: query.sort, order: query.order as "asc" | "desc" | "none", size: PAGE_SIZE })
-      .then((page) => {
-        if (!alive) return;
-        setData(page);
-        setSelected([]);
-      })
-      .catch((error) => TxToast.show({ variant: "danger", title: "목록을 불러오지 못했습니다", message: parseApiError(error).message }))
-      .finally(() => alive && setLoading(false));
-
-    return () => {
-      alive = false;
-    };
-  }, [query.q, query.role, query.status, query.page, query.sort, query.order, reload]);
 
   // 필터가 바뀌면 1페이지부터 다시 봅니다
   const filter = (next: Partial<typeof query>) => setQuery({ ...next, page: 1 });
@@ -55,16 +58,8 @@ export function AccountsScreen() {
       tone: "danger",
       confirmLabel: "삭제"
     });
-    if (!yes) return;
-
-    try {
-      const { removed } = await accountApi.remove(selected.map((account) => account.id));
-      TxToast.show({ variant: "info", title: `${removed}개를 삭제했습니다` });
-      setReload((n) => n + 1);
-    } catch (error) {
-      // 소유자 계정을 함께 고르면 서버가 403 으로 거절합니다
-      TxToast.show({ variant: "danger", title: "삭제하지 못했습니다", message: parseApiError(error).message });
-    }
+    // mutateAsync 의 Promise 를 돌려주므로 끝날 때까지 버튼이 잠깁니다. 실패는 onError 가 알립니다
+    if (yes) await remove.mutateAsync(selected.map((account) => account.id)).catch(() => undefined);
   };
 
   return (
@@ -73,7 +68,7 @@ export function AccountsScreen() {
         <TxSearchInput placeholder="아이디, 이름, 메일" aria-label="계정 검색" defaultValue={query.q} className="w-56" onSubmitText={(q) => filter({ q })} onClear={() => filter({ q: "" })} />
         <TxDropdown aria-label="역할" data={[{ name: "모든 역할", value: "" }, ...ROLES]} value={query.role} onChangeText={(role) => filter({ role: role ?? "" })} className="w-32" />
         <TxDropdown aria-label="상태" data={[{ name: "모든 상태", value: "" }, ...STATUSES]} value={query.status} onChangeText={(status) => filter({ status: status ?? "" })} className="w-32" />
-        <span className="text-sm text-slate-500 dark:text-slate-400">{data.total}개</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400">{error ? parseApiError(error).message : `${data.total}개`}</span>
 
         <div className="ms-auto flex gap-2">
           <TxButton label={`선택 삭제${selected.length ? ` (${selected.length})` : ""}`} variant="danger" disabled={!selected.length} onClick={removeSelected} />
@@ -85,7 +80,7 @@ export function AccountsScreen() {
       <div className="flex h-[34rem] flex-col">
         <TxAgGrid<Account>
           rowData={data.rows}
-          isLoading={loading}
+          isLoading={isFetching}
           getRowId={({ data: row }) => row.id}
           defaultColDef={{ flex: 1, minWidth: 110 }}
           option={{
@@ -123,14 +118,7 @@ export function AccountsScreen() {
         />
       </div>
 
-      <AccountForm
-        target={editing}
-        onClose={() => setEditing(null)}
-        onSaved={() => {
-          setEditing(null);
-          setReload((n) => n + 1);
-        }}
-      />
+      <AccountForm target={editing} onClose={() => setEditing(null)} onSaved={() => setEditing(null)} />
     </div>
   );
 }

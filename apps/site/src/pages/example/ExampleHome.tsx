@@ -1,5 +1,7 @@
+import { CodeBlock } from "../../components/CodeBlock";
 import { LinkCard, LinkCardGrid } from "../../components/LinkCard";
-import { Page } from "../../components/Page";
+import { Block, Page } from "../../components/Page";
+import { muted } from "./ExampleParts";
 
 /** `/example` 의 인덱스 화면. */
 export function ExampleHome() {
@@ -19,6 +21,21 @@ export function ExampleHome() {
           GitHub 검색 API를 실제로 호출하는 검색 화면
         </LinkCard>
       </LinkCardGrid>
+
+      <Block title="Built with TanStack Query">
+        <p className={muted}>
+          GitHub Search를 뺀 세 예제는 txstack과 <strong>TanStack Query</strong>를 함께 씁니다. 조건은 <code>useUrlQuery</code>로 주소에, 요청은 <code>createHttpClient</code>로, 캐시와 다시 부르기는 TanStack Query로 나눕니다. txstack 패키지는
+          TanStack에 의존하지 않으므로, 다른 데이터 라이브러리를 써도 됩니다.
+        </p>
+        <CodeBlock language="bash" title="sh">{`pnpm add @tanstack/react-query`}</CodeBlock>
+        <CodeBlock title="src/main.tsx">{`const queryClient = new QueryClient();
+
+createRoot(document.getElementById("root")!).render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+);`}</CodeBlock>
+      </Block>
     </Page>
   );
 }
