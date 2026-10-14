@@ -101,6 +101,12 @@ importers:
       '@txstack/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      ag-grid-community:
+        specifier: ^35.0.0
+        version: 35.3.1
+      ag-grid-react:
+        specifier: ^35.0.0
+        version: 35.3.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       axios:
         specifier: ^1.20.0
         version: 1.20.0
