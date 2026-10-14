@@ -1,14 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import { TxSpinner, TxTabs } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
+import { DemoLoading, Packages, SourceTabs, muted } from "./ExampleParts";
 import FORM_SOURCE from "./accounts/AccountForm.tsx?raw";
 import API_SOURCE from "./accounts/accountApi.ts?raw";
 import SCREEN_SOURCE from "./accounts/AccountsScreen.tsx?raw";
-
-const muted = "text-slate-600 dark:text-slate-300";
 
 /** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
 const AccountsDemo = lazy(() => import("./accounts/AccountsDemo"));
@@ -22,31 +20,18 @@ export function ExampleAccounts() {
           거절합니다. 이미 있는 아이디로 새 계정을 만들면 서버의 오류가 폼 위에 뜹니다.
         </p>
         <Demo>
-          <Suspense
-            fallback={
-              <span className={`inline-flex items-center gap-2 text-sm ${muted}`}>
-                <TxSpinner decorative /> 화면을 불러오는 중…
-              </span>
-            }
-          >
+          <Suspense fallback={<DemoLoading />}>
             <AccountsDemo />
           </Suspense>
         </Demo>
         <Used names={["TxAgGrid", "TxSlidePanel", "TxForm", "TxDropdown", "TxSearchInput", "TxTag", "TxButton", "TxDialog", "TxToast", "TxAlert"]} />
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          함께 쓴 패키지 ·{" "}
-          <Link to="/api/hooks#useurlquery" className="underline">
-            useUrlQuery
-          </Link>{" "}
-          ·{" "}
-          <Link to="/api/axios#createhttpclient" className="underline">
-            createHttpClient
-          </Link>{" "}
-          ·{" "}
-          <Link to="/api/axios#parseapierror" className="underline">
-            parseApiError
-          </Link>
-        </p>
+        <Packages
+          items={[
+            ["useUrlQuery", "/api/hooks#useurlquery"],
+            ["createHttpClient", "/api/axios#createhttpclient"],
+            ["parseApiError", "/api/axios#parseapierror"]
+          ]}
+        />
       </Block>
 
       <Block title="How it's built">
@@ -88,12 +73,11 @@ export function ExampleAccounts() {
 
       <Block title="Source">
         <p className={muted}>위 화면을 그리는 코드 전체입니다. 화면에서 돌아가는 파일을 그대로 보여 줍니다. 가짜 서버는 axios의 adapter 자리에 끼워 두었으므로, 그 부분을 지우면 진짜 서버로 요청합니다.</p>
-        <TxTabs
-          aria-label="소스 파일"
-          tabs={[
-            { label: "AccountsScreen.tsx", content: <CodeBlock title="src/accounts/AccountsScreen.tsx">{SCREEN_SOURCE}</CodeBlock> },
-            { label: "AccountForm.tsx", content: <CodeBlock title="src/accounts/AccountForm.tsx">{FORM_SOURCE}</CodeBlock> },
-            { label: "accountApi.ts", content: <CodeBlock title="src/accounts/accountApi.ts">{API_SOURCE}</CodeBlock> }
+        <SourceTabs
+          files={[
+            { name: "AccountsScreen.tsx", path: "src/accounts/AccountsScreen.tsx", source: SCREEN_SOURCE },
+            { name: "AccountForm.tsx", path: "src/accounts/AccountForm.tsx", source: FORM_SOURCE },
+            { name: "accountApi.ts", path: "src/accounts/accountApi.ts", source: API_SOURCE }
           ]}
         />
       </Block>
