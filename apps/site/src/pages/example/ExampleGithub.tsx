@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxAlert, TxDropdown, TxPagination, TxSearchInput, TxSkeleton, TxTag } from "@txstack/ui";
-import { CodeBlock } from "../components/CodeBlock";
-import { Block, Page } from "../components/Page";
-import { searchRepos, toMessage, type Repo, type RepoSort } from "../lib/github";
+import { CodeBlock } from "../../components/CodeBlock";
+import { Block, Page } from "../../components/Page";
+import { searchRepos, toMessage, type Repo, type RepoSort } from "../../lib/github";
 
 const SORTS = [
   { name: "관련도순", value: "best-match" },
@@ -18,7 +18,7 @@ const MAX_PAGE = Math.floor(1000 / PER_PAGE);
 
 const stars = (count: number) => (count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count));
 
-export function Examples() {
+export function ExampleGithub() {
   /**
    * **조회 조건이 주소에 있다.** 새로고침해도, 링크를 붙여 보내도 같은 화면이 뜬다 —
    * `useUrlQuery` 가 `?q=...&page=2&sort=stars` 를 상태처럼 다룬다.
@@ -75,7 +75,10 @@ export function Examples() {
   const search = (patch: { q?: string; sort?: RepoSort }) => setQuery({ ...patch, page: 1 });
 
   return (
-    <Page title="Example" lead="GitHub 검색 API를 실제로 호출하는 예제입니다. 검색어와 정렬을 바꾸고 페이지를 넘겨 보세요. 인증 없이 호출하므로 1분에 10번 넘게 검색하면 GitHub이 요청을 막는데, 이때 나오는 오류 화면도 일부러 그대로 보여 줍니다.">
+    <Page
+      title="GitHub Search"
+      lead="GitHub 검색 API를 실제로 호출하는 예제입니다. 검색어와 정렬을 바꾸고 페이지를 넘겨 보세요. 인증 없이 호출하므로 1분에 10번 넘게 검색하면 GitHub이 요청을 막는데, 이때 나오는 오류 화면도 일부러 그대로 보여 줍니다."
+    >
       <Block title="GitHub repository search">
         <div className="flex flex-wrap items-center gap-2">
           <TxSearchInput placeholder="검색어 입력 후 Enter" aria-label="저장소 검색" className="w-64" defaultValue={query.q} onSubmitText={(value) => search({ q: value })} onClear={() => search({ q: "" })} />

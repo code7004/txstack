@@ -204,8 +204,8 @@ try {
 
       <p className={muted}>
         이 클라이언트로 GitHub API를 부르는 예제는{" "}
-        <Link to="/example" className="underline">
-          Example
+        <Link to="/example/github" className="underline">
+          Example › GitHub Search
         </Link>
         에, 옵션 전체는{" "}
         <Link to="/api/axios" className="underline">

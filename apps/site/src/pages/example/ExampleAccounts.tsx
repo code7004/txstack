@@ -1,0 +1,102 @@
+import { lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
+import { TxSpinner, TxTabs } from "@txstack/ui";
+import { CodeBlock } from "../../components/CodeBlock";
+import { Block, Demo, Page } from "../../components/Page";
+import { Used } from "../../components/Used";
+import FORM_SOURCE from "./accounts/AccountForm.tsx?raw";
+import API_SOURCE from "./accounts/accountApi.ts?raw";
+import SCREEN_SOURCE from "./accounts/AccountsScreen.tsx?raw";
+
+const muted = "text-slate-600 dark:text-slate-300";
+
+/** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
+const AccountsDemo = lazy(() => import("./accounts/AccountsDemo"));
+
+export function ExampleAccounts() {
+  return (
+    <Page title="Accounts" lead="계정을 찾고, 만들고, 고치고, 여러 개를 한꺼번에 지우는 관리 화면입니다. 관리 도구에서 가장 자주 만드는 화면을 처음부터 끝까지 txstack으로 만들었습니다.">
+      <Block title="Try it">
+        <p className={muted}>
+          역할이나 상태로 거르고, 아이디 · 이름 머리를 눌러 정렬해 보세요. 이름을 누르면 옆 패널에서 고칩니다. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다. 줄 앞의 칸을 골라 한꺼번에 지울 수 있는데, 첫 줄의 소유자 계정을 함께 고르면 서버가
+          거절합니다. 이미 있는 아이디로 새 계정을 만들면 서버의 오류가 폼 위에 뜹니다.
+        </p>
+        <Demo>
+          <Suspense
+            fallback={
+              <span className={`inline-flex items-center gap-2 text-sm ${muted}`}>
+                <TxSpinner decorative /> 화면을 불러오는 중…
+              </span>
+            }
+          >
+            <AccountsDemo />
+          </Suspense>
+        </Demo>
+        <Used names={["TxAgGrid", "TxSlidePanel", "TxForm", "TxDropdown", "TxSearchInput", "TxTag", "TxButton", "TxDialog", "TxToast", "TxAlert"]} />
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          함께 쓴 패키지 ·{" "}
+          <Link to="/api/hooks#useurlquery" className="underline">
+            useUrlQuery
+          </Link>{" "}
+          ·{" "}
+          <Link to="/api/axios#createhttpclient" className="underline">
+            createHttpClient
+          </Link>{" "}
+          ·{" "}
+          <Link to="/api/axios#parseapierror" className="underline">
+            parseApiError
+          </Link>
+        </p>
+      </Block>
+
+      <Block title="How it's built">
+        <ol className={`flex list-inside list-decimal flex-col gap-2 ${muted}`}>
+          <li>
+            <strong>조건은 주소에.</strong> 검색어 · 역할 · 상태 · 정렬 · 페이지를 <code>useUrlQuery</code> 하나로 다룹니다. 필터가 바뀌면 1페이지로 돌아갑니다.
+          </li>
+          <li>
+            <strong>정렬은 서버가.</strong> 페이지로 나눠 받으므로 <code>serverSortColumns</code>로 정렬 화살표만 표가 그리고, 바뀐 정렬로 다시 조회합니다.
+          </li>
+          <li>
+            <strong>골라서 한꺼번에.</strong> <code>rowSelection</code>으로 줄을 고르고 <code>onSelectionChanged</code>로 받습니다. 지우기 전에 <code>TxDialog.confirm</code>으로 묻습니다.
+          </li>
+          <li>
+            <strong>목록을 둔 채 옆에서 편집.</strong> 새 계정 버튼과 이름 칸은 같은 폼을 <code>TxSlidePanel</code>에 엽니다. 비밀번호 칸은 새로 만들 때만 보이고, 열 때마다 <code>key</code>를 바꿔 이전 입력이 남지 않게 합니다.
+          </li>
+          <li>
+            <strong>서버의 거절은 알맞은 자리에.</strong> <code>parseApiError</code>가 오류를 한 형태로 바꿔 줍니다. 아이디 중복(409)은 폼 위에, 소유자 삭제 거절(403)은 알림으로 보여 줍니다.
+          </li>
+        </ol>
+      </Block>
+
+      <Block title="Show it to admins only">
+        <p className={muted}>
+          이런 화면은 보통 관리자만 봅니다. 라우트에 권한을 적어 두면 <code>getNavigableRoutes</code>가 권한이 없는 사람의 메뉴에서 이 항목을 뺍니다. 자세한 방법은{" "}
+          <Link to="/docs/guide/routing#5-filter-the-menu-by-permission" className="underline">
+            Routing & Menu
+          </Link>
+          에 있습니다.
+        </p>
+        <CodeBlock title="src/routes.tsx">{`settings: {
+  path: "/settings",
+  meta: { label: "설정" },
+  children: {
+    accounts: { path: "/settings/accounts", element: <AccountsScreen />, meta: { label: "계정", permissions: ["admin"] } }
+  }
+}`}</CodeBlock>
+      </Block>
+
+      <Block title="Source">
+        <p className={muted}>위 화면을 그리는 코드 전체입니다. 화면에서 돌아가는 파일을 그대로 보여 줍니다. 가짜 서버는 axios의 adapter 자리에 끼워 두었으므로, 그 부분을 지우면 진짜 서버로 요청합니다.</p>
+        <TxTabs
+          aria-label="소스 파일"
+          tabs={[
+            { label: "AccountsScreen.tsx", content: <CodeBlock title="src/accounts/AccountsScreen.tsx">{SCREEN_SOURCE}</CodeBlock> },
+            { label: "AccountForm.tsx", content: <CodeBlock title="src/accounts/AccountForm.tsx">{FORM_SOURCE}</CodeBlock> },
+            { label: "accountApi.ts", content: <CodeBlock title="src/accounts/accountApi.ts">{API_SOURCE}</CodeBlock> }
+          ]}
+        />
+      </Block>
+    </Page>
+  );
+}
