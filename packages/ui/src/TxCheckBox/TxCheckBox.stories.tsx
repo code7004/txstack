@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          "켜고 끄는 자리. 네모난 체크박스와 스위치 두 모양이 있다.",
+          "고르는 자리. 네모를 눌러 체크한다.",
           "",
           "```tsx",
           'import { TxCheckBox } from "@txstack/ui";',
@@ -81,7 +81,7 @@ export const States: Story = {
 /**
  * **키보드로 다뤄 보라.**
  *
- * Tab 으로 이동하면 네모나 스위치에 포커스 링이 걸리고, Space 로 켜고 끈다.
+ * Tab 으로 이동하면 네모에 포커스 링이 걸리고, Space 로 체크한다.
  * 글을 눌러도 토글된다 — 전체가 하나의 `<label>` 이다.
  */
 export const Keyboard: Story = {
@@ -170,8 +170,8 @@ export const StopPropagation: Story = {
 };
 
 /**
- * 토큰 한 줄로 바꾼다. 스위치의 손잡이 이동 거리는 **트랙과 손잡이 크기에서 계산되므로**
- * 크기만 바꿔도 알아서 맞는다.
+ * 토큰 한 줄로 바꾼다. 체크 표시는 네모 크기를 따르지 않으므로 크기를 키우면
+ * `--tx-checkbox-icon-size` 도 함께 준다.
  */
 export const CustomizingTokens: Story = {
   parameters: noControls,
