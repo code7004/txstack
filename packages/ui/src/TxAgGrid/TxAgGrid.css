@@ -39,6 +39,11 @@
   padding: var(--tx-ag-grid-footer-padding);
 }
 
+/** 쪽 번호는 자리를 다 쓰므로(`compact="auto"`) 오른쪽 정렬은 그 안에서 한다. */
+.tx-ag-grid__footer .tx-pagination {
+  --tx-pagination-justify: flex-end;
+}
+
 /* --- 우리가 얹은 것 -------------------------------------------------------- */
 
 .tx-ag-grid__index-cell,

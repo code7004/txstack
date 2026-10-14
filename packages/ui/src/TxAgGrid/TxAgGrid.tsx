@@ -135,7 +135,15 @@ export function TxAgGrid<TData = unknown>({
 
       {pagination && (
         <div className="tx-ag-grid__footer">
-          <TxPagination currentPage={pagination.currentPage} totalRows={pagination.totalRows} pageSize={pagination.pageSize} pageButtonCount={pagination.pageButtonCount} maxPage={pagination.maxPage} onChangePage={pagination.onChangePage} />
+          <TxPagination
+            currentPage={pagination.currentPage}
+            totalRows={pagination.totalRows}
+            pageSize={pagination.pageSize}
+            pageButtonCount={pagination.pageButtonCount}
+            maxPage={pagination.maxPage}
+            compact={pagination.compact}
+            onChangePage={pagination.onChangePage}
+          />
         </div>
       )}
     </div>

@@ -26,6 +26,7 @@ const meta = {
           "- **쪽이 하나뿐이면 아무것도 그리지 않는다** — 고를 것이 없는 자리를 채우지 않는다",
           "- 번호는 `pageButtonCount` 개씩 묶여 나오고 `«` `»` 가 묶음째 옮긴다",
           "- 같은 쪽을 다시 눌러도 `onChangePage` 는 오지 않는다",
+          "- **좁은 자리에서는 `‹ 3 / 12 ›` 로 줄어든다** — 화면 폭이 아니라 놓인 자리의 폭을 본다(`compact`)",
           "",
           "**마지막 쪽의 상한은 소비자가 준다**(`maxPage`). 서버가 결과를 1만 건까지만 돌려준다면",
           "`maxPage={Math.floor(10000 / pageSize)}` 다 — 그 사정은 소비자만 안다.",
@@ -45,6 +46,7 @@ const meta = {
     pageSize: { control: { type: "number", min: 1 } },
     pageButtonCount: { control: { type: "number", min: 1 } },
     maxPage: { control: "number", description: "마지막 쪽의 상한. 서버가 더 못 주는 자리에만 준다" },
+    compact: { control: "inline-radio", options: ["auto", true, false], description: '좁은 자리에서 `‹ 3 / 12 ›` 로 줄인다. 기본 `"auto"`' },
     hideStepButtons: { control: "boolean" },
     hideGroupButtons: { control: "boolean" },
     className: { control: "text", description: "`.tx-pagination` 에 덧붙는다 (교체 아님)" },
@@ -121,6 +123,42 @@ export const MaxPage: Story = {
   )
 };
 
+/**
+ * 좁은 자리에서는 번호 대신 `‹ 3 / 12 ›` 로 줄어든다. 기본 `compact="auto"` 는
+ * **화면 폭이 아니라 놓인 자리의 폭**(32rem)을 보므로, 넓은 화면의 옆 패널 안에서도 줄어든다.
+ *
+ * 늘 한 모양으로 두려면 `compact` · `compact={false}` 를 준다. 아래 칸의 오른쪽 모서리를 끌어 폭을 바꿔 보라.
+ */
+export const Compact: Story = {
+  parameters: noControls,
+  render: function CompactStory() {
+    const [page, setPage] = useState(3);
+    const box = "flex flex-col gap-2 rounded border border-dashed border-slate-300 p-3 dark:border-slate-600";
+    const caption = "text-xs font-bold text-slate-500 dark:text-slate-400";
+
+    return (
+      <div className="flex flex-col gap-6">
+        <div className={box} style={{ resize: "horizontal", overflow: "auto", width: "40rem", maxWidth: "100%", minWidth: "12rem" }}>
+          <div className={caption}>auto (기본) — 끌어서 좁혀 보라</div>
+          <TxPagination currentPage={page} totalRows={1250} pageSize={50} onChangePage={setPage} />
+        </div>
+        <div className={box} style={{ width: "18rem" }}>
+          <div className={caption}>auto — 18rem 칸 안</div>
+          <TxPagination currentPage={page} totalRows={1250} pageSize={50} onChangePage={setPage} />
+        </div>
+        <div className={box}>
+          <div className={caption}>compact — 넓어도 늘 줄인 모양</div>
+          <TxPagination compact currentPage={page} totalRows={1250} pageSize={50} onChangePage={setPage} />
+        </div>
+        <div className={box} style={{ width: "18rem" }}>
+          <div className={caption}>compact=&#123;false&#125; — 좁으면 두 줄로 넘어간다</div>
+          <TxPagination compact={false} currentPage={page} totalRows={1250} pageSize={50} onChangePage={setPage} />
+        </div>
+      </div>
+    );
+  }
+};
+
 /** 화살표를 숨겨 번호만 남길 수 있다. */
 export const WithoutArrows: Story = {
   parameters: noControls,
@@ -138,7 +176,14 @@ export const WithoutArrows: Story = {
  */
 export const Labels: Story = {
   parameters: noControls,
-  render: () => <TxPagination currentPage={2} totalRows={250} pageSize={50} labels={{ nav: "Pagination", prevGroup: "Previous 10", prev: "Previous", next: "Next", nextGroup: "Next 10", page: (page) => `Page ${page}` }} />
+  render: () => (
+    <TxPagination
+      currentPage={2}
+      totalRows={250}
+      pageSize={50}
+      labels={{ nav: "Pagination", prevGroup: "Previous 10", prev: "Previous", next: "Next", nextGroup: "Next 10", page: (page) => `Page ${page}`, status: (page, total) => `Page ${page} of ${total}` }}
+    />
+  )
 };
 
 /**

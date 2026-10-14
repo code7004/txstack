@@ -22,6 +22,18 @@ export interface TxPaginationProps {
   /** 쪽이 바뀔 때. **바뀔 때만** 온다 — 같은 쪽을 다시 눌러도 오지 않는다. */
   onChangePage?: (page: number) => void;
 
+  /**
+   * 좁은 자리에서 번호 대신 `‹ 3 / 12 ›` 로 줄인다. 기본 `"auto"`.
+   *
+   * - `"auto"` — **놓인 자리의 폭**을 보고 저절로 바꾼다(32rem 아래). 화면 폭이 아니라서 옆 패널 안에서도 맞는다
+   * - `true` — 늘 줄인 모양
+   * - `false` — 늘 번호 모양. 자리가 모자라면 두 줄로 넘어간다
+   *
+   * 줄인 모양에는 `«` `»` 가 없다 — 넘길 묶음이 보이지 않는다.
+   * `"auto"` 는 놓인 자리의 폭을 다 쓴다(`width: 100%`). 정렬은 `--tx-pagination-justify` 로 바꾼다.
+   */
+  compact?: boolean | "auto";
+
   /** `‹` `›` (한 쪽씩) 버튼을 숨긴다. */
   hideStepButtons?: boolean;
   /** `«` `»` (묶음째) 버튼을 숨긴다. */
@@ -52,4 +64,6 @@ export interface TxPaginationLabels {
   nextGroup?: string;
   /** 쪽 번호 버튼. 기본 `(page) => \`${page}쪽\``. */
   page?: (page: number) => string;
+  /** 줄인 모양의 `3 / 12`. 기본 `(page, total) => \`${total}쪽 중 ${page}쪽\``. */
+  status?: (page: number, total: number) => string;
 }
