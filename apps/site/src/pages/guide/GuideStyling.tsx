@@ -60,9 +60,9 @@ function Playground() {
   );
 }
 
-export function GuideTokens() {
+export function GuideStyling() {
   return (
-    <Page title="Tokens" lead="디자인을 바꿀 때는 CSS를 덮어쓰지 말고 토큰(디자인 값을 담은 CSS 변수)을 다시 정의하세요.">
+    <Page title="Styling" lead="색 · 모서리 · 여백 같은 모양은 토큰(디자인 값을 담은 CSS 변수)으로, 화면에 놓이는 자리는 className으로 바꿉니다. 컴포넌트의 CSS는 덮어쓰지 않습니다.">
       <Block title="Three levels of scope">
         <p className="text-slate-600 dark:text-slate-300">토큰은 세 단계 범위로 지정할 수 있습니다. 앱 전체, 컴포넌트 한 종류, 특정 위치 한 곳 순으로 범위가 좁아집니다.</p>
 
@@ -123,6 +123,45 @@ export function GuideTokens() {
           배경을 채우는 색과 글자로 쓰는 색은 <strong>요구 조건이 서로 다릅니다.</strong> 채우는 색은 그 위의 흰 글자가 읽히도록 어두워야 하고, 글자로 쓰는 색은 라이트 모드에서는 더 어둡게, 다크 모드에서는 밝게 바뀌어야 합니다. 그래서 민트나 파스텔
           같은 밝은 브랜드 색을 <code>--tx-color-primary</code>에만 넣으면 <strong>버튼은 잘 보이지만 현재 메뉴 표시가 잘 읽히지 않습니다.</strong> 이 사이트가 바로 그런 경우이고, 두 토큰을 각각 지정하는 것으로 해결했습니다.
         </TxAlert>
+      </Block>
+
+      <Block title="Classes">
+        <p className="text-slate-600 dark:text-slate-300">
+          토큰이 컴포넌트의 모양을 바꾼다면, <code>className</code>은 컴포넌트가 <strong>화면에 놓이는 자리</strong>(폭 · 바깥 여백 · 정렬)를 정합니다. <code>className</code>은 기본 클래스(<code>.tx-button</code>)를 대신하지 않고 뒤에 덧붙습니다.
+        </p>
+
+        <CodeBlock title="Screen.tsx">{`<TxButton label="저장" className="w-full sm:w-auto" />
+
+{/* 안쪽 요소는 classNames로 */}
+<TxCard title="회원" className="mt-6" classNames={{ body: "flex flex-col gap-3" }} />`}</CodeBlock>
+
+        <p className="text-slate-600 dark:text-slate-300">
+          <code>classNames</code>로 꾸밀 수 있는 안쪽 요소는 컴포넌트마다 정해져 있습니다. 예를 들어 <code>TxCard</code>는 <code>header</code> · <code>title</code> · <code>body</code>, <code>TxModal</code>은 <code>panel</code> · <code>header</code> ·{" "}
+          <code>body</code>입니다. 각 컴포넌트의 이름은{" "}
+          <Link to="/api/ui#components-by-category" className="underline">
+            API › ui
+          </Link>
+          에서 Storybook 문서로 이어집니다.
+        </p>
+
+        <p className="text-slate-600 dark:text-slate-300">
+          일반 CSS 파일에 쓴 클래스는 항상 컴포넌트 스타일보다 우선합니다. Tailwind를 쓴다면{" "}
+          <Link to="/docs/start#using-with-tailwind" className="underline">
+            Getting Started › Using with Tailwind
+          </Link>
+          의 레이어 순서 한 줄이 있어야 유틸리티 클래스가 우선합니다.
+        </p>
+
+        <TxAlert variant="warning" title="색은 className이 아니라 토큰으로">
+          <code>className=&quot;bg-violet-600&quot;</code>처럼 색을 직접 칠하면 평소 색만 바뀌고, 마우스를 올리거나 눌렀을 때의 색은 따라오지 않습니다. 다크 모드에서도 그대로 남습니다. 색은 그 컴포넌트의 토큰을 바꾸세요.
+        </TxAlert>
+
+        <SideBySide>
+          <CodeBlock language="css" title="app.css">{`.brand-button {
+  --tx-button-bg: #7c3aed;
+}`}</CodeBlock>
+          <CodeBlock title="Screen.tsx">{`<TxButton label="시작하기" className="brand-button" />`}</CodeBlock>
+        </SideBySide>
       </Block>
 
       <Block title="This site's settings">

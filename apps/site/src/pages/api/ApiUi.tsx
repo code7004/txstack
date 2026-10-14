@@ -55,8 +55,8 @@ export function ApiUi() {
       <Block title="Design tokens">
         <p className="text-slate-600 dark:text-slate-300">
           모든 컴포넌트가 따르는 전역 CSS 변수입니다. <code>:root</code>에서 값을 바꾸면 사이트 전체에 적용되고, <code>.dark</code>는 표의 다크 모드 값으로 바꿉니다. 바꾸는 방법은{" "}
-          <Link to="/docs/guide/tokens" className="underline">
-            Guide › Tokens
+          <Link to="/docs/guide/styling" className="underline">
+            Guide › Styling
           </Link>
           에 있습니다.
         </p>

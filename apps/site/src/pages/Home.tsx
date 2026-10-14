@@ -21,14 +21,14 @@ const STORY = [
 /** 세 가지 원칙. 각각 그 원칙을 보여 주는 문서로 간다 */
 const PRINCIPLES = [
   { title: "Easy to use", body: "설치하고 스타일시트 한 줄이면 바로 씁니다. 확인 창이나 알림도 Provider 없이 호출만 하면 됩니다.", to: "/docs/start" },
-  { title: "Easy to customize", body: "디자인은 CSS 변수만 바꾸면 됩니다. 컴포넌트를 직접 고칠 필요가 없고, 다크 모드도 같은 방식으로 바뀝니다.", to: "/docs/guide/tokens" },
+  { title: "Easy to customize", body: "디자인은 CSS 변수만 바꾸면 됩니다. 컴포넌트를 직접 고칠 필요가 없고, 다크 모드도 같은 방식으로 바뀝니다.", to: "/docs/guide/styling" },
   { title: "The app owns the policy", body: "인증 토큰, 401 처리, 응답 형식처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 옵션으로 넘깁니다.", to: "/api/axios" }
 ];
 
 /** 주요 기능. 원칙이 "어떤 생각으로" 라면 이쪽은 "무엇을 할 수 있나" 다. 각각 그 기능의 가이드로 간다 */
 const FEATURES = [
   { pkg: "ui", title: "49 components", body: "입력 폼, 표, 날짜 선택, 확인 창, 알림, 탭, 파일 업로드까지 서비스 화면에 필요한 컴포넌트를 갖췄습니다.", to: "/docs/components" },
-  { pkg: "ui", title: "Theming and dark mode", body: "색, 모서리, 간격을 CSS 변수로 바꾸고, 클래스 하나로 모든 컴포넌트를 다크 모드로 전환합니다.", to: "/docs/guide/tokens" },
+  { pkg: "ui", title: "Theming and dark mode", body: "색, 모서리, 간격을 CSS 변수로 바꾸고, 클래스 하나로 모든 컴포넌트를 다크 모드로 전환합니다.", to: "/docs/guide/styling" },
   { pkg: "ui", title: "App shell", body: "헤더, 위쪽 메뉴, 왼쪽 메뉴, 본문 자리를 한 번에 잡고, 좁은 화면에서는 메뉴가 서랍으로 들어갑니다.", to: "/docs/guide/layout" },
   { pkg: "route-meta", title: "Menus from routes", body: "라우트를 한 곳에 선언하면 메뉴, 현재 위치 표시, 권한별 메뉴가 모두 거기서 만들어집니다.", to: "/docs/guide/routing" },
   { pkg: "hooks", title: "Search state in the URL", body: "목록의 검색어, 필터, 페이지를 주소에 담아 새로고침하거나 링크를 공유해도 같은 화면이 열립니다.", to: "/docs/guide/url-state" },

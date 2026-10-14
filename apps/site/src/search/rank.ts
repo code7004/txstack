@@ -34,6 +34,7 @@ export const entry = (title: string, trail: string[], to: string, kind: SearchKi
  */
 const SYNONYMS: Record<string, string[]> = {
   토큰: ["token"],
+  스타일: ["styling", "style"],
   다크: ["dark"],
   권한: ["permission"],
   메뉴: ["menu", "nav"],

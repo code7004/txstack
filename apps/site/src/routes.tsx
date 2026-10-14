@@ -17,7 +17,7 @@ import { GuideHome } from "./pages/guide/GuideHome";
 import { GuideLayout } from "./pages/guide/GuideLayout";
 import { GuideRouting } from "./pages/guide/GuideRouting";
 import { GuideTables } from "./pages/guide/GuideTables";
-import { GuideTokens } from "./pages/guide/GuideTokens";
+import { GuideStyling } from "./pages/guide/GuideStyling";
 import { GuideUrlState } from "./pages/guide/GuideUrlState";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
@@ -81,7 +81,7 @@ export const routes = {
         meta: { label: "Guide", description: "디자인 · 레이아웃 · 폼 · 확인 창 · 표 · 라우팅 · URL 상태 · HTTP" },
         children: {
           index: { index: true, element: <GuideHome /> },
-          tokens: { path: "/docs/guide/tokens", element: <GuideTokens />, meta: { label: "Tokens" } },
+          styling: { path: "/docs/guide/styling", element: <GuideStyling />, meta: { label: "Styling" } },
           darkMode: { path: "/docs/guide/dark-mode", element: <GuideDarkMode />, meta: { label: "Dark mode" } },
           layout: { path: "/docs/guide/layout", element: <GuideLayout />, meta: { label: "Layout" } },
           forms: { path: "/docs/guide/forms", element: <GuideForms />, meta: { label: "Forms" } },
