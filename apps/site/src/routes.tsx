@@ -9,6 +9,8 @@ import { Components } from "./pages/Components";
 import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
 import { ExampleAccounts } from "./pages/example/ExampleAccounts";
+import { ExampleDashboard } from "./pages/example/ExampleDashboard";
+import { ExampleErrorLogs } from "./pages/example/ExampleErrorLogs";
 import { ExampleGithub } from "./pages/example/ExampleGithub";
 import { ExampleHome } from "./pages/example/ExampleHome";
 import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
@@ -124,6 +126,8 @@ export const routes = {
     children: {
       index: { index: true, element: <ExampleHome /> },
       accounts: { path: "/example/accounts", element: <ExampleAccounts />, meta: { label: "Accounts", description: "계정 목록 · 옆 패널 편집 · 일괄 삭제" } },
+      errorLogs: { path: "/example/error-logs", element: <ExampleErrorLogs />, meta: { label: "Error Logs", description: "주소에 담긴 필터 · 표 안 상태 수정 · 상세 모달" } },
+      dashboard: { path: "/example/dashboard", element: <ExampleDashboard />, meta: { label: "Dashboard", description: "숫자 카드에서 걸러진 목록으로" } },
       github: { path: "/example/github", element: <ExampleGithub />, meta: { label: "GitHub Search", description: "GitHub API로 만든 검색 화면" } }
     }
   },

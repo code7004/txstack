@@ -40,7 +40,7 @@
 | `Home`      | —                                                                                                                                                                                              | `ui`               |
 | `Documents` | `Getting Started` · `Tutorial` · `Guide`(`Styling` · `Dark mode` · `Layout` · `Forms` · `Dialogs & Toasts` · `Tables & Lists` · `Routing & Menu` · `URL State` · `HTTP Client`) · `Components` | **넷 다**          |
 | `API`       | `ui` · `route-meta` · `hooks` · `axios`                                                                                                                                                        | 넷 다              |
-| `Example`   | `Accounts` · `GitHub Search` (이어서 `Error Logs` · `Dashboard`)                                                                                                                               | **넷 다**          |
+| `Example`   | `Accounts` · `Error Logs` · `Dashboard` · `GitHub Search`                                                                                                                                      | **넷 다**          |
 | `About`     | `Profile` · `Contact`                                                                                                                                                                          | `ui`               |
 
 `Contact` 를 묶음 이름으로 두면 **`Contact > Contact`** 가 되므로 `About` 이다.
@@ -152,14 +152,18 @@
 
 **지금 위치**(2026-10-14) — **`Home` · `Documents` · `API` 는 한국어 기준으로 완성**이다. 남은 것:
 
-1. **`Example`** — 세 소비자 프로젝트의 화면을 본뜬 **완성형 예제 페이지**를 더한다(진행 중). 도메인(베팅 · 지갑 ·
+1. ~~**`Example`**~~ (2026-10-14 완료) — 세 소비자 프로젝트의 화면을 본뜬 **완성형 예제 페이지**를 더했다. 도메인(베팅 · 지갑 ·
    블랙리스트)과 실제 데이터는 가져오지 않고 일반적인 관리 화면으로 바꿨다. 각 예제는 `?raw` 로 전체 소스를 보이고,
    가짜 서버는 Tutorial 처럼 axios `adapter` 자리에 끼운다. 예제는 넓게 쓴다(`max-w-4xl` 없음)
    - [x] `Accounts` — 계정 목록(`TxAgGrid` 서버 정렬 · 다중 선택) · 옆 패널 폼(`TxSlidePanel`) · 일괄 삭제 확인 ·
          409(아이디 중복)는 폼 위, 403(소유자 삭제)은 알림. 조건은 전부 `useUrlQuery`. ag-grid 는 `React.lazy`
    - [x] `GitHub Search` — 기존 `/example` 을 `/example/github` 로 옮겼다
-   - [ ] `Error Logs` — 주소에 담긴 필터 · 기간 · 표 안 상태 수정 · 상세 모달 · 자동 새로고침
-   - [ ] `Dashboard` — 숫자 카드 · 확인 필요 목록 · 필터를 건 채로 `Error Logs` 로 이동
+   - [x] `Error Logs` — 검색 · 메서드 · 상태 · 기간(`TxDayPickerRange`)까지 주소에. 상태는 표 안에서 고치고
+         (`editColumns` + 선택 편집기), 줄을 누르면 상세(`TxModal`, 스택은 그때 따로 부른다). 삭제 규칙
+         (`canRemove`)은 화면과 서버가 같이 쓴다. 10초 자동 새로고침
+   - [x] `Dashboard` — 숫자 카드 · 지난 7일 막대 · 자주 나는 경로(`TxProgress`) · 확인 필요 목록. 링크의 경로는
+         **라우트 트리에서 꺼낸다**(`routes.example.children.errorLogs.path`) — 누르면 조건이 걸린 `Error Logs` 로 간다.
+         두 예제는 같은 가짜 서버를 쓴다. 표를 쓰는 예제의 ag-grid 등록 · 테마는 `GridFrame` 하나가 맡는다
 2. **영문** — 위 ③
 3. **`Profile`** — 사용자만 쓸 수 있는 내용(`PROFILE` 을 채운다)
 4. **npm 배포 뒤 정리** — 설치 안내가 `.tgz` 기준이고 Home 에 "npm 배포 준비 중" 링크가 있다. 배포하면 `pnpm add` 로 바꾼다
