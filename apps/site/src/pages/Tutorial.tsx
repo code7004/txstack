@@ -206,11 +206,11 @@ export function App() {
 }`}</CodeBlock>
         <CodeBlock language="bash" title="sh">{`pnpm dev`}</CodeBlock>
         <p className={muted}>
-          화면이 여러 개인 앱으로 이어 가려면, 같은 방식으로 만든{" "}
-          <Link to="/example" className="underline">
-            Example의 운영 관리 앱
+          화면이 여러 개인 앱으로 이어 가려면{" "}
+          <Link to="/example#put-them-in-an-app" className="underline">
+            Example › Put them in an app
           </Link>
-          을 받아 실행해 보세요. 메뉴 · 레이아웃 · 다크 모드 · TanStack Query까지 갖춘 전체 프로젝트입니다.
+          을 보세요. 같은 방식에 레이아웃(<code>TxAppShell</code>) · 메뉴 · TanStack Query를 더해 화면 셋을 묶습니다.
         </p>
       </Block>
 

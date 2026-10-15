@@ -4,10 +4,10 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
 import { DemoLoading, Packages, QuickGuide, SourceTabs, WholeAppNote, muted } from "./ExampleParts";
-import SCREEN_SOURCE from "@demo/features/error-logs/ErrorLogsScreen.tsx?raw";
-import DETAIL_SOURCE from "@demo/features/error-logs/LogDetail.tsx?raw";
-import API_SOURCE from "@demo/features/error-logs/logApi.ts?raw";
-import MOCK_SOURCE from "@demo/mock/logs.ts?raw";
+import SCREEN_SOURCE from "./error-logs/ErrorLogsScreen.tsx?raw";
+import DETAIL_SOURCE from "./error-logs/LogDetail.tsx?raw";
+import API_SOURCE from "./error-logs/logApi.ts?raw";
+import MOCK_SOURCE from "./mock/logs.ts?raw";
 
 /** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
 const ErrorLogsDemo = lazy(() => import("./ErrorLogsDemo"));
@@ -83,10 +83,10 @@ export function ExampleErrorLogs() {
         <WholeAppNote />
         <SourceTabs
           files={[
-            { name: "ErrorLogsScreen.tsx", path: "apps/demo/src/features/error-logs/ErrorLogsScreen.tsx", source: SCREEN_SOURCE },
-            { name: "LogDetail.tsx", path: "apps/demo/src/features/error-logs/LogDetail.tsx", source: DETAIL_SOURCE },
-            { name: "logApi.ts", path: "apps/demo/src/features/error-logs/logApi.ts", source: API_SOURCE },
-            { name: "mock/logs.ts", path: "apps/demo/src/mock/logs.ts", source: MOCK_SOURCE }
+            { name: "ErrorLogsScreen.tsx", path: "src/error-logs/ErrorLogsScreen.tsx", source: SCREEN_SOURCE },
+            { name: "LogDetail.tsx", path: "src/error-logs/LogDetail.tsx", source: DETAIL_SOURCE },
+            { name: "logApi.ts", path: "src/error-logs/logApi.ts", source: API_SOURCE },
+            { name: "mock/logs.ts", path: "src/mock/logs.ts", source: MOCK_SOURCE }
           ]}
         />
       </Block>

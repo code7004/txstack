@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
-import { api } from "@demo/lib/api";
-import { mockAdapter } from "@demo/mock/server";
+import { api } from "./api";
+import { mockAdapter } from "./mock/server";
 
 /**
  * `/example` 묶음의 껍데기. **실제 앱이라면 진입점(`main.tsx`)에서 한 번 감싸는 자리**다.
@@ -9,7 +9,7 @@ import { mockAdapter } from "@demo/mock/server";
  * 클라이언트를 묶음 하나가 함께 쓰므로 캐시도 함께다 — `Error Logs` 에서 상태를 바꾸면
  * 같은 키를 무효화하므로 `Dashboard` 의 숫자도 따라 바뀐다.
  */
-// 사이트의 예제는 늘 가짜 서버로 답한다. 데모 앱은 main.tsx 에서 같은 일을 한다(VITE_API_URL 이 없을 때)
+// 사이트의 예제는 늘 가짜 서버로 답한다. 실제 앱이라면 이 줄이 없다
 api.setConfig({ adapter: mockAdapter });
 
 const queryClient = new QueryClient({

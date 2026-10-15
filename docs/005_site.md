@@ -155,16 +155,14 @@
       Getting Started 의 `.tgz` 설치로 가는 링크를 둔다(`components/PrePublish.tsx` — 배포하면 `PUBLISHED` 하나를 바꾼다).
       "5분이면 충분합니다" 는 실제 과정(저장소 빌드 포함)에 맞게 고쳤다. `.tgz` 절차는 실제로 패킹해 확인했다
     - **Home 의 대상과 가치.** "관리 화면과 업무용 서비스를 위한 React 라이브러리" + 줄여 주는 반복 작업 여섯(각각 맡는 패키지 표기) +
-      `예제 앱 보기` 버튼. 설치 상자는 좁은 화면에서 명령이 잘리지 않게(복사 버튼 최소 폭 토큰을 그 자리만 줄인다)
-    - **독립 데모 앱 `apps/demo`.** Example 의 세 화면을 작은 운영 관리 앱 하나로 묶었다 — 진입점 · Provider · 레이아웃 · 라우트 트리 ·
-      다크 모드 · 역할 전환 · 가짜 서버 · README(저장소 밖으로 가져가는 법 · 실제 서버로 바꾸는 법). **화면 · API · 가짜 서버 코드는
-      데모 앱이 원본이고 사이트는 `@demo` 별칭으로 가져다 보여 준다** — 코드가 한 벌이라 어긋날 수 없다. Dashboard 의 링크는
-      사이트 라우트를 import 하던 것을 상대 경로(`../error-logs`, `relative="path"`)로 바꿔 두 곳에서 같은 코드가 돈다.
-      사이트 Tailwind 는 `@source "../../demo/src"` 로 그 폴더의 클래스도 만든다(빠뜨리면 표 높이가 0 이 된다)
+      `예제 보기` 버튼. 설치 상자는 좁은 화면에서 명령이 잘리지 않게(복사 버튼 최소 폭 토큰을 그 자리만 줄인다)
+    - **Example 을 앱 하나로 묶는 두 파일.** 독립 데모 앱(`apps/demo`)을 만들었다가 필요 없다고 판단해 걷어냈다(2026-10-15). 대신 Example 에 `App.tsx`(TxAppShell · QueryClientProvider ·
+      ag-grid 등록 · 라우트 트리로 만든 메뉴)와 `routes.tsx`(RouteTree)를 실제 파일로 두고 보여 준다(`pages/example/app/`).
+      그때 정리한 구조는 남겼다 — HTTP 클라이언트 하나(`example/api.ts`), 가짜 서버(`example/mock/`), Dashboard 의 상대 경로 링크
     - **Tutorial 하나로 실행까지.** Tailwind 설치 · `vite.config.ts` · `index.css` · `main.tsx` · `routes.tsx` · `App.tsx` 를 `Run it as an app` 에
       전부 적었다. 저장소 밖 새 앱에 `.tgz` 로 설치해 타입 검사 · 빌드 · 화면까지 확인했다
     - **연결과 좁은 화면.** Example 은 한 줄 안내 → 데모 → 접힌 "자세한 조작 안내" 순서. 긴 소스는 높이를 잘라 안에서 구르고, 탭 줄은 옆으로 민다.
-      표 위에 "옆으로 밀면" 안내(좁은 화면만, 데모 앱 화면 코드 안에 있다). Storybook 링크에는 무엇을 보러 가는지와 ↗(새 탭)를 붙였다.
+      표 위에 "옆으로 밀면" 안내(좁은 화면만, 화면 코드 안에 있다). Storybook 링크에는 무엇을 보러 가는지와 ↗(새 탭)를 붙였다.
       쓴 컴포넌트 칩이 `also` 이름(`TxDayPickerRange`)이면 그 계열의 줄로 간다. 라이트 모드에서 코드 판의 복사 버튼 글자가 묻히던 것도 고쳤다
     - About 초안 — [007_about_draft](007_about_draft.md)(사이트 미반영, 질문 목록 포함)
 

@@ -7,7 +7,7 @@ import { handleLogs } from "./logs";
  * 화면과 API 함수는 진짜 서버일 때와 똑같이 동작합니다.
  *
  * 응답은 `{ body: ... }`, 오류는 `{ statusCode, message }` 형식으로 돌려줍니다.
- * 실제 서버의 형식이 다르면 lib/api.ts 의 `unwrap` 만 맞추면 됩니다.
+ * 실제 서버의 형식이 다르면 api.ts 의 `unwrap` 만 맞추면 됩니다.
  */
 
 interface Respond {

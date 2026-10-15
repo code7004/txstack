@@ -72,7 +72,7 @@
 **라우트 메타데이터.** 라우트를 트리 하나로 선언하면 라우터 등록(`buildRouteObjects`) · 메뉴(`getNavigableRoutes`) ·
 현재 위치(`useCurrentRouteNode`)가 모두 거기서 나온다. 메뉴와 라우트를 따로 고치다 어긋나는 일을 없앤다.
 `meta` 는 라우터로 넘기지 않는다 — 정의와 실행을 나눈다.
-근거: `packages/route-meta/src/index.ts`, `apps/site/src/routes.tsx`, `apps/demo/src/routes.tsx`
+근거: `packages/route-meta/src/index.ts`, `apps/site/src/routes.tsx`, `apps/site/src/pages/example/app/routes.tsx`
 
 **URL 이 상태다.** `useUrlQuery` 는 기본값의 타입으로 주소의 값을 복원한다(`page: 1` 이면 `?page=2` 를 숫자로).
 목록의 조건을 주소에 담아 새로고침 · 공유 · 뒤로 가기가 그대로 된다.
@@ -83,9 +83,8 @@
 - `pnpm check` — lint · 타입 검사 · 테스트(2026-10-15 기준 1,827개). CSS 는 jsdom 이 못 보므로 **CSS 파일을 글자로 읽어 계약을 검사**한다
 - **이 문서 사이트가 첫 소비자다.** 주소창 · 새로고침 · 딥링크 · 진짜 요청은 테스트가 못 겪는다. 사이트를 만들며 드러난 결함과
   라이브러리 쪽 해결이 `docs/005_site.md` "만들며 드러난 것" 에 남아 있다(예: 서랍이 이동해도 안 닫힘, 동작 버튼 열을 붙일 길이 없음, 좁은 화면의 쪽 번호)
-- **데모 앱(`apps/demo`)은 빌드된 패키지(`dist`)를 쓴다** — npm 에서 받은 것과 같은 모양으로 돈다
 
-근거: `package.json` scripts, `docs/005_site.md`, `apps/demo/vite.config.ts`
+근거: `package.json` scripts, `docs/005_site.md`
 
 ## 6. 현재 한계와 계획
 

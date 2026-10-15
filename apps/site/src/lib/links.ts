@@ -8,6 +8,3 @@
  * 로컬(`pnpm site:dev`)에서는 Storybook 이 따로 떠 있으므로 그쪽 포트로 보낸다.
  */
 export const STORYBOOK_URL = import.meta.env.DEV ? "http://localhost:6310/" : `${import.meta.env.BASE_URL}storybook/`;
-
-/** 데모 앱의 저장소 위치. 사이트의 Example 세 화면은 이 폴더의 코드를 그대로 가져다 보여 준다 */
-export const DEMO_REPO_URL = "https://github.com/code7004/txstack/tree/main/apps/demo";

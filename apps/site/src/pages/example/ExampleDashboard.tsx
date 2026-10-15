@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
-import { DashboardScreen } from "@demo/features/dashboard/DashboardScreen";
-import SCREEN_SOURCE from "@demo/features/dashboard/DashboardScreen.tsx?raw";
+import { DashboardScreen } from "./dashboard/DashboardScreen";
+import SCREEN_SOURCE from "./dashboard/DashboardScreen.tsx?raw";
 import { Packages, QuickGuide, SourceTabs, WholeAppNote, muted } from "./ExampleParts";
 
 export function ExampleDashboard() {
@@ -41,7 +41,7 @@ export function ExampleDashboard() {
       <Block title="How it's built">
         <ol className={`flex list-inside list-decimal flex-col gap-2 ${muted}`}>
           <li>
-            <strong>옆 화면으로 가는 상대 링크.</strong> <code>../error-logs</code>에 <code>relative="path"</code>를 줍니다. 데모 앱에서는 <code>/dashboard</code> → <code>/error-logs</code>로, 이 사이트에서는 <code>/example/dashboard</code> →{" "}
+            <strong>옆 화면으로 가는 상대 링크.</strong> <code>../error-logs</code>에 <code>relative="path"</code>를 줍니다. 앱에서는 <code>/dashboard</code> → <code>/error-logs</code>로, 이 사이트에서는 <code>/example/dashboard</code> →{" "}
             <code>/example/error-logs</code>로 갑니다. 같은 코드가 어디에 붙어도 동작합니다.
           </li>
           <li>
@@ -60,13 +60,13 @@ export function ExampleDashboard() {
       </Block>
 
       <Block title="Relative links">
-        <CodeBlock title="apps/demo/src/features/dashboard/DashboardScreen.tsx">{`const logsUrl = (query: Record<string, string>) => \`../error-logs?\${new URLSearchParams(query)}\`;
+        <CodeBlock title="src/dashboard/DashboardScreen.tsx">{`const logsUrl = (query: Record<string, string>) => \`../error-logs?\${new URLSearchParams(query)}\`;
 
 <Link to={logsUrl({ status: "open" })} relative="path">열린 오류</Link>`}</CodeBlock>
         <p className={muted}>
-          화면이 어느 주소에 놓일지는 앱의 라우트 트리가 정합니다. 데모 앱의 트리(<code>routes.tsx</code>)는{" "}
-          <Link to="/example#run-the-whole-app" className="underline">
-            Run the whole app
+          화면이 어느 주소에 놓일지는 앱의 라우트 트리가 정합니다. 세 화면을 묶는 트리(<code>routes.tsx</code>)는{" "}
+          <Link to="/example#put-them-in-an-app" className="underline">
+            Put them in an app
           </Link>
           에, 트리를 만드는 방법은{" "}
           <Link to="/docs/guide/routing" className="underline">
@@ -85,7 +85,7 @@ export function ExampleDashboard() {
           를 함께 씁니다.
         </p>
         <WholeAppNote />
-        <SourceTabs files={[{ name: "DashboardScreen.tsx", path: "apps/demo/src/features/dashboard/DashboardScreen.tsx", source: SCREEN_SOURCE }]} />
+        <SourceTabs files={[{ name: "DashboardScreen.tsx", path: "src/dashboard/DashboardScreen.tsx", source: SCREEN_SOURCE }]} />
       </Block>
     </Page>
   );

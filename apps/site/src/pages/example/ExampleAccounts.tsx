@@ -4,10 +4,10 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
 import { DemoLoading, Packages, QuickGuide, SourceTabs, WholeAppNote, muted } from "./ExampleParts";
-import FORM_SOURCE from "@demo/features/accounts/AccountForm.tsx?raw";
-import API_SOURCE from "@demo/features/accounts/accountApi.ts?raw";
-import SCREEN_SOURCE from "@demo/features/accounts/AccountsScreen.tsx?raw";
-import MOCK_SOURCE from "@demo/mock/accounts.ts?raw";
+import FORM_SOURCE from "./accounts/AccountForm.tsx?raw";
+import API_SOURCE from "./accounts/accountApi.ts?raw";
+import SCREEN_SOURCE from "./accounts/AccountsScreen.tsx?raw";
+import MOCK_SOURCE from "./mock/accounts.ts?raw";
 
 /** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
 const AccountsDemo = lazy(() => import("./AccountsDemo"));
@@ -88,10 +88,10 @@ export function ExampleAccounts() {
         <WholeAppNote />
         <SourceTabs
           files={[
-            { name: "AccountsScreen.tsx", path: "apps/demo/src/features/accounts/AccountsScreen.tsx", source: SCREEN_SOURCE },
-            { name: "AccountForm.tsx", path: "apps/demo/src/features/accounts/AccountForm.tsx", source: FORM_SOURCE },
-            { name: "accountApi.ts", path: "apps/demo/src/features/accounts/accountApi.ts", source: API_SOURCE },
-            { name: "mock/accounts.ts", path: "apps/demo/src/mock/accounts.ts", source: MOCK_SOURCE }
+            { name: "AccountsScreen.tsx", path: "src/accounts/AccountsScreen.tsx", source: SCREEN_SOURCE },
+            { name: "AccountForm.tsx", path: "src/accounts/AccountForm.tsx", source: FORM_SOURCE },
+            { name: "accountApi.ts", path: "src/accounts/accountApi.ts", source: API_SOURCE },
+            { name: "mock/accounts.ts", path: "src/mock/accounts.ts", source: MOCK_SOURCE }
           ]}
         />
       </Block>
