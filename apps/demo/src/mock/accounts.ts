@@ -1,73 +1,8 @@
-import { createHttpClient } from "@txstack/axios";
-import { AxiosError, type AxiosAdapter, type AxiosResponse } from "axios";
+import type { Account, AccountDraft, AccountQuery, Status } from "../features/accounts/accountApi";
+import { TEAMS } from "../features/accounts/accountApi";
+import type { MockHandler } from "./server";
 
-export type Role = "owner" | "admin" | "member" | "viewer";
-export type Status = "active" | "invited" | "suspended";
-
-export interface Account {
-  id: string;
-  username: string;
-  name: string;
-  email: string;
-  role: Role;
-  status: Status;
-  teams: string[];
-  lastLoginAt: string | null;
-  createdAt: string;
-}
-
-/** 새로 만들 때만 비밀번호를 보냅니다. 고칠 때는 비밀번호를 건드리지 않습니다 */
-export type AccountDraft = Pick<Account, "username" | "name" | "email" | "role" | "status" | "teams"> & { password?: string };
-
-export interface AccountQuery {
-  q: string;
-  role: string;
-  status: string;
-  page: number;
-  size: number;
-  sort: string;
-  order: "asc" | "desc" | "none";
-}
-
-export interface AccountPage {
-  rows: Account[];
-  total: number;
-}
-
-export const ROLES: { name: string; value: Role }[] = [
-  { name: "소유자", value: "owner" },
-  { name: "관리자", value: "admin" },
-  { name: "멤버", value: "member" },
-  { name: "뷰어", value: "viewer" }
-];
-
-export const STATUSES: { name: string; value: Status }[] = [
-  { name: "사용 중", value: "active" },
-  { name: "초대됨", value: "invited" },
-  { name: "정지", value: "suspended" }
-];
-
-export const TEAMS = ["플랫폼", "결제", "검색", "데이터", "디자인"];
-
-/** 서버가 { body: ... } 형식으로 보낸다고 가정합니다. 실제 서비스의 응답 형식에 맞춰 바꿔 주세요 */
-export const api = createHttpClient({
-  baseURL: "/api",
-  timeout: 10_000,
-  getToken: () => localStorage.getItem("accessToken"),
-  unwrap: (data) => (data as { body: unknown }).body
-});
-
-export const accountApi = {
-  list: (query: AccountQuery) => api.get<AccountPage>("/accounts", query),
-  create: (draft: AccountDraft) => api.post<Account>("/accounts", draft),
-  update: (id: string, draft: AccountDraft) => api.put<Account>(`/accounts/${id}`, draft),
-  remove: (ids: string[]) => api.delete<{ removed: number }>("/accounts", { body: { ids } })
-};
-
-/* ------------------------------------------------------------------------------------------
- * 여기부터는 예제용 가짜 서버입니다. 실제 앱에서는 이 아래를 모두 지우면 진짜 서버로 요청합니다.
- * ------------------------------------------------------------------------------------------ */
-
+/** 계정 가짜 데이터. 새로고침하면 처음 상태로 돌아갑니다 */
 const PEOPLE = [
   ["kim.haneul", "김하늘"],
   ["park.doyun", "박도윤"],
@@ -105,15 +40,8 @@ let accounts: Account[] = Array.from({ length: 36 }, (_, index) => {
 
 let nextId = 2001 + accounts.length;
 
-const fakeServer: AxiosAdapter = async (config) => {
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  const ok = (body: unknown) => ({ status: 200, statusText: "OK", data: { body }, headers: {}, config, request: {} }) as AxiosResponse;
-  const fail = (status: number, message: string) => {
-    const response = { status, statusText: String(status), data: { statusCode: status, message }, headers: {}, config, request: {} } as AxiosResponse;
-    return new AxiosError(message, AxiosError.ERR_BAD_REQUEST, config, {}, response);
-  };
-
+/** `/accounts` 로 오는 요청을 받습니다. 맡지 않는 주소면 `undefined` 를 돌려줍니다 */
+export const handleAccounts: MockHandler = (config, { ok, fail }) => {
   const method = config.method?.toUpperCase();
   const id = config.url?.match(/^\/accounts\/(.+)$/)?.[1];
   const body = typeof config.data === "string" ? (JSON.parse(config.data) as unknown) : undefined;
@@ -163,7 +91,5 @@ const fakeServer: AxiosAdapter = async (config) => {
     return ok({ removed: ids.length });
   }
 
-  throw fail(404, "없는 주소입니다");
+  return undefined;
 };
-
-api.setConfig({ adapter: fakeServer });

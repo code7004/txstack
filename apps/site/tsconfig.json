@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    // Example 의 화면은 데모 앱(apps/demo)에서 가져온다 — vite.config.ts 의 별칭과 같다
+    "paths": { "@demo/*": ["../demo/src/*"] }
   },
   "include": ["src", "vite.config.ts"]
 }

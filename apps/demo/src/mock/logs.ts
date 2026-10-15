@@ -1,85 +1,7 @@
-import { createHttpClient } from "@txstack/axios";
-import { AxiosError, type AxiosAdapter, type AxiosResponse } from "axios";
+import { canRemove, type ErrorLog, type ErrorLogDetail, type LogQuery, type LogStatus, type LogSummary, type Method } from "../features/error-logs/logApi";
+import type { MockHandler } from "./server";
 
-export type Method = "GET" | "POST" | "PUT" | "DELETE";
-export type LogStatus = "open" | "in_progress" | "resolved";
-
-export interface ErrorLog {
-  id: string;
-  message: string;
-  method: Method;
-  path: string;
-  statusCode: number;
-  status: LogStatus;
-  assignee: string | null;
-  createdAt: string;
-}
-
-export interface ErrorLogDetail extends ErrorLog {
-  stack: string;
-}
-
-export interface LogQuery {
-  q: string;
-  method: string;
-  status: string;
-  /** `YYYY-MM-DD`. 비어 있으면 기간을 따지지 않습니다 */
-  from: string;
-  to: string;
-  page: number;
-  size: number;
-  sort: string;
-  order: "asc" | "desc" | "none";
-}
-
-export interface LogPage {
-  rows: ErrorLog[];
-  total: number;
-}
-
-export interface LogSummary {
-  open: number;
-  inProgress: number;
-  resolved: number;
-  today: number;
-  /** 지난 7일, 오래된 날부터 */
-  daily: { date: string; count: number }[];
-  topPaths: { path: string; count: number }[];
-  /** 하루 넘게 아무도 맡지 않은 오류 */
-  unattended: ErrorLog[];
-}
-
-export const METHODS: Method[] = ["GET", "POST", "PUT", "DELETE"];
-
-export const LOG_STATUSES: { name: string; value: LogStatus }[] = [
-  { name: "열림", value: "open" },
-  { name: "처리 중", value: "in_progress" },
-  { name: "해결", value: "resolved" }
-];
-
-/** 서버가 { body: ... } 형식으로 보낸다고 가정합니다. 실제 앱에서는 클라이언트를 한 곳(src/lib/api.ts)에 두고 함께 씁니다 */
-export const api = createHttpClient({
-  baseURL: "/api",
-  timeout: 10_000,
-  getToken: () => localStorage.getItem("accessToken"),
-  unwrap: (data) => (data as { body: unknown }).body
-});
-
-export const logApi = {
-  list: (query: LogQuery) => api.get<LogPage>("/logs", query),
-  detail: (id: string) => api.get<ErrorLogDetail>(`/logs/${id}`),
-  setStatus: (id: string, status: LogStatus) => api.patch<ErrorLog>(`/logs/${id}`, { status }),
-  remove: (id: string) => api.delete<null>(`/logs/${id}`),
-  summary: () => api.get<LogSummary>("/logs/summary")
-};
-
-/** 해결됐고 30일이 지난 로그만 지울 수 있습니다. 화면과 서버가 같은 규칙을 씁니다 */
-export const canRemove = (log: ErrorLog, now = Date.now()) => log.status === "resolved" && now - Date.parse(log.createdAt) > 30 * 86_400_000;
-
-/* ------------------------------------------------------------------------------------------
- * 여기부터는 예제용 가짜 서버입니다. 실제 앱에서는 이 아래를 모두 지우면 진짜 서버로 요청합니다.
- * ------------------------------------------------------------------------------------------ */
-
+/** 오류 로그 가짜 데이터. 새로고침하면 처음 상태로 돌아갑니다 */
 const SAMPLES: { method: Method; path: string; statusCode: number; message: string; name: string }[] = [
   { method: "POST", path: "/orders", statusCode: 500, message: "재고를 줄이는 중 잠금 시간이 초과되었습니다", name: "LockTimeoutError" },
   { method: "GET", path: "/orders/:id", statusCode: 500, message: "Cannot read properties of undefined (reading 'items')", name: "TypeError" },
@@ -139,15 +61,8 @@ const summary = (): LogSummary => {
   };
 };
 
-const fakeServer: AxiosAdapter = async (config) => {
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  const ok = (body: unknown) => ({ status: 200, statusText: "OK", data: { body }, headers: {}, config, request: {} }) as AxiosResponse;
-  const fail = (status: number, message: string) => {
-    const response = { status, statusText: String(status), data: { statusCode: status, message }, headers: {}, config, request: {} } as AxiosResponse;
-    return new AxiosError(message, AxiosError.ERR_BAD_REQUEST, config, {}, response);
-  };
-
+/** `/logs` 로 오는 요청을 받습니다. 맡지 않는 주소면 `undefined` 를 돌려줍니다 */
+export const handleLogs: MockHandler = (config, { ok, fail }) => {
   const method = config.method?.toUpperCase();
   const id = config.url?.match(/^\/logs\/(E-\d+)$/)?.[1];
   const found = id ? logs.find((log) => log.id === id) : undefined;
@@ -171,6 +86,7 @@ const fakeServer: AxiosAdapter = async (config) => {
     return ok({ rows: rows.slice((page - 1) * size, page * size).map(strip), total: rows.length });
   }
 
+  if (!config.url?.startsWith("/logs")) return undefined;
   if (!found) throw fail(404, "없는 로그입니다");
 
   if (method === "GET") return ok(found);
@@ -188,7 +104,5 @@ const fakeServer: AxiosAdapter = async (config) => {
     return ok(null);
   }
 
-  throw fail(404, "없는 주소입니다");
+  return undefined;
 };
-
-api.setConfig({ adapter: fakeServer });

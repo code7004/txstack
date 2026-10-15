@@ -25,9 +25,11 @@ export interface CodeBlockProps {
   title?: string;
   /** 복사 버튼을 없앤다. 짧은 한 줄에는 성가시다. */
   hideCopy?: boolean;
+  /** 긴 파일은 이 높이에서 자르고 안에서 구르게 한다. 통째 소스가 페이지를 몇 화면씩 밀어내지 않게 */
+  maxHeight?: string;
 }
 
-export function CodeBlock({ children, language = "tsx", title, hideCopy = false }: CodeBlockProps) {
+export function CodeBlock({ children, language = "tsx", title, hideCopy = false, maxHeight }: CodeBlockProps) {
   const code = children.trim();
 
   return (
@@ -38,12 +40,14 @@ export function CodeBlock({ children, language = "tsx", title, hideCopy = false 
         </span>
 
         {/* 복사는 우리 부품이 한다 — 클립보드·되돌리기·실패까지 이미 들어 있다 */}
-        {!hideCopy && <TxCopyButton value={code} variant="ghost" className="ms-auto text-xs" />}
+        {/* 코드 판은 라이트에서도 어둡다. 버튼 글자를 판의 글자색에 맞춰야 라이트에서 묻히지 않는다 */}
+        {!hideCopy && <TxCopyButton value={code} variant="ghost" className="ms-auto text-xs" style={{ "--tx-button-fg": "var(--site-code-text)", "--tx-color-state": "#ffffff" } as React.CSSProperties} />}
       </figcaption>
 
       <Highlight theme={theme} code={code} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre className={`${className} overflow-x-auto p-4 text-sm leading-relaxed`} style={style}>
+          // 좁은 화면에서는 글자를 한 단 줄인다 — 같은 줄이 덜 잘린다
+          <pre className={`${className} overflow-auto p-4 text-xs leading-relaxed sm:text-sm`} style={{ ...style, maxHeight }}>
             {tokens.map((line, index) => (
               <div key={index} {...getLineProps({ line })}>
                 {line.map((token, key) => (

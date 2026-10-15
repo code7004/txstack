@@ -71,6 +71,8 @@ export function ErrorLogsScreen() {
         </div>
       </div>
 
+      {/* 열이 많은 표는 좁은 화면에서 옆으로 밉니다. 터치 화면은 스크롤 막대가 안 보여서 알려 줍니다 */}
+      <p className="-mb-1 text-xs text-slate-500 sm:hidden dark:text-slate-400">표는 옆으로 밀면 나머지 열이 보입니다 →</p>
       <div className="flex h-[28rem] flex-col sm:h-[38rem]">
         <TxAgGrid<ErrorLog>
           rowData={data.rows}
