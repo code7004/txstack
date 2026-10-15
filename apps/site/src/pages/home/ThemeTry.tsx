@@ -1,5 +1,5 @@
 import { useState, useSyncExternalStore, type CSSProperties } from "react";
-import { TxButton, TxForm, TxSwitch, TxTag } from "@txstack/ui";
+import { TxAlert, TxButton, TxForm, TxProgress, TxSwitch, TxTag } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 
 /**
@@ -51,18 +51,19 @@ export function ThemeTry() {
   };
 
   return (
-    <div className="grid items-start gap-4 lg:grid-cols-2">
+    // 양쪽을 같은 높이로 — 미리보기 판이 왼쪽(선택지 + 코드)만큼 늘어나 빈 자리가 남지 않는다
+    <div className="grid gap-4 lg:grid-cols-2">
       <div className="flex flex-col gap-3">
         <fieldset className="flex flex-wrap items-center gap-2">
           <legend className="mb-1 text-sm text-slate-600 dark:text-slate-300">강조색</legend>
           {COLORS.map((item) => (
-            <TxButton key={item.name} label={item.name} variant={item === color ? "primary" : "secondary"} aria-pressed={item === color} onClick={() => setColor(item)} />
+            <TxButton key={item.name} label={item.name} variant={item.name === color.name ? "primary" : "secondary"} aria-pressed={item.name === color.name} onClick={() => setColor(item)} />
           ))}
         </fieldset>
         <fieldset className="flex flex-wrap items-center gap-2">
           <legend className="mb-1 text-sm text-slate-600 dark:text-slate-300">모서리</legend>
           {RADII.map((item) => (
-            <TxButton key={item.name} label={item.name} variant={item === radius ? "primary" : "secondary"} aria-pressed={item === radius} onClick={() => setRadius(item)} />
+            <TxButton key={item.name} label={item.name} variant={item.name === radius.name ? "primary" : "secondary"} aria-pressed={item.name === radius.name} onClick={() => setRadius(item)} />
           ))}
         </fieldset>
         <div className="flex flex-col gap-1">
@@ -87,18 +88,32 @@ export function ThemeTry() {
         }`}</CodeBlock>
       </div>
 
-      <div className={`flex flex-col gap-3 rounded-lg border p-5 ${panelDark ? "dark" : ""}`} style={{ ...(tokens as CSSProperties), borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)", color: "var(--tx-color-text)" }}>
-        <div className="flex flex-wrap items-center gap-2">
-          <TxButton label="저장" />
-          <TxButton label="취소" variant="secondary" />
+      {/* 토큰이 닿는 자리가 고루 보이도록 작은 설정 화면 하나: 채우는 색 · 글자 강조색 · 모서리 · 상태색 */}
+      <div
+        className={`flex h-full flex-col gap-4 rounded-lg border p-5 ${panelDark ? "dark" : ""}`}
+        style={{ ...(tokens as CSSProperties), borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)", color: "var(--tx-color-text)" }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-semibold">알림 설정</span>
           <TxTag variant="info" dot>
             진행 중
           </TxTag>
         </div>
         <TxForm noValidate onSubmit={() => undefined}>
-          <TxForm.Input caption="이름" placeholder="홍길동" />
+          <TxForm.Input caption="받는 메일" placeholder="you@company.com" />
         </TxForm>
-        <TxSwitch label="알림 받기" defaultChecked />
+        <div className="flex flex-col gap-2">
+          <TxSwitch label="새 주문 알림" defaultChecked />
+          <TxSwitch label="주간 리포트" />
+        </div>
+        <TxProgress value={64} label="이번 달 발송량" showValue />
+        <TxAlert variant="info" title="저장하지 않은 변경이 있습니다">
+          버튼과 강조색, 모서리가 토큰을 따라 함께 바뀝니다.
+        </TxAlert>
+        <div className="mt-auto flex flex-wrap justify-end gap-2">
+          <TxButton label="취소" variant="secondary" />
+          <TxButton label="저장" />
+        </div>
       </div>
     </div>
   );
