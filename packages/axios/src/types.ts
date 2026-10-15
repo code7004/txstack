@@ -18,7 +18,7 @@ export interface DeleteOptions {
 /**
  * `onRequest` 가 받는 요청 정보.
  *
- * **`data` 와 `params` 는 `maskFields` 가 적용된 뒤의 값이다.** 주입된 로거가 값을 외부로
+ * **`url` · `data` · `params` 는 `maskFields` 가 적용된 뒤의 값이다.** 주입된 로거가 값을 외부로
  * 보낼 수 있으므로, 마스킹을 훅 호출 전에 끝낸다.
  */
 export interface RequestLog {
@@ -69,7 +69,13 @@ export interface HttpClientOptions {
    */
   debug?: boolean;
 
-  /** 로그에서 값을 가릴 필드명. 기본값: password / privateKey / token / accessToken / refreshToken */
+  /**
+   * 로그에서 값을 가릴 키 이름(대소문자 구분). 기본값: password / privateKey / token / accessToken / refreshToken
+   *
+   * `onRequest` · `onResponse` 와 `debug` 콘솔 로그(오류 포함)에 넘기기 전에 가린다 — 중첩된 객체 · 배열 ·
+   * JSON 문자열 본문 · `URLSearchParams` · URL 쿼리까지. 원본 요청 · 응답과 `onError` 가 받는 오류는 바꾸지 않는다.
+   * `FormData` · `Blob` 같은 값과 JSON 이 아닌 문자열은 그대로 둔다.
+   */
   maskFields?: string[];
 
   /**
@@ -90,7 +96,12 @@ export interface HttpClientOptions {
 
   /** 401 응답 시 호출된다. 로그아웃 등 앱 정책을 여기서 처리한다. */
   onUnauthorized?: (error: AxiosError) => void;
-  /** 모든 에러 응답에서 호출된다. (401 포함) */
+  /**
+   * 모든 에러 응답에서 호출된다. (401 포함)
+   *
+   * **원래 오류를 그대로 받는다 — 가리지 않는다.** 오류를 처리하려면 응답 본문이 필요하기 때문이다.
+   * 여기서 오류를 외부로 보낸다면 민감한 값은 앱이 직접 가린다.
+   */
   onError?: (error: AxiosError) => void;
 
   /**
