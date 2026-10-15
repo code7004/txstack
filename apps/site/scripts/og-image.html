@@ -1,0 +1,221 @@
+<!doctype html>
+<!--
+  공유 카드 그림(1200×630)의 원본. 링크를 붙여 나눌 때 뜨는 그림이다 — public/og.png 로 굽는다.
+  내용은 홈 첫 화면과 같다: 정체(UI)와 대표 장점(라우트 하나로 GNB · 사이드바). 색은 사이트 토큰 값이다.
+
+  다시 굽기(macOS, 저장소 루트에서):
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+      --window-size=1200,630 --screenshot=apps/site/public/og.png "file://$PWD/apps/site/scripts/og-image.html"
+-->
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <style>
+      :root {
+        --bg: #0c1219;
+        --panel: #0f1720;
+        --line: #1e2a36;
+        --text: #e6edf3;
+        --muted: #8fa3b5;
+        --mint: #2dd4bf;
+        --mint-soft: rgba(45, 212, 191, 0.16);
+        --mono: ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+      }
+      .card {
+        display: grid;
+        grid-template-columns: 1fr 470px;
+        gap: 56px;
+        height: 100%;
+        padding: 72px 72px 64px;
+        background: radial-gradient(circle at 85% 10%, rgba(45, 212, 191, 0.12), transparent 45%);
+      }
+      .left {
+        display: flex;
+        flex-direction: column;
+      }
+      .mark {
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+      h1 {
+        margin-top: 44px;
+        font-size: 64px;
+        line-height: 1.18;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--mint);
+      }
+      .lead {
+        margin-top: 26px;
+        font-size: 26px;
+        word-break: keep-all;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .lead b {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+        font-family: var(--mono);
+        font-size: 17px;
+      }
+      .chips span {
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--muted);
+      }
+      .right {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-self: center;
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        overflow: hidden;
+      }
+      .title {
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--line);
+        font-family: var(--mono);
+        font-size: 15px;
+        color: #6b7f8f;
+      }
+      pre {
+        padding: 16px 18px;
+        font-family: var(--mono);
+        font-size: 17px;
+        line-height: 1.6;
+        color: #dbe3ea;
+      }
+      .k {
+        color: #fbcfe8;
+      }
+      .s {
+        color: #9ae6b4;
+      }
+      .p {
+        color: #8fa3b5;
+      }
+      .hl {
+        display: block;
+        margin: 0 -18px;
+        padding: 0 18px;
+        background: var(--mint-soft);
+        box-shadow: inset 3px 0 0 var(--mint);
+      }
+      .app {
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      .gnb {
+        display: flex;
+        gap: 6px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        font-size: 17px;
+      }
+      .gnb span,
+      .side span {
+        padding: 5px 10px;
+        border-radius: 6px;
+        color: var(--muted);
+      }
+      .gnb .on,
+      .side .on {
+        background: var(--mint-soft);
+        color: var(--text);
+      }
+      .body {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+      }
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px;
+        border-right: 1px solid var(--line);
+        font-size: 16px;
+      }
+      .side .sub {
+        padding-left: 24px;
+      }
+      .view {
+        padding: 14px 16px;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .view b {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 20px;
+        color: var(--text);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="left">
+        <div class="mark">TXSTACK</div>
+        <h1>관리 화면을 만드는<br /><em>React UI</em>와 도구</h1>
+        <p class="lead">폼 · 표 · 모달 · 레이아웃을 조립하고,<br /><b>라우트 설정 하나로 GNB와 사이드바</b>를 관리하세요.</p>
+        <div class="chips">
+          <span>@txstack/ui</span>
+          <span>route-meta</span>
+          <span>hooks</span>
+          <span>axios</span>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="panel">
+          <div class="title">routes.tsx</div>
+          <pre><span class="k">members</span><span class="p">: {</span> <span class="k">path</span><span class="p">:</span> <span class="s">"/members"</span><span class="p">,</span>
+  <span class="k">meta</span><span class="p">: {</span> <span class="k">label</span><span class="p">:</span> <span class="s">"회원"</span> <span class="p">} },</span>
+<span class="hl"><span class="k">reports</span><span class="p">: {</span> <span class="k">path</span><span class="p">:</span> <span class="s">"/reports"</span><span class="p">,</span>
+  <span class="k">meta</span><span class="p">: {</span> <span class="k">label</span><span class="p">:</span> <span class="s">"리포트"</span> <span class="p">} }</span></span></pre>
+        </div>
+        <div class="panel app">
+          <div class="gnb"><span>대시보드</span><span>회원</span><span>설정</span><span class="on">리포트</span></div>
+          <div class="body">
+            <div class="side">
+              <span>대시보드</span>
+              <span>회원</span>
+              <span class="sub">목록</span>
+              <span>설정</span>
+              <span class="on">리포트</span>
+            </div>
+            <div class="view"><b>리포트</b>routes.tsx 한 줄 → GNB · 사이드바</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

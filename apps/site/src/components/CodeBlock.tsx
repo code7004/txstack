@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Highlight, type PrismTheme } from "prism-react-renderer";
 import { TxCopyButton } from "@txstack/ui";
 
@@ -27,10 +28,24 @@ export interface CodeBlockProps {
   hideCopy?: boolean;
   /** 긴 파일은 이 높이에서 자르고 안에서 구르게 한다. 통째 소스가 페이지를 몇 화면씩 밀어내지 않게 */
   maxHeight?: string;
+  /** 짚어 줄 줄(1부터). 바탕과 줄 앞 표식(▸)으로 보이고, 판 밖이면 판 안에서 그 줄까지 굴린다 */
+  marked?: number[];
 }
 
-export function CodeBlock({ children, language = "tsx", title, hideCopy = false, maxHeight }: CodeBlockProps) {
+export function CodeBlock({ children, language = "tsx", title, hideCopy = false, maxHeight, marked }: CodeBlockProps) {
   const code = children.trim();
+  const pre = useRef<HTMLPreElement>(null);
+  const first = marked?.length ? Math.min(...marked) : undefined;
+
+  // 짚은 줄이 판 밖이면 판 안에서만 굴려 보인다. 페이지는 움직이지 않는다(줄의 위치는 `relative` 인 pre 기준)
+  useEffect(() => {
+    const box = pre.current;
+    const line = first && box?.querySelector<HTMLElement>("[data-marked]");
+    if (!box || !line) return;
+    if (line.offsetTop < box.scrollTop || line.offsetTop + line.offsetHeight > box.scrollTop + box.clientHeight) {
+      box.scrollTo({ top: line.offsetTop - box.clientHeight / 3 });
+    }
+  }, [first]);
 
   return (
     <figure className="not-prose overflow-hidden rounded-lg border" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--site-code-bg)" }}>
@@ -50,9 +65,9 @@ export function CodeBlock({ children, language = "tsx", title, hideCopy = false,
       <Highlight theme={theme} code={code} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           // 좁은 화면에서는 글자를 한 단 줄인다 — 같은 줄이 덜 잘린다
-          <pre className={`${className} overflow-auto p-4 text-xs leading-relaxed sm:text-sm`} style={{ ...style, maxHeight }}>
+          <pre ref={pre} className={`${className} relative overflow-auto p-4 text-xs leading-relaxed sm:text-sm`} style={{ ...style, maxHeight }}>
             {tokens.map((line, index) => (
-              <div key={index} {...getLineProps({ line })}>
+              <div key={index} {...getLineProps({ line })} data-marked={marked?.includes(index + 1) || undefined}>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token })} />
                 ))}

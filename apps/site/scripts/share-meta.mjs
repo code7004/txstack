@@ -22,6 +22,7 @@ const dist = join(root, "dist");
 const base = process.env.SITE_BASE ?? "/";
 const origin = process.env.SITE_ORIGIN?.replace(/\/$/, "");
 const SITE_NAME = "txstack";
+const IMAGE_ALT = "txstack — 관리 화면을 만드는 React UI와 도구. routes.tsx 한 줄이 GNB와 사이드바에 함께 나타나는 그림";
 
 // routes.tsx 는 TSX 이고 화면을 지연 로드한다. Vite 로 읽으면 화면 모듈은 받지 않고 트리만 얻는다
 const vite = await createServer({ root, logLevel: "error", server: { middlewareMode: true, hmr: false }, appType: "custom" });
@@ -63,8 +64,14 @@ function render({ path, title, description }, { index = true } = {}) {
     html = setTag(html, /<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${escape(description)}" />`);
   }
 
+  // 공유 그림(public/og.png, 원본은 scripts/og-image.html). 봇은 절대 주소만 따라가므로 origin 이 있을 때만 넣는다
+  const image = origin && `${origin}${base}og.png`;
+  const card = image
+    ? [`<meta property="og:image" content="${image}" />`, '<meta property="og:image:width" content="1200" />', '<meta property="og:image:height" content="630" />', `<meta property="og:image:alt" content="${escape(IMAGE_ALT)}" />`]
+    : [];
+
   const extra = index ? [url && `<link rel="canonical" href="${url}" />`, url && `<meta property="og:url" content="${url}" />`] : ['<meta name="robots" content="noindex" />'];
-  return html.replace(/\n\s*<\/head>/, `\n    ${extra.filter(Boolean).join("\n    ")}\n  </head>`);
+  return html.replace(/\n\s*<\/head>/, `\n    ${[...card, ...extra].filter(Boolean).join("\n    ")}\n  </head>`);
 }
 
 const list = pages(routes);

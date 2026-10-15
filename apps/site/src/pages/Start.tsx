@@ -62,16 +62,23 @@ export function Start() {
       </Block>
 
       <Block title="Prerequisites">
+        <p className={muted}>
+          환경이 두 가지입니다. <strong>여러분의 앱</strong>이 돌아가는 환경과, npm 배포 전이라 잠시 필요한 <strong>txstack 저장소를 빌드하는</strong> 환경입니다.
+        </p>
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>Node 20.19 이상 또는 22.12 이상</strong> — Vite가 요구하는 버전입니다. <strong>pnpm</strong> (npm·yarn도 쓸 수 있지만 이 문서는 pnpm 기준으로 설명합니다)
+            <strong>앱</strong> — <strong>React 18 이상</strong>. Node 버전은 앱의 도구가 정합니다. 1단계의 Vite는 <strong>Node 20.19 이상 또는 22.12 이상</strong>을 요구합니다.
           </li>
           <li>
-            <strong>React 18 이상</strong> 앱. 없다면 아래 1단계에서 만듭니다
+            <strong>저장소 빌드</strong> — <strong>Node 24.14.0</strong>(저장소의 <code>.nvmrc</code>)과 <strong>pnpm 10 이상</strong>. 2단계에서 한 번만 씁니다.
           </li>
         </ul>
-        <CodeBlock language="bash" title="버전 확인">{`node -v     # v20.19 이상 또는 v22.12 이상
-pnpm -v     # 없다면: npm i -g pnpm`}</CodeBlock>
+        <CodeBlock language="bash" title="버전 확인">{`node -v     # 앱: v20.19 이상 또는 v22.12 이상 · 저장소 빌드: v24.14.0
+pnpm -v     # 10 이상. 없다면: npm i -g pnpm`}</CodeBlock>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          확인한 범위: Node 24에서 React 18 · 19, react-router 6 · 7, Vite 7 · 8 앱에 설치해 타입 검사와 빌드를 확인했고, 이 페이지의 절차는 새 Vite 앱에서 끝까지 띄워 봤습니다. 패키지 자체는 Node 버전을 따로 요구하지 않지만, 다른 Node 버전은 아직
+          확인하지 않았습니다.
+        </p>
       </Block>
 
       <Block title="1. Create an app">
@@ -95,10 +102,11 @@ rm src/App.css`}</CodeBlock>
 cd ..
 git clone https://github.com/code7004/txstack.git
 cd txstack
+nvm use     # .nvmrc 의 Node 24.14.0 으로. nvm 이 없다면 node -v 로 확인만
 pnpm install && pnpm build
 pnpm -r --filter "./packages/*" exec pnpm pack --pack-destination "$PWD/.pack"
 
-# 앱으로 돌아와 필요한 패키지를 설치합니다 (예: ui와 axios)
+# 앱으로 돌아와 필요한 패키지를 설치합니다 (예: ui와 axios). Node 는 앱의 버전으로 돌아가도 됩니다
 cd ../my-app
 pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz
 pnpm add ../txstack/.pack/txstack-axios-0.1.0.tgz axios
@@ -195,6 +203,14 @@ export default function App() {
             </dt>
             <dd>
               아직 npm에 배포되지 않았습니다. 2단계의 <strong>저장소에서 빌드해 설치</strong>하는 방법을 따라 주세요.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-[color:var(--tx-color-text)]">
+              저장소의 <code>pnpm install</code>이 <code>Unsupported engine</code>을 경고하거나 빌드가 실패합니다
+            </dt>
+            <dd>
+              저장소는 Node 24.14.0 · pnpm 10 이상에서 빌드합니다. <code>txstack</code> 폴더에서 <code>nvm use</code>로 바꾸거나 같은 버전을 설치해 주세요. 앱의 Node 버전과는 상관없습니다.
             </dd>
           </div>
           <div>
