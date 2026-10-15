@@ -12,7 +12,8 @@ export const PUBLISHED = false;
 /** 설치 명령 블록의 제목. 배포 전에는 "배포 후" 기준이라는 것을 밝힌다 */
 export const INSTALL_TITLE = PUBLISHED ? "sh" : "npm 배포 후";
 
-export function PrePublishNote() {
+/** `standalone` 이면 위에 명령이 없는 자리다(Home) — "위 명령은…" 대신 상태만 말한다 */
+export function PrePublishNote({ standalone = false }: { standalone?: boolean }) {
   if (PUBLISHED) return null;
 
   return (
@@ -21,7 +22,7 @@ export function PrePublishNote() {
         npm 배포 전
       </TxTag>
       <span>
-        위 명령은 배포 후 기준입니다. 지금은{" "}
+        {standalone ? "아직 npm에 없습니다. 지금은" : "위 명령은 배포 후 기준입니다. 지금은"}{" "}
         <Link to="/docs/start#2-install" className="underline">
           저장소에서 빌드한 패키지 파일로 설치
         </Link>
