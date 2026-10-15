@@ -10,6 +10,12 @@ export function ExampleHome() {
       <Block title="An admin app in three screens">
         <p className={muted}>세 화면은 작은 운영 관리 앱 하나를 이루는 화면입니다. 각 페이지에서 화면 하나씩 직접 써 볼 수 있습니다.</p>
         <LinkCardGrid>
+          <LinkCard to="/example/app" title="App">
+            세 화면을 앱 하나로 묶는 App.tsx — TxAppShell · Provider
+          </LinkCard>
+          <LinkCard to="/example/routes" title="Routes">
+            세 화면을 등록하는 routes.tsx — RouteTree
+          </LinkCard>
           <LinkCard to="/example/dashboard" title="Dashboard">
             운영 상태 요약. 숫자를 누르면 걸러진 오류 로그로 이어집니다
           </LinkCard>
@@ -18,12 +24,6 @@ export function ExampleHome() {
           </LinkCard>
           <LinkCard to="/example/error-logs" title="Error Logs">
             오류 조회 · 기간 필터 · 표 안 상태 변경 · 상세 보기
-          </LinkCard>
-          <LinkCard to="/example/app" title="App">
-            세 화면을 앱 하나로 묶는 App.tsx — TxAppShell · Provider
-          </LinkCard>
-          <LinkCard to="/example/routes" title="Routes">
-            세 화면을 등록하는 routes.tsx — RouteTree
           </LinkCard>
         </LinkCardGrid>
       </Block>
