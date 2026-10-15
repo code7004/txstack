@@ -71,12 +71,10 @@ export function DashboardScreen() {
         {kpis.map((kpi) => (
           <Link key={kpi.label} to={kpi.to} className={card}>
             <TxCard>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-500 dark:text-slate-400">{kpi.label}</span>
-                <TxTag variant={kpi.tone} dot>
-                  보기
-                </TxTag>
-              </div>
+              {/* 이름표에 색 점을 붙여 무엇의 숫자인지와 성격을 함께 보입니다 */}
+              <TxTag variant={kpi.tone} dot className="whitespace-nowrap">
+                {kpi.label}
+              </TxTag>
               <div className="mt-2 text-3xl font-semibold tabular-nums">{kpi.value}</div>
             </TxCard>
           </Link>
@@ -115,7 +113,7 @@ export function DashboardScreen() {
       <TxCard title="확인이 필요한 오류">
         <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">하루가 지나도록 아무도 맡지 않은 오류입니다.</p>
         {summary.unattended.length === 0 ? (
-          <TxEmptyState variant="no-data" title="모두 담당자가 있습니다" />
+          <TxEmptyState variant="no-data" title="모두 담당자가 있습니다" description="하루 넘게 방치된 오류가 없습니다." />
         ) : (
           <ul className="flex flex-col divide-y divide-[color:var(--tx-color-border)]">
             {summary.unattended.map((log) => (
@@ -123,7 +121,7 @@ export function DashboardScreen() {
                 <Link to={logsUrl({ q: log.id })} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm hover:underline">
                   <span className="font-mono text-slate-500 dark:text-slate-400">{log.id}</span>
                   <TxTag appearance="outline">{log.method}</TxTag>
-                  <span className="min-w-0 flex-1 truncate">{log.message}</span>
+                  <span className="order-last w-full truncate sm:order-none sm:w-auto sm:min-w-0 sm:flex-1">{log.message}</span>
                   <span className="text-xs text-slate-500 dark:text-slate-400">{new Date(log.createdAt).toLocaleDateString("ko-KR")}</span>
                 </Link>
               </li>

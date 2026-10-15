@@ -77,7 +77,7 @@ export function AccountsScreen() {
       </div>
 
       {/* 표는 감싸는 자리의 높이를 채웁니다 */}
-      <div className="flex h-[34rem] flex-col">
+      <div className="flex h-[28rem] flex-col sm:h-[34rem]">
         <TxAgGrid<Account>
           rowData={data.rows}
           isLoading={isFetching}

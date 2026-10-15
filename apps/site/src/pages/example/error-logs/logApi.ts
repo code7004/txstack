@@ -107,7 +107,7 @@ let logs: ErrorLogDetail[] = Array.from({ length: 140 }, (_, index) => {
     id: `E-${String(9140 - index)}`,
     ...sample,
     status,
-    assignee: status === "open" && index % 3 !== 0 ? null : ASSIGNEES[index % ASSIGNEES.length]!,
+    assignee: status === "open" && index % 4 !== 0 ? null : ASSIGNEES[index % ASSIGNEES.length]!,
     createdAt: new Date(NOW - ago).toISOString(),
     stack: `${sample.name}: ${sample.message}\n    at handle (src/routes${sample.path.replace(/:id/, "[id]")}.ts:${40 + (index % 30)}:${11 + (index % 7)})\n    at Router.dispatch (src/server/router.ts:88:14)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)`
   };
