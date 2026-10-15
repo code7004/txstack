@@ -35,13 +35,16 @@ export function CodeBlock({ children, language = "tsx", title, hideCopy = false,
   return (
     <figure className="not-prose overflow-hidden rounded-lg border" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--site-code-bg)" }}>
       <figcaption className="flex items-center gap-2 border-b px-3 py-1.5" style={{ borderColor: "#1e2a36" }}>
-        <span className="font-mono text-xs" style={{ color: "#6b7f8f" }}>
+        {/* 긴 파일 이름은 말줄임으로 — 복사 버튼을 밀어내지 않는다 */}
+        <span className="min-w-0 truncate font-mono text-xs" style={{ color: "#6b7f8f" }} title={title ?? language}>
           {title ?? language}
         </span>
 
         {/* 복사는 우리 부품이 한다 — 클립보드·되돌리기·실패까지 이미 들어 있다 */}
         {/* 코드 판은 라이트에서도 어둡다. 버튼 글자를 판의 글자색에 맞춰야 라이트에서 묻히지 않는다 */}
-        {!hideCopy && <TxCopyButton value={code} variant="ghost" className="ms-auto text-xs" style={{ "--tx-button-fg": "var(--site-code-text)", "--tx-color-state": "#ffffff" } as React.CSSProperties} />}
+        {!hideCopy && (
+          <TxCopyButton value={code} variant="ghost" className="ms-auto shrink-0 text-xs" style={{ "--tx-button-fg": "var(--site-code-text)", "--tx-color-state": "#ffffff", "--tx-copy-button-min-width": "5rem" } as React.CSSProperties} />
+        )}
       </figcaption>
 
       <Highlight theme={theme} code={code} language={language}>
