@@ -26,26 +26,46 @@ export function PageToc({ root }: { root: RefObject<HTMLElement | null> }) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState<string>();
 
-  // 화면이 바뀌면 제목을 다시 읽는다. 앵커는 사이트 검색과 같은 규칙으로 만든다(lib/slug)
+  // 화면이 바뀌면 제목을 다시 읽는다. 앵커는 사이트 검색과 같은 규칙으로 만든다(lib/slug).
+  // **본문은 늦게 올 수 있다** — 화면은 처음 들어올 때 받아 온다(lib/page). 그래서 본문이 바뀌는 것을 지켜보다 다시 읽는다
   useEffect(() => {
-    // 창(모달 · 서랍) 안의 제목은 뺀다. 닫혀 있어도 그 제목이 문서에 남아 있어서 목차에 끼어든다
-    const nodes = Array.from(root.current?.querySelectorAll<HTMLHeadingElement>("h2, h3[data-toc]") ?? []).filter((node) => !node.closest("dialog, [role='dialog']"));
+    const body = root.current;
+    if (!body) return;
 
-    // 제목(h2)의 앵커는 사이트 검색과 똑같이 h2 끼리만 센다. 소제목은 따로 세고, 겹치면 뒤에 붙여 가른다
-    const titles = nodes.filter((node) => node.tagName === "H2");
-    const subs = nodes.filter((node) => node.tagName === "H3");
-    const titleIds = anchorsOf(titles.map((node) => node.textContent ?? ""));
-    // 소제목은 짧은 이름(data-toc-label)이 있으면 그것으로 보이고 앵커도 만든다
-    const label = (node: HTMLElement) => node.dataset.tocLabel ?? node.textContent ?? "";
-    const subIds = anchorsOf(subs.map(label)).map((id) => (titleIds.includes(id) ? `${id}-sub` : id));
+    let frame = 0;
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(read);
+    };
+    const observer = new MutationObserver(schedule);
+    observer.observe(body, { childList: true, subtree: true, characterData: true });
+    read();
 
-    setHeadings(
-      nodes.map((node) => {
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+
+    function read() {
+      // 창(모달 · 서랍) 안의 제목은 뺀다. 닫혀 있어도 그 제목이 문서에 남아 있어서 목차에 끼어든다
+      const nodes = Array.from(root.current?.querySelectorAll<HTMLHeadingElement>("h2, h3[data-toc]") ?? []).filter((node) => !node.closest("dialog, [role='dialog']"));
+
+      // 제목(h2)의 앵커는 사이트 검색과 똑같이 h2 끼리만 센다. 소제목은 따로 세고, 겹치면 뒤에 붙여 가른다
+      const titles = nodes.filter((node) => node.tagName === "H2");
+      const subs = nodes.filter((node) => node.tagName === "H3");
+      const titleIds = anchorsOf(titles.map((node) => node.textContent ?? ""));
+      // 소제목은 짧은 이름(data-toc-label)이 있으면 그것으로 보이고 앵커도 만든다
+      const label = (node: HTMLElement) => node.dataset.tocLabel ?? node.textContent ?? "";
+      const subIds = anchorsOf(subs.map(label)).map((id) => (titleIds.includes(id) ? `${id}-sub` : id));
+
+      const next = nodes.map((node) => {
         const sub = node.tagName === "H3";
         node.id ||= sub ? subIds[subs.indexOf(node)]! : titleIds[titles.indexOf(node)]!;
         return { id: node.id, text: sub ? label(node) : (node.textContent ?? ""), sub };
-      })
-    );
+      });
+      // 본문 안의 예제가 움직일 때마다 목차를 다시 그리지 않는다. 제목이 그대로면 그대로 둔다
+      setHeadings((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    }
   }, [pathname, root]);
 
   // 지금 읽고 있는 제목. 화면 위쪽 1/3 을 지난 마지막 제목이다 — 소제목도 함께 센다

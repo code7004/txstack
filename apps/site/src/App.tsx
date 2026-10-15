@@ -1,5 +1,5 @@
 import { buildRouteObjects, getNavigableRoutes, useCurrentRouteNode, type NavRoute } from "@txstack/route-meta";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { DocPager } from "./components/DocPager";
@@ -81,18 +81,43 @@ const sideItem = (item: NavRoute): ReactNode =>
     <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />
   );
 
+/** 조각의 자리를 기다리는 한도. 화면을 처음 받는 느린 연결도 넉넉히 덮는다 */
+const ANCHOR_WAIT_MS = 10_000;
+
 /**
  * **화면이 바뀌면 맨 위에서 시작한다.** 브라우저는 SPA 의 주소 변경을 새 문서로 보지 않아
  * 앞 화면의 스크롤 위치를 그대로 둔다 — "다음 장" 을 누르면 다음 장의 중간에 떨어진다.
- * 주소에 조각(`#…`)이 있으면 그 제목으로 간다.
+ *
+ * 주소에 조각(`#…`)이 있으면 그 제목으로 간다. **그 제목은 아직 없을 수 있다** — 화면은 처음 들어올 때
+ * 받아 오고(`lib/page`), 제목의 앵커는 목차가 붙인다. 그래서 자리가 생길 때까지 지켜보다가 간다.
  */
 function useScrollReset() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    const target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
-    if (target) target.scrollIntoView();
-    else window.scrollTo(0, 0);
+    const id = hash && decodeURIComponent(hash.slice(1));
+    if (!id) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const go = () => {
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView();
+      return !!target;
+    };
+    if (go()) return;
+
+    window.scrollTo(0, 0);
+    // 속성(id)까지 지켜본다 — 제목은 먼저 그려지고 앵커는 그다음에 붙는다
+    const observer = new MutationObserver(() => go() && stop());
+    const timer = window.setTimeout(() => stop(), ANCHOR_WAIT_MS);
+    const stop = () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["id"] });
+    return stop;
   }, [pathname, hash]);
 }
 
@@ -203,8 +228,11 @@ function Layout({ children }: { children: ReactNode }) {
        */}
       <div className={`mx-auto flex w-full gap-10 px-4 py-8 sm:px-6 sm:py-10 ${home ? "max-w-6xl" : "max-w-[76rem]"}`}>
         <div ref={body} className={`min-w-0 flex-1 ${home || showcase ? "" : "max-w-4xl"}`}>
-          {children}
-          <DocPager menu={MENU} />
+          {/* 화면을 처음 받는 동안. 다른 화면으로 옮길 때는 라우터가 앞 화면을 받을 때까지 남겨 둔다 */}
+          <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
+            {children}
+            <DocPager menu={MENU} />
+          </Suspense>
         </div>
         {/* Home 은 둘러보는 화면이라 목차가 오히려 군더더기다 */}
         {!home && <PageToc root={body} />}
