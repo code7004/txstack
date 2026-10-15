@@ -1,231 +1,184 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TxAlert, TxButton, TxCard, TxCopyButton, TxForm, TxTag } from "@txstack/ui";
-import { CodeBlock } from "../components/CodeBlock";
-import { LinkCard, LinkCardGrid } from "../components/LinkCard";
-import { PrePublishNote } from "../components/PrePublish";
+import { TxCopyButton, TxTag } from "@txstack/ui";
+import type { CSSProperties } from "react";
+import { LinkCard } from "../components/LinkCard";
+import { PUBLISHED, PrePublishNote } from "../components/PrePublish";
+import { Used } from "../components/Used";
+import { HomePreview } from "./home/HomePreview";
+import { ThemeTry } from "./home/ThemeTry";
+import { UiGroups } from "./home/UiGroups";
 
+/**
+ * **제공하는 UI → 실제로 만드는 화면 → 함께 쓰는 도구 → 설계 배경** 순서다(docs/008).
+ * 배경 글보다 실물을 앞에 둔다. 홈은 AG Grid 와 외부 요청을 불러오지 않는다 — 큰 표와 진짜 요청은 Example 이 맡는다.
+ */
+
+/** 네 패키지. 다 설치할 필요가 없다 — 필요한 때만 고른다 */
 const PACKAGES = [
-  { name: "@txstack/ui", what: "UI를 위한 다양한 Tx* 컴포넌트. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다", to: "/api/ui", tag: "React" },
-  { name: "@txstack/route-meta", what: "라우트를 메타데이터 트리 하나로 관리합니다. 라우터·메뉴·브레드크럼이 모두 여기서 만들어집니다", to: "/api/route-meta", tag: "React" },
-  { name: "@txstack/hooks", what: "범용 훅과 URL 쿼리 상태 관리", to: "/api/hooks", tag: "React" },
-  { name: "@txstack/axios", what: "정책을 주입받는 HTTP 클라이언트. 토큰·401 처리·응답 형식을 앱이 정합니다", to: "/api/axios", tag: "React 불필요" }
+  { name: "@txstack/ui", when: "버튼 · 폼 · 표 · 메뉴 등 화면 부품이 필요할 때", extra: "표는 ag-grid, 달력은 react-day-picker를 쓸 때만 추가", to: "/api/ui" },
+  { name: "@txstack/route-meta", when: "라우트 정의 하나로 메뉴와 지금 위치를 함께 관리할 때", extra: "react-router-dom", to: "/api/route-meta" },
+  { name: "@txstack/hooks", when: "객체 상태나 URL 검색 조건을 관리할 때", extra: "URL 상태는 react-router-dom", to: "/api/hooks" },
+  { name: "@txstack/axios", when: "인증 · 응답 · 오류 처리 정책을 HTTP 클라이언트에 연결할 때", extra: "axios. React 없이도 동작", to: "/api/axios" }
 ];
 
-/** 첫 화면에서 말하는 "줄여 주는 반복 작업". 오른쪽은 그 일을 맡는 패키지 */
-const CHORES = [
-  ["검색 조건과 페이지를 주소에 담기", "hooks"],
-  ["서버 정렬 · 페이지 · 선택이 있는 표", "ui/aggrid"],
-  ["검증 메시지가 붙는 입력 폼", "ui"],
-  ["라우트 한 곳에서 권한별 메뉴까지", "route-meta"],
-  ["토큰 · 401 · 오류 응답을 한 번에 설정", "axios"],
-  ["확인 창 · 알림을 호출 한 줄로", "ui"]
-] as const;
-
-/** 왜 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
-const STORY = [
-  { title: "Copied code, again and again", body: "여러 서비스가 같은 UI 컴포넌트와 HTTP 설정을 각자 복사해 썼습니다. 고칠 일이 생기면 프로젝트마다 다시 고쳐야 했고, 조금씩 서로 달라졌습니다." },
-  { title: "Extract only what is shared", body: "어느 서비스에도 묶이지 않도록 도메인 지식을 걷어 내고, 공통된 부분만 네 개의 패키지로 나눴습니다." },
-  { title: "The next project is the test", body: "다음 프로젝트가 설치만으로 그대로 쓸 수 있는지를 기준으로 삼았습니다. 그렇지 않다면 라이브러리가 아니라 앱 코드입니다." }
-];
-
-/** 세 가지 원칙. 각각 그 원칙을 보여 주는 문서로 간다 */
+/** 왜 이렇게 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
 const PRINCIPLES = [
-  { title: "Easy to use", body: "설치하고 스타일시트 한 줄이면 바로 씁니다. 확인 창이나 알림도 Provider 없이 호출만 하면 됩니다.", to: "/docs/start" },
-  { title: "Easy to customize", body: "디자인은 CSS 변수만 바꾸면 됩니다. 컴포넌트를 직접 고칠 필요가 없고, 다크 모드도 같은 방식으로 바뀝니다.", to: "/docs/guide/styling" },
-  { title: "The app owns the policy", body: "인증 토큰, 401 처리, 응답 형식처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 옵션으로 넘깁니다.", to: "/api/axios" }
+  { title: "Extracted from real services", body: "여러 서비스가 각자 복사해 쓰던 UI와 HTTP 설정에서 공통된 부분만 꺼냈습니다. 어느 서비스의 도메인도 모르는 라이브러리가 기준입니다.", to: "/about" },
+  { title: "Design through tokens", body: "디자인은 CSS 변수로 바꿉니다. 컴포넌트를 고치지 않고, 다크 모드도 같은 방식으로 바뀝니다. 이 사이트도 변수만으로 꾸몄습니다.", to: "/docs/guide/styling" },
+  { title: "The app owns the policy", body: "인증 토큰, 401 처리, 응답 형식, 메뉴 권한처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 넘깁니다.", to: "/docs/guide/http-client" }
 ];
-
-/** 주요 기능. 원칙이 "어떤 생각으로" 라면 이쪽은 "무엇을 할 수 있나" 다. 각각 그 기능의 가이드로 간다 */
-const FEATURES = [
-  { pkg: "ui", title: "49 components", body: "입력 폼, 표, 날짜 선택, 확인 창, 알림, 탭, 파일 업로드까지 서비스 화면에 필요한 컴포넌트를 갖췄습니다.", to: "/docs/components" },
-  { pkg: "ui", title: "Theming and dark mode", body: "색, 모서리, 간격을 CSS 변수로 바꾸고, 클래스 하나로 모든 컴포넌트를 다크 모드로 전환합니다.", to: "/docs/guide/styling" },
-  { pkg: "ui", title: "App shell", body: "헤더, 위쪽 메뉴, 왼쪽 메뉴, 본문 자리를 한 번에 잡고, 좁은 화면에서는 메뉴가 서랍으로 들어갑니다.", to: "/docs/guide/layout" },
-  { pkg: "route-meta", title: "Menus from routes", body: "라우트를 한 곳에 선언하면 메뉴, 현재 위치 표시, 권한별 메뉴가 모두 거기서 만들어집니다.", to: "/docs/guide/routing" },
-  { pkg: "hooks", title: "Search state in the URL", body: "목록의 검색어, 필터, 페이지를 주소에 담아 새로고침하거나 링크를 공유해도 같은 화면이 열립니다.", to: "/docs/guide/url-state" },
-  { pkg: "axios", title: "API client", body: "토큰 첨부, 401 처리, 오류 메시지 정리, 민감한 값을 가린 요청 로그를 한 곳에서 설정합니다.", to: "/docs/guide/http-client" }
-];
-
-const HERO_CODE = `import { TxButton, TxForm } from "@txstack/ui";
-import "@txstack/ui/styles.css";
-
-export function SignUp() {
-  return (
-    <TxForm noValidate labelWidth="4rem" onSubmit={submit}>
-      <TxForm.Input caption="이름" placeholder="홍길동" required />
-      <TxForm.Input caption="메일" type="email" error={errors.email} />
-      <TxButton type="submit" label="가입" />
-    </TxForm>
-  );
-}`;
-
-/** 오른쪽에서 **진짜로 도는** 폼. 왼쪽 코드가 이것을 그대로 만든다. */
-function HeroDemo() {
-  const [email, setEmail] = useState("");
-  const [tried, setTried] = useState(false);
-
-  const error = tried && !email.includes("@") ? "메일 형식이 아닙니다" : undefined;
-
-  return (
-    <TxForm noValidate labelWidth="4rem" className="w-full" onSubmit={() => setTried(true)}>
-      <TxForm.Input caption="이름" placeholder="홍길동" required />
-      <TxForm.Input caption="메일" type="email" placeholder="you@company.com" value={email} onChangeText={setEmail} error={error} />
-      <TxButton type="submit" label="가입" />
-    </TxForm>
-  );
-}
 
 export function Home() {
   return (
     <div className="flex flex-col gap-16">
-      {/* --- 히어로 ------------------------------------------------------- */}
-      <section className="flex flex-col gap-6 pt-4">
-        <div className="flex items-center gap-2">
-          <TxTag>MIT</TxTag>
-          <TxTag>React 18+</TxTag>
-          <TxTag>TypeScript</TxTag>
-        </div>
-
-        <h1 className="max-w-3xl text-4xl leading-tight font-semibold sm:text-5xl">
-          관리 화면과 업무용 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span>
-        </h1>
-
-        <p className="max-w-3xl text-lg text-slate-600 dark:text-slate-300">
-          React로 관리 도구나 사내 서비스를 만드는 개발자를 위해, 화면마다 다시 짜던 <strong>검색 · 목록 · 폼 · 권한별 메뉴 · HTTP 설정</strong>을 컴포넌트와 훅, 설정 몇 줄로 줄입니다.
-        </p>
-
-        {/* 줄여 주는 반복 작업. 각각 그 일을 맡는 패키지 이름을 붙인다 — 과장하지 않고, 실제로 있는 것만 */}
-        <ul className="grid max-w-3xl gap-x-6 gap-y-1.5 text-sm text-slate-600 sm:grid-cols-2 dark:text-slate-300">
-          {CHORES.map(([chore, pkg]) => (
-            <li key={chore} className="flex items-baseline gap-2">
-              <span aria-hidden className="text-[color:var(--tx-color-primary-strong)]">
-                ✓
-              </span>
-              <span>
-                {chore} <span className="font-mono text-xs text-slate-500 dark:text-slate-400">{pkg}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Link to="/docs/start" className="tx-button" data-variant="primary">
-            <span className="tx-button__label">Getting Started</span>
-          </Link>
-          <Link to="/example/accounts" className="tx-button" data-variant="secondary">
-            <span className="tx-button__label">예제 보기</span>
-          </Link>
-        </div>
-
-        {/* 설치 한 줄. 아직 npm 에 없으므로 상태를 명령 바로 위에 밝히고, 지금 설치하는 길로 보낸다 */}
-        <div className="flex w-full max-w-xl flex-col gap-1.5">
-          <div className="flex min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
-            <code className="min-w-0 flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
-            {/* 복사 버튼은 "복사했습니다" 가 들어갈 폭(8rem)을 미리 잡는다. 좁은 상자에서는 명령이 먼저라 그 폭을 줄인다 */}
-            <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="shrink-0 text-xs" style={{ "--tx-copy-button-min-width": "5rem" } as React.CSSProperties} />
+      {/* --- 1. 소개 + 대표 데모 + 주요 행동 ------------------------------------- */}
+      <section className="grid items-start gap-8 pt-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center gap-2">
+            <TxTag>MIT</TxTag>
+            <TxTag>React 18+</TxTag>
+            <TxTag>TypeScript</TxTag>
           </div>
-          <PrePublishNote />
+
+          <h1 className="text-4xl leading-tight font-semibold sm:text-5xl">
+            관리 화면과 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span> <span className="align-middle text-2xl text-slate-500 sm:text-3xl dark:text-slate-400">(UI & ETC)</span>
+          </h1>
+
+          <p className="text-lg text-slate-600 dark:text-slate-300">
+            txstack은 관리 화면과 업무용 서비스에 필요한 버튼, 입력 폼, 데이터 표, 모달, 메뉴와 레이아웃을 제공합니다. CSS 변수로 디자인을 바꾸고, 필요하면 라우팅 · URL 상태 · HTTP 도구를 함께 써서 화면을 완성합니다.
+          </p>
+          <p className="text-slate-600 dark:text-slate-300">UI만 쓰거나, 필요한 패키지만 골라 조합할 수 있습니다.</p>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to="/docs/components" className="tx-button" data-variant="primary">
+              <span className="tx-button__label">UI 둘러보기</span>
+            </Link>
+            <Link to="/docs/start" className="tx-button" data-variant="secondary">
+              <span className="tx-button__label">시작하기</span>
+            </Link>
+          </div>
+
+          {/* 설치. 배포 전에는 복사 버튼 대신 지금 설치하는 길로 보낸다 — 배포 후 명령을 먼저 복사하면 실패한다 */}
+          {PUBLISHED ? (
+            <div className="flex w-full max-w-md min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+              <code className="min-w-0 flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
+              <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="shrink-0 text-xs" style={{ "--tx-copy-button-min-width": "5rem" } as CSSProperties} />
+            </div>
+          ) : (
+            <PrePublishNote standalone />
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="rounded-lg border p-4" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+            <HomePreview />
+          </div>
+          <Used names={["TxSearchInput", "TxDropdown", "TxTag", "TxModal", "TxForm", "TxToast", "TxSkeleton", "TxEmptyState", "TxAlert"]} />
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            큰 표 · 옆 패널 편집 · 서버 정렬까지 갖춘 화면은{" "}
+            <Link to="/example/accounts" className="underline">
+              Example › Accounts
+            </Link>
+            에 있습니다.
+          </p>
         </div>
       </section>
 
-      {/* --- 왜 만들었나 ---------------------------------------------------- */}
+      {/* --- 2. 기능군별 UI ---------------------------------------------------- */}
+      <section className="flex flex-col gap-4">
+        <header className="flex flex-col gap-1">
+          <h2 className="text-xl font-semibold">What's in the UI</h2>
+          <p className="text-slate-600 dark:text-slate-300">기능군마다 실제로 동작하는 작은 예시입니다. 컴포넌트 이름을 누르면 API 목록으로, 거기서 Storybook의 props로 이어집니다.</p>
+        </header>
+        <UiGroups />
+      </section>
+
+      {/* --- 3. 디자인 바꾸기 --------------------------------------------------- */}
+      <section className="flex flex-col gap-4">
+        <header className="flex flex-col gap-1">
+          <h2 className="text-xl font-semibold">Change the design with tokens</h2>
+          <p className="text-slate-600 dark:text-slate-300">
+            강조색과 모서리, 다크 모드를 바꿔 보세요. 컴포넌트는 그대로 두고 CSS 변수만 바꿉니다. 자세한 방법은{" "}
+            <Link to="/docs/guide/styling" className="underline">
+              Styling
+            </Link>
+            과{" "}
+            <Link to="/docs/guide/dark-mode" className="underline">
+              Dark mode
+            </Link>
+            에 있습니다.
+          </p>
+        </header>
+        <ThemeTry />
+      </section>
+
+      {/* --- 4. 네 패키지 --------------------------------------------------------- */}
+      <section className="flex flex-col gap-4">
+        <header className="flex flex-col gap-1">
+          <h2 className="text-xl font-semibold">Pick only what you need</h2>
+          <p className="text-slate-600 dark:text-slate-300">네 패키지는 따로 설치합니다. UI만 써도 되고, 필요한 도구만 더하면 됩니다.</p>
+        </header>
+
+        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
+          <table className="site-stack-table w-full text-sm">
+            <thead>
+              <tr style={{ backgroundColor: "var(--tx-color-muted)" }}>
+                <th className="px-3 py-2 text-start font-semibold">패키지</th>
+                <th className="px-3 py-2 text-start font-semibold">이럴 때</th>
+                <th className="px-3 py-2 text-start font-semibold">함께 설치</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PACKAGES.map((item) => (
+                <tr key={item.name} className="border-t align-top" style={{ borderColor: "var(--tx-color-border)" }}>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    <Link to={item.to} className="font-mono text-xs font-semibold underline">
+                      {item.name}
+                    </Link>
+                  </td>
+                  <td className="px-3 py-2 text-slate-600 dark:text-slate-300">{item.when}</td>
+                  <td data-label="함께 설치" className="px-3 py-2 text-slate-500 dark:text-slate-400">
+                    {item.extra}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          <code>route-meta</code>의 권한은 <strong>메뉴에서 항목을 거르는 일</strong>까지입니다. 주소로 직접 들어오는 것을 막는 페이지 접근 제어와 서버의 권한 검증은 앱과 서버가 맡습니다.
+        </p>
+      </section>
+
+      {/* --- 5. 완성된 화면과 시작하기 -------------------------------------------- */}
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl font-semibold">See it in a real screen</h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          <LinkCard to="/example/app" title="Example">
+            대시보드 · 계정 · 오류 로그를 묶은 운영 관리 화면. 검색 · 편집 · 저장 · 실패까지
+          </LinkCard>
+          <LinkCard to="/docs/tutorial" title="Tutorial">
+            네 패키지로 목록 화면 하나를 처음부터 만들어 앱으로 띄우기까지
+          </LinkCard>
+          <LinkCard to="/docs/start" title="Getting Started">
+            필요한 패키지를 고르고 설치해 첫 화면을 띄우기
+          </LinkCard>
+        </div>
+      </section>
+
+      {/* --- 6. 배경과 설계 원칙 -------------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
           <h2 className="text-xl font-semibold">Why txstack</h2>
           <p className="text-slate-600 dark:text-slate-300">실제 서비스를 개발하면서 반복되던 코드에서 출발했습니다.</p>
         </header>
-
-        <ol className="grid gap-3 md:grid-cols-3">
-          {STORY.map((step, index) => (
-            <li key={step.title} className="site-card flex flex-col gap-2 rounded-lg border p-4">
-              <span className="font-mono text-xs font-semibold text-[color:var(--tx-color-primary-strong)]">0{index + 1}</span>
-              <span className="font-semibold">{step.title}</span>
-              <span className="text-sm text-slate-600 dark:text-slate-300">{step.body}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* --- 원칙 ------------------------------------------------------------ */}
-      <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold">Three principles</h2>
-
         <div className="grid gap-3 md:grid-cols-3">
           {PRINCIPLES.map((item) => (
             <LinkCard key={item.title} to={item.to} title={item.title}>
               {item.body}
             </LinkCard>
           ))}
-        </div>
-      </section>
-
-      {/* --- 주요 기능 -------------------------------------------------------- */}
-      <section className="flex flex-col gap-4">
-        <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">Key features</h2>
-          <p className="text-slate-600 dark:text-slate-300">카드를 누르면 해당 기능의 가이드로 이동합니다. 가이드의 예제는 페이지 안에서 직접 써 볼 수 있습니다.</p>
-        </header>
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((item) => (
-            <LinkCard key={item.title} to={item.to} title={item.title} aside={<span className="font-mono text-xs text-slate-500 dark:text-slate-400">{item.pkg}</span>}>
-              {item.body}
-            </LinkCard>
-          ))}
-        </div>
-      </section>
-
-      {/* --- 코드와 결과를 나란히 --------------------------------------------- */}
-      <section className="flex flex-col gap-4">
-        <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">@txstack/ui example</h2>
-          <p className="text-slate-600 dark:text-slate-300">
-            <code>TxForm</code>으로 입력란, 오류 메시지, 제출 버튼을 묶은 가입 폼입니다.
-          </p>
-        </header>
-
-        <div className="grid items-start gap-4 lg:grid-cols-2">
-          <CodeBlock title="SignUp.tsx">{HERO_CODE}</CodeBlock>
-
-          <TxCard title="결과" className="h-full">
-            <HeroDemo />
-          </TxCard>
-        </div>
-      </section>
-
-      {/* --- 패키지 ------------------------------------------------------- */}
-      <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold">Packages</h2>
-
-        <LinkCardGrid>
-          {PACKAGES.map((item) => (
-            <LinkCard key={item.name} to={item.to} title={<span className="font-mono text-sm">{item.name}</span>} aside={<TxTag>{item.tag}</TxTag>}>
-              {item.what}
-            </LinkCard>
-          ))}
-        </LinkCardGrid>
-      </section>
-
-      {/* --- 이 사이트가 증거다 ---------------------------------------------- */}
-      <section className="flex flex-col gap-4">
-        <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">This site is built with txstack</h2>
-          <p className="text-slate-600 dark:text-slate-300">
-            지금 보고 계신 화면의 틀, 메뉴, 버튼, 카드가 모두 txstack 컴포넌트입니다. 사이트의 색과 모서리 모양은 컴포넌트를 고치지 않고, <strong>아래처럼 CSS 변수 몇 줄만 지정해서</strong> 바꿨습니다.
-          </p>
-        </header>
-
-        <div className="grid items-start gap-4 lg:grid-cols-2">
-          <CodeBlock title="theme.css" language="css">{`:root {
-  --tx-color-primary: #2dd4bf;      /* 채움 색 — 라이트·다크 공통 */
-  --tx-color-on-accent: #04231f;    /* 채움 위의 글자는 어둡게 */
-  --tx-color-primary-strong: #0f766e;    /* 글자·테두리용 진한 색 */
-  --tx-radius: 0.375rem;            /* 모서리 반경 */
-}`}</CodeBlock>
-
-          <TxAlert variant="info" title="디자인을 바꾸려고 컴포넌트를 고칠 필요가 없습니다">
-            색, 글자, 간격 같은 디자인 값을 CSS 변수로 열어 두었습니다. 변수만으로 바꿀 수 없는 부분이 생기면, 라이브러리에 변수를 더해서 해결합니다.
-          </TxAlert>
         </div>
       </section>
     </div>
