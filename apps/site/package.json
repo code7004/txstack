@@ -6,7 +6,7 @@
   "description": "Docs and showcase site for txstack. Not published.",
   "scripts": {
     "dev": "vite --port 6410",
-    "build": "vite build",
+    "build": "vite build && node scripts/share-meta.mjs",
     "preview": "vite preview --port 6410",
     "typecheck": "tsc --noEmit"
   },

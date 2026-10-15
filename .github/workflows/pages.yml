@@ -43,18 +43,17 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # 저장소 이름이 하위 경로가 된다. basename · 자산 경로가 이 값을 따른다
+      # 저장소 이름이 하위 경로가 된다. basename · 자산 경로가 이 값을 따른다.
+      # 빌드가 주소마다 index.html(제목 · 설명 · 공유 카드)과 404.html 을 함께 만든다(apps/site/scripts/share-meta.mjs)
       - run: pnpm site:build
         env:
           SITE_BASE: /txstack/
+          SITE_ORIGIN: https://code7004.github.io
 
       - run: pnpm storybook:build
 
-      - name: 사이트 안에 Storybook 을 싣고, 딥링크를 살린다
-        run: |
-          cp -R apps/storybook/dist apps/site/dist/storybook
-          # Pages 에는 SPA 폴백이 없다. 없는 경로에 404.html 을 주므로 그것을 index.html 로 둔다
-          cp apps/site/dist/index.html apps/site/dist/404.html
+      - name: 사이트 안에 Storybook 을 싣는다
+        run: cp -R apps/storybook/dist apps/site/dist/storybook
 
       - uses: actions/upload-pages-artifact@v3
         with:
