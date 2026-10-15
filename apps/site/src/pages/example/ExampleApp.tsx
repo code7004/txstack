@@ -8,14 +8,61 @@ import { Packages, muted } from "./ExampleParts";
 /** Dashboard · Accounts · Error Logs 를 앱 하나로 묶는 App.tsx. 화면 코드가 아니라 앱의 틀이다 */
 export function ExampleApp() {
   return (
-    <Page title="App" lead="Dashboard · Accounts · Error Logs 세 화면을 앱 하나로 묶는 App.tsx입니다. TxAppShell이 머리 줄 · 왼쪽 메뉴 · 본문 자리를 잡고, 세 화면에 필요한 Provider를 한 번 감쌉니다.">
-      <Block title="Source">
+    <Page title="App" lead="세 화면을 앱 하나로 묶는 App.tsx입니다. 라우트 트리를 읽어 왼쪽 메뉴와 지금 위치를 그리고, TxAppShell이 화면 틀을, Provider가 세 화면의 공통 설정을 맡습니다.">
+      <Block title="The menu in a few lines">
         <p className={muted}>
-          메뉴와 화면은{" "}
+          메뉴는 트리를 <code>getNavigableRoutes</code>로 거른 결과를 그리기만 하면 됩니다. 자식도 같은 모양이라 함수 하나가 몇 단이든 그립니다. 메뉴 항목을 손으로 적지 않으므로, 화면을 더할 때는{" "}
           <Link to="/example/routes" className="underline">
             Routes
           </Link>
-          의 라우트 트리에서 나옵니다. 나머지(<code>main.tsx</code> · 스타일시트)는{" "}
+          의 트리에 한 줄만 더합니다.
+        </p>
+        <CodeBlock title="src/App.tsx — 메뉴 부분">{`const menuItem = (item: NavRoute): ReactNode =>
+  item.children ? (
+    <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} icon={item.meta?.icon} defaultOpen>
+      {item.children.map(menuItem)}
+    </TxSideNav.Item>
+  ) : (
+    <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} icon={item.meta?.icon} as={NavLink} to={item.path} />
+  );
+
+// 권한 판정은 앱이 정합니다 — 라이브러리는 판정 함수만 받습니다
+const menu = getNavigableRoutes(routes, (permissions) => permissions.includes(role));
+
+<TxSideNav>{menu.map(menuItem)}</TxSideNav>`}</CodeBlock>
+      </Block>
+
+      <Block title="Where you are">
+        <p className={muted}>
+          <code>useCurrentRouteNode</code>가 주는 <code>matches</code>는 바깥 묶음부터 지금 화면까지의 사슬입니다. 그대로 경로 표시가 되고, 마지막 노드의 <code>meta</code>가 화면 제목과 탭 제목이 됩니다. 화면마다 제목을 따로 적지 않습니다.
+        </p>
+        <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta, matches } = useCurrentRouteNode(routes);
+const trail = matches.filter((node) => node.meta?.label);   // 운영 › 대시보드
+
+<TxBreadcrumb>
+  {trail.map((node, index) => /* 마지막이 아니면 링크 */)}
+</TxBreadcrumb>
+<h1>{meta?.label}</h1>`}</CodeBlock>
+      </Block>
+
+      <Block title="Same tree, top bar">
+        <p className={muted}>왼쪽 메뉴 대신 위쪽 가로 메뉴로 그려도 트리는 그대로입니다. 묶음은 줄의 항목이 되고, 마우스를 올리면 하위 메뉴가 열립니다.</p>
+        <CodeBlock title="src/Header.tsx">{`<TxNavBar>
+  {menu.map((group) => (
+    <TxNavBar.Item
+      key={group.key}
+      label={group.meta?.label ?? group.key}
+      panel={group.children?.map((item) => (
+        <NavLink key={item.key} to={item.path}>{item.meta?.label}</NavLink>
+      ))}
+    />
+  ))}
+</TxNavBar>`}</CodeBlock>
+      </Block>
+
+      <Block title="Source">
+        <p className={muted}>
+          <code>App.tsx</code> 전체입니다. 머리 줄의 버튼으로 역할을 바꾸면 메뉴가 다시 걸러집니다. 나머지(<code>main.tsx</code> · 스타일시트)는{" "}
           <Link to="/docs/tutorial#run-it-as-an-app" className="underline">
             Tutorial › Run it as an app
           </Link>
@@ -24,35 +71,15 @@ export function ExampleApp() {
         <CodeBlock title="src/App.tsx" maxHeight="40rem">
           {APP_SOURCE}
         </CodeBlock>
-        <Used names={["TxAppShell", "TxSideNav", "TxButton"]} />
+        <Used names={["TxAppShell", "TxSideNav", "TxBreadcrumb", "TxNavBar", "TxButton"]} />
         <Packages
           items={[
             ["getNavigableRoutes", "/api/route-meta#getnavigableroutes"],
             ["useCurrentRouteNode", "/api/route-meta#usecurrentroutenode"],
-            ["RouteRenderer", "/api/route-meta#routerenderer"]
+            ["RouteRenderer", "/api/route-meta#routerenderer"],
+            ["NavRoute", "/api/route-meta#navroute"]
           ]}
         />
-      </Block>
-
-      <Block title="How it's built">
-        <ol className={`flex list-inside list-decimal flex-col gap-2 ${muted}`}>
-          <li>
-            <strong>틀은 TxAppShell 하나.</strong> 머리 줄 · 왼쪽 메뉴 · 본문 자리를 잡고, 좁은 화면에서는 메뉴가 서랍으로 들어갑니다. 자세한 것은{" "}
-            <Link to="/docs/guide/layout" className="underline">
-              Layout
-            </Link>
-            에 있습니다.
-          </li>
-          <li>
-            <strong>메뉴와 제목은 트리에서.</strong> <code>getNavigableRoutes</code>가 메뉴를, <code>useCurrentRouteNode</code>가 지금 화면의 이름과 설명을 꺼내고, <code>RouteRenderer</code>가 화면을 그립니다. 화면을 더해도 이 파일은 고치지 않습니다.
-          </li>
-          <li>
-            <strong>권한은 메뉴에서 거른다.</strong> <code>getNavigableRoutes</code>의 두 번째 인자가 각 화면의 <code>permissions</code>를 판정합니다. 주소로 직접 들어오는 것까지 막으려면 서버가 거절해야 합니다.
-          </li>
-          <li>
-            <strong>Provider 는 앱에서 한 번.</strong> <code>QueryClientProvider</code>와 ag-grid 모듈 등록 · 테마(<code>TxAgGridProvider</code>)를 여기서 하므로 화면 코드에는 없습니다.
-          </li>
-        </ol>
       </Block>
     </Page>
   );
