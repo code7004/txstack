@@ -1,0 +1,24 @@
+{
+  "name": "verify-app",
+  "private": true,
+  "type": "module",
+  "description": "route-meta · hooks 를 react-router 와 함께 쓰는 소비자",
+  "scripts": {
+    "verify": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@txstack/hooks": "TXSTACK",
+    "@txstack/route-meta": "TXSTACK",
+    "@txstack/ui": "TXSTACK",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.8.2",
+    "vite": "^7.2.7"
+  }
+}

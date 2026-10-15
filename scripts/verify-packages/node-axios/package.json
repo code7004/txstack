@@ -1,0 +1,17 @@
+{
+  "name": "verify-node-axios",
+  "private": true,
+  "type": "module",
+  "description": "React 없이 Node 에서 @txstack/axios 를 쓰는 소비자",
+  "scripts": {
+    "verify": "tsc --noEmit && node src/check.mjs"
+  },
+  "dependencies": {
+    "@txstack/axios": "TXSTACK",
+    "axios": "^1.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.8.2"
+  }
+}

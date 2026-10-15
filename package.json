@@ -43,7 +43,8 @@
     "changeset:version": "changeset version",
     "release": "pnpm build && changeset publish",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "verify:packages": "node scripts/verify-packages.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.1",
