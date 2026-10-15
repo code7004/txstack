@@ -223,6 +223,15 @@ describe("TxDayPicker — 하나 고르기", () => {
     expect(document.body.querySelector('[data-tag="TxPopup"] [role="dialog"], [data-tag="TxPopup"][role="dialog"]')).not.toBeNull();
   });
 
+  /** 좁은 화면에서 두 달짜리 달력이 오른쪽 가장자리에 붙어 잘렸다 — 왼쪽만 여백 안에 가뒀기 때문이다 */
+  it("팝업은 화면 양쪽 여백 안으로 폭이 묶인다", () => {
+    render(<TxDayPicker />);
+
+    open();
+    const popup = document.body.querySelector<HTMLElement>('[data-tag="TxPopup"]')!;
+    expect(popup.style.maxWidth).toBe("calc(100vw - 16px)");
+  });
+
   it("바깥을 누르면 닫힌다", () => {
     render(<TxDayPicker />);
 
