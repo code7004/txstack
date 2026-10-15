@@ -70,11 +70,15 @@ export function SourceTabs({ files }: { files: { name: string; path: string; sou
 export function WholeAppNote() {
   return (
     <p className={muted}>
-      세 화면을 앱 하나로 묶는 <code>App.tsx</code>(TxAppShell · Provider)와 <code>routes.tsx</code>(RouteTree)는{" "}
+      세 화면을 앱 하나로 묶는{" "}
       <Link to="/example/app" className="underline">
-        Example › App
+        App.tsx
       </Link>
-      에 있습니다.
+      (TxAppShell · Provider)와{" "}
+      <Link to="/example/routes" className="underline">
+        routes.tsx
+      </Link>
+      (RouteTree)는 Example 메뉴의 App · Routes에 있습니다.
     </p>
   );
 }
