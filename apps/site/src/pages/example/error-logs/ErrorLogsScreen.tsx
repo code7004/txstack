@@ -71,7 +71,7 @@ export function ErrorLogsScreen() {
         </div>
       </div>
 
-      <div className="flex h-[38rem] flex-col">
+      <div className="flex h-[28rem] flex-col sm:h-[38rem]">
         <TxAgGrid<ErrorLog>
           rowData={data.rows}
           isLoading={isFetching}
