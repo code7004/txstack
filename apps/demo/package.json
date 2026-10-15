@@ -1,0 +1,36 @@
+{
+  "name": "@txstack/demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A small admin app built with txstack — Dashboard, Accounts, Error Logs on a fake API. Not published.",
+  "scripts": {
+    "dev": "vite --port 6420",
+    "build": "vite build",
+    "preview": "vite preview --port 6420",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.4",
+    "@txstack/axios": "workspace:*",
+    "@txstack/hooks": "workspace:*",
+    "@txstack/route-meta": "workspace:*",
+    "@txstack/ui": "workspace:*",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-react": "^35.0.0",
+    "axios": "^1.20.0",
+    "react": "^19.2.8",
+    "react-day-picker": "^10.0.1",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.1.2",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.8.2",
+    "vite": "^7.2.7"
+  }
+}

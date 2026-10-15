@@ -3,22 +3,32 @@ import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
-import { DemoLoading, Packages, SourceTabs, muted } from "./ExampleParts";
-import SCREEN_SOURCE from "./error-logs/ErrorLogsScreen.tsx?raw";
-import DETAIL_SOURCE from "./error-logs/LogDetail.tsx?raw";
-import API_SOURCE from "./error-logs/logApi.ts?raw";
+import { DemoLoading, Packages, QuickGuide, SourceTabs, WholeAppNote, muted } from "./ExampleParts";
+import SCREEN_SOURCE from "@demo/features/error-logs/ErrorLogsScreen.tsx?raw";
+import DETAIL_SOURCE from "@demo/features/error-logs/LogDetail.tsx?raw";
+import API_SOURCE from "@demo/features/error-logs/logApi.ts?raw";
+import MOCK_SOURCE from "@demo/mock/logs.ts?raw";
 
 /** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
-const ErrorLogsDemo = lazy(() => import("./error-logs/ErrorLogsDemo"));
+const ErrorLogsDemo = lazy(() => import("./ErrorLogsDemo"));
 
 export function ExampleErrorLogs() {
   return (
-    <Page title="Error Logs" lead="서버 오류를 찾아보고, 상태를 바꾸고, 상세를 여는 운영 화면입니다. 검색 · 필터 · 기간이 모두 주소에 담겨서 다른 화면이나 메신저에서 링크 하나로 같은 목록을 열 수 있습니다.">
+    <Page title="Error Logs" lead="서버 오류를 찾아보고, 상태를 바꾸고, 상세를 여는 운영 화면입니다. 조건이 모두 주소에 담겨 링크 하나로 같은 목록을 열 수 있습니다.">
       <Block title="Try it">
-        <p className={muted}>
-          메서드 · 상태 · 기간으로 걸러 보세요. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다. 줄을 누르면 스택 트레이스가 담긴 상세가 열리고, 상태 칸은 두 번 눌러 표 안에서 바로 바꿉니다. 삭제는 해결됐고 30일이 지난 로그만 됩니다. 스위치를
-          켜면 10초마다 같은 조건으로 다시 불러옵니다.
-        </p>
+        <QuickGuide
+          more={
+            <>
+              <p>
+                메서드 · 상태 · 기간으로 걸러 보세요. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다.
+              </p>
+              <p>줄을 누르면 스택 트레이스가 담긴 상세가 열립니다. 상태 칸은 두 번 눌러 표 안에서 바로 바꿉니다.</p>
+              <p>삭제는 해결됐고 30일이 지난 로그만 됩니다. 스위치를 켜면 10초마다 같은 조건으로 다시 불러옵니다.</p>
+            </>
+          }
+        >
+          줄을 눌러 상세를 열고, 상태 칸을 두 번 눌러 바꿔 보세요.
+        </QuickGuide>
         <Demo>
           <Suspense fallback={<DemoLoading />}>
             <ErrorLogsDemo />
@@ -69,12 +79,14 @@ export function ExampleErrorLogs() {
       </Block>
 
       <Block title="Source">
-        <p className={muted}>위 화면을 그리는 코드 전체입니다. 가짜 서버는 axios의 adapter 자리에 끼워 두었으므로, 그 부분을 지우면 진짜 서버로 요청합니다.</p>
+        <p className={muted}>위 화면을 그리는 코드 전체입니다. 화면에서 돌아가는 파일을 그대로 보여 줍니다.</p>
+        <WholeAppNote />
         <SourceTabs
           files={[
-            { name: "ErrorLogsScreen.tsx", path: "src/error-logs/ErrorLogsScreen.tsx", source: SCREEN_SOURCE },
-            { name: "LogDetail.tsx", path: "src/error-logs/LogDetail.tsx", source: DETAIL_SOURCE },
-            { name: "logApi.ts", path: "src/error-logs/logApi.ts", source: API_SOURCE }
+            { name: "ErrorLogsScreen.tsx", path: "apps/demo/src/features/error-logs/ErrorLogsScreen.tsx", source: SCREEN_SOURCE },
+            { name: "LogDetail.tsx", path: "apps/demo/src/features/error-logs/LogDetail.tsx", source: DETAIL_SOURCE },
+            { name: "logApi.ts", path: "apps/demo/src/features/error-logs/logApi.ts", source: API_SOURCE },
+            { name: "mock/logs.ts", path: "apps/demo/src/mock/logs.ts", source: MOCK_SOURCE }
           ]}
         />
       </Block>

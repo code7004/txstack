@@ -429,3 +429,12 @@ export const rowAnchor = (table: ApiTable, name: string) => `row-${slug(table.la
 export const tableAnchor = (table: ApiTable) => (table.searchable ? (name: string) => rowAnchor(table, name) : undefined);
 
 export const componentAnchor = (name: string) => `component-${slug(name)}`;
+
+/**
+ * 컴포넌트 이름이 놓인 줄. `TxDayPickerRange` 처럼 다른 줄의 `also` 에 들어 있는 이름은 그 줄로 간다 —
+ * 목록은 한 계열을 한 줄로 묶는다.
+ */
+export const componentRowAnchor = (name: string) => {
+  const row = CATALOG.flatMap(([, items]) => items).find((item) => item.name === name || item.also?.includes(name));
+  return componentAnchor(row?.name ?? name);
+};

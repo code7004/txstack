@@ -3,22 +3,32 @@ import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page } from "../../components/Page";
 import { Used } from "../../components/Used";
-import { DemoLoading, Packages, SourceTabs, muted } from "./ExampleParts";
-import FORM_SOURCE from "./accounts/AccountForm.tsx?raw";
-import API_SOURCE from "./accounts/accountApi.ts?raw";
-import SCREEN_SOURCE from "./accounts/AccountsScreen.tsx?raw";
+import { DemoLoading, Packages, QuickGuide, SourceTabs, WholeAppNote, muted } from "./ExampleParts";
+import FORM_SOURCE from "@demo/features/accounts/AccountForm.tsx?raw";
+import API_SOURCE from "@demo/features/accounts/accountApi.ts?raw";
+import SCREEN_SOURCE from "@demo/features/accounts/AccountsScreen.tsx?raw";
+import MOCK_SOURCE from "@demo/mock/accounts.ts?raw";
 
 /** ag-grid 는 무겁다. 이 예제를 열 때만 받는다 */
-const AccountsDemo = lazy(() => import("./accounts/AccountsDemo"));
+const AccountsDemo = lazy(() => import("./AccountsDemo"));
 
 export function ExampleAccounts() {
   return (
-    <Page title="Accounts" lead="계정을 찾고, 만들고, 고치고, 여러 개를 한꺼번에 지우는 관리 화면입니다. 관리 도구에서 가장 자주 만드는 화면을 처음부터 끝까지 txstack으로 만들었습니다.">
+    <Page title="Accounts" lead="계정을 찾고, 만들고, 고치고, 여러 개를 한꺼번에 지우는 관리 화면입니다.">
       <Block title="Try it">
-        <p className={muted}>
-          역할이나 상태로 거르고, 아이디 · 이름 머리를 눌러 정렬해 보세요. 줄 끝의 수정을 누르면 옆 패널에서 고칩니다. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다. 줄 앞의 칸을 골라 한꺼번에 지울 수 있는데, 첫 줄의 소유자 계정을 함께 고르면
-          서버가 거절합니다. 이미 있는 아이디로 새 계정을 만들면 서버의 오류가 폼 위에 뜹니다.
-        </p>
+        <QuickGuide
+          more={
+            <>
+              <p>
+                역할이나 상태로 거르고, 아이디 · 이름 머리를 눌러 정렬해 보세요. 조건은 <strong>이 페이지의 주소</strong>에 담깁니다.
+              </p>
+              <p>줄 끝의 수정을 누르면 옆 패널에서 고칩니다. 줄 앞의 칸을 골라 한꺼번에 지울 수 있습니다.</p>
+              <p>첫 줄의 소유자 계정을 함께 지우려 하면 서버가 거절(403)하고, 이미 있는 아이디로 새 계정을 만들면 서버의 오류(409)가 폼 위에 뜹니다.</p>
+            </>
+          }
+        >
+          필터 · 정렬 · 수정 · 선택 삭제를 직접 해 보세요.
+        </QuickGuide>
         <Demo>
           <Suspense fallback={<DemoLoading />}>
             <AccountsDemo />
@@ -74,12 +84,14 @@ export function ExampleAccounts() {
       </Block>
 
       <Block title="Source">
-        <p className={muted}>위 화면을 그리는 코드 전체입니다. 화면에서 돌아가는 파일을 그대로 보여 줍니다. 가짜 서버는 axios의 adapter 자리에 끼워 두었으므로, 그 부분을 지우면 진짜 서버로 요청합니다.</p>
+        <p className={muted}>위 화면을 그리는 코드 전체입니다. 화면에서 돌아가는 파일을 그대로 보여 줍니다.</p>
+        <WholeAppNote />
         <SourceTabs
           files={[
-            { name: "AccountsScreen.tsx", path: "src/accounts/AccountsScreen.tsx", source: SCREEN_SOURCE },
-            { name: "AccountForm.tsx", path: "src/accounts/AccountForm.tsx", source: FORM_SOURCE },
-            { name: "accountApi.ts", path: "src/accounts/accountApi.ts", source: API_SOURCE }
+            { name: "AccountsScreen.tsx", path: "apps/demo/src/features/accounts/AccountsScreen.tsx", source: SCREEN_SOURCE },
+            { name: "AccountForm.tsx", path: "apps/demo/src/features/accounts/AccountForm.tsx", source: FORM_SOURCE },
+            { name: "accountApi.ts", path: "apps/demo/src/features/accounts/accountApi.ts", source: API_SOURCE },
+            { name: "mock/accounts.ts", path: "apps/demo/src/mock/accounts.ts", source: MOCK_SOURCE }
           ]}
         />
       </Block>

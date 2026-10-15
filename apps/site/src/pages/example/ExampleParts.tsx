@@ -1,11 +1,28 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { TxSpinner, TxTabs } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
+import { DEMO_REPO_URL } from "../../lib/links";
 
-/** 예제 페이지들이 함께 쓰는 조각 — 불러오는 중 표시 · 함께 쓴 패키지 · 소스 탭 */
+/** 예제 페이지들이 함께 쓰는 조각 — 짧은 안내 · 불러오는 중 · 함께 쓴 패키지 · 소스 탭 */
 
 export const muted = "text-slate-600 dark:text-slate-300";
+
+/**
+ * **데모 앞의 설명은 한 줄이다.** 좁은 화면에서 데모가 두세 화면 아래로 밀리지 않게, 자세한 조작 안내는
+ * 접어 두고 필요할 때 펼친다.
+ */
+export function QuickGuide({ children, more }: { children: ReactNode; more: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className={muted}>{children}</p>
+      <details className="group text-sm">
+        <summary className="cursor-pointer text-slate-500 select-none hover:underline dark:text-slate-400">자세한 조작 안내</summary>
+        <div className={`mt-2 flex flex-col gap-1 ${muted}`}>{more}</div>
+      </details>
+    </div>
+  );
+}
 
 export function DemoLoading() {
   return (
@@ -32,15 +49,37 @@ export function Packages({ items }: { items: [name: string, to: string][] }) {
   );
 }
 
-/** 화면에서 돌아가는 파일을 그대로(`?raw`) 탭으로 */
+/** 화면에서 돌아가는 파일을 그대로(`?raw`) 탭으로. 긴 파일은 안에서 구른다 */
 export function SourceTabs({ files }: { files: { name: string; path: string; source: string }[] }) {
   return (
     <TxTabs
       aria-label="소스 파일"
+      classNames={{ list: "overflow-x-auto" }}
       tabs={files.map((file) => ({
         label: file.name,
-        content: <CodeBlock title={file.path}>{file.source}</CodeBlock>
+        content: (
+          <CodeBlock title={file.path} maxHeight="32rem">
+            {file.source}
+          </CodeBlock>
+        )
       }))}
     />
+  );
+}
+
+/** 화면 코드 말고 앱의 나머지(진입점 · 라우트 · Provider · 스타일)가 어디 있는지 */
+export function WholeAppNote() {
+  return (
+    <p className={muted}>
+      이 화면은 데모 앱(<code>apps/demo</code>)의 코드를 그대로 가져온 것입니다. 진입점 · 라우트 · Provider · 스타일 설정은{" "}
+      <Link to="/example#run-the-whole-app" className="underline">
+        Example › Run the whole app
+      </Link>
+      에서,{" "}
+      <a href={DEMO_REPO_URL} className="underline" target="_blank" rel="noreferrer">
+        저장소의 apps/demo
+      </a>
+      에서 전체를 볼 수 있습니다.
+    </p>
   );
 }

@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { parseApiError } from "@txstack/axios";
 import { TxAlert, TxButton, TxCard, TxEmptyState, TxProgress, TxSkeleton, TxTag } from "@txstack/ui";
-import { routes } from "../../../routes";
 import { logApi } from "../error-logs/logApi";
 
 /**
- * 오류 로그 화면으로 가는 주소. **경로는 라우트 트리에서 가져옵니다** — 경로를 바꿔도 이 링크가 따라옵니다.
+ * 오류 로그 화면으로 가는 주소. **이 화면의 옆 주소(`../error-logs`)로 갑니다** — 앱이 이 화면을
+ * `/dashboard` 에 두든 `/admin/dashboard` 에 두든 링크가 따라옵니다(`relative="path"`).
  * 조건은 쿼리 문자열로 붙입니다. 그 화면이 useUrlQuery 로 주소를 읽으므로 걸러진 채로 열립니다.
  */
-const logsUrl = (query: Record<string, string>) => `${routes.example.children.errorLogs.path}?${new URLSearchParams(query)}`;
+const logsUrl = (query: Record<string, string>) => `../error-logs?${new URLSearchParams(query)}`;
 
 const card = "block rounded-lg transition hover:-translate-y-0.5 focus-visible:outline-2";
 
@@ -69,10 +69,10 @@ export function DashboardScreen() {
       {/* 숫자 카드. 누르면 그 조건이 걸린 오류 로그로 갑니다 */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {kpis.map((kpi) => (
-          <Link key={kpi.label} to={kpi.to} className={card}>
+          <Link key={kpi.label} to={kpi.to} relative="path" className={card}>
             <TxCard>
               {/* 이름표에 색 점을 붙여 무엇의 숫자인지와 성격을 함께 보입니다 */}
-              <TxTag variant={kpi.tone} dot className="whitespace-nowrap">
+              <TxTag variant={kpi.tone} dot className="self-start whitespace-nowrap">
                 {kpi.label}
               </TxTag>
               <div className="mt-2 text-3xl font-semibold tabular-nums">{kpi.value}</div>
@@ -86,7 +86,7 @@ export function DashboardScreen() {
           {/* 막대 하나가 하루입니다. 누르면 그날의 로그로 갑니다 */}
           <div className="flex h-40 items-end gap-2">
             {summary.daily.map((day) => (
-              <Link key={day.date} to={logsUrl({ from: day.date, to: day.date })} className="group flex h-full flex-1 flex-col items-center justify-end gap-1" title={`${day.date} · ${day.count}건`}>
+              <Link key={day.date} to={logsUrl({ from: day.date, to: day.date })} relative="path" className="group flex h-full flex-1 flex-col items-center justify-end gap-1" title={`${day.date} · ${day.count}건`}>
                 <span className="text-xs tabular-nums text-slate-500 dark:text-slate-400">{day.count}</span>
                 <span className="w-full rounded-t bg-[color:var(--tx-color-primary)] opacity-80 group-hover:opacity-100" style={{ height: `${(day.count / peak) * 100}%`, minHeight: day.count ? 4 : 0 }} />
                 <span className="text-xs whitespace-nowrap text-slate-500 dark:text-slate-400">{Number(day.date.slice(8))}일</span>
@@ -98,7 +98,7 @@ export function DashboardScreen() {
         <TxCard title="자주 나는 곳 (미해결)">
           <div className="flex flex-col gap-3">
             {summary.topPaths.map((item) => (
-              <Link key={item.path} to={logsUrl({ q: item.path, status: "open" })} className="flex flex-col gap-1 hover:underline">
+              <Link key={item.path} to={logsUrl({ q: item.path, status: "open" })} relative="path" className="flex flex-col gap-1 hover:underline">
                 <span className="flex justify-between text-sm">
                   <span className="font-mono">{item.path}</span>
                   <span className="tabular-nums">{item.count}건</span>
@@ -118,7 +118,7 @@ export function DashboardScreen() {
           <ul className="flex flex-col divide-y divide-[color:var(--tx-color-border)]">
             {summary.unattended.map((log) => (
               <li key={log.id}>
-                <Link to={logsUrl({ q: log.id })} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm hover:underline">
+                <Link to={logsUrl({ q: log.id })} relative="path" className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm hover:underline">
                   <span className="font-mono text-slate-500 dark:text-slate-400">{log.id}</span>
                   <TxTag appearance="outline">{log.method}</TxTag>
                   <span className="order-last w-full truncate sm:order-none sm:w-auto sm:min-w-0 sm:flex-1">{log.message}</span>
