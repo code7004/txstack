@@ -60,7 +60,8 @@ export function GuideTables() {
         <p className={muted}>
           <code>TxAgGrid</code>는 무거워서 별도 진입점(<code>@txstack/ui/aggrid</code>)에 있습니다. 쓸 때만 ag-grid를 함께 설치하고, 앱 진입점에서 ag-grid 모듈을 한 번 등록합니다. 어떤 모듈을 쓸지는 앱이 고릅니다.
         </p>
-        <CodeBlock language="bash" title="sh">{`pnpm add ag-grid-community ag-grid-react`}</CodeBlock>
+        <CodeBlock language="bash" title="sh">{`# @txstack/ui 가 맞춘 메이저(35)로 받습니다
+pnpm add ag-grid-community@35 ag-grid-react@35`}</CodeBlock>
         <CodeBlock title="src/main.tsx">{`import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 
 ModuleRegistry.registerModules([AllCommunityModule]);`}</CodeBlock>
