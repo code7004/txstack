@@ -259,6 +259,38 @@ h3[id] {
   }
 }
 
+/**
+ * **코드에서 짚어 줄 줄**(`CodeBlock` 의 `marked`). 바탕 · 왼쪽 막대에 줄 앞 표식(▸)까지 단다 — 색만으로 알리지 않는다.
+ * 표식은 줄 앞 여백에 둔다. 긴 줄의 끝에 두면 옆으로 넘쳐 안 보인다. 다시 그려지면 한 번 밝게 떴다가 가라앉는다.
+ */
+pre [data-marked] {
+  position: relative;
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  background-color: color-mix(in oklab, var(--tx-color-primary) 18%, transparent);
+  box-shadow: inset 3px 0 0 var(--tx-color-primary);
+  animation: site-mark 1.2s ease-out;
+}
+
+pre [data-marked]::before {
+  content: "▸";
+  position: absolute;
+  inset-inline-start: 0.3rem;
+  color: var(--tx-color-primary);
+}
+
+@keyframes site-mark {
+  0% {
+    background-color: color-mix(in oklab, var(--tx-color-primary) 45%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  pre [data-marked] {
+    animation: none;
+  }
+}
+
 /*
  * 좁은 화면의 비교 표 — 칸을 옆으로 늘어놓으면 한 칸에 한두 글자씩 끊긴다. 줄마다 칸을 위아래로 쌓는다.
  * 머리 줄이 없어지므로, 무엇인지 알아야 하는 칸은 `data-label` 로 이름을 앞에 붙인다.

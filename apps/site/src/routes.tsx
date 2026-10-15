@@ -6,6 +6,7 @@ import { SectionLayout } from "./pages/SectionLayout";
  * 화면은 그 주소에 처음 들어올 때 받는다(`lib/page`). 묶음의 껍데기(`SectionLayout`)는 작아서 바로 싣는다.
  */
 const AboutHome = page(() => import("./pages/AboutHome"), "AboutHome", "pages/AboutHome.tsx");
+const CaseStudy = page(() => import("./pages/CaseStudy"), "CaseStudy", "pages/CaseStudy.tsx");
 const ApiAxios = page(() => import("./pages/api/ApiAxios"), "ApiAxios", "pages/api/ApiAxios.tsx");
 const ApiHome = page(() => import("./pages/ApiHome"), "ApiHome", "pages/ApiHome.tsx");
 const ApiHooks = page(() => import("./pages/api/ApiHooks"), "ApiHooks", "pages/api/ApiHooks.tsx");
@@ -149,9 +150,10 @@ export const routes = {
   about: {
     path: "/about",
     element: <SectionLayout />,
-    meta: { label: "About", description: "만든 사람과 문의 방법" },
+    meta: { label: "About", description: "설계 사례 · 만든 사람 · 문의 방법" },
     children: {
       index: { index: true, element: <AboutHome /> },
+      caseStudy: { path: "/about/case-study", element: <CaseStudy />, meta: { label: "Case Study", description: "무엇을 왜 나눴고, 무엇을 앱에 남겼고, 어떻게 검증하나" } },
       profile: { path: "/about/profile", element: <Profile />, meta: { label: "Profile", description: "만든 사람 소개" } },
       contact: { path: "/about/contact", element: <Contact />, meta: { label: "Contact", description: "질문 · 제안 · 버그 제보는 GitHub 이슈로" } }
     }

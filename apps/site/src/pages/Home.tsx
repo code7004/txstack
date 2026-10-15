@@ -24,7 +24,7 @@ const PACKAGES = [
 
 /** 왜 이렇게 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
 const PRINCIPLES = [
-  { title: "Extracted from real services", body: "여러 서비스가 각자 복사해 쓰던 UI와 HTTP 설정에서 공통된 부분만 꺼냈습니다. 어느 서비스의 도메인도 모르는 라이브러리가 기준입니다.", to: "/about" },
+  { title: "Extracted from real services", body: "여러 서비스가 각자 복사해 쓰던 UI와 HTTP 설정에서 공통된 부분만 꺼냈습니다. 어느 서비스의 도메인도 모르는 라이브러리가 기준입니다.", to: "/about/case-study" },
   { title: "Design through tokens", body: "디자인은 CSS 변수로 바꿉니다. 컴포넌트를 고치지 않고, 다크 모드도 같은 방식으로 바뀝니다. 이 사이트도 변수만으로 꾸몄습니다.", to: "/docs/guide/styling" },
   { title: "The app owns the policy", body: "인증 토큰, 401 처리, 응답 형식, 메뉴 권한처럼 서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 넘깁니다.", to: "/docs/guide/http-client" }
 ];
@@ -41,19 +41,17 @@ export function Home() {
             <TxTag>TypeScript</TxTag>
           </div>
 
+          {/* 첫 화면은 짧게 — 정체(UI)와 대표 장점(라우트 하나로 두 메뉴)만 둔다. 디자인 · URL 상태 · HTTP 는 아래 구역이 맡는다(docs/009) */}
           <h1 className="text-4xl leading-tight font-semibold sm:text-5xl">
-            관리 화면과 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span> <span className="align-middle text-2xl text-slate-500 sm:text-3xl dark:text-slate-400">(UI & HOOK)</span>
+            관리 화면을 만드는 <span style={{ color: "var(--tx-color-primary-strong)" }}>React UI</span>와 도구
           </h1>
 
           <p className="text-lg text-slate-600 dark:text-slate-300">
-            txstack은 관리 화면과 업무용 서비스에 필요한 버튼, 입력 폼, 데이터 표, 모달, 메뉴와 레이아웃을 제공합니다. CSS 변수로 디자인을 바꾸고, 필요하면 라우팅 · URL 상태 · HTTP 도구를 함께 써서 화면을 완성합니다.
-          </p>
-          <p className="text-slate-600 dark:text-slate-300">
-            라우트 메타데이터를 한 번 정의하고,{" "}
+            폼 · 표 · 모달 · 레이아웃을 조립하고,{" "}
             <a href="#routes-to-menus" className="underline">
-              GNB와 사이드바를 같은 설정으로 구성
+              라우트 설정 하나로 GNB와 사이드바
             </a>
-            하세요. UI만 쓰거나, 필요한 패키지만 골라 조합할 수 있습니다.
+            를 관리하세요.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -201,7 +199,13 @@ export function Home() {
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
           <h2 className="text-xl font-semibold">Why txstack</h2>
-          <p className="text-slate-600 dark:text-slate-300">실제 서비스를 개발하면서 반복되던 코드에서 출발했습니다.</p>
+          <p className="text-slate-600 dark:text-slate-300">
+            실제 서비스를 개발하면서 반복되던 코드에서 출발했습니다. 무엇을 왜 나눴고 어떤 결함을 어떻게 고쳤는지는{" "}
+            <Link to="/about/case-study" className="underline">
+              Case Study
+            </Link>
+            에 있습니다.
+          </p>
         </header>
         <div className="grid gap-3 md:grid-cols-3">
           {PRINCIPLES.map((item) => (

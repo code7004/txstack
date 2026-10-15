@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { matchRoutes } from "react-router-dom";
+import { Link, matchRoutes } from "react-router-dom";
 import { buildRouteObjects, getNavigableRoutes, type NavRoute, type RouteHandle, type RouteNode, type RouteTree } from "@txstack/route-meta";
 import { TxBreadcrumb, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
@@ -66,6 +66,20 @@ function toSource(tree: RouteTree, depth = 1): string {
   return entries.join(",\n");
 }
 
+/** 기본 설정에서 무엇이 달라졌나. 더해진 메뉴와 이름이 바뀐 메뉴의 키 */
+function changesOf(tree: RouteTree) {
+  const added = Object.keys(tree).filter((key) => !(key in base));
+  const renamed = Object.keys(tree).filter((key) => key in base && tree[key]!.meta?.label !== base[key as keyof typeof base].meta.label);
+  return { added, renamed };
+}
+
+/** 코드에서 그 글자가 든 줄 번호(1부터) */
+const linesWith = (source: string, needle: string) =>
+  source
+    .split("\n")
+    .map((line, index) => (line.includes(needle) ? index + 1 : 0))
+    .filter(Boolean);
+
 /** 묶음은 첫 자식 화면으로 간다 */
 const firstLeaf = (item: NavRoute): string => (item.children?.length ? firstLeaf(item.children[0]!) : item.path);
 
@@ -88,16 +102,32 @@ export function RouteMenuDemo() {
   const trail = matches.map((match) => (match.route.handle as RouteHandle | undefined)?.node).filter((node): node is RouteNode => !!node?.meta?.label);
   const current = trail.at(-1);
 
+  // 무엇이 바뀌었는지 — 코드의 그 줄, 두 메뉴의 그 항목, 한 줄 안내가 함께 가리킨다
+  const { added, renamed } = changesOf(tree);
+  const source = `export const routes = {\n${toSource(tree)}\n} satisfies RouteTree;`;
+  const marked = [...added.flatMap((key) => linesWith(source, `${key}: {`)), ...renamed.flatMap((key) => linesWith(source, `label: "${tree[key]!.meta?.label}"`)), ...(role === "viewer" ? linesWith(source, "permissions:") : [])];
+  /** 바뀐 메뉴는 이름 앞에 표식을 단다(＋ 더함 · ✎ 이름 바꿈). 색이 아니라 글자로 보인다 */
+  const labelOf = (item: NavRoute) => `${added.includes(item.key) ? "＋ " : renamed.includes(item.key) ? "✎ " : ""}${item.meta?.label ?? item.key}`;
+  const nameOf = (key: string) => tree[key]?.meta?.label ?? key;
+  const status =
+    role === "viewer"
+      ? '뷰어로 보면 permissions가 "admin"인 설정 메뉴가 GNB와 사이드바에서 함께 빠집니다. 메뉴만 거르는 것이고, 주소로 들어오는 것을 막는 일은 앱과 서버가 합니다.'
+      : added.length
+        ? `코드에 ${added.join(", ")} 항목을 더했더니 GNB와 사이드바에 “＋ ${added.map(nameOf).join(", ")}”가 함께 생겼습니다.`
+        : renamed.length
+          ? `label 하나를 “${renamed.map(nameOf).join(", ")}”로 바꿨더니 GNB · 사이드바 · 경로 표시가 함께 바뀌었습니다(✎ 표시).`
+          : "설정을 바꿔 보세요. 코드 한 곳이 바뀌면 GNB와 사이드바가 함께 바뀝니다.";
+
   const go = (item: NavRoute) => setPath(firstLeaf(item));
   const here = (item: NavRoute) => (shown === item.path || shown.startsWith(`${item.path}/`) ? "page" : undefined);
 
   const sideItem = (item: NavRoute) =>
     item.children ? (
-      <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} defaultOpen>
+      <TxSideNav.Item key={item.key} label={labelOf(item)} defaultOpen>
         {item.children.map(sideItem)}
       </TxSideNav.Item>
     ) : (
-      <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as="button" type="button" aria-current={shown === item.path ? "page" : undefined} onClick={() => setPath(item.path)} />
+      <TxSideNav.Item key={item.key} label={labelOf(item)} as="button" type="button" aria-current={shown === item.path ? "page" : undefined} onClick={() => setPath(item.path)} />
     );
 
   return (
@@ -109,18 +139,23 @@ export function RouteMenuDemo() {
         ))}
         <TxButton label={role === "admin" ? "뷰어로 보기" : "관리자로 보기"} variant="ghost" onClick={() => setRole((prev) => (prev === "admin" ? "viewer" : "admin"))} />
       </div>
+      {/* 바뀐 결과를 한 줄로. 화면 낭독기도 읽는다 — 포커스는 누른 버튼에 그대로 둔다 */}
+      <p role="status" className="text-sm text-slate-600 dark:text-slate-300">
+        {status}
+      </p>
 
       <div className="grid items-start gap-4 lg:grid-cols-2">
-        <CodeBlock title="routes.tsx — 이 판이 쓰는 설정 그대로" maxHeight="26rem">{`export const routes = {
-${toSource(tree)}
-} satisfies RouteTree;`}</CodeBlock>
+        {/* 고를 때마다 새로 그려 짚은 줄이 다시 한 번 밝게 뜬다 */}
+        <CodeBlock key={`${preset.name}-${role}`} title="routes.tsx — 이 판이 쓰는 설정 그대로(메뉴 부분)" maxHeight="26rem" marked={marked}>
+          {source}
+        </CodeBlock>
 
         {/* 같은 트리로 그린 작은 앱. 라우터 대신 이 판의 상태가 주소다 */}
         <div className="flex flex-col overflow-hidden rounded-lg border h-full" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
           <div className="border-b px-2" style={{ borderColor: "var(--tx-color-border)" }}>
             <TxNavBar aria-label="샘플 상단 메뉴">
               {menu.map((item) => (
-                <TxNavBar.Item key={item.key} label={item.meta?.label ?? item.key} as="button" type="button" aria-current={here(item)} onClick={() => go(item)} />
+                <TxNavBar.Item key={item.key} label={labelOf(item)} as="button" type="button" aria-current={here(item)} onClick={() => go(item)} />
               ))}
             </TxNavBar>
           </div>
@@ -143,12 +178,23 @@ ${toSource(tree)}
         </div>
       </div>
 
-      <CodeBlock title="App.tsx — 연결 코드">{`// 같은 트리 하나에서
+      <CodeBlock title="App.tsx — 연결 부분만 발췌">{`// 같은 트리 하나에서
 const router = buildRouteObjects(routes);                                  // → useRoutes(router) 또는 <RouteRenderer tree={routes} />
 const menu = getNavigableRoutes(routes, (perms) => perms.includes(role));  // → 메뉴 데이터
 
 <TxNavBar>{menu.map((item) => <TxNavBar.Item key={item.key} label={item.meta?.label} as={NavLink} to={item.path} />)}</TxNavBar>
 <TxSideNav>{menu.map(sideItem)}</TxSideNav>   // sideItem: 자식이 있으면 펼치는 묶음, 없으면 링크`}</CodeBlock>
+      <p className="text-sm text-slate-500 dark:text-slate-400">
+        위 두 코드는 메뉴를 보이려고 줄인 발췌입니다 — 화면(<code>element</code>)과 <code>role</code> · <code>sideItem</code> 정의가 빠져 있습니다. 그대로 돌아가는 완성 코드는{" "}
+        <Link to="/example/routes" className="underline">
+          Example › Routes
+        </Link>
+        (화면까지 등록한 트리)와{" "}
+        <Link to="/example/app" className="underline">
+          Example › App
+        </Link>
+        (권한 · 메뉴 · 레이아웃 연결)에 있습니다.
+      </p>
     </div>
   );
 }
