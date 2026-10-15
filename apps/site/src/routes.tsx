@@ -10,6 +10,7 @@ import { Contact } from "./pages/Contact";
 import { DocsHome } from "./pages/DocsHome";
 import { ExampleAccounts } from "./pages/example/ExampleAccounts";
 import { ExampleApp } from "./pages/example/ExampleApp";
+import { ExampleRoutes } from "./pages/example/ExampleRoutes";
 import { ExampleDashboard } from "./pages/example/ExampleDashboard";
 import { ExampleErrorLogs } from "./pages/example/ExampleErrorLogs";
 import { ExampleGithub } from "./pages/example/ExampleGithub";
@@ -127,10 +128,11 @@ export const routes = {
     meta: { label: "Example", description: "txstack으로 끝까지 만든 화면" },
     children: {
       index: { index: true, element: <ExampleHome /> },
+      app: { path: "/example/app", element: <ExampleApp />, meta: { label: "App", description: "세 화면을 묶는 App.tsx — TxAppShell · Provider" } },
+      routes: { path: "/example/routes", element: <ExampleRoutes />, meta: { label: "Routes", description: "세 화면을 등록하는 routes.tsx — RouteTree" } },
+      dashboard: { path: "/example/dashboard", element: <ExampleDashboard />, meta: { label: "Dashboard", description: "숫자 카드에서 걸러진 목록으로" } },
       accounts: { path: "/example/accounts", element: <ExampleAccounts />, meta: { label: "Accounts", description: "계정 목록 · 옆 패널 편집 · 일괄 삭제" } },
       errorLogs: { path: "/example/error-logs", element: <ExampleErrorLogs />, meta: { label: "Error Logs", description: "주소에 담긴 필터 · 표 안 상태 수정 · 상세 모달" } },
-      dashboard: { path: "/example/dashboard", element: <ExampleDashboard />, meta: { label: "Dashboard", description: "숫자 카드에서 걸러진 목록으로" } },
-      app: { path: "/example/app", element: <ExampleApp />, meta: { label: "App", description: "세 화면을 앱 하나로 — App.tsx · routes.tsx" } },
       github: { path: "/example/github", element: <ExampleGithub />, meta: { label: "GitHub Search", description: "GitHub API로 만든 검색 화면" } }
     }
   },

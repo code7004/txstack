@@ -20,7 +20,10 @@ export function ExampleHome() {
             오류 조회 · 기간 필터 · 표 안 상태 변경 · 상세 보기
           </LinkCard>
           <LinkCard to="/example/app" title="App">
-            세 화면을 앱 하나로 묶는 App.tsx(TxAppShell)와 routes.tsx(RouteTree)
+            세 화면을 앱 하나로 묶는 App.tsx — TxAppShell · Provider
+          </LinkCard>
+          <LinkCard to="/example/routes" title="Routes">
+            세 화면을 등록하는 routes.tsx — RouteTree
           </LinkCard>
         </LinkCardGrid>
       </Block>
