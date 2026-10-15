@@ -93,16 +93,16 @@ export const routes = {
         meta: { label: "Guide", description: "디자인 · 레이아웃 · 폼 · 확인 창 · 표 · 라우팅 · URL 상태 · HTTP" },
         children: {
           index: { index: true, element: <GuideHome /> },
-          styling: { path: "/docs/guide/styling", element: <GuideStyling />, meta: { label: "Styling" } },
-          darkMode: { path: "/docs/guide/dark-mode", element: <GuideDarkMode />, meta: { label: "Dark mode" } },
-          layout: { path: "/docs/guide/layout", element: <GuideLayout />, meta: { label: "Layout" } },
-          forms: { path: "/docs/guide/forms", element: <GuideForms />, meta: { label: "Forms" } },
-          dialogs: { path: "/docs/guide/dialogs", element: <GuideDialogs />, meta: { label: "Dialogs & Toasts" } },
-          tables: { path: "/docs/guide/tables", element: <GuideTables />, meta: { label: "Tables & Lists" } },
+          styling: { path: "/docs/guide/styling", element: <GuideStyling />, meta: { label: "Styling", description: "토큰으로 색 · 모서리 · 여백을, className으로 자리를 바꾸기" } },
+          darkMode: { path: "/docs/guide/dark-mode", element: <GuideDarkMode />, meta: { label: "Dark mode", description: "html 클래스 하나로 컴포넌트 전체를 다크 모드로" } },
+          layout: { path: "/docs/guide/layout", element: <GuideLayout />, meta: { label: "Layout", description: "TxAppShell로 헤더 · 메뉴 · 본문의 틀 잡기" } },
+          forms: { path: "/docs/guide/forms", element: <GuideForms />, meta: { label: "Forms", description: "TxForm으로 입력 · 검증 · 제출까지" } },
+          dialogs: { path: "/docs/guide/dialogs", element: <GuideDialogs />, meta: { label: "Dialogs & Toasts", description: "확인 창 · 알림 · 모달 · 옆 패널을 Provider 없이" } },
+          tables: { path: "/docs/guide/tables", element: <GuideTables />, meta: { label: "Tables & Lists", description: "목록 방식 고르기와 TxAgGrid의 정렬 · 페이지 · 편집" } },
           // 여기부터는 ui 밖의 세 패키지 — 화면 구조 · 주소 · 서버
-          routing: { path: "/docs/guide/routing", element: <GuideRouting />, meta: { label: "Routing & Menu" } },
-          urlState: { path: "/docs/guide/url-state", element: <GuideUrlState />, meta: { label: "URL State" } },
-          httpClient: { path: "/docs/guide/http-client", element: <GuideHttpClient />, meta: { label: "HTTP Client" } }
+          routing: { path: "/docs/guide/routing", element: <GuideRouting />, meta: { label: "Routing & Menu", description: "라우트 트리 하나로 라우터 · 메뉴 · 지금 위치를" } },
+          urlState: { path: "/docs/guide/url-state", element: <GuideUrlState />, meta: { label: "URL State", description: "검색 조건과 페이지를 주소에 담기" } },
+          httpClient: { path: "/docs/guide/http-client", element: <GuideHttpClient />, meta: { label: "HTTP Client", description: "토큰 · 401 · 오류 메시지를 한 곳에 모은 API 클라이언트" } }
         }
       },
 
@@ -120,10 +120,10 @@ export const routes = {
     meta: { label: "API", description: "네 패키지의 API 레퍼런스" },
     children: {
       index: { index: true, element: <ApiHome /> },
-      ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui" } },
-      routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta" } },
-      hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks" } },
-      axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios" } }
+      ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui", description: "Tx* 컴포넌트 49종의 props · 토큰 레퍼런스" } },
+      routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta", description: "RouteTree · buildRouteObjects · getNavigableRoutes 레퍼런스" } },
+      hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks", description: "useUrlQuery · useObjectState 레퍼런스" } },
+      axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios", description: "createHttpClient 옵션과 오류 처리 레퍼런스" } }
     }
   },
 
@@ -152,8 +152,8 @@ export const routes = {
     meta: { label: "About", description: "만든 사람과 문의 방법" },
     children: {
       index: { index: true, element: <AboutHome /> },
-      profile: { path: "/about/profile", element: <Profile />, meta: { label: "Profile" } },
-      contact: { path: "/about/contact", element: <Contact />, meta: { label: "Contact" } }
+      profile: { path: "/about/profile", element: <Profile />, meta: { label: "Profile", description: "만든 사람 소개" } },
+      contact: { path: "/about/contact", element: <Contact />, meta: { label: "Contact", description: "질문 · 제안 · 버그 제보는 GitHub 이슈로" } }
     }
   },
 

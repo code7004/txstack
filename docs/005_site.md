@@ -94,7 +94,8 @@
   - [x] **배포** — `code7004.github.io/txstack/` · `/storybook/`. 하위 경로라 셋을 맞췄다 —
         `SITE_BASE=/txstack/`, Storybook 링크는 `BASE_URL` 을 앞에 붙인다(`src/lib/links.ts`),
         파비콘은 상대경로(`./`)가 딥링크에서 깨져 `/` 로 바꿨다(Vite 가 base 를 붙인다).
-        Pages 에 SPA 폴백이 없어 `404.html` 을 `index.html` 사본으로 둔다
+        Pages 에 SPA 폴백이 없어 **빌드가 주소마다 `index.html` 을 만든다**(`apps/site/scripts/share-meta.mjs`) —
+        제목 · 설명 · 공유 카드가 그 페이지 것이고 직접 링크가 200 이다. 없는 주소는 `404.html`(noindex)이 화면을 살린다
   - [ ] `Profile` · `Contact` — 사용자만 쓸 수 있는 내용
 - [ ] **E. 다듬기** — ① 따라 하기 쉬운 가이드 → ② 디자인 마감(모바일 포함) → ③ 영문(`/en/…` 프리픽스).
       번역은 글이 굳은 뒤에 한다 — 먼저 하면 두 번 쓴다
