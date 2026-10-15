@@ -5,9 +5,6 @@ import { defineConfig } from "vite";
 
 const pkg = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, import.meta.url));
 
-/** Example 의 화면 · API · 가짜 서버는 데모 앱(`apps/demo`)이 원본이다. 사이트는 그것을 가져다 보여 준다 */
-const demo = fileURLToPath(new URL("../demo/src", import.meta.url));
-
 /**
  * txstack 을 소개하는 사이트. **이 앱은 배포 패키지가 아니라 첫 소비자다** —
  * 네 패키지를 진짜로 써 보는 자리이므로, 소스에 별칭을 걸어 고친 것이 바로 반영되게 한다.
@@ -26,7 +23,6 @@ export default defineConfig({
      */
     dedupe: ["react", "react-dom", "react-router-dom", "ag-grid-community", "ag-grid-react", "react-day-picker", "@tanstack/react-query"],
     alias: [
-      { find: /^@demo\//, replacement: `${demo}/` },
       { find: /^@txstack\/ui\/aggrid$/, replacement: pkg("ui/src/aggrid.ts") },
       { find: /^@txstack\/ui\/daypicker$/, replacement: pkg("ui/src/daypicker.ts") },
       { find: /^@txstack\/ui$/, replacement: pkg("ui/src/index.ts") },

@@ -113,7 +113,7 @@ export function Home() {
             <span className="tx-button__label">Getting Started</span>
           </Link>
           <Link to="/example/accounts" className="tx-button" data-variant="secondary">
-            <span className="tx-button__label">예제 앱 보기</span>
+            <span className="tx-button__label">예제 보기</span>
           </Link>
         </div>
 

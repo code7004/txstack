@@ -1,4 +1,4 @@
-import { canRemove, type ErrorLog, type ErrorLogDetail, type LogQuery, type LogStatus, type LogSummary, type Method } from "../features/error-logs/logApi";
+import { canRemove, type ErrorLog, type ErrorLogDetail, type LogQuery, type LogStatus, type LogSummary, type Method } from "../error-logs/logApi";
 import type { MockHandler } from "./server";
 
 /** 오류 로그 가짜 데이터. 새로고침하면 처음 상태로 돌아갑니다 */

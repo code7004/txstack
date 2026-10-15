@@ -15,8 +15,5 @@
 /* 부품 소스에 남아 있는 Tailwind 클래스가 purge 되지 않게 한다. */
 @source "../../../packages/ui/src";
 
-/* Example 의 화면은 데모 앱(apps/demo)의 코드다. 그 폴더의 클래스도 만든다 */
-@source "../../demo/src";
-
 /* 다크모드는 class 전략 — <html class="dark"> 토글. */
 @custom-variant dark (&:where(.dark, .dark *));

@@ -1,4 +1,4 @@
-import { api } from "../../lib/api";
+import { api } from "../api";
 
 export type Role = "owner" | "admin" | "member" | "viewer";
 export type Status = "active" | "invited" | "suspended";
@@ -48,7 +48,7 @@ export const STATUSES: { name: string; value: Status }[] = [
 
 export const TEAMS = ["플랫폼", "결제", "검색", "데이터", "디자인"];
 
-/** 요청은 앱이 함께 쓰는 클라이언트(lib/api.ts)로 보냅니다. 화면은 이 함수들만 부릅니다 */
+/** 요청은 앱이 함께 쓰는 클라이언트(api.ts)로 보냅니다. 화면은 이 함수들만 부릅니다 */
 export const accountApi = {
   list: (query: AccountQuery) => api.get<AccountPage>("/accounts", query),
   create: (draft: AccountDraft) => api.post<Account>("/accounts", draft),

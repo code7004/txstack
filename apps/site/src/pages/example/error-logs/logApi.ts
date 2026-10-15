@@ -1,4 +1,4 @@
-import { api } from "../../lib/api";
+import { api } from "../api";
 
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
 export type LogStatus = "open" | "in_progress" | "resolved";
@@ -56,7 +56,7 @@ export const LOG_STATUSES: { name: string; value: LogStatus }[] = [
   { name: "해결", value: "resolved" }
 ];
 
-/** 요청은 앱이 함께 쓰는 클라이언트(lib/api.ts)로 보냅니다. 화면은 이 함수들만 부릅니다 */
+/** 요청은 앱이 함께 쓰는 클라이언트(api.ts)로 보냅니다. 화면은 이 함수들만 부릅니다 */
 export const logApi = {
   list: (query: LogQuery) => api.get<LogPage>("/logs", query),
   detail: (id: string) => api.get<ErrorLogDetail>(`/logs/${id}`),

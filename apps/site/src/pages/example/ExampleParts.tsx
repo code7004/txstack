@@ -2,7 +2,6 @@ import { Fragment, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { TxSpinner, TxTabs } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
-import { DEMO_REPO_URL } from "../../lib/links";
 
 /** 예제 페이지들이 함께 쓰는 조각 — 짧은 안내 · 불러오는 중 · 함께 쓴 패키지 · 소스 탭 */
 
@@ -67,19 +66,15 @@ export function SourceTabs({ files }: { files: { name: string; path: string; sou
   );
 }
 
-/** 화면 코드 말고 앱의 나머지(진입점 · 라우트 · Provider · 스타일)가 어디 있는지 */
+/** 화면 코드 말고 앱의 나머지(레이아웃 · 라우트 · Provider)가 어디 있는지 */
 export function WholeAppNote() {
   return (
     <p className={muted}>
-      이 화면은 데모 앱(<code>apps/demo</code>)의 코드를 그대로 가져온 것입니다. 진입점 · 라우트 · Provider · 스타일 설정은{" "}
-      <Link to="/example#run-the-whole-app" className="underline">
-        Example › Run the whole app
+      세 화면을 앱 하나로 묶는 <code>App.tsx</code>(TxAppShell · Provider)와 <code>routes.tsx</code>(RouteTree)는{" "}
+      <Link to="/example#put-them-in-an-app" className="underline">
+        Example › Put them in an app
       </Link>
-      에서,{" "}
-      <a href={DEMO_REPO_URL} className="underline" target="_blank" rel="noreferrer">
-        저장소의 apps/demo
-      </a>
-      에서 전체를 볼 수 있습니다.
+      에 있습니다.
     </p>
   );
 }

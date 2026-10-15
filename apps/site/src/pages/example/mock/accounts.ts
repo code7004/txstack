@@ -1,5 +1,5 @@
-import type { Account, AccountDraft, AccountQuery, Status } from "../features/accounts/accountApi";
-import { TEAMS } from "../features/accounts/accountApi";
+import type { Account, AccountDraft, AccountQuery, Status } from "../accounts/accountApi";
+import { TEAMS } from "../accounts/accountApi";
 import type { MockHandler } from "./server";
 
 /** 계정 가짜 데이터. 새로고침하면 처음 상태로 돌아갑니다 */
