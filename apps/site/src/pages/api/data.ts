@@ -91,7 +91,12 @@ export const TABLES = {
         ["unwrap", "(data: unknown) => unknown", "res.data 그대로", "응답에서 실제 데이터를 꺼냅니다. 응답이 { body: T } 형식이면 data => data.body"],
         ["onRequest", "(log: RequestLog) => void", "—", "요청이 나가기 직전에 불립니다. 로그를 모니터링 도구로 보낼 때 씁니다"],
         ["onResponse", "(log: ResponseLog) => void", "—", "응답을 받으면 불립니다. durationMs로 느린 요청을 찾을 수 있습니다"],
-        ["maskFields", "string[]", "password, privateKey, token, accessToken, refreshToken", "로그에서 값을 가릴 필드 이름. onRequest · onResponse에 넘기기 전에 가립니다"],
+        [
+          "maskFields",
+          "string[]",
+          "password, privateKey, token, accessToken, refreshToken",
+          "로그에서 값을 가릴 키 이름(대소문자 구분). onRequest · onResponse와 debug 콘솔 로그에 넘기기 전에, 중첩된 객체 · 배열 · JSON 문자열과 URL 쿼리까지 가립니다. 원본 요청 · 응답과 onError가 받는 오류는 바꾸지 않습니다"
+        ],
         ["debug", "boolean", "false", "켜면 요청 · 응답 · 오류를 콘솔에 출력합니다. onRequest · onResponse를 직접 넘기면 그쪽이 우선합니다"]
       ] as Row[]
     },
@@ -139,7 +144,7 @@ export const TABLES = {
       searchable: true,
       rows: [
         ["method", "string", "—", "대문자 HTTP 메서드"],
-        ["url", "string", "—", "요청 경로"],
+        ["url", "string", "—", "요청 경로. 쿼리의 maskFields 값은 가려진 채입니다"],
         ["params", "unknown", "—", "쿼리. maskFields가 가려진 값입니다"],
         ["data", "unknown", "—", "본문. maskFields가 가려진 값입니다"]
       ] as Row[]
@@ -151,7 +156,7 @@ export const TABLES = {
       rows: [
         ["status", "number", "—", "HTTP 상태 코드"],
         ["method", "string", "—", "대문자 HTTP 메서드"],
-        ["url", "string", "—", "요청 경로"],
+        ["url", "string", "—", "요청 경로. 쿼리의 maskFields 값은 가려진 채입니다"],
         ["data", "unknown", "—", "응답 본문. maskFields가 가려진 값입니다"],
         ["durationMs", "number", "—", "요청부터 응답까지 걸린 시간"]
       ] as Row[]
