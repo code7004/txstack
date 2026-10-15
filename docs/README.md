@@ -164,6 +164,14 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
       **404 폴백 평가** — 배포 사이트에서 `/` 와 `/storybook/` 은 200, **그 밖의 직접 링크 · 새로고침은 화면은 돌아오지만 HTTP 404** 다
       (`404.html` = `index.html`). 사람에게는 문제없지만 검색 엔진 · 링크 미리보기는 "없는 페이지" 로 본다.
       고치려면 주요 소개 페이지를 경로마다 HTML 로 내보내야 한다(사전 렌더링 + 공유 메타) — 008 대로 **별도 작업**으로 둔다
+- [x] **도입 안내 정리**(2026-10-15, [008](008_review_and_site_plan.md) 6장) — Getting Started · Tutorial 을 **적힌 그대로** 새 Vite 앱
+      (`create vite` react-ts — Vite 8 · TypeScript 6 · React 19)에서 따라 쳤다. 저장소 클론 · 빌드 · `.tgz` 설치 → 첫 화면(SignUp)의
+      오류 표시 · 알림 → Tailwind 레이어 순서(`className` 우선, preflight 가 버튼을 지우지 않음) → Tutorial 의 다섯 파일 + 전체 코드
+      (목록 · 주소의 검색 조건)까지 타입 검사 · 빌드 · 브라우저에서 돈다. 고친 것:
+      Node 요구 버전(20 → **20.19 / 22.12 이상**, Vite 기준) · 네 패키지를 한 번에 설치하는 줄(Tutorial 이 넷을 다 쓴다) ·
+      peer 표(ui 에 `react-dom`, hooks 는 `useUrlQuery` 만) · 표 · 달력의 "쓸 때만" 설치 명령과 진입점 · 문제 해결 두 줄(npm 404, 서브패스 모듈 없음).
+      **ag-grid 는 `@35` 로 받게 했다** — 그냥 `pnpm add ag-grid-community ag-grid-react` 하면 지금 36 이 와서 peer(`^35`) 밖이다.
+      36 에서도 기본 표는 떴지만 검증한 범위가 아니다. peer 를 넓힐지는 따로 정한다
 
 **컴포넌트는 다 만들었다 — 49개.** 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가
 소유하고, 하나하나의 기능과 정한 것은 `docs/001_ui/NNN_TxName.md` 각 장에 있다.

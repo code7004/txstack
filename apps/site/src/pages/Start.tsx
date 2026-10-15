@@ -13,9 +13,9 @@ import SIGN_UP_SOURCE from "./start/SignUp.tsx?raw";
 
 /** 무엇을 하려는지로 고른다. 넷은 따로 설치되고, 서로 없어도 동작한다 */
 const PACKAGES = [
-  { name: "@txstack/ui", when: "버튼, 폼, 표, 확인 창 같은 화면 컴포넌트가 필요할 때", peer: "react", guide: "/docs/tutorial", guideLabel: "Tutorial" },
+  { name: "@txstack/ui", when: "버튼, 폼, 표, 확인 창 같은 화면 컴포넌트가 필요할 때", peer: "react · react-dom", guide: "/docs/tutorial", guideLabel: "Tutorial" },
   { name: "@txstack/route-meta", when: "라우트와 메뉴, 현재 위치 표시를 한 곳에서 관리하고 싶을 때", peer: "react-router-dom", guide: "/docs/guide/routing", guideLabel: "Routing & Menu" },
-  { name: "@txstack/hooks", when: "목록의 검색 조건을 주소에 담거나, 객체 상태를 편하게 다루고 싶을 때", peer: "react-router-dom", guide: "/docs/guide/url-state", guideLabel: "URL State" },
+  { name: "@txstack/hooks", when: "목록의 검색 조건을 주소에 담거나, 객체 상태를 편하게 다루고 싶을 때", peer: "react-router-dom (useUrlQuery만)", guide: "/docs/guide/url-state", guideLabel: "URL State" },
   { name: "@txstack/axios", when: "토큰, 401 처리, 오류 메시지를 한 곳에 모은 API 클라이언트가 필요할 때", peer: "axios", guide: "/docs/guide/http-client", guideLabel: "HTTP Client" }
 ];
 
@@ -56,19 +56,21 @@ export function Start() {
             </tbody>
           </table>
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400">&quot;함께 설치&quot;는 peer 의존성입니다. 앱에 이미 있다면 따로 설치하지 않아도 됩니다.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          &quot;함께 설치&quot;는 peer 의존성입니다. 앱에 이미 있다면 따로 설치하지 않아도 됩니다. route-meta와 hooks는 <code>react</code>도 쓰지만 React 앱이면 이미 있습니다.
+        </p>
       </Block>
 
       <Block title="Prerequisites">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>Node 20 이상</strong>, <strong>pnpm</strong> (npm·yarn도 쓸 수 있지만 이 문서는 pnpm 기준으로 설명합니다)
+            <strong>Node 20.19 이상 또는 22.12 이상</strong> — Vite가 요구하는 버전입니다. <strong>pnpm</strong> (npm·yarn도 쓸 수 있지만 이 문서는 pnpm 기준으로 설명합니다)
           </li>
           <li>
             <strong>React 18 이상</strong> 앱. 없다면 아래 1단계에서 만듭니다
           </li>
         </ul>
-        <CodeBlock language="bash" title="버전 확인">{`node -v     # v20 이상
+        <CodeBlock language="bash" title="버전 확인">{`node -v     # v20.19 이상 또는 v22.12 이상
 pnpm -v     # 없다면: npm i -g pnpm`}</CodeBlock>
       </Block>
 
@@ -99,14 +101,23 @@ pnpm -r --filter "./packages/*" exec pnpm pack --pack-destination "$PWD/.pack"
 # 앱으로 돌아와 필요한 패키지를 설치합니다 (예: ui와 axios)
 cd ../my-app
 pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz
-pnpm add ../txstack/.pack/txstack-axios-0.1.0.tgz axios`}</CodeBlock>
+pnpm add ../txstack/.pack/txstack-axios-0.1.0.tgz axios
+
+# 네 패키지를 모두 쓴다면(Tutorial) 한 번에
+pnpm add ../txstack/.pack/*.tgz react-router-dom axios`}</CodeBlock>
 
         <CodeBlock language="bash" title="npm 배포 후">{`pnpm add @txstack/ui
 pnpm add @txstack/axios axios`}</CodeBlock>
 
         <p className={muted}>
-          <code>react</code>와 <code>react-dom</code>은 peer 의존성이라 앱에 이미 설치된 버전을 사용합니다. 표(<code>ag-grid</code>)와 달력(<code>react-day-picker</code>)은 쓸 때만 따로 설치하면 됩니다.
+          <code>react</code>와 <code>react-dom</code>은 peer 의존성이라 앱에 이미 설치된 버전을 사용합니다. 표와 달력은 <strong>쓸 때만</strong> 따로 설치합니다. 기본 경로(<code>@txstack/ui</code>)만 쓰면 설치하지 않아도 됩니다.
         </p>
+        <CodeBlock language="bash" title="쓸 때만 — 표와 달력">{`# 표: TxAgGrid — import { TxAgGrid } from "@txstack/ui/aggrid"
+# @txstack/ui 가 맞춘 메이저(35)로 받습니다. 모듈 등록은 Guide › Tables & Lists
+pnpm add ag-grid-community@35 ag-grid-react@35
+
+# 달력: TxDayPicker · TxFormDayPicker — import { TxDayPicker } from "@txstack/ui/daypicker"
+pnpm add react-day-picker`}</CodeBlock>
       </Block>
 
       <Block title="3. Import the stylesheet (ui)">
@@ -178,6 +189,20 @@ export default function App() {
 
       <Block title="Troubleshooting">
         <dl className={`flex flex-col gap-4 ${muted}`}>
+          <div>
+            <dt className="font-semibold text-[color:var(--tx-color-text)]">
+              <code>pnpm add @txstack/ui</code>가 <code>404</code>로 실패합니다
+            </dt>
+            <dd>
+              아직 npm에 배포되지 않았습니다. 2단계의 <strong>저장소에서 빌드해 설치</strong>하는 방법을 따라 주세요.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold text-[color:var(--tx-color-text)]">
+              <code>@txstack/ui/aggrid</code>나 <code>@txstack/ui/daypicker</code>를 불러오면 모듈을 찾을 수 없다고 합니다
+            </dt>
+            <dd>표와 달력은 외부 라이브러리를 씁니다. 2단계의 &quot;쓸 때만&quot; 명령으로 함께 설치해 주세요.</dd>
+          </div>
           <div>
             <dt className="font-semibold text-[color:var(--tx-color-text)]">컴포넌트에 스타일이 적용되지 않습니다</dt>
             <dd>
