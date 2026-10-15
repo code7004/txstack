@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
+import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
 import { TABLES, tableAnchor } from "./data";
@@ -21,7 +22,8 @@ export function ApiHooks() {
       }
     >
       <Block title="Install">
-        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/hooks`}</CodeBlock>
+        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/hooks`}</CodeBlock>
+        <PrePublishNote />
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.hooks.installEntry.rows} anchor={tableAnchor(TABLES.hooks.installEntry)} />
         <p className={muted}>
           루트 진입점(<code>@txstack/hooks</code>)은 없습니다. 훅 이름까지 경로에 적어 주세요. 다른 라우터를 쓰는 앱도 <code>useObjectState</code>는 그대로 쓸 수 있습니다.

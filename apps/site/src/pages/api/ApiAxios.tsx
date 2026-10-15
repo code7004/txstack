@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
+import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
 import { TABLES, tableAnchor } from "./data";
@@ -22,7 +23,8 @@ export function ApiAxios() {
       }
     >
       <Block title="Install">
-        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/axios axios`}</CodeBlock>
+        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/axios axios`}</CodeBlock>
+        <PrePublishNote />
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.axios.installEntry.rows} anchor={tableAnchor(TABLES.axios.installEntry)} />
       </Block>
 

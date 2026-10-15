@@ -3,7 +3,7 @@ import { Page } from "../components/Page";
 
 /** **읽는 차례 그대로다.** 트리의 순서와 같아서 장 끝의 "다음" 을 따라가도 같은 길이 된다. */
 const STEPS = [
-  { to: "/docs/start", title: "Getting Started", time: "5분", what: "필요한 패키지를 고르고, 설치해서 첫 화면을 띄웁니다" },
+  { to: "/docs/start", title: "Getting Started", time: "저장소 빌드 포함", what: "필요한 패키지를 고르고, 설치해서 첫 화면을 띄웁니다" },
   { to: "/docs/tutorial", title: "Tutorial", time: "15분", what: "네 패키지를 모두 써서 검색, 등록, 삭제가 있는 목록 화면을 끝까지 만듭니다" },
   { to: "/docs/guide", title: "Guide", time: "필요할 때", what: "디자인 바꾸기, 다크 모드, 화면 틀, 입력 폼, 확인 창과 알림, 표, 라우팅과 메뉴, URL 상태, API 클라이언트" },
   { to: "/docs/components", title: "Components", time: "찾아볼 때", what: "분류마다 실제로 동작하는 작은 화면으로 컴포넌트를 둘러봅니다" }
