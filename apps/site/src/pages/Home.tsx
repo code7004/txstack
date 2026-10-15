@@ -42,7 +42,7 @@ export function Home() {
           </div>
 
           <h1 className="text-4xl leading-tight font-semibold sm:text-5xl">
-            관리 화면과 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span> <span className="align-middle text-2xl text-slate-500 sm:text-3xl dark:text-slate-400">(UI & ETC)</span>
+            관리 화면과 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span> <span className="align-middle text-2xl text-slate-500 sm:text-3xl dark:text-slate-400">(UI & HOOK)</span>
           </h1>
 
           <p className="text-lg text-slate-600 dark:text-slate-300">
