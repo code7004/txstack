@@ -1,5 +1,6 @@
 import type { RouteNode, RouteTree } from "@txstack/route-meta";
 import { isValidElement } from "react";
+import type { Page } from "../lib/page";
 import { anchorsOf } from "../lib/slug";
 import { API_PAGES, CATALOG, TABLES, componentAnchor, rowAnchor, type ApiTable } from "../pages/api/data";
 import { routes } from "../routes";
@@ -72,28 +73,26 @@ const NO_SECTIONS = new Set(["/", "/about/profile"]);
 const SECTION_TITLE = /<Block\s+title="([^"]+)"/g;
 
 async function sectionEntries(): Promise<SearchEntry[]> {
-  // 소스(글자)와 모듈(컴포넌트). 둘 다 지연 로드라 처음 검색할 때 받는다
-  const sources = import.meta.glob<string>("../pages/**/*.tsx", { query: "?raw", import: "default" });
-  const modules = import.meta.glob<Record<string, unknown>>("../pages/**/*.tsx");
+  // 화면 소스를 글자로. 지연 로드라 처음 검색할 때 받는다. 라우트에 오르는 화면이 있는 폴더만 본다
+  const sources = import.meta.glob<string>(["../pages/*.tsx", "../pages/{api,guide,example}/*.tsx"], { query: "?raw", import: "default" });
 
-  const files = await Promise.all(Object.keys(modules).map(async (file) => ({ file, exports: Object.values(await modules[file]!()), source: await sources[file]!() })));
+  const found = await Promise.all(
+    PLACES.map(async ({ node, path, trail }) => {
+      if (NO_SECTIONS.has(path) || !isValidElement(node.element)) return [];
 
-  return PLACES.flatMap(({ node, path, trail }) => {
-    if (NO_SECTIONS.has(path) || !isValidElement(node.element)) return [];
+      // 라우트의 화면은 자기 소스 파일을 안다(lib/page). 화면 모듈을 받지 않고 그 파일의 글자만 읽는다
+      const source = (node.element.type as Partial<Page>).source;
+      const load = source && sources[`../${source}`];
+      if (!load) return [];
 
-    // 라우트의 화면 컴포넌트를 내보내는 파일을 찾는다. **참조로 견준다** — 이름은 빌드하면 압축된다.
-    // 개발 서버는 고친 파일을 `?t=…` 를 붙여 다시 불러와서 라우터와 여기가 다른 사본을 쥘 수 있다.
-    // 그때만 이름으로 한 번 더 견준다(개발 중에는 이름이 살아 있다)
-    const type = node.element.type;
-    const sameName = (value: unknown) => import.meta.env.DEV && typeof value === "function" && typeof type === "function" && value.name === type.name;
-    const found = files.find(({ exports }) => exports.includes(type)) ?? files.find(({ exports }) => exports.some(sameName));
-    if (!found) return [];
+      const titles = [...(await load()).matchAll(SECTION_TITLE)].map(([, title]) => title!);
+      const anchors = anchorsOf(titles);
 
-    const titles = [...found.source.matchAll(SECTION_TITLE)].map(([, title]) => title!);
-    const anchors = anchorsOf(titles);
+      return titles.map((title, index) => entry(title, trail, `${path}#${anchors[index]}`, "section"));
+    })
+  );
 
-    return titles.map((title, index) => entry(title, trail, `${path}#${anchors[index]}`, "section"));
-  });
+  return found.flat();
 }
 
 /* --- 색인 ------------------------------------------------------------------------------ */

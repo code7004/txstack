@@ -1,37 +1,42 @@
 import type { RouteTree } from "@txstack/route-meta";
-import { AboutHome } from "./pages/AboutHome";
-import { ApiAxios } from "./pages/api/ApiAxios";
-import { ApiHome } from "./pages/ApiHome";
-import { ApiHooks } from "./pages/api/ApiHooks";
-import { ApiRouteMeta } from "./pages/api/ApiRouteMeta";
-import { ApiUi } from "./pages/api/ApiUi";
-import { Components } from "./pages/Components";
-import { Contact } from "./pages/Contact";
-import { DocsHome } from "./pages/DocsHome";
-import { ExampleAccounts } from "./pages/example/ExampleAccounts";
-import { ExampleApp } from "./pages/example/ExampleApp";
-import { ExampleRoutes } from "./pages/example/ExampleRoutes";
-import { ExampleDashboard } from "./pages/example/ExampleDashboard";
-import { ExampleErrorLogs } from "./pages/example/ExampleErrorLogs";
-import { ExampleGithub } from "./pages/example/ExampleGithub";
-import { ExampleHome } from "./pages/example/ExampleHome";
-import { ExampleLayout } from "./pages/example/ExampleLayout";
-import { GuideDarkMode } from "./pages/guide/GuideDarkMode";
-import { GuideDialogs } from "./pages/guide/GuideDialogs";
-import { GuideForms } from "./pages/guide/GuideForms";
-import { GuideHttpClient } from "./pages/guide/GuideHttpClient";
-import { GuideHome } from "./pages/guide/GuideHome";
-import { GuideLayout } from "./pages/guide/GuideLayout";
-import { GuideRouting } from "./pages/guide/GuideRouting";
-import { GuideTables } from "./pages/guide/GuideTables";
-import { GuideStyling } from "./pages/guide/GuideStyling";
-import { GuideUrlState } from "./pages/guide/GuideUrlState";
-import { Home } from "./pages/Home";
-import { NotFound } from "./pages/NotFound";
-import { Profile } from "./pages/Profile";
+import { page } from "./lib/page";
 import { SectionLayout } from "./pages/SectionLayout";
-import { Start } from "./pages/Start";
-import { Tutorial } from "./pages/Tutorial";
+
+/**
+ * 화면은 그 주소에 처음 들어올 때 받는다(`lib/page`). 묶음의 껍데기(`SectionLayout`)는 작아서 바로 싣는다.
+ */
+const AboutHome = page(() => import("./pages/AboutHome"), "AboutHome", "pages/AboutHome.tsx");
+const ApiAxios = page(() => import("./pages/api/ApiAxios"), "ApiAxios", "pages/api/ApiAxios.tsx");
+const ApiHome = page(() => import("./pages/ApiHome"), "ApiHome", "pages/ApiHome.tsx");
+const ApiHooks = page(() => import("./pages/api/ApiHooks"), "ApiHooks", "pages/api/ApiHooks.tsx");
+const ApiRouteMeta = page(() => import("./pages/api/ApiRouteMeta"), "ApiRouteMeta", "pages/api/ApiRouteMeta.tsx");
+const ApiUi = page(() => import("./pages/api/ApiUi"), "ApiUi", "pages/api/ApiUi.tsx");
+const Components = page(() => import("./pages/Components"), "Components", "pages/Components.tsx");
+const Contact = page(() => import("./pages/Contact"), "Contact", "pages/Contact.tsx");
+const DocsHome = page(() => import("./pages/DocsHome"), "DocsHome", "pages/DocsHome.tsx");
+const ExampleAccounts = page(() => import("./pages/example/ExampleAccounts"), "ExampleAccounts", "pages/example/ExampleAccounts.tsx");
+const ExampleApp = page(() => import("./pages/example/ExampleApp"), "ExampleApp", "pages/example/ExampleApp.tsx");
+const ExampleRoutes = page(() => import("./pages/example/ExampleRoutes"), "ExampleRoutes", "pages/example/ExampleRoutes.tsx");
+const ExampleDashboard = page(() => import("./pages/example/ExampleDashboard"), "ExampleDashboard", "pages/example/ExampleDashboard.tsx");
+const ExampleErrorLogs = page(() => import("./pages/example/ExampleErrorLogs"), "ExampleErrorLogs", "pages/example/ExampleErrorLogs.tsx");
+const ExampleGithub = page(() => import("./pages/example/ExampleGithub"), "ExampleGithub", "pages/example/ExampleGithub.tsx");
+const ExampleHome = page(() => import("./pages/example/ExampleHome"), "ExampleHome", "pages/example/ExampleHome.tsx");
+const ExampleLayout = page(() => import("./pages/example/ExampleLayout"), "ExampleLayout", "pages/example/ExampleLayout.tsx");
+const GuideDarkMode = page(() => import("./pages/guide/GuideDarkMode"), "GuideDarkMode", "pages/guide/GuideDarkMode.tsx");
+const GuideDialogs = page(() => import("./pages/guide/GuideDialogs"), "GuideDialogs", "pages/guide/GuideDialogs.tsx");
+const GuideForms = page(() => import("./pages/guide/GuideForms"), "GuideForms", "pages/guide/GuideForms.tsx");
+const GuideHttpClient = page(() => import("./pages/guide/GuideHttpClient"), "GuideHttpClient", "pages/guide/GuideHttpClient.tsx");
+const GuideHome = page(() => import("./pages/guide/GuideHome"), "GuideHome", "pages/guide/GuideHome.tsx");
+const GuideLayout = page(() => import("./pages/guide/GuideLayout"), "GuideLayout", "pages/guide/GuideLayout.tsx");
+const GuideRouting = page(() => import("./pages/guide/GuideRouting"), "GuideRouting", "pages/guide/GuideRouting.tsx");
+const GuideTables = page(() => import("./pages/guide/GuideTables"), "GuideTables", "pages/guide/GuideTables.tsx");
+const GuideStyling = page(() => import("./pages/guide/GuideStyling"), "GuideStyling", "pages/guide/GuideStyling.tsx");
+const GuideUrlState = page(() => import("./pages/guide/GuideUrlState"), "GuideUrlState", "pages/guide/GuideUrlState.tsx");
+const Home = page(() => import("./pages/Home"), "Home", "pages/Home.tsx");
+const NotFound = page(() => import("./pages/NotFound"), "NotFound", "pages/NotFound.tsx");
+const Profile = page(() => import("./pages/Profile"), "Profile", "pages/Profile.tsx");
+const Start = page(() => import("./pages/Start"), "Start", "pages/Start.tsx");
+const Tutorial = page(() => import("./pages/Tutorial"), "Tutorial", "pages/Tutorial.tsx");
 
 /**
  * **이 사이트의 단일 출처.** 라우터도 메뉴도 브레드크럼도 여기서 나온다.

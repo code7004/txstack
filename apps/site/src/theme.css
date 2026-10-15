@@ -8,8 +8,7 @@
  * 톤은 **개발자 도구** 쪽이다 — 저채도 바탕, 얇은 선, 조밀한 간격, 모노스페이스 억양.
  */
 
-/* Pretendard — 한글과 라틴이 한 가족으로 돈다. 자체 호스팅은 배포 때로 미룬다 */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+/* Pretendard 는 index.html 의 <link> 로 받는다. CSS 의 @import 는 빌드가 앞에 다른 규칙을 붙여 무효가 된다 */
 
 :root {
   /* --- 색 ---------------------------------------------------------------- */
