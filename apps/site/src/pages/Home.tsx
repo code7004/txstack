@@ -5,6 +5,7 @@ import { LinkCard } from "../components/LinkCard";
 import { PUBLISHED, PrePublishNote } from "../components/PrePublish";
 import { Used } from "../components/Used";
 import { HomePreview } from "./home/HomePreview";
+import { RouteMenuDemo } from "./home/RouteMenuDemo";
 import { ThemeTry } from "./home/ThemeTry";
 import { UiGroups } from "./home/UiGroups";
 
@@ -47,7 +48,13 @@ export function Home() {
           <p className="text-lg text-slate-600 dark:text-slate-300">
             txstack은 관리 화면과 업무용 서비스에 필요한 버튼, 입력 폼, 데이터 표, 모달, 메뉴와 레이아웃을 제공합니다. CSS 변수로 디자인을 바꾸고, 필요하면 라우팅 · URL 상태 · HTTP 도구를 함께 써서 화면을 완성합니다.
           </p>
-          <p className="text-slate-600 dark:text-slate-300">UI만 쓰거나, 필요한 패키지만 골라 조합할 수 있습니다.</p>
+          <p className="text-slate-600 dark:text-slate-300">
+            라우트 메타데이터를 한 번 정의하고,{" "}
+            <a href="#routes-to-menus" className="underline">
+              GNB와 사이드바를 같은 설정으로 구성
+            </a>
+            하세요. UI만 쓰거나, 필요한 패키지만 골라 조합할 수 있습니다.
+          </p>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link to="/docs/components" className="tx-button" data-variant="primary">
@@ -91,6 +98,29 @@ export function Home() {
           <p className="text-slate-600 dark:text-slate-300">기능군마다 실제로 동작하는 작은 예시입니다. 컴포넌트 이름을 누르면 API 목록으로, 거기서 Storybook의 props로 이어집니다.</p>
         </header>
         <UiGroups />
+      </section>
+
+      {/* --- 3. 라우트 하나로 GNB · 사이드바 -------------------------------------- */}
+      <section id="routes-to-menus" className="site-anchor flex flex-col gap-4">
+        <header className="flex flex-col gap-1">
+          <h2 className="text-xl font-semibold">One route tree, both menus</h2>
+          <p className="text-slate-600 dark:text-slate-300">
+            <strong>라우트 한 곳에 정의하고, GNB와 사이드바를 함께 구성하세요.</strong> 경로와 메뉴 이름, 하위 메뉴를 메타데이터 트리로 선언합니다. 같은 트리에서 라우터와 메뉴 데이터를 만들고, UI 컴포넌트에 연결해 상단 메뉴와 사이드바를 구성합니다.
+            메뉴를 추가하거나 이름을 바꿀 때도 이 설정 한 곳만 고칩니다.
+          </p>
+        </header>
+        <RouteMenuDemo />
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          <code>route-meta</code>는 라우트 변환과 메뉴 데이터를 만들고, 메뉴를 그리는 일은 UI 컴포넌트와 위의 짧은 연결 코드가 합니다. 권한은 메뉴에서 항목을 거르는 데까지입니다. 이 사이트의 메뉴도 같은 방식으로 구성했습니다 —{" "}
+          <Link to="/docs/guide/routing" className="underline">
+            Routing & Menu
+          </Link>
+          ,{" "}
+          <Link to="/example/routes" className="underline">
+            Example › Routes
+          </Link>
+          .
+        </p>
       </section>
 
       {/* --- 3. 디자인 바꾸기 --------------------------------------------------- */}
