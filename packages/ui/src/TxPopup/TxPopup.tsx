@@ -167,6 +167,9 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
         top: pos?.top ?? 0,
         left: pos?.left ?? 0,
         width: pos?.width,
+        // 화면보다 넓은 내용(두 달짜리 달력 등)은 양쪽 여백 안으로 줄인다. 위의 left 계산만으로는
+        // 왼쪽만 가두고 오른쪽은 화면 밖으로 밀려난다
+        maxWidth: `calc(100vw - ${EDGE * 2}px)`,
         maxHeight,
         // 자리를 잡기 전 한 프레임 동안 엉뚱한 곳에 보이지 않게 한다.
         visibility: pos ? undefined : "hidden"

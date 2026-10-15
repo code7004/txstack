@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui/daypicker` — 서브패스. peer `react-day-picker`         |
 | 내보내는 것 | `TxDayPicker, TxDayPickerRange`                                     |
 | 소스        | [`packages/ui/src/TxDayPicker/`](../../packages/ui/src/TxDayPicker) |
-| 테스트      | 43개                                                                |
+| 테스트      | 44개                                                                |
 
 ## 개발 목적
 
@@ -34,7 +34,7 @@ import { TxDayPicker } from "@txstack/ui/daypicker";
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxDayPicker/`
-- [x] **테스트** — 43개
+- [x] **테스트** — 44개
 - [x] **스토리** — `TxDayPicker.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
