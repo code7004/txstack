@@ -4,6 +4,9 @@
 #   https://code7004.github.io/txstack/storybook/  ← Storybook
 #
 # npm 배포와는 별개다. 둘 다 패키지를 소스로 잇기 때문에(vite alias) 패키지 빌드 없이 돈다.
+#
+# **품질 검사(ci.yml)를 통과해야만 배포한다.** lint · 타입 · 테스트 · 배포 파일 검증 중 하나라도 실패하면
+# 빌드도 배포도 하지 않는다.
 name: Pages
 
 on:
@@ -22,7 +25,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
   build:
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

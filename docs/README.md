@@ -145,7 +145,11 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 - [x] **후속 B — 배포 파일 설치 검증**(2026-10-15) — `pnpm build && pnpm verify:packages`. 네 패키지를 `pnpm pack` 으로 묶어
       저장소 밖 임시 폴더의 소비자 앱에 설치하고 타입 검사 · 빌드 · 실행을 돌린다(`scripts/verify-packages.mjs`, 앱은 `scripts/verify-packages/`).
       아래 "배포 파일 검증" 에 결과와 확인하지 못한 범위를 적었다
-- [ ] 후속 C(CI) · D(번들 · 폰트 · 딥링크) — [008](008_review_and_site_plan.md) 5장
+- [x] **후속 C — CI**(2026-10-15) — [`ci.yml`](../.github/workflows/ci.yml): 패키지 빌드 → `pnpm check` → `verify:packages`.
+      PR 마다 돌고, [`pages.yml`](../.github/workflows/pages.yml) 이 배포 전에 불러 **통과해야만 빌드 · 배포한다.**
+      main 푸시에는 직접 걸지 않아 같은 커밋에서 두 번 돌지 않는다. npm publish 는 넣지 않았다.
+      PR 을 머지 전에 막으려면 GitHub 저장소 설정의 브랜치 보호에서 이 검사를 필수로 지정해야 한다(저장소 설정 — 사람이 한다)
+- [ ] 후속 D(번들 · 폰트 · 딥링크) — [008](008_review_and_site_plan.md) 5장
 
 **컴포넌트는 다 만들었다 — 49개.** 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가
 소유하고, 하나하나의 기능과 정한 것은 `docs/001_ui/NNN_TxName.md` 각 장에 있다.
