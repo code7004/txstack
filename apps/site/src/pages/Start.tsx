@@ -23,7 +23,7 @@ const muted = "text-slate-600 dark:text-slate-300";
 
 export function Start() {
   return (
-    <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 5분이면 충분합니다.">
+    <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 아직 npm에 배포되지 않아서, 처음 한 번은 저장소를 받아 빌드하는 단계가 더 있습니다.">
       <Block title="Which packages do you need">
         <p className={muted}>
           txstack은 네 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.

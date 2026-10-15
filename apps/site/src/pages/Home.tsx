@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { TxAlert, TxButton, TxCard, TxCopyButton, TxForm, TxTag } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
 import { LinkCard, LinkCardGrid } from "../components/LinkCard";
+import { PrePublishNote } from "../components/PrePublish";
 
 const PACKAGES = [
   { name: "@txstack/ui", what: "UI를 위한 다양한 Tx* 컴포넌트. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다", to: "/api/ui", tag: "React" },
@@ -10,6 +11,16 @@ const PACKAGES = [
   { name: "@txstack/hooks", what: "범용 훅과 URL 쿼리 상태 관리", to: "/api/hooks", tag: "React" },
   { name: "@txstack/axios", what: "정책을 주입받는 HTTP 클라이언트. 토큰·401 처리·응답 형식을 앱이 정합니다", to: "/api/axios", tag: "React 불필요" }
 ];
+
+/** 첫 화면에서 말하는 "줄여 주는 반복 작업". 오른쪽은 그 일을 맡는 패키지 */
+const CHORES = [
+  ["검색 조건과 페이지를 주소에 담기", "hooks"],
+  ["서버 정렬 · 페이지 · 선택이 있는 표", "ui/aggrid"],
+  ["검증 메시지가 붙는 입력 폼", "ui"],
+  ["라우트 한 곳에서 권한별 메뉴까지", "route-meta"],
+  ["토큰 · 401 · 오류 응답을 한 번에 설정", "axios"],
+  ["확인 창 · 알림을 호출 한 줄로", "ui"]
+] as const;
 
 /** 왜 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
 const STORY = [
@@ -76,28 +87,44 @@ export function Home() {
         </div>
 
         <h1 className="max-w-3xl text-4xl leading-tight font-semibold sm:text-5xl">
-          서비스 개발에 필요한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span>
+          관리 화면과 업무용 서비스를 위한 <span style={{ color: "var(--tx-color-primary-strong)" }}>React 라이브러리</span>
         </h1>
 
-        <p className="text-lg text-slate-600 dark:text-slate-300">
-          여러 프로젝트에서 반복해 쓰던 코드를 재사용할 수 있도록, <strong>쓰기 쉽고 바꾸기 쉽게</strong> 만들었습니다.
+        <p className="max-w-3xl text-lg text-slate-600 dark:text-slate-300">
+          React로 관리 도구나 사내 서비스를 만드는 개발자를 위해, 화면마다 다시 짜던 <strong>검색 · 목록 · 폼 · 권한별 메뉴 · HTTP 설정</strong>을 컴포넌트와 훅, 설정 몇 줄로 줄입니다.
         </p>
+
+        {/* 줄여 주는 반복 작업. 각각 그 일을 맡는 패키지 이름을 붙인다 — 과장하지 않고, 실제로 있는 것만 */}
+        <ul className="grid max-w-3xl gap-x-6 gap-y-1.5 text-sm text-slate-600 sm:grid-cols-2 dark:text-slate-300">
+          {CHORES.map(([chore, pkg]) => (
+            <li key={chore} className="flex items-baseline gap-2">
+              <span aria-hidden className="text-[color:var(--tx-color-primary-strong)]">
+                ✓
+              </span>
+              <span>
+                {chore} <span className="font-mono text-xs text-slate-500 dark:text-slate-400">{pkg}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
 
         <div className="flex flex-wrap items-center gap-3">
           <Link to="/docs/start" className="tx-button" data-variant="primary">
             <span className="tx-button__label">Getting Started</span>
           </Link>
-
-          {/* 설치 한 줄. 복사는 우리 부품이 한다 */}
-          <div className="flex max-w-full min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
-            <code className="min-w-0 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
-            <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="text-xs" />
-          </div>
-
-          {/* 아직 npm 에 없다. 그대로 따라 치면 실패하므로 지금 설치하는 길로 보낸다 */}
-          <Link to="/docs/start#2-install" className="text-sm text-slate-500 underline dark:text-slate-400">
-            npm 배포 준비 중 — 지금 설치하는 방법
+          <Link to="/example/accounts" className="tx-button" data-variant="secondary">
+            <span className="tx-button__label">예제 앱 보기</span>
           </Link>
+        </div>
+
+        {/* 설치 한 줄. 아직 npm 에 없으므로 상태를 명령 바로 위에 밝히고, 지금 설치하는 길로 보낸다 */}
+        <div className="flex w-full max-w-xl flex-col gap-1.5">
+          <div className="flex min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+            <code className="min-w-0 flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
+            {/* 복사 버튼은 "복사했습니다" 가 들어갈 폭(8rem)을 미리 잡는다. 좁은 상자에서는 명령이 먼저라 그 폭을 줄인다 */}
+            <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="shrink-0 text-xs" style={{ "--tx-copy-button-min-width": "5rem" } as React.CSSProperties} />
+          </div>
+          <PrePublishNote />
         </div>
       </section>
 

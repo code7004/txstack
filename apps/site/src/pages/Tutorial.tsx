@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
+import { INSTALL_TITLE, PrePublishNote } from "../components/PrePublish";
 import { Block, Demo, Page } from "../components/Page";
 import { MemberScreen } from "./tutorial/MemberScreen";
 import MEMBER_API_SOURCE from "./tutorial/memberApi.ts?raw";
@@ -25,9 +26,12 @@ export function Tutorial() {
           <Link to="/docs/start" className="underline">
             Getting Started
           </Link>
-          를 마친 React 앱에서 시작합니다. 이번에는 네 패키지와 함께 <code>react-router-dom</code>, <code>axios</code>가 필요합니다.
+          를 마친 React 앱에서 시작합니다. 이번에는 네 패키지와 함께 <code>react-router-dom</code>, <code>axios</code>가 필요하고, 화면 배치에 쓴 Tailwind도 설치합니다.
         </p>
-        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios react-router-dom axios`}</CodeBlock>
+        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios`}</CodeBlock>
+        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add react-router-dom axios
+pnpm add -D tailwindcss @tailwindcss/vite`}</CodeBlock>
         <div className="overflow-x-auto">
           <table className="site-stack-table w-full text-sm">
             <tbody className={muted}>
@@ -141,6 +145,73 @@ const search = (q: string) => setQuery({ q, page: 1 });`}</CodeBlock>
         <Demo>
           <MemberScreen />
         </Demo>
+      </Block>
+
+      <Block title="Run it as an app">
+        <p className={muted}>
+          아래 다섯 파일과 맨 아래의 두 파일(<code>memberApi.ts</code>, <code>MemberScreen.tsx</code>)이면 위 화면이 앱으로 뜹니다. Getting Started에서 만든 Vite 앱의 같은 이름 파일을 바꿉니다.
+        </p>
+        <CodeBlock title="vite.config.ts">{`import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()]
+});`}</CodeBlock>
+        <CodeBlock language="css" title="src/index.css">{`/* 레이어 순서 — txstack(tx)은 Tailwind 의 preflight(base) 뒤, 유틸리티 앞 */
+@layer theme, base, tx, components, utilities;
+
+@import "tailwindcss";
+@import "@txstack/ui/styles.css";`}</CodeBlock>
+        <CodeBlock title="src/main.tsx">{`import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { App } from "./App";
+import "./index.css";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);`}</CodeBlock>
+        <CodeBlock title="src/routes.tsx">{`import type { RouteTree } from "@txstack/route-meta";
+import { Navigate } from "react-router-dom";
+import { MemberScreen } from "./MemberScreen";
+
+export const routes = {
+  home: { index: true, element: <Navigate to="/members" replace /> },
+  members: { path: "/members", element: <MemberScreen />, meta: { label: "회원" } }
+} satisfies RouteTree;`}</CodeBlock>
+        <CodeBlock title="src/App.tsx">{`import { RouteRenderer, getNavigableRoutes } from "@txstack/route-meta";
+import { NavLink } from "react-router-dom";
+import { routes } from "./routes";
+
+const menu = getNavigableRoutes(routes);
+
+export function App() {
+  return (
+    <div className="mx-auto flex max-w-3xl flex-col gap-4 p-6">
+      <nav className="flex gap-4">
+        {menu.map((item) => (
+          <NavLink key={item.key} to={item.path} className="font-semibold">
+            {item.meta?.label}
+          </NavLink>
+        ))}
+      </nav>
+      <RouteRenderer tree={routes} />
+    </div>
+  );
+}`}</CodeBlock>
+        <CodeBlock language="bash" title="sh">{`pnpm dev`}</CodeBlock>
+        <p className={muted}>
+          화면이 여러 개인 앱으로 이어 가려면, 같은 방식으로 만든{" "}
+          <Link to="/example" className="underline">
+            Example의 운영 관리 앱
+          </Link>
+          을 받아 실행해 보세요. 메뉴 · 레이아웃 · 다크 모드 · TanStack Query까지 갖춘 전체 프로젝트입니다.
+        </p>
       </Block>
 
       <Block title="Full code">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
+import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefTable } from "../../components/Reference";
 import { STORYBOOK_URL } from "../../lib/links";
@@ -10,7 +11,8 @@ export function ApiUi() {
   return (
     <Page title="@txstack/ui" lead="UI를 위한 Tx* 컴포넌트 49종입니다. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다.">
       <Block title="Install">
-        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui`}</CodeBlock>
+        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui`}</CodeBlock>
+        <PrePublishNote />
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.ui.installEntry.rows} anchor={tableAnchor(TABLES.ui.installEntry)} />
 
         <TxAlert variant="info" title="루트를 import해도 서브패스는 딸려 오지 않습니다">
@@ -19,7 +21,9 @@ export function ApiUi() {
       </Block>
 
       <Block title="Components by category">
-        <p className="text-slate-600 dark:text-slate-300">props, 디자인 토큰, 예제는 Storybook에 정리되어 있습니다. 같은 내용을 두 곳에서 관리하면 어긋나기 쉬워서 여기에는 목록만 두고, 이름을 누르면 해당 컴포넌트의 Storybook 문서가 열립니다.</p>
+        <p className="text-slate-600 dark:text-slate-300">
+          props, 디자인 토큰, 예제는 Storybook에 정리되어 있습니다. 같은 내용을 두 곳에서 관리하면 어긋나기 쉬워서 여기에는 목록만 두고, 이름(↗)을 누르면 해당 컴포넌트의 props와 예제가 있는 Storybook 문서가 새 탭에서 열립니다.
+        </p>
         {CATALOG.map(([category, items]) => (
           <div key={category} className="flex flex-col gap-2">
             <h3 data-toc className="site-anchor text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">
@@ -31,8 +35,11 @@ export function ApiUi() {
                   {items.map((item) => (
                     <tr key={item.name} id={componentAnchor(item.name)} className="site-anchor border-t align-top first:border-t-0" style={{ borderColor: "var(--tx-color-border)" }}>
                       <td className="w-56 px-3 py-2 whitespace-nowrap">
-                        <a href={storyUrl(category, item)} target="_blank" rel="noreferrer" className="font-mono text-xs font-semibold underline">
+                        <a href={storyUrl(category, item)} target="_blank" rel="noreferrer" title={`${item.name}의 props와 예제를 Storybook에서 보기 (새 탭)`} className="font-mono text-xs font-semibold underline">
                           {item.name}
+                          <span aria-hidden className="ms-0.5 text-slate-400">
+                            ↗
+                          </span>
                         </a>
                         {item.sub && <span className="ms-2 font-mono text-xs text-slate-500 dark:text-slate-400">/{item.sub}</span>}
                       </td>
@@ -48,7 +55,7 @@ export function ApiUi() {
           </div>
         ))}
         <a href={STORYBOOK_URL} className="tx-button self-start" data-variant="primary" target="_blank" rel="noreferrer">
-          <span className="tx-button__label">Storybook 열기</span>
+          <span className="tx-button__label">Storybook에서 전체 props 보기 ↗</span>
         </a>
       </Block>
 

@@ -36,7 +36,7 @@ export function SiteFooter() {
       <div className="flex flex-wrap gap-10">
         <div className="flex min-w-56 flex-col gap-2">
           <span className="font-mono text-sm font-semibold">txstack</span>
-          <p className="text-sm text-slate-500 dark:text-slate-400">서비스 개발에 필요한 React 라이브러리. 여러 프로젝트에서 재사용할 수 있도록 쓰기 쉽고 바꾸기 쉽게 만들었습니다.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">관리 화면과 업무용 서비스를 위한 React 라이브러리. 여러 프로젝트에서 재사용할 수 있도록 쓰기 쉽고 바꾸기 쉽게 만들었습니다.</p>
         </div>
 
         <Column title="Packages" links={PACKAGES} />
@@ -48,7 +48,7 @@ export function SiteFooter() {
             GitHub
           </a>
           <a href={STORYBOOK_URL} className="text-sm hover:underline" target="_blank" rel="noreferrer">
-            Storybook
+            Storybook — 컴포넌트 props ↗
           </a>
           <Link to="/about/contact" className="text-sm hover:underline">
             Contact

@@ -280,8 +280,8 @@ function ActionDemo() {
         <span className={`text-sm ${muted}`}>onClick이 Promise를 돌려주면 끝날 때까지 잠기고 스피너가 붙습니다.</span>
       </div>
       <div className="flex items-center gap-2">
-        <code className="text-sm">pnpm add @txstack/ui</code>
-        <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" />
+        <code className="text-sm">import "@txstack/ui/styles.css";</code>
+        <TxCopyButton value={'import "@txstack/ui/styles.css";'} variant="ghost" />
       </div>
     </div>
   );
@@ -303,7 +303,7 @@ export function Components() {
     >
       <div className="flex flex-wrap gap-3">
         <a href={STORYBOOK_URL} className="tx-button" data-variant="primary" target="_blank" rel="noreferrer">
-          <span className="tx-button__label">Storybook 열기</span>
+          <span className="tx-button__label">Storybook에서 props 보기 ↗</span>
         </a>
         <Link to="/api/ui#components-by-category" className="tx-button" data-variant="secondary">
           <span className="tx-button__label">컴포넌트 49종 목록</span>

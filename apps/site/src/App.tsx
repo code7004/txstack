@@ -140,7 +140,7 @@ function useCurrentPlace() {
   useEffect(() => {
     // `ui` 처럼 짧은 이름은 묶음을 붙여야 탭에서 읽힌다 — "ui · API"
     const place = section ? `${label} · ${section}` : label;
-    document.title = !place || home ? `${SITE_NAME} — 서비스 개발에 필요한 React 라이브러리` : `${place} — ${SITE_NAME}`;
+    document.title = !place || home ? `${SITE_NAME} — 관리 화면과 업무용 서비스를 위한 React 라이브러리` : `${place} — ${SITE_NAME}`;
   }, [label, section, home]);
 
   return { home, showcase, sub: MENU.find((item) => item.path === top?.path)?.children };

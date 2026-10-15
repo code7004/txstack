@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
+import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
 import { TABLES, tableAnchor } from "./data";
@@ -22,7 +23,8 @@ export function ApiRouteMeta() {
       }
     >
       <Block title="Install">
-        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
+        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
+        <PrePublishNote />
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.routeMeta.installEntry.rows} anchor={tableAnchor(TABLES.routeMeta.installEntry)} />
       </Block>
 
