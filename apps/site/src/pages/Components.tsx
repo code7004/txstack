@@ -279,8 +279,8 @@ function ActionDemo() {
         <TxButton label="2초 걸리는 저장" onClick={() => wait(2000)} />
         <span className={`text-sm ${muted}`}>onClick이 Promise를 돌려주면 끝날 때까지 잠기고 스피너가 붙습니다.</span>
       </div>
-      <div className="flex items-center gap-2">
-        <code className="text-sm">import "@txstack/ui/styles.css";</code>
+      <div className="flex flex-wrap items-center gap-2">
+        <code className="text-xs whitespace-nowrap sm:text-sm">import "@txstack/ui/styles.css";</code>
         <TxCopyButton value={'import "@txstack/ui/styles.css";'} variant="ghost" />
       </div>
     </div>
