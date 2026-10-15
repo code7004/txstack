@@ -45,6 +45,19 @@ function makeClient(options?: Partial<HttpClientOptions>) {
       return { data: { accessToken: "eyJhbGciOi", user: { id: 7 } }, status: 200, statusText: "OK", headers: {}, config };
     }
 
+    // 오류 응답에 민감한 값이 실려 오는 자리 — 서버가 받은 요청을 되돌려 주는 422 같은 것
+    if (config.url?.startsWith("/leaky-error")) {
+      throw Object.assign(new Error("Request failed with status code 422"), {
+        isAxiosError: true,
+        config,
+        response: { status: 422, data: { message: "invalid", echo: { password: "pw-in-error" }, accessToken: "tok-in-error" }, statusText: "Unprocessable", headers: {}, config }
+      });
+    }
+
+    if (config.url === "/nested") {
+      return { data: { user: { profile: { accessToken: "deep-token" } }, items: [{ refreshToken: "arr-token", id: 1 }] }, status: 200, statusText: "OK", headers: {}, config };
+    }
+
     if (config.url === "/binary") {
       return { data: new Uint8Array([1, 2, 3]).buffer, status: 200, statusText: "OK", headers: {}, config };
     }
@@ -222,6 +235,98 @@ describe("로깅 훅", () => {
     await client.get("/session");
 
     expect(onResponse.mock.calls[0][0].data).toEqual({ accessToken: "eyJhbGciOi", user: "******" });
+  });
+
+  /** 로그로 나가는 글자를 모두 모은다. 이 안에 심어 둔 값이 하나라도 보이면 샌 것이다 */
+  const printed = (...spies: { mock: { calls: unknown[][] } }[]) =>
+    spies
+      .flatMap((spy) => spy.mock.calls.flat())
+      .map((arg) => (typeof arg === "string" ? arg : JSON.stringify(arg)))
+      .join("\n");
+
+  it("debug 오류 로그는 응답 본문의 민감한 값을 가린다", async () => {
+    const group = vi.spyOn(console, "group").mockImplementation(() => {});
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const { client } = makeClient({ debug: true });
+    await expect(client.get("/leaky-error")).rejects.toBeDefined();
+
+    const out = printed(group, error);
+    expect(out).toContain("[ERR] 422");
+    expect(out).not.toContain("pw-in-error");
+    expect(out).not.toContain("tok-in-error");
+    expect(out).toContain("invalid");
+  });
+
+  it("로그의 URL 은 쿼리의 민감한 값을 가린다 — 요청 · 응답 · 오류 모두", async () => {
+    const onRequest = vi.fn();
+    const onResponse = vi.fn();
+    const group = vi.spyOn(console, "group").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const { client } = makeClient({ onRequest, onResponse, debug: true });
+    await client.get("/users?token=url-secret&page=2");
+    await expect(client.get("/leaky-error?accessToken=url-secret-2")).rejects.toBeDefined();
+
+    expect(onRequest.mock.calls[0][0].url).toBe("/users?token=******&page=2");
+    expect(onResponse.mock.calls[0][0].url).toBe("/users?token=******&page=2");
+    expect(printed(group)).not.toContain("url-secret-2");
+  });
+
+  it("중첩된 객체와 배열 안까지 가린다", async () => {
+    const onRequest = vi.fn();
+    const onResponse = vi.fn();
+    const { client } = makeClient({ onRequest, onResponse, unwrap: undefined });
+
+    await client.post("/signup", { user: { name: "kim", password: "nested-pw" }, devices: [{ token: "device-token" }] });
+    await client.get("/nested");
+
+    expect(onRequest.mock.calls[0][0].data).toEqual({ user: { name: "kim", password: "******" }, devices: [{ token: "******" }] });
+    const nested = onResponse.mock.calls.map((call) => call[0]).find((log: { url: string }) => log.url === "/nested");
+    expect(nested.data).toEqual({ user: { profile: { accessToken: "******" } }, items: [{ refreshToken: "******", id: 1 }] });
+  });
+
+  it("JSON 문자열 본문도 가린다", async () => {
+    const onRequest = vi.fn();
+    const { client } = makeClient({ onRequest });
+
+    await client.post("/raw", JSON.stringify({ password: "string-pw", id: 1 }));
+
+    expect(JSON.stringify(onRequest.mock.calls[0][0].data)).not.toContain("string-pw");
+  });
+
+  it("원본은 건드리지 않는다 — 서버로는 원래 값이 나가고, onError 는 원래 오류를 받는다", async () => {
+    const onRequest = vi.fn();
+    const onError = vi.fn();
+    const sent: unknown[] = [];
+    const { client } = makeClient({ onRequest, onError });
+    const adapter = client.instance.defaults.adapter as AxiosAdapter;
+    client.instance.defaults.adapter = (config) => {
+      if (typeof config.data === "string") sent.push(JSON.parse(config.data));
+      return adapter(config);
+    };
+
+    const body = { user: { password: "keep-me" } };
+    await client.post("/signup", body);
+    await expect(client.get("/leaky-error")).rejects.toBeDefined();
+
+    expect(body.user.password).toBe("keep-me");
+    expect(sent[0]).toEqual({ user: { password: "keep-me" } });
+    expect((onError.mock.calls[0][0] as { response: { data: { accessToken: string } } }).response.data.accessToken).toBe("tok-in-error");
+  });
+
+  /** 순환 본문은 axios 가 설정을 합칠 때 먼저 멈춘다. 순환 값이 로거에 닿는 곳은 응답(직접 만든 adapter 등)이다 */
+  it("순환 참조가 있어도 로그가 멈추지 않는다", async () => {
+    const onResponse = vi.fn();
+    const { client } = makeClient({ onResponse, unwrap: undefined });
+    const looped: Record<string, unknown> = { password: "loop-pw", shared: { id: 1 } };
+    looped.self = looped;
+    looped.again = looped.shared;
+    client.instance.defaults.adapter = async (config) => ({ data: looped, status: 200, statusText: "OK", headers: {}, config });
+
+    await client.get("/loop");
+
+    expect(onResponse.mock.calls[0][0].data).toEqual({ password: "******", shared: { id: 1 }, self: "[Circular]", again: { id: 1 } });
   });
 
   it("debug 없이 훅도 없으면 콘솔에 아무것도 찍지 않는다", async () => {
