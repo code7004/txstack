@@ -65,8 +65,8 @@ export function ExampleDashboard() {
 <Link to={logsUrl({ status: "open" })} relative="path">열린 오류</Link>`}</CodeBlock>
         <p className={muted}>
           화면이 어느 주소에 놓일지는 앱의 라우트 트리가 정합니다. 세 화면을 묶는 트리(<code>routes.tsx</code>)는{" "}
-          <Link to="/example#put-them-in-an-app" className="underline">
-            Put them in an app
+          <Link to="/example/app" className="underline">
+            Example › App
           </Link>
           에, 트리를 만드는 방법은{" "}
           <Link to="/docs/guide/routing" className="underline">

@@ -207,8 +207,8 @@ export function App() {
         <CodeBlock language="bash" title="sh">{`pnpm dev`}</CodeBlock>
         <p className={muted}>
           화면이 여러 개인 앱으로 이어 가려면{" "}
-          <Link to="/example#put-them-in-an-app" className="underline">
-            Example › Put them in an app
+          <Link to="/example/app" className="underline">
+            Example › App
           </Link>
           을 보세요. 같은 방식에 레이아웃(<code>TxAppShell</code>) · 메뉴 · TanStack Query를 더해 화면 셋을 묶습니다.
         </p>

@@ -71,8 +71,8 @@ export function WholeAppNote() {
   return (
     <p className={muted}>
       세 화면을 앱 하나로 묶는 <code>App.tsx</code>(TxAppShell · Provider)와 <code>routes.tsx</code>(RouteTree)는{" "}
-      <Link to="/example#put-them-in-an-app" className="underline">
-        Example › Put them in an app
+      <Link to="/example/app" className="underline">
+        Example › App
       </Link>
       에 있습니다.
     </p>
