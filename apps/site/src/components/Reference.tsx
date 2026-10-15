@@ -22,7 +22,8 @@ export type Row = [name: string, type: string, fallback: string, description: Re
 export function RefTable({ rows, head = ["Name", "Type", "Default", "Description"], anchor }: { rows: Row[]; head?: [string, string, string, string]; anchor?: (name: string) => string }) {
   return (
     <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-      <table className="w-full text-sm">
+      {/* 좁은 화면에서는 줄마다 위아래로 쌓는다(site-stack-table) — 옆으로 밀어야 설명이 보이면 표를 읽지 않게 된다 */}
+      <table className="site-stack-table w-full text-sm">
         <thead>
           <tr style={{ backgroundColor: "var(--tx-color-muted)" }}>
             {head.map((cell) => (
@@ -36,9 +37,14 @@ export function RefTable({ rows, head = ["Name", "Type", "Default", "Description
           {rows.map(([name, type, fallback, description]) => (
             <tr key={name} id={anchor?.(name)} className="site-anchor border-t align-top" style={{ borderColor: "var(--tx-color-border)" }}>
               <td className="px-3 py-2 font-mono text-xs font-semibold whitespace-nowrap">{name}</td>
-              <td className="max-w-48 px-3 py-2 font-mono text-xs break-words text-slate-600 dark:text-slate-300">{type}</td>
-              <td className="max-w-40 px-3 py-2 font-mono text-xs break-words text-slate-500 dark:text-slate-400">{fallback}</td>
-              <td className="min-w-72 px-3 py-2 text-slate-600 dark:text-slate-300">{description}</td>
+              <td data-label={head[1]} className="px-3 py-2 font-mono text-xs break-words text-slate-600 sm:max-w-48 dark:text-slate-300">
+                {type}
+              </td>
+              {/* 기본값이 없으면(—) 좁은 화면에서는 줄을 아낀다 */}
+              <td data-label={head[2]} className={`px-3 py-2 font-mono text-xs break-words text-slate-500 sm:max-w-40 dark:text-slate-400 ${fallback === "—" ? "max-sm:hidden" : ""}`}>
+                {fallback}
+              </td>
+              <td className="px-3 py-2 text-slate-600 sm:min-w-72 dark:text-slate-300">{description}</td>
             </tr>
           ))}
         </tbody>
