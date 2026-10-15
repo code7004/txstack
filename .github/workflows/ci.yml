@@ -1,0 +1,68 @@
+# 품질 검사. PR 마다 돌고, main 의 배포(pages.yml)도 이것을 불러 통과해야만 배포한다.
+#
+#   1. 패키지 빌드      — 사이트 · Storybook 의 타입 검사가 패키지의 dist 타입을 읽는다
+#   2. pnpm check       — lint · 타입 검사 · 테스트
+#   3. verify:packages  — 빌드한 .tgz 를 저장소 밖 소비자 앱에 설치해 검증(docs/README "배포 파일 검증")
+#
+# main 푸시에는 직접 걸지 않는다. pages.yml 이 부르므로 같은 커밋에서 두 번 돌지 않는다.
+# npm publish 는 여기에 없다 — 배포는 사람이 명시적으로 한다.
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 같은 PR 에 새 커밋이 오면 앞의 검사는 버린다. 부르는 쪽(Pages)과는 그룹이 갈린다
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # 검사보다 먼저, 따로 돈다. 빌드가 dist 를 지우고 다시 쓰는 동안 타입 검사가 읽으면 엉뚱하게 깨진다
+      - name: 패키지 빌드
+        run: pnpm build
+
+      - name: lint · 타입 검사 · 테스트
+        run: pnpm check
+
+  verify-packages:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: 패키지 빌드
+        run: pnpm build
+
+      # 소비자 앱의 외부 의존(react · vite 등)은 레지스트리에서 받는다
+      - name: 배포 파일 설치 검증
+        run: pnpm verify:packages
