@@ -73,6 +73,29 @@
 `pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
 
+### 배포 파일 검증
+
+사이트와 Storybook 은 패키지 **소스**에 별칭을 걸어 쓴다. npm 에 올라갈 **파일**이 실제로 쓰이는지는
+`pnpm build && pnpm verify:packages` 가 따로 본다 — `.tgz` 를 만들어 저장소 밖 소비자 앱에 설치한다.
+
+| 소비자 앱     | 무엇을 쓰나                                                      | 보는 것                                                                                      |
+| ------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `core-ui`     | `@txstack/ui` 루트 + `styles.css`. ag-grid · 달력 **설치 안 함** | 타입 검사 · 빌드 · 스타일이 실리는지 · **선택 peer 가 설치되지도, 번들에 끌려오지도 않는지** |
+| `ui-subpaths` | `/aggrid` · `/daypicker` + 선택 peer                             | 타입 검사(`skipLibCheck: false`) · 빌드 · ag-grid 가 번들에 들어오는지                       |
+| `app`         | `route-meta` · `hooks` 두 진입점 · `react-router-dom`            | 타입 검사 · 빌드                                                                             |
+| `node-axios`  | `@txstack/axios` · `/singleton`. **React 설치 안 함**            | Node 에서 실제 실행 — 토큰 헤더 · 로그 가리기(URL 쿼리 포함) · `parseApiError` · 싱글턴      |
+| `react18`     | `core-ui` 를 React 18 로                                         | 타입 검사 · 빌드                                                                             |
+| `router6`     | `app` 을 react-router-dom 6 으로                                 | 타입 검사 · 빌드                                                                             |
+
+2026-10-15 결과: **여섯 모두 통과** — React 19.3.0 · 18.3.1, react-router-dom 7.18.3 · 6.30.6, Node 24.
+
+**확인하지 못한 것**
+
+- **CommonJS(`require`) 소비자는 지원하지 않는다.** 네 패키지 모두 `exports` 에 `import` 조건만 있다(ESM 전용)
+- UI 소비자는 **빌드까지**다. 브라우저에서 띄워 동작을 보지 않았다(React 18 포함)
+- React 18.0 ~ 18.2, react-router-dom 6.30 미만, Node 24 외의 버전, Next.js 같은 SSR 환경
+- 실제 서비스에 적용하는 일은 이 검증과 별개다 — [006_adoption](006_adoption.md)
+
 ### 버전은 changesets 가 매긴다
 
 구현이 0줄일 때는 안 넣었다 — 커밋 훅도 버전도 그때는 마찰만 된다. **붙이는 시점을
@@ -119,7 +142,10 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 - [x] **후속 A — HTTP 로그 마스킹**(2026-10-15) — `debug` 오류 로그가 오류 응답 본문을, 로그 URL 이 `?token=` 을 그대로
       내보내던 것을 테스트로 재현하고 고쳤다. 중첩 객체 · 배열 · JSON 문자열 · `URLSearchParams` · URL 쿼리까지 가리고, 원본 요청 · 응답과
       `onError` 의 오류는 바꾸지 않는다. 공개 옵션은 그대로다 — 범위와 한계는 [004_axios/003](004_axios/003_logging.md)
-- [ ] 후속 B(배포 파일 설치 검증) · C(CI) · D(번들 · 폰트 · 딥링크) — [008](008_review_and_site_plan.md) 5장
+- [x] **후속 B — 배포 파일 설치 검증**(2026-10-15) — `pnpm build && pnpm verify:packages`. 네 패키지를 `pnpm pack` 으로 묶어
+      저장소 밖 임시 폴더의 소비자 앱에 설치하고 타입 검사 · 빌드 · 실행을 돌린다(`scripts/verify-packages.mjs`, 앱은 `scripts/verify-packages/`).
+      아래 "배포 파일 검증" 에 결과와 확인하지 못한 범위를 적었다
+- [ ] 후속 C(CI) · D(번들 · 폰트 · 딥링크) — [008](008_review_and_site_plan.md) 5장
 
 **컴포넌트는 다 만들었다 — 49개.** 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가
 소유하고, 하나하나의 기능과 정한 것은 `docs/001_ui/NNN_TxName.md` 각 장에 있다.

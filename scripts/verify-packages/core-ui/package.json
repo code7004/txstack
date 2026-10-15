@@ -1,0 +1,21 @@
+{
+  "name": "verify-core-ui",
+  "private": true,
+  "type": "module",
+  "description": "@txstack/ui 루트만 쓰는 소비자. ag-grid · react-day-picker 를 설치하지 않는다",
+  "scripts": {
+    "verify": "tsc --noEmit && vite build && node ../check-bundle.mjs core-ui"
+  },
+  "dependencies": {
+    "@txstack/ui": "TXSTACK",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.8.2",
+    "vite": "^7.2.7"
+  }
+}

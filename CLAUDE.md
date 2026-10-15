@@ -143,6 +143,7 @@ jsdom 에는 스타일시트가 없어 렌더 결과로는 안 보인다. 그래
 pnpm check           # lint + typecheck + test  ← 기본
 pnpm test            # 회귀 테스트 (vitest)
 pnpm build           # packages/* 전체 빌드 (ui 는 dist/styles.css 까지)
+pnpm verify:packages # 빌드한 .tgz 를 저장소 밖 소비자 앱에 설치해 검증 (build 뒤에)
 pnpm build:watch     # 소비자에 link: 로 붙여 놓고 고칠 때 — 안 띄우면 옛 dist 를 보게 된다
 pnpm storybook:dev   # 컴포넌트 카탈로그 — 사용자가 직접 보는 자리
 ```
