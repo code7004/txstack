@@ -30,11 +30,11 @@ export function ApiUi() {
               {category}
             </h3>
             <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
-              <table className="w-full text-sm">
+              <table className="site-stack-table w-full text-sm">
                 <tbody>
                   {items.map((item) => (
                     <tr key={item.name} id={componentAnchor(item.name)} className="site-anchor border-t align-top first:border-t-0" style={{ borderColor: "var(--tx-color-border)" }}>
-                      <td className="w-56 px-3 py-2 whitespace-nowrap">
+                      <td className="px-3 py-2 whitespace-nowrap sm:w-56">
                         <a href={storyUrl(category, item)} target="_blank" rel="noreferrer" title={`${item.name}의 props와 예제를 Storybook에서 보기 (새 탭)`} className="font-mono text-xs font-semibold underline">
                           {item.name}
                           <span aria-hidden className="ms-0.5 text-slate-400">
