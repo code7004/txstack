@@ -37,7 +37,8 @@
 역할 한 줄과 소개 문단은 2026-10-16 사용자가 직접 쓴 문장으로 바꿨다(이전 A안 대체).
 
 - 아바타: 사진 없이 TxAvatar 이니셜
-- 첫 영역 링크: GitHub(`github.com/code7004/txstack`), 이메일(`code7004@gmail.com`), 대표 프로젝트(§3)로 이동
+- 이메일(`code7004@gmail.com`): 이름·역할 바로 아래에 둔다. Contact의 협업 문의 카드도 같은 값을 쓴다
+- 첫 영역 링크: GitHub(`github.com/code7004/txstack`), 대표 프로젝트(§3)로 이동
 
 근거: 이력서 "핵심 요약"·"자기소개", 면접 요약 "반복해서 써야 할 핵심 문장", `docs/README.md`
 
