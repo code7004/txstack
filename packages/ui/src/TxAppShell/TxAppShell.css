@@ -1,8 +1,9 @@
 /**
  * TxAppShell — 화면 전체를 짜는 껍데기.
  *
- * **패널의 폭과 헤더의 높이만 정한다.** 그 안에 무엇이 놓이는지는 슬롯을 준 쪽의 일이라
- * 색도 여백도 손대지 않는다 — 손대면 소비자의 헤더가 우리 규칙과 싸운다.
+ * **틀을 짠다. 그 안에 무엇이 놓이는지는 슬롯을 준 쪽의 일이다.**
+ * 여백 · 높이 · 색은 기본값을 두되 **전부 `--tx-app-shell-*` 변수로 연다** — 고정값으로 박으면
+ * 소비자의 헤더가 우리 규칙과 싸우고, 끌 방법이 내부 클래스를 덮어쓰는 것뿐이 된다.
  *
  * 명세: docs/001_ui/044_TxAppShell.md
  */
@@ -12,6 +13,15 @@
   --tx-app-shell-right-width: 14rem;
   --tx-app-shell-bottom-height: 12rem;
   --tx-app-shell-main-padding: 1.5rem;
+
+  /** 헤더 줄(`header` 슬롯과 햄버거가 놓이는 줄). 높이는 최소값이다 — 내용이 크면 늘어난다 */
+  --tx-app-shell-bar-min-height: 3.5rem;
+  --tx-app-shell-bar-padding: 0 1rem;
+  --tx-app-shell-bar-gap: 0.75rem;
+
+  /** 헤더 아래 전체 폭 띠(`top` 슬롯) */
+  --tx-app-shell-top-padding: 0 1rem;
+
   --tx-app-shell-border-color: var(--tx-color-border);
   --tx-app-shell-header-bg: var(--tx-color-surface);
   --tx-app-shell-duration: 200ms;
@@ -106,9 +116,9 @@
 .tx-app-shell__bar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  min-block-size: 3.5rem;
-  padding-inline: 1rem;
+  gap: var(--tx-app-shell-bar-gap);
+  min-block-size: var(--tx-app-shell-bar-min-height);
+  padding: var(--tx-app-shell-bar-padding);
 }
 
 /**
@@ -120,7 +130,7 @@
 }
 
 .tx-app-shell__top {
-  padding-inline: 1rem;
+  padding: var(--tx-app-shell-top-padding);
 }
 
 /* --- 몸통 ----------------------------------------------------------------- */

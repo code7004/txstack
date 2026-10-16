@@ -187,8 +187,13 @@ export interface TxAppShellProps extends HTMLAttributes<HTMLDivElement> {
   /** 스크린리더가 읽을 글자들. */
   labels?: TxAppShellLabels;
 
-  /** 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다. */
-  classNames?: { header?: string; top?: string; left?: string; right?: string; bottom?: string; main?: string; footer?: string };
+  /**
+   * 안쪽 슬롯. 바깥 겉은 `className` 이 맡는다.
+   *
+   * `header` 는 머리 전체(`bar` + `top`)를 감싸는 겉이고, `bar` 는 그 안에서 `header` 슬롯과
+   * 햄버거가 놓이는 줄이다. 여백 · 높이는 변수(`--tx-app-shell-bar-*`)로도 끌 수 있다.
+   */
+  classNames?: { header?: string; bar?: string; top?: string; left?: string; right?: string; bottom?: string; main?: string; footer?: string };
 
   children?: ReactNode;
 }

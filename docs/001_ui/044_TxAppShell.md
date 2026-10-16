@@ -65,7 +65,7 @@
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxAppShell/`
-- [x] **테스트** — 87개
+- [x] **테스트** — 88개
 - [x] **스토리** — `TxAppShell.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -269,11 +269,43 @@ footer                              footer
 본문의 `id` 는 `useId` 로 만든다. **한 페이지에 셸이 둘이어도 서로의 본문을 가리키지
 않는다.**
 
-### 색과 여백은 슬롯이 정한다
+### 여백 · 높이 · 색은 기본값을 두되 전부 변수로 연다 (고쳤다)
 
-셸은 **패널의 폭과 헤더의 높이만** 정한다. 그 안의 색·여백까지 정하면 소비자의 헤더가
-셸의 규칙과 싸운다. 본문에는 `min-inline-size: 0` 을 준다 — flex 자식의 기본 최소 크기는
-내용이라, 그대로 두면 긴 표가 본문을 밀어내 옆 패널까지 넘친다.
+**처음 문장은 "셸은 색·여백을 손대지 않는다" 였는데 사실이 아니었다.** 헤더 줄(`__bar`)에
+`padding-inline: 1rem` · `min-block-size: 3.5rem` · `gap: 0.75rem`, 가로 띠(`__top`)에
+`padding-inline: 1rem` 이 고정값으로 박혀 있었다. `__bar` 에는 `classNames` 슬롯도 없어서
+**공개된 방법으로는 끌 수 없었다** — black-message 에 붙이자 `h-8` 로 준 헤더가 56px 로 서고
+좌우에 1rem 이 생겼다. 끄려면 내부 클래스(`.tx-app-shell__bar`)를 덮어써야 했다.
+
+다른 컴포넌트(`TxCard` · `TxModal` · `TxCollapsible` …)는 전부 **기본값 + 변수**다. 셸만 어긋나 있었으므로
+같은 방식으로 맞췄다. **기본값은 그대로라 이미 쓰는 화면은 바뀌지 않는다.**
+
+| 변수                            | 기본      | 자리                                       |
+| ------------------------------- | --------- | ------------------------------------------ |
+| `--tx-app-shell-bar-min-height` | `3.5rem`  | 헤더 줄의 최소 높이 — 내용이 크면 늘어난다 |
+| `--tx-app-shell-bar-padding`    | `0 1rem`  | 헤더 줄 여백                               |
+| `--tx-app-shell-bar-gap`        | `0.75rem` | 햄버거 ↔ `header` 슬롯 사이                |
+| `--tx-app-shell-top-padding`    | `0 1rem`  | `top` 띠 여백                              |
+| `--tx-app-shell-main-padding`   | `1.5rem`  | 본문 여백 (원래 있던 것)                   |
+| `--tx-app-shell-header-bg`      | surface   | 머리 배경 (원래 있던 것)                   |
+| `--tx-app-shell-border-color`   | border    | 머리 · 패널 · footer 경계선 (원래 있던 것) |
+
+`classNames` 에는 `bar` 를 더했다 — `header` 는 머리 전체(`bar` + `top`)의 겉이고, `bar` 는 그 안의 줄이다.
+**슬롯을 감싸는 자리의 여백 · 높이가 변수를 거치는지는 CSS 계약 테스트가 지킨다.**
+
+셸이 슬롯 안을 직접 꾸미지 않고 슬롯이 스스로 꾸미게 하려면 셸의 여백을 전부 끄면 된다.
+
+```css
+.tx-app-shell {
+  --tx-app-shell-bar-min-height: 0;
+  --tx-app-shell-bar-padding: 0;
+  --tx-app-shell-top-padding: 0;
+  --tx-app-shell-main-padding: 0;
+}
+```
+
+본문에는 `min-inline-size: 0` 을 준다 — flex 자식의 기본 최소 크기는 내용이라, 그대로 두면
+긴 표가 본문을 밀어내 옆 패널까지 넘친다.
 
 ### 브라우저 창의 시계가 멈춰 있었다 (도구 한계)
 
