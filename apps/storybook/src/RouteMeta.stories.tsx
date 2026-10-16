@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { MemoryRouter, NavLink, Outlet, useRoutes } from "react-router-dom";
-import { buildRouteObjects, getNavigableRoutes, useCurrentRouteNode, type CanAccess, type NavRoute, type RouteTree } from "@txstack/route-meta";
+import { buildRouteObjects, getNavRoutes, useCurrentRoute, type CanAccess, type NavRoute, type RouteTree } from "@txstack/route-meta";
 import { TxAppShell, TxButton, TxFlex, TxGrid, TxNavBar, TxSideNav } from "@txstack/ui";
 
 /**
@@ -101,9 +101,9 @@ const barItem = (item: NavRoute) => (
   />
 );
 
-/** 지금 어디인지. `useCurrentRouteNode` 가 매칭 사슬을 그대로 준다. */
+/** 지금 어디인지. `useCurrentRoute` 가 매칭 사슬을 그대로 준다. */
 const Crumbs = () => {
-  const { matches, pathname } = useCurrentRouteNode(routes);
+  const { matches, pathname } = useCurrentRoute(routes);
 
   return (
     <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -134,7 +134,7 @@ const meta = {
           "`@txstack/route-meta` 와 `@txstack/ui` 의 메뉴 부품을 이어 붙이는 자리다.",
           "",
           "```tsx",
-          'import { buildRouteObjects, getNavigableRoutes, type NavRoute } from "@txstack/route-meta";',
+          'import { buildRouteObjects, getNavRoutes, type NavRoute } from "@txstack/route-meta";',
           'import { TxSideNav } from "@txstack/ui";',
           "",
           "const item = (n: NavRoute) => (",
@@ -143,7 +143,7 @@ const meta = {
           "  </TxSideNav.Item>",
           ");",
           "",
-          "<TxSideNav>{getNavigableRoutes(routes, canAccess).map(item)}</TxSideNav>",
+          "<TxSideNav>{getNavRoutes(routes, canAccess).map(item)}</TxSideNav>",
           "```",
           "",
           "### 두 패키지는 서로를 모른다",
@@ -181,7 +181,7 @@ export const SideNav: Story = {
           panelSticky={false}
           header={<strong className="px-1">IDK</strong>}
           breakpoint={360}
-          left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}
+          left={<TxSideNav>{getNavRoutes(routes).map(sideItem)}</TxSideNav>}
           style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}
         >
           <TxFlex className="flex-col gap-4">
@@ -199,7 +199,7 @@ export const NavBar: Story = {
   render: () => (
     <MemoryRouter initialEntries={["/"]}>
       <div style={frame}>
-        <TxAppShell panelSticky={false} header={<strong className="px-1">IDK</strong>} breakpoint={360} top={<TxNavBar>{getNavigableRoutes(routes).map(barItem)}</TxNavBar>} style={{ minBlockSize: "26rem" }}>
+        <TxAppShell panelSticky={false} header={<strong className="px-1">IDK</strong>} breakpoint={360} top={<TxNavBar>{getNavRoutes(routes).map(barItem)}</TxNavBar>} style={{ minBlockSize: "26rem" }}>
           <TxFlex className="flex-col gap-4">
             <Screen />
             <Crumbs />
@@ -218,7 +218,7 @@ export const Permissions: Story = {
   render: function PermissionsStory() {
     const [admin, setAdmin] = useState(false);
     const canAccess: CanAccess = (permissions) => permissions.some((p) => (admin ? p === "admin" : false));
-    const menu = getNavigableRoutes(routes, canAccess);
+    const menu = getNavRoutes(routes, canAccess);
 
     return (
       <MemoryRouter initialEntries={["/"]}>
@@ -261,7 +261,7 @@ export const HiddenRoute: Story = {
           panelSticky={false}
           header={<strong className="px-1">IDK</strong>}
           breakpoint={360}
-          left={<TxSideNav>{getNavigableRoutes(routes).map(sideItem)}</TxSideNav>}
+          left={<TxSideNav>{getNavRoutes(routes).map(sideItem)}</TxSideNav>}
           style={{ minBlockSize: "30rem", "--tx-app-shell-left-width": "fit-content" } as CSSProperties}
         >
           <TxFlex className="flex-col gap-4">

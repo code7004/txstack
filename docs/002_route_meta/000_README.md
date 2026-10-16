@@ -18,21 +18,21 @@
 ```
 RouteTree (단일 출처)
    ├─ buildRouteObjects   → React Router 의 RouteObject[]
-   ├─ getNavigableRoutes  → GNB / 사이드 메뉴
-   └─ useCurrentRouteNode → 현재 위치 · 브레드크럼
+   ├─ getNavRoutes  → GNB / 사이드 메뉴
+   └─ useCurrentRoute → 현재 위치 · 브레드크럼
 ```
 
 ## 개발 리스트
 
 **5개가 끝났다. 테스트 25개.** 번호는 트리를 선언하고 쓰는 차례다.
 
-| 번호 | 무엇                                                | 하는 일                                  | 테스트        |
-| ---- | --------------------------------------------------- | ---------------------------------------- | ------------- |
-| 001  | [`RouteTree`](001_RouteTree.md)                     | 트리 선언 형식 — 이 패키지의 단일 출처   | 2 (타입 단정) |
-| 002  | [`buildRouteObjects`](002_buildRouteObjects.md)     | 트리 → React Router `RouteObject[]`      | 6             |
-| 003  | [`getNavigableRoutes`](003_getNavigableRoutes.md)   | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`)  | 11            |
-| 004  | [`useCurrentRouteNode`](004_useCurrentRouteNode.md) | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8             |
-| 005  | [`RouteRenderer`](005_RouteRenderer.md)             | 002 를 감싼 얇은 포장                    | —             |
+| 번호 | 무엇                                            | 하는 일                                  | 테스트        |
+| ---- | ----------------------------------------------- | ---------------------------------------- | ------------- |
+| 001  | [`RouteTree`](001_RouteTree.md)                 | 트리 선언 형식 — 이 패키지의 단일 출처   | 2 (타입 단정) |
+| 002  | [`buildRouteObjects`](002_buildRouteObjects.md) | 트리 → React Router `RouteObject[]`      | 6             |
+| 003  | [`getNavRoutes`](003_getNavRoutes.md)           | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`)  | 11            |
+| 004  | [`useCurrentRoute`](004_useCurrentRoute.md)     | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8             |
+| 005  | [`RouteTreeRenderer`](005_RouteTreeRenderer.md) | 002 를 감싼 얇은 포장                    | —             |
 
 ## 두 계층의 필터 규칙이 다르다
 
@@ -56,7 +56,7 @@ RouteTree (단일 출처)
 - **권한 모델은 라이브러리가 정하지 않는다.** 판정 함수를 주입받는다
 - **트리는 `satisfies RouteTree` 로 선언한다.** 타입 주석으로 붙이면 키가 `string` 으로
   넓어져 `routes.users.children.detail` 자동완성이 죽는다
-- **메뉴 데이터에 실행 계층을 섞지 않는다.** `getNavigableRoutes` 는 `RouteNode` 가 아니라
+- **메뉴 데이터에 실행 계층을 섞지 않는다.** `getNavRoutes` 는 `RouteNode` 가 아니라
   `NavRoute`(`key` · `path` · `meta` · `children`)를 준다
 
 ## 검증
@@ -74,7 +74,7 @@ RouteTree (단일 출처)
 **없다.** 열려 있던 둘을 메뉴를 실제로 그려 보고 닫았다.
 
 - [x] `RouteMeta.onClick` 을 **뺐다** — [001_RouteTree](001_RouteTree.md)
-- [x] `getNavigableRoutes` 가 **`NavRoute[]` 하나로 통일** — [003_getNavigableRoutes](003_getNavigableRoutes.md)
+- [x] `getNavRoutes` 가 **`NavRoute[]` 하나로 통일** — [003_getNavRoutes](003_getNavRoutes.md)
 
 `@txstack/ui` 의 메뉴 부품과의 연결은 **소비자 몫이다.** 두 패키지는 서로를 import 하지
 않는다(의존 방향은 `ui → hooks` 하나) — 이어 붙이는 15줄은

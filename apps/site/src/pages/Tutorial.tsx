@@ -184,11 +184,11 @@ export const routes = {
   home: { index: true, element: <Navigate to="/members" replace /> },
   members: { path: "/members", element: <MemberScreen />, meta: { label: "회원" } }
 } satisfies RouteTree;`}</CodeBlock>
-        <CodeBlock title="src/App.tsx">{`import { RouteRenderer, getNavigableRoutes } from "@txstack/route-meta";
+        <CodeBlock title="src/App.tsx">{`import { RouteTreeRenderer, getNavRoutes } from "@txstack/route-meta";
 import { NavLink } from "react-router-dom";
 import { routes } from "./routes";
 
-const menu = getNavigableRoutes(routes);
+const menu = getNavRoutes(routes);
 
 export function App() {
   return (
@@ -200,7 +200,7 @@ export function App() {
           </NavLink>
         ))}
       </nav>
-      <RouteRenderer tree={routes} />
+      <RouteTreeRenderer tree={routes} />
     </div>
   );
 }`}</CodeBlock>

@@ -5,7 +5,7 @@ import type { ActionFunction, LoaderFunction } from "react-router-dom";
  * 라우트 정의 트리. **이 트리가 단일 출처(SSOT)다.**
  *
  * 키는 소비자가 정하는 식별자이고(`users`, `detail` …), 값이 실제 라우트 정의다.
- * `getNavigableRoutes` 는 이 키를 그대로 보존한다.
+ * `getNavRoutes` 는 이 키를 그대로 보존한다.
  *
  * **선언할 때는 `satisfies` 로 붙인다.**
  *
@@ -31,7 +31,7 @@ export interface RouteMeta {
   description?: string;
   /** 메뉴 생성에서 제외한다. **라우터에는 그대로 등록된다** — 주소로 직접 접근은 돼야 하기 때문이다. */
   hidden?: boolean;
-  /** 접근 권한. 판정은 `getNavigableRoutes` 의 `canAccess` 가 한다. */
+  /** 접근 권한. 판정은 `getNavRoutes` 의 `canAccess` 가 한다. */
   permissions?: string[];
 }
 
@@ -73,14 +73,14 @@ export interface IndexRouteNode extends RouteNodeBase {
 export type RouteNode = PathRouteNode | IndexRouteNode;
 
 /**
- * 메뉴 한 칸. `getNavigableRoutes` 가 주는 형태다.
+ * 메뉴 한 칸. `getNavRoutes` 가 주는 형태다.
  *
  * **`RouteNode` 를 그대로 흘리지 않는다.** 메뉴를 그리는 자리에 `element` · `loader` 같은
  * 실행 계층이 섞여 들어오고, 최상위는 배열인데 자식은 키 있는 객체라 재귀가 두 형태를
  * 다뤄야 했다. 여기서는 **위아래가 같은 형태**다 — 자식도 `NavRoute[]`.
  *
  * ```tsx
- * const menu = getNavigableRoutes(routes, canAccess);
+ * const menu = getNavRoutes(routes, canAccess);
  *
  * menu.map((item) => <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />);
  * ```

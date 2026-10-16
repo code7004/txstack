@@ -68,7 +68,7 @@ export function ExampleAccounts() {
 
       <Block title="Show it to admins only">
         <p className={muted}>
-          이런 화면은 보통 관리자만 봅니다. 라우트에 권한을 적어 두면 <code>getNavigableRoutes</code>가 권한이 없는 사람의 메뉴에서 이 항목을 뺍니다. 자세한 방법은{" "}
+          이런 화면은 보통 관리자만 봅니다. 라우트에 권한을 적어 두면 <code>getNavRoutes</code>가 권한이 없는 사람의 메뉴에서 이 항목을 뺍니다. 자세한 방법은{" "}
           <Link to="/docs/guide/routing#5-filter-the-menu-by-permission" className="underline">
             Routing & Menu
           </Link>

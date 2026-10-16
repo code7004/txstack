@@ -101,4 +101,4 @@ routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 
 - **`meta` 는 실행 계층 최상위로 전달되지 않는다.** 라우터는 `meta` 를 모른다. 다만
   `RouteObject.handle` 에 원본 노드가 실린다 — 라우터가 해석하지 않고 실어 나르기만 하는
   자리이고, 그 덕에 경로 매칭을 직접 구현하지 않아도 된다
-  ([004_useCurrentRouteNode](004_useCurrentRouteNode.md))
+  ([004_useCurrentRoute](004_useCurrentRoute.md))

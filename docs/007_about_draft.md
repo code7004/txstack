@@ -45,7 +45,7 @@
 | 응답에서 본문을 꺼내는 자리                 | 응답 봉투의 모양(`unwrap`) — `{ body }` 인지 `{ data }` 인지                  |
 | 오류를 한 형태로 읽는 함수(`parseApiError`) | 그 오류를 어디에 어떻게 보여 주나                                             |
 | 요청 로그의 민감한 값 가리기                | 무엇을 가릴지(`maskFields`), 로그를 어디로 보낼지(`onRequest` · `onResponse`) |
-| 메뉴에서 권한 없는 항목을 빼는 일           | 권한 판정(`getNavigableRoutes` 의 `canAccess`)                                |
+| 메뉴에서 권한 없는 항목을 빼는 일           | 권한 판정(`getNavRoutes` 의 `canAccess`)                                      |
 | 쪽 번호 계산                                | 마지막 쪽의 상한(`maxPage`) — 서버만 아는 사정                                |
 | 컴포넌트의 모양                             | 색 · 모서리 · 간격(`--tx-*` 토큰), 놓이는 자리(`className`)                   |
 
@@ -69,8 +69,8 @@
 `@txstack/ui/daypicker` 로 분리하고 optional peer 로 둔다. 루트에서 import 해도 그 둘은 로드되지 않는다.
 근거: `packages/ui/package.json` 의 `exports` · `peerDependenciesMeta`, `packages/ui/src/daypicker.ts`
 
-**라우트 메타데이터.** 라우트를 트리 하나로 선언하면 라우터 등록(`buildRouteObjects`) · 메뉴(`getNavigableRoutes`) ·
-현재 위치(`useCurrentRouteNode`)가 모두 거기서 나온다. 메뉴와 라우트를 따로 고치다 어긋나는 일을 없앤다.
+**라우트 메타데이터.** 라우트를 트리 하나로 선언하면 라우터 등록(`buildRouteObjects`) · 메뉴(`getNavRoutes`) ·
+현재 위치(`useCurrentRoute`)가 모두 거기서 나온다. 메뉴와 라우트를 따로 고치다 어긋나는 일을 없앤다.
 `meta` 는 라우터로 넘기지 않는다 — 정의와 실행을 나눈다.
 근거: `packages/route-meta/src/index.ts`, `apps/site/src/routes.tsx`, `apps/site/src/pages/example/app/routes.tsx`
 

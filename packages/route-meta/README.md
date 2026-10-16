@@ -34,14 +34,14 @@ export const routes: RouteTree = {
 
 ```tsx
 // 실행 — 라우터. 둘은 같다
-<RouteRenderer tree={routes} />;
+<RouteTreeRenderer tree={routes} />;
 useRoutes(buildRouteObjects(routes));
 
 // 내비게이션 — 메뉴. 권한 판정은 앱이 정한다
-const menu = getNavigableRoutes(routes, (perms) => perms.some((p) => user.roles.includes(p)));
+const menu = getNavRoutes(routes, (perms) => perms.some((p) => user.roles.includes(p)));
 
 // 런타임 — 현재 위치 · 브레드크럼
-const { node, meta, matches, params } = useCurrentRouteNode(routes);
+const { node, meta, matches, params } = useCurrentRoute(routes);
 ```
 
 ## 두 계층의 필터 규칙이 다르다
@@ -58,10 +58,10 @@ const { node, meta, matches, params } = useCurrentRouteNode(routes);
 ## 매칭은 라우터에 위임한다
 
 `buildRouteObjects` 가 각 `RouteObject.handle` 에 원본 노드를 심고,
-`useCurrentRouteNode` 는 `matchRoutes` 결과에서 그걸 되찾는다.
+`useCurrentRoute` 는 `matchRoutes` 결과에서 그걸 되찾는다.
 **화면에 렌더된 라우트와 항상 같은 노드가 나온다.**
 
-`useCurrentRouteNode` 에 넘기는 트리는 **모듈 상수로 둔다.** 그러면 주소가 그대로일 때
+`useCurrentRoute` 에 넘기는 트리는 **모듈 상수로 둔다.** 그러면 주소가 그대로일 때
 같은 객체를 돌려주므로 `useEffect` 의존성에 넣어도 된다.
 
 ## 문서

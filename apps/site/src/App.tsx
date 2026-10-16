@@ -1,4 +1,4 @@
-import { buildRouteObjects, getNavigableRoutes, useCurrentRouteNode, type NavRoute } from "@txstack/route-meta";
+import { buildRouteObjects, getNavRoutes, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
 import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
@@ -11,10 +11,10 @@ import { routes } from "./routes";
 
 /**
  * **모듈 상수로 둔다.** 렌더마다 다시 만들면 라우터가 매번 트리를 읽고,
- * `useCurrentRouteNode` 의 반환도 매번 새 객체가 된다.
+ * `useCurrentRoute` 의 반환도 매번 새 객체가 된다.
  */
 const ROUTE_OBJECTS = buildRouteObjects(routes);
-const MENU = getNavigableRoutes(routes);
+const MENU = getNavRoutes(routes);
 
 const STORAGE_KEY = "txstack-site-theme";
 
@@ -151,7 +151,7 @@ const SITE_NAME = "txstack";
  * 인덱스 화면은 자기 `meta` 가 없으므로 그 묶음의 이름을 쓴다. 없는 주소(`hidden`)도 제목은 갖는다.
  */
 function useCurrentPlace() {
-  const { matches } = useCurrentRouteNode(routes);
+  const { matches } = useCurrentRoute(routes);
   const top = matches[0];
 
   // 가까운 쪽부터 이름 둘 — 자기 이름과 바로 위 묶음의 이름

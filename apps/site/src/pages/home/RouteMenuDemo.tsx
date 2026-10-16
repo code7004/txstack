@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, matchRoutes } from "react-router-dom";
-import { buildRouteObjects, getNavigableRoutes, type NavRoute, type RouteHandle, type RouteNode, type RouteTree } from "@txstack/route-meta";
+import { buildRouteObjects, getNavRoutes, type NavRoute, type RouteHandle, type RouteNode, type RouteTree } from "@txstack/route-meta";
 import { TxBreadcrumb, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 
@@ -8,7 +8,7 @@ import { CodeBlock } from "../../components/CodeBlock";
  * **라우트 트리 하나로 GNB 와 사이드바를 함께 그린다**(docs/008 4.5).
  *
  * 왼쪽 코드는 오른쪽 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열을 따로 적어 두지 않는다.
- * - 메뉴: `getNavigableRoutes(tree, canAccess)` → TxNavBar · TxSideNav
+ * - 메뉴: `getNavRoutes(tree, canAccess)` → TxNavBar · TxSideNav
  * - 지금 화면: `buildRouteObjects(tree)` 를 react-router 의 `matchRoutes` 에 넣어 찾는다
  *
  * 사이트는 이미 라우터 안이라 라우터를 하나 더 두지 않는다. 그래서 메뉴는 링크 대신 버튼이고, 주소는 이 판 안의
@@ -90,7 +90,7 @@ export function RouteMenuDemo() {
 
   const tree = preset.tree;
   // 같은 트리에서 메뉴와 라우트를 함께 만든다
-  const menu = useMemo(() => getNavigableRoutes(tree, (permissions) => permissions.includes(role)), [tree, role]);
+  const menu = useMemo(() => getNavRoutes(tree, (permissions) => permissions.includes(role)), [tree, role]);
   const routeObjects = useMemo(() => buildRouteObjects(tree), [tree]);
 
   // 메뉴에 남아 있는 화면인가. 권한으로 빠졌으면 첫 메뉴의 화면을 보인다(상태는 그대로 두고 보이는 값만)
@@ -179,8 +179,8 @@ export function RouteMenuDemo() {
       </div>
 
       <CodeBlock title="App.tsx — 연결 부분만 발췌">{`// 같은 트리 하나에서
-const router = buildRouteObjects(routes);                                  // → useRoutes(router) 또는 <RouteRenderer tree={routes} />
-const menu = getNavigableRoutes(routes, (perms) => perms.includes(role));  // → 메뉴 데이터
+const router = buildRouteObjects(routes);                                  // → useRoutes(router) 또는 <RouteTreeRenderer tree={routes} />
+const menu = getNavRoutes(routes, (perms) => perms.includes(role));  // → 메뉴 데이터
 
 <TxNavBar>{menu.map((item) => <TxNavBar.Item key={item.key} label={item.meta?.label} as={NavLink} to={item.path} />)}</TxNavBar>
 <TxSideNav>{menu.map(sideItem)}</TxSideNav>   // sideItem: 자식이 있으면 펼치는 묶음, 없으면 링크`}</CodeBlock>

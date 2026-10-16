@@ -1,11 +1,11 @@
-# 005 · RouteRenderer
+# 005 · RouteTreeRenderer
 
 > `buildRouteObjects` + `useRoutes` 를 감싼 **얇은 포장**.
 
 |             |                                                                                      |
 | ----------- | ------------------------------------------------------------------------------------ |
 | 진입점      | `@txstack/route-meta`                                                                |
-| 내보내는 것 | `RouteRenderer`                                                                      |
+| 내보내는 것 | `RouteTreeRenderer`                                                                  |
 | 소스        | [`packages/route-meta/src/renderer.tsx`](../../packages/route-meta/src/renderer.tsx) |
 | 테스트      | 없다 — 감싸는 `buildRouteObjects` 의 테스트가 지킨다                                 |
 
@@ -17,9 +17,9 @@
 ## 기능
 
 ```tsx
-import { RouteRenderer } from "@txstack/route-meta";
+import { RouteTreeRenderer } from "@txstack/route-meta";
 
-<RouteRenderer tree={routes} />;
+<RouteTreeRenderer tree={routes} />;
 ```
 
 직접 쓰고 싶으면 [`buildRouteObjects`](002_buildRouteObjects.md) 를 그대로 부른다 —

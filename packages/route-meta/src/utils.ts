@@ -11,7 +11,7 @@ import type { NavRoute, RouteNode, RouteTree } from "./types";
  * - `enabled !== false` 인 노드만 등록한다. **`hidden` 은 보지 않는다** —
  *   메뉴에서만 숨길 뿐 주소로는 접근돼야 하기 때문이다.
  * - `meta` 는 `RouteObject` 최상위로 넘어가지 않는다. 라우터는 `meta` 를 모른다.
- * - 각 `RouteObject.handle` 에 원본 노드를 심는다. `useCurrentRouteNode` 가 이걸로 되찾는다.
+ * - 각 `RouteObject.handle` 에 원본 노드를 심는다. `useCurrentRoute` 가 이걸로 되찾는다.
  */
 export function buildRouteObjects(tree: RouteTree): RouteObject[] {
   return Object.values(tree)
@@ -64,12 +64,12 @@ const DENY_RESTRICTED: CanAccess = () => false;
  * 선언 순서를 지킨다. 메뉴 순서는 트리에 쓴 순서다.
  *
  * @example
- * const menu = getNavigableRoutes(routes, (perms) => perms.some((p) => user.roles.includes(p)));
+ * const menu = getNavRoutes(routes, (perms) => perms.some((p) => user.roles.includes(p)));
  *
  * @example 권한 판정 없이 — permissions 가 걸린 노드는 전부 빠진다
- * const publicMenu = getNavigableRoutes(routes);
+ * const publicMenu = getNavRoutes(routes);
  */
-export function getNavigableRoutes(tree: RouteTree, canAccess: CanAccess = DENY_RESTRICTED): NavRoute[] {
+export function getNavRoutes(tree: RouteTree, canAccess: CanAccess = DENY_RESTRICTED): NavRoute[] {
   return Object.entries(tree).flatMap<NavRoute>(([key, node]) => {
     // index route 는 경로가 없어 메뉴 항목이 될 수 없다.
     if (node.index) return [];
@@ -82,7 +82,7 @@ export function getNavigableRoutes(tree: RouteTree, canAccess: CanAccess = DENY_
     const item: NavRoute = { key, path: node.path, meta: node.meta };
 
     // 자식이 전부 걸러졌으면 children 을 달지 않는다. 빈 배열이면 "펼치는 항목" 으로 보인다.
-    const children = node.children ? getNavigableRoutes(node.children, canAccess) : [];
+    const children = node.children ? getNavRoutes(node.children, canAccess) : [];
     return [children.length ? { ...item, children } : item];
   });
 }

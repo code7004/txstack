@@ -14,7 +14,7 @@ export function ExampleRoutes() {
           <Link to="/example/app" className="underline">
             App
           </Link>
-          이 <code>getNavigableRoutes</code>로 읽으면 왼쪽 메뉴가 이렇게 나옵니다. 묶음 · 아이콘 · 권한 · 숨김이 모두 트리의 <code>meta</code>에서 옵니다.
+          이 <code>getNavRoutes</code>로 읽으면 왼쪽 메뉴가 이렇게 나옵니다. 묶음 · 아이콘 · 권한 · 숨김이 모두 트리의 <code>meta</code>에서 옵니다.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           <MenuPreview
@@ -65,7 +65,7 @@ export function ExampleRoutes() {
             <strong>
               <code>permissions</code>
             </strong>{" "}
-            — 판정은 앱이 <code>getNavigableRoutes</code>에 넘기는 함수가 합니다. 묶음에 걸면 묶음째 빠집니다. 메뉴에서만 거르므로 주소로 직접 들어오는 것은 서버가 막아야 합니다.
+            — 판정은 앱이 <code>getNavRoutes</code>에 넘기는 함수가 합니다. 묶음에 걸면 묶음째 빠집니다. 메뉴에서만 거르므로 주소로 직접 들어오는 것은 서버가 막아야 합니다.
           </li>
           <li>
             <strong>

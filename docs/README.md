@@ -144,7 +144,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       **사용자 확인 대기** — 첫 화면만 보고 "무엇을 제공하고 어디서 시작하는가" 가 읽히는지
 - [x] **홈 4.5 — 라우트 하나로 GNB · 사이드바**(2026-10-15) — 첫 화면에 한 줄로 알리고, UI 범위 다음에 시연 구역
       (`One route tree, both menus`). 왼쪽 코드는 오른쪽 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이고,
-      메뉴는 `getNavigableRoutes`, 지금 화면은 `buildRouteObjects` + `matchRoutes` 로 찾는다(사이트 라우터 안이라 라우터를 더 두지 않는다).
+      메뉴는 `getNavRoutes`, 지금 화면은 `buildRouteObjects` + `matchRoutes` 로 찾는다(사이트 라우터 안이라 라우터를 더 두지 않는다).
       메뉴 추가 · 이름 변경 · 뷰어 전환에 코드 · GNB · 사이드바 · 경로 표시가 함께 바뀐다. 연결 코드와 Routing · Example 링크
 - [x] **후속 A — HTTP 로그 마스킹**(2026-10-15) — `debug` 오류 로그가 오류 응답 본문을, 로그 URL 이 `?token=` 을 그대로
       내보내던 것을 테스트로 재현하고 고쳤다. 중첩 객체 · 배열 · JSON 문자열 · `URLSearchParams` · URL 쿼리까지 가리고, 원본 요청 · 응답과
