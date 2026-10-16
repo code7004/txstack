@@ -307,6 +307,24 @@ footer                              footer
 본문에는 `min-inline-size: 0` 을 준다 — flex 자식의 기본 최소 크기는 내용이라, 그대로 두면
 긴 표가 본문을 밀어내 옆 패널까지 넘친다.
 
+### 화면을 꽉 채우는 앱은 소비자가 두 가지를 정한다
+
+**셸의 기본은 문서가 스크롤되는 페이지다** — 겉은 `min-block-size: 100dvh` 이고 본문(`__main`)은
+`display: block` 이라 내용만큼 늘어난다. black-message 에 붙이자 **표가 있는 화면의 높이가 0** 이 됐다.
+예전 앱 레이아웃은 `h-screen` 겉 안에 `<div className="flex min-w-0 flex-1 overflow-hidden"><Outlet /></div>`
+였고, 화면들은 그 flex 부모를 `flex-1` 로 채우게 짜여 있었다. 셸 본문은 flex 가 아니라
+`flex-1` 이 먹지 않고, 그 안의 `height: 100%` 그리드는 기준 높이가 없어 0 이 된다.
+
+**셸을 바꾸지 않고 소비자가 정하게 했다.** 글을 읽는 사이트(이 사이트)에는 지금 기본이 맞고,
+관리 화면에는 아래 두 줄이면 된다. 본문 줄과 본문에 `min-block-size: 0` 이 이미 있어서
+겉의 높이만 고정하면 남는 높이가 그대로 내려간다.
+
+```tsx
+<TxAppShell className="h-dvh" classNames={{ main: "flex overflow-hidden" }}>
+```
+
+site 의 `Guide › Layout › Fill the screen with the content` 가 소비자용 설명이다.
+
 ### 브라우저 창의 시계가 멈춰 있었다 (도구 한계)
 
 내리면 숨는 헤더가 안 움직여 결함으로 보였다. **직접 만든 `<div>` 의 전이도

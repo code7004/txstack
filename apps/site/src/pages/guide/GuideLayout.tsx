@@ -119,6 +119,45 @@ export function GuideLayout() {
         </TxAlert>
       </Block>
 
+      <Block title="Fill the screen with the content">
+        <p className="text-slate-600 dark:text-slate-300">
+          TxAppShell은 기본적으로 <strong>문서 전체가 스크롤되는 페이지</strong>를 기준으로 합니다. 셸은 최소 화면 높이(<code>min-block-size: 100dvh</code>)만 갖고, 본문은 내용만큼 늘어납니다. 이 사이트처럼 글을 읽는 화면에는 이것이 맞습니다.
+        </p>
+        <p className="text-slate-600 dark:text-slate-300">
+          관리 화면처럼 <strong>본문이 화면을 꽉 채우고 표 안에서만 스크롤</strong>되어야 한다면 두 가지를 정합니다. 셸의 높이를 화면 높이로 고정하고, 본문을 flex 컨테이너로 만듭니다.
+        </p>
+        <SideBySide>
+          <CodeBlock title="AppShell.tsx">{`<TxAppShell
+  className="h-dvh"                              // ① 셸을 화면 높이에 고정
+  classNames={{ main: "flex overflow-hidden" }}  // ② 본문을 flex 로
+  header={<Brand />}
+  top={<MainNav />}
+>
+  <Outlet />
+</TxAppShell>`}</CodeBlock>
+          <CodeBlock title="MemberList.tsx">{`// 화면은 남는 높이를 채우고, 스크롤은 표가 맡는다
+<div className="flex min-h-0 flex-1 flex-col gap-2">
+  <SearchBar />
+  <div className="min-h-0 flex-1">
+    <TxAgGrid rowData={rows} columnDefs={columns} />
+  </div>
+</div>`}</CodeBlock>
+        </SideBySide>
+        <TxAlert variant="warning" title="둘 중 하나라도 빠지면 표의 높이가 0이 됩니다">
+          본문은 기본이 flex가 아니므로, 화면의 <code>flex-1</code>이 아무 효과도 내지 못하고 화면 높이가 내용 높이가 됩니다. 그 안에서 <code>height: 100%</code>로 높이를 채우는 표는 기준이 될 높이가 없어 0이 됩니다. 셸 높이를 고정하지 않으면 본문이
+          내용만큼 늘어나 표 대신 페이지 전체가 스크롤됩니다.
+        </TxAlert>
+        <p className="text-slate-600 dark:text-slate-300">
+          셸 안의 본문 줄과 본문에는 이미 <code>min-block-size: 0</code>이 들어 있어서, 높이만 고정하면 헤더를 뺀 나머지를 본문이 그대로 나눠 갖습니다. 본문의 여백을 없애려면 <code>--tx-app-shell-main-padding: 0</code>을 지정합니다. Tailwind를 쓰지
+          않는다면 같은 자리에 앱의 클래스를 주고 CSS로 정합니다.
+        </p>
+        <SideBySide>
+          <CodeBlock title="AppShell.tsx">{`<TxAppShell className="app-shell" classNames={{ main: "app-main" }}>`}</CodeBlock>
+          <CodeBlock language="css" title="app.css">{`.app-shell { block-size: 100dvh; }
+.app-main { display: flex; overflow: hidden; }`}</CodeBlock>
+        </SideBySide>
+      </Block>
+
       <Block title="Horizontal and vertical menus">
         <SideBySide>
           <TxCard title="TxNavBar: 가로 메뉴">
