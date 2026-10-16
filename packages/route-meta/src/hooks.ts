@@ -20,7 +20,7 @@ const EMPTY_RESULT: CurrentRoute = { node: null, meta: undefined, matches: [], p
  * 현재 주소에 해당하는 `RouteNode` 를 찾는다. 타이틀 · 브레드크럼 · 현재 메뉴 표시에 쓴다.
  *
  * ```tsx
- * const { node, meta, matches } = useCurrentRouteNode(routes);
+ * const { node, meta, matches } = useCurrentRoute(routes);
  *
  * document.title = meta?.label ?? "";
  * const crumbs = matches.map((n) => n.meta?.label).filter(Boolean);
@@ -40,7 +40,7 @@ const EMPTY_RESULT: CurrentRoute = { node: null, meta: undefined, matches: [], p
  * `tree` 와 주소가 그대로면 **같은 객체를 돌려준다.** `useEffect` 의존성에 넣어도 된다.
  * 그러려면 `tree` 가 안정적이어야 하므로 **모듈 상수로 둔다** (인라인으로 만들지 않는다).
  */
-export function useCurrentRouteNode(tree: RouteTree): CurrentRoute {
+export function useCurrentRoute(tree: RouteTree): CurrentRoute {
   const location = useLocation();
   const routes = useMemo(() => buildRouteObjects(tree), [tree]);
 

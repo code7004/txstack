@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { RouteHandle, RouteTree } from "./types";
-import { buildRouteObjects, getNavigableRoutes } from "./utils";
+import { buildRouteObjects, getNavRoutes } from "./utils";
 
 /**
  * 라우트 정의 트리에서 "실행 계층(Router)" 과 "네비게이션 계층(GNB)" 이 각각 무엇을 걸러내는지 고정한다.
@@ -67,28 +67,28 @@ describe("buildRouteObjects", () => {
   });
 });
 
-describe("getNavigableRoutes", () => {
+describe("getNavRoutes", () => {
   it("index·hidden·disabled·권한노드를 모두 제외한다", () => {
-    expect(getNavigableRoutes(TREE).map((n) => n.path)).toEqual(["/", "/group"]);
+    expect(getNavRoutes(TREE).map((n) => n.path)).toEqual(["/", "/group"]);
   });
 
   it("선언 순서를 지킨다", () => {
-    expect(getNavigableRoutes(TREE).map((n) => n.key)).toEqual(["home", "group"]);
+    expect(getNavRoutes(TREE).map((n) => n.key)).toEqual(["home", "group"]);
   });
 
   it("canAccess 가 통과시키면 권한 노드도 노출된다", () => {
-    const menu = getNavigableRoutes(TREE, (perms) => perms.includes("admin"));
+    const menu = getNavRoutes(TREE, (perms) => perms.includes("admin"));
     expect(menu.map((n) => n.path)).toEqual(["/", "/admin", "/group"]);
   });
 
   it("canAccess 가 막으면 제외된다", () => {
-    const menu = getNavigableRoutes(TREE, (perms) => perms.includes("user"));
+    const menu = getNavRoutes(TREE, (perms) => perms.includes("user"));
     expect(menu.map((n) => n.path)).toEqual(["/", "/group"]);
   });
 
   it("canAccess 는 권한이 걸린 노드에만 호출된다", () => {
     const seen: string[][] = [];
-    getNavigableRoutes(TREE, (perms) => {
+    getNavRoutes(TREE, (perms) => {
       seen.push(perms);
       return true;
     });
@@ -101,13 +101,13 @@ describe("getNavigableRoutes", () => {
    * 메뉴를 재귀로 그리는 쪽이 두 형태를 다뤄야 했다.
    */
   it("자식도 같은 형태의 배열이고 키를 갖는다", () => {
-    const group = getNavigableRoutes(TREE).find((n) => n.path === "/group");
+    const group = getNavRoutes(TREE).find((n) => n.path === "/group");
 
     expect(group?.children).toEqual([{ key: "visible", path: "/group/a", meta: { label: "A" } }]);
   });
 
   it("메뉴에 실행 계층을 흘리지 않는다", () => {
-    const home = getNavigableRoutes(TREE)[0];
+    const home = getNavRoutes(TREE)[0];
 
     expect(Object.keys(home)).toEqual(["key", "path", "meta"]);
     expect("element" in home).toBe(false);
@@ -126,11 +126,11 @@ describe("getNavigableRoutes", () => {
     };
 
     // 빈 배열을 주면 "펼치는 항목" 으로 보인다. 없으면 없어야 한다.
-    expect(getNavigableRoutes(tree)[0].children).toBeUndefined();
+    expect(getNavRoutes(tree)[0].children).toBeUndefined();
   });
 
   it("원본 트리를 변형하지 않는다", () => {
-    getNavigableRoutes(TREE);
+    getNavRoutes(TREE);
     expect(Object.keys((TREE.group as { children: RouteTree }).children)).toEqual(["visible", "hiddenChild", "disabledChild"]);
   });
 });
@@ -167,6 +167,6 @@ describe("RouteTree 선언", () => {
 
   it("그대로 두 함수에 넘어간다", () => {
     expect(buildRouteObjects(routes).map((r) => r.path)).toEqual(["/"]);
-    expect(getNavigableRoutes(routes).map((n) => n.key)).toEqual(["main"]);
+    expect(getNavRoutes(routes).map((n) => n.key)).toEqual(["main"]);
   });
 });

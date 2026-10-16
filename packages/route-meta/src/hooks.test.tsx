@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { useCurrentRouteNode } from "./hooks";
+import { useCurrentRoute } from "./hooks";
 import type { RouteTree } from "./types";
 
 /**
@@ -32,10 +32,10 @@ function wrapper(initialEntry: string) {
 }
 
 function renderAt(path: string, tree: RouteTree = TREE) {
-  return renderHook(() => useCurrentRouteNode(tree), { wrapper: wrapper(path) });
+  return renderHook(() => useCurrentRoute(tree), { wrapper: wrapper(path) });
 }
 
-describe("useCurrentRouteNode — 매칭", () => {
+describe("useCurrentRoute — 매칭", () => {
   it("정적 경로가 동적 경로보다 먼저 선언되지 않아도 이긴다", () => {
     const { result } = renderAt("/users/new");
 
@@ -82,7 +82,7 @@ describe("useCurrentRouteNode — 매칭", () => {
   });
 });
 
-describe("useCurrentRouteNode — identity", () => {
+describe("useCurrentRoute — identity", () => {
   it("트리와 주소가 그대로면 같은 객체를 돌려준다", () => {
     const { result, rerender } = renderAt("/users/42");
     const first = result.current;

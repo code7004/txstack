@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouteRenderer, getNavigableRoutes, useCurrentRouteNode, type NavRoute } from "@txstack/route-meta";
+import { RouteTreeRenderer, getNavRoutes, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
 import { TxAppShell, TxBreadcrumb, TxButton, TxSideNav } from "@txstack/ui";
 import { TxAgGridProvider } from "@txstack/ui/aggrid";
 import { AllCommunityModule, ModuleRegistry, colorSchemeDarkBlue, themeQuartz } from "ag-grid-community";
@@ -37,10 +37,10 @@ export function App() {
   const [role, setRole] = useState<Role>("admin");
 
   // 권한 판정은 앱이 정합니다. 라이브러리는 판정 함수만 받습니다 — 뷰어로 바꾸면 "관리" 묶음이 빠집니다
-  const menu = getNavigableRoutes(routes, (permissions) => permissions.includes(role));
+  const menu = getNavRoutes(routes, (permissions) => permissions.includes(role));
 
   // 지금 위치. matches 는 바깥 묶음부터 지금 화면까지의 사슬이라 그대로 경로 표시가 됩니다
-  const { meta, matches } = useCurrentRouteNode(routes);
+  const { meta, matches } = useCurrentRoute(routes);
   const trail = matches.filter((node) => node.meta?.label);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function App() {
                 <p className="text-sm text-slate-500 dark:text-slate-400">{meta.description}</p>
               </header>
             )}
-            <RouteRenderer tree={routes} />
+            <RouteTreeRenderer tree={routes} />
           </main>
         </TxAppShell>
       </TxAgGridProvider>

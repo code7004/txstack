@@ -70,18 +70,18 @@ type RouteNode = PathRouteNode | IndexRouteNode;`}</Signature>
 export const App = () => useRoutes(ROUTE_OBJECTS);`}</CodeBlock>
       </Block>
 
-      <Block title="RouteRenderer">
-        <Signature>{`function RouteRenderer(props: { tree: RouteTree }): ReactElement | null`}</Signature>
+      <Block title="RouteTreeRenderer">
+        <Signature>{`function RouteTreeRenderer(props: { tree: RouteTree }): ReactElement | null`}</Signature>
         <p className={muted}>
           <code>useRoutes(buildRouteObjects(tree))</code>를 컴포넌트 하나로 감싼 것입니다. <code>tree</code>가 그대로면 다시 변환하지 않습니다.
         </p>
         <CodeBlock title="src/App.tsx">{`<BrowserRouter>
-  <RouteRenderer tree={routes} />
+  <RouteTreeRenderer tree={routes} />
 </BrowserRouter>`}</CodeBlock>
       </Block>
 
-      <Block title="getNavigableRoutes">
-        <Signature>{`function getNavigableRoutes(tree: RouteTree, canAccess?: CanAccess): NavRoute[]
+      <Block title="getNavRoutes">
+        <Signature>{`function getNavRoutes(tree: RouteTree, canAccess?: CanAccess): NavRoute[]
 
 type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signature>
         <p className={muted}>메뉴에 보일 항목만 골라 같은 모양의 배열로 돌려줍니다. 선언 순서를 지킵니다.</p>
@@ -94,7 +94,7 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
 
         <RefLabel>NavRoute</RefLabel>
         <RefTable rows={TABLES.routeMeta.navroute.rows} anchor={tableAnchor(TABLES.routeMeta.navroute)} />
-        <CodeBlock title="example">{`const menu = getNavigableRoutes(routes, (permissions) =>
+        <CodeBlock title="example">{`const menu = getNavRoutes(routes, (permissions) =>
   permissions.some((p) => user.roles.includes(p))
 );`}</CodeBlock>
         <TxAlert variant="warning" title="메뉴에서 빼는 것은 보안이 아닙니다">
@@ -102,8 +102,8 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
         </TxAlert>
       </Block>
 
-      <Block title="useCurrentRouteNode">
-        <Signature>{`function useCurrentRouteNode(tree: RouteTree): CurrentRoute`}</Signature>
+      <Block title="useCurrentRoute">
+        <Signature>{`function useCurrentRoute(tree: RouteTree): CurrentRoute`}</Signature>
         <p className={muted}>
           지금 주소에 맞는 노드와, 맨 위에서 거기까지 이어지는 경로를 돌려줍니다. 트리와 주소가 그대로면 같은 객체를 돌려주므로 <code>useEffect</code> 의존성에 넣어도 됩니다. 라우터 안에서 써야 합니다.
         </p>

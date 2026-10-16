@@ -7,7 +7,7 @@ import { buildRouteObjects } from "./utils";
  * `RouteTree` 를 React Router 에 연결한다. `useRoutes(buildRouteObjects(tree))` 의 얇은 포장이다.
  *
  * ```tsx
- * <RouteRenderer tree={routes} />
+ * <RouteTreeRenderer tree={routes} />
  * ```
  *
  * 직접 쓰고 싶다면 `useRoutes(buildRouteObjects(routes))` 를 그대로 불러도 된다.
@@ -15,7 +15,7 @@ import { buildRouteObjects } from "./utils";
  * `tree` 가 그대로면 변환을 다시 하지 않는다. **트리는 모듈 상수로 둔다** —
  * 인라인으로 만들면 매 렌더 전체 트리를 다시 변환한다.
  */
-export function RouteRenderer({ tree }: { tree: RouteTree }) {
+export function RouteTreeRenderer({ tree }: { tree: RouteTree }) {
   const routes = useMemo(() => buildRouteObjects(tree), [tree]);
   return useRoutes(routes);
 }

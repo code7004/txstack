@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, NavLink } from "react-router-dom";
-import { RouteRenderer, buildRouteObjects, getNavigableRoutes, useCurrentRouteNode, type RouteTree } from "@txstack/route-meta";
+import { RouteTreeRenderer, buildRouteObjects, getNavRoutes, useCurrentRoute, type RouteTree } from "@txstack/route-meta";
 import { useObjectState } from "@txstack/hooks/useObjectState";
 import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxSideNav } from "@txstack/ui";
@@ -26,8 +26,8 @@ const routes = {
 export const routeObjects = buildRouteObjects(routes);
 
 function App() {
-  const menu = getNavigableRoutes(routes, (permissions) => permissions.includes("admin"));
-  const { meta } = useCurrentRouteNode(routes);
+  const menu = getNavRoutes(routes, (permissions) => permissions.includes("admin"));
+  const { meta } = useCurrentRoute(routes);
   return (
     <>
       <TxSideNav>
@@ -36,7 +36,7 @@ function App() {
         ))}
       </TxSideNav>
       <h1>{meta?.label}</h1>
-      <RouteRenderer tree={routes} />
+      <RouteTreeRenderer tree={routes} />
     </>
   );
 }

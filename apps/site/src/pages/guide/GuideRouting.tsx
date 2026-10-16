@@ -1,4 +1,4 @@
-import { getNavigableRoutes, useCurrentRouteNode, type NavRoute, type RouteTree } from "@txstack/route-meta";
+import { getNavRoutes, useCurrentRoute, type NavRoute, type RouteTree } from "@txstack/route-meta";
 import { TxAlert, TxBreadcrumb, TxSideNav, TxSwitch } from "@txstack/ui";
 import { useState, type ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
@@ -34,7 +34,7 @@ const SAMPLE = {
 
 /** 이 페이지의 위치. 사이트의 진짜 트리에서 읽는다 */
 function CurrentPlace() {
-  const { matches } = useCurrentRouteNode(routes);
+  const { matches } = useCurrentRoute(routes);
   const chain = matches.filter((node) => node.meta?.label);
 
   return (
@@ -60,7 +60,7 @@ function PermissionDemo() {
   const [admin, setAdmin] = useState(false);
   const [picked, setPicked] = useState("대시보드");
 
-  const menu = getNavigableRoutes(SAMPLE, (permissions) => admin && permissions.includes("admin"));
+  const menu = getNavRoutes(SAMPLE, (permissions) => admin && permissions.includes("admin"));
 
   const item = (node: NavRoute): ReactNode =>
     node.children ? (
@@ -100,8 +100,8 @@ export function GuideRouting() {
         <p className={muted}>라우트 정의와 메뉴 정의를 따로 관리하면, 주소를 하나 바꿀 때 두 곳을 고쳐야 합니다. 한 곳을 잊으면 메뉴가 없는 페이지를 가리키게 됩니다. 라우트 트리 하나만 두고 나머지는 모두 거기서 만들면 이런 일이 생기지 않습니다.</p>
         <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`routes (라우트 트리)
  ├─ buildRouteObjects   → 라우터에 넘길 라우트 목록
- ├─ getNavigableRoutes  → 메뉴
- └─ useCurrentRouteNode → 현재 위치 (경로 표시, 탭 제목)`}</CodeBlock>
+ ├─ getNavRoutes  → 메뉴
+ └─ useCurrentRoute → 현재 위치 (경로 표시, 탭 제목)`}</CodeBlock>
       </Block>
 
       <Block title="This site is the example">
@@ -153,14 +153,14 @@ export function App() {
 
       <Block title="3. Render the menu">
         <p className={muted}>
-          <code>getNavigableRoutes</code>는 메뉴에 보일 항목만 골라 줍니다. 숨긴 화면(<code>hidden</code>)과 첫 화면(<code>index</code>)은 빠집니다. 결과는 <code>{"{ key, path, meta, children }"}</code> 모양이라 <code>TxSideNav</code>나{" "}
+          <code>getNavRoutes</code>는 메뉴에 보일 항목만 골라 줍니다. 숨긴 화면(<code>hidden</code>)과 첫 화면(<code>index</code>)은 빠집니다. 결과는 <code>{"{ key, path, meta, children }"}</code> 모양이라 <code>TxSideNav</code>나{" "}
           <code>TxNavBar</code>로 바로 그릴 수 있습니다.
         </p>
-        <CodeBlock title="src/Menu.tsx">{`import { getNavigableRoutes, type NavRoute } from "@txstack/route-meta";
+        <CodeBlock title="src/Menu.tsx">{`import { getNavRoutes, type NavRoute } from "@txstack/route-meta";
 import { TxSideNav } from "@txstack/ui";
 import { NavLink } from "react-router-dom";
 
-const MENU = getNavigableRoutes(routes);
+const MENU = getNavRoutes(routes);
 
 const item = (node: NavRoute) =>
   node.children ? (
@@ -177,9 +177,9 @@ export const Menu = () => <TxSideNav>{MENU.map(item)}</TxSideNav>;`}</CodeBlock>
 
       <Block title="4. Show the current location">
         <p className={muted}>
-          <code>useCurrentRouteNode</code>는 지금 주소에 맞는 라우트와, 맨 위부터 이어지는 경로(<code>matches</code>)를 돌려줍니다. 경로 표시나 탭 제목을 만들 때 씁니다.
+          <code>useCurrentRoute</code>는 지금 주소에 맞는 라우트와, 맨 위부터 이어지는 경로(<code>matches</code>)를 돌려줍니다. 경로 표시나 탭 제목을 만들 때 씁니다.
         </p>
-        <CodeBlock title="src/Breadcrumb.tsx">{`const { matches } = useCurrentRouteNode(routes);
+        <CodeBlock title="src/Breadcrumb.tsx">{`const { matches } = useCurrentRoute(routes);
 
 <TxBreadcrumb>
   {matches.map((node) => (
@@ -193,7 +193,7 @@ export const Menu = () => <TxSideNav>{MENU.map(item)}</TxSideNav>;`}</CodeBlock>
           <code>meta.permissions</code>가 있는 항목은 앱이 넘긴 판정 함수로 보일지 말지 정합니다. 권한을 어떻게 나눌지는 앱이 정하고, 라이브러리는 함수를 부르기만 합니다. 판정 함수를 넘기지 않으면 권한이 걸린 항목은 모두 숨겨집니다.
         </p>
         <SideBySide>
-          <CodeBlock title="권한 판정">{`const menu = getNavigableRoutes(routes, (permissions) =>
+          <CodeBlock title="권한 판정">{`const menu = getNavRoutes(routes, (permissions) =>
   permissions.some((p) => user.roles.includes(p))
 );`}</CodeBlock>
           <Demo>

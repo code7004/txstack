@@ -236,7 +236,7 @@ export const TABLES = {
     }
   },
   routeMeta: {
-    installEntry: { section: "Install", searchable: true, rows: [["@txstack/route-meta", "buildRouteObjects · getNavigableRoutes · useCurrentRouteNode · RouteRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[] },
+    installEntry: { section: "Install", searchable: true, rows: [["@txstack/route-meta", "buildRouteObjects · getNavRoutes · useCurrentRoute · RouteTreeRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[] },
     pathroutenode: {
       section: "RouteTree",
       label: "PathRouteNode",
@@ -269,11 +269,11 @@ export const TABLES = {
         ["icon", "ReactNode", "—", "메뉴 아이콘"],
         ["description", "string", "—", "설명. 메뉴 패널이나 인덱스 화면에 씁니다"],
         ["hidden", "boolean", "false", "메뉴에서만 뺍니다. 라우터에는 등록되어 주소로는 열립니다"],
-        ["permissions", "string[]", "—", "접근 권한. 메뉴에 보일지는 getNavigableRoutes의 canAccess가 정합니다"]
+        ["permissions", "string[]", "—", "접근 권한. 메뉴에 보일지는 getNavRoutes의 canAccess가 정합니다"]
       ] as Row[]
     },
     filterRules: {
-      section: "getNavigableRoutes",
+      section: "getNavRoutes",
       label: "Router vs. menu filtering",
       searchable: false,
       rows: [
@@ -284,7 +284,7 @@ export const TABLES = {
       ] as Row[]
     },
     navroute: {
-      section: "getNavigableRoutes",
+      section: "getNavRoutes",
       label: "NavRoute",
       searchable: true,
       rows: [
@@ -295,7 +295,7 @@ export const TABLES = {
       ] as Row[]
     },
     currentroute: {
-      section: "useCurrentRouteNode",
+      section: "useCurrentRoute",
       label: "CurrentRoute",
       searchable: true,
       rows: [
@@ -315,9 +315,9 @@ export const TABLES = {
         ["PathRouteNode", "{ path, element?, children?, meta?, … }", "", "주소가 있는 노드"],
         ["IndexRouteNode", "{ index: true, element?, meta?, … }", "", "부모 주소의 첫 화면"],
         ["RouteMeta", "{ label?, icon?, description?, hidden?, permissions? }", "", "메뉴 · 현재 위치 정보"],
-        ["NavRoute", "{ key, path, meta?, children? }", "", "getNavigableRoutes의 결과 한 칸"],
+        ["NavRoute", "{ key, path, meta?, children? }", "", "getNavRoutes의 결과 한 칸"],
         ["CanAccess", "(permissions, node) => boolean", "", "권한 판정 함수"],
-        ["CurrentRoute", "{ node, meta, matches, params, pathname }", "", "useCurrentRouteNode의 결과"],
+        ["CurrentRoute", "{ node, meta, matches, params, pathname }", "", "useCurrentRoute의 결과"],
         ["RouteHandle", "{ node: RouteNode }", "", "buildRouteObjects가 각 라우트의 handle에 싣는 값. matchRoutes 결과에서 원래 노드를 찾을 때 씁니다"]
       ] as Row[]
     }

@@ -123,8 +123,8 @@ export function CaseStudy() {
 
       <Block title="Main case: one route tree">
         <p className={muted}>
-          관리 화면에서 가장 자주 어긋나던 것은 라우트와 메뉴였습니다. <code>route-meta</code>는 라우트를 트리 하나로 선언하고, 거기서 라우터 등록(<code>buildRouteObjects</code>) · 메뉴 데이터(<code>getNavigableRoutes</code>) · 지금 위치(
-          <code>useCurrentRouteNode</code>)를 모두 만듭니다. 화면을 더하거나 이름을 바꿀 때 고치는 곳이 한 곳입니다.
+          관리 화면에서 가장 자주 어긋나던 것은 라우트와 메뉴였습니다. <code>route-meta</code>는 라우트를 트리 하나로 선언하고, 거기서 라우터 등록(<code>buildRouteObjects</code>) · 메뉴 데이터(<code>getNavRoutes</code>) · 지금 위치(
+          <code>useCurrentRoute</code>)를 모두 만듭니다. 화면을 더하거나 이름을 바꿀 때 고치는 곳이 한 곳입니다.
         </p>
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>

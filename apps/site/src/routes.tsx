@@ -53,7 +53,7 @@ const Tutorial = page(() => import("./pages/Tutorial"), "Tutorial", "pages/Tutor
  *
  * **묶음마다 인덱스 화면을 트리에 선언한다**(`index: true`). 그래서 제목(`/docs`)을 눌러도
  * 빈 화면이 아니라 그 묶음의 안내가 나온다. 인덱스 라우트는 경로가 없어 **메뉴에는 오르지
- * 않는다** — `getNavigableRoutes` 가 걸러 준다.
+ * 않는다** — `getNavRoutes` 가 걸러 준다.
  *
  * 메뉴에 보이는 글자(`label`)는 영어다. 설명은 한국어로 쓰되 주제·항목 이름은 영어로 —
  * 패키지 이름과 폴더가 영어라 섞이면 찾기가 어렵다.
@@ -122,7 +122,7 @@ export const routes = {
     children: {
       index: { index: true, element: <ApiHome /> },
       ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui", description: "Tx* 컴포넌트 49종의 props · 토큰 레퍼런스" } },
-      routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta", description: "RouteTree · buildRouteObjects · getNavigableRoutes 레퍼런스" } },
+      routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta", description: "RouteTree · buildRouteObjects · getNavRoutes 레퍼런스" } },
       hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks", description: "useUrlQuery · useObjectState 레퍼런스" } },
       axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios", description: "createHttpClient 옵션과 오류 처리 레퍼런스" } }
     }

@@ -11,7 +11,7 @@ export function ExampleApp() {
     <Page title="App" lead="세 화면을 앱 하나로 묶는 App.tsx입니다. 라우트 트리를 읽어 왼쪽 메뉴와 지금 위치를 그리고, TxAppShell이 화면 틀을, Provider가 세 화면의 공통 설정을 맡습니다.">
       <Block title="The menu in a few lines">
         <p className={muted}>
-          메뉴는 트리를 <code>getNavigableRoutes</code>로 거른 결과를 그리기만 하면 됩니다. 자식도 같은 모양이라 함수 하나가 몇 단이든 그립니다. 메뉴 항목을 손으로 적지 않으므로, 화면을 더할 때는{" "}
+          메뉴는 트리를 <code>getNavRoutes</code>로 거른 결과를 그리기만 하면 됩니다. 자식도 같은 모양이라 함수 하나가 몇 단이든 그립니다. 메뉴 항목을 손으로 적지 않으므로, 화면을 더할 때는{" "}
           <Link to="/example/routes" className="underline">
             Routes
           </Link>
@@ -27,16 +27,16 @@ export function ExampleApp() {
   );
 
 // 권한 판정은 앱이 정합니다 — 라이브러리는 판정 함수만 받습니다
-const menu = getNavigableRoutes(routes, (permissions) => permissions.includes(role));
+const menu = getNavRoutes(routes, (permissions) => permissions.includes(role));
 
 <TxSideNav>{menu.map(menuItem)}</TxSideNav>`}</CodeBlock>
       </Block>
 
       <Block title="Where you are">
         <p className={muted}>
-          <code>useCurrentRouteNode</code>가 주는 <code>matches</code>는 바깥 묶음부터 지금 화면까지의 사슬입니다. 그대로 경로 표시가 되고, 마지막 노드의 <code>meta</code>가 화면 제목과 탭 제목이 됩니다. 화면마다 제목을 따로 적지 않습니다.
+          <code>useCurrentRoute</code>가 주는 <code>matches</code>는 바깥 묶음부터 지금 화면까지의 사슬입니다. 그대로 경로 표시가 되고, 마지막 노드의 <code>meta</code>가 화면 제목과 탭 제목이 됩니다. 화면마다 제목을 따로 적지 않습니다.
         </p>
-        <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta, matches } = useCurrentRouteNode(routes);
+        <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta, matches } = useCurrentRoute(routes);
 const trail = matches.filter((node) => node.meta?.label);   // 운영 › 대시보드
 
 <TxBreadcrumb>
@@ -74,9 +74,9 @@ const trail = matches.filter((node) => node.meta?.label);   // 운영 › 대시
         <Used names={["TxAppShell", "TxSideNav", "TxBreadcrumb", "TxNavBar", "TxButton"]} />
         <Packages
           items={[
-            ["getNavigableRoutes", "/api/route-meta#getnavigableroutes"],
-            ["useCurrentRouteNode", "/api/route-meta#usecurrentroutenode"],
-            ["RouteRenderer", "/api/route-meta#routerenderer"],
+            ["getNavRoutes", "/api/route-meta#getnavroutes"],
+            ["useCurrentRoute", "/api/route-meta#usecurrentroute"],
+            ["RouteTreeRenderer", "/api/route-meta#routetreerenderer"],
             ["NavRoute", "/api/route-meta#navroute"]
           ]}
         />

@@ -1,11 +1,11 @@
-# 004 · useCurrentRouteNode
+# 004 · useCurrentRoute
 
 > 지금 어느 노드에 있는지 — 타이틀 · 브레드크럼이 여기서 나온다.
 
 |             |                                                                              |
 | ----------- | ---------------------------------------------------------------------------- |
 | 진입점      | `@txstack/route-meta`                                                        |
-| 내보내는 것 | `useCurrentRouteNode` · `CurrentRoute`                                       |
+| 내보내는 것 | `useCurrentRoute` · `CurrentRoute`                                           |
 | 소스        | [`packages/route-meta/src/hooks.ts`](../../packages/route-meta/src/hooks.ts) |
 | 테스트      | 8개 (jsdom + `MemoryRouter`)                                                 |
 
@@ -17,9 +17,9 @@
 ## 기능
 
 ```tsx
-import { useCurrentRouteNode } from "@txstack/route-meta";
+import { useCurrentRoute } from "@txstack/route-meta";
 
-const { node, meta, matches, params, pathname } = useCurrentRouteNode(routes);
+const { node, meta, matches, params, pathname } = useCurrentRoute(routes);
 
 document.title = meta?.label ?? "";
 const crumbs = matches.map((n) => n.meta?.label).filter(Boolean); // 루트 → 현재

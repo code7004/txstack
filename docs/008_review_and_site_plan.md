@@ -166,7 +166,7 @@ UI 제공 범위 다음에 배치해 “화면 부품이 있다”에서 “화�
 구현의 역할을 정확하게 보여 준다.
 
 `RouteTree → buildRouteObjects → 라우터`,
-`같은 RouteTree → getNavigableRoutes → TxNavBar / TxSideNav`
+`같은 RouteTree → getNavRoutes → TxNavBar / TxSideNav`
 
 route-meta는 라우트 변환과 메뉴 데이터를 제공하고, 화면 표현은 UI 컴포넌트와 소비자 앱의
 연결 코드가 담당한다. 메타데이터만 선언하면 연결 코드 없이 메뉴 UI까지 자동 생성되는 것처럼

@@ -148,7 +148,7 @@ import { TxAppShell, TxNavBar, TxSideNav } from "@txstack/ui";
 `@txstack/route-meta` 를 함께 쓰면 **트리 하나**에서 라우터 · 메뉴 · 브레드크럼이 나온다. 경로를 바꿀 때 고칠 곳이 한 곳이다.
 
 ```tsx
-const menu = getNavigableRoutes(routes, canAccess);
+const menu = getNavRoutes(routes, canAccess);
 
 <TxSideNav>
   {menu.map((item) => (
