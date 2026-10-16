@@ -4,6 +4,7 @@ import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { DocPager } from "./components/DocPager";
 import { PageToc } from "./components/PageToc";
+import { STORYBOOK_URL } from "./lib/links";
 import { SiteFooter } from "./pages/SiteFooter";
 import { SiteSearch } from "./search/SiteSearch";
 import { routes } from "./routes";
@@ -190,6 +191,12 @@ function Layout({ children }: { children: ReactNode }) {
           <div className="ms-auto flex items-center gap-1">
             {/* 사이트 검색 — 페이지 · 섹션 · API 항목. 색인은 코드에 이미 있는 것을 모은다(search/searchIndex) */}
             <SiteSearch narrow={narrow} />
+            {/* 바깥으로 나가는 둘. Storybook 은 라우트가 아닌 별개의 사이트라 가로 줄이 아니라 여기 둔다. 좁으면 서랍으로 내린다 */}
+            {!narrow && (
+              <a href={STORYBOOK_URL} className="rounded px-3 py-2 text-sm hover:underline" target="_blank" rel="noreferrer">
+                Storybook
+              </a>
+            )}
             <a href="https://github.com/code7004/txstack" className="rounded px-3 py-2 text-sm hover:underline" target="_blank" rel="noreferrer">
               GitHub
             </a>
@@ -207,7 +214,15 @@ function Layout({ children }: { children: ReactNode }) {
       /* 넓을 때는 하위 항목이 있는 섹션에서만 왼쪽 줄이 선다 — 없는 화면에서 빈 기둥이 남지 않는다 */
       left={
         narrow ? (
-          <TxSideNav className="p-3">{MENU.map(sideItem)}</TxSideNav>
+          <>
+            <TxSideNav className="p-3">{MENU.map(sideItem)}</TxSideNav>
+            {/* 헤더에서 내린 바깥 링크. 메뉴 트리와 섞이지 않게 선 아래에 둔다 */}
+            <div className="mx-3 border-t px-3 py-3" style={{ borderColor: "var(--tx-color-border)" }}>
+              <a href={STORYBOOK_URL} className="text-sm hover:underline" target="_blank" rel="noreferrer">
+                Storybook ↗
+              </a>
+            </div>
+          </>
         ) : (
           sub && (
             /* 셸의 `left` 는 여백을 정하지 않는다 — 무엇이 들어올지 모르기 때문이다. 여기서 준다 */
