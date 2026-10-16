@@ -65,10 +65,9 @@ const apiEntries = (): SearchEntry[] => [
 /* --- 2. 섹션 ------------------------------------------------------------------------------ */
 
 /**
- * 섹션을 뽑지 않는 화면. Home 은 목차가 없어 제목에 앵커가 붙지 않고,
- * Profile 의 섹션은 내용을 채워야 나타난다.
+ * 섹션을 뽑지 않는 화면. Home 은 목차가 없어 제목에 앵커가 붙지 않는다.
  */
-const NO_SECTIONS = new Set(["/", "/about/profile"]);
+const NO_SECTIONS = new Set(["/"]);
 
 const SECTION_TITLE = /<Block\s+title="([^"]+)"/g;
 

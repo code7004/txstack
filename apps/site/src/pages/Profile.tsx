@@ -1,101 +1,180 @@
 import { TxAvatar, TxTag } from "@txstack/ui";
-import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import { Block, Page } from "../components/Page";
+import { CAREER, PROFILE, PROJECTS, QUALITY_BACKGROUND, SKILLS, STRENGTHS, WAYS_OF_WORKING, WHY, WHY_RESULTS, type ProfileLink } from "./profile/profile";
 
 /**
- * **이 페이지의 내용은 만든 사람만 쓸 수 있다.** 여기를 채우면 화면이 따라온다.
+ * 만든 사람 소개. **내용은 `profile/profile.ts` 가 갖고**, 이 화면은 배치만 한다.
  *
- * 비어 있는 칸은 배포판에서 **그 칸째로 사라지고**, 개발 서버(`pnpm site:dev`)에서만 점선
- * 자리표시로 보인다 — 채우는 동안 어디에 무엇이 놓이는지 보면서 쓸 수 있게.
+ * 순서는 읽는 사람이 묻는 순서다 — 누구인가 → 무엇을 잘하나 → 무엇을 만들었나 → txstack 과 어떻게 이어지나 → 지나온 길.
+ * 좁은 화면에서도 위에서 아래로 그대로 읽히게 가로 타임라인 · 탭을 쓰지 않는다.
  */
-const PROFILE = {
-  /** 이름. 비어 있으면 배포판에서 이 페이지 전체가 "준비 중" 이 된다 */
-  name: "",
-  /** 한 줄 — 무엇을 하는 사람인가 */
-  role: "",
-  /** 아바타 이미지 주소. 비면 이름 첫 글자가 나온다 */
-  avatar: "",
-  /** 두세 문단. 문단마다 배열 한 칸 */
-  intro: [] as string[],
-  /** 왜 txstack 을 만들었나. 문단마다 배열 한 칸 */
-  why: [] as string[],
-  /** 다루는 것 — 태그로 보인다 */
-  skills: [] as string[],
-  links: [] as { label: string; href: string }[]
-};
 
-const DRAFT = import.meta.env.DEV;
+const muted = "text-slate-600 dark:text-slate-300";
+const line = { borderColor: "var(--tx-color-border)" };
+const strong = "text-[color:var(--tx-color-primary-strong)]";
 
-/** 비어 있으면 배포판에서는 아무것도 그리지 않고, 개발 중에는 자리를 보여 준다 */
-function Slot({ filled, hint, children }: { filled: boolean; hint: string; children: ReactNode }) {
-  if (filled) return children;
-  if (!DRAFT) return null;
+/** 사이트 안이면 라우터로, `#` 이면 같은 화면 안으로, 그 밖은 새 탭으로 */
+function ProfileAnchor({ link, className }: { link: ProfileLink; className?: string }) {
+  const { href, label } = link;
 
-  return <div className="rounded-lg border border-dashed px-4 py-3 text-sm text-slate-500 dark:text-slate-400" style={{ borderColor: "var(--tx-color-border)" }}>{`PROFILE.${hint} 값을 채워 주세요 — src/pages/Profile.tsx`}</div>;
+  if (href.startsWith("/"))
+    return (
+      <Link to={href} className={className}>
+        {label} →
+      </Link>
+    );
+  if (href.startsWith("#") || href.startsWith("mailto:"))
+    return (
+      <a href={href} className={className}>
+        {label}
+      </a>
+    );
+
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className={className}>
+      {label} ↗
+    </a>
+  );
+}
+
+function LinkRow({ links }: { links: ProfileLink[] }) {
+  return (
+    <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      {links.map((link) => (
+        <li key={link.href}>
+          <ProfileAnchor link={link} className={`font-semibold underline-offset-4 hover:underline ${strong}`} />
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export function Profile() {
-  const { name, role, avatar, intro, why, skills, links } = PROFILE;
-
-  if (!name && !DRAFT) {
-    return <Page title="Profile" lead="준비 중입니다." />;
-  }
-
   return (
     <Page title="Profile">
-      <header className="flex items-center gap-5">
-        <TxAvatar src={avatar || undefined} name={name || "?"} size="lg" />
-        <div className="flex flex-col gap-1">
-          <Slot filled={!!name} hint="name">
-            <p className="text-xl font-semibold">{name}</p>
-          </Slot>
-          <Slot filled={!!role} hint="role">
-            <p className="text-slate-600 dark:text-slate-300">{role}</p>
-          </Slot>
+      <header className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <TxAvatar name={PROFILE.name} size="lg" />
+          <div className="flex flex-col gap-1">
+            <p className="text-xl font-semibold">{PROFILE.name}</p>
+            <p className={muted}>{PROFILE.role}</p>
+          </div>
         </div>
+        <div className="flex flex-col gap-3 text-slate-700 dark:text-slate-200">
+          {PROFILE.intro.map((text) => (
+            <p key={text}>{text}</p>
+          ))}
+        </div>
+        <LinkRow links={[...PROFILE.links, { label: "대표 프로젝트", href: "#projects" }]} />
       </header>
 
-      <Slot filled={intro.length > 0} hint="intro">
-        <div className="flex flex-col gap-3 text-slate-700 dark:text-slate-200">
-          {intro.map((line) => (
-            <p key={line}>{line}</p>
+      <Block title="Strengths">
+        <div className="grid gap-3 md:grid-cols-3">
+          {STRENGTHS.map((item) => (
+            <section key={item.title} className="flex flex-col gap-2 rounded-lg border p-4" style={line}>
+              <h3 className="font-semibold">{item.title}</h3>
+              <p className={`text-sm ${muted}`}>{item.desc}</p>
+              <p className={`text-sm ${muted}`}>
+                <strong className="text-[color:var(--tx-color-text)]">경험</strong> · {item.story}
+              </p>
+              <div className="mt-auto pt-1">
+                <LinkRow links={item.links} />
+              </div>
+            </section>
           ))}
         </div>
-      </Slot>
+      </Block>
 
-      <Slot filled={why.length > 0} hint="why">
-        <Block title="Why I built txstack">
-          {why.map((line) => (
-            <p key={line} className="text-slate-600 dark:text-slate-300">
-              {line}
+      <Block title="Projects">
+        <div className="flex flex-col gap-4">
+          {PROJECTS.map((project) => (
+            <section key={project.name} className="flex flex-col gap-3 rounded-lg border p-4" style={line}>
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 className="font-semibold">{project.name}</h3>
+                {project.facts && <span className="text-xs text-slate-500 dark:text-slate-400">{project.facts.join(" · ")}</span>}
+              </div>
+              <p className={muted}>{project.problem}</p>
+              <ul className={`flex list-inside list-disc flex-col gap-1 text-sm ${muted}`}>
+                {project.work.map((text) => (
+                  <li key={text}>{text}</li>
+                ))}
+              </ul>
+              <dl className={`grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[4rem_1fr] ${muted}`}>
+                <dt className="font-semibold text-[color:var(--tx-color-text)]">역할</dt>
+                <dd>{project.role}</dd>
+                <dt className="font-semibold text-[color:var(--tx-color-text)]">기술</dt>
+                <dd className="flex flex-wrap gap-1.5">
+                  {project.tech.map((name) => (
+                    <TxTag key={name}>{name}</TxTag>
+                  ))}
+                </dd>
+              </dl>
+              {project.links && <LinkRow links={project.links} />}
+            </section>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 rounded-lg border-s-4 py-1 ps-4" style={line}>
+          <h3 className="font-semibold">품질 기준의 배경 — 의료·재활 소프트웨어</h3>
+          {QUALITY_BACKGROUND.map((text) => (
+            <p key={text} className={`text-sm ${muted}`}>
+              {text}
             </p>
           ))}
-        </Block>
-      </Slot>
+        </div>
+      </Block>
 
-      <Slot filled={skills.length > 0} hint="skills">
-        <Block title="Tech stack">
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <TxTag key={skill}>{skill}</TxTag>
-            ))}
-          </div>
-        </Block>
-      </Slot>
+      <Block title="Why I built txstack">
+        {WHY.map((text) => (
+          <p key={text} className={muted}>
+            {text}
+          </p>
+        ))}
+        <ul className="flex flex-col">
+          {WHY_RESULTS.map((item) => (
+            <li key={item.problem} className="flex flex-col gap-1 border-b py-3 sm:flex-row sm:items-baseline sm:gap-4" style={line}>
+              <span className="text-sm font-semibold sm:w-56 sm:shrink-0">{item.problem}</span>
+              <span className={`text-sm ${muted}`}>{item.result}</span>
+              <ProfileAnchor link={item.link} className={`text-sm font-semibold whitespace-nowrap underline-offset-4 hover:underline sm:ms-auto ${strong}`} />
+            </li>
+          ))}
+        </ul>
+      </Block>
 
-      <Slot filled={links.length > 0} hint="links">
-        <Block title="Links">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2">
-            {links.map((link) => (
-              <li key={link.href}>
-                <a href={link.href} target="_blank" rel="noreferrer" className="underline">
-                  {link.label} ↗
-                </a>
-              </li>
-            ))}
-          </ul>
-        </Block>
-      </Slot>
+      <Block title="Career">
+        <ol className="flex flex-col">
+          {CAREER.map((item) => (
+            <li key={item.period} className="flex flex-col gap-1 border-s-2 pb-4 ps-4 last:pb-0" style={line}>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{item.period}</span>
+              <span className="font-semibold">{item.area}</span>
+              <span className={`text-sm ${muted}`}>{item.desc}</span>
+            </li>
+          ))}
+        </ol>
+      </Block>
+
+      <Block title="How I work">
+        <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
+          {WAYS_OF_WORKING.map((text) => (
+            <li key={text}>{text}</li>
+          ))}
+        </ul>
+      </Block>
+
+      <Block title="Tech stack">
+        <dl className="flex flex-col gap-3">
+          {SKILLS.map(({ group, items }) => (
+            <div key={group} className="flex flex-col gap-1.5 sm:flex-row sm:gap-4">
+              <dt className="text-sm font-semibold sm:w-36 sm:shrink-0">{group}</dt>
+              <dd className="flex flex-wrap gap-1.5">
+                {items.map((name) => (
+                  <TxTag key={name}>{name}</TxTag>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Block>
     </Page>
   );
 }
