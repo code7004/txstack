@@ -132,6 +132,11 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 [009 · 사이트 재검수와 후속 개선 작업안](009_site_followup_review.md)에 정리했다.
 다음 사이트 작업은 009의 실행 환경 안내 수정부터 진행한다. 구현 진행 상태는 이 문서에서 관리한다.
 
+Profile의 공개용 콘텐츠·화면 구성·대표 프로젝트 연결 계획은
+[010 · Profile 구축 계획](<010 profile.md>)에서 구체화한다.
+확정한 공개용 문구와 확인 내역은 [011 · Profile 공개용 콘텐츠 초안](011_profile_content.md)에 있고,
+Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/Profile.tsx`로 구현했다. 내용은 `pages/profile/profile.ts`가 갖는다.
+
 - [x] **홈 개편 1차**(2026-10-15) — 제목 "관리 화면과 서비스를 위한 React 라이브러리 (UI & ETC)", 주요 행동 `UI 둘러보기` · `시작하기`,
       첫 화면에 샘플 데이터로 동작하는 팀원 관리 데모(검색 · 필터 · 상태 표시 · 편집 창 · 저장 알림 · 로딩/빈 결과/오류 상태),
       기능군 다섯의 작은 실물, 토큰 · 다크 모드 체험(판에만 적용), 패키지 선택 표, 예제 · 시작하기 연결, 배경과 원칙 순.
@@ -191,7 +196,7 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
       연결 코드는 "발췌" 라고 밝히고 완성 코드(Example › Routes · App)로 잇는다. `CodeBlock` 에 `marked` 를 더했다.
       ④ **Case Study**(`/about/case-study`): 문제 → 판단(패키지 경계 · 앱이 정하는 것) → 대표 사례(route-meta) →
       결함 셋(로그 마스킹 · 서랍 · 강조색 대비)의 원인 · 고침 · 막은 테스트 → 증거 → 한계. 저장소로 확인되는 것만 썼다.
-      Home 의 "Why txstack" 과 About 에서 잇는다. **Profile 은 따로 계획한다** — 개인 정보 확인 전이라 손대지 않았다.
+      Home 의 "Why txstack" 과 About 에서 잇는다. **Profile 은 [010](<010 profile.md>) 이 맡는다** — [011](011_profile_content.md) 에서 확정한 내용으로 구현했다.
       ⑤ **공유 그림**: `public/og.png`(1200×630, 원본 `apps/site/scripts/og-image.html` — 헤드리스 Chrome 으로 굽는다).
       빌드가 `og:image` 를 배포 주소로 넣고, 카드는 `summary_large_image` 다
 
@@ -211,7 +216,8 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
          가짜 서버(`recipes/members.ts`) 하나로 흉내 내고 **폼·목록 조각을 레시피끼리 재사용한다**
 2. **`apps/site` 의 배포(D)** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
    뼈대(A) · 내용(B) · 진짜 데이터(C)까지 섰다. 계획과 진행은 [005_site](005_site.md) 가 갖는다.
-   - [ ] `Profile` · `Contact` — **사용자만 쓸 수 있는 내용**이다 (경력 · 왜 만들었나 · 연락처)
+   - [x] `Profile` — 소개 · 역량 · 대표 프로젝트 · txstack으로 이어진 과정 · 경력 · 기술 (2026-10-15, [011](011_profile_content.md))
+   - [ ] `Contact` — 개인 협업 문의 경로를 이슈 창구와 나눌지 정한다 (010 §3)
    - [x] GitHub Pages — `https://code7004.github.io/txstack/`, Storybook 은 그 아래 `/storybook/`.
          `main` 에 푸시하면 [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) 이 다시 올린다.
          **npm 배포보다 먼저 올렸다** — 소비자 프로젝트에 적용하며 볼 문서 자리가 필요했다
