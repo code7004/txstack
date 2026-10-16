@@ -868,13 +868,14 @@ describe("TxAppShell — 겉", () => {
 
   it("안쪽 슬롯에 클래스를 줄 수 있다", () => {
     const { container } = render(
-      <TxAppShell {...SLOTS} classNames={{ header: "h1", top: "t1", left: "l1", right: "r1", bottom: "b1", main: "m1", footer: "f1" }}>
+      <TxAppShell {...SLOTS} classNames={{ header: "h1", bar: "ba1", top: "t1", left: "l1", right: "r1", bottom: "b1", main: "m1", footer: "f1" }}>
         본문
       </TxAppShell>
     );
 
     for (const [part, name] of [
       ["header", "h1"],
+      ["bar", "ba1"],
       ["top", "t1"],
       ["left", "l1"],
       ["right", "r1"],
@@ -1025,6 +1026,28 @@ describe("TxAppShell — CSS 계약", () => {
    */
   it("본문만 줄어들게 한다", () => {
     expect(css).toMatch(/\.tx-app-shell__main\s*\{[^}]*min-inline-size:\s*0/);
+  });
+
+  /**
+   * 슬롯을 감싸는 자리의 여백 · 높이를 고정값으로 박으면 소비자가 끌 방법이
+   * 내부 클래스를 덮어쓰는 것뿐이 된다. 전부 변수를 거친다.
+   */
+  it("슬롯을 감싸는 자리의 여백 · 높이는 변수로 연다", () => {
+    for (const [part, props] of [
+      ["bar", ["gap", "min-block-size", "padding"]],
+      ["top", ["padding"]],
+      ["main", ["padding"]]
+    ] as const) {
+      const rule = css.match(new RegExp(`\\.tx-app-shell__${part}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+
+      for (const prop of props) expect(rule, `${part} ${prop}`).toMatch(new RegExp(`(^|;|\\s)${prop}:\\s*var\\(--tx-app-shell-`));
+      expect(rule, part).not.toMatch(/(^|;|\s)(padding(-inline|-block)?|gap|min-block-size):\s*(?!0;)[\d.]/);
+    }
+
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-bar-min-height:\s*3\.5rem/);
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-bar-padding:\s*0 1rem/);
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-bar-gap:\s*0\.75rem/);
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-top-padding:\s*0 1rem/);
   });
 
   /** 좌우를 물리 방향으로 쓰면 RTL 에서 좌우가 뒤집히지 않는다. */

@@ -165,7 +165,7 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
 
       {(header != null || top != null || inDrawer) && (
         <header ref={headerRef} className={cm("tx-app-shell__header", classNames?.header)}>
-          <div className="tx-app-shell__bar">
+          <div className={cm("tx-app-shell__bar", classNames?.bar)}>
             {inDrawer && (
               // 머리 줄의 다른 아이콘 버튼과 같은 크기 · 색이 되도록 TxButton icon 으로 그린다
               <TxButton icon variant="ghost" label="☰" aria-label={text.menu} aria-expanded={drawer} className="tx-app-shell__menu" onClick={() => setDrawer(true)} />
