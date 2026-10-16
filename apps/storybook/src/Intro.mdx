@@ -97,11 +97,19 @@ document.documentElement.classList.toggle("dark", isDark);
 Tailwind 를 쓴다면 **한 줄이 필요하다.** 우리 스타일은 `@layer tx` 안에 있어서, 레이어 순서를 이렇게 선언해 두면 `className` 으로 준 유틸리티가 이긴다.
 
 ```css
+/* src/index.css — Tailwind 진입 CSS */
 @layer theme, base, tx, components, utilities;
 
 @import "tailwindcss";
-@import "@txstack/ui/styles.css";
 ```
+
+```tsx
+// src/main.tsx — Tailwind 를 먼저, txstack 을 뒤에
+import "./index.css";
+import "@txstack/ui/styles.css";
+```
+
+순서 한 줄은 **가장 먼저 로드되는 CSS** 에 있어야 한다 — 레이어 순서는 처음 등장한 순서로 정해진다.
 
 `tx` 는 **preflight(`base`) 뒤, 유틸리티 앞**이어야 한다. 앞에 두면 preflight 가 버튼의 배경과 여백을 지우고, 뒤에 두면 `className` 이 안 먹는다.
 

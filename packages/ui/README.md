@@ -93,13 +93,23 @@ import "@txstack/ui/styles.css";
 **Tailwind 를 쓴다면 한 줄이 필요하다.** `tx` 가 preflight 뒤, 유틸리티 앞이어야 한다.
 
 ```css
+/* src/index.css — Tailwind 진입 CSS. 맨 위에 순서 한 줄 */
 @layer theme, base, tx, components, utilities;
 
 @import "tailwindcss";
-@import "@txstack/ui/styles.css";
 ```
 
-`styles.css` 를 JS 에서 import 하면 순서가 번들러 손에 넘어간다. Tailwind 진입 CSS 안에서 `@import` 한다.
+```ts
+// src/main.tsx — Tailwind 를 먼저, txstack 을 뒤에
+import "./index.css";
+import "@txstack/ui/styles.css";
+```
+
+레이어 순서는 처음 등장한 순서로 정해진다. 순서 한 줄이 있는 CSS 가 **가장 먼저** 로드되도록
+같은 진입 모듈에서 정적 import 로 앞에 둔다. 지연 로딩되는 청크에서 불러오지 않는다.
+
+앱 전체의 토큰 · 컴포넌트 기본값을 덮을 때는 txstack 전용 CSS 하나에 모으고, 컴포넌트
+기본값 덮어쓰기는 `@layer components` 안에 둔다 — 레이어 밖이면 화면의 `className` 까지 이긴다.
 
 ### 다크 모드
 

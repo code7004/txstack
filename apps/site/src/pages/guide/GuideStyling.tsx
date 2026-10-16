@@ -164,6 +164,46 @@ export function GuideStyling() {
         </SideBySide>
       </Block>
 
+      <Block title="Where app settings live">
+        <p className="text-slate-600 dark:text-slate-300">
+          앱 전체에 적용할 설정은 <strong>txstack 전용 CSS 파일 하나</strong>에 모으는 것을 권합니다. 스타일시트 import, 전역 토큰, 컴포넌트 기본값 덮어쓰기가 한곳에 있으면 무엇을 바꿨는지 한눈에 보이고, Tailwind를 쓰든 안 쓰든 같은 파일을 그대로
+          씁니다.
+        </p>
+
+        <SideBySide>
+          <CodeBlock language="css" title="src/txstack.css">{`@import "@txstack/ui/styles.css";
+
+/* ① 앱 전체 — 전역 토큰 */
+:root {
+  --tx-color-primary: #3176ec;
+}
+
+/* ② 컴포넌트 기본값 덮어쓰기 — 레이어 안에 */
+@layer components {
+  .tx-app-shell {
+    --tx-app-shell-bar-padding: 0;
+    --tx-app-shell-main-padding: 0;
+  }
+}`}</CodeBlock>
+          <CodeBlock title="src/main.tsx">{`import "./index.css";     // Tailwind (쓰는 앱만) — 먼저
+import "./txstack.css";   // txstack — 뒤에`}</CodeBlock>
+        </SideBySide>
+
+        <p className="text-slate-600 dark:text-slate-300">
+          Tailwind를 쓰지 않는 앱은 <code>main.tsx</code>에서 <code>txstack.css</code>만 불러오면 됩니다. Tailwind를 쓰는 앱은{" "}
+          <Link to="/docs/start#using-with-tailwind" className="underline">
+            레이어 순서 한 줄
+          </Link>
+          이 있는 Tailwind 파일을 <strong>먼저</strong> 불러옵니다.
+        </p>
+
+        <TxAlert variant="warning" title="컴포넌트 기본값을 덮을 때는 @layer components 안에">
+          레이어 밖에 쓴 규칙은 레이어 안의 규칙을 <strong>모두</strong> 이깁니다. 컴포넌트 스타일(<code>tx</code>)뿐 아니라 Tailwind 유틸리티(<code>utilities</code>)까지 이기기 때문에, 앱 전체에 준 값을 화면 하나에서 <code>className</code>으로 다시
+          바꿀 수 없게 됩니다. <code>@layer components</code>에 넣으면 컴포넌트 기본값은 이기고 화면의 <code>className</code>에는 집니다. Tailwind를 쓰지 않는 앱에서도 <code>tx</code> 다음에 오는 레이어가 되어 똑같이 동작합니다. <code>:root</code>의
+          전역 토큰은 요소에 붙는 클래스와 겹치지 않으므로 레이어 밖에 두어도 됩니다.
+        </TxAlert>
+      </Block>
+
       <Block title="This site's settings">
         <SideBySide>
           <CodeBlock language="css" title="apps/site/src/theme.css">{`:root {

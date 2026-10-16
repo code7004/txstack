@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
-import { Block, Demo, Page } from "../components/Page";
+import { Block, Demo, Page, SideBySide } from "../components/Page";
 import { SignUp } from "./start/SignUp";
 import SIGN_UP_SOURCE from "./start/SignUp.tsx?raw";
 
@@ -174,14 +174,26 @@ export default function App() {
 
       <Block title="Using with Tailwind">
         <p className={muted}>
-          Tailwind v4를 쓰는 앱이라면 3단계 대신 CSS 파일에서 불러오고, <strong>레이어 순서를 한 줄</strong> 지정합니다. 그래야 <code>className</code>으로 준 유틸리티 클래스가 컴포넌트 스타일보다 우선 적용됩니다.
+          Tailwind v4를 쓰는 앱이라면 Tailwind의 CSS 파일 맨 위에 <strong>레이어 순서를 한 줄</strong> 지정합니다. 그래야 <code>className</code>으로 준 유틸리티 클래스가 컴포넌트 스타일보다 우선 적용됩니다. 3단계의 import는 그대로 두고, Tailwind
+          파일보다 <strong>뒤에</strong> 불러옵니다.
         </p>
-        <CodeBlock language="css" title="src/index.css">{`@layer theme, base, tx, components, utilities;
+        <SideBySide>
+          <CodeBlock language="css" title="src/index.css">{`@layer theme, base, tx, components, utilities;
 
-@import "tailwindcss";
-@import "@txstack/ui/styles.css";`}</CodeBlock>
+@import "tailwindcss";`}</CodeBlock>
+          <CodeBlock title="src/main.tsx">{`import "./index.css";              // Tailwind — 먼저
+import "@txstack/ui/styles.css";   // txstack — 뒤에`}</CodeBlock>
+        </SideBySide>
+        <p className={muted}>
+          Tailwind 파일에는 Tailwind의 일만, txstack은 따로 불러옵니다. 그러면 Tailwind를 빼거나 바꿔도 txstack 쪽은 손대지 않아도 됩니다. 토큰과 컴포넌트 설정까지 한 파일에 모으는 방법은{" "}
+          <Link to="/docs/guide/styling#where-app-settings-live" className="underline">
+            Styling › Where app settings live
+          </Link>
+          에 있습니다.
+        </p>
         <TxAlert variant="info" title="순서가 중요합니다">
-          <code>tx</code>는 preflight(<code>base</code>)보다 뒤, <code>utilities</code>보다 앞이어야 합니다. 더 앞에 두면 preflight가 버튼의 배경과 여백을 지우고, 더 뒤에 두면 <code>className</code>이 적용되지 않습니다.
+          <code>tx</code>는 preflight(<code>base</code>)보다 뒤, <code>utilities</code>보다 앞이어야 합니다. 더 앞에 두면 preflight가 버튼의 배경과 여백을 지우고, 더 뒤에 두면 <code>className</code>이 적용되지 않습니다. 레이어 순서는{" "}
+          <strong>처음 등장한 순서</strong>로 정해지므로, 이 한 줄은 <strong>가장 먼저 불러오는 CSS 파일</strong>에 있어야 합니다.
         </TxAlert>
       </Block>
 
