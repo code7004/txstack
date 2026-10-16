@@ -217,7 +217,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
 2. **`apps/site` 의 배포(D)** — 소개 사이트이자 **네 패키지의 첫 진짜 소비자**다.
    뼈대(A) · 내용(B) · 진짜 데이터(C)까지 섰다. 계획과 진행은 [005_site](005_site.md) 가 갖는다.
    - [x] `Profile` — 소개 · 역량 · 대표 프로젝트 · txstack으로 이어진 과정 · 경력 · 기술 (2026-10-15, [011](011_profile_content.md))
-   - [ ] `Contact` — 개인 협업 문의 경로를 이슈 창구와 나눌지 정한다 (010 §3)
+   - [x] `Contact` — 라이브러리 문의는 GitHub 이슈, 협업 제안은 메일 카드로 나눴다. Profile 머리에도 메일을 둔다 (2026-10-16)
    - [x] GitHub Pages — `https://code7004.github.io/txstack/`, Storybook 은 그 아래 `/storybook/`.
          `main` 에 푸시하면 [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) 이 다시 올린다.
          **npm 배포보다 먼저 올렸다** — 소비자 프로젝트에 적용하며 볼 문서 자리가 필요했다

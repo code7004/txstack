@@ -22,10 +22,9 @@ export const PROFILE = {
     "기능 구현과 함께 운영 중 발생할 오류와 복구, 유지보수도 고려합니다. 반복되는 기능은 공통 구조로 정리하고, 서비스마다 다른 정책은 분리해 다음 개발에도 활용할 수 있도록 설계합니다.",
     "현재는 여러 프로젝트에서 사용하던 공통 UI와 훅을, 라우트 메타데이터·HTTP 설정과 함께 독립적으로 설치해 사용할 수 있는 라이브러리 txstack으로 발전시키고 있습니다."
   ],
-  links: [
-    { label: "GitHub", href: REPO },
-    { label: "code7004@gmail.com", href: "mailto:code7004@gmail.com" }
-  ] satisfies ProfileLink[]
+  /** 협업 문의 창구. Profile 머리와 Contact 가 같이 쓴다 */
+  email: "code7004@gmail.com",
+  links: [{ label: "GitHub", href: REPO }] satisfies ProfileLink[]
 };
 
 /** 핵심 역량. 카드마다 그것을 확인할 수 있는 자리를 붙인다 */

@@ -59,6 +59,9 @@ export function Profile() {
           <div className="flex flex-col gap-1">
             <p className="text-xl font-semibold">{PROFILE.name}</p>
             <p className={muted}>{PROFILE.role}</p>
+            <a href={`mailto:${PROFILE.email}`} className={`w-fit text-sm font-semibold underline-offset-4 hover:underline ${strong}`}>
+              {PROFILE.email}
+            </a>
           </div>
         </div>
         <div className="flex flex-col gap-3 text-slate-700 dark:text-slate-200">
