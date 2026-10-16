@@ -161,13 +161,13 @@ export default defineConfig({
         <CodeBlock language="css" title="src/index.css">{`/* 레이어 순서 — txstack(tx)은 Tailwind 의 preflight(base) 뒤, 유틸리티 앞 */
 @layer theme, base, tx, components, utilities;
 
-@import "tailwindcss";
-@import "@txstack/ui/styles.css";`}</CodeBlock>
+@import "tailwindcss";`}</CodeBlock>
         <CodeBlock title="src/main.tsx">{`import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
-import "./index.css";
+import "./index.css";              // Tailwind — 먼저
+import "@txstack/ui/styles.css";   // txstack — 뒤에
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

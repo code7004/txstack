@@ -66,13 +66,50 @@ import "@txstack/ui/styles.css";
   그래서 순수 CSS · Sass · CSS Modules 를 쓰는 소비자는 **아무것도 안 해도** 덮어쓸 수 있다.
 - **Tailwind 를 쓴다면 한 줄이 필요하다.** `tx` 는 preflight(`base`) 뒤, 유틸리티 앞이어야 한다.
   앞에 두면 preflight 가 버튼 배경·여백을 지우고, 뒤에 두면 `className` 이 안 먹는다.
+- **진입점은 둘로 나눈다 (결정됨).** Tailwind 진입 CSS 에는 Tailwind 의 일만 두고, txstack 은
+  따로 불러온다. Tailwind 를 빼거나 바꿔도 txstack 쪽은 손대지 않는다 — Tailwind 를 안 쓰는
+  앱과 **같은 txstack 진입 파일**을 쓴다.
 
   ```css
+  /* src/index.css — Tailwind 의 일만 */
   @layer theme, base, tx, components, utilities;
 
   @import "tailwindcss";
-  @import "@txstack/ui/styles.css";
   ```
+
+  ```css
+  /* src/txstack.css — txstack 의 일만. Tailwind 유무와 상관없이 같다 */
+  @import "@txstack/ui/styles.css";
+
+  :root {
+    --tx-color-primary: #3176ec; /* 전역 토큰 — 레이어 밖이어도 된다 */
+  }
+
+  @layer components {
+    /* 컴포넌트 기본값 덮어쓰기 — 레이어 안에 */
+    .tx-app-shell {
+      --tx-app-shell-main-padding: 0;
+    }
+  }
+  ```
+
+  ```ts
+  // src/main.tsx — Tailwind 를 먼저
+  import "./index.css";
+  import "./txstack.css";
+  ```
+
+  **순서 줄은 가장 먼저 로드되는 CSS 에 있어야 한다.** 레이어 순서는 문서에서 처음 등장한
+  순서로 정해진다. 그래서 두 파일은 **같은 진입 모듈에서 정적 import 로, Tailwind 를 먼저**
+  불러온다. 정적 import 의 순서는 번들러(Vite · webpack · Next)가 지킨다 — 지연 로딩되는
+  청크에서 불러오면 그 순서가 보장되지 않으므로 거기서 불러오지 않는다.
+  (예전에는 "JS 에서 import 하면 순서가 번들러 손에 넘어간다" 며 한 CSS 파일 안에서 `@import`
+  하게 했다. 순서가 흔들리는 경우는 지연 청크이고, 진입 모듈의 정적 import 는 순서대로 나온다 —
+  black-message 의 Vite 빌드 결과에서 `theme → base → tx → components → utilities` 를 확인했다.)
+
+  **컴포넌트 기본값을 덮는 규칙은 `@layer components` 에 둔다.** 레이어 밖에 두면 `tx` 뿐 아니라
+  `utilities` 까지 이겨서, 앱 전체에 준 값을 화면 하나에서 `className` 으로 다시 바꿀 수 없다.
+  Tailwind 를 안 쓰는 앱에서도 `tx` 다음에 처음 등장하는 레이어가 되어 똑같이 동작한다.
 
 ### 4. `TxTheme` 은 폐기됐다
 

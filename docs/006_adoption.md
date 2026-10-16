@@ -171,20 +171,38 @@ import "@txstack/ui/styles.css"; // 이 한 줄이 없으면 아무 스타일도
 
 **Tailwind 를 쓰는 소비자는 레이어 순서를 먼저 못박아야 한다.** 안 그러면 `tx` 레이어가
 Tailwind 레이어들 **뒤에** 선언돼, 화면에서 준 유틸리티 클래스가 부품 CSS 에 진다.
-순서는 선언 순서로 정해지므로 `styles.css` 를 JS 에서 import 하면 그 순서가 번들러 손에
-넘어간다 — **CSS 진입 파일 안에서 `@import` 로 가져오고 위에 순서를 적는다.**
+**진입점은 둘로 나눈다** — Tailwind 진입 CSS 에는 순서 한 줄과 `tailwindcss` 만, txstack 은
+앱의 `txstack.css` 하나에 모은다. 순서는 처음 등장한 순서로 정해지므로 **같은 진입 모듈에서
+정적 import 로 Tailwind 를 먼저** 불러온다. 근거와 예시는
+[900_common.md §3](001_ui/900_common.md) 이 갖는다.
 
 ```css
-/* 소비자의 Tailwind 진입 CSS */
+/* src/styles/tailwind.css — Tailwind 의 일만 */
 @layer theme, base, tx, components, utilities;
 
 @import "tailwindcss";
-@import "@txstack/ui/styles.css";
-@import "./txstack-theme.css"; /* 토큰 재정의 */
 ```
 
-토큰 재정의는 **레이어 밖에** 둔다. 패키지 토큰이 `@layer tx` 안에 있어서, 레이어 없는
-규칙이 순서와 상관없이 이긴다.
+```css
+/* src/styles/txstack.css — txstack 의 일만 */
+@import "@txstack/ui/styles.css";
+@import "./txstack-theme.css"; /* 토큰 재정의 — 레이어 밖 */
+
+@layer components {
+  /* 컴포넌트 기본값 덮어쓰기 — 레이어 안 */
+}
+```
+
+```ts
+// src/index.tsx
+import "@/styles/tailwind.css";
+import "@/styles/txstack.css";
+```
+
+토큰 재정의(`:root` · `.dark`)는 **레이어 밖에** 둬도 된다. 패키지 토큰이 `@layer tx` 안에 있어서
+레이어 없는 규칙이 순서와 상관없이 이기고, 요소에 붙는 유틸리티와는 부딪히지 않는다.
+**컴포넌트 기본값 덮어쓰기는 `@layer components` 안에** 둔다 — 레이어 밖이면 화면의
+`className` 까지 이겨서 다시 덮을 수 없다.
 
 겉모습은 **부품 CSS 를 덮지 않고 토큰만 다시 정의한다.** 방법은 사이트의
 `Guide › Tokens` 와 [apps/site/src/theme.css](../apps/site/src/theme.css) 가 실물 예제다.
