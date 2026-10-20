@@ -15,7 +15,7 @@
 핵심 판정 기준은 하나다 — **네 번째 프로젝트가 그대로 설치해 쓸 수 있는가.**
 못 쓴다면 그건 앱 코드지 라이브러리가 아니다.
 
-## 4개 패키지
+## 5개 패키지
 
 | 번호  | 패키지                | 한 줄 목적                                             | React | 문서                                           |
 | ----- | --------------------- | ------------------------------------------------------ | ----- | ---------------------------------------------- |
@@ -23,6 +23,7 @@
 | `002` | `@txstack/route-meta` | 라우트를 메타데이터 트리로 선언 → 라우터·메뉴·현재위치 | O     | [002_route_meta](002_route_meta/000_README.md) |
 | `003` | `@txstack/hooks`      | 의존 없는 범용 훅 + URL 쿼리를 상태처럼                | O     | [003_hooks](003_hooks/000_README.md)           |
 | `004` | `@txstack/axios`      | axios 래퍼. 인증·에러·봉투 정책을 주입받는다           | **X** | [004_axios](004_axios/000_README.md)           |
+| `012` | `@txstack/fns`        | 작은 함수 모음. 포맷 · 날짜 · 폼 · 전화번호 · 쿠키     | **X** | [012_fns](012_fns/000_README.md)               |
 
 새 PC 에서 세팅하려면 [900_setup](900_setup.md) 을 본다.
 
@@ -32,11 +33,12 @@
 
 ```
        ui ──▶ hooks
-  route-meta        axios
+  route-meta        axios        fns
    (서로 참조하지 않는다)
 ```
 
-- `hooks` / `route-meta` / `axios` 는 **서로를 import 하지 않는다.** 셋 다 독립 설치 가능해야 한다.
+- `hooks` / `route-meta` / `axios` / `fns` 는 **서로를 import 하지 않는다.** 넷 다 독립 설치 가능해야 한다.
+- `fns` 는 **lodash 에 있는 것을 만들지 않고**, 런타임 의존이 없다. `browser/` 밖의 진입점은 Node 에서 돈다.
 - `axios` 는 **React 를 모른다.** 훅도 컨텍스트도 없다. Node 스크립트에서도 돌아가야 한다.
 - **런타임 정책은 패키지가 정하지 않는다.** 토큰을 어디서 읽는지, 401 에 무엇을 할지,
   응답 봉투가 `{ body }` 인지 `{ data }` 인지는 전부 **옵션으로 주입받는다.**
@@ -66,11 +68,12 @@
 | `axios`       | **완료** — 테스트 37개 통과. `apps/site` 의 `Example` 이 공개 API 를 실제로 부른다                                                                                                                                           |
 | `hooks`       | **가져온 만큼 완료** — 테스트 28개 통과. `useUrlQuery` 는 `apps/site` 의 검색 화면이 쓴다. **원본 4개 중 2개만 왔다** — 나머지 둘은 쓸 자리가 생길 때 (아래 "아직 안 가져온 것")                                             |
 | `route-meta`  | **완료** — 테스트 25개 통과. `ui` 의 메뉴 부품과 이어 붙였고, **실사용 검증은 `apps/site` 가 한다**                                                                                                                          |
+| `fns`         | **이식 완료**(2026-10-20) — 진입점 13개, 테스트 176개. 사이트 `API › fns` 가 첫 소비자. 소비자 프로젝트 적용은 아직 ([012_fns](012_fns/000_README.md))                                                                       |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 테스트 1,674개                                                                                                                                          |
 | `apps/*`      | **storybook** — 부품 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트. 뼈대·내용·진짜 데이터까지 섰고 **배포(D)가 남았다** ([005_site](005_site.md)). `pnpm storybook:dev` · `pnpm site:dev` |
-| 배포 도구     | **changesets 붙였다** — 네 패키지 모두 `0.1.0`. **husky 도 붙였다**(커밋할 때 포맷 자동 정리). commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                                 |
+| 배포 도구     | **changesets 붙였다** — 다섯 패키지 모두 `0.1.0`. **husky 도 붙였다**(커밋할 때 포맷 자동 정리). commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                               |
 
-`pnpm build` 가 **진입점 8개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1)를
+`pnpm build` 가 **진입점 21개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1 · `fns` 13)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
 
 ### 배포 파일 검증
@@ -78,20 +81,21 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 사이트와 Storybook 은 패키지 **소스**에 별칭을 걸어 쓴다. npm 에 올라갈 **파일**이 실제로 쓰이는지는
 `pnpm build && pnpm verify:packages` 가 따로 본다 — `.tgz` 를 만들어 저장소 밖 소비자 앱에 설치한다.
 
-| 소비자 앱     | 무엇을 쓰나                                                      | 보는 것                                                                                      |
-| ------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `core-ui`     | `@txstack/ui` 루트 + `styles.css`. ag-grid · 달력 **설치 안 함** | 타입 검사 · 빌드 · 스타일이 실리는지 · **선택 peer 가 설치되지도, 번들에 끌려오지도 않는지** |
-| `ui-subpaths` | `/aggrid` · `/daypicker` + 선택 peer                             | 타입 검사(`skipLibCheck: false`) · 빌드 · ag-grid 가 번들에 들어오는지                       |
-| `app`         | `route-meta` · `hooks` 두 진입점 · `react-router-dom`            | 타입 검사 · 빌드                                                                             |
-| `node-axios`  | `@txstack/axios` · `/singleton`. **React 설치 안 함**            | Node 에서 실제 실행 — 토큰 헤더 · 로그 가리기(URL 쿼리 포함) · `parseApiError` · 싱글턴      |
-| `react18`     | `core-ui` 를 React 18 로                                         | 타입 검사 · 빌드                                                                             |
-| `router6`     | `app` 을 react-router-dom 6 으로                                 | 타입 검사 · 빌드                                                                             |
+| 소비자 앱     | 무엇을 쓰나                                                      | 보는 것                                                                                            |
+| ------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `core-ui`     | `@txstack/ui` 루트 + `styles.css`. ag-grid · 달력 **설치 안 함** | 타입 검사 · 빌드 · 스타일이 실리는지 · **선택 peer 가 설치되지도, 번들에 끌려오지도 않는지**       |
+| `ui-subpaths` | `/aggrid` · `/daypicker` + 선택 peer                             | 타입 검사(`skipLibCheck: false`) · 빌드 · ag-grid 가 번들에 들어오는지                             |
+| `app`         | `route-meta` · `hooks` 두 진입점 · `react-router-dom`            | 타입 검사 · 빌드                                                                                   |
+| `node-axios`  | `@txstack/axios` · `/singleton`. **React 설치 안 함**            | Node 에서 실제 실행 — 토큰 헤더 · 로그 가리기(URL 쿼리 포함) · `parseApiError` · 싱글턴            |
+| `node-fns`    | `@txstack/fns` 진입점 13개. **React 설치 안 함**                 | 타입 검사 · Node 에서 실제 실행 — `browser/` 진입점도 불러오기만으로는 `document` 를 안 건드리는지 |
+| `react18`     | `core-ui` 를 React 18 로                                         | 타입 검사 · 빌드                                                                                   |
+| `router6`     | `app` 을 react-router-dom 6 으로                                 | 타입 검사 · 빌드                                                                                   |
 
 2026-10-15 결과: **여섯 모두 통과** — React 19.3.0 · 18.3.1, react-router-dom 7.18.3 · 6.30.6, Node 24.
 
 **확인하지 못한 것**
 
-- **CommonJS(`require`) 소비자는 지원하지 않는다.** 네 패키지 모두 `exports` 에 `import` 조건만 있다(ESM 전용)
+- **CommonJS(`require`) 소비자는 지원하지 않는다.** 다섯 패키지 모두 `exports` 에 `import` 조건만 있다(ESM 전용)
 - UI 소비자는 **빌드까지**다. 브라우저에서 띄워 동작을 보지 않았다(React 18 포함)
 - React 18.0 ~ 18.2, react-router-dom 6.30 미만, Node 24 외의 버전, Next.js 같은 SSR 환경
 - 실제 서비스에 적용하는 일은 이 검증과 별개다 — [006_adoption](006_adoption.md)
@@ -99,7 +103,7 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 ### 버전은 changesets 가 매긴다
 
 구현이 0줄일 때는 안 넣었다 — 커밋 훅도 버전도 그때는 마찰만 된다. **붙이는 시점을
-"첫 `export` 가 확정될 때" 로 잡아 두었고, 그때가 왔다.** 네 패키지 모두 `0.1.0` 이다.
+"첫 `export` 가 확정될 때" 로 잡아 두었고, 그때가 왔다.** 다섯 패키지 모두 `0.1.0` 이다.
 
 ```sh
 pnpm changeset           # 무엇이 어떻게 바뀌었는지 적는다

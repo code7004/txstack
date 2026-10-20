@@ -1,0 +1,91 @@
+{
+  "name": "@txstack/fns",
+  "version": "0.1.0",
+  "description": "Small, dependency-free TypeScript functions — number formatting, dates, random data, forms, Korean phone numbers, browser helpers",
+  "keywords": [
+    "utils",
+    "functions",
+    "format",
+    "date",
+    "random",
+    "typescript"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code7004/txstack.git",
+    "directory": "packages/fns"
+  },
+  "homepage": "https://github.com/code7004/txstack/tree/main/packages/fns#readme",
+  "bugs": "https://github.com/code7004/txstack/issues",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    "./num": {
+      "types": "./dist/num.d.ts",
+      "import": "./dist/num.js"
+    },
+    "./rand": {
+      "types": "./dist/rand.d.ts",
+      "import": "./dist/rand.js"
+    },
+    "./date": {
+      "types": "./dist/date.d.ts",
+      "import": "./dist/date.js"
+    },
+    "./obj": {
+      "types": "./dist/obj.d.ts",
+      "import": "./dist/obj.js"
+    },
+    "./arr": {
+      "types": "./dist/arr.d.ts",
+      "import": "./dist/arr.js"
+    },
+    "./str": {
+      "types": "./dist/str.d.ts",
+      "import": "./dist/str.js"
+    },
+    "./form": {
+      "types": "./dist/form.d.ts",
+      "import": "./dist/form.js"
+    },
+    "./async": {
+      "types": "./dist/async.d.ts",
+      "import": "./dist/async.js"
+    },
+    "./math": {
+      "types": "./dist/math.d.ts",
+      "import": "./dist/math.js"
+    },
+    "./phone-kr": {
+      "types": "./dist/phone-kr.d.ts",
+      "import": "./dist/phone-kr.js"
+    },
+    "./browser/cookie": {
+      "types": "./dist/browser/cookie.d.ts",
+      "import": "./dist/browser/cookie.js"
+    },
+    "./browser/css": {
+      "types": "./dist/browser/css.d.ts",
+      "import": "./dist/browser/css.js"
+    },
+    "./browser/file": {
+      "types": "./dist/browser/file.d.ts",
+      "import": "./dist/browser/file.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch src",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
