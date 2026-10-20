@@ -354,7 +354,7 @@ export const CATALOG: [category: string, items: CatalogItem[]][] = [
       { name: "TxCombobox", desc: "입력하면서 후보를 고르는 입력창" },
       { name: "TxCheckBox", desc: "체크박스" },
       { name: "TxRadioGroup", desc: "여러 개 중 하나를 고르는 라디오 버튼", also: ["TxRadio"] },
-      { name: "TxSwitch", desc: "바로 켜고 끄는 스위치" },
+      { name: "TxSwitch", desc: "바로 켜고 끄는 스위치(토글)" },
       { name: "TxSlider", desc: "끌어서 값을 고르는 슬라이더" },
       { name: "TxFileUpload", desc: "파일을 끌어 놓거나 골라서 올리고, 진행 상태를 보여 줍니다" },
       { name: "TxCapsLockCheck", desc: "비밀번호 입력 중 Caps Lock이 켜져 있으면 알려 줍니다" },

@@ -12,7 +12,8 @@ const INDEX = [
   entry("data", ["API", "axios", "RequestLog"], "/api/axios#types", "api", "본문. maskFields가 가려진 값입니다"),
   entry("Dark mode", ["Documents", "Guide"], "/docs/guide/dark-mode", "page", "클래스 하나로 모든 컴포넌트가 다크 모드로 바뀝니다"),
   entry("5. Filter the menu by permission", ["Documents", "Guide", "Routing & Menu"], "/docs/guide/routing#5-filter-the-menu-by-permission", "section"),
-  entry("permissions", ["API", "route-meta", "RouteMeta"], "/api/route-meta#routetree", "api", "접근 권한")
+  entry("permissions", ["API", "route-meta", "RouteMeta"], "/api/route-meta#routetree", "api", "접근 권한"),
+  entry("TxSwitch", ["API", "ui", "Form"], "/api/ui#component-txswitch", "component", "바로 켜고 끄는 스위치(토글)")
 ];
 
 const titles = (keyword: string) => search(keyword, 10, INDEX).map((item) => item.title);
@@ -39,6 +40,14 @@ describe("사이트 검색 — 순위", () => {
   it("한국어로 찾으면 동의어가 영어 낱말을 보탠다", () => {
     expect(titles("다크 모드")).toContain("Dark mode");
     expect(titles("권한")).toEqual(expect.arrayContaining(["permissions", "5. Filter the menu by permission"]));
+  });
+
+  /** 켜고 끄는 부품의 이름은 Switch 다. 다른 라이브러리의 Toggle 로 찾아도 닿아야 한다 */
+  it("다른 이름으로 찾아도 걸린다 — TxToggle · toggle · 토글 → TxSwitch", () => {
+    expect(titles("TxToggle")).toEqual(["TxSwitch"]);
+    expect(titles("toggle")).toContain("TxSwitch");
+    expect(titles("토글")).toContain("TxSwitch");
+    expect(titles("스위치")).toContain("TxSwitch");
   });
 
   it("빈 검색어는 아무것도 주지 않는다", () => {
