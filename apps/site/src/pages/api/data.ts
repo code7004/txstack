@@ -395,7 +395,8 @@ export const CATALOG: [category: string, items: CatalogItem[]][] = [
       { name: "TxDialog", desc: "확인 · 알림 창. await로 사용자의 선택을 기다립니다" },
       { name: "TxModal", desc: "화면을 덮고 뜨는 창" },
       { name: "TxSlidePanel", desc: "화면 가장자리에서 나오는 패널. 상세 보기나 필터에 씁니다" },
-      { name: "TxDropMenu", desc: "눌러서 펼치는 메뉴와 오른쪽 클릭 메뉴", also: ["TxContextMenu"] },
+      { name: "TxDropMenu", desc: "눌러서 펼치는 메뉴. 누르는 것은 label, 항목은 children" },
+      { name: "TxContextMenu", desc: "오른쪽 클릭 메뉴. 감싼 대상(children) 위에서 menu 를 띄웁니다" },
       { name: "TxTooltip", desc: "마우스를 올리면 뜨는 짧은 설명" }
     ]
   ],

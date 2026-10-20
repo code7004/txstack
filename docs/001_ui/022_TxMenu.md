@@ -2,12 +2,13 @@
 
 > 눌러서 펼치는 메뉴와 우클릭 메뉴. **공개는 둘, 속은 하나다.**
 
-|             |                                                           |
-| ----------- | --------------------------------------------------------- |
-| 진입점      | `@txstack/ui`                                             |
-| 내보내는 것 | `TxContextMenu, TxDropMenu`                               |
-| 소스        | [`packages/ui/src/TxMenu/`](../../packages/ui/src/TxMenu) |
-| 테스트      | 34개                                                      |
+|             |                                                            |
+| ----------- | ---------------------------------------------------------- |
+| 진입점      | `@txstack/ui`                                              |
+| 내보내는 것 | `TxContextMenu, TxDropMenu`                                |
+| 소스        | [`packages/ui/src/TxMenu/`](../../packages/ui/src/TxMenu)  |
+| 테스트      | 34개                                                       |
+| 스토리      | `Overlay/TxDropMenu` · `Overlay/TxContextMenu` — 따로 둔다 |
 
 ## 개발 목적
 
@@ -42,7 +43,7 @@
 
 - [x] **구현** — `packages/ui/src/TxMenu/`
 - [x] **테스트** — 34개
-- [x] **스토리** — `TxMenu.stories.tsx`
+- [x] **스토리** — `TxMenu.stories.tsx`(`Overlay/TxDropMenu`) · `TxContextMenu.stories.tsx`(`Overlay/TxContextMenu`)
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
 ## 정한 것 · 고친 것
@@ -87,6 +88,16 @@ fragment 에 갇혀 들여쓰기가 깊어지고, `TxSideNav.Item` 은 하위를
 - **여는 방법은 `trigger` → `openOn`** — `TxNavBar` 와 같은 이름이다. `trigger` 는 "누르는 것" 과 헷갈렸다
 - 두 메뉴가 함께 받던 `menu` 는 이제 `TxContextMenu` 만 받는다. 나머지(`menuLabel` · `maxHeight` ·
   `onOpenChange` · `classNames`)는 그대로 함께 받는다
+
+### Storybook · API 목록에서 둘을 가른다
+
+처음에는 `TxContextMenu` 를 `Overlay/TxDropMenu` 안의 이야기 두 개로, site 의 API 목록에서는 `TxDropMenu`
+줄의 `also` 로 두었다 — 받는 모양이 같았기 때문이다. **children 기준을 다시 정하자 둘의 모양이 갈라졌다.**
+`TxDropMenu` 의 props 표만 보면 `TxContextMenu` 도 children 에 항목을 넣는다고 읽게 된다.
+
+그래서 **문서는 따로, 속은 하나** 로 둔다. `Overlay/TxContextMenu` 가 자기 props 표(`children` = 대상 ·
+`menu` · `button`)를 갖고, API 목록도 줄을 나눠 각자의 문서로 간다. 같은 것(항목 · 키보드 · 토큰)은
+한쪽에 두고 링크한다 — 토큰 이야기는 `TxDropMenu` 쪽에 있다.
 
 ### 라우터 주입 — 계획대로 마지막 두 곳이었다
 
