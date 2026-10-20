@@ -27,7 +27,7 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
    * 그래서 이 패널은 **지름길**이다. 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다.
    * 키보드 · 터치로도 열려야 하면 항목마다 하위(children)를 준다.
    *
-   * 자기 하위(children)를 가진 항목에 얹으면 그 항목의 패널이 열린다. `openOn="click"` 이면
+   * 자기 하위(children)를 가진 항목에 얹으면 그 항목의 패널이 열린다. `trigger="click"` 이면
    * 이 패널은 열리지 않는다.
    */
   panel?: ReactNode;
@@ -45,7 +45,7 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
    *
    * **누르는 것으로도 늘 열린다** — 터치에는 hover 가 없기 때문이다.
    */
-  openOn?: "hover" | "click";
+  trigger?: "hover" | "click";
 
   /**
    * 링크이면서 패널을 여는 항목(`as` + `children`)의 `▾` 버튼을 언제 보일지. 기본 `"always"`.
@@ -57,7 +57,7 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
    * **터치에는 얹는 동작이 없어 `"focus"` 에서는 열 방법이 사라진다** — 터치 기기를 쓰지 않는
    * 화면에서만 고른다. 완전히 없애는 값은 두지 않는다 — 키보드로 열 길이 없어진다.
    *
-   * `openOn="click"` 이면 이 값과 상관없이 늘 보인다. 얹어서 열리지 않으니 마우스에게도 이 버튼뿐이다.
+   * `trigger="click"` 이면 이 값과 상관없이 늘 보인다. 얹어서 열리지 않으니 마우스에게도 이 버튼뿐이다.
    */
   toggle?: "always" | "focus";
 

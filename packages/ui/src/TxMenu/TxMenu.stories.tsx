@@ -65,7 +65,7 @@ const meta = {
   argTypes: {
     label: { control: false },
     children: { control: false },
-    openOn: { control: "inline-radio", options: ["click", "hover"] },
+    trigger: { control: "inline-radio", options: ["click", "hover"] },
     maxHeight: { control: "text" },
     menuLabel: { control: "text", description: "스크린리더가 읽을 메뉴의 이름" },
     onOpenChange: { control: false },
@@ -89,7 +89,7 @@ const BASIC_MENU = (
 );
 
 export const Playground: Story = {
-  args: { openOn: "click", menuLabel: "사용자 메뉴" },
+  args: { trigger: "click", menuLabel: "사용자 메뉴" },
   render: (args) => (
     <TxDropMenu {...args} label="👤 사용자">
       {BASIC_MENU}
@@ -152,13 +152,13 @@ export const Keyboard: Story = {
   )
 };
 
-/** `openOn="hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **눌러서도 열린다** — 터치에는 hover 가 없다. */
+/** `trigger="hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **눌러서도 열린다** — 터치에는 hover 가 없다. */
 export const Hover: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex>
       {["파일", "편집", "보기"].map((label) => (
-        <TxDropMenu key={label} openOn="hover" menuLabel={label} label={<span className="px-2 py-1">{label}</span>}>
+        <TxDropMenu key={label} trigger="hover" menuLabel={label} label={<span className="px-2 py-1">{label}</span>}>
           <TxDropMenu.Item onClick={() => {}}>{label} 하나</TxDropMenu.Item>
           <TxDropMenu.Item onClick={() => {}}>{label} 둘</TxDropMenu.Item>
         </TxDropMenu>

@@ -49,7 +49,7 @@ const BAR = "tx-nav-bar";
  *
  * 명세: `docs/001_ui/048_TxNavBar.md`
  */
-export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", toggle = "always", onOpenChange, className, children, ...props }: TxNavBarProps) {
+export function TxNavBar({ label, panel, panelWidth = "bar", trigger = "hover", toggle = "always", onOpenChange, className, children, ...props }: TxNavBarProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
@@ -74,12 +74,12 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
 
   const shared = useMemo(
     () => ({
-      hoverable: openOn === "hover",
+      hoverable: trigger === "hover",
       openId,
       toggle: (id: string, text: string) => open(openId === id ? null : id, text),
-      hover: (id: string, text: string) => openOn === "hover" && open(id, text)
+      hover: (id: string, text: string) => trigger === "hover" && open(id, text)
     }),
-    [openId, open, openOn]
+    [openId, open, trigger]
   );
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
@@ -104,7 +104,7 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
   };
 
   const hdKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-    const trigger = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-trigger]");
+    const at = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-trigger]");
 
     switch (event.key) {
       case "Escape":
@@ -119,18 +119,18 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
 
       case "ArrowLeft":
       case "ArrowRight":
-        if (!trigger) return;
+        if (!at) return;
 
         event.preventDefault();
-        move(trigger, event.key === "ArrowLeft" ? -1 : 1);
+        move(at, event.key === "ArrowLeft" ? -1 : 1);
         break;
 
       case "Home":
       case "End":
-        if (!trigger) return;
+        if (!at) return;
 
         event.preventDefault();
-        move(trigger, event.key === "Home" ? "first" : "last");
+        move(at, event.key === "Home" ? "first" : "last");
         break;
     }
   };
@@ -142,7 +142,7 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
    * 자기 하위(children)를 가진 항목은 건너뛴다. 그 항목은 스스로 자기 패널을 연다.
    */
   const hdPointerOver = (event: ReactPointerEvent<HTMLUListElement>) => {
-    if (!panel || openOn !== "hover" || event.pointerType !== "mouse") return;
+    if (!panel || trigger !== "hover" || event.pointerType !== "mouse") return;
 
     const item = (event.target as Element).closest(".tx-nav-bar__item");
     if (!item || item.querySelector("[data-nav-trigger]")) return;
@@ -181,7 +181,7 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
       data-tag="TxNavBar"
       data-panel-width={panelWidth}
       // 누를 때만 열리면 마우스에게도 ▾ 가 유일한 길이다 — 숨기지 않는다
-      data-toggle={openOn === "click" ? "always" : toggle}
+      data-toggle={trigger === "click" ? "always" : toggle}
       className={cm("tx-nav-bar", className)}
       onKeyDown={hdKeyDown}
       onBlur={hdBlur}

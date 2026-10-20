@@ -26,7 +26,7 @@ const HOVER_CLOSE_DELAY = 120;
  *
  * 명세: `docs/001_ui/022_TxMenu.md`
  */
-export const TxDropMenuBase = ({ label, children, openOn = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
+export const TxDropMenuBase = ({ label, children, trigger = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [open, setOpen] = useState(false);
@@ -44,7 +44,7 @@ export const TxDropMenuBase = ({ label, children, openOn = "click", onOpenChange
 
   /** hover 로 열 때만. 트리거와 메뉴 사이를 지나는 동안 닫히면 못 쓴다. */
   const scheduleClose = () => {
-    if (openOn !== "hover") return;
+    if (trigger !== "hover") return;
 
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => change(false), HOVER_CLOSE_DELAY);
@@ -63,7 +63,7 @@ export const TxDropMenuBase = ({ label, children, openOn = "click", onOpenChange
       {...props}
       data-tag="TxDropMenu"
       className={cm("tx-drop-menu", className)}
-      onPointerEnter={(event) => openOn === "hover" && event.pointerType !== "touch" && change(true)}
+      onPointerEnter={(event) => trigger === "hover" && event.pointerType !== "touch" && change(true)}
       onPointerLeave={(event) => event.pointerType !== "touch" && scheduleClose()}
     >
       <button

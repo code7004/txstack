@@ -39,7 +39,7 @@ export interface TxDropMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<
    * `"hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **누르는 것으로도 열린다** —
    * 터치에는 hover 가 없기 때문이다.
    */
-  openOn?: "click" | "hover";
+  trigger?: "click" | "hover";
 }
 
 export interface TxContextMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {
