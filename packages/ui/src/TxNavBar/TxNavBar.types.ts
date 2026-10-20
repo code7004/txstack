@@ -103,3 +103,21 @@ export type TxNavBarItemProps<E extends ElementType = "a"> = {
    */
   toggleLabel?: string;
 } & Omit<ComponentPropsWithoutRef<E>, "children" | "as">;
+
+/**
+ * 줄 맨 오른쪽의 **전체 메뉴 칸**. 누르면 메뉴 전체(보통 `TxSiteMap`)가 줄 전체 폭으로 열린다.
+ *
+ * 명세: `docs/001_ui/050_TxSiteMap.md`
+ */
+export interface TxNavBarSiteMapProps {
+  /** 칸에 보이는 것. 기본 `"🗺️"`. */
+  icon?: ReactNode;
+  /**
+   * 스크린리더가 읽을 이름. 기본 `"전체 메뉴"`.
+   *
+   * 칸에는 아이콘만 보이므로 **이것이 버튼의 이름이다.** 번역된 글자를 그대로 준다.
+   */
+  label?: string;
+  /** 펼칠 것 — 보통 `TxSiteMap`. */
+  children: ReactNode;
+}

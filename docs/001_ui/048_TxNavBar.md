@@ -245,6 +245,29 @@ black-message GNB 를 항목별 패널로 옮기자 하위가 있는 항목마�
 
 **터치에는 얹는 동작이 없어 `"focus"` 에서는 패널을 열 수 없다.** 터치 기기를 쓰지 않는 화면에서만 고른다.
 
+### 줄 맨 오른쪽의 전체 메뉴 칸 — `TxNavBar.SiteMap`
+
+```tsx
+<TxNavBar panelWidth="item">
+  <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<DocsMenu />} />
+  <TxNavBar.SiteMap>
+    <TxSiteMap>…</TxSiteMap>
+  </TxNavBar.SiteMap>
+</TxNavBar>
+```
+
+항목별 패널은 한 묶음의 하위만 보인다. 메뉴 전체는 **따로 연 지도**에서 본다 — 줄이 함께 쓰는
+패널로 전체를 펼치면 열이 상위 항목과 따로 놓여 헷갈렸다(black-message). 지도 자체는
+[050_TxSiteMap](050_TxSiteMap.md) 이 갖고, 이 칸은 **여는 자리**만 맡는다.
+
+| 정한 것              | 어떻게                                                                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 늘 맨 오른쪽         | `<li>` 에 `margin-inline-start: auto`. 겉이 flex 여도 밀 자리가 있게 목록이 남는 폭을 채운다(`:has(> [data-site-map])`)        |
+| 늘 줄 전체 폭        | `panelWidth="item"` 에서 항목이 쥐는 기준(`position: relative`)을 이 칸만 내려놓는다. 패널 폭 제한도 줄의 패널과 같이 되돌린다 |
+| 누를 때만 연다       | `onPointerEnter` 를 달지 않고, 줄이 함께 쓰는 패널도 이 칸에 얹어서는 열리지 않는다(여는 버튼이 있는 칸은 건너뛰는 기존 규칙)  |
+| 아이콘만 보이는 버튼 | 기본 `🗺️` 는 `aria-hidden`, 이름은 `label`(기본 `"전체 메뉴"`) — 이모지가 따로 읽히지 않는다                                   |
+| 나머지는 줄의 규칙   | 하나만 열림 · Escape 로 닫고 칸으로 돌아오기 · 화살표 이동 · 바깥으로 나가면 닫힘 · 안의 링크를 누르면 닫힘                    |
+
 ### 패널 안의 링크를 누르면 닫힌다
 
 SPA 에서는 링크가 문서를 바꾸지 않아, 닫지 않으면 새 화면을 패널이 덮은 채 남는다.
@@ -269,4 +292,5 @@ SPA 에서는 링크가 문서를 바꾸지 않아, 닫지 않으면 새 화면�
       패널의 링크가 된다.** 두 패키지는 서로를 import 하지 않으므로 잇는 코드는 소비자 몫이다 —
       `apps/storybook` 의 `Recipes/RouteMeta` 이야기에 있다
 - [x] **`toggle`**(`"always"` · `"focus"`) — 테스트 5개 더해 50개, 스토리 `Toggle On Focus`
+- [x] **`TxNavBar.SiteMap`** — 테스트 11개 더해 61개, 스토리 `Site Map Corner`
 - [ ] 확인 — Storybook 에서 **사용자가** 직접 본다

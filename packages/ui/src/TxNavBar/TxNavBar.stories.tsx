@@ -332,6 +332,48 @@ export const SharedPanel: Story = {
   }
 };
 
+/**
+ * **줄 맨 오른쪽의 전체 메뉴 칸** — `TxNavBar.SiteMap`.
+ *
+ * 항목 아래에는 그 항목의 하위만 펼치고(`panelWidth="item"`), 메뉴 전체는 맨 오른쪽 🗺️ 를
+ * 눌러 연 지도에서 본다. 지도는 상위 항목과 줄을 맞추지 않으니 어느 열이 어느 항목의 것인지
+ * 헷갈리지 않는다 — 열마다 묶음 이름이 머리에 붙는다.
+ *
+ * ```tsx
+ * <TxNavBar panelWidth="item">
+ *   <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<DocsMenu />} />
+ *   <TxNavBar.SiteMap>
+ *     <TxSiteMap>…</TxSiteMap>
+ *   </TxNavBar.SiteMap>
+ * </TxNavBar>
+ * ```
+ *
+ * - 어디에 넣어도 **늘 맨 오른쪽**에 선다
+ * - 줄의 `panelWidth` 와 상관없이 **늘 줄 전체 폭**으로 열린다
+ * - **누를 때만** 열린다 — 얹어서는 열리지 않는다. 버튼이라 키보드 · 터치로도 열린다
+ * - 아이콘은 `icon`, 스크린리더가 읽는 이름은 `label`(기본 `"전체 메뉴"`)로 바꾼다
+ */
+export const SiteMapCorner: Story = {
+  parameters: noControls,
+  render: function SiteMapCornerStory() {
+    const [picked, setPicked] = useState("문서");
+
+    return (
+      <div style={room}>
+        <TxNavBar label="주 메뉴" panelWidth="item">
+          {SITE.map(([name, links]) => (
+            <TxNavBar.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} panel={<LinkPanel groups={[[name, links]]} pick={setPicked} />} />
+          ))}
+          <TxNavBar.SiteMap>
+            <LinkPanel groups={SITE} pick={setPicked} />
+          </TxNavBar.SiteMap>
+        </TxNavBar>
+        <Body picked={picked} />
+      </div>
+    );
+  }
+};
+
 /** `panelWidth="item"` — 항목 아래에만 붙는다. 항목이 많고 패널이 작을 때 쓴다. */
 export const PanelUnderItem: Story = {
   parameters: noControls,
