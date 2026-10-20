@@ -127,6 +127,44 @@ describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
   });
 });
 
+/**
+ * 숨기는 것은 CSS 다(`data-toggle`). jsdom 에는 스타일이 없어 보이고 안 보이고는
+ * CSS 계약으로 보고, 여기서는 **숨겨도 버튼이 그대로 남아 키보드로 열리는지**를 본다.
+ */
+describe("TxNavBar — ▾ 를 언제 보일지 (toggle)", () => {
+  const linked = (props: Partial<Parameters<typeof TxNavBar>[0]>) => (
+    <TxNavBar {...props}>
+      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+    </TxNavBar>
+  );
+
+  it('기본은 "always" 다', () => {
+    render(linked({}));
+    expect(root().dataset.toggle).toBe("always");
+  });
+
+  it('"focus" 를 data 속성으로 알린다', () => {
+    render(linked({ toggle: "focus" }));
+    expect(root().dataset.toggle).toBe("focus");
+  });
+
+  it('"focus" 여도 버튼은 남는다 — 키보드로 열린다', () => {
+    render(linked({ toggle: "focus" }));
+
+    const toggle = screen.getByRole("button", { name: "문서 하위 메뉴" });
+    toggle.focus();
+    fireEvent.click(toggle);
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByRole("link", { name: "시작하기" })).not.toBeNull();
+  });
+
+  it('openOn="click" 이면 "focus" 를 줘도 늘 보인다 — 마우스에게도 유일한 길이다', () => {
+    render(linked({ toggle: "focus", openOn: "click" }));
+    expect(root().dataset.toggle).toBe("always");
+  });
+});
+
 describe("TxNavBar — 열고 닫기", () => {
   it("누르면 열리고 다시 누르면 닫힌다", () => {
     render(<TxNavBar>{menu}</TxNavBar>);
@@ -515,6 +553,16 @@ describe("TxNavBar — CSS 계약과 경계", () => {
 
   it("패널은 떠오른다 — 자리를 밀지 않는다", () => {
     expect(css).toMatch(/\.tx-nav-bar__panel\s*\{[^}]*position:\s*absolute/);
+  });
+
+  /** `display: none` 이면 Tab 이 닿지 않아 키보드로 열 길이 사라진다. 잘라서 숨긴다. */
+  it('toggle="focus" 는 포커스가 없을 때만 잘라 숨긴다 — display: none 이 아니다', () => {
+    const rule = css.match(/\[data-toggle="focus"\]\s*\.tx-nav-bar__toggle:not\(:focus-visible\)\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(rule).toMatch(/clip-path:\s*inset\(50%\)/);
+    expect(rule).toMatch(/position:\s*absolute/);
+    expect(rule).not.toMatch(/display:\s*none/);
+    expect(css).not.toMatch(/\[data-toggle="focus"\][^{]*\{[^}]*display:\s*none/);
   });
 
   it("styles.css 에 실려 나간다 — 안 실리면 소비자에게 도달하지 않는다", () => {

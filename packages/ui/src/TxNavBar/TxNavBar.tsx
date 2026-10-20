@@ -46,7 +46,7 @@ const BAR = "tx-nav-bar";
  *
  * 명세: `docs/001_ui/048_TxNavBar.md`
  */
-export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", onOpenChange, className, children, ...props }: TxNavBarProps) {
+export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", toggle = "always", onOpenChange, className, children, ...props }: TxNavBarProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
@@ -177,6 +177,8 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", o
       ref={rootRef}
       data-tag="TxNavBar"
       data-panel-width={panelWidth}
+      // 누를 때만 열리면 마우스에게도 ▾ 가 유일한 길이다 — 숨기지 않는다
+      data-toggle={openOn === "click" ? "always" : toggle}
       className={cm("tx-nav-bar", className)}
       onKeyDown={hdKeyDown}
       onBlur={hdBlur}
