@@ -11,6 +11,9 @@ import { configDefaults, defineConfig } from "vitest/config";
  * - `*.test.tsx` → 컴포넌트 렌더. jsdom 이 필요하다
  *
  * 전체를 jsdom 으로 옮기면 유틸이 DOM 에 기대는지 아닌지가 가려진다. 그래서 나눈다.
+ *
+ * `fns` 는 **폴더로 가른다** — `src/browser/` 만 jsdom, 나머지는 node 다. 그래서 browser 밖의
+ * 그룹이 DOM 을 건드리면 테스트가 깨진다(Node 에서도 돈다는 약속).
  */
 export default defineConfig({
   test: {
@@ -30,7 +33,7 @@ export default defineConfig({
           name: "node",
           environment: "node",
           exclude: [...configDefaults.exclude, "**/._*"],
-          include: ["packages/axios/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.ts", "apps/site/src/**/*.test.ts"]
+          include: ["packages/axios/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.ts", "packages/fns/src/*.test.ts", "apps/site/src/**/*.test.ts"]
         }
       },
       {
@@ -38,7 +41,7 @@ export default defineConfig({
           name: "dom",
           environment: "jsdom",
           exclude: [...configDefaults.exclude, "**/._*"],
-          include: ["packages/hooks/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.tsx"]
+          include: ["packages/hooks/src/**/*.test.{ts,tsx}", "packages/{route-meta,ui}/src/**/*.test.tsx", "packages/fns/src/browser/*.test.ts"]
         }
       }
     ]

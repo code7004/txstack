@@ -1,0 +1,16 @@
+{
+  "name": "verify-node-fns",
+  "private": true,
+  "type": "module",
+  "description": "React · DOM 없이 Node 에서 @txstack/fns 를 쓰는 소비자",
+  "scripts": {
+    "verify": "tsc --noEmit && node src/check.mjs"
+  },
+  "dependencies": {
+    "@txstack/fns": "TXSTACK"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.8.2"
+  }
+}

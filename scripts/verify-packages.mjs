@@ -3,14 +3,14 @@
  * **배포 파일을 설치해 검증한다**(docs/008 B).
  *
  * 사이트와 Storybook 은 패키지 소스에 별칭을 걸어 쓰므로, npm 에 올라갈 파일(`.tgz`)이 실제로 쓰이는지는
- * 따로 확인해야 한다. 네 패키지를 `pnpm pack` 으로 묶고, 저장소 밖 임시 폴더에 소비자 앱을 만들어 설치한 뒤
+ * 따로 확인해야 한다. 패키지를 모두 `pnpm pack` 으로 묶고, 저장소 밖 임시 폴더에 소비자 앱을 만들어 설치한 뒤
  * 타입 검사 · 빌드 · 실행을 돌린다.
  *
  *   pnpm build && pnpm verify:packages            # 전부
  *   pnpm verify:packages core-ui node-axios       # 골라서
  *
  * 소비자 앱은 scripts/verify-packages/ 에 있다. 외부 의존(react · vite 등)은 레지스트리에서 받는다.
- * UI 앱은 타입 검사와 빌드까지 본다(브라우저에서 띄우지는 않는다). node-axios 는 Node 에서 실제로 실행한다.
+ * UI 앱은 타입 검사와 빌드까지 본다(브라우저에서 띄우지는 않는다). node-axios · node-fns 는 Node 에서 실제로 실행한다.
  */
 import { execSync } from "node:child_process";
 import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
@@ -26,6 +26,7 @@ const CASES = {
   "ui-subpaths": {},
   app: {},
   "node-axios": {},
+  "node-fns": {},
   react18: { from: "core-ui", deps: { react: "^18.3.1", "react-dom": "^18.3.1" }, devDeps: { "@types/react": "^18.3.0", "@types/react-dom": "^18.3.0" } },
   // route-meta · hooks 의 peer 하한(react-router-dom >=6)
   router6: { from: "app", deps: { "react-router-dom": "^6.30.0" } }

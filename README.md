@@ -8,8 +8,9 @@
 | [`@txstack/route-meta`](packages/route-meta) | 라우트를 메타데이터 트리로 관리               | O     |
 | [`@txstack/hooks`](packages/hooks)           | 범용 React 훅 + URL 쿼리 상태                 | O     |
 | [`@txstack/axios`](packages/axios)           | axios 래퍼 — 인증·에러·봉투 정책을 주입받는다 | **X** |
+| [`@txstack/fns`](packages/fns)               | 작은 함수 모음 — 포맷 · 날짜 · 폼 · 전화번호  | **X** |
 
-**아직 npm 에 배포되지 않았다.** 네 패키지 모두 구현은 끝났고, 기존 프로젝트에 적용하며 다듬는 중이다.
+**아직 npm 에 배포되지 않았다.** 다섯 패키지 모두 구현은 끝났고, 기존 프로젝트에 적용하며 다듬는 중이다.
 
 문서는 [`docs/README.md`](docs/README.md) 에서 시작한다 — 무엇을 만드는지, 어디까지 왔는지,
 다음에 뭘 할 차례인지가 거기 있다.
