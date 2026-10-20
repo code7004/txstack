@@ -67,7 +67,7 @@ const meta = {
     open: { control: false },
     onClose: { control: false },
     title: { control: "text" },
-    size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    size: { control: "inline-radio", options: ["sm", "md", "lg", "auto"] },
     closeOnBackdrop: { control: "boolean" },
     closeLabel: { control: "text", description: "닫기 버튼의 이름. 스크린리더가 읽는다" },
     hideCloseButton: { control: "boolean", description: "오른쪽 위 X 를 없앤다. 닫는 길을 따로 마련한 창에만" },
@@ -148,6 +148,40 @@ export const Sizes: Story = {
           <p>폭만 다르다. 높이는 내용이 정한다.</p>
         </TxModal>
       </div>
+    );
+  }
+};
+
+/**
+ * **`size="auto"` — 내용이 크기를 정한다.** 표 · 미리보기가 든 큰 작업 창에 쓴다.
+ *
+ * 크기를 안쪽 한 곳에서만 적는다. 셸에 폭을, 안쪽에 높이를 나눠 적지 않아도 된다.
+ *
+ * ```tsx
+ * <TxModal open={open} onClose={close} size="auto" title="대량 등록">
+ *   <div className="flex h-[70vh] w-[70vw] flex-col">…</div>
+ * </TxModal>
+ * ```
+ *
+ * 창을 줄여 보라 — **화면은 넘지 않는다.** 폭은 `100vw - 2rem`, 높이는 `100dvh - 2rem` 에서 멈추고
+ * 넘치는 것은 본문 안에서 굴러간다.
+ */
+export const AutoSize: Story = {
+  parameters: noControls,
+  render: function AutoSizeStory() {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <TxButton label="큰 작업 창 열기" onClick={() => setOpen(true)} />
+
+        <TxModal open={open} size="auto" onClose={() => setOpen(false)} title="대량 등록">
+          <div className="flex h-[70vh] w-[70vw] flex-col gap-3">
+            <p className="text-sm">크기는 이 div 한 곳(h-[70vh] w-[70vw])이 정한다.</p>
+            <div className="flex-1 rounded border border-dashed p-3 text-sm">미리보기 자리</div>
+          </div>
+        </TxModal>
+      </>
     );
   }
 };

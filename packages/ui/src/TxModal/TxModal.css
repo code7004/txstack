@@ -189,3 +189,13 @@
 .tx-modal[data-size="lg"] {
   --tx-modal-width: 48rem;
 }
+
+/**
+ * **내용 크기를 따른다.** 크기를 셸과 안쪽 두 곳에 나눠 적지 않게 한다 — 큰 작업 창은 안쪽 한 곳이면 된다.
+ * `--tx-modal-width` 에 `fit-content` 를 넣는 길은 없다 — `min()` 이 키워드를 받지 않는다. 그래서 따로 둔다.
+ * 화면을 넘지 않게 위아래 한계는 그대로 둔다(높이는 겉의 `max-height` 가 이미 지킨다).
+ */
+.tx-modal[data-size="auto"] {
+  width: fit-content;
+  max-width: calc(100vw - 2rem);
+}

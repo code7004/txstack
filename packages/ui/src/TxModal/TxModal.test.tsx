@@ -440,6 +440,16 @@ describe("TxModal — 겉", () => {
     expect(dialogOf(container).getAttribute("data-size")).toBe("lg");
   });
 
+  it('size="auto" 도 속성으로 나간다', () => {
+    const { container } = render(
+      <TxModal open onClose={vi.fn()} size="auto">
+        <div style={{ width: "80vw", height: "82vh" }}>큰 작업 창</div>
+      </TxModal>
+    );
+
+    expect(dialogOf(container).getAttribute("data-size")).toBe("auto");
+  });
+
   it("Footer 는 버튼 줄이다", () => {
     const { container } = render(
       <TxModal open onClose={vi.fn()}>
@@ -477,6 +487,18 @@ describe("TxModal — CSS 계약", () => {
   it("색을 하드코딩하지 않는다 — 값이 토큰으로 나가 있다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     expect(css).toMatch(/background-color:\s*var\(--tx-modal-bg\)/);
+  });
+
+  /**
+   * 크기를 셸과 안쪽 두 곳에 나눠 적지 않게 한다. 내용이 폭을 정하되 화면은 넘지 않는다 —
+   * 높이 한계는 겉의 `max-height` 가 이미 지킨다.
+   */
+  it('size="auto" 는 내용 폭을 따르고 화면을 넘지 않는다', () => {
+    const rule = css.match(/\.tx-modal\[data-size="auto"\]\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(rule).toMatch(/width:\s*fit-content/);
+    expect(rule).toMatch(/max-width:\s*calc\(100vw - 2rem\)/);
+    expect(css).toMatch(/\.tx-modal\s*\{[^}]*max-height:\s*calc\(100dvh - 2rem\)/);
   });
 
   it(".dark 분기를 갖지 않는다", () => {

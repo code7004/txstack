@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui`                                               |
 | 내보내는 것 | `TxModal`                                                   |
 | 소스        | [`packages/ui/src/TxModal/`](../../packages/ui/src/TxModal) |
-| 테스트      | 35개                                                        |
+| 테스트      | 37개                                                        |
 
 ## 개발 목적
 
@@ -38,7 +38,7 @@
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxModal/`
-- [x] **테스트** — 35개
+- [x] **테스트** — 37개
 - [x] **스토리** — `TxModal.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -107,6 +107,30 @@ Escape 를 브라우저가 스스로 처리하면 창은 닫히는데 `open` 은
   `<dialog>` 자신인지로 가린다 — `TxDropdown` 에서 고쳤던 것과 같은 결함이었다
 - `preventOutside` → `closeOnBackdrop`. **부정형 prop 을 만들지 않는다**
 - `visible`/`onExit` → `open`/`onClose` (`TxPopup`·`TxDropdown` 과 같은 이름)
+
+### 크기는 한 곳에서 — `size="auto"` (black-message 에서 요구됐다)
+
+예전 로컬 모달은 **내용 크기를 따라** 커졌다. 그래서 앱은 큰 작업 창(대량 등록 · 발송 등록)의 크기를
+안쪽 `<div className="h-[82vh] w-[80vw]">` 한 곳에 적어 두었다. txstack 의 폭은 `size`(24 · 32 · 48rem)라,
+옮기자 패널이 32rem 에 머물고 안쪽이 넘쳐 가로 스크롤이 생겼다. `--tx-modal-width` 로 폭을 셸에 주면
+풀리지만 **폭은 셸에, 높이는 안쪽에 — 크기가 두 곳으로 갈린다.**
+
+| 고른 것                                  | 왜                                                                                                         |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **`size="auto"` — 내용이 크기를 정한다** | 크기를 안쪽 한 곳에서만 적는다. 예전 앱 코드가 거의 그대로 남는다                                          |
+| 화면은 넘지 않는다                       | `max-width: calc(100vw - 2rem)` · 겉의 `max-height: calc(100dvh - 2rem)`. 넘치면 본문(`__body`)이 굴러간다 |
+| 기본은 그대로 `md`                       | 폼처럼 작은 창은 정해진 폭이 낫다 — 안의 긴 글이 패널을 화면 끝까지 밀지 않는다                            |
+| `size` 에 길이(`"80vw"`)는 받지 않았다   | 폭만 한 곳이 되고 높이는 여전히 안쪽이라 두 곳 문제가 남는다                                               |
+| `width` · `height` prop 은 두지 않았다   | 이런 창은 안쪽이 `flex h-full` 이라 결국 안쪽도 손대야 하고, 공개 prop 만 둘 늘어난다                      |
+
+`--tx-modal-width: fit-content` 로는 안 된다 — 폭이 `min(var(--tx-modal-width), …)` 인데 `min()` 은
+키워드를 받지 않는다. 그래서 `[data-size="auto"]` 를 따로 둔다.
+
+### `<dialog>` 겉에 `display` 를 주지 않는다 (소비자 주의)
+
+닫힌 `<dialog>` 를 숨기는 것은 브라우저 기본 규칙(`dialog:not([open]) { display: none }`)이다. 그런데
+`className` 은 `<dialog>` 자신에 붙고 **작성자 CSS 는 브라우저 기본을 이긴다** — `className="flex flex-col"` 을 주면
+**닫혀 있어도 그려진다**(black-message 의 발송 등록 창이 그랬다). 배치는 안쪽 내용이나 `classNames.body` 에 준다.
 
 ### framer-motion 을 걷어낸 첫 사례
 
