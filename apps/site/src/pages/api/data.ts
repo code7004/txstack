@@ -576,6 +576,83 @@ export const rowAnchor = (table: ApiTable, name: string) => `row-${slug(table.la
 /** 검색에 오르는 표만 줄마다 앵커를 단다 */
 export const tableAnchor = (table: ApiTable) => (table.searchable ? (name: string) => rowAnchor(table, name) : undefined);
 
+/**
+ * **`@txstack/fns` 로 옮기며 바뀐 이름.** 세 서비스의 `core/extensions.ts` 에 있던 이름으로 찾아도
+ * 새 함수에 닿게 한다 — 사이트 검색이 옛 이름마다 항목을 하나씩 만들고, API › fns 의 `Former names` 표가 같은 것을 그린다.
+ *
+ * `[옛 이름, TABLES.fns 의 표, 그 표의 새 이름, 주의]`. lodash 로 넘긴 것처럼 새 이름이 표에 없으면 표를 `null` 로 둔다.
+ */
+export type FnsTableKey = Exclude<keyof typeof TABLES.fns, "installEntry">;
+
+export const FNS_FORMER: [former: string, table: FnsTableKey | null, now: string, note?: string][] = [
+  ["waitForSeconds", "async", "sleep", "이름은 seconds지만 원래도 ms를 받았습니다"],
+  ["networkWrapper", "async", "withLoading", "alert를 띄우던 자리는 onError에서 직접"],
+  ["rand", "rand", "float"],
+  ["randInt", "rand", "int"],
+  ["randDate", "rand", "date"],
+  ["randPick", "rand", "pick", "빈 배열이면 undefined"],
+  ["randIP", "rand", "ip"],
+  ["shortUID", "rand", "shortId"],
+  ["numberToStartEndDate", "date", "lastDays", "(-14, 0) → lastDays(14). dayRange(-14, 0)이 아닙니다 — 옛 함수는 시작에 하루를 더했습니다"],
+  ["numberToPeriod", "date", "lastDays", "(-14, 0) → lastDays(14)"],
+  ["timeZone", "date", "localTimeZone", "상수 → 함수 호출"],
+  ["yyyymmddToTime", "date", "parseYmd", "parseYmd(s)?.getTime(). 잘못된 값이면 null"],
+  ["getISOWeekKey", "date", "isoWeek"],
+  ["elapsedTimeToLabel", "date", "elapsed", "(sec, 2, $t) → elapsed(sec, { decimals: 2, t: $t })"],
+  ["numberWithDelimiter", "num", "format"],
+  ["toFormattedNumber", "num", "format", '빈 값에 ""이 필요하면 { fallback: "" }'],
+  ["num2str", "num", "format"],
+  ["num2String", "num", "format"],
+  ["num2Money", "num", "format", '{ style: "currency", currency: "KRW" }'],
+  ["num2Percent", "num", "percent"],
+  ["compactFormatter", "num", "compact", '한국어로 고정하려면 { locale: "ko-KR" }'],
+  ["formatBytes", "num", "bytes"],
+  ["isNumber", "num", "isNumeric", '"12abc"는 이제 false'],
+  ["safeNumber", "num", "toNumber"],
+  ["stringToHex", "str", "hashColor"],
+  ["numberToHex", "str", "paletteColor"],
+  ["emailToId", "str", "emailLocalPart"],
+  ["containsNonAscii", "str", "hasNonAscii"],
+  ["diffObject", "obj", "diff", "깊은 비교는 diff(a, b, _.isEqual)"],
+  ["intergrity", "obj", "undefinedToNull"],
+  ["sortArray", "obj", "sortByOrder", 'sortArray(t, s) → sortByOrder(t, s, "name")'],
+  ["checkEmptyFields", "form", "checkEmpty", "exclude → { optional }"],
+  ["checkRegexFields", "form", "checkPattern", "규칙의 reg → pattern"],
+  ["checkForm", "form", "check", "(f, r, ex) → check(f, r, { optional: ex })"],
+  ["lerpVector2", "async", "lerpVector"],
+  ["toRotation", "async", "rotate", "({ x1, y1, cx, cy, degree }) → rotate({ x, y }, { x, y }, degree)"],
+  ["toSin", "async", "toRadians", "Math.sin(toRadians(d))"],
+  ["toCos", "async", "toRadians", "Math.cos(toRadians(d))"],
+  ["normalizePhoneNumber", "phone", "normalize"],
+  ["validPhoneNumber", "phone", "parseMobile", "실패하면 false 대신 null"],
+  ["maskPhone", "phone", "mask", "개발 중 안 가리는 분기는 앱에서"],
+  ["maskKeyword", "phone", "maskIfPhone"],
+  ["validatePhoneNumbersAsync", "phone", "validateMany"],
+  ["dedupePhoneNumbersAsync", "phone", "dedupe"],
+  ["excludePhonesAsync", "phone", "exclude", "결과 필드 duplicates → excluded"],
+  ["setCookie", "browser", "set", "@txstack/fns/browser/cookie"],
+  ["getCookie", "browser", "get", "@txstack/fns/browser/cookie. 옛 쿠키도 읽힙니다"],
+  ["createCSS", "browser", "inject", "@txstack/fns/browser/css"],
+  ["createCSSWithPseudo", "browser", "inject", "@txstack/fns/browser/css"],
+  ["readTextFileAsync", "browser", "readText", "@txstack/fns/browser/file"],
+  ["downloadMessageFile", "browser", "download", '(name, lines) → download(name + ".txt", lines)'],
+  ["mapping", null, "_.pick", "lodash"],
+  ["keyCopy", null, "Object.assign", "표준 API"],
+  ["numSort", null, "_.sortBy", "lodash"],
+  ["isInRange", null, "_.inRange", "lodash. 끝값을 포함하지 않고 경계를 생략할 수 없습니다"]
+];
+
+/**
+ * 새 이름을 네임스페이스와 함께 — `num.format`. 표 하나에 두 그룹이 든 것(`obj · arr` · `async · math` · `browser`)은
+ * 이름으로 그룹을 가린다. 표에 없으면(lodash) 이름 그대로.
+ */
+const FORMER_GROUP: Record<string, string> = { sortByOrder: "arr", lerpVector: "math", rotate: "math", toRadians: "math", set: "cookie", get: "cookie", inject: "css", readText: "file", download: "file" };
+
+export const formerLabel = ([, table, now]: (typeof FNS_FORMER)[number]) => (table ? `${FORMER_GROUP[now] ?? table}.${now}` : now);
+
+/** 옛 이름이 가는 곳 — 새 함수의 표 줄, 없으면 lodash 를 다룬 Namespaces 섹션 */
+export const formerTarget = ([, table, now]: (typeof FNS_FORMER)[number]) => `${API_PAGES.fns.path}#${table ? rowAnchor(TABLES.fns[table], now) : "namespaces"}`;
+
 export const componentAnchor = (name: string) => `component-${slug(name)}`;
 
 /**

@@ -2,7 +2,7 @@ import type { RouteNode, RouteTree } from "@txstack/route-meta";
 import { isValidElement } from "react";
 import type { Page } from "../lib/page";
 import { anchorsOf } from "../lib/slug";
-import { API_PAGES, CATALOG, TABLES, componentAnchor, rowAnchor, type ApiTable } from "../pages/api/data";
+import { API_PAGES, CATALOG, FNS_FORMER, TABLES, componentAnchor, formerLabel, formerTarget, rowAnchor, type ApiTable } from "../pages/api/data";
 import { routes } from "../routes";
 import { entry, type SearchEntry } from "./rank";
 
@@ -13,7 +13,8 @@ export { search, type SearchEntry, type SearchKind } from "./rank";
  *
  * 1. 페이지: 라우트 트리의 `label` · `description` (메뉴와 같은 출처)
  * 2. 섹션: 각 페이지 소스의 `<Block title="…">` 제목. 소스를 글자로 읽어(`?raw`) 뽑는다
- * 3. API 항목: `pages/api/data.ts` 의 표 — API 페이지가 그리는 것과 같은 데이터
+ * 3. API 항목: `pages/api/data.ts` 의 표 — API 페이지가 그리는 것과 같은 데이터.
+ *    `fns` 로 옮기며 바뀐 옛 이름(`waitForSeconds` …)도 항목이 되어 새 함수의 줄로 간다
  *
  * 그래서 문서를 고치면 검색도 같이 고쳐진다. 손으로 관리하는 키워드가 없다.
  *
@@ -59,6 +60,11 @@ const apiEntries = (): SearchEntry[] => [
         return table.rows.map(([name, , , description]) => entry(name, where, `${API_PAGES[key].path}#${rowAnchor(table, name)}`, "api", typeof description === "string" ? description : undefined));
       })
   ),
+  ...FNS_FORMER.map((former) => {
+    const [name, table, , note] = former;
+    const where = ["API", "fns", table ? TABLES.fns[table].section : "lodash"];
+    return entry(name, where, formerTarget(former), "api", `→ ${formerLabel(former)}${note ? ` — ${note}` : ""}`);
+  }),
   ...CATALOG.flatMap(([category, items]) => items.flatMap((item) => [item.name, ...(item.also ?? [])].map((name) => entry(name, ["API", "ui", category], `/api/ui#${componentAnchor(item.name)}`, "component", item.desc))))
 ];
 
