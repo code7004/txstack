@@ -3,7 +3,6 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { TxButton } from "../TxButton";
 import { TxDropdown } from "../TxDropdown";
 import { TxFlex } from "../TxFlex";
-import { TxContextMenu } from "./TxContextMenu";
 import { TxDropMenu } from "./TxDropMenu";
 
 /** CSS 변수를 인라인 스타일로 주려면 타입을 넓혀야 한다. 스토리에서만 쓴다. */
@@ -24,7 +23,8 @@ const meta = {
     docs: {
       description: {
         component: [
-          "눌러서 아래로 펼쳐지는 메뉴. **오른쪽 버튼으로 여는 `TxContextMenu` 와 속이 같다.**",
+          "눌러서 아래로 펼쳐지는 메뉴. **오른쪽 버튼으로 여는 `TxContextMenu` 와 속이 같다** —",
+          "항목 · 키보드 · 닫힘 규약이 같고, 받는 모양만 다르다(`Overlay/TxContextMenu`).",
           "",
           "```tsx",
           'import { TxDropMenu } from "@txstack/ui";',
@@ -207,7 +207,7 @@ export const Scrollable: Story = {
   )
 };
 
-/** 겉모습은 CSS 변수로 바꾼다. **두 메뉴가 같은 토큰을 쓴다.** */
+/** 겉모습은 CSS 변수로 바꾼다. **`TxContextMenu` 도 같은 토큰을 쓴다** — 속(`TxMenuShell`)이 하나다. */
 export const Tokens: Story = {
   parameters: noControls,
   render: () => (
@@ -217,68 +217,5 @@ export const Tokens: Story = {
         {BASIC_MENU}
       </TxDropMenu>
     </TxFlex>
-  )
-};
-
-/**
- * **오른쪽 버튼을 누르면 그 자리에 뜬다.** `TxDropMenu` 와 다른 것은 여는 방법과 뜨는 자리뿐이고,
- * 항목 · 키보드 · 포커스는 같은 속이 맡는다 — `TxContextMenu.Item` 은 `TxDropMenu.Item` 과 **같은 부품**이다.
- *
- * 아래 표 위에서 오른쪽 버튼을 눌러 보라. 브라우저 기본 메뉴는 뜨지 않는다.
- */
-export const ContextMenu: Story = {
-  parameters: noControls,
-  render: function ContextMenuStory() {
-    const [last, setLast] = useState("—");
-
-    return (
-      <div className="flex flex-col gap-3">
-        <TxContextMenu
-          menuLabel="행 메뉴"
-          menu={
-            <>
-              <TxContextMenu.Item onClick={() => setLast("복사")}>복사</TxContextMenu.Item>
-              <TxContextMenu.Item onClick={() => setLast("다시 보내기")}>다시 보내기</TxContextMenu.Item>
-              <TxContextMenu.Divider />
-              <TxContextMenu.Item as={DemoLink} to="/detail">
-                상세로 이동
-              </TxContextMenu.Item>
-              <TxContextMenu.Item onClick={() => setLast("삭제")}>삭제</TxContextMenu.Item>
-            </>
-          }
-        >
-          <table className="w-full max-w-md border-collapse text-sm">
-            <tbody>
-              {["8213 · FAILED", "8214 · DONE", "8215 · PENDING"].map((row) => (
-                <tr key={row} className="border-b">
-                  <td className="px-3 py-2">{row}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </TxContextMenu>
-
-        <div className="font-mono text-sm text-slate-500 dark:text-slate-400">고른 것: {last}</div>
-      </div>
-    );
-  }
-};
-
-/** `button="both"` 는 왼쪽 클릭으로도 연다 — 터치 화면을 함께 받을 때 쓴다. */
-export const ContextMenuBothButtons: Story = {
-  parameters: noControls,
-  render: () => (
-    <TxContextMenu
-      button="both"
-      menuLabel="아무 버튼"
-      menu={
-        <>
-          <TxContextMenu.Item onClick={() => {}}>복사</TxContextMenu.Item>
-          <TxContextMenu.Item onClick={() => {}}>삭제</TxContextMenu.Item>
-        </>
-      }
-    >
-      <div className="max-w-sm rounded border border-dashed p-6 text-center text-sm">왼쪽·오른쪽 아무 버튼이나 눌러 보라</div>
-    </TxContextMenu>
   )
 };
