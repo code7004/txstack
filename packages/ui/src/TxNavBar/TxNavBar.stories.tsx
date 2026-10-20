@@ -160,10 +160,11 @@ const meta = {
       }
     }
   },
-  args: { panelWidth: "bar", openOn: "hover" },
+  args: { panelWidth: "bar", openOn: "hover", toggle: "always" },
   argTypes: {
     panelWidth: { control: "inline-radio", options: ["bar", "item"] },
     openOn: { control: "inline-radio", options: ["hover", "click"] },
+    toggle: { control: "inline-radio", options: ["always", "focus"] },
     label: { control: "text" },
     className: { control: "text", description: "`.tx-nav-bar` 에 덧붙는다 (교체 아님)" }
   }
@@ -226,6 +227,40 @@ export const TitleAsLink: Story = {
         <TxNavBar label="주 메뉴">
           <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")} panel={<Panel groups={PRODUCT} pick={setPicked} />} />
           <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")} panel={<Panel groups={DOCS} pick={setPicked} />} />
+          <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
+        </TxNavBar>
+
+        <Body picked={picked} />
+      </div>
+    );
+  }
+};
+
+/**
+ * **`▾` 를 평소에는 숨긴다** — `toggle="focus"`.
+ *
+ * 마우스는 제목에 얹기만 해도 패널이 열리므로 `▾` 가 없어도 된다. 키보드로 Tab 을 눌러
+ * 포커스가 오면 그때 나타나 Enter 로 연다. 숨은 동안에는 자리도 차지하지 않는다.
+ *
+ * ```tsx
+ * <TxNavBar toggle="focus">
+ *   <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<Panel />} />
+ * </TxNavBar>
+ * ```
+ *
+ * **터치에는 얹는 동작이 없어 패널을 열 수 없다.** 터치 기기를 쓰지 않는 화면에서만 고른다.
+ * `openOn="click"` 이면 `▾` 가 늘 보인다.
+ */
+export const ToggleOnFocus: Story = {
+  parameters: noControls,
+  render: function ToggleOnFocusStory() {
+    const [picked, setPicked] = useState("문서");
+
+    return (
+      <div style={room}>
+        <TxNavBar label="주 메뉴" panelWidth="item" toggle="focus">
+          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")} panel={<Panel groups={[PRODUCT[0]!]} pick={setPicked} />} />
+          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")} panel={<Panel groups={[DOCS[1]!]} pick={setPicked} />} />
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
 

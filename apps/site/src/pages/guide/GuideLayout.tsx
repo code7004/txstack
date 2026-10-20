@@ -165,6 +165,9 @@ export function GuideLayout() {
               항목에 <code>panel</code>을 주면 그 항목의 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
             </p>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              <code>▾</code>는 키보드와 터치로 패널을 여는 길입니다. 마우스 위주의 화면이라 거슬린다면 <code>toggle=&quot;focus&quot;</code>로 평소에는 숨기고 키보드 포커스가 올 때만 보이게 할 수 있습니다. 이때 터치로는 패널을 열 수 없습니다.
+            </p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               메뉴 바 자체에 <code>panel</code>을 주면 <strong>모든 항목이 패널 하나를 함께 씁니다</strong>. 어느 항목에 마우스를 올려도 메뉴 전체가 펼쳐집니다. 이 사이트의 위쪽 메뉴가 그렇게 동작합니다(마우스 전용이라, 패널 안의 링크는 각 항목의
               페이지에서도 닿아야 합니다).
             </p>
