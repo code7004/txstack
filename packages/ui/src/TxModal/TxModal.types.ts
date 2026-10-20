@@ -1,7 +1,11 @@
 import type { DialogHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 
-/** 폭. `--tx-modal-width` 를 직접 주면 이것과 무관하게 그 값이 쓰인다. */
-export type TxModalSize = "sm" | "md" | "lg";
+/**
+ * 폭. `--tx-modal-width` 를 직접 주면 이것과 무관하게 그 값이 쓰인다.
+ *
+ * `"auto"` 는 **내용 크기를 따른다** — 크기는 안쪽에서 한 번만 정한다. 화면은 넘지 않는다.
+ */
+export type TxModalSize = "sm" | "md" | "lg" | "auto";
 
 export interface TxModalProps extends Omit<DialogHTMLAttributes<HTMLDialogElement>, "open" | "title" | "onClose"> {
   open: boolean;
@@ -27,7 +31,14 @@ export interface TxModalProps extends Omit<DialogHTMLAttributes<HTMLDialogElemen
    */
   closeOnEscape?: boolean;
 
-  /** 폭. 기본 `"md"`. */
+  /**
+   * 폭. 기본 `"md"`.
+   *
+   * - `"sm"` · `"md"` · `"lg"` — 정해진 폭(24 · 32 · 48rem). 높이는 내용이 정한다. 폼처럼 작은 창에 쓴다
+   * - `"auto"` — **폭도 높이도 내용이 정한다.** 표 · 미리보기가 든 큰 작업 창에 쓴다.
+   *   크기를 안쪽 한 곳에서만 적으면 된다(`<div className="h-[82vh] w-[80vw]">`).
+   *   그래도 화면은 넘지 않는다 — 최대 `100vw - 2rem` · `100dvh - 2rem` 이고, 넘치면 본문 안에서 굴러간다
+   */
   size?: TxModalSize;
 
   /** 닫기 버튼의 이름. 스크린리더가 읽는다. 기본 `"닫기"`. */
