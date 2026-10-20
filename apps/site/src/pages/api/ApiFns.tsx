@@ -8,7 +8,8 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Demo, Page } from "../../components/Page";
 import { RefLabel, RefTable } from "../../components/Reference";
-import { TABLES, tableAnchor, type ApiTable } from "./data";
+import { Link } from "react-router-dom";
+import { FNS_FORMER, TABLES, formerLabel, formerTarget, tableAnchor, type ApiTable } from "./data";
 
 const muted = "text-slate-600 dark:text-slate-300";
 
@@ -121,6 +122,36 @@ const [start, end] = lastDays(14);`}</CodeBlock>
         <p className={muted}>
           lodash에 있는 기능(<code>pick</code> · <code>isEqual</code> · <code>clamp</code> · <code>inRange</code> · <code>sortBy</code> …)은 넣지 않았습니다. 같은 일을 하는 함수가 두 벌이면 어느 쪽을 써야 할지 헷갈리기 때문입니다.
         </p>
+      </Block>
+
+      <Block title="Former names">
+        <p className={muted}>
+          세 서비스의 <code>core/extensions.ts</code>에서 옮기며 이름을 바꿨습니다. 사이트 검색에 옛 이름을 쳐도 새 함수로 갑니다.
+        </p>
+        <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
+          <table className="site-stack-table w-full text-sm">
+            <thead>
+              <tr style={{ backgroundColor: "var(--tx-color-muted)" }}>
+                <th className="px-3 py-2 text-start font-semibold">Former</th>
+                <th className="px-3 py-2 text-start font-semibold">Now</th>
+                <th className="px-3 py-2 text-start font-semibold">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {FNS_FORMER.map((former) => (
+                <tr key={former[0]} className="border-t align-top" style={{ borderColor: "var(--tx-color-border)" }}>
+                  <td className="px-3 py-2 font-mono text-xs whitespace-nowrap text-slate-500 dark:text-slate-400">{former[0]}</td>
+                  <td data-label="Now" className="px-3 py-2 font-mono text-xs whitespace-nowrap">
+                    <Link to={formerTarget(former)} className="underline">
+                      {formerLabel(former)}
+                    </Link>
+                  </td>
+                  <td className="px-3 py-2 text-slate-600 dark:text-slate-300">{former[3] ?? ""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Block>
 
       <Block title="num">

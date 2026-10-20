@@ -98,6 +98,21 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
     expect(missing(names, page("ApiFns", "fns"))).toEqual([]);
   });
 
+  /** 옛 이름이 가리키는 새 이름이 실제로 그 표에 있어야 검색 결과가 그 줄로 간다 */
+  it("@txstack/fns — 옛 이름은 표에 있는 새 이름을 가리킨다", async () => {
+    const { FNS_FORMER, TABLES } = await import("./data");
+
+    expect(FNS_FORMER.length).toBeGreaterThan(40);
+    for (const [former, table, now] of FNS_FORMER) {
+      if (!table) continue;
+      expect(
+        TABLES.fns[table].rows.map(([name]) => name),
+        `${former} → ${now}`
+      ).toContain(now);
+    }
+    expect(new Set(FNS_FORMER.map(([former]) => former)).size).toBe(FNS_FORMER.length);
+  });
+
   /** props 는 Storybook 이 갖는다. 여기서는 컴포넌트(값 export)가 목록에 다 있는지만 본다 */
   it("@txstack/ui — 루트와 서브패스의 컴포넌트", () => {
     const names = [...exportsOf(pkg("ui/src/index.ts"), true), ...exportsOf(pkg("ui/src/aggrid.ts"), true), ...exportsOf(pkg("ui/src/daypicker.ts"), true)].filter((name) => name.startsWith("Tx"));
