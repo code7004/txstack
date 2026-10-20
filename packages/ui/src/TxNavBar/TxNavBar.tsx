@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, type FocusEve
 import { cm } from "../tx-ui.utils";
 import { TxNavBarContext } from "./TxNavBar.context";
 import { TxNavBarItem } from "./TxNavBarItem";
+import { TxNavBarSiteMap } from "./TxNavBarSiteMap";
 import type { TxNavBarProps } from "./TxNavBar.types";
 
 /**
@@ -212,3 +213,4 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
 }
 
 TxNavBar.Item = TxNavBarItem;
+TxNavBar.SiteMap = TxNavBarSiteMap;

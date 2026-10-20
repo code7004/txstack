@@ -165,6 +165,120 @@ describe("TxNavBar — ▾ 를 언제 보일지 (toggle)", () => {
   });
 });
 
+/**
+ * 줄 맨 오른쪽의 전체 메뉴 칸. 위치 · 폭은 CSS 라 계약으로 보고, 여기서는
+ * **누를 때만 열리고 키보드로도 열리며 줄의 규칙을 그대로 타는지**를 본다.
+ */
+describe("TxNavBar.SiteMap — 전체 메뉴 칸", () => {
+  const withMap = (props: Partial<Parameters<typeof TxNavBar>[0]> = {}, map: Partial<Parameters<typeof TxNavBar.SiteMap>[0]> = {}) => (
+    <TxNavBar panelWidth="item" {...props}>
+      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+      <TxNavBar.SiteMap {...map}>
+        <a href="/docs/start">전체 · 시작하기</a>
+        <a href="/api">전체 · API</a>
+      </TxNavBar.SiteMap>
+    </TxNavBar>
+  );
+  const mapButton = () => screen.getByRole("button", { name: "전체 메뉴" });
+
+  it("아이콘만 보이는 버튼이고 이름은 label 이다 — 기본 🗺️ · 전체 메뉴", () => {
+    render(withMap());
+
+    expect(mapButton().textContent).toBe("🗺️");
+    expect(mapButton().querySelector("[aria-hidden]")).not.toBeNull();
+  });
+
+  it("아이콘과 이름을 바꾼다", () => {
+    render(withMap({}, { icon: <svg data-testid="grid" />, label: "All menus" }));
+
+    const button = screen.getByRole("button", { name: "All menus" });
+    expect(button.querySelector('[data-testid="grid"]')).not.toBeNull();
+  });
+
+  it("누르면 열리고 다시 누르면 닫힌다", () => {
+    render(withMap());
+
+    fireEvent.click(mapButton());
+    expect(mapButton().getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByRole("link", { name: "전체 · API" })).not.toBeNull();
+
+    fireEvent.click(mapButton());
+    expect(mapButton().getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("link", { name: "전체 · API" })).toBeNull();
+  });
+
+  it('얹어도 열리지 않는다 — 줄이 openOn="hover" 여도', () => {
+    render(withMap());
+
+    fireEvent.pointerEnter(mapButton().closest("li")!, { pointerType: "mouse" });
+    fireEvent.pointerOver(mapButton(), { pointerType: "mouse" });
+    expect(mapButton().getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("줄이 함께 쓰는 패널이 있어도 이 칸에 얹으면 그것을 열지 않는다", () => {
+    render(
+      <TxNavBar panel={<p>줄의 패널</p>}>
+        <TxNavBar.Item label="문서" href="/docs" />
+        <TxNavBar.SiteMap>
+          <a href="/api">API</a>
+        </TxNavBar.SiteMap>
+      </TxNavBar>
+    );
+
+    fireEvent.pointerOver(mapButton(), { pointerType: "mouse" });
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("열림은 하나뿐이다 — 다른 항목을 열면 지도가 닫힌다", () => {
+    render(withMap());
+
+    fireEvent.click(mapButton());
+    fireEvent.click(screen.getByRole("button", { name: "문서 하위 메뉴" }));
+
+    expect(mapButton().getAttribute("aria-expanded")).toBe("false");
+    expect(panels()).toHaveLength(1);
+  });
+
+  it("Escape 로 닫고 포커스를 칸으로 되돌린다", () => {
+    render(withMap());
+
+    fireEvent.click(mapButton());
+    fireEvent.keyDown(screen.getByRole("link", { name: "전체 · API" }), { key: "Escape" });
+
+    expect(panels()).toHaveLength(0);
+    expect(document.activeElement).toBe(mapButton());
+  });
+
+  it("안의 링크를 누르면 닫힌다", () => {
+    render(withMap());
+
+    fireEvent.click(mapButton());
+    fireEvent.click(screen.getByRole("link", { name: "전체 · API" }), { button: 0 });
+
+    expect(panels()).toHaveLength(0);
+  });
+
+  it("화살표로 옮겨 다니는 칸에 든다", () => {
+    render(withMap());
+
+    const toggle = screen.getByRole("button", { name: "문서 하위 메뉴" });
+    toggle.focus();
+    fireEvent.keyDown(toggle, { key: "ArrowRight" });
+
+    expect(document.activeElement).toBe(mapButton());
+  });
+
+  it("열리면 aria-controls 가 패널을 가리키고, 패널은 data-site-map 을 갖는다", () => {
+    render(withMap());
+
+    fireEvent.click(mapButton());
+    const panel = document.getElementById(mapButton().getAttribute("aria-controls")!);
+
+    expect(panel?.classList.contains("tx-nav-bar__panel")).toBe(true);
+    expect(panel?.hasAttribute("data-site-map")).toBe(true);
+  });
+});
+
 describe("TxNavBar — 열고 닫기", () => {
   it("누르면 열리고 다시 누르면 닫힌다", () => {
     render(<TxNavBar>{menu}</TxNavBar>);
@@ -548,11 +662,18 @@ describe("TxNavBar — CSS 계약과 경계", () => {
   });
 
   it("줄이 함께 쓰는 패널은 panelWidth 와 상관없이 줄 폭이다", () => {
-    expect(css).toMatch(/__panel\[data-shared\]\s*\{[^}]*inset-inline:\s*0[^}]*max-inline-size:\s*none/);
+    expect(css).toMatch(/__panel:is\(\[data-shared\], \[data-site-map\]\)\s*\{[^}]*inset-inline:\s*0[^}]*max-inline-size:\s*none/);
   });
 
   it("패널은 떠오른다 — 자리를 밀지 않는다", () => {
     expect(css).toMatch(/\.tx-nav-bar__panel\s*\{[^}]*position:\s*absolute/);
+  });
+
+  it("전체 메뉴 칸은 맨 오른쪽에 서고, panelWidth 와 상관없이 줄 폭으로 열린다", () => {
+    expect(css).toMatch(/\.tx-nav-bar__list:has\(> \.tx-nav-bar__item\[data-site-map\]\)\s*\{[^}]*flex:\s*1/);
+    expect(css).toMatch(/\.tx-nav-bar__item\[data-site-map\]\s*\{[^}]*margin-inline-start:\s*auto/);
+    // 항목이 기준을 쥐는 규칙(position: relative)보다 무겁게 내려놓는다
+    expect(css).toMatch(/\.tx-nav-bar\[data-panel-width\] \.tx-nav-bar__item\[data-site-map\]\s*\{[^}]*position:\s*static/);
   });
 
   /** `display: none` 이면 Tab 이 닿지 않아 키보드로 열 길이 사라진다. 잘라서 숨긴다. */
