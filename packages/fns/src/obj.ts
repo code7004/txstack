@@ -2,8 +2,8 @@
  * 객체.
  *
  * ```ts
- * import * as obj from "@txstack/fns/obj";
- * obj.diff(saved, edited); // 바뀐 필드만
+ * import { diffObject } from "@txstack/fns";
+ * diffObject(saved, edited); // 바뀐 필드만
  * ```
  *
  * lodash 에 있는 것(`pick` · `omit` · `isEqual` …)은 두지 않는다. 같은 일을 하는 함수가 두 벌이면
@@ -20,7 +20,7 @@
  * diff({ a: 1, b: 2 }, { a: 1, b: 3 })                  // { b: 3 }
  * diff({ tags: ["x"] }, { tags: ["x"] }, _.isEqual)     // {}
  */
-export function diff<T extends object>(prev: Partial<T>, next: T, isEqual: (a: unknown, b: unknown) => boolean = Object.is): Partial<T> {
+export function diffObject<T extends object>(prev: Partial<T>, next: T, isEqual: (a: unknown, b: unknown) => boolean = Object.is): Partial<T> {
   const result: Partial<T> = {};
   for (const key of Object.keys(next) as Array<keyof T>) {
     if (!isEqual(prev[key], next[key])) result[key] = next[key];

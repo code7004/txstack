@@ -2,9 +2,9 @@
  * 폼 값 검사 — 빈 칸과 형식. **첫 번째로 걸린 필드 하나**만 알려 준다.
  *
  * ```ts
- * import * as form from "@txstack/fns/form";
+ * import { checkForm } from "@txstack/fns";
  *
- * const error = form.check(values, { email: { pattern: /^\S+@\S+$/, message: "이메일 형식이 아닙니다" } }, { optional: ["memo"] });
+ * const error = checkForm(values, { email: { pattern: /^\S+@\S+$/, message: "이메일 형식이 아닙니다" } }, { optional: ["memo"] });
  * if (error) return toast.error(Object.values(error)[0]);
  * ```
  *
@@ -72,6 +72,6 @@ export function checkPattern<T extends object>(values: T, rules: PatternRules<T>
 }
 
 /** 빈 칸을 먼저, 그다음 형식을 본다. 둘 다 통과하면 `null` */
-export function check<T extends object>(values: T, rules: PatternRules<T> = {}, options: CheckEmptyOptions<T> = {}): FormError<T> | null {
+export function checkForm<T extends object>(values: T, rules: PatternRules<T> = {}, options: CheckEmptyOptions<T> = {}): FormError<T> | null {
   return checkEmpty(values, options) ?? checkPattern(values, rules);
 }

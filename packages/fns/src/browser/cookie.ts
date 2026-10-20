@@ -2,9 +2,9 @@
  * 쿠키 읽기 · 쓰기. **브라우저 전용**이다(`document.cookie`).
  *
  * ```ts
- * import * as cookie from "@txstack/fns/browser/cookie";
- * cookie.set("filters", ["soccer", "baseball"]);
- * cookie.get("filters", [] as string[]);
+ * import { getCookie, setCookie } from "@txstack/fns";
+ * setCookie("filters", ["soccer", "baseball"]);
+ * getCookie("filters", [] as string[]);
  * ```
  *
  * 값은 JSON 으로 저장한다 — 문자열 `"00123"` 을 넣으면 문자열 `"00123"` 이 돌아온다.
@@ -23,7 +23,7 @@ export interface SetCookieOptions {
 }
 
 /** 값을 JSON 으로 저장한다 */
-export function set(name: string, value: unknown, options: SetCookieOptions = {}): void {
+export function setCookie(name: string, value: unknown, options: SetCookieOptions = {}): void {
   const { days = 30, path = "/", sameSite = "Lax", secure = sameSite === "None" } = options;
   const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
   const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(JSON.stringify(value ?? null))}`, `expires=${expires}`, `path=${path}`, `SameSite=${sameSite}`];
@@ -44,7 +44,7 @@ function readRaw(name: string): string | undefined {
  * 저장한 값을 읽는다. 없으면 `fallback`. 타입은 `fallback` 을 따르지만 **검사하지는 않는다** —
  * 다른 모양으로 저장된 값이 올 수 있다.
  */
-export function get<T>(name: string, fallback: T): T {
+export function getCookie<T>(name: string, fallback: T): T {
   const raw = readRaw(name);
   if (raw === undefined) return fallback;
   try {
@@ -55,6 +55,6 @@ export function get<T>(name: string, fallback: T): T {
 }
 
 /** 지운다. 저장할 때 `path` 를 바꿨으면 같은 값을 준다 */
-export function remove(name: string, options: Pick<SetCookieOptions, "path"> = {}): void {
+export function removeCookie(name: string, options: Pick<SetCookieOptions, "path"> = {}): void {
   document.cookie = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${options.path ?? "/"}`;
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { sleep, withLoading } from "./async";
-import { check, checkEmpty, checkPattern } from "./form";
+import { checkEmpty, checkForm, checkPattern } from "./form";
 import { lerp, lerpVector, rotate, toDegrees, toRadians } from "./math";
 
 describe("form.checkEmpty", () => {
@@ -43,12 +43,12 @@ describe("form.checkPattern", () => {
   });
 });
 
-describe("form.check", () => {
+describe("checkForm", () => {
   it("빈 칸이 먼저, 그다음 형식", () => {
     const rules = { email: { pattern: /@/, message: "이메일 형식" } };
-    expect(check({ name: "", email: "x" }, rules)).toEqual({ name: "name is empty" });
-    expect(check({ name: "kim", email: "x" }, rules)).toEqual({ email: "이메일 형식" });
-    expect(check({ name: "kim", email: "a@b" }, rules)).toBeNull();
+    expect(checkForm({ name: "", email: "x" }, rules)).toEqual({ name: "name is empty" });
+    expect(checkForm({ name: "kim", email: "x" }, rules)).toEqual({ email: "이메일 형식" });
+    expect(checkForm({ name: "kim", email: "a@b" }, rules)).toBeNull();
   });
 });
 

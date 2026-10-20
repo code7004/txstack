@@ -2,14 +2,14 @@
  * 파일 읽기 · 내려받기. **브라우저 전용**이다.
  *
  * ```ts
- * import * as file from "@txstack/fns/browser/file";
- * const text = await file.readText(input.files[0]);
- * file.download("numbers.txt", ["01012345678", "01087654321"]);
+ * import { downloadFile, readTextFile } from "@txstack/fns";
+ * const text = await readTextFile(input.files[0]);
+ * downloadFile("numbers.txt", ["01012345678", "01087654321"]);
  * ```
  */
 
 /** `<input type="file">` 로 고른 파일을 글자로 읽는다 */
-export function readText(source: Blob): Promise<string> {
+export function readTextFile(source: Blob): Promise<string> {
   // Blob.text() 는 오래된 Safari(<14)에 없어 FileReader 로 읽는다
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -25,7 +25,7 @@ export function readText(source: Blob): Promise<string> {
  *
  * @returns 내려받을 내용이 없으면(빈 배열 · 빈 문자열) 아무것도 하지 않고 `false`
  */
-export function download(filename: string, content: string | readonly string[] | Blob, type: string = "text/plain;charset=utf-8"): boolean {
+export function downloadFile(filename: string, content: string | readonly string[] | Blob, type: string = "text/plain;charset=utf-8"): boolean {
   const blob =
     content instanceof Blob
       ? content

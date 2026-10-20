@@ -68,12 +68,12 @@
 | `axios`       | **완료** — 테스트 37개 통과. `apps/site` 의 `Example` 이 공개 API 를 실제로 부른다                                                                                                                                           |
 | `hooks`       | **가져온 만큼 완료** — 테스트 28개 통과. `useUrlQuery` 는 `apps/site` 의 검색 화면이 쓴다. **원본 4개 중 2개만 왔다** — 나머지 둘은 쓸 자리가 생길 때 (아래 "아직 안 가져온 것")                                             |
 | `route-meta`  | **완료** — 테스트 25개 통과. `ui` 의 메뉴 부품과 이어 붙였고, **실사용 검증은 `apps/site` 가 한다**                                                                                                                          |
-| `fns`         | **이식 완료**(2026-10-20) — 진입점 13개, 테스트 176개. 사이트 `API › fns` 가 첫 소비자. 소비자 프로젝트 적용은 아직 ([012_fns](012_fns/000_README.md))                                                                       |
+| `fns`         | **이식 완료**(2026-10-20) — 루트 + 그룹 진입점 13개. 함수마다 예제가 있고 테스트가 그 예제를 실행해 본다. 사이트 `API › fns` 가 첫 소비자 ([012_fns](012_fns/000_README.md))                                                 |
 | `ui`          | **컴포넌트 49개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 테스트 1,674개                                                                                                                                          |
 | `apps/*`      | **storybook** — 부품 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트. 뼈대·내용·진짜 데이터까지 섰고 **배포(D)가 남았다** ([005_site](005_site.md)). `pnpm storybook:dev` · `pnpm site:dev` |
 | 배포 도구     | **changesets 붙였다** — 다섯 패키지 모두 `0.1.0`. **husky 도 붙였다**(커밋할 때 포맷 자동 정리). commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                               |
 
-`pnpm build` 가 **진입점 21개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1 · `fns` 13)를
+`pnpm build` 가 **진입점 22개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1 · `fns` 14)를
 ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한다.
 
 ### 배포 파일 검증
@@ -87,7 +87,7 @@ ESM + `.d.ts` 로 내고, `pnpm check`(lint · typecheck · test)가 통과한�
 | `ui-subpaths` | `/aggrid` · `/daypicker` + 선택 peer                             | 타입 검사(`skipLibCheck: false`) · 빌드 · ag-grid 가 번들에 들어오는지                             |
 | `app`         | `route-meta` · `hooks` 두 진입점 · `react-router-dom`            | 타입 검사 · 빌드                                                                                   |
 | `node-axios`  | `@txstack/axios` · `/singleton`. **React 설치 안 함**            | Node 에서 실제 실행 — 토큰 헤더 · 로그 가리기(URL 쿼리 포함) · `parseApiError` · 싱글턴            |
-| `node-fns`    | `@txstack/fns` 진입점 13개. **React 설치 안 함**                 | 타입 검사 · Node 에서 실제 실행 — `browser/` 진입점도 불러오기만으로는 `document` 를 안 건드리는지 |
+| `node-fns`    | `@txstack/fns` 루트 · 그룹 진입점. **React 설치 안 함**          | 타입 검사 · Node 에서 실제 실행 — `browser/` 진입점도 불러오기만으로는 `document` 를 안 건드리는지 |
 | `react18`     | `core-ui` 를 React 18 로                                         | 타입 검사 · 빌드                                                                                   |
 | `router6`     | `app` 을 react-router-dom 6 으로                                 | 타입 검사 · 빌드                                                                                   |
 

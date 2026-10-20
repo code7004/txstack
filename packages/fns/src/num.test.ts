@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { bytes, compact, format, isNumeric, percent, toNumber } from "./num";
+import { formatBytes, formatCompact, formatNumber, formatPercent, isNumeric, toNumber } from "./num";
 
 /**
  * 숫자 모양을 보는 테스트는 **로케일을 적는다.** CI · Node 의 기본 로케일은 보통 `en-US` 라
@@ -41,103 +41,103 @@ describe("toNumber", () => {
   });
 });
 
-describe("format", () => {
+describe("formatNumber", () => {
   it("자릿수 구분", () => {
-    expect(format(1234567, ko)).toBe("1,234,567");
-    expect(format(-1234.5, ko)).toBe("-1,234.5");
+    expect(formatNumber(1234567, ko)).toBe("1,234,567");
+    expect(formatNumber(-1234.5, ko)).toBe("-1,234.5");
   });
 
   it("소수부에는 구분 기호가 들어가지 않는다 (옛 numberWithDelimiter 는 '1,234.5,678')", () => {
-    expect(format(1234.5678, ko)).toBe("1,234.568");
+    expect(formatNumber(1234.5678, ko)).toBe("1,234.568");
   });
 
   it("숫자 문자열도 받는다", () => {
-    expect(format("1234.5", ko)).toBe("1,234.5");
+    expect(formatNumber("1234.5", ko)).toBe("1,234.5");
   });
 
   it("Intl 옵션을 그대로 넘긴다", () => {
-    expect(format(1234.5678, { ...ko, maximumFractionDigits: 2 })).toBe("1,234.57");
-    expect(format(12345, { ...ko, style: "currency", currency: "KRW" })).toBe("₩12,345");
+    expect(formatNumber(1234.5678, { ...ko, maximumFractionDigits: 2 })).toBe("1,234.57");
+    expect(formatNumber(12345, { ...ko, style: "currency", currency: "KRW" })).toBe("₩12,345");
   });
 
-  it.each([null, undefined, NaN, "abc", "1,234"])("빈 값 %j → '0'", (value) => expect(format(value, ko)).toBe("0"));
+  it.each([null, undefined, NaN, "abc", "1,234"])("빈 값 %j → '0'", (value) => expect(formatNumber(value, ko)).toBe("0"));
 
   it("fallback 을 주면 빈 값에 그 글자", () => {
-    expect(format(null, { fallback: "-" })).toBe("-");
-    expect(format(undefined, { fallback: "" })).toBe("");
+    expect(formatNumber(null, { fallback: "-" })).toBe("-");
+    expect(formatNumber(undefined, { fallback: "" })).toBe("");
   });
 
   it("0 은 빈 값이 아니다", () => {
-    expect(format(0, { fallback: "-" })).toBe("0");
+    expect(formatNumber(0, { fallback: "-" })).toBe("0");
   });
 
   it("locale 을 빼면 실행 환경의 로케일", () => {
-    expect(format(1234.5)).toBe(new Intl.NumberFormat().format(1234.5));
+    expect(formatNumber(1234.5)).toBe(new Intl.NumberFormat().format(1234.5));
   });
 });
 
-describe("percent", () => {
+describe("formatPercent", () => {
   it("비율을 받고 자릿수는 고정", () => {
-    expect(percent(0.1234, 1, ko)).toBe("12.3%");
-    expect(percent(0.1234, 2, ko)).toBe("12.34%");
-    expect(percent(0.5, 1, ko)).toBe("50.0%");
-    expect(percent(-0.031, 1, ko)).toBe("-3.1%");
-    expect(percent(1.5, 1, ko)).toBe("150.0%");
+    expect(formatPercent(0.1234, 1, ko)).toBe("12.3%");
+    expect(formatPercent(0.1234, 2, ko)).toBe("12.34%");
+    expect(formatPercent(0.5, 1, ko)).toBe("50.0%");
+    expect(formatPercent(-0.031, 1, ko)).toBe("-3.1%");
+    expect(formatPercent(1.5, 1, ko)).toBe("150.0%");
   });
 
   it("빈 값은 0%, fallback 이 있으면 그 글자", () => {
-    expect(percent(null, 1, ko)).toBe("0.0%");
-    expect(percent("abc", 1, ko)).toBe("0.0%");
-    expect(percent(null, 1, { fallback: "-" })).toBe("-");
+    expect(formatPercent(null, 1, ko)).toBe("0.0%");
+    expect(formatPercent("abc", 1, ko)).toBe("0.0%");
+    expect(formatPercent(null, 1, { fallback: "-" })).toBe("-");
   });
 });
 
-describe("compact", () => {
+describe("formatCompact", () => {
   it("로케일의 단위를 따른다", () => {
-    expect(compact(12000, ko)).toBe("1.2만");
-    expect(compact(1_000_000, ko)).toBe("100만");
-    expect(compact(150_000_000, ko)).toBe("1.5억");
-    expect(compact(12000, { locale: "en-US" })).toBe("12K");
+    expect(formatCompact(12000, ko)).toBe("1.2만");
+    expect(formatCompact(1_000_000, ko)).toBe("100만");
+    expect(formatCompact(150_000_000, ko)).toBe("1.5억");
+    expect(formatCompact(12000, { locale: "en-US" })).toBe("12K");
   });
 
   it("소수는 한 자리까지, 옵션으로 덮어쓴다", () => {
-    expect(compact(12345, ko)).toBe("1.2만");
-    expect(compact(12345, { ...ko, maximumFractionDigits: 2 })).toBe("1.23만");
+    expect(formatCompact(12345, ko)).toBe("1.2만");
+    expect(formatCompact(12345, { ...ko, maximumFractionDigits: 2 })).toBe("1.23만");
   });
 
   it("0 과 빈 값", () => {
-    expect(compact(0, ko)).toBe("0");
-    expect(compact(null, ko)).toBe("0");
+    expect(formatCompact(0, ko)).toBe("0");
+    expect(formatCompact(null, ko)).toBe("0");
   });
 
   it("locale 을 빼면 실행 환경의 로케일", () => {
-    expect(compact(12000)).toBe(new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(12000));
+    expect(formatCompact(12000)).toBe(new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(12000));
   });
 });
 
-describe("bytes", () => {
-  it.each([0, null, NaN, -1])("%j → '0 B'", (value) => expect(bytes(value)).toBe("0 B"));
+describe("formatBytes", () => {
+  it.each([0, null, NaN, -1])("%j → '0 B'", (value) => expect(formatBytes(value)).toBe("0 B"));
 
   it("1024 기준", () => {
-    expect(bytes(512)).toBe("512 B");
-    expect(bytes(1024)).toBe("1 KB");
-    expect(bytes(1536)).toBe("1.5 KB");
-    expect(bytes(5_300_000)).toBe("5.05 MB");
-    expect(bytes(5_300_000, 0)).toBe("5 MB");
+    expect(formatBytes(512)).toBe("512 B");
+    expect(formatBytes(1024)).toBe("1 KB");
+    expect(formatBytes(1536)).toBe("1.5 KB");
+    expect(formatBytes(5_300_000)).toBe("5.05 MB");
+    expect(formatBytes(5_300_000, 0)).toBe("5 MB");
   });
 
   it("거듭제곱 경계에서 한 단계 아래로 떨어지지 않는다", () => {
-    expect(bytes(1024 ** 2)).toBe("1 MB");
-    expect(bytes(1024 ** 3)).toBe("1 GB");
-    expect(bytes(2 ** 40)).toBe("1 TB");
+    expect(formatBytes(1024 ** 2)).toBe("1 MB");
+    expect(formatBytes(1024 ** 3)).toBe("1 GB");
+    expect(formatBytes(2 ** 40)).toBe("1 TB");
   });
 
   it("PB 에서 멈춘다 (옛 formatBytes 는 '1 undefined')", () => {
-    expect(bytes(2 ** 50)).toBe("1 PB");
-    expect(bytes(2 ** 60)).toBe("1024 PB");
+    expect(formatBytes(2 ** 50)).toBe("1 PB");
+    expect(formatBytes(2 ** 60)).toBe("1024 PB");
   });
 
   it("소수 끝의 0 은 지운다", () => {
-    expect(bytes(1536, 2)).toBe("1.5 KB");
+    expect(formatBytes(1536, 2)).toBe("1.5 KB");
   });
 });

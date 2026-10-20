@@ -2,8 +2,8 @@
  * 날짜 · 기간 · 경과 시간.
  *
  * ```ts
- * import * as date from "@txstack/fns/date";
- * const [start, end] = date.lastDays(14); // 오늘을 포함한 14일
+ * import { lastDays } from "@txstack/fns";
+ * const [start, end] = lastDays(14); // 오늘을 포함한 14일
  * ```
  *
  * 모든 계산은 **실행 환경의 시간대**를 쓴다. `dayjs` 같은 의존 없이 `Date` 만 쓴다.

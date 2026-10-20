@@ -2,7 +2,7 @@
  * 비동기 흐름.
  *
  * ```ts
- * import { sleep, withLoading } from "@txstack/fns/async";
+ * import { sleep, withLoading } from "@txstack/fns";
  * ```
  */
 

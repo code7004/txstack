@@ -2,8 +2,8 @@
  * 배열.
  *
  * ```ts
- * import * as arr from "@txstack/fns/arr";
- * arr.sortByOrder(rows, ["high", "medium", "low"], "priority");
+ * import { sortByOrder } from "@txstack/fns";
+ * sortByOrder(rows, ["high", "medium", "low"], "priority");
  * ```
  *
  * 숫자 정렬 · 키 정렬은 lodash(`_.sortBy` · `_.orderBy`)를 쓴다. 여기에는 lodash 에 없는 것만 둔다.

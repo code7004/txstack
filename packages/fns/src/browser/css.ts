@@ -2,8 +2,8 @@
  * 실행 중에 CSS 규칙을 넣고 바꾼다. **브라우저 전용**이다.
  *
  * ```ts
- * import * as css from "@txstack/fns/browser/css";
- * css.inject("brand", ".btn:hover", { backgroundColor: "#2dd4bf" });
+ * import { injectCSS } from "@txstack/fns";
+ * injectCSS("brand", ".btn:hover", { backgroundColor: "#2dd4bf" });
  * ```
  *
  * 인라인 `style` 로 안 되는 자리 — `:hover` · `::before` · 미디어 쿼리 밖의 선택자 — 에 쓴다.
@@ -31,7 +31,7 @@ function sheetOf(styleId: string): CSSStyleSheet | null {
  *
  * @returns 넣었으면 `true`. 브라우저가 규칙을 거부하면(잘못된 선택자 등) `false`
  */
-export function inject(styleId: string, selector: string, rules: CssRules): boolean {
+export function injectCSS(styleId: string, selector: string, rules: CssRules): boolean {
   const sheet = sheetOf(styleId);
   if (!sheet) return false;
 
@@ -55,7 +55,7 @@ export function inject(styleId: string, selector: string, rules: CssRules): bool
   }
 }
 
-/** `inject` 로 만든 `<style>` 을 통째로 지운다 */
-export function remove(styleId: string): void {
+/** `injectCSS` 로 만든 `<style>` 을 통째로 지운다 */
+export function removeCSS(styleId: string): void {
   document.getElementById(styleId)?.remove();
 }
