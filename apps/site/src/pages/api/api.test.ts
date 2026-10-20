@@ -90,6 +90,14 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
     expect(missing(names, page("ApiHooks", "hooks"))).toEqual([]);
   });
 
+  it("@txstack/fns — 그룹마다 진입점", () => {
+    const groups = ["num", "date", "rand", "str", "obj", "arr", "form", "async", "math", "phone-kr", "browser/cookie", "browser/css", "browser/file"];
+    const names = groups.flatMap((group) => exportsOf(pkg(`fns/src/${group}.ts`)));
+
+    expect(names.length).toBeGreaterThan(50);
+    expect(missing(names, page("ApiFns", "fns"))).toEqual([]);
+  });
+
   /** props 는 Storybook 이 갖는다. 여기서는 컴포넌트(값 export)가 목록에 다 있는지만 본다 */
   it("@txstack/ui — 루트와 서브패스의 컴포넌트", () => {
     const names = [...exportsOf(pkg("ui/src/index.ts"), true), ...exportsOf(pkg("ui/src/aggrid.ts"), true), ...exportsOf(pkg("ui/src/daypicker.ts"), true)].filter((name) => name.startsWith("Tx"));

@@ -95,6 +95,9 @@ importers:
       '@txstack/axios':
         specifier: workspace:*
         version: link:../../packages/axios
+      '@txstack/fns':
+        specifier: workspace:*
+        version: link:../../packages/fns
       '@txstack/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
@@ -198,6 +201,8 @@ importers:
         version: 7.3.6(@types/node@24.13.3)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0)
 
   packages/axios: {}
+
+  packages/fns: {}
 
   packages/hooks: {}
 

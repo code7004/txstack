@@ -11,12 +11,13 @@ import SIGN_UP_SOURCE from "./start/SignUp.tsx?raw";
  * (`?raw` 로 같은 소스를 읽는다 — 보이는 코드와 도는 코드가 어긋날 수 없다).
  */
 
-/** 무엇을 하려는지로 고른다. 넷은 따로 설치되고, 서로 없어도 동작한다 */
+/** 무엇을 하려는지로 고른다. 다섯은 따로 설치되고, 서로 없어도 동작한다 */
 const PACKAGES = [
   { name: "@txstack/ui", when: "버튼, 폼, 표, 확인 창 같은 화면 컴포넌트가 필요할 때", peer: "react · react-dom", guide: "/docs/tutorial", guideLabel: "Tutorial" },
   { name: "@txstack/route-meta", when: "라우트와 메뉴, 현재 위치 표시를 한 곳에서 관리하고 싶을 때", peer: "react-router-dom", guide: "/docs/guide/routing", guideLabel: "Routing & Menu" },
   { name: "@txstack/hooks", when: "목록의 검색 조건을 주소에 담거나, 객체 상태를 편하게 다루고 싶을 때", peer: "react-router-dom (useUrlQuery만)", guide: "/docs/guide/url-state", guideLabel: "URL State" },
-  { name: "@txstack/axios", when: "토큰, 401 처리, 오류 메시지를 한 곳에 모은 API 클라이언트가 필요할 때", peer: "axios", guide: "/docs/guide/http-client", guideLabel: "HTTP Client" }
+  { name: "@txstack/axios", when: "토큰, 401 처리, 오류 메시지를 한 곳에 모은 API 클라이언트가 필요할 때", peer: "axios", guide: "/docs/guide/http-client", guideLabel: "HTTP Client" },
+  { name: "@txstack/fns", when: "숫자 포맷, 날짜 범위, 폼 검사, 전화번호 마스킹 같은 작은 함수가 필요할 때", peer: "없음", guide: "/api/fns", guideLabel: "API › fns" }
 ];
 
 const muted = "text-slate-600 dark:text-slate-300";
@@ -26,7 +27,7 @@ export function Start() {
     <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 아직 npm에 배포되지 않아서, 처음 한 번은 저장소를 받아 빌드하는 단계가 더 있습니다.">
       <Block title="Which packages do you need">
         <p className={muted}>
-          txstack은 네 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
+          txstack은 다섯 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
         </p>
         <div className="overflow-x-auto">
           <table className="site-stack-table w-full text-sm">
@@ -111,7 +112,7 @@ cd ../my-app
 pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz
 pnpm add ../txstack/.pack/txstack-axios-0.1.0.tgz axios
 
-# 네 패키지를 모두 쓴다면(Tutorial) 한 번에
+# 모든 패키지를 쓴다면 한 번에
 pnpm add ../txstack/.pack/*.tgz react-router-dom axios`}</CodeBlock>
 
         <CodeBlock language="bash" title="npm 배포 후">{`pnpm add @txstack/ui

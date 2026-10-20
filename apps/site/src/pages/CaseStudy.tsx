@@ -89,8 +89,8 @@ export function CaseStudy() {
 
       <Block title="Decisions">
         <p className={muted}>
-          <strong>필요한 것만 설치하도록 네 패키지로 나눴습니다.</strong> 의존 방향은 <code>ui → hooks</code> 하나만 허용하고, <code>route-meta</code> · <code>hooks</code> · <code>axios</code>는 서로를 가져오지 않습니다. <code>axios</code>는 React
-          없이도 동작합니다. 표와 달력처럼 무거운 의존은 <code>@txstack/ui/aggrid</code> · <code>@txstack/ui/daypicker</code>로 따로 두어, 쓰지 않으면 설치하지도 불러오지도 않습니다.
+          <strong>필요한 것만 설치하도록 다섯 패키지로 나눴습니다.</strong> 의존 방향은 <code>ui → hooks</code> 하나만 허용하고, <code>route-meta</code> · <code>hooks</code> · <code>axios</code> · <code>fns</code>는 서로를 가져오지 않습니다.{" "}
+          <code>axios</code>와 <code>fns</code>는 React 없이도 동작합니다. 표와 달력처럼 무거운 의존은 <code>@txstack/ui/aggrid</code> · <code>@txstack/ui/daypicker</code>로 따로 두어, 쓰지 않으면 설치하지도 불러오지도 않습니다.
         </p>
         <p className={muted}>
           <strong>서비스마다 다른 규칙은 라이브러리가 정하지 않고 앱이 넘깁니다.</strong> 라이브러리가 그것을 정하면 다음 서비스에서 바로 깨집니다.
@@ -178,7 +178,7 @@ export function CaseStudy() {
       <Block title="Evidence">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>테스트</strong> — lint · 타입 검사 · 테스트 1,833개(<code>pnpm check</code>). 화면 테스트 환경(jsdom)은 스타일시트를 못 보므로, CSS 파일을 글자로 읽어 토큰만 쓰는지 · 레이어 안에 있는지를 검사합니다.
+            <strong>테스트</strong> — lint · 타입 검사 · 테스트 2,030개(<code>pnpm check</code>). 화면 테스트 환경(jsdom)은 스타일시트를 못 보므로, CSS 파일을 글자로 읽어 토큰만 쓰는지 · 레이어 안에 있는지를 검사합니다.
           </li>
           <li>
             <strong>배포 파일 검증</strong> — 네 패키지를 실제 배포 파일(<code>.tgz</code>)로 묶어 저장소 밖의 새 앱에 설치하고, React 18 · 19와 react-router 6 · 7에서 타입 검사 · 빌드하고, axios는 Node에서 실제로 실행합니다(
@@ -207,7 +207,7 @@ export function CaseStudy() {
       <Block title="Limits">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>npm에 아직 배포하지 않았습니다.</strong> 네 패키지 모두 <code>0.1.0</code>이고, 지금은 저장소에서 빌드한 파일로 설치합니다.
+            <strong>npm에 아직 배포하지 않았습니다.</strong> 다섯 패키지 모두 <code>0.1.0</code>이고, 지금은 저장소에서 빌드한 파일로 설치합니다.
           </li>
           <li>
             <strong>기존 서비스에 적용하는 중입니다.</strong> 실제 서비스에서 드러나는 것을 라이브러리에서 고치는 단계이고, npm 배포는 그 다음입니다.
