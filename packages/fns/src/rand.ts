@@ -2,9 +2,9 @@
  * 랜덤 값 · 짧은 ID. 주로 목업 데이터를 만들 때 쓴다.
  *
  * ```ts
- * import * as rand from "@txstack/fns/rand";
- * rand.int(0, 10);
- * rand.pick(["a", "b", "c"], 0.9); // 뒤쪽이 더 자주 나온다
+ * import { randomInt, randomPick } from "@txstack/fns";
+ * randomInt(0, 10);
+ * randomPick(["a", "b", "c"], 0.9); // 뒤쪽이 더 자주 나온다
  * ```
  *
  * **암호용이 아니다.** `Math.random` 을 쓴다. 토큰 · 비밀번호에는 `crypto.getRandomValues` 를 쓴다.
@@ -17,7 +17,7 @@
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
 /** `min` 이상 `max` 미만의 실수 */
-export function float(min: number, max: number, bias?: number, weight: number = 0.8): number {
+export function randomFloat(min: number, max: number, bias?: number, weight: number = 0.8): number {
   const t = Math.random();
   if (bias === undefined) return min + (max - min) * t;
 
@@ -26,24 +26,24 @@ export function float(min: number, max: number, bias?: number, weight: number = 
 }
 
 /** `min` 이상 `max` 미만의 정수 */
-export function int(min: number, max: number, bias?: number, weight?: number): number {
-  return Math.floor(float(min, max, bias, weight));
+export function randomInt(min: number, max: number, bias?: number, weight?: number): number {
+  return Math.floor(randomFloat(min, max, bias, weight));
 }
 
 /** `start` 이상 `end` 미만의 날짜 */
-export function date(start: Date, end: Date, bias?: number, weight?: number): Date {
-  return new Date(int(start.getTime(), end.getTime(), bias, weight));
+export function randomDate(start: Date, end: Date, bias?: number, weight?: number): Date {
+  return new Date(randomInt(start.getTime(), end.getTime(), bias, weight));
 }
 
 /** 배열에서 하나. 빈 배열이면 `undefined` */
-export function pick<T>(items: readonly T[], bias?: number, weight?: number): T | undefined {
+export function randomPick<T>(items: readonly T[], bias?: number, weight?: number): T | undefined {
   if (items.length === 0) return undefined;
-  return items[int(0, items.length, bias, weight)];
+  return items[randomInt(0, items.length, bias, weight)];
 }
 
 /** `"x.x.x.x"` 꼴의 IPv4 주소 */
-export function ip(): string {
-  return Array.from({ length: 4 }, () => int(0, 256)).join(".");
+export function randomIp(): string {
+  return Array.from({ length: 4 }, () => randomInt(0, 256)).join(".");
 }
 
 let counter = 0;

@@ -2,8 +2,8 @@
  * 숫자 판정 · 변환 · 포맷.
  *
  * ```ts
- * import * as num from "@txstack/fns/num";
- * num.format(1234567); // "1,234,567"
+ * import { formatNumber } from "@txstack/fns";
+ * formatNumber(1234567); // "1,234,567"
  * ```
  *
  * 포맷 함수는 **빈 값을 0 으로 그린다** — `null` · `undefined` · `NaN` · 숫자가 아닌 문자열 모두.
@@ -62,7 +62,7 @@ function intl(value: number, options: FormatOptions, defaults: Intl.NumberFormat
  * format(null)                                           // "0"
  * format(null, { fallback: "-" })                        // "-"
  */
-export function format(value: Numberish, options: FormatOptions = {}): string {
+export function formatNumber(value: Numberish, options: FormatOptions = {}): string {
   const n = read(value);
   if (n === undefined && options.fallback !== undefined) return options.fallback;
   return intl(n ?? 0, options);
@@ -75,7 +75,7 @@ export function format(value: Numberish, options: FormatOptions = {}): string {
  * percent(0.1234)     // "12.3%"
  * percent(0.1234, 2)  // "12.34%"
  */
-export function percent(ratio: Numberish, digits: number = 1, options: FormatOptions = {}): string {
+export function formatPercent(ratio: Numberish, digits: number = 1, options: FormatOptions = {}): string {
   const n = read(ratio);
   if (n === undefined && options.fallback !== undefined) return options.fallback;
   return intl(n ?? 0, options, { style: "percent", minimumFractionDigits: digits, maximumFractionDigits: digits });
@@ -88,7 +88,7 @@ export function percent(ratio: Numberish, digits: number = 1, options: FormatOpt
  * compact(12000, { locale: "ko-KR" })  // "1.2만"
  * compact(12000, { locale: "en-US" })  // "12K"
  */
-export function compact(value: Numberish, options: FormatOptions = {}): string {
+export function formatCompact(value: Numberish, options: FormatOptions = {}): string {
   const n = read(value);
   if (n === undefined && options.fallback !== undefined) return options.fallback;
   return intl(n ?? 0, options, { notation: "compact", maximumFractionDigits: 1 });
@@ -104,7 +104,7 @@ const BYTE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"] as const;
  * bytes(1536)       // "1.5 KB"
  * bytes(5_300_000)  // "5.05 MB"
  */
-export function bytes(value: Numberish, decimals: number = 2): string {
+export function formatBytes(value: Numberish, decimals: number = 2): string {
   const n = read(value);
   if (n === undefined || n <= 0) return "0 B";
 

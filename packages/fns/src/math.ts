@@ -2,8 +2,8 @@
  * 보간 · 각도 · 2D 회전. 애니메이션이나 캔버스 · SVG 좌표 계산에 쓴다.
  *
  * ```ts
- * import * as math from "@txstack/fns/math";
- * math.rotate({ x: 10, y: 0 }, { x: 0, y: 0 }, 90); // ≈ { x: 0, y: 10 }
+ * import { rotate } from "@txstack/fns";
+ * rotate({ x: 10, y: 0 }, { x: 0, y: 0 }, 90); // ≈ { x: 0, y: 10 }
  * ```
  *
  * 각도는 모두 **도(degree)** 단위로 받는다. 범위 · 경계(`clamp` · `inRange`)는 lodash 를 쓴다.

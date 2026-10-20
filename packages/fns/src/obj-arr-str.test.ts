@@ -1,28 +1,28 @@
 import { describe, expect, it } from "vitest";
 import { sortByOrder } from "./arr";
-import { diff, undefinedToNull } from "./obj";
+import { diffObject, undefinedToNull } from "./obj";
 import { PALETTE, emailLocalPart, hasNonAscii, hasSpecialChars, hashColor, paletteColor } from "./str";
 
-describe("obj.diff", () => {
+describe("diffObject", () => {
   it("next 에서 바뀐 필드만", () => {
-    expect(diff({ a: 1, b: 2 }, { a: 1, b: 3 })).toEqual({ b: 3 });
+    expect(diffObject({ a: 1, b: 2 }, { a: 1, b: 3 })).toEqual({ b: 3 });
   });
 
   it("prev 에 없던 필드는 바뀐 것", () => {
-    expect(diff<{ a: number; b?: number }>({ a: 1 }, { a: 1, b: 2 })).toEqual({ b: 2 });
+    expect(diffObject<{ a: number; b?: number }>({ a: 1 }, { a: 1, b: 2 })).toEqual({ b: 2 });
   });
 
   it("기본 비교는 Object.is — 새로 만든 배열은 다르다", () => {
-    expect(diff({ tags: ["x"] }, { tags: ["x"] })).toEqual({ tags: ["x"] });
+    expect(diffObject({ tags: ["x"] }, { tags: ["x"] })).toEqual({ tags: ["x"] });
   });
 
   it("비교 함수를 넘기면 내용으로 본다", () => {
     const deep = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
-    expect(diff({ tags: ["x"] }, { tags: ["x"] }, deep)).toEqual({});
+    expect(diffObject({ tags: ["x"] }, { tags: ["x"] }, deep)).toEqual({});
   });
 
   it("NaN 은 NaN 과 같다", () => {
-    expect(diff({ a: NaN }, { a: NaN })).toEqual({});
+    expect(diffObject({ a: NaN }, { a: NaN })).toEqual({});
   });
 });
 

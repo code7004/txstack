@@ -2,15 +2,15 @@
  * 한국 전화번호 — 정규화 · 휴대폰 판정 · 마스킹 · 대량 처리.
  *
  * ```ts
- * import * as phone from "@txstack/fns/phone-kr";
- * phone.parseMobile("+82 10-1234-5678"); // "01012345678"
- * phone.mask("01012345678");             // "010****5678"
+ * import { maskPhone, parseMobile } from "@txstack/fns";
+ * parseMobile("+82 10-1234-5678"); // "01012345678"
+ * maskPhone("01012345678");        // "010****5678"
  * ```
  *
  * **정규화한 값(숫자만)으로 비교 · 저장한다.** 하이픈 · 공백 · `+82` 가 섞인 원본끼리 비교하면
  * 같은 번호를 다르게 본다.
  *
- * 대량 함수(`validateMany` · `dedupe` · `exclude`)는 1만 건마다 이벤트 루프에 양보한다 —
+ * 대량 함수(`validatePhones` · `dedupePhones` · `excludePhones`)는 1만 건마다 이벤트 루프에 양보한다 —
  * 수십만 건을 붙여 넣어도 화면이 굳지 않는다.
  */
 
@@ -21,7 +21,7 @@
  * - `1012345678` → `01012345678` (앞 0 생략)
  * - `12345678` → `01012345678` (010 생략, 7~8자리만 들어온 경우)
  */
-export function normalize(input: string | null | undefined): string {
+export function normalizePhone(input: string | null | undefined): string {
   if (!input) return "";
 
   let digits = String(input).replace(/\D/g, "");
@@ -34,7 +34,7 @@ export function normalize(input: string | null | undefined): string {
 
 /** 정규화해서 `010` 휴대폰 번호면 그 값(숫자만), 아니면 `null` */
 export function parseMobile(input: string | null | undefined): string | null {
-  const digits = normalize(input);
+  const digits = normalizePhone(input);
   return /^010\d{7,8}$/.test(digits) ? digits : null;
 }
 
@@ -47,7 +47,7 @@ export function parseMobile(input: string | null | undefined): string | null {
  * mask("0212345678")    // "02****5678"
  * mask("0311234567")    // "031***4567"
  */
-export function mask(input: string | null | undefined): string {
+export function maskPhone(input: string | null | undefined): string {
   if (!input) return "";
 
   const digits = String(input).replace(/\D/g, "");
@@ -67,7 +67,7 @@ export function maskIfPhone(keyword: string | null | undefined): string {
 
   const value = String(keyword).trim();
   const digits = value.replace(/\D/g, "");
-  return /^01\d{8,9}$/.test(digits) || /^0\d{8,10}$/.test(digits) ? mask(value) : value;
+  return /^01\d{8,9}$/.test(digits) || /^0\d{8,10}$/.test(digits) ? maskPhone(value) : value;
 }
 
 const CHUNK = 10000;
@@ -90,7 +90,7 @@ function chunked<T>(items: readonly T[], visit: (item: T) => void): Promise<void
  * 휴대폰 번호 목록을 가른다. `valid` 는 정규화한 값, `invalid` 는 원본이다.
  * `null` 이나 배열이 아닌 값을 넘기면 둘 다 빈 목록이다.
  */
-export async function validateMany(numbers: readonly string[] | null | undefined): Promise<{ valid: string[]; invalid: string[] }> {
+export async function validatePhones(numbers: readonly string[] | null | undefined): Promise<{ valid: string[]; invalid: string[] }> {
   const valid: string[] = [];
   const invalid: string[] = [];
   if (!Array.isArray(numbers)) return { valid, invalid };
@@ -105,9 +105,9 @@ export async function validateMany(numbers: readonly string[] | null | undefined
 
 /**
  * 중복을 걸러 낸다. 처음 나온 것은 `uniques` 에, 두 번째부터는 `duplicates` 에 간다.
- * 앞뒤 공백은 지우고, 빈 값은 버린다. **정규화는 하지 않는다** — 먼저 `validateMany` 를 거친다.
+ * 앞뒤 공백은 지우고, 빈 값은 버린다. **정규화는 하지 않는다** — 먼저 `validatePhones` 를 거친다.
  */
-export async function dedupe(numbers: readonly string[] | null | undefined): Promise<{ uniques: string[]; duplicates: string[] }> {
+export async function dedupePhones(numbers: readonly string[] | null | undefined): Promise<{ uniques: string[]; duplicates: string[] }> {
   const uniques: string[] = [];
   const duplicates: string[] = [];
   if (!Array.isArray(numbers)) return { uniques, duplicates };
@@ -131,7 +131,7 @@ export async function dedupe(numbers: readonly string[] | null | undefined): Pro
  * @example
  * await exclude(["010…1", "010…2"], ["010…2"]) // { remains: ["010…1"], excluded: ["010…2"] }
  */
-export async function exclude(source: readonly string[], blocked: Iterable<string>): Promise<{ remains: string[]; excluded: string[] }> {
+export async function excludePhones(source: readonly string[], blocked: Iterable<string>): Promise<{ remains: string[]; excluded: string[] }> {
   const remains: string[] = [];
   const excluded: string[] = [];
   const set = new Set(blocked);

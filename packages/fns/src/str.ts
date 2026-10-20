@@ -2,8 +2,8 @@
  * 문자열 · 문자열에서 만든 색.
  *
  * ```ts
- * import * as str from "@txstack/fns/str";
- * str.hashColor("kim@example.com"); // 같은 글자면 늘 같은 색
+ * import { hashColor } from "@txstack/fns";
+ * hashColor("kim@example.com"); // 같은 글자면 늘 같은 색
  * ```
  */
 

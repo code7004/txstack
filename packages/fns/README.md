@@ -1,40 +1,44 @@
 # @txstack/fns
 
 화면마다 다시 쓰게 되는 작은 함수 모음. **React 를 모르고 런타임 의존이 없다.**
-`browser/` 아래를 빼면 Node 에서도 그대로 돈다.
+`browser` 그룹을 부르는 것만 빼면 Node 에서도 그대로 돈다.
 
 ```sh
 pnpm add @txstack/fns
 ```
 
-**그룹마다 진입점이 하나다.** 루트(`@txstack/fns`)는 없고, 경로 이름을 그대로 네임스페이스로 받는다.
+**루트에서 이름으로 가져온다.** 함수 이름이 패키지 안에서 겹치지 않아 앱의 변수 이름(`file` · `date` · `form`)과 부딪히지 않는다.
 
 ```ts
-import * as num from "@txstack/fns/num";
-import * as phone from "@txstack/fns/phone-kr";
-import { lastDays } from "@txstack/fns/date";
+import { formatNumber, formatCompact, lastDays, maskPhone, readTextFile } from "@txstack/fns";
 
-num.format(1234567); // "1,234,567"
-num.compact(12000, { locale: "ko-KR" }); // "1.2만"
-phone.mask("01012345678"); // "010****5678"
+formatNumber(1234567); // "1,234,567"
+formatCompact(12000, { locale: "ko-KR" }); // "1.2만"
+maskPhone("01012345678"); // "010****5678"
 const [start, end] = lastDays(14); // 오늘을 포함한 14일
+const text = await readTextFile(file);
+
+// 한 이름으로 묶어도 된다
+import * as fns from "@txstack/fns";
 ```
 
-| 진입점                        | 내용                                                       |
-| ----------------------------- | ---------------------------------------------------------- |
-| `@txstack/fns/num`            | 숫자 판정 · 변환 · 포맷 (`format` · `percent` · `bytes` …) |
-| `@txstack/fns/date`           | 기간 · ISO 주차 · 경과 시간                                |
-| `@txstack/fns/rand`           | 랜덤 값 · 짧은 ID (목업용, 암호용 아님)                    |
-| `@txstack/fns/str`            | 문자열 판정 · 문자열에서 만든 색                           |
-| `@txstack/fns/obj`            | `diff` · `undefinedToNull`                                 |
-| `@txstack/fns/arr`            | `sortByOrder`                                              |
-| `@txstack/fns/form`           | 폼 값의 빈 칸 · 형식 검사                                  |
-| `@txstack/fns/async`          | `sleep` · `withLoading`                                    |
-| `@txstack/fns/math`           | 보간 · 각도 · 2D 회전                                      |
-| `@txstack/fns/phone-kr`       | 한국 전화번호 정규화 · 마스킹 · 대량 처리                  |
-| `@txstack/fns/browser/cookie` | 쿠키 (브라우저 전용)                                       |
-| `@txstack/fns/browser/css`    | 실행 중 CSS 규칙 넣기 (브라우저 전용)                      |
-| `@txstack/fns/browser/file`   | 파일 읽기 · 내려받기 (브라우저 전용)                       |
+| 그룹 진입점                   | 함수                                                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `@txstack/fns/num`            | `isNumeric` · `toNumber` · `formatNumber` · `formatPercent` · `formatCompact` · `formatBytes`                        |
+| `@txstack/fns/date`           | `dayRange` · `lastDays` · `localTimeZone` · `parseYmd` · `isoWeek` · `parseTimestamps` · `splitSeconds` · `elapsed`  |
+| `@txstack/fns/rand`           | `randomFloat` · `randomInt` · `randomDate` · `randomPick` · `randomIp` · `shortId` (목업용, 암호용 아님)             |
+| `@txstack/fns/str`            | `hashColor` · `paletteColor` · `PALETTE` · `emailLocalPart` · `hasSpecialChars` · `hasNonAscii`                      |
+| `@txstack/fns/obj`            | `diffObject` · `undefinedToNull`                                                                                     |
+| `@txstack/fns/arr`            | `sortByOrder`                                                                                                        |
+| `@txstack/fns/form`           | `checkForm` · `checkEmpty` · `checkPattern`                                                                          |
+| `@txstack/fns/async`          | `sleep` · `withLoading`                                                                                              |
+| `@txstack/fns/math`           | `lerp` · `lerpVector` · `toRadians` · `toDegrees` · `rotate`                                                         |
+| `@txstack/fns/phone-kr`       | `normalizePhone` · `parseMobile` · `maskPhone` · `maskIfPhone` · `validatePhones` · `dedupePhones` · `excludePhones` |
+| `@txstack/fns/browser/cookie` | `getCookie` · `setCookie` · `removeCookie` (브라우저 전용)                                                           |
+| `@txstack/fns/browser/css`    | `injectCSS` · `removeCSS` (브라우저 전용)                                                                            |
+| `@txstack/fns/browser/file`   | `readTextFile` · `downloadFile` (브라우저 전용)                                                                      |
+
+그룹 진입점은 가져오는 범위를 좁혀 두고 싶을 때 쓴다. 루트와 같은 함수다.
 
 **lodash 에 있는 것(`pick` · `isEqual` · `clamp` · `inRange` · `sortBy` …)은 넣지 않았다.**
 포맷 함수는 빈 값(`null` · `NaN` …)을 0 으로 그리고, `fallback` 으로 바꿀 수 있다. 로케일 기본은 실행 환경의 것이다.
