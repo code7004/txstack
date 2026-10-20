@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui`                                             |
 | 내보내는 것 | `TxContextMenu, TxDropMenu`                               |
 | 소스        | [`packages/ui/src/TxMenu/`](../../packages/ui/src/TxMenu) |
-| 테스트      | 33개                                                      |
+| 테스트      | 34개                                                      |
 
 ## 개발 목적
 
@@ -17,7 +17,9 @@
 
 `TxDropMenu` 는 눌러서 아래로 펼쳐지고, `TxContextMenu` 는 오른쪽 클릭한 자리에 뜬다.
 
-- **`children` 은 손대는 대상, `menu` 는 떠오르는 것이다** — `TxTooltip` 과 같은 규칙이다
+- **`children` 은 그 부품이 품는 것이다** — `TxDropMenu` 는 스스로 버튼을 만들어 그 아래 펼치므로
+  children 이 **항목**이고 누르는 것은 `label` 이다. `TxContextMenu` 는 이미 있는 것을 감싸므로
+  children 이 **대상**이고 항목은 `menu` 다([900_common](900_common.md) 「children 은 품는 것」)
 - 키보드는 메뉴 규약을 따른다 — ↓ 로 열고, ↑↓ 로 옮기고, Home·End 로 양 끝,
   Escape 로 닫으면 **포커스가 트리거로 돌아온다**
 - 항목의 링크는 `as` 로 갈아끼운다. 기본은 `<button>` 이고, 라우터를 주입하면 그것이 된다
@@ -25,16 +27,10 @@
 ### 쓰는 법
 
 ```tsx
-<TxDropMenu
-  menu={
-    <>
-      <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>
-      <TxDropMenu.Divider />
-      <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>
-    </>
-  }
->
-  👤 {username}
+<TxDropMenu label={`👤 ${username}`} menuLabel="계정 메뉴">
+  <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>
+  <TxDropMenu.Divider />
+  <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>
 </TxDropMenu>
 
 <TxContextMenu menu={<TxContextMenu.Item onClick={remove}>삭제</TxContextMenu.Item>}>
@@ -45,7 +41,7 @@
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxMenu/`
-- [x] **테스트** — 33개
+- [x] **테스트** — 34개
 - [x] **스토리** — `TxMenu.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -64,19 +60,33 @@
   둘로 두면 한쪽만 고쳐지고 다른 쪽은 남는다. 원본이 정확히 그랬다.
 - `TxDropMenu.Item` 과 `TxContextMenu.Item` 은 **이름만 둘이고 같은 부품**이다.
 
-### `children` 은 손대는 대상, `menu` 는 떠오르는 것
+### `children` 은 그 부품이 품는 것 (다시 정했다)
 
-메뉴 계열의 API 를 정하면서 **`TxTooltip` 의 `tip` 과 같은 규칙으로 맞췄다.**
-`children` 에는 누르거나 오른쪽 버튼을 댈 것이 오고, 뜨는 내용은 prop 으로 준다.
+**처음에는 `TxTooltip` 의 `tip` 과 같은 규칙으로 맞췄다** — 세 부품 모두 `children` 이 손대는 대상이고
+뜨는 것은 prop 이었다(`<TxDropMenu menu={…}>👤 {username}</TxDropMenu>`).
+
+black-message 의 계정 메뉴를 옮기면서 **사용자가 이 모양을 어색하다고 봤다.** 항목들이 prop 안의
+fragment 에 갇혀 들여쓰기가 깊어지고, `TxSideNav.Item` 은 하위를 children 으로 받는데 `TxDropMenu` 만
+반대였다. 그래서 기준을 "대상이냐 내용이냐" 에서 **"그 부품이 무엇을 품느냐"** 로 바꿨다.
+
+| 부품            | 하는 일                         | children    | 뜨는 것 / 누르는 것 |
+| --------------- | ------------------------------- | ----------- | ------------------- |
+| `TxDropMenu`    | **스스로 버튼을 만들어** 펼친다 | 항목        | `label` (버튼 안)   |
+| `TxContextMenu` | **이미 있는 것을 감싼다**       | 대상(표 등) | `menu`              |
+| `TxTooltip`     | **이미 있는 것을 감싼다**       | 대상        | `tip`               |
 
 ```tsx
-<TxTooltip tip="설명">     <button>버튼</button>       </TxTooltip>
-<TxDropMenu menu={<…/>}>   👤 {username}                </TxDropMenu>
-<TxContextMenu menu={<…/>}><TxAgGrid … />               </TxContextMenu>
+<TxDropMenu label="👤 kim">            <TxDropMenu.Item … />           </TxDropMenu>
+<TxContextMenu menu={<…/>}>            <TxAgGrid … />                  </TxContextMenu>
 ```
 
-셋이 같은 모양이라 하나를 익히면 나머지가 따라온다. `menu` · `children` 을 컴포넌트마다
-다르게 두면 소비자는 매번 문서를 다시 본다.
+함께 바꾼 것:
+
+- **누르는 것은 `label`** — `TxNavBar.Item` 의 `label`(ReactNode, 줄에 보이는 것)과 같은 이름 · 같은 뜻이다.
+  옛 앱들의 로컬 구현도 이 이름이라 옮기기 쉽다
+- **여는 방법은 `trigger` → `openOn`** — `TxNavBar` 와 같은 이름이다. `trigger` 는 "누르는 것" 과 헷갈렸다
+- 두 메뉴가 함께 받던 `menu` 는 이제 `TxContextMenu` 만 받는다. 나머지(`menuLabel` · `maxHeight` ·
+  `onOpenChange` · `classNames`)는 그대로 함께 받는다
 
 ### 라우터 주입 — 계획대로 마지막 두 곳이었다
 
@@ -126,8 +136,8 @@ Next.js·TanStack Router 소비자도 그대로 쓴다. (`TxCard` 는 링크를 
 - hover 로 여는 메뉴도 **눌러서 열린다.** 터치에는 hover 가 없다
 - 오른쪽 버튼 메뉴는 브라우저 기본 메뉴를 막는다. 안 막으면 그 위에 겹쳐 뜬다
 
-## `TxDropMenu` — `children` 은 버튼 안의 내용이다
+## `TxDropMenu` — `label` 은 버튼 안의 내용이다
 
 스토리를 브라우저에서 보다 콘솔이 잡아 준 것이다. 트리거를 감싸는 것이 이미 `<button>` 이라
-`children` 에 버튼을 넣으면 **`<button>` 안의 `<button>`** 이 된다. 타입으로는 못 막으므로
-prop 설명에 적었다. (스토리 하나가 그러고 있어서 함께 고쳤다.)
+`label` 에 버튼을 넣으면 **`<button>` 안의 `<button>`** 이 된다. 타입으로는 못 막으므로
+prop 설명에 적었다. `<div>` 도 버튼 안에 둘 수 없다 — 묶을 때는 `<span>` 을 쓴다.

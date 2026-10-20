@@ -1,6 +1,6 @@
 # 048 · TxNavBar
 
-> 가로로 도는 내비게이션 줄. 항목에 `panel` 을 주면 **메가메뉴**가 된다.
+> 가로로 도는 내비게이션 줄. 항목에 하위(children)를 주면 **메가메뉴**가 된다.
 
 |        |                                                               |
 | ------ | ------------------------------------------------------------- |
@@ -50,9 +50,13 @@ import { TxAppShell, TxNavBar } from "@txstack/ui";
 
 const menu = (
   <>
-    <TxNavBar.Item label="제품" panel={<ProductPanel />} />
+    <TxNavBar.Item label="제품">
+      <ProductPanel />
+    </TxNavBar.Item>
     <TxNavBar.Item label="가격" as={NavLink} to="/pricing" />
-    <TxNavBar.Item label="문서" panel={<DocsPanel />} />
+    <TxNavBar.Item label="문서">
+      <DocsPanel />
+    </TxNavBar.Item>
     <TxNavBar.Item label="회사" as={NavLink} to="/about" />
   </>
 );
@@ -105,7 +109,7 @@ const ProductPanel = () => (
   아니라 문서 조각이다. 패널 밖으로 나가면 닫는다
 - **← → 로 항목 사이를 옮긴다.** 열려 있으면 옮긴 항목이 열린 채로 이어진다.
   `Home` · `End` 로 양 끝
-- 항목이 링크면(`panel` 없음) 그냥 링크다. 열 것이 없다
+- 항목이 링크면(하위 없음) 그냥 링크다. 열 것이 없다
 
 ## 접근성
 
@@ -179,14 +183,16 @@ const ProductPanel = () => (
 
 ### 항목은 세 모양이다
 
-| 준 것          | 나오는 것                                                            |
-| -------------- | -------------------------------------------------------------------- |
-| `as` 만        | 그냥 링크                                                            |
-| `panel` 만     | 제목 자체가 **여는 버튼**(`<button aria-expanded>`)                  |
-| `panel` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |
+| 준 것             | 나오는 것                                                            |
+| ----------------- | -------------------------------------------------------------------- |
+| `as` 만           | 그냥 링크                                                            |
+| `children` 만     | 제목 자체가 **여는 버튼**(`<button aria-expanded>`)                  |
+| `children` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |
 
 ```tsx
-<TxNavBar.Item label="Documents" as={NavLink} to="/docs" panel={<Panel />} />
+<TxNavBar.Item label="Documents" as={NavLink} to="/docs">
+  <Panel />
+</TxNavBar.Item>
 ```
 
 셋째는 **`apps/site` 를 만들면서 요구된 것**이다. 그전에는 `panel` 이 있으면 소비자가 준
@@ -197,6 +203,21 @@ const ProductPanel = () => (
 `▾` 버튼은 `"<항목 이름> 하위 메뉴"` 로 읽히고, 그 문구는 `toggleLabel` 로 바꾼다.
 
 화살표 키는 `▾` 버튼도 찾아간다 — 여는 항목만 옮겨 다니고 링크는 `Tab` 이 맡는 규칙 그대로다.
+
+### 항목의 하위는 `children` 이다 (다시 정했다)
+
+처음에는 항목의 패널을 `panel` prop 으로 받았다(`<TxNavBar.Item label="문서" panel={<Panel />} />`).
+`TxDropMenu` 를 고치면서 **"children 은 그 부품이 품는 것"** 으로 기준을 정했고
+([900_common](900_common.md)), 항목은 스스로 버튼을 만들어 그 아래 펼치는 부품이라 **children 이 하위**가 됐다.
+`TxSideNav.Item` 이 처음부터 그랬고, `TxNavBar.SiteMap` 도 그렇다.
+
+```tsx
+<TxNavBar.Item label="회원" as={NavLink} to="/members">
+  <SubMenu items={node.children} />
+</TxNavBar.Item>
+```
+
+**줄의 `panel` 은 그대로 prop 이다** — 줄(`TxNavBar`)의 children 은 이미 항목들이라 자리가 없다.
 
 ### 줄이 패널 하나를 함께 쓴다 — `panel` on `TxNavBar`
 
@@ -211,14 +232,14 @@ const ProductPanel = () => (
 펼쳐 보이는 모양이다. 항목은 그냥 링크라 `▾` 가 없다. `apps/site` 에서 요구됐다 —
 `API` 에 얹으면 `API` 의 하위만이 아니라 `Documents · API · Example · About` 전부가 보이기를 바랐다.
 
-| 정한 것                                 | 왜                                                                                                                                                                                                  |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **마우스로 얹을 때만 열린다**           | 여는 버튼이 없으니 키보드 · 터치로는 열 길이 없다. 그래서 이 패널은 **지름길**이고, 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다. 키보드 · 터치로도 열려야 하면 항목마다 `panel` 을 준다 |
-| **항목 위에서만 연다**                  | 항목 사이 빈틈 · 줄 오른쪽 빈자리에서는 열지 않는다. 머리 줄을 가로지르기만 해도 패널이 덮이면 성가시다                                                                                             |
-| **항목의 `panel` 이 이긴다**            | 둘을 같이 주면 자기 패널을 가진 항목은 자기 것을 연다. 조용히 버리지 않는다 — `panel` + `as` 에서 한 번 겪었다                                                                                      |
-| 늘 줄 폭                                | `panelWidth` 와 상관없다. 메뉴 전체를 펼치는 자리라 항목 폭이 뜻이 없다                                                                                                                             |
-| `openOn="click"` 이면 안 열린다         | 누를 것이 없다                                                                                                                                                                                      |
-| `onOpenChange` 는 처음 얹은 항목의 글자 | 패널 안에서 항목을 옮겨 다니는 동안은 같은 패널이라 다시 알리지 않는다                                                                                                                              |
+| 정한 것                                 | 왜                                                                                                                                                                                                        |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **마우스로 얹을 때만 열린다**           | 여는 버튼이 없으니 키보드 · 터치로는 열 길이 없다. 그래서 이 패널은 **지름길**이고, 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다. 키보드 · 터치로도 열려야 하면 항목마다 하위(children)를 준다 |
+| **항목 위에서만 연다**                  | 항목 사이 빈틈 · 줄 오른쪽 빈자리에서는 열지 않는다. 머리 줄을 가로지르기만 해도 패널이 덮이면 성가시다                                                                                                   |
+| **항목의 하위가 이긴다**                | 둘을 같이 주면 자기 패널을 가진 항목은 자기 것을 연다. 조용히 버리지 않는다 — `panel` + `as` 에서 한 번 겪었다                                                                                            |
+| 늘 줄 폭                                | `panelWidth` 와 상관없다. 메뉴 전체를 펼치는 자리라 항목 폭이 뜻이 없다                                                                                                                                   |
+| `openOn="click"` 이면 안 열린다         | 누를 것이 없다                                                                                                                                                                                            |
+| `onOpenChange` 는 처음 얹은 항목의 글자 | 패널 안에서 항목을 옮겨 다니는 동안은 같은 패널이라 다시 알리지 않는다                                                                                                                                    |
 
 **`▾` 는 지우지 않았다.** 항목별 패널에서 `▾` 는 키보드 · 터치로 여는 유일한 길이다.
 `apps/site` 는 줄의 패널로 옮겨서 화면에서 `▾` 가 사라졌을 뿐이다.
@@ -227,7 +248,9 @@ const ProductPanel = () => (
 
 ```tsx
 <TxNavBar panelWidth="item" toggle="focus">
-  <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<Panel />} />
+  <TxNavBar.Item label="문서" as={NavLink} to="/docs">
+    <Panel />
+  </TxNavBar.Item>
 </TxNavBar>
 ```
 
@@ -249,7 +272,9 @@ black-message GNB 를 항목별 패널로 옮기자 하위가 있는 항목마�
 
 ```tsx
 <TxNavBar panelWidth="item">
-  <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<DocsMenu />} />
+  <TxNavBar.Item label="문서" as={NavLink} to="/docs">
+    <DocsMenu />
+  </TxNavBar.Item>
   <TxNavBar.SiteMap>
     <TxSiteMap>…</TxSiteMap>
   </TxNavBar.SiteMap>

@@ -80,25 +80,19 @@ const sideItem = (item: NavRoute): ReactNode =>
 
 /** 가로 줄은 **한 겹만** 펼친다 — 자식은 패널 안의 링크가 된다. */
 const barItem = (item: NavRoute) => (
-  <TxNavBar.Item
-    key={item.key}
-    label={item.meta?.label ?? item.key}
-    as={NavLink}
-    to={item.path}
-    panel={
-      item.children && (
-        <TxGrid columns={1}>
-          <section className="flex flex-col items-start gap-1">
-            {item.children.map((child: NavRoute) => (
-              <NavLink key={child.key} to={child.path} className="rounded px-1 py-0.5 hover:underline">
-                {child.meta?.label ?? child.key}
-              </NavLink>
-            ))}
-          </section>
-        </TxGrid>
-      )
-    }
-  />
+  <TxNavBar.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path}>
+    {item.children && (
+      <TxGrid columns={1}>
+        <section className="flex flex-col items-start gap-1">
+          {item.children.map((child: NavRoute) => (
+            <NavLink key={child.key} to={child.path} className="rounded px-1 py-0.5 hover:underline">
+              {child.meta?.label ?? child.key}
+            </NavLink>
+          ))}
+        </section>
+      </TxGrid>
+    )}
+  </TxNavBar.Item>
 );
 
 /** 지금 어디인지. `useCurrentRoute` 가 매칭 사슬을 그대로 준다. */

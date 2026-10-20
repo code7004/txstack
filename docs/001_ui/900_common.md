@@ -119,6 +119,34 @@ import "@txstack/ui/styles.css";
 **이식 시 `TxTheme` 을 참조하는 컴포넌트는 그 참조를 CSS + 토큰으로 바꾼 뒤에 가져온다.**
 `TxTheme` 자체는 새 저장소로 옮기지 않는다.
 
+## `children` 은 그 부품이 품는 것이다 (결정됨)
+
+**하위 항목 · 펼쳐질 내용은 `children` 으로 받는다.** 기준은 "그 부품이 무엇을 품는가" 하나다.
+
+- **스스로 버튼이나 틀을 만드는 부품** → children 은 **펼쳐질 내용 · 하위 항목**이다.
+  누르는 것은 `label` 로 받는다
+- **이미 있는 남의 요소를 감싸는 부품** → children 은 **감싸는 대상**이다.
+  떠오르는 것은 prop 으로 받는다
+
+| 부품                                      | 하는 일    | children                | 그 밖                           |
+| ----------------------------------------- | ---------- | ----------------------- | ------------------------------- |
+| `TxDropMenu`                              | 만든다     | 메뉴 항목               | 누르는 것은 `label`             |
+| `TxNavBar.Item`                           | 만든다     | 하위 패널               | 줄에 보이는 것은 `label`        |
+| `TxNavBar.SiteMap`                        | 만든다     | 지도                    | 아이콘은 `icon`                 |
+| `TxSideNav.Item`                          | 만든다     | 하위 항목               | `label`                         |
+| `TxCollapsible` · `TxCard` · `TxModal` 등 | 만든다     | 본문                    | 제목은 `title`                  |
+| `TxTooltip`                               | **감싼다** | 대상                    | 뜨는 것은 `tip`                 |
+| `TxContextMenu`                           | **감싼다** | 대상(표 · 그리드)       | 뜨는 것은 `menu`                |
+| `TxNavBar` 줄의 공유 패널                 | —          | 줄의 children 은 항목들 | 그래서 `panel` prop 으로 남는다 |
+
+**왜** — black-message 의 계정 메뉴를 옮길 때 `TxDropMenu` 의 항목이 `menu={<>…</>}` 안에 갇혀
+들여쓰기가 깊어졌고, `TxSideNav.Item` 은 하위를 children 으로 받는데 `TxDropMenu` · `TxNavBar.Item` 만
+반대였다. "대상이냐 내용이냐" 로 맞췄던 것을 **"품는 것"** 으로 다시 정해 메뉴 계열을 한 모양으로 모았다.
+감싸는 부품(`TxTooltip` · `TxContextMenu`)은 대상이 크고(표 · 그리드) 뜨는 것이 짧아 그대로 둔다.
+
+**자식을 뒤지지 않는다는 원칙은 그대로다.** `<TxDropMenu.Trigger>` 처럼 자식 중에서 역할을 찾는
+모양(Radix 식)은 만들지 않는다 — 조건부 렌더나 `memo` 한 겹에 못 찾는다(044 TxAppShell 「슬롯은 prop 이다」).
+
 ## 외부 의존 — 늘리지 않는다 (결정됨)
 
 옛 패키지의 peer 에는 `framer-motion` 과 `react-router-dom` 이 있었다. **지금은 없고, 늘리지 않는다.**

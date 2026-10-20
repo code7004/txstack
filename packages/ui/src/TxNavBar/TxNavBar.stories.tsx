@@ -40,8 +40,12 @@ const Panel = ({ groups, pick }: { groups: [string, string[]][]; pick: Pick }) =
 
 const items = (pick: Pick, picked: string) => (
   <>
-    <TxNavBar.Item label="제품" panel={<Panel groups={PRODUCT} pick={pick} />} />
-    <TxNavBar.Item label="문서" panel={<Panel groups={DOCS} pick={pick} />} />
+    <TxNavBar.Item label="제품">
+      <Panel groups={PRODUCT} pick={pick} />
+    </TxNavBar.Item>
+    <TxNavBar.Item label="문서">
+      <Panel groups={DOCS} pick={pick} />
+    </TxNavBar.Item>
     <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => pick("가격")} />
     <TxNavBar.Item label="회사" as="button" type="button" aria-current={picked === "회사" ? "page" : undefined} onClick={() => pick("회사")} />
   </>
@@ -70,7 +74,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          "가로로 도는 내비게이션 줄. **항목에 `panel` 을 주면 메가메뉴가 된다.**",
+          "가로로 도는 내비게이션 줄. **항목에 하위(children)를 주면 메가메뉴가 된다.**",
           "",
           "```tsx",
           'import { TxAppShell, TxNavBar } from "@txstack/ui";',
@@ -78,7 +82,7 @@ const meta = {
           "",
           "const menu = (",
           "  <>",
-          '    <TxNavBar.Item label="제품" panel={<ProductPanel />} />',
+          '    <TxNavBar.Item label="제품"><ProductPanel /></TxNavBar.Item>',
           '    <TxNavBar.Item label="가격" as={NavLink} to="/pricing" />',
           "  </>",
           ");",
@@ -91,8 +95,8 @@ const meta = {
           "| 준 것 | 나오는 것 |",
           "| --- | --- |",
           "| `as` 만 | 그냥 링크 |",
-          "| `panel` 만 | 제목 자체가 **여는 버튼** |",
-          "| `panel` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |",
+          "| `children` 만 | 제목 자체가 **여는 버튼** |",
+          "| `children` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |",
           "",
           "셋째가 사이트 내비게이션에서 흔한 모양이다(`TitleAsLink`). 제목이 진짜 링크라",
           "새 탭으로 열기 · 주소 복사가 되고, **여는 일은 버튼이 맡아 `aria-expanded` 가 거짓이",
@@ -113,7 +117,7 @@ const meta = {
           "",
           "**마우스로 얹을 때만 열린다** — 여는 버튼이 없어 키보드 · 터치로는 열 수 없다. 그래서 이",
           "패널은 **지름길**이다. 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다.",
-          "키보드 · 터치로도 열려야 하면 항목마다 `panel` 을 준다.",
+          "키보드 · 터치로도 열려야 하면 항목마다 하위(children)를 준다.",
           "",
           "패널 안의 링크를 누르면 패널이 닫힌다 — 줄의 패널이든 항목의 패널이든 같다.",
           "",
@@ -204,7 +208,7 @@ export const Default: Story = {
 };
 
 /**
- * **제목이 링크이면서 패널도 연다.** `panel` 과 `as` 를 함께 주면 제목은 그 요소가 되고,
+ * **제목이 링크이면서 패널도 연다.** 하위(children)와 `as` 를 함께 주면 제목은 그 요소가 되고,
  * 옆에 생긴 `▾` 버튼이 패널을 맡는다.
  *
  * 사이트 내비게이션에서 흔한 모양이다 — 제목을 눌러 그 묶음의 첫 화면으로 가고, `▾` 로
@@ -212,7 +216,7 @@ export const Default: Story = {
  * 여는 버튼이 가져서 거짓이 되지 않는다.
  *
  * ```tsx
- * <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<Panel />} />
+ * <TxNavBar.Item label="문서" as={NavLink} to="/docs"><Panel /></TxNavBar.Item>
  * ```
  *
  * 여기서는 라우터가 없어 제목이 `as="button"` 이다 — 누르면 본문이 바뀐다.
@@ -225,8 +229,12 @@ export const TitleAsLink: Story = {
     return (
       <div style={room}>
         <TxNavBar label="주 메뉴">
-          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")} panel={<Panel groups={PRODUCT} pick={setPicked} />} />
-          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")} panel={<Panel groups={DOCS} pick={setPicked} />} />
+          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")}>
+            <Panel groups={PRODUCT} pick={setPicked} />
+          </TxNavBar.Item>
+          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")}>
+            <Panel groups={DOCS} pick={setPicked} />
+          </TxNavBar.Item>
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
 
@@ -244,7 +252,7 @@ export const TitleAsLink: Story = {
  *
  * ```tsx
  * <TxNavBar toggle="focus">
- *   <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<Panel />} />
+ *   <TxNavBar.Item label="문서" as={NavLink} to="/docs"><Panel /></TxNavBar.Item>
  * </TxNavBar>
  * ```
  *
@@ -259,8 +267,12 @@ export const ToggleOnFocus: Story = {
     return (
       <div style={room}>
         <TxNavBar label="주 메뉴" panelWidth="item" toggle="focus">
-          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")} panel={<Panel groups={[PRODUCT[0]!]} pick={setPicked} />} />
-          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")} panel={<Panel groups={[DOCS[1]!]} pick={setPicked} />} />
+          <TxNavBar.Item label="제품" as="button" type="button" aria-current={picked === "제품" ? "page" : undefined} onClick={() => setPicked("제품")}>
+            <Panel groups={[PRODUCT[0]!]} pick={setPicked} />
+          </TxNavBar.Item>
+          <TxNavBar.Item label="문서" as="button" type="button" aria-current={picked === "문서" ? "page" : undefined} onClick={() => setPicked("문서")}>
+            <Panel groups={[DOCS[1]!]} pick={setPicked} />
+          </TxNavBar.Item>
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
 
@@ -341,7 +353,7 @@ export const SharedPanel: Story = {
  *
  * ```tsx
  * <TxNavBar panelWidth="item">
- *   <TxNavBar.Item label="문서" as={NavLink} to="/docs" panel={<DocsMenu />} />
+ *   <TxNavBar.Item label="문서" as={NavLink} to="/docs"><DocsMenu /></TxNavBar.Item>
  *   <TxNavBar.SiteMap>
  *     <TxSiteMap>…</TxSiteMap>
  *   </TxNavBar.SiteMap>
@@ -362,7 +374,9 @@ export const SiteMapCorner: Story = {
       <div style={room}>
         <TxNavBar label="주 메뉴" panelWidth="item">
           {SITE.map(([name, links]) => (
-            <TxNavBar.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)} panel={<LinkPanel groups={[[name, links]]} pick={setPicked} />} />
+            <TxNavBar.Item key={name} label={name} as="button" type="button" aria-current={picked === name ? "page" : undefined} onClick={() => setPicked(name)}>
+              <LinkPanel groups={[[name, links]]} pick={setPicked} />
+            </TxNavBar.Item>
           ))}
           <TxNavBar.SiteMap>
             <LinkPanel groups={SITE} pick={setPicked} />
@@ -383,8 +397,12 @@ export const PanelUnderItem: Story = {
     return (
       <div style={room}>
         <TxNavBar label="주 메뉴" panelWidth="item">
-          <TxNavBar.Item label="제품" panel={<Panel groups={[PRODUCT[0]!]} pick={setPicked} />} />
-          <TxNavBar.Item label="문서" panel={<Panel groups={[DOCS[1]!]} pick={setPicked} />} />
+          <TxNavBar.Item label="제품">
+            <Panel groups={[PRODUCT[0]!]} pick={setPicked} />
+          </TxNavBar.Item>
+          <TxNavBar.Item label="문서">
+            <Panel groups={[DOCS[1]!]} pick={setPicked} />
+          </TxNavBar.Item>
           <TxNavBar.Item label="가격" as="button" type="button" aria-current={picked === "가격" ? "page" : undefined} onClick={() => setPicked("가격")} />
         </TxNavBar>
         <Body picked={picked} />

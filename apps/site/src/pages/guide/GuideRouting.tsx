@@ -170,7 +170,11 @@ function GnbDemo() {
             const label = node.meta?.label ?? node.key;
             const pick = () => setPicked(label);
 
-            return <TxNavBar.Item key={node.key} label={label} as="button" type="button" aria-current={current(label)} onClick={pick} panel={node.children && subMenu(node.children)} />;
+            return (
+              <TxNavBar.Item key={node.key} label={label} as="button" type="button" aria-current={current(label)} onClick={pick}>
+                {node.children && subMenu(node.children)}
+              </TxNavBar.Item>
+            );
           })}
         </TxNavBar>
         <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
@@ -289,8 +293,8 @@ export const SideMenu = () => <TxSideNav>{MENU.map(item)}</TxSideNav>;`}</CodeBl
 
         <h3 className="mt-2 font-semibold">가로 메뉴(GNB) — TxNavBar</h3>
         <p className={muted}>
-          하위가 있는 항목에만 <code>panel</code>을 주고 <code>panelWidth=&quot;item&quot;</code>으로 두면, 하위 메뉴가 <strong>그 항목 바로 아래</strong>에 펼쳐집니다. 메뉴 전체를 한 판에 펼치면 열이 상위 항목과 따로 놓여 어느 것이 어느 항목의
-          하위인지 헷갈리기 쉽습니다.
+          하위가 있는 항목에만 <code>children</code>으로 하위 메뉴를 주고 <code>panelWidth=&quot;item&quot;</code>으로 두면, 하위 메뉴가 <strong>그 항목 바로 아래</strong>에 펼쳐집니다. 메뉴 전체를 한 판에 펼치면 열이 상위 항목과 따로 놓여 어느 것이
+          어느 항목의 하위인지 헷갈리기 쉽습니다.
         </p>
         <CodeBlock title="src/Gnb.tsx">{`import { getNavRoutes, type NavRoute } from "@txstack/route-meta";
 import { TxNavBar } from "@txstack/ui";
@@ -312,13 +316,9 @@ export function Gnb() {
   return (
     <TxNavBar panelWidth="item">
       {menu.map((node) => (
-        <TxNavBar.Item
-          key={node.key}
-          label={node.meta?.label}
-          as={NavLink}
-          to={node.path}
-          panel={node.children && <SubMenu items={node.children} />}
-        />
+        <TxNavBar.Item key={node.key} label={node.meta?.label} as={NavLink} to={node.path}>
+          {node.children && <SubMenu items={node.children} />}
+        </TxNavBar.Item>
       ))}
     </TxNavBar>
   );

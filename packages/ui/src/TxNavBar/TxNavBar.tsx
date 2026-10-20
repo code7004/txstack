@@ -15,13 +15,15 @@ const HOVER_CLOSE_DELAY = 120;
 const BAR = "tx-nav-bar";
 
 /**
- * 가로로 도는 내비게이션 줄. **항목에 `panel` 을 주면 메가메뉴가 된다.**
+ * 가로로 도는 내비게이션 줄. **항목에 하위(children)를 주면 메가메뉴가 된다.**
  *
  * @example
  * ```tsx
  * const menu = (
  *   <>
- *     <TxNavBar.Item label="제품" panel={<ProductPanel />} />
+ *     <TxNavBar.Item label="제품">
+ *       <ProductPanel />
+ *     </TxNavBar.Item>
  *     <TxNavBar.Item label="가격" as={NavLink} to="/pricing" />
  *   </>
  * );
@@ -137,7 +139,7 @@ export function TxNavBar({ label, panel, panelWidth = "bar", openOn = "hover", t
    * **줄의 패널은 항목에 얹으면 열린다.** 항목 사이의 빈틈이나 줄 오른쪽의 빈자리에서는
    * 열지 않는다 — 머리 줄을 가로지르기만 해도 패널이 덮이면 성가시다.
    *
-   * 자기 `panel` 을 가진 항목은 건너뛴다. 그 항목은 스스로 자기 패널을 연다.
+   * 자기 하위(children)를 가진 항목은 건너뛴다. 그 항목은 스스로 자기 패널을 연다.
    */
   const hdPointerOver = (event: ReactPointerEvent<HTMLUListElement>) => {
     if (!panel || openOn !== "hover" || event.pointerType !== "mouse") return;

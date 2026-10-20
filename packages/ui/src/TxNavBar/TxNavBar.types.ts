@@ -25,9 +25,9 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
    *
    * **마우스로 얹을 때만 열린다** — 여는 버튼이 없으므로 키보드 · 터치로는 열 수 없다.
    * 그래서 이 패널은 **지름길**이다. 안의 링크는 전부 제목이 가리키는 화면에서도 닿아야 한다.
-   * 키보드 · 터치로도 열려야 하면 항목마다 `panel` 을 준다.
+   * 키보드 · 터치로도 열려야 하면 항목마다 하위(children)를 준다.
    *
-   * 자기 `panel` 을 가진 항목에 얹으면 그 항목의 패널이 열린다. `openOn="click"` 이면
+   * 자기 하위(children)를 가진 항목에 얹으면 그 항목의 패널이 열린다. `openOn="click"` 이면
    * 이 패널은 열리지 않는다.
    */
   panel?: ReactNode;
@@ -48,7 +48,7 @@ export interface TxNavBarProps extends HTMLAttributes<HTMLElement> {
   openOn?: "hover" | "click";
 
   /**
-   * 링크이면서 패널을 여는 항목(`as` + `panel`)의 `▾` 버튼을 언제 보일지. 기본 `"always"`.
+   * 링크이면서 패널을 여는 항목(`as` + `children`)의 `▾` 버튼을 언제 보일지. 기본 `"always"`.
    *
    * - `"always"` — 늘 보인다. 펼칠 것이 있다는 표시이기도 하다
    * - `"focus"` — 평소에는 숨고 **키보드 포커스가 오면** 보인다. 마우스는 얹으면 열리므로 없어도 된다.
@@ -76,8 +76,8 @@ export type TxNavBarItemProps<E extends ElementType = "a"> = {
    * 링크로 쓸 것. 기본 `<a>` 이고 `as={NavLink}` 로 갈아끼운다.
    * **패키지가 라우터를 알지 못한다.**
    *
-   * `panel` 과 함께 주면 **제목이 링크이고 옆의 `▾` 버튼이 패널을 연다.**
-   * `panel` 만 주고 이것을 안 주면 제목 자체가 여는 버튼이다.
+   * `children` 과 함께 주면 **제목이 링크이고 옆의 `▾` 버튼이 패널을 연다.**
+   * `children` 만 주고 이것을 안 주면 제목 자체가 여는 버튼이다.
    */
   as?: E;
 
@@ -85,18 +85,21 @@ export type TxNavBarItemProps<E extends ElementType = "a"> = {
   label: ReactNode;
 
   /**
-   * 펼쳐질 것. **주면 이 항목이 메가메뉴가 된다** — 안 주면 그냥 링크다.
+   * 그 항목 아래 펼쳐질 패널. **주면 이 항목이 메가메뉴가 된다** — 안 주면 그냥 링크다.
    *
    * 안의 배치는 소비자 것이다. 그 배치가 곧 그 사이트의 정보 구조라, 라이브러리가 정하면
    * 도메인 지식이 들어온다.
    *
    * **`as` 를 함께 주면 제목이 링크가 되고 여는 일은 옆의 `▾` 버튼이 맡는다.**
    * 안 주면 제목 자체가 여는 버튼이다.
+   *
+   * children 인 이유: 항목이 스스로 버튼을 만들어 펼치는 부품이라 children 이 품는 것은 하위다 —
+   * `TxSideNav.Item` · `TxDropMenu` 와 같다(docs/001_ui/900_common.md 「children 은 품는 것」).
    */
-  panel?: ReactNode;
+  children?: ReactNode;
 
   /**
-   * `panel` 과 `as` 를 함께 줬을 때 생기는 `▾` 버튼의 이름. 기본 `"하위 메뉴"`.
+   * `children` 과 `as` 를 함께 줬을 때 생기는 `▾` 버튼의 이름. 기본 `"하위 메뉴"`.
    *
    * 스크린리더는 `"<항목 이름> 하위 메뉴"` 로 읽는다. **번역된 글자를 그대로 준다** —
    * 키를 넘기고 안에서 번역하지 않는다.

@@ -162,7 +162,7 @@ export function GuideLayout() {
         <SideBySide>
           <TxCard title="TxNavBar: 가로 메뉴">
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              항목에 <code>panel</code>을 주면 그 항목의 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
+              항목의 <code>children</code>으로 하위를 주면 그 항목의 메가메뉴가 됩니다. <code>as</code>를 함께 주면 항목 이름은 링크가 되고, 옆의 <code>▾</code>가 패널을 엽니다.
             </p>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               <code>▾</code>는 키보드와 터치로 패널을 여는 길입니다. 마우스 위주의 화면이라 거슬린다면 <code>toggle=&quot;focus&quot;</code>로 평소에는 숨기고 키보드 포커스가 올 때만 보이게 할 수 있습니다. 이때 터치로는 패널을 열 수 없습니다.
