@@ -13,6 +13,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.101.4",
     "@txstack/axios": "workspace:*",
+    "@txstack/fns": "workspace:*",
     "@txstack/hooks": "workspace:*",
     "@txstack/route-meta": "workspace:*",
     "@txstack/ui": "workspace:*",

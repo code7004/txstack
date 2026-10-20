@@ -7,7 +7,7 @@ const pkg = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, im
 
 /**
  * txstack 을 소개하는 사이트. **이 앱은 배포 패키지가 아니라 첫 소비자다** —
- * 네 패키지를 진짜로 써 보는 자리이므로, 소스에 별칭을 걸어 고친 것이 바로 반영되게 한다.
+ * 다섯 패키지를 진짜로 써 보는 자리이므로, 소스에 별칭을 걸어 고친 것이 바로 반영되게 한다.
  *
  * 스토리북과 같은 방식이다(`apps/storybook/.storybook/main.ts`).
  */
@@ -29,7 +29,9 @@ export default defineConfig({
       { find: /^@txstack\/route-meta$/, replacement: pkg("route-meta/src/index.ts") },
       { find: /^@txstack\/hooks\/useUrlQuery$/, replacement: pkg("hooks/src/useUrlQuery.ts") },
       { find: /^@txstack\/hooks\/useObjectState$/, replacement: pkg("hooks/src/useObjectState.ts") },
-      { find: /^@txstack\/axios$/, replacement: pkg("axios/src/index.ts") }
+      { find: /^@txstack\/axios$/, replacement: pkg("axios/src/index.ts") },
+      // fns 는 그룹마다 진입점이다 — "@txstack/fns/browser/cookie" → src/browser/cookie.ts
+      { find: /^@txstack\/fns\/(.+)$/, replacement: pkg("fns/src/$1.ts") }
     ]
   }
 });

@@ -21,11 +21,12 @@ export interface ApiPage {
   label: string;
 }
 
-export const API_PAGES: Record<"ui" | "axios" | "hooks" | "routeMeta", ApiPage> = {
+export const API_PAGES: Record<"ui" | "axios" | "hooks" | "routeMeta" | "fns", ApiPage> = {
   ui: { path: "/api/ui", label: "ui" },
   axios: { path: "/api/axios", label: "axios" },
   hooks: { path: "/api/hooks", label: "hooks" },
-  routeMeta: { path: "/api/route-meta", label: "route-meta" }
+  routeMeta: { path: "/api/route-meta", label: "route-meta" },
+  fns: { path: "/api/fns", label: "fns" }
 };
 
 export const TABLES = {
@@ -319,6 +320,147 @@ export const TABLES = {
         ["CanAccess", "(permissions, node) => boolean", "", "권한 판정 함수"],
         ["CurrentRoute", "{ node, meta, matches, params, pathname }", "", "useCurrentRoute의 결과"],
         ["RouteHandle", "{ node: RouteNode }", "", "buildRouteObjects가 각 라우트의 handle에 싣는 값. matchRoutes 결과에서 원래 노드를 찾을 때 씁니다"]
+      ] as Row[]
+    }
+  },
+  fns: {
+    installEntry: {
+      section: "Install",
+      searchable: true,
+      rows: [
+        ["@txstack/fns/num", "isNumeric · toNumber · format · percent · compact · bytes", "—", "숫자 판정 · 변환 · 포맷"],
+        ["@txstack/fns/date", "dayRange · lastDays · localTimeZone · parseYmd · isoWeek · parseTimestamps · splitSeconds · elapsed", "—", "날짜 · 기간 · 경과 시간. dayjs 없이 Date만 씁니다"],
+        ["@txstack/fns/rand", "float · int · date · pick · ip · shortId", "—", "랜덤 값과 짧은 ID. 목업 데이터용이며 암호용이 아닙니다"],
+        ["@txstack/fns/str", "hashColor · paletteColor · PALETTE · emailLocalPart · hasSpecialChars · hasNonAscii", "—", "문자열과 문자열에서 만든 색"],
+        ["@txstack/fns/obj", "diff · undefinedToNull", "—", "객체. lodash에 있는 것은 두지 않습니다"],
+        ["@txstack/fns/arr", "sortByOrder", "—", "정해 준 순서대로 정렬"],
+        ["@txstack/fns/form", "check · checkEmpty · checkPattern", "—", "폼 값의 빈 칸과 형식 검사"],
+        ["@txstack/fns/async", "sleep · withLoading", "—", "기다리기와 로딩 · 오류 처리 감싸기"],
+        ["@txstack/fns/math", "lerp · lerpVector · toRadians · toDegrees · rotate", "—", "보간 · 각도 · 2D 회전"],
+        ["@txstack/fns/phone-kr", "normalize · parseMobile · mask · maskIfPhone · validateMany · dedupe · exclude", "—", "한국 전화번호. 대량 처리는 1만 건마다 화면에 양보합니다"],
+        ["@txstack/fns/browser/cookie", "get · set · remove", "브라우저", "쿠키 읽기 · 쓰기. 값은 JSON으로 저장합니다"],
+        ["@txstack/fns/browser/css", "inject · remove", "브라우저", ":hover · ::before처럼 인라인 style로 안 되는 규칙을 실행 중에 넣습니다"],
+        ["@txstack/fns/browser/file", "readText · download", "브라우저", "파일을 글자로 읽기와 내려받기"]
+      ] as Row[]
+    },
+    num: {
+      section: "num",
+      searchable: true,
+      rows: [
+        ["isNumeric", "(value: unknown) => boolean", "—", '유한한 숫자로 읽히는가. "1.5" · "1e3"은 참, "" · " " · "1,234" · "12abc" · 배열은 거짓입니다'],
+        ["toNumber", "(value, fallback?) => number | undefined", "—", "숫자로 바꿉니다. 바꿀 수 없으면 fallback입니다. null도 0이 아니라 fallback이 됩니다"],
+        ["format", "(value: Numberish, options?: FormatOptions) => string", "—", "자릿수 구분. Intl.NumberFormat 옵션(통화 · 소수 자릿수 등)을 그대로 받습니다"],
+        ["percent", "(ratio, digits = 1, options?) => string", "digits 1", '비율(0~1)을 백분율로. 소수 자릿수는 고정입니다 — 0.5는 "50.0%"'],
+        ["compact", "(value, options?) => string", "소수 1자리", "큰 수를 짧게. ko-KR이면 만 · 억, en-US면 K · M"],
+        ["bytes", "(value, decimals = 2) => string", "decimals 2", '1024 기준 B · KB · MB · GB · TB · PB. 음수와 빈 값은 "0 B"'],
+        ["Numberish", "number | string | null | undefined", "—", "포맷 함수가 받는 값"],
+        ["FormatOptions", "Intl.NumberFormatOptions & { locale?, fallback? }", "환경 로케일", "locale을 빼면 실행 환경의 로케일. fallback을 주면 빈 값에 0 대신 그 글자"]
+      ] as Row[]
+    },
+    date: {
+      section: "date",
+      searchable: true,
+      rows: [
+        ["dayRange", "(from, to, now?) => [Date, Date]", "now: 지금", "오늘 기준 from일째 0시부터 to일째 23:59:59.999까지"],
+        ["lastDays", "(days, now?) => [Date, Date]", "now: 지금", "오늘을 포함한 최근 days일. lastDays(1)은 오늘 하루입니다"],
+        ["localTimeZone", "() => string", "—", '실행 환경의 IANA 시간대("Asia/Seoul")'],
+        ["parseYmd", "(ymd: string) => Date | null", "—", '"20251231" → 그날 0시. 형식이 다르거나 없는 날짜면 null'],
+        ["isoWeek", "(value: Date | string) => IsoWeek | null", "—", "ISO 8601 주차. 12월 말이 다음 해 1주차일 수 있습니다"],
+        ["parseTimestamps", "(value) => [Date, Date] | null", "—", "쉼표로 이은 밀리초 두 개(주소 쿼리의 기간) → [시작, 끝]"],
+        ["splitSeconds", "(total, { pad?, dayLabel? }) => SplitSeconds", 'pad true · dayLabel "d "', '초를 일 · 시 · 분 · 초로 나누고 "1d 01:01:01" 꼴 글자도 줍니다'],
+        ["elapsed", "(seconds, { decimals?, t? }) => string", "decimals 2", '경과 시간을 "1m 30s"처럼. t에 i18n 번역 함수를 넘기면 단위 글자가 바뀝니다'],
+        ["IsoWeek", "{ year, week, key }", "—", 'key는 "2026-W01"'],
+        ["SplitSeconds", "{ days, hours, minutes, seconds, formatted }", "—", "splitSeconds의 결과"],
+        ["ElapsedKey", '"just_now" | "second" | "minute" | "hour" | "day" | "month" | "year"', "—", "elapsed가 t에 넘기는 키"]
+      ] as Row[]
+    },
+    rand: {
+      section: "rand",
+      searchable: true,
+      rows: [
+        ["float", "(min, max, bias?, weight = 0.8) => number", "—", "min 이상 max 미만의 실수. bias로 한쪽에 쏠리게 합니다"],
+        ["int", "(min, max, bias?, weight?) => number", "—", "min 이상 max 미만의 정수"],
+        ["date", "(start: Date, end: Date, bias?, weight?) => Date", "—", "범위 안의 날짜"],
+        ["pick", "(items, bias?, weight?) => T | undefined", "—", "배열에서 하나. 빈 배열이면 undefined"],
+        ["ip", "() => string", "—", '"x.x.x.x" 꼴의 IPv4 주소'],
+        ["shortId", "() => string", "—", "시각 + 랜덤 + 순번. 같은 밀리초에 불러도 겹치지 않습니다"]
+      ] as Row[]
+    },
+    str: {
+      section: "str",
+      searchable: true,
+      rows: [
+        ["hashColor", "(value: string) => string", '"#407adf"', "문자열마다 늘 같은 #rrggbb 색. 아바타 · 태그 색에 씁니다"],
+        ["paletteColor", "(index: number) => string", "—", "PALETTE에서 순번으로 색 하나. 넘치면 처음으로 돕니다"],
+        ["PALETTE", "readonly string[]", "—", "Tailwind 500 계열 열다섯 색"],
+        ["emailLocalPart", "(email: string) => string", "—", "@ 앞부분. @가 없으면 그대로"],
+        ["hasSpecialChars", "(value: string) => boolean", "—", "키보드 특수문자가 있는가. 밑줄과 공백은 아닙니다"],
+        ["hasNonAscii", "(value: string) => boolean", "—", "ASCII 밖의 글자(한글 · 이모지 등)가 있는가"]
+      ] as Row[]
+    },
+    obj: {
+      section: "obj · arr",
+      searchable: true,
+      rows: [
+        ["diff", "(prev, next, isEqual = Object.is) => Partial<T>", "Object.is", "next에서 바뀐 필드만. 깊은 비교는 _.isEqual 같은 함수를 넘깁니다"],
+        ["undefinedToNull", "(value: T) => UndefinedToNull<T>", "—", "undefined인 필드를 null로 바꾼 새 객체. JSON으로 보낼 때 필드가 빠지지 않습니다"],
+        ["UndefinedToNull", "{ [K in keyof T]: … | null }", "—", "undefinedToNull의 결과 타입"],
+        ["sortByOrder", '(items, order, by, direction = "asc") => T[]', "asc", "정해 준 순서대로 정렬한 새 배열. 목록에 없는 값은 뒤에서 글자 순입니다"]
+      ] as Row[]
+    },
+    form: {
+      section: "form",
+      searchable: true,
+      rows: [
+        ["check", "(values, rules?, options?) => FormError<T> | null", "—", "빈 칸을 먼저, 그다음 형식을 봅니다. 첫 번째로 걸린 필드 하나만 알려 줍니다"],
+        ["checkEmpty", "(values, { optional?, message? }) => FormError<T> | null", "—", "빈 필드를 찾습니다. 공백만 있는 문자열과 빈 배열도 빈 것, 0 · false는 값이 있는 것입니다"],
+        ["checkPattern", "(values, rules) => FormError<T> | null", "—", "형식이 틀린 필드를 찾습니다. 빈 필드는 건너뜁니다"],
+        ["FormError", "Partial<Record<keyof T, string>>", "—", "걸린 필드 하나 → 메시지"],
+        ["PatternRule", "{ pattern: RegExp; message: string }", "—", "형식 규칙 하나"],
+        ["PatternRules", "Partial<Record<keyof T, PatternRule>>", "—", "필드 이름 → 형식 규칙"],
+        ["CheckEmptyOptions", "{ optional?, message? }", "—", "비워도 되는 필드와 빈 칸 메시지"]
+      ] as Row[]
+    },
+    async: {
+      section: "async · math",
+      searchable: true,
+      rows: [
+        ["sleep", "(ms = 1000) => Promise<void>", "1000", "ms 뒤에 풀리는 Promise"],
+        ["withLoading", "(fn, { onLoading?, onError? }) => (...args) => Promise<R | undefined>", "—", "비동기 함수에 로딩 상태와 오류 처리를 붙입니다. onError가 없으면 오류를 다시 던집니다"],
+        ["WithLoadingOptions", "{ onLoading?, onError? }", "—", "withLoading의 옵션"],
+        ["lerp", "(start, end, t) => number", "—", "선형 보간. t가 0이면 start, 1이면 end"],
+        ["lerpVector", "(start: Vector2, end: Vector2, t) => Vector2", "—", "좌표의 선형 보간"],
+        ["toRadians", "(degree) => number", "—", "도 → 라디안"],
+        ["toDegrees", "(radian) => number", "—", "라디안 → 도"],
+        ["rotate", "(point, center, degree) => Vector2", "—", "center를 축으로 degree만큼 돌린 좌표"],
+        ["Vector2", "{ x: number; y: number }", "—", "2D 좌표"]
+      ] as Row[]
+    },
+    phone: {
+      section: "phone-kr",
+      searchable: true,
+      rows: [
+        ["normalize", "(input) => string", "—", "숫자만 남기고 휴대폰 번호 꼴로. +82 · 82-010 · 앞자리 생략을 맞춥니다"],
+        ["parseMobile", "(input) => string | null", "—", "010 휴대폰이면 숫자만 남긴 값, 아니면 null"],
+        ["mask", "(input) => string", "—", '가운데 자리를 *로 가립니다. "010****5678"'],
+        ["maskIfPhone", "(keyword) => string", "—", "전화번호처럼 보일 때만 가립니다. 검색어를 화면 · 로그에 남길 때 씁니다"],
+        ["validateMany", "(numbers) => Promise<{ valid, invalid }>", "—", "휴대폰 번호 목록을 가릅니다. valid는 정규화한 값, invalid는 원본"],
+        ["dedupe", "(numbers) => Promise<{ uniques, duplicates }>", "—", "중복을 걸러 냅니다. 정규화는 하지 않습니다"],
+        ["exclude", "(source, blocked) => Promise<{ remains, excluded }>", "—", "source에서 blocked에 든 번호를 뺍니다"]
+      ] as Row[]
+    },
+    browser: {
+      section: "browser",
+      searchable: true,
+      rows: [
+        ["get", "(name, fallback: T) => T", "—", "cookie — 저장한 값을 읽습니다. 없으면 fallback"],
+        ["set", "(name, value, options?: SetCookieOptions) => void", "30일 · / · Lax", "cookie — 값을 JSON으로 저장합니다"],
+        ["remove", "(name, { path? }) => void", "—", "cookie — 지웁니다. css — inject로 만든 <style>을 통째로 지웁니다"],
+        ["SetCookieOptions", "{ days?, path?, sameSite?, secure? }", "—", "sameSite가 None이면 secure를 자동으로 켭니다"],
+        ["inject", "(styleId, selector, rules: CssRules) => boolean", "—", "css — 규칙을 넣습니다. 같은 선택자가 있으면 그 자리에서 바꿉니다"],
+        ["CssRules", "Record<string, string | number>", "—", "camelCase와 CSS 이름(--변수 포함)을 둘 다 받습니다"],
+        ["readText", "(source: Blob) => Promise<string>", "—", "file — 고른 파일을 글자로 읽습니다"],
+        ["download", "(filename, content, type?) => boolean", "text/plain", "file — 내려받게 합니다. 문자열 배열은 다듬어 줄로 잇습니다. 내용이 없으면 false"]
       ] as Row[]
     }
   }

@@ -8,6 +8,7 @@ import { SectionLayout } from "./pages/SectionLayout";
 const AboutHome = page(() => import("./pages/AboutHome"), "AboutHome", "pages/AboutHome.tsx");
 const CaseStudy = page(() => import("./pages/CaseStudy"), "CaseStudy", "pages/CaseStudy.tsx");
 const ApiAxios = page(() => import("./pages/api/ApiAxios"), "ApiAxios", "pages/api/ApiAxios.tsx");
+const ApiFns = page(() => import("./pages/api/ApiFns"), "ApiFns", "pages/api/ApiFns.tsx");
 const ApiHome = page(() => import("./pages/ApiHome"), "ApiHome", "pages/ApiHome.tsx");
 const ApiHooks = page(() => import("./pages/api/ApiHooks"), "ApiHooks", "pages/api/ApiHooks.tsx");
 const ApiRouteMeta = page(() => import("./pages/api/ApiRouteMeta"), "ApiRouteMeta", "pages/api/ApiRouteMeta.tsx");
@@ -118,13 +119,14 @@ export const routes = {
   api: {
     path: "/api",
     element: <SectionLayout />,
-    meta: { label: "API", description: "네 패키지의 API 레퍼런스" },
+    meta: { label: "API", description: "다섯 패키지의 API 레퍼런스" },
     children: {
       index: { index: true, element: <ApiHome /> },
       ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui", description: "Tx* 컴포넌트 49종의 props · 토큰 레퍼런스" } },
       routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta", description: "RouteTree · buildRouteObjects · getNavRoutes 레퍼런스" } },
       hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks", description: "useUrlQuery · useObjectState 레퍼런스" } },
-      axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios", description: "createHttpClient 옵션과 오류 처리 레퍼런스" } }
+      axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios", description: "createHttpClient 옵션과 오류 처리 레퍼런스" } },
+      fns: { path: "/api/fns", element: <ApiFns />, meta: { label: "fns", description: "숫자 · 날짜 · 폼 · 전화번호 · 쿠키 같은 작은 함수 모음 레퍼런스" } }
     }
   },
 

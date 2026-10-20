@@ -14,12 +14,13 @@ import { UiGroups } from "./home/UiGroups";
  * 배경 글보다 실물을 앞에 둔다. 홈은 AG Grid 와 외부 요청을 불러오지 않는다 — 큰 표와 진짜 요청은 Example 이 맡는다.
  */
 
-/** 네 패키지. 다 설치할 필요가 없다 — 필요한 때만 고른다 */
+/** 다섯 패키지. 다 설치할 필요가 없다 — 필요한 때만 고른다 */
 const PACKAGES = [
   { name: "@txstack/ui", when: "버튼 · 폼 · 표 · 메뉴 등 화면 부품이 필요할 때", extra: "표는 ag-grid, 달력은 react-day-picker를 쓸 때만 추가", to: "/api/ui" },
   { name: "@txstack/route-meta", when: "라우트 정의 하나로 메뉴와 지금 위치를 함께 관리할 때", extra: "react-router-dom", to: "/api/route-meta" },
   { name: "@txstack/hooks", when: "객체 상태나 URL 검색 조건을 관리할 때", extra: "URL 상태는 react-router-dom", to: "/api/hooks" },
-  { name: "@txstack/axios", when: "인증 · 응답 · 오류 처리 정책을 HTTP 클라이언트에 연결할 때", extra: "axios. React 없이도 동작", to: "/api/axios" }
+  { name: "@txstack/axios", when: "인증 · 응답 · 오류 처리 정책을 HTTP 클라이언트에 연결할 때", extra: "axios. React 없이도 동작", to: "/api/axios" },
+  { name: "@txstack/fns", when: "숫자 포맷 · 날짜 범위 · 폼 검사 · 전화번호 마스킹을 매번 다시 쓰고 있을 때", extra: "없음. React 없이도 동작", to: "/api/fns" }
 ];
 
 /** 왜 이렇게 만들었나. 프로젝트 이름은 싣지 않는다 — 공개 사이트다 */
@@ -140,11 +141,11 @@ export function Home() {
         <ThemeTry />
       </section>
 
-      {/* --- 4. 네 패키지 --------------------------------------------------------- */}
+      {/* --- 4. 다섯 패키지 --------------------------------------------------------- */}
       <section className="flex flex-col gap-4">
         <header className="flex flex-col gap-1">
           <h2 className="text-xl font-semibold">Pick only what you need</h2>
-          <p className="text-slate-600 dark:text-slate-300">네 패키지는 따로 설치합니다. UI만 써도 되고, 필요한 도구만 더하면 됩니다.</p>
+          <p className="text-slate-600 dark:text-slate-300">다섯 패키지는 따로 설치합니다. UI만 써도 되고, 필요한 도구만 더하면 됩니다.</p>
         </header>
 
         <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
