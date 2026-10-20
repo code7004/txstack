@@ -31,7 +31,7 @@ import {
   TxTooltip
 } from "@txstack/ui";
 import { Block, Demo, Page } from "../components/Page";
-import { STORYBOOK_URL } from "../lib/links";
+import { STORYBOOK_TARGET, STORYBOOK_URL } from "../lib/links";
 import { Used } from "../components/Used";
 
 /**
@@ -300,7 +300,7 @@ export function Components() {
       }
     >
       <div className="flex flex-wrap gap-3">
-        <a href={STORYBOOK_URL} className="tx-button" data-variant="primary" target="_blank" rel="noreferrer">
+        <a href={STORYBOOK_URL} className="tx-button" data-variant="primary" target={STORYBOOK_TARGET}>
           <span className="tx-button__label">Storybook에서 props 보기 ↗</span>
         </a>
         <Link to="/api/ui#components-by-category" className="tx-button" data-variant="secondary">

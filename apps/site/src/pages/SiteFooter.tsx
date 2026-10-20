@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { STORYBOOK_URL } from "../lib/links";
+import { STORYBOOK_TARGET, STORYBOOK_URL } from "../lib/links";
 
 const PACKAGES = [
   ["@txstack/ui", "/api/ui"],
@@ -47,7 +47,7 @@ export function SiteFooter() {
           <a href="https://github.com/code7004/txstack" className="text-sm hover:underline" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <a href={STORYBOOK_URL} className="text-sm hover:underline" target="_blank" rel="noreferrer">
+          <a href={STORYBOOK_URL} className="text-sm hover:underline" target={STORYBOOK_TARGET}>
             Storybook — 컴포넌트 props ↗
           </a>
           <Link to="/about/contact" className="text-sm hover:underline">

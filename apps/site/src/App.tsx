@@ -4,7 +4,7 @@ import { NavLink, useLocation, useRoutes } from "react-router-dom";
 import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { DocPager } from "./components/DocPager";
 import { PageToc } from "./components/PageToc";
-import { STORYBOOK_URL } from "./lib/links";
+import { STORYBOOK_TARGET, STORYBOOK_URL } from "./lib/links";
 import { SiteFooter } from "./pages/SiteFooter";
 import { SiteSearch } from "./search/SiteSearch";
 import { routes } from "./routes";
@@ -193,7 +193,7 @@ function Layout({ children }: { children: ReactNode }) {
             <SiteSearch narrow={narrow} />
             {/* 바깥으로 나가는 둘. Storybook 은 라우트가 아닌 별개의 사이트라 가로 줄이 아니라 여기 둔다. 좁으면 서랍으로 내린다 */}
             {!narrow && (
-              <a href={STORYBOOK_URL} className="rounded px-3 py-2 text-sm hover:underline" target="_blank" rel="noreferrer">
+              <a href={STORYBOOK_URL} className="rounded px-3 py-2 text-sm hover:underline" target={STORYBOOK_TARGET}>
                 Storybook
               </a>
             )}
@@ -218,7 +218,7 @@ function Layout({ children }: { children: ReactNode }) {
             <TxSideNav className="p-3">{MENU.map(sideItem)}</TxSideNav>
             {/* 헤더에서 내린 바깥 링크. 메뉴 트리와 섞이지 않게 선 아래에 둔다 */}
             <div className="mx-3 border-t px-3 py-3" style={{ borderColor: "var(--tx-color-border)" }}>
-              <a href={STORYBOOK_URL} className="text-sm hover:underline" target="_blank" rel="noreferrer">
+              <a href={STORYBOOK_URL} className="text-sm hover:underline" target={STORYBOOK_TARGET}>
                 Storybook ↗
               </a>
             </div>
