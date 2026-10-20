@@ -30,7 +30,8 @@ export default defineConfig({
       { find: /^@txstack\/hooks\/useUrlQuery$/, replacement: pkg("hooks/src/useUrlQuery.ts") },
       { find: /^@txstack\/hooks\/useObjectState$/, replacement: pkg("hooks/src/useObjectState.ts") },
       { find: /^@txstack\/axios$/, replacement: pkg("axios/src/index.ts") },
-      // fns 는 그룹마다 진입점이다 — "@txstack/fns/browser/cookie" → src/browser/cookie.ts
+      // fns 는 루트와 그룹 진입점 — "@txstack/fns/browser/cookie" → src/browser/cookie.ts
+      { find: /^@txstack\/fns$/, replacement: pkg("fns/src/index.ts") },
       { find: /^@txstack\/fns\/(.+)$/, replacement: pkg("fns/src/$1.ts") }
     ]
   }

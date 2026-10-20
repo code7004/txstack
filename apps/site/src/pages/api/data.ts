@@ -328,19 +328,20 @@ export const TABLES = {
       section: "Install",
       searchable: true,
       rows: [
-        ["@txstack/fns/num", "isNumeric · toNumber · format · percent · compact · bytes", "—", "숫자 판정 · 변환 · 포맷"],
+        ["@txstack/fns", "아래 함수 전부", "어디서나", "루트 진입점. 함수 이름이 패키지 안에서 겹치지 않아 여기 하나로 충분합니다. browser 함수도 불러오기만으로는 document를 건드리지 않습니다"],
+        ["@txstack/fns/num", "isNumeric · toNumber · formatNumber · formatPercent · formatCompact · formatBytes", "—", "숫자 판정 · 변환 · 포맷"],
         ["@txstack/fns/date", "dayRange · lastDays · localTimeZone · parseYmd · isoWeek · parseTimestamps · splitSeconds · elapsed", "—", "날짜 · 기간 · 경과 시간. dayjs 없이 Date만 씁니다"],
-        ["@txstack/fns/rand", "float · int · date · pick · ip · shortId", "—", "랜덤 값과 짧은 ID. 목업 데이터용이며 암호용이 아닙니다"],
+        ["@txstack/fns/rand", "randomFloat · randomInt · randomDate · randomPick · randomIp · shortId", "—", "랜덤 값과 짧은 ID. 목업 데이터용이며 암호용이 아닙니다"],
         ["@txstack/fns/str", "hashColor · paletteColor · PALETTE · emailLocalPart · hasSpecialChars · hasNonAscii", "—", "문자열과 문자열에서 만든 색"],
-        ["@txstack/fns/obj", "diff · undefinedToNull", "—", "객체. lodash에 있는 것은 두지 않습니다"],
+        ["@txstack/fns/obj", "diffObject · undefinedToNull", "—", "객체. lodash에 있는 것은 두지 않습니다"],
         ["@txstack/fns/arr", "sortByOrder", "—", "정해 준 순서대로 정렬"],
-        ["@txstack/fns/form", "check · checkEmpty · checkPattern", "—", "폼 값의 빈 칸과 형식 검사"],
+        ["@txstack/fns/form", "checkForm · checkEmpty · checkPattern", "—", "폼 값의 빈 칸과 형식 검사"],
         ["@txstack/fns/async", "sleep · withLoading", "—", "기다리기와 로딩 · 오류 처리 감싸기"],
         ["@txstack/fns/math", "lerp · lerpVector · toRadians · toDegrees · rotate", "—", "보간 · 각도 · 2D 회전"],
-        ["@txstack/fns/phone-kr", "normalize · parseMobile · mask · maskIfPhone · validateMany · dedupe · exclude", "—", "한국 전화번호. 대량 처리는 1만 건마다 화면에 양보합니다"],
-        ["@txstack/fns/browser/cookie", "get · set · remove", "브라우저", "쿠키 읽기 · 쓰기. 값은 JSON으로 저장합니다"],
-        ["@txstack/fns/browser/css", "inject · remove", "브라우저", ":hover · ::before처럼 인라인 style로 안 되는 규칙을 실행 중에 넣습니다"],
-        ["@txstack/fns/browser/file", "readText · download", "브라우저", "파일을 글자로 읽기와 내려받기"]
+        ["@txstack/fns/phone-kr", "normalizePhone · parseMobile · maskPhone · maskIfPhone · validatePhones · dedupePhones · excludePhones", "—", "한국 전화번호. 대량 처리는 1만 건마다 화면에 양보합니다"],
+        ["@txstack/fns/browser/cookie", "getCookie · setCookie · removeCookie", "브라우저", "쿠키 읽기 · 쓰기. 값은 JSON으로 저장합니다"],
+        ["@txstack/fns/browser/css", "injectCSS · removeCSS", "브라우저", ":hover · ::before처럼 인라인 style로 안 되는 규칙을 실행 중에 넣습니다"],
+        ["@txstack/fns/browser/file", "readTextFile · downloadFile", "브라우저", "파일을 글자로 읽기와 내려받기"]
       ] as Row[]
     },
     num: {
@@ -349,10 +350,10 @@ export const TABLES = {
       rows: [
         ["isNumeric", "(value: unknown) => boolean", "—", '유한한 숫자로 읽히는가. "1.5" · "1e3"은 참, "" · " " · "1,234" · "12abc" · 배열은 거짓입니다'],
         ["toNumber", "(value, fallback?) => number | undefined", "—", "숫자로 바꿉니다. 바꿀 수 없으면 fallback입니다. null도 0이 아니라 fallback이 됩니다"],
-        ["format", "(value: Numberish, options?: FormatOptions) => string", "—", "자릿수 구분. Intl.NumberFormat 옵션(통화 · 소수 자릿수 등)을 그대로 받습니다"],
-        ["percent", "(ratio, digits = 1, options?) => string", "digits 1", '비율(0~1)을 백분율로. 소수 자릿수는 고정입니다 — 0.5는 "50.0%"'],
-        ["compact", "(value, options?) => string", "소수 1자리", "큰 수를 짧게. ko-KR이면 만 · 억, en-US면 K · M"],
-        ["bytes", "(value, decimals = 2) => string", "decimals 2", '1024 기준 B · KB · MB · GB · TB · PB. 음수와 빈 값은 "0 B"'],
+        ["formatNumber", "(value: Numberish, options?: FormatOptions) => string", "—", "자릿수 구분. Intl.NumberFormat 옵션(통화 · 소수 자릿수 등)을 그대로 받습니다"],
+        ["formatPercent", "(ratio, digits = 1, options?) => string", "digits 1", '비율(0~1)을 백분율로. 소수 자릿수는 고정입니다 — 0.5는 "50.0%"'],
+        ["formatCompact", "(value, options?) => string", "소수 1자리", "큰 수를 짧게. ko-KR이면 만 · 억, en-US면 K · M"],
+        ["formatBytes", "(value, decimals = 2) => string", "decimals 2", '1024 기준 B · KB · MB · GB · TB · PB. 음수와 빈 값은 "0 B"'],
         ["Numberish", "number | string | null | undefined", "—", "포맷 함수가 받는 값"],
         ["FormatOptions", "Intl.NumberFormatOptions & { locale?, fallback? }", "환경 로케일", "locale을 빼면 실행 환경의 로케일. fallback을 주면 빈 값에 0 대신 그 글자"]
       ] as Row[]
@@ -378,11 +379,11 @@ export const TABLES = {
       section: "rand",
       searchable: true,
       rows: [
-        ["float", "(min, max, bias?, weight = 0.8) => number", "—", "min 이상 max 미만의 실수. bias로 한쪽에 쏠리게 합니다"],
-        ["int", "(min, max, bias?, weight?) => number", "—", "min 이상 max 미만의 정수"],
-        ["date", "(start: Date, end: Date, bias?, weight?) => Date", "—", "범위 안의 날짜"],
-        ["pick", "(items, bias?, weight?) => T | undefined", "—", "배열에서 하나. 빈 배열이면 undefined"],
-        ["ip", "() => string", "—", '"x.x.x.x" 꼴의 IPv4 주소'],
+        ["randomFloat", "(min, max, bias?, weight = 0.8) => number", "—", "min 이상 max 미만의 실수. bias로 한쪽에 쏠리게 합니다"],
+        ["randomInt", "(min, max, bias?, weight?) => number", "—", "min 이상 max 미만의 정수"],
+        ["randomDate", "(start: Date, end: Date, bias?, weight?) => Date", "—", "범위 안의 날짜"],
+        ["randomPick", "(items, bias?, weight?) => T | undefined", "—", "배열에서 하나. 빈 배열이면 undefined"],
+        ["randomIp", "() => string", "—", '"x.x.x.x" 꼴의 IPv4 주소'],
         ["shortId", "() => string", "—", "시각 + 랜덤 + 순번. 같은 밀리초에 불러도 겹치지 않습니다"]
       ] as Row[]
     },
@@ -402,7 +403,7 @@ export const TABLES = {
       section: "obj · arr",
       searchable: true,
       rows: [
-        ["diff", "(prev, next, isEqual = Object.is) => Partial<T>", "Object.is", "next에서 바뀐 필드만. 깊은 비교는 _.isEqual 같은 함수를 넘깁니다"],
+        ["diffObject", "(prev, next, isEqual = Object.is) => Partial<T>", "Object.is", "next에서 바뀐 필드만. 깊은 비교는 _.isEqual 같은 함수를 넘깁니다"],
         ["undefinedToNull", "(value: T) => UndefinedToNull<T>", "—", "undefined인 필드를 null로 바꾼 새 객체. JSON으로 보낼 때 필드가 빠지지 않습니다"],
         ["UndefinedToNull", "{ [K in keyof T]: … | null }", "—", "undefinedToNull의 결과 타입"],
         ["sortByOrder", '(items, order, by, direction = "asc") => T[]', "asc", "정해 준 순서대로 정렬한 새 배열. 목록에 없는 값은 뒤에서 글자 순입니다"]
@@ -412,7 +413,7 @@ export const TABLES = {
       section: "form",
       searchable: true,
       rows: [
-        ["check", "(values, rules?, options?) => FormError<T> | null", "—", "빈 칸을 먼저, 그다음 형식을 봅니다. 첫 번째로 걸린 필드 하나만 알려 줍니다"],
+        ["checkForm", "(values, rules?, options?) => FormError<T> | null", "—", "빈 칸을 먼저, 그다음 형식을 봅니다. 첫 번째로 걸린 필드 하나만 알려 줍니다"],
         ["checkEmpty", "(values, { optional?, message? }) => FormError<T> | null", "—", "빈 필드를 찾습니다. 공백만 있는 문자열과 빈 배열도 빈 것, 0 · false는 값이 있는 것입니다"],
         ["checkPattern", "(values, rules) => FormError<T> | null", "—", "형식이 틀린 필드를 찾습니다. 빈 필드는 건너뜁니다"],
         ["FormError", "Partial<Record<keyof T, string>>", "—", "걸린 필드 하나 → 메시지"],
@@ -440,27 +441,28 @@ export const TABLES = {
       section: "phone-kr",
       searchable: true,
       rows: [
-        ["normalize", "(input) => string", "—", "숫자만 남기고 휴대폰 번호 꼴로. +82 · 82-010 · 앞자리 생략을 맞춥니다"],
+        ["normalizePhone", "(input) => string", "—", "숫자만 남기고 휴대폰 번호 꼴로. +82 · 82-010 · 앞자리 생략을 맞춥니다"],
         ["parseMobile", "(input) => string | null", "—", "010 휴대폰이면 숫자만 남긴 값, 아니면 null"],
-        ["mask", "(input) => string", "—", '가운데 자리를 *로 가립니다. "010****5678"'],
+        ["maskPhone", "(input) => string", "—", '가운데 자리를 *로 가립니다. "010****5678"'],
         ["maskIfPhone", "(keyword) => string", "—", "전화번호처럼 보일 때만 가립니다. 검색어를 화면 · 로그에 남길 때 씁니다"],
-        ["validateMany", "(numbers) => Promise<{ valid, invalid }>", "—", "휴대폰 번호 목록을 가릅니다. valid는 정규화한 값, invalid는 원본"],
-        ["dedupe", "(numbers) => Promise<{ uniques, duplicates }>", "—", "중복을 걸러 냅니다. 정규화는 하지 않습니다"],
-        ["exclude", "(source, blocked) => Promise<{ remains, excluded }>", "—", "source에서 blocked에 든 번호를 뺍니다"]
+        ["validatePhones", "(numbers) => Promise<{ valid, invalid }>", "—", "휴대폰 번호 목록을 가릅니다. valid는 정규화한 값, invalid는 원본"],
+        ["dedupePhones", "(numbers) => Promise<{ uniques, duplicates }>", "—", "중복을 걸러 냅니다. 정규화는 하지 않으니 validatePhones를 먼저 거칩니다"],
+        ["excludePhones", "(source, blocked) => Promise<{ remains, excluded }>", "—", "source에서 blocked에 든 번호를 뺍니다"]
       ] as Row[]
     },
     browser: {
       section: "browser",
       searchable: true,
       rows: [
-        ["get", "(name, fallback: T) => T", "—", "cookie — 저장한 값을 읽습니다. 없으면 fallback"],
-        ["set", "(name, value, options?: SetCookieOptions) => void", "30일 · / · Lax", "cookie — 값을 JSON으로 저장합니다"],
-        ["remove", "(name, { path? }) => void", "—", "cookie — 지웁니다. css — inject로 만든 <style>을 통째로 지웁니다"],
+        ["getCookie", "(name, fallback: T) => T", "—", "저장한 값을 읽습니다. 없으면 fallback"],
+        ["setCookie", "(name, value, options?: SetCookieOptions) => void", "30일 · / · Lax", "값을 JSON으로 저장합니다"],
+        ["removeCookie", "(name, { path? }) => void", "—", "쿠키를 지웁니다"],
         ["SetCookieOptions", "{ days?, path?, sameSite?, secure? }", "—", "sameSite가 None이면 secure를 자동으로 켭니다"],
-        ["inject", "(styleId, selector, rules: CssRules) => boolean", "—", "css — 규칙을 넣습니다. 같은 선택자가 있으면 그 자리에서 바꿉니다"],
+        ["injectCSS", "(styleId, selector, rules: CssRules) => boolean", "—", "규칙을 넣습니다. 같은 선택자가 있으면 그 자리에서 바꿉니다"],
+        ["removeCSS", "(styleId) => void", "—", "injectCSS로 만든 <style>을 통째로 지웁니다"],
         ["CssRules", "Record<string, string | number>", "—", "camelCase와 CSS 이름(--변수 포함)을 둘 다 받습니다"],
-        ["readText", "(source: Blob) => Promise<string>", "—", "file — 고른 파일을 글자로 읽습니다"],
-        ["download", "(filename, content, type?) => boolean", "text/plain", "file — 내려받게 합니다. 문자열 배열은 다듬어 줄로 잇습니다. 내용이 없으면 false"]
+        ["readTextFile", "(source: Blob) => Promise<string>", "—", "고른 파일을 글자로 읽습니다"],
+        ["downloadFile", "(filename, content, type?) => boolean", "text/plain", "내려받게 합니다. 문자열 배열은 다듬어 줄로 잇습니다. 내용이 없으면 false"]
       ] as Row[]
     }
   }
@@ -581,17 +583,18 @@ export const tableAnchor = (table: ApiTable) => (table.searchable ? (name: strin
  * 새 함수에 닿게 한다 — 사이트 검색이 옛 이름마다 항목을 하나씩 만들고, API › fns 의 `Former names` 표가 같은 것을 그린다.
  *
  * `[옛 이름, TABLES.fns 의 표, 그 표의 새 이름, 주의]`. lodash 로 넘긴 것처럼 새 이름이 표에 없으면 표를 `null` 로 둔다.
+ * `getCookie` · `formatBytes` · `maskPhone` 처럼 이름이 그대로인 것은 두지 않는다.
  */
 export type FnsTableKey = Exclude<keyof typeof TABLES.fns, "installEntry">;
 
 export const FNS_FORMER: [former: string, table: FnsTableKey | null, now: string, note?: string][] = [
   ["waitForSeconds", "async", "sleep", "이름은 seconds지만 원래도 ms를 받았습니다"],
   ["networkWrapper", "async", "withLoading", "alert를 띄우던 자리는 onError에서 직접"],
-  ["rand", "rand", "float"],
-  ["randInt", "rand", "int"],
-  ["randDate", "rand", "date"],
-  ["randPick", "rand", "pick", "빈 배열이면 undefined"],
-  ["randIP", "rand", "ip"],
+  ["rand", "rand", "randomFloat"],
+  ["randInt", "rand", "randomInt"],
+  ["randDate", "rand", "randomDate"],
+  ["randPick", "rand", "randomPick", "빈 배열이면 undefined"],
+  ["randIP", "rand", "randomIp"],
   ["shortUID", "rand", "shortId"],
   ["numberToStartEndDate", "date", "lastDays", "(-14, 0) → lastDays(14). dayRange(-14, 0)이 아닙니다 — 옛 함수는 시작에 하루를 더했습니다"],
   ["numberToPeriod", "date", "lastDays", "(-14, 0) → lastDays(14)"],
@@ -599,59 +602,45 @@ export const FNS_FORMER: [former: string, table: FnsTableKey | null, now: string
   ["yyyymmddToTime", "date", "parseYmd", "parseYmd(s)?.getTime(). 잘못된 값이면 null"],
   ["getISOWeekKey", "date", "isoWeek"],
   ["elapsedTimeToLabel", "date", "elapsed", "(sec, 2, $t) → elapsed(sec, { decimals: 2, t: $t })"],
-  ["numberWithDelimiter", "num", "format"],
-  ["toFormattedNumber", "num", "format", '빈 값에 ""이 필요하면 { fallback: "" }'],
-  ["num2str", "num", "format"],
-  ["num2String", "num", "format"],
-  ["num2Money", "num", "format", '{ style: "currency", currency: "KRW" }'],
-  ["num2Percent", "num", "percent"],
-  ["compactFormatter", "num", "compact", '한국어로 고정하려면 { locale: "ko-KR" }'],
-  ["formatBytes", "num", "bytes"],
+  ["numberWithDelimiter", "num", "formatNumber"],
+  ["toFormattedNumber", "num", "formatNumber", '빈 값에 ""이 필요하면 { fallback: "" }'],
+  ["num2str", "num", "formatNumber"],
+  ["num2String", "num", "formatNumber"],
+  ["num2Money", "num", "formatNumber", '{ style: "currency", currency: "KRW" }'],
+  ["num2Percent", "num", "formatPercent"],
+  ["compactFormatter", "num", "formatCompact", '한국어로 고정하려면 { locale: "ko-KR" }'],
   ["isNumber", "num", "isNumeric", '"12abc"는 이제 false'],
   ["safeNumber", "num", "toNumber"],
   ["stringToHex", "str", "hashColor"],
   ["numberToHex", "str", "paletteColor"],
   ["emailToId", "str", "emailLocalPart"],
   ["containsNonAscii", "str", "hasNonAscii"],
-  ["diffObject", "obj", "diff", "깊은 비교는 diff(a, b, _.isEqual)"],
   ["intergrity", "obj", "undefinedToNull"],
   ["sortArray", "obj", "sortByOrder", 'sortArray(t, s) → sortByOrder(t, s, "name")'],
   ["checkEmptyFields", "form", "checkEmpty", "exclude → { optional }"],
   ["checkRegexFields", "form", "checkPattern", "규칙의 reg → pattern"],
-  ["checkForm", "form", "check", "(f, r, ex) → check(f, r, { optional: ex })"],
   ["lerpVector2", "async", "lerpVector"],
   ["toRotation", "async", "rotate", "({ x1, y1, cx, cy, degree }) → rotate({ x, y }, { x, y }, degree)"],
   ["toSin", "async", "toRadians", "Math.sin(toRadians(d))"],
   ["toCos", "async", "toRadians", "Math.cos(toRadians(d))"],
-  ["normalizePhoneNumber", "phone", "normalize"],
+  ["normalizePhoneNumber", "phone", "normalizePhone"],
   ["validPhoneNumber", "phone", "parseMobile", "실패하면 false 대신 null"],
-  ["maskPhone", "phone", "mask", "개발 중 안 가리는 분기는 앱에서"],
   ["maskKeyword", "phone", "maskIfPhone"],
-  ["validatePhoneNumbersAsync", "phone", "validateMany"],
-  ["dedupePhoneNumbersAsync", "phone", "dedupe"],
-  ["excludePhonesAsync", "phone", "exclude", "결과 필드 duplicates → excluded"],
-  ["setCookie", "browser", "set", "@txstack/fns/browser/cookie"],
-  ["getCookie", "browser", "get", "@txstack/fns/browser/cookie. 옛 쿠키도 읽힙니다"],
-  ["createCSS", "browser", "inject", "@txstack/fns/browser/css"],
-  ["createCSSWithPseudo", "browser", "inject", "@txstack/fns/browser/css"],
-  ["readTextFileAsync", "browser", "readText", "@txstack/fns/browser/file"],
-  ["downloadMessageFile", "browser", "download", '(name, lines) → download(name + ".txt", lines)'],
+  ["validatePhoneNumbersAsync", "phone", "validatePhones"],
+  ["dedupePhoneNumbersAsync", "phone", "dedupePhones"],
+  ["excludePhonesAsync", "phone", "excludePhones", "결과 필드 duplicates → excluded"],
+  ["createCSS", "browser", "injectCSS"],
+  ["createCSSWithPseudo", "browser", "injectCSS"],
+  ["readTextFileAsync", "browser", "readTextFile"],
+  ["downloadMessageFile", "browser", "downloadFile", '(name, lines) → downloadFile(name + ".txt", lines)'],
   ["mapping", null, "_.pick", "lodash"],
   ["keyCopy", null, "Object.assign", "표준 API"],
   ["numSort", null, "_.sortBy", "lodash"],
   ["isInRange", null, "_.inRange", "lodash. 끝값을 포함하지 않고 경계를 생략할 수 없습니다"]
 ];
 
-/**
- * 새 이름을 네임스페이스와 함께 — `num.format`. 표 하나에 두 그룹이 든 것(`obj · arr` · `async · math` · `browser`)은
- * 이름으로 그룹을 가린다. 표에 없으면(lodash) 이름 그대로.
- */
-const FORMER_GROUP: Record<string, string> = { sortByOrder: "arr", lerpVector: "math", rotate: "math", toRadians: "math", set: "cookie", get: "cookie", inject: "css", readText: "file", download: "file" };
-
-export const formerLabel = ([, table, now]: (typeof FNS_FORMER)[number]) => (table ? `${FORMER_GROUP[now] ?? table}.${now}` : now);
-
-/** 옛 이름이 가는 곳 — 새 함수의 표 줄, 없으면 lodash 를 다룬 Namespaces 섹션 */
-export const formerTarget = ([, table, now]: (typeof FNS_FORMER)[number]) => `${API_PAGES.fns.path}#${table ? rowAnchor(TABLES.fns[table], now) : "namespaces"}`;
+/** 옛 이름이 가는 곳 — 새 함수의 예제(옮길 때 바로 쓰는 법이 보인다), 없으면 lodash 를 다룬 Import 섹션 */
+export const formerTarget = ([, table, now]: (typeof FNS_FORMER)[number]) => `${API_PAGES.fns.path}#${table ? `example-${slug(now)}` : "import"}`;
 
 export const componentAnchor = (name: string) => `component-${slug(name)}`;
 

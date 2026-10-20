@@ -2,7 +2,7 @@ import type { RouteNode, RouteTree } from "@txstack/route-meta";
 import { isValidElement } from "react";
 import type { Page } from "../lib/page";
 import { anchorsOf } from "../lib/slug";
-import { API_PAGES, CATALOG, FNS_FORMER, TABLES, componentAnchor, formerLabel, formerTarget, rowAnchor, type ApiTable } from "../pages/api/data";
+import { API_PAGES, CATALOG, FNS_FORMER, TABLES, componentAnchor, formerTarget, rowAnchor, type ApiTable } from "../pages/api/data";
 import { routes } from "../routes";
 import { entry, type SearchEntry } from "./rank";
 
@@ -63,7 +63,7 @@ const apiEntries = (): SearchEntry[] => [
   ...FNS_FORMER.map((former) => {
     const [name, table, , note] = former;
     const where = ["API", "fns", table ? TABLES.fns[table].section : "lodash"];
-    return entry(name, where, formerTarget(former), "api", `→ ${formerLabel(former)}${note ? ` — ${note}` : ""}`);
+    return entry(name, where, formerTarget(former), "api", `→ ${former[2]}${note ? ` — ${note}` : ""}`);
   }),
   ...CATALOG.flatMap(([category, items]) => items.flatMap((item) => [item.name, ...(item.also ?? [])].map((name) => entry(name, ["API", "ui", category], `/api/ui#${componentAnchor(item.name)}`, "component", item.desc))))
 ];
