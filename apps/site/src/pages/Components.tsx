@@ -190,16 +190,14 @@ function OverlayDemo() {
         }}
       />
       <TxDropMenu
-        menu={
-          <>
-            <TxDropMenu.Item onClick={() => TxToast.show({ title: "이름을 바꿉니다" })}>이름 바꾸기</TxDropMenu.Item>
-            <TxDropMenu.Item onClick={() => TxToast.show({ title: "복제했습니다" })}>복제</TxDropMenu.Item>
-          </>
+        label={
+          <span className="tx-button" data-variant="ghost">
+            <span className="tx-button__label">더 보기 ▾</span>
+          </span>
         }
       >
-        <span className="tx-button" data-variant="ghost">
-          <span className="tx-button__label">더 보기 ▾</span>
-        </span>
+        <TxDropMenu.Item onClick={() => TxToast.show({ title: "이름을 바꿉니다" })}>이름 바꾸기</TxDropMenu.Item>
+        <TxDropMenu.Item onClick={() => TxToast.show({ title: "복제했습니다" })}>복제</TxDropMenu.Item>
       </TxDropMenu>
       <TxTooltip tip="마우스를 올리면 뜨는 짧은 설명입니다">
         <span className={`cursor-help text-sm underline decoration-dotted ${muted}`}>도움말</span>

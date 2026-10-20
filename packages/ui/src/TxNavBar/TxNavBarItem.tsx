@@ -9,8 +9,11 @@ import type { TxNavBarItemProps } from "./TxNavBar.types";
  * | 준 것 | 나오는 것 |
  * | --- | --- |
  * | `as` 만 | 그냥 링크 |
- * | `panel` 만 | 제목 자체가 **여는 버튼**(`<button aria-expanded>`) |
- * | `panel` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |
+ * | `children` 만 | 제목 자체가 **여는 버튼**(`<button aria-expanded>`) |
+ * | `children` + `as` | **링크 + 옆에 `▾` 버튼** — 제목을 누르면 이동하고 버튼이 패널을 연다 |
+ *
+ * **children 은 그 항목 아래 펼쳐질 패널이다** — 항목이 스스로 버튼을 만들어 펼치므로
+ * children 이 품는 것은 하위다. `TxSideNav.Item` · `TxDropMenu` 와 같다.
  *
  * 셋째가 사이트 내비게이션에서 흔한 모양이다. 제목이 진짜 링크라 **새 탭으로 열기 ·
  * 주소 복사 · 가운데 클릭**이 되고, 여는 일은 버튼이 맡아 `aria-expanded` 가 거짓이 되지
@@ -18,7 +21,7 @@ import type { TxNavBarItemProps } from "./TxNavBar.types";
  *
  * 명세: `docs/001_ui/048_TxNavBar.md`
  */
-export function TxNavBarItem<E extends ElementType = "a">({ as, label, panel, toggleLabel = "하위 메뉴", className, ...rest }: TxNavBarItemProps<E>) {
+export function TxNavBarItem<E extends ElementType = "a">({ as, label, children: panel, toggleLabel = "하위 메뉴", className, ...rest }: TxNavBarItemProps<E>) {
   const shared = useContext(TxNavBarContext);
   const id = useId();
 

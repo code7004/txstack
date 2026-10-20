@@ -20,9 +20,13 @@ afterEach(() => {
 
 const menu = (
   <>
-    <TxNavBar.Item label="제품" panel={<a href="/crm">CRM</a>} />
+    <TxNavBar.Item label="제품">
+      <a href="/crm">CRM</a>
+    </TxNavBar.Item>
     <TxNavBar.Item label="가격" href="/pricing" />
-    <TxNavBar.Item label="문서" panel={<a href="/guide">가이드</a>} />
+    <TxNavBar.Item label="문서">
+      <a href="/guide">가이드</a>
+    </TxNavBar.Item>
   </>
 );
 
@@ -64,7 +68,9 @@ describe("TxNavBar — 항목", () => {
 describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
   const linked = (
     <TxNavBar>
-      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+      <TxNavBar.Item label="문서" as="a" href="/docs">
+        <a href="/docs/start">시작하기</a>
+      </TxNavBar.Item>
     </TxNavBar>
   );
 
@@ -105,7 +111,9 @@ describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
   it("버튼 이름을 소비자가 바꾼다", () => {
     render(
       <TxNavBar>
-        <TxNavBar.Item label="Docs" as="a" href="/docs" toggleLabel="submenu" panel={<a href="/docs/start">Start</a>} />
+        <TxNavBar.Item label="Docs" as="a" href="/docs" toggleLabel="submenu">
+          <a href="/docs/start">Start</a>
+        </TxNavBar.Item>
       </TxNavBar>
     );
 
@@ -115,8 +123,12 @@ describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
   it("화살표는 그 버튼도 찾아간다", () => {
     render(
       <TxNavBar>
-        <TxNavBar.Item label="제품" panel={<a href="/crm">CRM</a>} />
-        <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+        <TxNavBar.Item label="제품">
+          <a href="/crm">CRM</a>
+        </TxNavBar.Item>
+        <TxNavBar.Item label="문서" as="a" href="/docs">
+          <a href="/docs/start">시작하기</a>
+        </TxNavBar.Item>
       </TxNavBar>
     );
 
@@ -134,7 +146,9 @@ describe("TxNavBar — 링크이면서 패널을 여는 항목", () => {
 describe("TxNavBar — ▾ 를 언제 보일지 (toggle)", () => {
   const linked = (props: Partial<Parameters<typeof TxNavBar>[0]>) => (
     <TxNavBar {...props}>
-      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+      <TxNavBar.Item label="문서" as="a" href="/docs">
+        <a href="/docs/start">시작하기</a>
+      </TxNavBar.Item>
     </TxNavBar>
   );
 
@@ -172,7 +186,9 @@ describe("TxNavBar — ▾ 를 언제 보일지 (toggle)", () => {
 describe("TxNavBar.SiteMap — 전체 메뉴 칸", () => {
   const withMap = (props: Partial<Parameters<typeof TxNavBar>[0]> = {}, map: Partial<Parameters<typeof TxNavBar.SiteMap>[0]> = {}) => (
     <TxNavBar panelWidth="item" {...props}>
-      <TxNavBar.Item label="문서" as="a" href="/docs" panel={<a href="/docs/start">시작하기</a>} />
+      <TxNavBar.Item label="문서" as="a" href="/docs">
+        <a href="/docs/start">시작하기</a>
+      </TxNavBar.Item>
       <TxNavBar.SiteMap {...map}>
         <a href="/docs/start">전체 · 시작하기</a>
         <a href="/api">전체 · API</a>
@@ -593,7 +609,9 @@ describe("TxNavBar — 줄이 함께 쓰는 패널", () => {
     render(
       <TxNavBar panel={sitemap}>
         {shared}
-        <TxNavBar.Item label="제품" panel={<a href="/crm">CRM</a>} />
+        <TxNavBar.Item label="제품">
+          <a href="/crm">CRM</a>
+        </TxNavBar.Item>
       </TxNavBar>
     );
 
@@ -611,14 +629,11 @@ describe("TxNavBar — 항목 패널의 링크", () => {
   it("패널 안의 링크를 누르면 닫힌다", () => {
     render(
       <TxNavBar>
-        <TxNavBar.Item
-          label="제품"
-          panel={
-            <a href="/crm" onClick={(evt) => evt.preventDefault()}>
-              CRM
-            </a>
-          }
-        />
+        <TxNavBar.Item label="제품">
+          <a href="/crm" onClick={(evt) => evt.preventDefault()}>
+            CRM
+          </a>
+        </TxNavBar.Item>
       </TxNavBar>
     );
 

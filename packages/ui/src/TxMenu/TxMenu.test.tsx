@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -31,15 +31,29 @@ const openDropMenu = async () => {
 };
 
 describe("TxDropMenu — 여닫기", () => {
+  /** 부품이 스스로 버튼을 만들고 그 아래 펼치므로, children 이 품는 것은 펼쳐질 항목이다. */
+  it("label 은 트리거 버튼 안에, children 은 열릴 때만 메뉴 안에 선다", async () => {
+    render(<TxDropMenu label={<span data-testid="who">👤 관리자</span>}>{MENU}</TxDropMenu>);
+
+    const trigger = screen.getByRole("button", { name: "👤 관리자" });
+    expect(trigger.querySelector('[data-testid="who"]')).not.toBeNull();
+    expect(screen.queryByRole("menuitem", { name: "첫째" })).toBeNull();
+
+    fireEvent.click(trigger);
+    const menu = await screen.findByRole("menu");
+    expect(within(menu).getByRole("menuitem", { name: "첫째" })).toBeTruthy();
+    expect(trigger.textContent).toBe("👤 관리자");
+  });
+
   it("트리거를 누르면 열린다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
 
     expect(screen.queryByRole("menu")).toBeNull();
     expect(await openDropMenu()).toBeTruthy();
   });
 
   it("다시 누르면 닫힌다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     await openDropMenu();
 
     fireEvent.click(screen.getByRole("button", { name: "메뉴" }));
@@ -48,7 +62,11 @@ describe("TxDropMenu — 여닫기", () => {
 
   it("항목을 누르면 닫힌다", async () => {
     const onClick = vi.fn();
-    render(<TxDropMenu menu={<TxDropMenu.Item onClick={onClick}>로그아웃</TxDropMenu.Item>}>메뉴</TxDropMenu>);
+    render(
+      <TxDropMenu label="메뉴">
+        <TxDropMenu.Item onClick={onClick}>로그아웃</TxDropMenu.Item>
+      </TxDropMenu>
+    );
     await openDropMenu();
 
     fireEvent.click(screen.getByRole("menuitem", { name: "로그아웃" }));
@@ -59,7 +77,11 @@ describe("TxDropMenu — 여닫기", () => {
 
   /** 메뉴 안에서 값을 고르는 줄이 있다. 고를 때마다 닫히면 못 쓴다. */
   it("keepOpen 을 준 항목은 닫지 않는다", async () => {
-    render(<TxDropMenu menu={<TxDropMenu.Item keepOpen>테마</TxDropMenu.Item>}>메뉴</TxDropMenu>);
+    render(
+      <TxDropMenu label="메뉴">
+        <TxDropMenu.Item keepOpen>테마</TxDropMenu.Item>
+      </TxDropMenu>
+    );
     await openDropMenu();
 
     fireEvent.click(screen.getByRole("menuitem", { name: "테마" }));
@@ -69,8 +91,8 @@ describe("TxDropMenu — 여닫기", () => {
   it("열림이 바뀔 때 알려 준다", async () => {
     const onOpenChange = vi.fn();
     render(
-      <TxDropMenu menu={MENU} onOpenChange={onOpenChange}>
-        메뉴
+      <TxDropMenu label="메뉴" onOpenChange={onOpenChange}>
+        {MENU}
       </TxDropMenu>
     );
 
@@ -84,8 +106,8 @@ describe("TxDropMenu — 여닫기", () => {
   /** hover 로 여는 메뉴도 눌러서 열려야 한다 — 터치에는 hover 가 없다. */
   it("hover 메뉴도 눌러서 열린다", async () => {
     render(
-      <TxDropMenu menu={MENU} trigger="hover">
-        메뉴
+      <TxDropMenu label="메뉴" openOn="hover">
+        {MENU}
       </TxDropMenu>
     );
 
@@ -96,21 +118,21 @@ describe("TxDropMenu — 여닫기", () => {
 describe("TxDropMenu — 키보드와 포커스", () => {
   /** 메뉴는 열면 안으로 들어가는 것이 규약이다. 원본은 포커스를 옮기지 않았다. */
   it("열면 첫 줄로 포커스가 들어간다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     await openDropMenu();
 
     await waitFor(() => expect(document.activeElement?.textContent).toBe("첫째"));
   });
 
   it("↓ 로도 열린다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
 
     fireEvent.keyDown(screen.getByRole("button", { name: "메뉴" }), { key: "ArrowDown" });
     expect(await screen.findByRole("menu")).toBeTruthy();
   });
 
   it("↑↓ 로 옮기고 양 끝에서 감긴다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     const menu = await openDropMenu();
     await waitFor(() => expect(document.activeElement?.textContent).toBe("첫째"));
 
@@ -123,7 +145,7 @@ describe("TxDropMenu — 키보드와 포커스", () => {
   });
 
   it("Home·End 로 양 끝에 간다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     const menu = await openDropMenu();
 
     fireEvent.keyDown(menu, { key: "End" });
@@ -138,7 +160,7 @@ describe("TxDropMenu — 키보드와 포커스", () => {
    * 키보드만 쓰는 사람은 처음부터 Tab 을 다시 눌러야 한다.
    */
   it("닫으면 포커스가 트리거로 돌아온다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     const menu = await openDropMenu();
     await waitFor(() => expect(document.activeElement?.textContent).toBe("첫째"));
 
@@ -149,7 +171,7 @@ describe("TxDropMenu — 키보드와 포커스", () => {
 
   /** 메뉴에서 Tab 은 빠져나가는 것이 아니라 닫는 것이다. */
   it("Tab 은 메뉴를 닫는다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     const menu = await openDropMenu();
 
     fireEvent.keyDown(menu, { key: "Tab" });
@@ -158,7 +180,7 @@ describe("TxDropMenu — 키보드와 포커스", () => {
 
   /** 줄마다 탭 정거장을 만들면 열 줄에 Tab 을 열 번 눌러야 한다. */
   it("줄은 탭 순서에 들어가지 않는다", async () => {
-    render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     await openDropMenu();
 
     expect(screen.getAllByRole("menuitem").map((item) => (item as HTMLElement).tabIndex)).toEqual([-1, -1, -1]);
@@ -233,7 +255,7 @@ describe("두 메뉴가 같은 속을 쓴다", () => {
   });
 
   it("둘 다 role=menu 와 menuitem 으로 그린다", async () => {
-    const { container, unmount } = render(<TxDropMenu menu={MENU}>메뉴</TxDropMenu>);
+    const { container, unmount } = render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
     await openDropMenu();
     expect(screen.getAllByRole("menuitem")).toHaveLength(3);
     unmount();
@@ -264,7 +286,11 @@ describe("TxMenu.Item — 링크를 주입한다", () => {
    * 라우터를 끌어왔고, 다른 라우터를 쓰는 소비자는 이 컴포넌트를 쓸 수 없었다.
    */
   it("기본은 button 이다", async () => {
-    render(<TxDropMenu menu={<TxDropMenu.Item>보통 줄</TxDropMenu.Item>}>메뉴</TxDropMenu>);
+    render(
+      <TxDropMenu label="메뉴">
+        <TxDropMenu.Item>보통 줄</TxDropMenu.Item>
+      </TxDropMenu>
+    );
     await openDropMenu();
 
     expect(screen.getByRole("menuitem", { name: "보통 줄" }).tagName).toBe("BUTTON");
@@ -278,14 +304,10 @@ describe("TxMenu.Item — 링크를 주입한다", () => {
     );
 
     render(
-      <TxDropMenu
-        menu={
-          <TxDropMenu.Item as={MyLink} to="/settings">
-            설정
-          </TxDropMenu.Item>
-        }
-      >
-        메뉴
+      <TxDropMenu label="메뉴">
+        <TxDropMenu.Item as={MyLink} to="/settings">
+          설정
+        </TxDropMenu.Item>
       </TxDropMenu>
     );
     await openDropMenu();
@@ -311,17 +333,13 @@ describe("TxMenu.Item — 링크를 주입한다", () => {
 describe("TxMenu — 안에 든 팝업", () => {
   const openWithDropdown = async () => {
     render(
-      <TxDropMenu
-        menu={
-          <>
-            <div role="group">
-              <TxDropdown data={["하나", "둘"]} aria-label="고르기" />
-            </div>
-            <TxDropMenu.Item onClick={() => {}}>첫째</TxDropMenu.Item>
-          </>
-        }
-      >
-        메뉴
+      <TxDropMenu label="메뉴">
+        <>
+          <div role="group">
+            <TxDropdown data={["하나", "둘"]} aria-label="고르기" />
+          </div>
+          <TxDropMenu.Item onClick={() => {}}>첫째</TxDropMenu.Item>
+        </>
       </TxDropMenu>
     );
 
@@ -354,17 +372,13 @@ describe("TxMenu — 안에 든 팝업", () => {
   /** 화살표가 건너뛰면 키보드로는 그 컨트롤에 닿을 길이 없다. */
   it("화살표가 항목이 아닌 컨트롤에도 닿는다", async () => {
     render(
-      <TxDropMenu
-        menu={
-          <>
-            <div role="group">
-              <TxDropdown data={["하나"]} aria-label="고르기" />
-            </div>
-            <TxDropMenu.Item onClick={() => {}}>첫째</TxDropMenu.Item>
-          </>
-        }
-      >
-        메뉴
+      <TxDropMenu label="메뉴">
+        <>
+          <div role="group">
+            <TxDropdown data={["하나"]} aria-label="고르기" />
+          </div>
+          <TxDropMenu.Item onClick={() => {}}>첫째</TxDropMenu.Item>
+        </>
       </TxDropMenu>
     );
 

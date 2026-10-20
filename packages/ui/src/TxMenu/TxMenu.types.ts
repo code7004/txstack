@@ -2,12 +2,6 @@ import type { ComponentPropsWithoutRef, ElementType, HTMLAttributes, ReactNode }
 
 /** 두 메뉴가 함께 받는 것. */
 interface TxMenuCommonProps {
-  /**
-   * 떠오르는 메뉴. **`TxTooltip` 의 `tip` 과 같은 자리다** —
-   * `children` 은 손대는 대상이고 뜨는 것은 prop 으로 준다.
-   */
-  menu: ReactNode;
-
   /** 메뉴가 열리고 닫힐 때. */
   onOpenChange?: (open: boolean) => void;
 
@@ -24,23 +18,39 @@ interface TxMenuCommonProps {
 export interface TxDropMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /**
    * 눌러서 여는 것. **트리거 버튼 안에 들어가는 내용이다** — 글자든 아이콘이든 온다.
+   * `TxNavBar.Item` 의 `label` 과 같은 자리다.
    *
    * 버튼을 또 넣지 않는다. 감싼 것이 이미 `<button>` 이라 `<button>` 안의 `<button>` 이 된다.
+   */
+  label: ReactNode;
+
+  /**
+   * 떠오르는 메뉴 — `TxDropMenu.Item` · `TxDropMenu.Divider` 들.
+   *
+   * **부품이 스스로 버튼을 만들고 그 아래 펼치는 것이라 children 이 펼쳐질 내용이다** —
+   * `TxSideNav.Item` · `TxNavBar.Item` 과 같다. 이미 있는 것을 감싸는 `TxContextMenu` 는 반대로
+   * children 이 대상이고 메뉴는 `menu` 다(docs/001_ui/900_common.md 「children 은 품는 것」).
    */
   children: ReactNode;
 
   /**
-   * 여는 방법. 기본 `"click"`.
+   * 여는 방법. 기본 `"click"`. `TxNavBar` 와 같은 이름이다.
    *
    * `"hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **누르는 것으로도 열린다** —
    * 터치에는 hover 가 없기 때문이다.
    */
-  trigger?: "click" | "hover";
+  openOn?: "click" | "hover";
 }
 
 export interface TxContextMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** 오른쪽 버튼을 누를 대상. 표나 그리드처럼 큰 것이 그대로 들어간다. */
   children: ReactNode;
+
+  /**
+   * 떠오르는 메뉴. **`TxTooltip` 의 `tip` 과 같은 자리다** — 이미 있는 것을 감싸는 부품이라
+   * `children` 은 손대는 대상이고 뜨는 것은 prop 으로 준다.
+   */
+  menu: ReactNode;
 
   /**
    * 어느 버튼으로 여는가. 기본 `"right"`.

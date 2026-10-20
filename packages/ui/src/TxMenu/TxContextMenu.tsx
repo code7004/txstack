@@ -20,10 +20,10 @@ import { TxMenuShell } from "./TxMenuShell";
  * </TxContextMenu>
  * ```
  *
- * **`children` 은 손대는 대상, `menu` 는 떠오르는 것이다** — `TxDropMenu` · `TxTooltip` 과 같다.
- * 표나 그리드처럼 큰 것이 그대로 들어간다.
+ * **`children` 은 손대는 대상, `menu` 는 떠오르는 것이다** — 이미 있는 것을 감싸는 부품이라 `TxTooltip` 과 같다.
+ * 표나 그리드처럼 큰 것이 그대로 들어간다. 스스로 버튼을 만드는 `TxDropMenu` 는 반대로 children 이 항목이다.
  *
- * `TxDropMenu` 와 **다른 것은 둘뿐이다** — 여는 방법(오른쪽 버튼)과 뜨는 자리(마우스 좌표).
+ * `TxDropMenu` 와 **속에서 다른 것은 둘뿐이다** — 여는 방법(오른쪽 버튼)과 뜨는 자리(마우스 좌표).
  * 항목·키보드·포커스는 같은 속(`TxMenuShell`)이 맡으므로 갈릴 자리가 없다.
  *
  * 명세: `docs/001_ui/022_TxMenu.md`

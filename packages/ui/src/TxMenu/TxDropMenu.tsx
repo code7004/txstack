@@ -11,27 +11,22 @@ const HOVER_CLOSE_DELAY = 120;
  * 눌러서 아래로 펼쳐지는 메뉴.
  *
  * ```tsx
- * <TxDropMenu
- *   menu={
- *     <>
- *       <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>
- *       <TxDropMenu.Divider />
- *       <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>
- *     </>
- *   }
- * >
- *   👤 {username}
+ * <TxDropMenu label={`👤 ${username}`} menuLabel="계정 메뉴">
+ *   <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>
+ *   <TxDropMenu.Divider />
+ *   <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>
  * </TxDropMenu>
  * ```
  *
- * **`children` 은 손대는 대상, `menu` 는 떠오르는 것이다** — `TxTooltip` 과 같은 규칙이다.
+ * **`label` 은 누르는 것, `children` 은 펼쳐질 항목이다** — 부품이 스스로 버튼을 만들고
+ * 그 아래 펼치므로 children 이 품는 것은 항목이다. `TxNavBar.Item` · `TxSideNav.Item` 과 같다.
  *
  * 키보드는 메뉴 규약을 따른다 — ↓ 로 열고, ↑↓ 로 옮기고, Home·End 로 양 끝,
  * Escape 로 닫으면 **포커스가 트리거로 돌아온다.**
  *
  * 명세: `docs/001_ui/022_TxMenu.md`
  */
-export const TxDropMenuBase = ({ children, menu, trigger = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
+export const TxDropMenuBase = ({ label, children, openOn = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [open, setOpen] = useState(false);
@@ -49,7 +44,7 @@ export const TxDropMenuBase = ({ children, menu, trigger = "click", onOpenChange
 
   /** hover 로 열 때만. 트리거와 메뉴 사이를 지나는 동안 닫히면 못 쓴다. */
   const scheduleClose = () => {
-    if (trigger !== "hover") return;
+    if (openOn !== "hover") return;
 
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => change(false), HOVER_CLOSE_DELAY);
@@ -68,7 +63,7 @@ export const TxDropMenuBase = ({ children, menu, trigger = "click", onOpenChange
       {...props}
       data-tag="TxDropMenu"
       className={cm("tx-drop-menu", className)}
-      onPointerEnter={(event) => trigger === "hover" && event.pointerType !== "touch" && change(true)}
+      onPointerEnter={(event) => openOn === "hover" && event.pointerType !== "touch" && change(true)}
       onPointerLeave={(event) => event.pointerType !== "touch" && scheduleClose()}
     >
       <button
@@ -81,11 +76,11 @@ export const TxDropMenuBase = ({ children, menu, trigger = "click", onOpenChange
         onClick={() => change(!open)}
         onKeyDown={hdTriggerKeyDown}
       >
-        {children}
+        {label}
       </button>
 
       <TxMenuCloseContext.Provider value={() => change(false)}>
-        <TxMenuShell anchorRef={triggerRef} open={open} onClose={() => change(false)} menu={menu} menuLabel={menuLabel} maxHeight={maxHeight} className={classNames?.menu} returnFocusRef={triggerRef} />
+        <TxMenuShell anchorRef={triggerRef} open={open} onClose={() => change(false)} menu={children} menuLabel={menuLabel} maxHeight={maxHeight} className={classNames?.menu} returnFocusRef={triggerRef} />
       </TxMenuCloseContext.Provider>
     </div>
   );

@@ -45,7 +45,9 @@ import { TxSiteMap } from "@txstack/ui";
 ```tsx
 <TxNavBar panelWidth="item">
   {menus.map((menu) => (
-    <TxNavBar.Item key={menu.key} label={menu.meta?.label} as={NavLink} to={menu.path} panel={...} />
+    <TxNavBar.Item key={menu.key} label={menu.meta?.label} as={NavLink} to={menu.path}>
+      {menu.children && <SubMenu items={menu.children} />}
+    </TxNavBar.Item>
   ))}
 
   {/* 늘 줄 맨 오른쪽에 선다. 기본 아이콘은 🗺️, 줄 전체 폭으로 열린다 */}

@@ -49,13 +49,11 @@ const trail = matches.filter((node) => node.meta?.label);   // 운영 › 대시
         <p className={muted}>왼쪽 메뉴 대신 위쪽 가로 메뉴로 그려도 트리는 그대로입니다. 묶음은 줄의 항목이 되고, 마우스를 올리면 하위 메뉴가 열립니다.</p>
         <CodeBlock title="src/Header.tsx">{`<TxNavBar>
   {menu.map((group) => (
-    <TxNavBar.Item
-      key={group.key}
-      label={group.meta?.label ?? group.key}
-      panel={group.children?.map((item) => (
+    <TxNavBar.Item key={group.key} label={group.meta?.label ?? group.key}>
+      {group.children?.map((item) => (
         <NavLink key={item.key} to={item.path}>{item.meta?.label}</NavLink>
       ))}
-    />
+    </TxNavBar.Item>
   ))}
 </TxNavBar>`}</CodeBlock>
       </Block>

@@ -30,21 +30,15 @@ const meta = {
           'import { TxDropMenu } from "@txstack/ui";',
           'import "@txstack/ui/styles.css"; // 앱에서 한 번',
           "",
-          "<TxDropMenu",
-          "  menu={",
-          "    <>",
-          "      <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>",
-          "      <TxDropMenu.Divider />",
-          '      <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>',
-          "    </>",
-          "  }",
-          ">",
-          "  👤 {username}",
+          '<TxDropMenu label={`👤 ${username}`} menuLabel="계정 메뉴">',
+          "  <TxDropMenu.Item onClick={changePassword}>비밀번호 변경</TxDropMenu.Item>",
+          "  <TxDropMenu.Divider />",
+          '  <TxDropMenu.Item as={NavLink} to="/settings">설정</TxDropMenu.Item>',
           "</TxDropMenu>;",
           "```",
           "",
-          "**`children` 은 손대는 대상, `menu` 는 떠오르는 것이다** — `TxTooltip` 의 `tip` 과 같은 규칙이라",
-          "셋을 같은 모양으로 쓴다.",
+          "**`label` 은 누르는 것, `children` 은 펼쳐질 항목이다.** `TxNavBar.Item` 의 `label` 과 같은 자리이고,",
+          "하위가 children 에 오는 것은 `TxSideNav.Item` · `TxNavBar.Item` 과 같다.",
           "",
           "### 라우터를 알지 못한다",
           "",
@@ -67,11 +61,11 @@ const meta = {
       }
     }
   },
-  args: { menu: null, children: "메뉴" },
+  args: { label: "메뉴", children: null },
   argTypes: {
-    menu: { control: false },
+    label: { control: false },
     children: { control: false },
-    trigger: { control: "inline-radio", options: ["click", "hover"] },
+    openOn: { control: "inline-radio", options: ["click", "hover"] },
     maxHeight: { control: "text" },
     menuLabel: { control: "text", description: "스크린리더가 읽을 메뉴의 이름" },
     onOpenChange: { control: false },
@@ -95,10 +89,10 @@ const BASIC_MENU = (
 );
 
 export const Playground: Story = {
-  args: { trigger: "click", menuLabel: "사용자 메뉴" },
+  args: { openOn: "click", menuLabel: "사용자 메뉴" },
   render: (args) => (
-    <TxDropMenu {...args} menu={BASIC_MENU}>
-      👤 사용자
+    <TxDropMenu {...args} label="👤 사용자">
+      {BASIC_MENU}
     </TxDropMenu>
   )
 };
@@ -118,28 +112,21 @@ export const UserMenu: Story = {
     const [star, setStar] = useState(false);
 
     return (
-      <TxDropMenu
-        menuLabel="사용자 메뉴"
-        menu={
-          <>
-            {/* 항목이 아니라 컨트롤이 든 묶음이다. 화살표는 드롭다운 자체에 닿는다 */}
-            <div role="group" className="tx-menu__item">
-              <TxDropdown data={["Quartz", "Balham", "Material"]} value={theme} onChangeText={(next) => setTheme(next ?? "Quartz")} />
-            </div>
-            <TxDropMenu.Item keepOpen onClick={() => setStar((on) => !on)}>
-              {star ? "★" : "☆"} 즐겨찾기 (keepOpen — 눌러도 안 닫힌다)
-            </TxDropMenu.Item>
-            <TxDropMenu.Divider />
-            <TxDropMenu.Item onClick={() => {}}>비밀번호 변경</TxDropMenu.Item>
-            <TxDropMenu.Item as={DemoLink} to="/settings">
-              설정
-            </TxDropMenu.Item>
-            <TxDropMenu.Divider />
-            <TxDropMenu.Item onClick={() => {}}>로그아웃</TxDropMenu.Item>
-          </>
-        }
-      >
-        👤 kim
+      <TxDropMenu menuLabel="사용자 메뉴" label="👤 kim">
+        {/* 항목이 아니라 컨트롤이 든 묶음이다. 화살표는 드롭다운 자체에 닿는다 */}
+        <div role="group" className="tx-menu__item">
+          <TxDropdown data={["Quartz", "Balham", "Material"]} value={theme} onChangeText={(next) => setTheme(next ?? "Quartz")} />
+        </div>
+        <TxDropMenu.Item keepOpen onClick={() => setStar((on) => !on)}>
+          {star ? "★" : "☆"} 즐겨찾기 (keepOpen — 눌러도 안 닫힌다)
+        </TxDropMenu.Item>
+        <TxDropMenu.Divider />
+        <TxDropMenu.Item onClick={() => {}}>비밀번호 변경</TxDropMenu.Item>
+        <TxDropMenu.Item as={DemoLink} to="/settings">
+          설정
+        </TxDropMenu.Item>
+        <TxDropMenu.Divider />
+        <TxDropMenu.Item onClick={() => {}}>로그아웃</TxDropMenu.Item>
       </TxDropMenu>
     );
   }
@@ -156,33 +143,24 @@ export const Keyboard: Story = {
   render: () => (
     <TxFlex>
       <TxButton label="앞의 버튼" variant="secondary" />
-      {/* children 은 트리거 버튼 **안에** 들어가는 내용이다. 버튼을 또 넣지 않는다 */}
-      <TxDropMenu menu={BASIC_MENU} menuLabel="키보드 예제">
-        메뉴 열기
+      {/* label 은 트리거 버튼 **안에** 들어가는 내용이다. 버튼을 또 넣지 않는다 */}
+      <TxDropMenu menuLabel="키보드 예제" label="메뉴 열기">
+        {BASIC_MENU}
       </TxDropMenu>
       <TxButton label="뒤의 버튼" variant="secondary" />
     </TxFlex>
   )
 };
 
-/** `trigger="hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **눌러서도 열린다** — 터치에는 hover 가 없다. */
+/** `openOn="hover"` 는 GNB 처럼 훑어 보는 자리에 쓴다. **눌러서도 열린다** — 터치에는 hover 가 없다. */
 export const Hover: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex>
       {["파일", "편집", "보기"].map((label) => (
-        <TxDropMenu
-          key={label}
-          trigger="hover"
-          menuLabel={label}
-          menu={
-            <>
-              <TxDropMenu.Item onClick={() => {}}>{label} 하나</TxDropMenu.Item>
-              <TxDropMenu.Item onClick={() => {}}>{label} 둘</TxDropMenu.Item>
-            </>
-          }
-        >
-          <span className="px-2 py-1">{label}</span>
+        <TxDropMenu key={label} openOn="hover" menuLabel={label} label={<span className="px-2 py-1">{label}</span>}>
+          <TxDropMenu.Item onClick={() => {}}>{label} 하나</TxDropMenu.Item>
+          <TxDropMenu.Item onClick={() => {}}>{label} 둘</TxDropMenu.Item>
         </TxDropMenu>
       ))}
     </TxFlex>
@@ -202,22 +180,15 @@ export const Hover: Story = {
 export const LinkItems: Story = {
   parameters: noControls,
   render: () => (
-    <TxDropMenu
-      menuLabel="바로가기"
-      menu={
-        <>
-          <TxDropMenu.Item as={DemoLink} to="/dashboard">
-            대시보드
-          </TxDropMenu.Item>
-          <TxDropMenu.Item as={DemoLink} to="/settings">
-            설정
-          </TxDropMenu.Item>
-          <TxDropMenu.Divider />
-          <TxDropMenu.Item onClick={() => {}}>로그아웃 (버튼)</TxDropMenu.Item>
-        </>
-      }
-    >
-      바로가기
+    <TxDropMenu menuLabel="바로가기" label="바로가기">
+      <TxDropMenu.Item as={DemoLink} to="/dashboard">
+        대시보드
+      </TxDropMenu.Item>
+      <TxDropMenu.Item as={DemoLink} to="/settings">
+        설정
+      </TxDropMenu.Item>
+      <TxDropMenu.Divider />
+      <TxDropMenu.Item onClick={() => {}}>로그아웃 (버튼)</TxDropMenu.Item>
     </TxDropMenu>
   )
 };
@@ -226,20 +197,12 @@ export const LinkItems: Story = {
 export const Scrollable: Story = {
   parameters: noControls,
   render: () => (
-    <TxDropMenu
-      maxHeight="12rem"
-      menuLabel="긴 목록"
-      menu={
-        <>
-          {Array.from({ length: 20 }, (_, index) => (
-            <TxDropMenu.Item key={index} onClick={() => {}}>
-              항목 {index + 1}
-            </TxDropMenu.Item>
-          ))}
-        </>
-      }
-    >
-      긴 목록 (maxHeight 12rem)
+    <TxDropMenu maxHeight="12rem" menuLabel="긴 목록" label="긴 목록 (maxHeight 12rem)">
+      {Array.from({ length: 20 }, (_, index) => (
+        <TxDropMenu.Item key={index} onClick={() => {}}>
+          항목 {index + 1}
+        </TxDropMenu.Item>
+      ))}
     </TxDropMenu>
   )
 };
@@ -249,9 +212,9 @@ export const Tokens: Story = {
   parameters: noControls,
   render: () => (
     <TxFlex>
-      <TxDropMenu menu={BASIC_MENU}>기본</TxDropMenu>
-      <TxDropMenu menu={BASIC_MENU} style={vars({ "--tx-menu-min-width": "16rem", "--tx-menu-item-padding": "0.75rem 1rem", "--tx-menu-item-font-size": "1rem" })}>
-        넓고 큰 메뉴
+      <TxDropMenu label="기본">{BASIC_MENU}</TxDropMenu>
+      <TxDropMenu style={vars({ "--tx-menu-min-width": "16rem", "--tx-menu-item-padding": "0.75rem 1rem", "--tx-menu-item-font-size": "1rem" })} label="넓고 큰 메뉴">
+        {BASIC_MENU}
       </TxDropMenu>
     </TxFlex>
   )
