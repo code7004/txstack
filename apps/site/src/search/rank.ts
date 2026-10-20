@@ -63,7 +63,17 @@ const SYNONYMS: Record<string, string[]> = {
   컴포넌트: ["component"],
   검색: ["search"],
   디자인: ["design", "token", "theme"],
-  클라이언트: ["client"]
+  클라이언트: ["client"],
+
+  /**
+   * **다른 라이브러리에서 쓰는 이름.** 같은 부품을 그쪽 이름으로 찾아도 걸리게 한다.
+   * 켜고 끄는 부품은 `TxSwitch` 다 — ARIA(`role="switch"`) · MUI · Ant Design · Radix · Mantine 이 모두
+   * Switch 라 부른다. Toggle 은 여러 곳에서 "눌린 채로 남는 버튼"(`aria-pressed`)을 뜻해 이름으로 쓰지 않았다.
+   */
+  toggle: ["switch"],
+  txtoggle: ["txswitch"],
+  토글: ["toggle", "switch"],
+  스위치: ["switch"]
 };
 
 const KIND_BONUS: Record<SearchKind, number> = { page: 4, section: 2, api: 3, component: 3 };
