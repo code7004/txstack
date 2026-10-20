@@ -173,8 +173,8 @@ describe("TxNavBar — ▾ 를 언제 보일지 (toggle)", () => {
     expect(screen.getByRole("link", { name: "시작하기" })).not.toBeNull();
   });
 
-  it('openOn="click" 이면 "focus" 를 줘도 늘 보인다 — 마우스에게도 유일한 길이다', () => {
-    render(linked({ toggle: "focus", openOn: "click" }));
+  it('trigger="click" 이면 "focus" 를 줘도 늘 보인다 — 마우스에게도 유일한 길이다', () => {
+    render(linked({ toggle: "focus", trigger: "click" }));
     expect(root().dataset.toggle).toBe("always");
   });
 });
@@ -223,7 +223,7 @@ describe("TxNavBar.SiteMap — 전체 메뉴 칸", () => {
     expect(screen.queryByRole("link", { name: "전체 · API" })).toBeNull();
   });
 
-  it('얹어도 열리지 않는다 — 줄이 openOn="hover" 여도', () => {
+  it('얹어도 열리지 않는다 — 줄이 trigger="hover" 여도', () => {
     render(withMap());
 
     fireEvent.pointerEnter(mapButton().closest("li")!, { pointerType: "mouse" });
@@ -338,8 +338,8 @@ describe("TxNavBar — 열고 닫기", () => {
     expect(openName()).toBe("제품");
   });
 
-  it("openOn=click 이면 얹어도 열리지 않는다", () => {
-    render(<TxNavBar openOn="click">{menu}</TxNavBar>);
+  it("trigger=click 이면 얹어도 열리지 않는다", () => {
+    render(<TxNavBar trigger="click">{menu}</TxNavBar>);
 
     fireEvent.pointerEnter(trigger("제품").parentElement!, { pointerType: "mouse" });
     expect(panels()).toHaveLength(0);
@@ -542,9 +542,9 @@ describe("TxNavBar — 줄이 함께 쓰는 패널", () => {
     expect(panels()).toHaveLength(0);
   });
 
-  it('openOn="click" 이면 열리지 않는다', () => {
+  it('trigger="click" 이면 열리지 않는다', () => {
     render(
-      <TxNavBar panel={sitemap} openOn="click">
+      <TxNavBar panel={sitemap} trigger="click">
         {shared}
       </TxNavBar>
     );

@@ -147,6 +147,22 @@ import "@txstack/ui/styles.css";
 **자식을 뒤지지 않는다는 원칙은 그대로다.** `<TxDropMenu.Trigger>` 처럼 자식 중에서 역할을 찾는
 모양(Radix 식)은 만들지 않는다 — 조건부 렌더나 `memo` 한 겹에 못 찾는다(044 TxAppShell 「슬롯은 prop 이다」).
 
+## 여는 방법은 `trigger` 다 (결정됨)
+
+떠오르는 것을 **어떻게 여는지**(누르기 · 얹기)는 부품이 달라도 `trigger` 하나로 받는다.
+
+```tsx
+<TxDropMenu label="👤 kim" trigger="hover">…</TxDropMenu>
+<TxNavBar trigger="click">…</TxNavBar>
+```
+
+- 한때 `openOn` 으로 바꿨다가 **되돌렸다.** `trigger` 가 "누르는 것(버튼)" 과 헷갈린다는 이유였는데,
+  누르는 것은 `label` 이 맡게 되어 겹치지 않는다. `trigger="click"` 이 더 바로 읽히고
+  Ant Design · Mantine · 옛 로컬 tx-ui 가 같은 이름이라 옮기기도 쉽다
+- **`TxContextMenu` 의 `button` 은 다른 축이다** — 어떻게 여는지가 아니라 어느 마우스 버튼인지(`"right"` · `"left"` · `"both"`)다.
+  `trigger` 에 섞으면 hover 와 오른쪽 버튼이 한 목록에 놓여 읽기 어렵다
+- 클래스 · 속성의 `__trigger` · `data-nav-trigger` 는 "누르는 요소" 를 가리키는 내부 이름이라 그대로 둔다
+
 ## 외부 의존 — 늘리지 않는다 (결정됨)
 
 옛 패키지의 peer 에는 `framer-motion` 과 `react-router-dom` 이 있었다. **지금은 없고, 늘리지 않는다.**

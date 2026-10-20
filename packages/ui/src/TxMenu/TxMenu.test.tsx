@@ -106,7 +106,7 @@ describe("TxDropMenu — 여닫기", () => {
   /** hover 로 여는 메뉴도 눌러서 열려야 한다 — 터치에는 hover 가 없다. */
   it("hover 메뉴도 눌러서 열린다", async () => {
     render(
-      <TxDropMenu label="메뉴" openOn="hover">
+      <TxDropMenu label="메뉴" trigger="hover">
         {MENU}
       </TxDropMenu>
     );

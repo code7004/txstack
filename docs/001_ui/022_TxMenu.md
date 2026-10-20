@@ -85,7 +85,9 @@ fragment 에 갇혀 들여쓰기가 깊어지고, `TxSideNav.Item` 은 하위를
 
 - **누르는 것은 `label`** — `TxNavBar.Item` 의 `label`(ReactNode, 줄에 보이는 것)과 같은 이름 · 같은 뜻이다.
   옛 앱들의 로컬 구현도 이 이름이라 옮기기 쉽다
-- **여는 방법은 `trigger` → `openOn`** — `TxNavBar` 와 같은 이름이다. `trigger` 는 "누르는 것" 과 헷갈렸다
+- **여는 방법은 `trigger`** — 한때 `openOn` 으로 바꿨다가 되돌렸다. "누르는 것" 과 헷갈린다는 이유였는데,
+  누르는 것은 이제 `label` 이 따로 맡아 겹칠 일이 없다. `trigger="click"` 이 더 읽기 쉽고 Ant Design ·
+  Mantine · 옛 로컬 tx-ui 와도 같은 이름이다. `TxNavBar` 도 같이 `trigger` 다([900_common](900_common.md))
 - 두 메뉴가 함께 받던 `menu` 는 이제 `TxContextMenu` 만 받는다. 나머지(`menuLabel` · `maxHeight` ·
   `onOpenChange` · `classNames`)는 그대로 함께 받는다
 

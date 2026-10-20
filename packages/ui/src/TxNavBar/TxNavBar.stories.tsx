@@ -164,10 +164,10 @@ const meta = {
       }
     }
   },
-  args: { panelWidth: "bar", openOn: "hover", toggle: "always" },
+  args: { panelWidth: "bar", trigger: "hover", toggle: "always" },
   argTypes: {
     panelWidth: { control: "inline-radio", options: ["bar", "item"] },
-    openOn: { control: "inline-radio", options: ["hover", "click"] },
+    trigger: { control: "inline-radio", options: ["hover", "click"] },
     toggle: { control: "inline-radio", options: ["always", "focus"] },
     label: { control: "text" },
     className: { control: "text", description: "`.tx-nav-bar` 에 덧붙는다 (교체 아님)" }
@@ -257,7 +257,7 @@ export const TitleAsLink: Story = {
  * ```
  *
  * **터치에는 얹는 동작이 없어 패널을 열 수 없다.** 터치 기기를 쓰지 않는 화면에서만 고른다.
- * `openOn="click"` 이면 `▾` 가 늘 보인다.
+ * `trigger="click"` 이면 `▾` 가 늘 보인다.
  */
 export const ToggleOnFocus: Story = {
   parameters: noControls,
