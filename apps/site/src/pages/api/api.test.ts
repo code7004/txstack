@@ -91,7 +91,7 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
   });
 
   it("@txstack/fns — 그룹마다 진입점", () => {
-    const groups = ["num", "date", "rand", "str", "obj", "arr", "form", "async", "math", "phone-kr", "browser/cookie", "browser/css", "browser/file"];
+    const groups = ["index", "num", "date", "rand", "str", "obj", "arr", "form", "async", "math", "phone-kr", "browser/cookie", "browser/css", "browser/file"];
     const names = groups.flatMap((group) => exportsOf(pkg(`fns/src/${group}.ts`)));
 
     expect(names.length).toBeGreaterThan(50);
@@ -111,6 +111,8 @@ describe("API 페이지 — export 를 빠뜨리지 않는다", () => {
       ).toContain(now);
     }
     expect(new Set(FNS_FORMER.map(([former]) => former)).size).toBe(FNS_FORMER.length);
+    // 이름이 그대로인 것은 대응표에 두지 않는다 — 검색에 같은 이름이 두 번 뜬다
+    expect(FNS_FORMER.filter(([former, , now]) => former === now)).toEqual([]);
   });
 
   /** props 는 Storybook 이 갖는다. 여기서는 컴포넌트(값 export)가 목록에 다 있는지만 본다 */

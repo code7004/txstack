@@ -178,7 +178,7 @@ export function CaseStudy() {
       <Block title="Evidence">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>테스트</strong> — lint · 타입 검사 · 테스트 2,030개(<code>pnpm check</code>). 화면 테스트 환경(jsdom)은 스타일시트를 못 보므로, CSS 파일을 글자로 읽어 토큰만 쓰는지 · 레이어 안에 있는지를 검사합니다.
+            <strong>테스트</strong> — lint · 타입 검사 · 테스트 2,134개(<code>pnpm check</code>). 화면 테스트 환경(jsdom)은 스타일시트를 못 보므로, CSS 파일을 글자로 읽어 토큰만 쓰는지 · 레이어 안에 있는지를 검사합니다.
           </li>
           <li>
             <strong>배포 파일 검증</strong> — 네 패키지를 실제 배포 파일(<code>.tgz</code>)로 묶어 저장소 밖의 새 앱에 설치하고, React 18 · 19와 react-router 6 · 7에서 타입 검사 · 빌드하고, axios는 Node에서 실제로 실행합니다(
