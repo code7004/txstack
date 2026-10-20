@@ -4,7 +4,7 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefTable } from "../../components/Reference";
-import { STORYBOOK_URL } from "../../lib/links";
+import { STORYBOOK_TARGET, STORYBOOK_URL } from "../../lib/links";
 import { CATALOG, TABLES, componentAnchor, storyUrl, tableAnchor } from "./data";
 
 export function ApiUi() {
@@ -35,7 +35,7 @@ export function ApiUi() {
                   {items.map((item) => (
                     <tr key={item.name} id={componentAnchor(item.name)} className="site-anchor border-t align-top first:border-t-0" style={{ borderColor: "var(--tx-color-border)" }}>
                       <td className="px-3 py-2 whitespace-nowrap sm:w-56">
-                        <a href={storyUrl(category, item)} target="_blank" rel="noreferrer" title={`${item.name}의 props와 예제를 Storybook에서 보기 (새 탭)`} className="font-mono text-xs font-semibold underline">
+                        <a href={storyUrl(category, item)} target={STORYBOOK_TARGET} title={`${item.name}의 props와 예제를 Storybook에서 보기 (Storybook 창)`} className="font-mono text-xs font-semibold underline">
                           {item.name}
                           <span aria-hidden className="ms-0.5 text-slate-400">
                             ↗
@@ -54,7 +54,7 @@ export function ApiUi() {
             </div>
           </div>
         ))}
-        <a href={STORYBOOK_URL} className="tx-button self-start" data-variant="primary" target="_blank" rel="noreferrer">
+        <a href={STORYBOOK_URL} className="tx-button self-start" data-variant="primary" target={STORYBOOK_TARGET}>
           <span className="tx-button__label">Storybook에서 전체 props 보기 ↗</span>
         </a>
       </Block>
