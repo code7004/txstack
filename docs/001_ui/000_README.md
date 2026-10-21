@@ -44,7 +44,7 @@ import "@txstack/ui/styles.css";
 
 | 번호 | 컴포넌트                                         | 무엇                                                | 테스트 |
 | ---- | ------------------------------------------------ | --------------------------------------------------- | ------ |
-| 001  | [`TxButton`](001_TxButton.md)                    | 누르면 뭔가 일어나는 자리                           | 47     |
+| 001  | [`TxButton`](001_TxButton.md)                    | 누르면 뭔가 일어나는 자리                           | 48     |
 | 002  | [`TxFlex`](002_TxFlex.md)                        | 가로로 늘어놓는 자리                                | 16     |
 | 003  | [`TxLoading`](003_TxLoading.md)                  | "로딩 중" 을 화면에 세우는 자리                     | 30     |
 | 004  | [`TxSpinner`](004_TxSpinner.md)                  | 로딩 중임을 알리는 회전 아이콘                      | 20     |
@@ -70,9 +70,9 @@ import "@txstack/ui/styles.css";
 | 024  | [`TxJsonTree`](024_TxJsonTree.md)                | 임의의 객체를 접을 수 있는 트리로 그린다            | 100    |
 | 025  | [`TxAlert`](025_TxAlert.md)                      | 페이지 안에 박히는 안내 상자                        | 38     |
 | 026  | [`TxToast`](026_TxToast.md)                      | 떴다 사라지는 알림                                  | 35     |
-| 027  | [`TxCollapsible`](027_TxCollapsible.md)          | 눌러서 접고 펴는 한 덩이                            | 32     |
+| 027  | [`TxCollapsible`](027_TxCollapsible.md)          | 눌러서 접고 펴는 한 덩이                            | 33     |
 | 028  | [`TxAccordion`](028_TxAccordion.md)              | 여러 덩이를 이어 붙이고 하나씩만 열리게 한다        | 37     |
-| 029  | [`TxTag`](029_TxTag.md)                          | 작은 이름표                                         | 35     |
+| 029  | [`TxTag`](029_TxTag.md)                          | 작은 이름표                                         | 42     |
 | 030  | [`TxSkeleton`](030_TxSkeleton.md)                | 내용이 올 자리를 미리 잡아 두는 회색 덩이           | 45     |
 | 031  | [`TxBadge`](031_TxBadge.md)                      | 무언가에 붙는 알림 점·개수                          | 26     |
 | 032  | [`TxCopyButton`](032_TxCopyButton.md)            | 눌러서 글자를 복사하는 버튼                         | 21     |
@@ -87,20 +87,21 @@ import "@txstack/ui/styles.css";
 | 041  | [`TxSwitch`](041_TxSwitch.md)                    | 그 자리에서 바로 켜고 끄는 자리                     | 24     |
 | 042  | [`TxBreadcrumb`](042_TxBreadcrumb.md)            | 계층 경로                                           | 24     |
 | 043  | [`TxScrollArea`](043_TxScrollArea.md)            | 넘치는 내용을 굴려 보는 자리                        | 18     |
-| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 87     |
+| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 88     |
 | 045  | [`TxAvatar`](045_TxAvatar.md)                    | 사람 한 명을 나타내는 동그란 칸                     | 28     |
 | 046  | [`TxTicker`](046_TxTicker.md)                    | 저절로 움직이는 공지 줄                             | 28     |
 | 047  | [`TxCarousel`](047_TxCarousel.md)                | 여러 장을 옆으로 넘겨 보는 자리                     | 50     |
 | 048  | [`TxNavBar`](048_TxNavBar.md)                    | 가로로 도는 내비게이션 · 메가메뉴                   | 26     |
 | 049  | [`TxSideNav`](049_TxSideNav.md)                  | 세로로 서는 내비게이션 · 아이콘 rail · 하위 트리    | 27     |
 | 050  | [`TxSiteMap`](050_TxSiteMap.md)                  | 메뉴 전체를 한 판에 펼쳐 보이는 지도 (S1 합의 중)   | —      |
+| 051  | [`TxTabBar`](051_TxTabBar.md)                    | 모바일 하단 탭바 (제안 — 슬롯 · 부품 결정 대기)     | —      |
 
 _(내부)_ 는 배럴에서 내보내지 않는 부품이다 — 소비자가 이름을 볼 수 없다.
 `/daypicker` `/aggrid` 는 서브패스 전용이다.
 
 ## 아직 없는 것
 
-이식할 컴포넌트는 다 들어왔다. **적용 중에 새로 요구된 것은 [050 TxSiteMap](050_TxSiteMap.md) 하나다**(S1 합의 중). 남은 일은 **쓰기 쉽게 설명하는 것** —
+이식할 컴포넌트는 다 들어왔다. **적용 중에 새로 요구된 것은 [050 TxSiteMap](050_TxSiteMap.md)(S1 합의 중)과 [051 TxTabBar](051_TxTabBar.md)(제안 — 결정 대기)다.** 남은 일은 **쓰기 쉽게 설명하는 것** —
 스토리북을 자세한 사용 안내로 다듬는다. 상태와 다음 순서는 [docs/README](../README.md) 가 갖는다.
 
 ## 자른 것 · 안 만드는 것
