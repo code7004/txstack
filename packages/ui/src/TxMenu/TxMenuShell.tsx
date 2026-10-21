@@ -20,6 +20,8 @@ export interface TxMenuShellProps {
   menu: ReactNode;
   menuLabel?: string;
   maxHeight?: number | string;
+  /** 메뉴를 앵커의 어느 끝에 맞추나. 기본 `"start"`. */
+  align?: "start" | "end";
   className?: string;
 
   /** 닫을 때 포커스를 되돌릴 곳. 안 주면 앵커로 돌아간다. */
@@ -38,7 +40,7 @@ export interface TxMenuShellProps {
  * **열면 첫 항목으로 들어가고 닫으면 트리거로 돌아온다.** 메뉴는 그렇게 다루는 것이 규약이다 —
  * `TxPopup` 은 포커스를 옮기지 않으므로(목록형 위젯 기준) 그 일을 여기서 한다.
  */
-export function TxMenuShell({ anchorRef, anchorPoint, open, onClose, menu, menuLabel, maxHeight = "20rem", className, returnFocusRef }: TxMenuShellProps) {
+export function TxMenuShell({ anchorRef, anchorPoint, open, onClose, menu, menuLabel, maxHeight = "20rem", align, className, returnFocusRef }: TxMenuShellProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const wasOpenRef = useRef(false);
 
@@ -107,7 +109,7 @@ export function TxMenuShell({ anchorRef, anchorPoint, open, onClose, menu, menuL
   };
 
   return (
-    <TxPopup anchorRef={anchorRef} anchorPoint={anchorPoint} open={open} onClose={onClose} matchAnchorWidth={false} maxHeight={maxHeight} className="tx-menu">
+    <TxPopup anchorRef={anchorRef} anchorPoint={anchorPoint} open={open} onClose={onClose} matchAnchorWidth={false} align={align} maxHeight={maxHeight} className="tx-menu">
       <div ref={menuRef} role="menu" aria-label={menuLabel} className={cm("tx-menu__list", className)} onKeyDown={hdKeyDown}>
         {menu}
       </div>

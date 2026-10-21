@@ -40,6 +40,13 @@ export interface TxDropMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<
    * 터치에는 hover 가 없기 때문이다.
    */
   trigger?: "click" | "hover";
+
+  /**
+   * 메뉴를 트리거의 어느 끝에 맞추나. 기본 `"start"` — 왼쪽 끝끼리(LTR).
+   * `"end"` 면 **메뉴의 오른쪽 끝을 트리거의 오른쪽 끝에** 맞춘다 — 헤더 오른쪽 끝의 계정 버튼처럼
+   * 오른쪽에 붙은 트리거에 쓴다. 화면 밖으로 나가면 어느 쪽이든 안으로 당긴다. 글 방향(RTL)을 따른다.
+   */
+  align?: "start" | "end";
 }
 
 export interface TxContextMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {

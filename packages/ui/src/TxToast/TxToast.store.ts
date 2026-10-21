@@ -16,11 +16,16 @@ export interface TxToastItem extends Required<Pick<TxToastOptions, "variant" | "
   title?: TxToastOptions["title"];
   message: TxToastOptions["message"];
   closeLabel?: string;
+  icon?: TxToastOptions["icon"];
+  /** 닫기 버튼을 그리는가. 사라지지 않는 알림은 늘 그린다 — 닫을 길이 그것뿐이다 */
+  closable: boolean;
 }
 
-const DEFAULT_CONFIG: Required<TxToastConfig> = { position: "top-right", duration: 4000, max: 4 };
+type Config = Required<Omit<TxToastConfig, "icon">> & Pick<TxToastConfig, "icon">;
 
-let config: Required<TxToastConfig> = DEFAULT_CONFIG;
+const DEFAULT_CONFIG: Config = { position: "top-right", duration: 4000, max: 4, icon: undefined, hideCloseButton: false };
+
+let config: Config = DEFAULT_CONFIG;
 let items: TxToastItem[] = [];
 let nextId = 0;
 
@@ -65,13 +70,17 @@ export function toOptions(input: TxToastInput): TxToastOptions {
  */
 export function add(options: TxToastOptions) {
   const id = (nextId += 1);
+  const duration = options.duration ?? config.duration;
   const item: TxToastItem = {
     id,
     variant: options.variant ?? "info",
-    duration: options.duration ?? config.duration,
+    duration,
     title: options.title,
     message: options.message,
-    closeLabel: options.closeLabel
+    closeLabel: options.closeLabel,
+    // undefined 는 "안 줬다" 라 앱 전체 기본을 쓴다. false 는 "그림 없음" 이라 그대로 간다
+    icon: options.icon === undefined ? config.icon : options.icon,
+    closable: duration <= 0 || !(options.hideCloseButton ?? config.hideCloseButton)
   };
 
   items = [...items, item].slice(-config.max);
