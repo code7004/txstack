@@ -37,6 +37,20 @@
   --tx-tag-fg: color-mix(in oklab, var(--tx-tag-accent) 65%, var(--tx-color-text));
   --tx-tag-border-color: transparent;
 
+  /**
+   * 누를 수 있는 태그(`onClick`)에 손을 얹었을 때의 바탕. 기본은 갈래색을 두 배로 섞는다.
+   * 칠하는 방식 · 선택 상태가 각자 다시 정한다 — 소비자가 덮으면 그 값이 이긴다.
+   */
+  --tx-tag-hover-bg: color-mix(in oklab, var(--tx-tag-accent) 20%, var(--tx-color-surface));
+
+  /**
+   * 선택된 태그(`selected`). **색만으로 가르지 않는다** — 바탕이 진해지고 테두리가 글자색으로 선다.
+   * 화면에서는 테두리가, 스크린리더에는 `aria-pressed` 가 상태를 알린다.
+   */
+  --tx-tag-selected-bg: color-mix(in oklab, var(--tx-tag-accent) 20%, var(--tx-color-surface));
+  --tx-tag-selected-fg: var(--tx-tag-fg);
+  --tx-tag-selected-border-color: var(--tx-tag-fg);
+
   display: inline-flex;
   align-items: center;
   gap: var(--tx-tag-gap);
@@ -89,6 +103,23 @@
   --tx-tag-bg: transparent;
   /* 테두리도 글자색에서 뽑는다. 갈래색 그대로면 다크에서 바탕에 묻힌다 */
   --tx-tag-border-color: color-mix(in oklab, var(--tx-tag-fg) 45%, transparent);
+  /* 바탕이 비어 있으니 hover 도 바탕 없이 옅게 */
+  --tx-tag-hover-bg: color-mix(in oklab, var(--tx-tag-accent) 10%, transparent);
+}
+
+/**
+ * 선택 상태. 바탕 · 글자 · 테두리를 **값으로 직접** 칠한다 — `--tx-tag-fg` 를 다시 정의하면
+ * 기본값이 그것을 가리키는 `--tx-tag-selected-fg` 와 고리가 생긴다.
+ *
+ * hover 는 **선택 바탕 위에 상태색을 얹는다**(`TxButton` 의 hover 와 같은 식). 갈래색으로 다시 섞으면
+ * 선택 바탕을 검정으로 바꾼 칩이 손을 얹는 순간 회색이 된다.
+ */
+.tx-tag[data-selected] {
+  --tx-tag-hover-bg: color-mix(in oklab, var(--tx-color-state) var(--tx-state-hover), var(--tx-tag-selected-bg));
+
+  border-color: var(--tx-tag-selected-border-color);
+  background-color: var(--tx-tag-selected-bg);
+  color: var(--tx-tag-selected-fg);
 }
 
 /* --- 누르고 지우기 ---------------------------------------------------------- */
@@ -111,11 +142,7 @@ button.tx-tag__body {
 }
 
 .tx-tag[data-interactive]:hover {
-  background-color: color-mix(in oklab, var(--tx-tag-accent) 20%, var(--tx-color-surface));
-}
-
-.tx-tag[data-interactive][data-appearance="outline"]:hover {
-  background-color: color-mix(in oklab, var(--tx-tag-accent) 10%, transparent);
+  background-color: var(--tx-tag-hover-bg);
 }
 
 /**
@@ -169,6 +196,6 @@ button.tx-tag__body {
   height: var(--tx-tag-dot-size);
 
   border-radius: 50%;
-  /* 글자와 같은 색이다. 갈래색 그대로면 작은 점이 바탕에 묻힌다 */
-  background-color: var(--tx-tag-fg);
+  /* 글자와 같은 색이다. 갈래색 그대로면 작은 점이 바탕에 묻힌다. 선택돼 글자색이 바뀌면 함께 바뀐다 */
+  background-color: currentColor;
 }

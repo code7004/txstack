@@ -190,7 +190,7 @@ export const Tokens: Story = {
       <TxCollapsible title="기본" defaultOpen>
         내용
       </TxCollapsible>
-      <TxCollapsible title="테두리 없이 넓게" defaultOpen style={vars({ "--tx-collapsible-border-color": "transparent", "--tx-collapsible-padding": "1.25rem", "--tx-collapsible-title-size": "1.0625rem" })}>
+      <TxCollapsible title="테두리 없이 넓게" defaultOpen style={vars({ "--tx-collapsible-border-width": "0", "--tx-collapsible-padding": "1.25rem 0", "--tx-collapsible-title-size": "1.0625rem" })}>
         내용
       </TxCollapsible>
       <TxCollapsible title="천천히 열린다" defaultOpen style={vars({ "--tx-collapsible-duration": "600ms" })}>

@@ -48,6 +48,9 @@ const meta = {
           "`onClick` 을 주면 **글자가 눌리고**, `onRemove` 를 주면 **지우기(×)** 가 붙는다.",
           "둘 다 안 주면 읽기만 하는 이름표다.",
           "",
+          "켜고 끄는 칩(걸러내기)이면 `selected` 를 함께 준다. 화면에서는 진한 바탕과 테두리가,",
+          "스크린리더에는 **눌림 상태**가 그것을 알린다.",
+          "",
           "둘을 함께 줘도 **`<button>` 안의 `<button>` 이 되지 않는다** — 태그 전체가 아니라",
           "글자만 버튼이 되고 지우기는 그 옆에 따로 선다. 통째로 감쌌다면 못 쓰는 마크업이 됐다.",
           "",
@@ -220,6 +223,49 @@ export const Interactive: Story = {
         </TxFlex>
 
         <p className="font-mono text-sm text-slate-500 dark:text-slate-400">고른 것: {picked ?? "—"}</p>
+      </div>
+    );
+  }
+};
+
+/**
+ * 켜고 끄는 칩. `onClick` 과 함께 `selected` 를 준다 — 화면에서는 진한 바탕과 테두리가,
+ * 스크린리더에는 눌림 상태가 지금 켜진 칩을 알린다.
+ *
+ * 아래 줄은 선택된 칩을 검정으로 칠했다(`--tx-tag-selected-*`). 기본 hover 는 선택 바탕 위에 상태색을
+ * 얹으므로 검정 칩이 회색으로 바래지 않는다. hover 색을 직접 정하려면 `--tx-tag-hover-bg` 를 준다.
+ *
+ * 토큰은 **태그 자신**(`.tx-tag` 이나 거기 붙인 클래스)에 준다 — 부모에 주면 태그가 자기 기본값으로 덮는다.
+ */
+const blackChip = vars({
+  "--tx-tag-selected-bg": "#111827",
+  "--tx-tag-selected-fg": "#ffffff",
+  "--tx-tag-selected-border-color": "#111827",
+  "--tx-tag-padding": "0.25rem 0.75rem"
+});
+
+export const Selectable: Story = {
+  parameters: noControls,
+  render: function SelectableStory() {
+    const [picked, setPicked] = useState("전체");
+    const names = ["전체", "쿠팡", "배민", "요기요"];
+
+    return (
+      <div className="flex flex-col gap-3">
+        <TxFlex>
+          {names.map((name) => (
+            <TxTag key={name} onClick={() => setPicked(name)} selected={picked === name}>
+              {name}
+            </TxTag>
+          ))}
+        </TxFlex>
+        <TxFlex>
+          {names.map((name) => (
+            <TxTag key={name} appearance="outline" onClick={() => setPicked(name)} selected={picked === name} style={blackChip}>
+              {name}
+            </TxTag>
+          ))}
+        </TxFlex>
       </div>
     );
   }

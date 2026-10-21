@@ -33,11 +33,12 @@
 여러 덩이를 묶어 하나씩만 열리게 하려면 **`TxAccordion`** 을 쓴다 — 이것을 부품으로 쓴다.
 
 겉모습은 CSS 변수로 바꾼다 — `.tx-collapsible { --tx-collapsible-padding: 1rem }`.
+테두리를 없애려면 **두께**를 `0` 으로 둔다 — `--tx-collapsible-border-width: 0`.
 
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxCollapsible/`
-- [x] **테스트** — 32개
+- [x] **테스트** — 33개
 - [x] **스토리** — `TxCollapsible.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -86,3 +87,18 @@ DOM 에 남는다 — uncontrolled 값을 내부 상태로 들고 있는다.
 `TxAccordion` 은 **이어 붙은 목록**이다. 맞닿은 테두리를 한 겹으로 겹치고 모서리를 바깥에만
 남긴다. 상자를 떨어뜨려 쌓는 것은 `TxCollapsible` 여러 개가 이미 하는 일이라, 그것을 위한
 `gap` 옵션을 두지 않았다 — 두면 모서리 규칙이 갈라져 둘 다 어중간해진다.
+
+### 테두리 두께 `--tx-collapsible-border-width` (settlemint 에서 요구됐다)
+
+선 없는 목록 줄(위아래 12 · 높이 42)을 만들려고 `--tx-collapsible-border-color: transparent` 를 주면
+**보이지 않는 1px 이 남아** 줄이 2px 높아지고 내용이 좌우로 1px 들어간다. settlemint 는 위아래 여백을 11 로 줄여 맞췄다.
+
+```css
+.my-row {
+  --tx-collapsible-border-width: 0;
+  --tx-collapsible-padding: 12px 0;
+}
+```
+
+기본은 `1px` 이라 이미 쓰는 화면은 그대로다. **`TxAccordion` 의 맞닿은 테두리 겹치기도 이 값을 따른다** —
+`1px` 로 박혀 있으면 두께를 `0` 으로 둔 목록이 1px 씩 파고든다.

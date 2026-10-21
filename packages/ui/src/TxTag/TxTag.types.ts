@@ -36,6 +36,15 @@ export interface TxTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, "onCli
    */
   onClick?: MouseEventHandler<HTMLButtonElement>;
 
+  /**
+   * 켜고 끄는 태그의 상태. **`onClick` 과 함께 줄 때만 뜻이 있다** — 글자 버튼에 `aria-pressed` 가 붙고
+   * 루트에 `data-selected` 가 붙는다. 걸러내기 칩처럼 눌러서 켜고 끄는 태그에 쓴다.
+   *
+   * `false` 도 알린다(`aria-pressed="false"`) — "켜고 끄는 것" 이라는 사실 자체가 정보다.
+   * 안 주면 그냥 누르는 태그다. 겉모습은 `--tx-tag-selected-bg` · `-fg` · `-border-color` 로 바꾼다.
+   */
+  selected?: boolean;
+
   /** 주면 오른쪽에 지우기(×) 버튼이 생긴다. */
   onRemove?: MouseEventHandler<HTMLButtonElement>;
 

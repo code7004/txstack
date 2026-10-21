@@ -961,6 +961,17 @@ describe("TxAppShell — CSS 계약", () => {
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = strip(readFileSync(join(here, "TxAppShell.tsx"), "utf8"));
 
+  /** 평소 투명한 헤더 선이 1px 을 차지해 헤더가 그만큼 높았다 — settlemint 에서 요구됐다 */
+  it("경계선 두께는 --tx-app-shell-border-width 하나이고 기본은 1px 이다", () => {
+    const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";
+    const lines = [...css.matchAll(/border(?:-[a-z-]+)?:\s*([^;]*var\(--tx-app-shell-border-color\)[^;]*);/g)].map((match) => match[1]);
+
+    expect(base).toMatch(/--tx-app-shell-border-width:\s*1px;/);
+    // 헤더 · 좌우 · 아래 패널 · 푸터 다섯 곳. 접기 스위치(단추 자신의 테두리)만 1px 그대로다
+    expect(lines.filter((value) => value.startsWith("var(--tx-app-shell-border-width)"))).toHaveLength(5);
+    expect(lines.filter((value) => !value.startsWith("var(--tx-app-shell-border-width)"))).toEqual(["1px solid var(--tx-app-shell-border-color)"]);
+  });
+
   it("색을 하드코딩하지 않는다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
   });

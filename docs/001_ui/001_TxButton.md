@@ -39,9 +39,24 @@
 색·반경은 CSS 변수로 바꾼다 — 앱 전체는 `:root { --tx-color-primary: … }`,
 이 컴포넌트만은 `.tx-button { --tx-button-bg: … }`.
 
+### 테두리 (`--tx-button-border-width` · `--tx-button-border-color`)
+
+기본은 테두리가 없다(`0` · `transparent`). **흰 바탕에 선 하나짜리 알약 버튼**은 이 둘로 만든다 —
+`className` 으로 `border` 를 덮지 않는다. settlemint 의 계정 버튼 · 「+」 칩에서 요구됐다.
+
+```css
+.my-pill {
+  --tx-button-border-width: 1px;
+  --tx-button-border-color: var(--tx-color-border);
+  --tx-button-radius: 9999px;
+}
+```
+
+`<button>` 은 UA 기본이 `border-box` 라 선을 줘도 `icon` 버튼의 한 변은 `--tx-button-icon-size` 그대로다.
+
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxButton/`
-- [x] **테스트** — 47개
+- [x] **테스트** — 48개
 - [x] **스토리** — `TxButton.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`

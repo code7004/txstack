@@ -25,19 +25,21 @@
 
 <TxTag variant="info" onRemove={() => drop("서울")}>서울</TxTag>
 <TxTag onClick={() => filter("vip")}>VIP</TxTag>
+<TxTag onClick={() => setPlatform("all")} selected={platform === "all"}>전체</TxTag>
 ```
 
 갈래는 **`TxAlert` · `TxToast` 와 같은 어휘**에 `neutral` 하나가 더 있다.
 
 **`onClick` 을 주면 글자가 눌리고, `onRemove` 를 주면 지우기(×)가 붙는다.**
-둘 다 안 주면 읽기만 하는 이름표다.
+둘 다 안 주면 읽기만 하는 이름표다. **켜고 끄는 칩이면 `selected` 를 함께 준다** — 글자 버튼에
+`aria-pressed` 가, 루트에 `data-selected` 가 붙는다.
 
 겉모습은 CSS 변수로 바꾼다 — `.tx-tag { --tx-tag-radius: 0.25rem }`.
 
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxTag/`
-- [x] **테스트** — 35개
+- [x] **테스트** — 42개
 - [x] **스토리** — `TxTag.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -92,3 +94,38 @@
 `onClick`(누르기)과 `onRemove`(지우기)를 더했다. **태그 전체를 버튼으로 감싸지 않는다** —
 지우기도 버튼이라 감싸면 `<button>` 안의 `<button>` 이 되어 못 쓰는 마크업이 된다.
 글자만 버튼이 되고 지우기는 그 옆에 따로 선다.
+
+### 선택 상태 `selected` · hover 토큰 (settlemint 에서 요구됐다)
+
+settlemint 홈의 연동 플랫폼 칩은 **눌러서 하나를 켜는 걸러내기**다. 선택 상태를 줄 자리가 없어 앱이
+`data-selected` 로 겉만 칠하고 숨김 글자로 상태를 읽혔다. 또 hover 바탕이 갈래색과 surface 를 섞어 계산돼,
+선택 바탕을 검정으로 칠한 칩이 손을 얹는 순간 **회색으로 바랬다** — 앱은 `--tx-color-surface` 를 덮어 우회했다.
+
+```tsx
+<TxTag onClick={() => onSelect("all")} selected={selected === "all"}>
+  전체
+</TxTag>
+```
+
+```css
+.sm-chip {
+  --tx-tag-selected-bg: var(--sm-text-strong);
+  --tx-tag-selected-fg: var(--sm-text-inverse);
+  --tx-tag-selected-border-color: var(--sm-text-strong);
+  /* 필요하면 hover 도 직접 — 기본은 선택 바탕 위에 상태색을 얹는다 */
+  --tx-tag-hover-bg: …;
+}
+```
+
+| 정한 것                                                       | 왜                                                                                                                               |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 이름은 `selected`, ARIA 는 `aria-pressed`                     | `pressed` 는 `TxButton` 의 `--tx-button-bg-pressed` 가 이미 "누르는 동안(:active)" 뜻으로 쓴다. 겹치면 토큰 이름이 헷갈린다      |
+| **`onClick` 과 함께일 때만** 뜻이 있다                        | 누를 수 없는 것에 눌림 상태는 없다. 겉만 선택된 것처럼 보이면 거짓이 된다 — 그래서 `data-selected` 도 붙지 않는다                |
+| `selected={false}` 도 알린다 (`aria-pressed="false"`)         | "켜고 끄는 칩" 이라는 사실 자체가 정보다. 안 주면 그냥 누르는 태그다                                                             |
+| 지우기(×)에는 붙지 않는다                                     | 지우기는 켜고 끄는 것이 아니다                                                                                                   |
+| 기본 겉모습 — 바탕을 조금 진하게 + **테두리를 글자색으로**    | 색만으로 가르지 않는다. 테두리가 모양으로도 상태를 알린다. 토큰은 `--tx-tag-selected-bg` · `-fg` · `-border-color`               |
+| 선택은 `--tx-tag-fg` 를 다시 정의하지 않고 값으로 직접 칠한다 | `--tx-tag-selected-fg` 의 기본값이 `--tx-tag-fg` 라, 거꾸로 정의하면 고리가 생긴다                                               |
+| 점(`dot`)은 `currentColor`                                    | 선택돼 글자색이 바뀌면 점도 따라간다                                                                                             |
+| hover 바탕은 `--tx-tag-hover-bg` 하나로 모았다                | soft · outline · 선택이 각자 이 값만 다시 정한다. 선택된 칩은 **선택 바탕 위에 상태색을 얹는다**(`TxButton` 의 hover 와 같은 식) |
+
+**토큰은 태그 자신에 준다**(`.tx-tag` 나 거기 붙인 클래스). 부모에 주면 태그가 자기 기본값으로 덮는다.

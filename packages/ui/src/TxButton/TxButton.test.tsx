@@ -275,6 +275,16 @@ describe("TxButton — CSS 계약", () => {
   const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
   const variantRules = rules.filter((rule) => rule.selector.includes("[data-variant="));
 
+  /** 흰 바탕 + 선 하나짜리 알약 버튼을 className 으로 덮지 않게 — settlemint 에서 요구됐다 */
+  it("테두리는 두께 · 색 토큰으로 나가 있고 기본은 없다", () => {
+    const base = css.match(/\.tx-button\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(base).toMatch(/--tx-button-border-width:\s*0;/);
+    expect(base).toMatch(/--tx-button-border-color:\s*transparent;/);
+    expect(base).toMatch(/border:\s*var\(--tx-button-border-width\) solid var\(--tx-button-border-color\)/);
+    expect(base).not.toMatch(/border:\s*none/);
+  });
+
   it("포커스 링을 variant 가 아니라 기본 클래스가 소유한다 (D2)", () => {
     // **이것이 D2 의 회귀 감시다.** 포커스 링 규칙이 variant 를 타는 순간
     // 어떤 variant 는 링이 없는 상태로 다시 갈라진다 — 키보드 사용자가 위치를 못 본다.

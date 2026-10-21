@@ -179,6 +179,9 @@ export const InForm: Story = {
  * 세 번째 줄의 `brand` 는 라이브러리에 없는 이름인데, 위 CSS 두 줄로 만들어 쓰고 있다.
  * 마우스를 올려 보면 hover 색까지 따라오는 게 보인다.
  */
+/** 선 하나짜리 알약 버튼. 컴포넌트 토큰은 버튼 자신에 준다 — 부모에 주면 버튼이 자기 기본값으로 덮는다 */
+const pill = vars({ "--tx-button-border-width": "1px", "--tx-button-border-color": "var(--tx-color-border)", "--tx-button-radius": "9999px", "--tx-button-shadow": "none" });
+
 export const CustomizingTokens: Story = {
   parameters: noControls,
   render: () => (
@@ -201,6 +204,14 @@ export const CustomizingTokens: Story = {
         <TxButton label="삭제" variant="danger" />
         <span className="text-slate-500 dark:text-slate-400">
           이 영역에만 <code>--tx-color-primary</code> · <code>--tx-radius</code> — 올려보면 hover 도 보라 계열이다
+        </span>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <TxButton label="010-1234-5678" variant="ghost" style={pill} />
+        <TxButton icon label="+" aria-label="추가" variant="ghost" style={pill} />
+        <span className="text-slate-500 dark:text-slate-400">
+          <code>--tx-button-border-width</code> · <code>--tx-button-border-color</code> — 선 하나짜리 알약 버튼
         </span>
       </div>
 

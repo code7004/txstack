@@ -456,3 +456,22 @@ export const 폭바꾸기: Story = {
     </div>
   )
 };
+
+/**
+ * 경계선을 없애려면 **두께**를 0 으로 둔다. 색만 `transparent` 로 두면 보이지 않는 1px 이 남아
+ * 헤더가 그만큼 높아진다. 위는 기본, 아래는 `--tx-app-shell-border-width: 0` 이다.
+ */
+export const 선없이: Story = {
+  name: "선 없이",
+  args: { header: <Brand />, left: <Left />, children: <Article /> },
+  render: (args) => (
+    <div className="flex flex-col gap-4">
+      <div style={frame}>
+        <TxAppShell {...args} style={{ minBlockSize: "14rem" }} />
+      </div>
+      <div style={frame}>
+        <TxAppShell {...args} style={{ minBlockSize: "14rem", ...vars({ "--tx-app-shell-border-width": "0" }) }} />
+      </div>
+    </div>
+  )
+};

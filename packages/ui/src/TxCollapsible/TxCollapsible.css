@@ -13,6 +13,8 @@
   --tx-collapsible-padding: 0.875rem 1rem;
   --tx-collapsible-radius: var(--tx-radius);
   --tx-collapsible-border-color: var(--tx-color-border);
+  /** `0` 이면 테두리가 자리도 차지하지 않는다. 색만 투명하게 하면 1px 이 남아 줄이 2px 높고 안쪽으로 1px 들어간다 */
+  --tx-collapsible-border-width: 1px;
   --tx-collapsible-bg: transparent;
 
   --tx-collapsible-title-weight: 600;
@@ -22,7 +24,7 @@
   --tx-collapsible-duration: 200ms;
   --tx-collapsible-disabled-opacity: 0.45;
 
-  border: 1px solid var(--tx-collapsible-border-color);
+  border: var(--tx-collapsible-border-width) solid var(--tx-collapsible-border-color);
   border-radius: var(--tx-collapsible-radius);
   background-color: var(--tx-collapsible-bg);
   color: var(--tx-color-text);

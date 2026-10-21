@@ -298,8 +298,9 @@ describe("TxAccordion — CSS 계약", () => {
   });
 
   /** 그대로 두면 덩이 사이가 2px 이 되어 상자를 쌓아 둔 것으로 보인다. */
-  it("맞닿은 테두리를 한 겹으로 겹친다", () => {
-    expect(css).toMatch(/\.tx-accordion__item \+ \.tx-accordion__item\s*\{[^}]*margin-top:\s*-1px/);
+  it("맞닿은 테두리를 한 겹으로 겹친다 — 겹치는 폭은 테두리 두께 그대로다", () => {
+    // 1px 로 박아 두면 --tx-collapsible-border-width 를 0 으로 둔 목록이 1px 씩 파고든다
+    expect(css).toMatch(/\.tx-accordion__item \+ \.tx-accordion__item\s*\{[^}]*margin-top:\s*calc\(-1 \* var\(--tx-collapsible-border-width\)\)/);
   });
 
   /** 소비자가 클래스 하나로 되돌릴 수 있어야 한다. */

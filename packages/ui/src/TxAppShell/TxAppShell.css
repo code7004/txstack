@@ -23,6 +23,12 @@
   --tx-app-shell-top-padding: 0 1rem;
 
   --tx-app-shell-border-color: var(--tx-color-border);
+  /**
+   * 경계선(헤더 아래 · 좌우 · 아래 패널 · 푸터)의 두께. `0` 이면 선이 자리도 차지하지 않는다 —
+   * 색만 `transparent` 로 두면 투명한 1px 이 남아 헤더가 그만큼 높아진다(settlemint 에서 요구됐다).
+   * 접기 스위치의 테두리는 경계선이 아니라 그 단추의 것이라 따라가지 않는다
+   */
+  --tx-app-shell-border-width: 1px;
   --tx-app-shell-header-bg: var(--tx-color-surface);
   --tx-app-shell-duration: 200ms;
 
@@ -95,7 +101,7 @@
 
 .tx-app-shell__header {
   z-index: var(--tx-app-shell-header-z);
-  border-block-end: 1px solid var(--tx-app-shell-border-color);
+  border-block-end: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
   background-color: var(--tx-app-shell-header-bg);
 }
 
@@ -155,12 +161,12 @@
 
 .tx-app-shell__left {
   inline-size: var(--tx-app-shell-left-width);
-  border-inline-end: 1px solid var(--tx-app-shell-border-color);
+  border-inline-end: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
 }
 
 .tx-app-shell__right {
   inline-size: var(--tx-app-shell-right-width);
-  border-inline-start: 1px solid var(--tx-app-shell-border-color);
+  border-inline-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /**
@@ -205,7 +211,7 @@
 
 .tx-app-shell__bottom {
   block-size: var(--tx-app-shell-bottom-height);
-  border-block-start: 1px solid var(--tx-app-shell-border-color);
+  border-block-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /**
@@ -258,7 +264,7 @@
 }
 
 .tx-app-shell__footer {
-  border-block-start: 1px solid var(--tx-app-shell-border-color);
+  border-block-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /* --- 크기 조절 손잡이 --------------------------------------------------------- */

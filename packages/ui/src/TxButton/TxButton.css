@@ -28,6 +28,12 @@
 
   --tx-button-padding: 0.5rem;
   --tx-button-radius: var(--tx-radius);
+  /**
+   * 테두리. 기본은 없다. 흰 바탕 + 선 하나짜리 알약 버튼은 이 둘로 만든다.
+   * `<button>` 은 UA 기본이 `border-box` 라 선을 줘도 `icon` 버튼의 한 변은 그대로다
+   */
+  --tx-button-border-width: 0;
+  --tx-button-border-color: transparent;
   --tx-button-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
   --tx-button-font-weight: 500;
   --tx-button-transition: background-color 150ms;
@@ -41,7 +47,7 @@
   justify-content: center;
 
   padding: var(--tx-button-padding);
-  border: none;
+  border: var(--tx-button-border-width) solid var(--tx-button-border-color);
   border-radius: var(--tx-button-radius);
   background-color: var(--tx-button-bg);
   color: var(--tx-button-fg);

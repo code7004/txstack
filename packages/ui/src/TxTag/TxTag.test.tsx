@@ -118,6 +118,33 @@ describe("TxTag — CSS 계약", () => {
   const tokens = strip(readFileSync(join(here, "..", "tokens.css"), "utf8"));
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
 
+  /** 선택된 칩의 바탕을 바꾼 소비자가 hover 에서 엉뚱한 색을 보지 않게 — settlemint 에서 요구됐다 */
+  it("hover 바탕은 --tx-tag-hover-bg 하나다 — 칠하는 방식 · 선택 상태가 그 값만 다시 정한다", () => {
+    const base = css.match(/\.tx-tag\s*\{([^}]*)\}/)?.[1] ?? "";
+    const outline = css.match(/\.tx-tag\[data-appearance="outline"\]\s*\{([^}]*)\}/)?.[1] ?? "";
+    const selected = css.match(/\.tx-tag\[data-selected\]\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(base).toMatch(/--tx-tag-hover-bg:/);
+    expect(outline).toMatch(/--tx-tag-hover-bg:/);
+    // 선택 바탕 위에 상태색을 얹는다. 갈래색으로 다시 섞으면 검정 칩이 회색이 된다
+    expect(selected).toMatch(/--tx-tag-hover-bg:\s*color-mix\([^;]*var\(--tx-color-state\)[^;]*var\(--tx-tag-selected-bg\)/);
+    expect(css).toMatch(/\.tx-tag\[data-interactive\]:hover\s*\{\s*background-color:\s*var\(--tx-tag-hover-bg\);?\s*\}/);
+    expect(css.match(/:hover\s*\{[^}]*background-color:[^;]*color-mix/g)).toBeNull();
+  });
+
+  it("선택 상태는 세 토큰으로 칠하고, 색만이 아니라 테두리로도 갈린다", () => {
+    const base = css.match(/\.tx-tag\s*\{([^}]*)\}/)?.[1] ?? "";
+    const selected = css.match(/\.tx-tag\[data-selected\]\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    for (const name of ["bg", "fg", "border-color"]) expect(base).toMatch(new RegExp(`--tx-tag-selected-${name}:`));
+    expect(base).toMatch(/--tx-tag-selected-border-color:\s*var\(--tx-tag-fg\)/);
+    expect(selected).toMatch(/background-color:\s*var\(--tx-tag-selected-bg\)/);
+    expect(selected).toMatch(/color:\s*var\(--tx-tag-selected-fg\)/);
+    expect(selected).toMatch(/border-color:\s*var\(--tx-tag-selected-border-color\)/);
+    // --tx-tag-fg 를 다시 정의하면 그것을 기본값으로 갖는 --tx-tag-selected-fg 와 고리가 생긴다
+    expect(selected).not.toMatch(/--tx-tag-fg:/);
+  });
+
   it("색을 하드코딩하지 않는다 — 값이 토큰으로 나가 있다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     expect(css).toMatch(/background-color:\s*var\(--tx-tag-bg\)/);
@@ -187,7 +214,8 @@ describe("TxTag — CSS 계약", () => {
     const dot = css.match(/\.tx-tag__dot\s*\{([^}]*)\}/)?.[1] ?? "";
     const outline = css.match(/\.tx-tag\[data-appearance="outline"\]\s*\{([^}]*)\}/)?.[1] ?? "";
 
-    expect(dot).toMatch(/background-color:\s*var\(--tx-tag-fg\)/);
+    // currentColor 다 — 글자색을 따른다. 선택돼 글자색이 바뀌어도 점이 함께 바뀐다
+    expect(dot).toMatch(/background-color:\s*currentColor/);
     expect(outline).toMatch(/--tx-tag-border-color:[^;]*var\(--tx-tag-fg\)/);
   });
 
@@ -208,6 +236,50 @@ describe("TxTag — CSS 계약", () => {
  * 감싸면 지우기(×)가 그 안에 들어가 못 쓰는 마크업이 된다.
  */
 describe("TxTag — 누르고 지우기", () => {
+  it("selected 를 주면 글자 버튼이 눌린 상태를 알린다", () => {
+    const { container } = render(
+      <TxTag onClick={vi.fn()} selected>
+        전체
+      </TxTag>
+    );
+
+    expect(screen.getByRole("button", { name: "전체", pressed: true })).toBeTruthy();
+    expect(badgeOf(container).hasAttribute("data-selected")).toBe(true);
+  });
+
+  it("selected={false} 도 알린다 — 켜고 끄는 칩이라는 것 자체가 정보다", () => {
+    const { container } = render(
+      <TxTag onClick={vi.fn()} selected={false}>
+        전체
+      </TxTag>
+    );
+
+    expect(screen.getByRole("button", { name: "전체" }).getAttribute("aria-pressed")).toBe("false");
+    expect(badgeOf(container).hasAttribute("data-selected")).toBe(false);
+  });
+
+  it("selected 를 안 주면 그냥 누르는 태그다", () => {
+    render(<TxTag onClick={vi.fn()}>VIP</TxTag>);
+    expect(screen.getByRole("button", { name: "VIP" }).hasAttribute("aria-pressed")).toBe(false);
+  });
+
+  /** 누를 수 없는 것에 눌린 상태는 없다 — 겉모습만 선택된 것처럼 보이면 거짓이 된다 */
+  it("onClick 없이 준 selected 는 무시한다", () => {
+    const { container } = render(<TxTag selected>초안</TxTag>);
+
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(badgeOf(container).hasAttribute("data-selected")).toBe(false);
+  });
+
+  it("선택해도 지우기 버튼은 눌림 상태를 갖지 않는다", () => {
+    render(
+      <TxTag onClick={vi.fn()} onRemove={vi.fn()} selected>
+        서울
+      </TxTag>
+    );
+    expect(screen.getByRole("button", { name: "지우기" }).hasAttribute("aria-pressed")).toBe(false);
+  });
+
   it("onClick 을 주면 글자가 눌린다", () => {
     const onClick = vi.fn();
     render(<TxTag onClick={onClick}>VIP</TxTag>);
