@@ -130,7 +130,7 @@ export const routes = {
     meta: { label: "API", description: "다섯 패키지의 API 레퍼런스" },
     children: {
       index: { index: true, element: <ApiHome /> },
-      ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui", description: "Tx* 컴포넌트 49종의 props · 토큰 레퍼런스" } },
+      ui: { path: "/api/ui", element: <ApiUi />, meta: { label: "ui", description: "Tx* 컴포넌트 50종의 props · 토큰 레퍼런스" } },
       routeMeta: { path: "/api/route-meta", element: <ApiRouteMeta />, meta: { label: "route-meta", description: "RouteTree · buildRouteObjects · getNavRoutes 레퍼런스" } },
       hooks: { path: "/api/hooks", element: <ApiHooks />, meta: { label: "hooks", description: "useUrlQuery · useObjectState 레퍼런스" } },
       axios: { path: "/api/axios", element: <ApiAxios />, meta: { label: "axios", description: "createHttpClient 옵션과 오류 처리 레퍼런스" } },

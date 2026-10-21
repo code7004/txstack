@@ -519,9 +519,10 @@ export const CATALOG: [category: string, items: CatalogItem[]][] = [
   [
     "Layout",
     [
-      { name: "TxAppShell", desc: "헤더 · 메뉴 · 본문 · 하단을 잡는 화면 틀. 좁은 화면에서는 메뉴가 서랍으로 들어갑니다" },
+      { name: "TxAppShell", desc: "헤더 · 메뉴 · 본문 · 하단을 잡는 화면 틀. 좁은 화면에서는 메뉴가 서랍으로 들어가고 하단 탭바를 둘 수 있습니다" },
       { name: "TxNavBar", desc: "가로 메뉴. 항목별 패널이나 메뉴 전체를 펼치는 패널을 둘 수 있습니다" },
       { name: "TxSideNav", desc: "세로 메뉴. 아이콘만 남기고 접히고, 하위 메뉴는 트리로 펼쳐집니다" },
+      { name: "TxTabBar", desc: "좁은 화면 아래쪽의 탭 줄. TxAppShell 의 tabBar 자리에 넣으면 좁을 때만 화면 아래에 붙습니다" },
       { name: "TxBreadcrumb", desc: "현재 위치까지의 경로" },
       { name: "TxTabs", desc: "탭과 그 아래 내용" },
       { name: "TxCard", desc: "내용을 담는 카드. 테두리 · 모서리 · 그림자 · 여백을 한 곳에서 정합니다" },

@@ -9,7 +9,7 @@ import { CATALOG, TABLES, componentAnchor, storyUrl, tableAnchor } from "./data"
 
 export function ApiUi() {
   return (
-    <Page title="@txstack/ui" lead="UI를 위한 Tx* 컴포넌트 49종입니다. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다.">
+    <Page title="@txstack/ui" lead="UI를 위한 Tx* 컴포넌트 50종입니다. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다.">
       <Block title="Install">
         <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui`}</CodeBlock>
         <PrePublishNote />

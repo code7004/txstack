@@ -475,3 +475,34 @@ export const 선없이: Story = {
     </div>
   )
 };
+
+/**
+ * 좁을 때만 화면 아래에 붙는 **하단 탭바**. `bottom`(콘솔 패널)과 다른 자리다.
+ * 셸은 자리 · 본문 아래 자리 비우기 · 아이폰 홈 표시줄을 맡고, 항목은 `TxTabBar` 가 그린다 — 여기서는 셸만 보이려고 목록을 직접 넣었다.
+ *
+ * 탭바는 `position: fixed` 라 이 판 안에 가둬 보였다. 높이 · 바탕 · 선 · 위쪽 페이드는 `--tx-app-shell-tab-bar-*` 로 바꾼다.
+ */
+export const 하단탭바: Story = {
+  name: "하단 탭바",
+  args: { header: <Brand />, left: <Left />, breakpoint: 100_000, children: <Article /> },
+  render: (args) => (
+    // 바깥(transform)이 fixed 의 기준이 되고, 안쪽이 굴러간다 — 탭바는 판 아래에 붙은 채로 남는다
+    <div style={{ ...frame, maxInlineSize: "26rem", blockSize: "28rem", transform: "translateZ(0)" }}>
+      <div style={{ blockSize: "100%", overflow: "auto" }}>
+        <TxAppShell
+          {...args}
+          tabBar={
+            <ul className="m-0 flex h-full list-none p-0">
+              {["홈", "내역", "설정"].map((name) => (
+                <li key={name} className="flex flex-1 items-center justify-center text-sm">
+                  {name}
+                </li>
+              ))}
+            </ul>
+          }
+          style={{ minBlockSize: "100%", ...vars({ "--tx-app-shell-tab-bar-fade": "2.5rem" }) }}
+        />
+      </div>
+    </div>
+  )
+};

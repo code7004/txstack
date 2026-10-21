@@ -858,6 +858,82 @@ describe("TxAppShell — 접기", () => {
   });
 });
 
+/**
+ * 하단 탭바. **좁을 때만 선다** — 넓은 화면에는 top · left 가 이미 그 일을 한다.
+ * `bottom`(콘솔 패널)과는 다른 자리다.
+ */
+describe("TxAppShell — 하단 탭바", () => {
+  const tabs = (
+    <ul>
+      <li>
+        <a href="/">홈</a>
+      </li>
+    </ul>
+  );
+
+  it("넓으면 그리지 않는다", () => {
+    render(<TxAppShell tabBar={tabs}>본문</TxAppShell>);
+
+    expect(screen.queryByRole("navigation", { name: "하단 탭" })).toBeNull();
+    expect(root().hasAttribute("data-tab-bar")).toBe(false);
+  });
+
+  it("좁으면 이름 붙은 nav 로 선다", () => {
+    setViewport(true);
+    render(<TxAppShell tabBar={tabs}>본문</TxAppShell>);
+
+    const nav = screen.getByRole("navigation", { name: "하단 탭" });
+    expect(nav.classList.contains("tx-app-shell__tab-bar")).toBe(true);
+    expect(nav.contains(screen.getByRole("link", { name: "홈" }))).toBe(true);
+  });
+
+  /** 본문 아래 자리 비우기는 CSS 가 이 표시를 보고 한다 */
+  it("서 있는 동안 셸에 표시를 남긴다", () => {
+    setViewport(true);
+    render(<TxAppShell tabBar={tabs}>본문</TxAppShell>);
+    expect(root().hasAttribute("data-tab-bar")).toBe(true);
+  });
+
+  it("탭바를 안 주면 좁아도 표시가 없다", () => {
+    setViewport(true);
+    render(<TxAppShell>본문</TxAppShell>);
+    expect(root().hasAttribute("data-tab-bar")).toBe(false);
+  });
+
+  /** 탭바에 다 안 드는 메뉴가 갈 곳이다 */
+  it("탭바가 있어도 서랍(햄버거)은 남는다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell left={SLOTS.left} tabBar={tabs}>
+        본문
+      </TxAppShell>
+    );
+    expect(screen.getByRole("button", { name: "메뉴 열기" })).toBeTruthy();
+  });
+
+  it("bottom 과 따로 선다 — 콘솔 패널 자리가 아니다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell bottom={SLOTS.bottom} tabBar={tabs}>
+        본문
+      </TxAppShell>
+    );
+
+    expect(screen.getByRole("region", { name: "아래 패널" })).toBeTruthy();
+    expect(screen.getByRole("navigation", { name: "하단 탭" })).toBeTruthy();
+  });
+
+  it("이름과 className 을 바꿀 수 있다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell tabBar={tabs} labels={{ tabBar: "주 탭" }} classNames={{ tabBar: "mine" }}>
+        본문
+      </TxAppShell>
+    );
+    expect(screen.getByRole("navigation", { name: "주 탭" }).classList.contains("mine")).toBe(true);
+  });
+});
+
 describe("TxAppShell — 겉", () => {
   it("className 은 덧붙는다 — 교체하지 않는다", () => {
     render(<TxAppShell className="mine">본문</TxAppShell>);
@@ -962,9 +1038,42 @@ describe("TxAppShell — CSS 계약", () => {
   const source = strip(readFileSync(join(here, "TxAppShell.tsx"), "utf8"));
 
   /** 평소 투명한 헤더 선이 1px 을 차지해 헤더가 그만큼 높았다 — settlemint 에서 요구됐다 */
+  /** settlemint 의 Figma(높이 84 · 위 8 · 아래 24 · 흰 바탕 · 위 선 · 페이드 40)를 전부 토큰으로 맞출 수 있어야 한다 */
+  it("하단 탭바의 높이 · 여백 · 바탕 · 경계선 · 페이드가 전부 토큰이다", () => {
+    const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";
+    for (const name of ["height", "padding-top", "padding-bottom", "bg", "border-width", "border-color", "fade", "fade-color"]) {
+      expect(base, name).toMatch(new RegExp(`--tx-app-shell-tab-bar-${name}:`));
+    }
+    expect(base).toMatch(/--tx-app-shell-tab-bar-fade:\s*0;/);
+  });
+
+  it("하단 탭바는 화면 아래에 붙고, 아이폰 홈 표시줄 자리는 아래 여백에 더한다", () => {
+    const bar = css.match(/\.tx-app-shell__tab-bar\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(bar).toMatch(/position:\s*fixed/);
+    expect(bar).toMatch(/inset-block-end:\s*0/);
+    expect(bar).toMatch(/padding-block:\s*var\(--tx-app-shell-tab-bar-padding-top\) calc\(var\(--tx-app-shell-tab-bar-padding-bottom\) \+ env\(safe-area-inset-bottom/);
+    expect(bar).toMatch(/border-block-start:\s*var\(--tx-app-shell-tab-bar-border-width\) solid var\(--tx-app-shell-tab-bar-border-color\)/);
+  });
+
+  /** 안 비우면 본문 맨 아래 줄이 탭바에 가려 누를 수 없다 */
+  it("탭바가 서 있으면 셸 아래에 그 높이만큼 자리를 비운다", () => {
+    const rule = css.match(/\.tx-app-shell\[data-tab-bar\]\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(rule).toMatch(/padding-block-end:\s*calc\(var\(--tx-app-shell-tab-bar-height\) \+ env\(safe-area-inset-bottom/);
+    expect(rule).toMatch(/box-sizing:\s*border-box/);
+  });
+
+  it("위쪽 페이드는 눌림을 가로채지 않는다", () => {
+    const fade = css.match(/\.tx-app-shell__tab-bar::before\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(fade).toMatch(/block-size:\s*var\(--tx-app-shell-tab-bar-fade\)/);
+    expect(fade).toMatch(/pointer-events:\s*none/);
+  });
+
   it("경계선 두께는 --tx-app-shell-border-width 하나이고 기본은 1px 이다", () => {
     const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";
-    const lines = [...css.matchAll(/border(?:-[a-z-]+)?:\s*([^;]*var\(--tx-app-shell-border-color\)[^;]*);/g)].map((match) => match[1]);
+    const lines = [...css.matchAll(/(?<![\w-])border(?:-[a-z-]+)?:\s*([^;]*var\(--tx-app-shell-border-color\)[^;]*);/g)].map((match) => match[1]);
 
     expect(base).toMatch(/--tx-app-shell-border-width:\s*1px;/);
     // 헤더 · 좌우 · 아래 패널 · 푸터 다섯 곳. 접기 스위치(단추 자신의 테두리)만 1px 그대로다

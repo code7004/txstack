@@ -1,0 +1,151 @@
+/**
+ * TxTabBar — 좁은 화면 아래쪽의 탭 줄.
+ *
+ * **항목만 그린다.** 화면 아래에 붙기 · 높이 · 바탕 · 위 경계선 · 아이폰 홈 표시줄 자리는
+ * `TxAppShell` 의 `tabBar` 자리(`--tx-app-shell-tab-bar-*`)가 갖는다.
+ *
+ * 명세: docs/001_ui/051_TxTabBar.md
+ */
+
+.tx-tab-bar {
+  --tx-tab-bar-max-width: none;
+  --tx-tab-bar-padding-inline: 0;
+
+  /** 칸 안의 차례 — 아이콘 칸 → 간격 → 글자 */
+  --tx-tab-bar-icon-size: 1.25rem;
+  --tx-tab-bar-gap: 0.25rem;
+  --tx-tab-bar-font-size: 0.6875rem;
+  --tx-tab-bar-font-weight: 600;
+
+  /** 나머지 탭의 글자 · 아이콘 색. 아이콘은 `currentColor` 로 따라온다 */
+  --tx-tab-bar-color: color-mix(in oklab, var(--tx-color-text) 55%, transparent);
+
+  /** 지금 탭. 글자로 쓰이는 자리라 면 위에서 읽히는 강조색이다 */
+  --tx-tab-bar-current-color: var(--tx-color-primary-strong);
+  --tx-tab-bar-current-font-weight: 700;
+
+  /**
+   * 지금 탭을 짚는 위쪽 막대. **색만으로 알리지 않으려고 기본으로 그린다.**
+   * 두께를 `0` 으로 두면 사라진다 — 그때는 굵기 차이를 남기는 편이 낫다.
+   */
+  --tx-tab-bar-indicator-size: 2px;
+  --tx-tab-bar-indicator-width: 1.5rem;
+  --tx-tab-bar-indicator-color: var(--tx-tab-bar-current-color);
+
+  /** 아이콘 모서리의 개수 */
+  --tx-tab-bar-badge-bg: var(--tx-color-danger);
+  --tx-tab-bar-badge-fg: var(--tx-color-on-accent);
+
+  block-size: 100%;
+}
+
+.tx-tab-bar__list {
+  display: flex;
+  align-items: stretch;
+
+  block-size: 100%;
+  max-inline-size: var(--tx-tab-bar-max-width);
+  margin: 0 auto;
+  padding: 0 var(--tx-tab-bar-padding-inline);
+  list-style: none;
+}
+
+/** **같은 폭으로 나눈다.** 글자가 긴 칸이 넓어지면 손가락이 닿는 자리가 칸마다 달라진다 */
+.tx-tab-bar__item {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.tx-tab-bar__link {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tx-tab-bar-gap);
+
+  /* `as="button"` 이어도 칸을 꽉 채운다 — 버튼은 내용 폭으로 줄어든다 */
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  background: none;
+  color: var(--tx-tab-bar-color);
+  font-family: inherit;
+  font-size: var(--tx-tab-bar-font-size);
+  font-weight: var(--tx-tab-bar-font-weight);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tx-tab-bar__link:focus-visible {
+  outline: var(--tx-focus-ring);
+  outline-offset: calc(var(--tx-focus-ring-offset) * -1);
+}
+
+.tx-tab-bar__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+
+  inline-size: var(--tx-tab-bar-icon-size);
+  block-size: var(--tx-tab-bar-icon-size);
+  font-size: var(--tx-tab-bar-icon-size);
+}
+
+.tx-tab-bar__label {
+  max-inline-size: 100%;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/** 아이콘 칸의 오른쪽 위 모서리. 칸이 가운데에 서므로 가운데에서 아이콘 반만큼 비켜 선다 */
+.tx-tab-bar__badge {
+  position: absolute;
+  inset-block-start: calc(var(--tx-tab-bar-icon-size) * -0.25);
+  inset-inline-start: calc(50% + var(--tx-tab-bar-icon-size) * 0.25);
+
+  min-inline-size: 1rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background-color: var(--tx-tab-bar-badge-bg);
+  color: var(--tx-tab-bar-badge-fg);
+
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1rem;
+  text-align: center;
+}
+
+/**
+ * 지금 탭. **라우터가 붙여 주는 `aria-current` 를 그대로 읽는다** —
+ * 우리가 따로 `active` prop 을 받으면 두 곳이 어긋난다.
+ */
+.tx-tab-bar__link[aria-current]:not([aria-current="false"]) {
+  color: var(--tx-tab-bar-current-color);
+  font-weight: var(--tx-tab-bar-current-font-weight);
+}
+
+.tx-tab-bar__link[aria-current]:not([aria-current="false"])::before {
+  content: "";
+
+  position: absolute;
+  inset-block-start: 0;
+  /* 양쪽을 0 으로 두고 margin auto — 글 방향(RTL)이 바뀌어도 가운데다 */
+  inset-inline: 0;
+
+  inline-size: var(--tx-tab-bar-indicator-width);
+  margin-inline: auto;
+  block-size: var(--tx-tab-bar-indicator-size);
+  border-radius: 999px;
+  background-color: var(--tx-tab-bar-indicator-color);
+}

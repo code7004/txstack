@@ -16,6 +16,7 @@
 ## 기능
 
 `header` · `top` · `left` · `right` · `bottom` · `footer`, 그리고 `children` 이 본문이다.
+좁을 때만 화면 아래에 붙는 **하단 탭바 `tabBar`** 도 있다 — 아래 "하단 탭바 — `tabBar`".
 
 ### 쓰는 법
 
@@ -65,7 +66,7 @@
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxAppShell/`
-- [x] **테스트** — 88개
+- [x] **테스트** — 99개
 - [x] **스토리** — `TxAppShell.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -344,3 +345,29 @@ site 의 `Guide › Layout › Fill the screen with the content` 가 소비자�
 정확히 섰다. 프로그램 스크롤에 이벤트가 안 오는 것(`TxScrollArea` 에서 겪은 것)도
 같이 나와, 스크롤 이벤트는 손으로 보내 확인했다 — 8px 손떨림은 무시하고 500 → 300 에서
 바로 다시 나온다.
+
+### 하단 탭바 — `tabBar` (settlemint 에서 요구됐다 · 사용자 결정)
+
+`bottom` 은 본문 아래의 콘솔 · 로그 패널이라 모바일 하단 탭바 자리가 아니다. 그래서 자리를 따로 열었다 —
+**좁을 때(`breakpoint` 보다 좁은 화면)만** 화면 아래에 붙는다. 항목은 [051_TxTabBar](051_TxTabBar.md) 가 그린다.
+
+```tsx
+<TxAppShell breakpoint={1024} left={<TxSideNav>{sideItems}</TxSideNav>} tabBar={<TxTabBar>{tabItems}</TxTabBar>}>
+  <Outlet />
+</TxAppShell>
+```
+
+| 셸이 하는 것         | 어떻게                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------- |
+| 좁을 때만 그린다     | 서랍과 같은 `breakpoint` 를 쓴다 — 넓으면 `left` · `top` 의 메뉴가 그 일을 한다                |
+| 랜드마크             | `<nav aria-label="하단 탭">` (`labels.tabBar` 로 바꾼다). `classNames.tabBar`                  |
+| 화면 아래 고정       | `position: fixed` · `z-index` 는 헤더와 같다. 서랍(모달)은 최상위 층이라 그 위를 덮는다        |
+| **본문 자리 비우기** | 서 있는 동안 루트에 `data-tab-bar` · 그만큼 아래 여백(`border-box`). 푸터도 탭바 위에서 끝난다 |
+| 아이폰 홈 표시줄     | `env(safe-area-inset-bottom)` 을 아래 여백 · 전체 높이에 더한다                                |
+| 위쪽 페이드          | `--tx-app-shell-tab-bar-fade`(기본 `0`) — 가상요소라 마크업이 늘지 않고 눌림을 가로채지 않는다 |
+
+**서랍(햄버거)은 탭바가 있어도 남는다** — 탭바에 다 안 드는 메뉴가 갈 곳이다. 두 메뉴는 같은 라우트 배열에서 뽑는다.
+이 셸이 "모바일용 메뉴를 따로 받지 않는다"(위 "좁아지면 `left` 가 서랍으로 간다")고 정한 것과 부딪히는 자리라, 어긋나지 않는 길을 그렇게 정했다.
+
+토큰은 `--tx-app-shell-tab-bar-height` · `-padding-top` · `-padding-bottom` · `-bg` · `-border-width` · `-border-color` · `-fade` · `-fade-color`.
+기본값과 Figma 값을 맞추는 예는 [051](051_TxTabBar.md) 의 "토큰".

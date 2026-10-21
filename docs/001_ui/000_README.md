@@ -39,7 +39,7 @@ import "@txstack/ui/styles.css";
 
 ## 개발 리스트
 
-**49개가 끝났다. 컴포넌트 테스트 1,567개.** 번호는 **만든 차례**다 —
+**50개가 끝났다. 컴포넌트 테스트 1,567개.** 번호는 **만든 차례**다 —
 새로 만드는 것은 뒤에 붙고, 번호는 다시 매기지 않는다.
 
 | 번호 | 컴포넌트                                         | 무엇                                                | 테스트 |
@@ -87,21 +87,21 @@ import "@txstack/ui/styles.css";
 | 041  | [`TxSwitch`](041_TxSwitch.md)                    | 그 자리에서 바로 켜고 끄는 자리                     | 24     |
 | 042  | [`TxBreadcrumb`](042_TxBreadcrumb.md)            | 계층 경로                                           | 24     |
 | 043  | [`TxScrollArea`](043_TxScrollArea.md)            | 넘치는 내용을 굴려 보는 자리                        | 18     |
-| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 88     |
+| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 99     |
 | 045  | [`TxAvatar`](045_TxAvatar.md)                    | 사람 한 명을 나타내는 동그란 칸                     | 28     |
 | 046  | [`TxTicker`](046_TxTicker.md)                    | 저절로 움직이는 공지 줄                             | 28     |
 | 047  | [`TxCarousel`](047_TxCarousel.md)                | 여러 장을 옆으로 넘겨 보는 자리                     | 50     |
 | 048  | [`TxNavBar`](048_TxNavBar.md)                    | 가로로 도는 내비게이션 · 메가메뉴                   | 26     |
 | 049  | [`TxSideNav`](049_TxSideNav.md)                  | 세로로 서는 내비게이션 · 아이콘 rail · 하위 트리    | 27     |
 | 050  | [`TxSiteMap`](050_TxSiteMap.md)                  | 메뉴 전체를 한 판에 펼쳐 보이는 지도 (S1 합의 중)   | —      |
-| 051  | [`TxTabBar`](051_TxTabBar.md)                    | 모바일 하단 탭바 (제안 — 슬롯 · 부품 결정 대기)     | —      |
+| 051  | [`TxTabBar`](051_TxTabBar.md)                    | 좁은 화면 아래쪽의 탭 줄 — 셸의 `tabBar` 에 넣는다  | 17     |
 
 _(내부)_ 는 배럴에서 내보내지 않는 부품이다 — 소비자가 이름을 볼 수 없다.
 `/daypicker` `/aggrid` 는 서브패스 전용이다.
 
 ## 아직 없는 것
 
-이식할 컴포넌트는 다 들어왔다. **적용 중에 새로 요구된 것은 [050 TxSiteMap](050_TxSiteMap.md)(S1 합의 중)과 [051 TxTabBar](051_TxTabBar.md)(제안 — 결정 대기)다.** 남은 일은 **쓰기 쉽게 설명하는 것** —
+이식할 컴포넌트는 다 들어왔다. **적용 중에 새로 요구된 것은 [050 TxSiteMap](050_TxSiteMap.md)(S1 합의 중)과 [051 TxTabBar](051_TxTabBar.md)(만들었다)다.** 남은 일은 **쓰기 쉽게 설명하는 것** —
 스토리북을 자세한 사용 안내로 다듬는다. 상태와 다음 순서는 [docs/README](../README.md) 가 갖는다.
 
 ## 자른 것 · 안 만드는 것
