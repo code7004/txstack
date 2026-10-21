@@ -133,6 +133,44 @@ export const Size: Story = {
 };
 
 /**
+ * **모바일 하단 시트.** `side="bottom" size="auto"` — 내용이 높이를 정하고, 화면보다 길면 거기서 멈춰 본문이 굴러간다.
+ * 위 두 모서리는 `--tx-slide-panel-radius`, 머리와 본문 여백은 따로 준다.
+ *
+ * ```css
+ * .my-sheet {
+ *   --tx-slide-panel-radius: 20px;
+ *   --tx-slide-panel-padding: 24px;            // 머리 (위 · 좌우)
+ *   --tx-slide-panel-body-padding: 16px 24px 32px;
+ * }
+ * ```
+ */
+export const BottomSheet: Story = {
+  name: "하단 시트 (size=auto)",
+  parameters: noControls,
+  render: () => {
+    const sheet = vars({ "--tx-slide-panel-radius": "20px", "--tx-slide-panel-padding": "24px", "--tx-slide-panel-body-padding": "16px 24px 32px" });
+
+    return (
+      <TxFlex>
+        <Demo label="짧은 시트" side="bottom" size="auto" title="연동 플랫폼" style={sheet}>
+          <p className="text-sm text-slate-600 dark:text-slate-300">내용만큼만 올라온다.</p>
+        </Demo>
+        <Demo label="긴 시트" side="bottom" size="auto" title="약관" style={sheet}>
+          {Array.from({ length: 40 }, (_, index) => (
+            <p key={index} className="py-1 text-sm text-slate-600 dark:text-slate-300">
+              {index + 1}. 화면보다 길면 화면 높이에서 멈추고 본문만 굴러간다.
+            </p>
+          ))}
+        </Demo>
+        <Demo label="오른쪽 · 내용 폭" side="right" size="auto" title="내용 폭" style={vars({ "--tx-slide-panel-radius": "20px" })}>
+          <div className="w-[18rem] text-sm">폭은 이 div(18rem)가 정한다.</div>
+        </Demo>
+      </TxFlex>
+    );
+  }
+};
+
+/**
  * 흔한 쓰임 — **필터 서랍.** 본문이 길어지면 머리는 자리에 남고 본문만 스크롤한다.
  */
 export const FilterDrawer: Story = {

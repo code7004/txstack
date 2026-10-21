@@ -60,13 +60,13 @@ import "@txstack/ui/styles.css";
 | 014  | [`TxForm`](014_TxForm.md)                        | 폼 한 줄을 짜는 계층                                | 39     |
 | 015  | [`TxAgGrid`](015_TxAgGrid.md) `/aggrid`          | ag-grid 위에 목록 화면에서 늘 하는 일을 얹은 표     | 48     |
 | 016  | [`TxPagination`](016_TxPagination.md)            | 쪽 번호                                             | 29     |
-| 017  | [`TxModal`](017_TxModal.md)                      | 화면을 덮고 뜨는 창                                 | 35     |
+| 017  | [`TxModal`](017_TxModal.md)                      | 화면을 덮고 뜨는 창                                 | 39     |
 | 018  | [`TxDialog`](018_TxDialog.md)                    | 네이티브 alert · confirm 을 대신하는 확인창         | 21     |
 | 019  | [`TxTabs`](019_TxTabs.md)                        | 탭                                                  | 29     |
 | 020  | [`TxCard`](020_TxCard.md)                        | 내용을 담는 상자                                    | 26     |
 | 021  | [`TxTooltip`](021_TxTooltip.md)                  | 올리면 뜨는 짧은 설명                               | 31     |
 | 022  | [`TxMenu`](022_TxMenu.md)                        | 눌러서 펼치는 메뉴와 우클릭 메뉴                    | 33     |
-| 023  | [`TxSlidePanel`](023_TxSlidePanel.md)            | 가장자리에서 밀려 나오는 패널(서랍)                 | 48     |
+| 023  | [`TxSlidePanel`](023_TxSlidePanel.md)            | 가장자리에서 밀려 나오는 패널(서랍)                 | 53     |
 | 024  | [`TxJsonTree`](024_TxJsonTree.md)                | 임의의 객체를 접을 수 있는 트리로 그린다            | 100    |
 | 025  | [`TxAlert`](025_TxAlert.md)                      | 페이지 안에 박히는 안내 상자                        | 38     |
 | 026  | [`TxToast`](026_TxToast.md)                      | 떴다 사라지는 알림                                  | 35     |

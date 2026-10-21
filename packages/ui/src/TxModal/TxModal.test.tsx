@@ -484,6 +484,30 @@ describe("TxModal — CSS 계약", () => {
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = readFileSync(join(here, "TxModal.tsx"), "utf8");
 
+  it("본문 여백은 --tx-modal-body-padding 이고 기본은 머리와 같다", () => {
+    const base = css.match(/\.tx-modal\s*\{([^}]*)\}/)?.[1] ?? "";
+    const body = css.match(/\.tx-modal__body\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(base).toMatch(/--tx-modal-body-padding:\s*var\(--tx-modal-padding\);/);
+    expect(body).toMatch(/padding:\s*var\(--tx-modal-body-padding\)/);
+  });
+
+  /**
+   * 본문 여백은 네 값까지 받는 줄임 값이라 한쪽만 꺼낼 수 없다. 버튼 줄이 음수 여백으로 그것을 상쇄하면
+   * 본문 여백을 바꾸는 순간 버튼 줄이 어긋난다 — 그래서 버튼 줄은 본문 여백을 계산에 쓰지 않는다.
+   */
+  it("버튼 줄은 본문 여백과 무관하게 바닥 · 양옆에 닿는다", () => {
+    const footer = css.match(/\.tx-modal__footer\s*\{([^}]*)\}/)?.[1] ?? "";
+    const withFooter = css.match(/\.tx-modal__body:has\(\.tx-modal__footer\)\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(footer).not.toMatch(/body-padding/);
+    expect(footer).not.toMatch(/\*\s*-1/);
+    expect(footer).toMatch(/bottom:\s*0/);
+    // 바탕만 양옆으로 넓힌다 — 자리를 차지하지 않고 본문의 스크롤 상자가 자른다
+    expect(footer).toMatch(/border-image:[^;]*fill[^;]*100vmax/);
+    expect(withFooter).toMatch(/padding-block-end:\s*0/);
+  });
+
   it("색을 하드코딩하지 않는다 — 값이 토큰으로 나가 있다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
     expect(css).toMatch(/background-color:\s*var\(--tx-modal-bg\)/);

@@ -3,6 +3,12 @@ import type { DialogHTMLAttributes, ReactNode } from "react";
 /** 어느 가장자리에서 밀려 나오는가. */
 export type TxSlidePanelSide = "left" | "right" | "top" | "bottom";
 
+/**
+ * 크기를 무엇이 정하는가. `"auto"` 면 **내용이** 정한다 — `TxModal` 의 `size="auto"` 와 같은 뜻.
+ * 안 주면 `--tx-slide-panel-size` 다.
+ */
+export type TxSlidePanelSize = "auto";
+
 export interface TxSlidePanelProps extends Omit<DialogHTMLAttributes<HTMLDialogElement>, "open" | "title" | "onClose"> {
   open: boolean;
 
@@ -15,6 +21,12 @@ export interface TxSlidePanelProps extends Omit<DialogHTMLAttributes<HTMLDialogE
 
   /** 어느 쪽에서 나오는가. 기본 `"right"`. */
   side?: TxSlidePanelSide;
+
+  /**
+   * `"auto"` 면 **내용이 크기를 정한다** — 위아래면 높이, 좌우면 폭. 화면을 넘으면 거기서 멈추고 본문이 굴러간다.
+   * 모바일 하단 시트(`side="bottom" size="auto"`)에 쓴다. 안 주면 `--tx-slide-panel-size` 다.
+   */
+  size?: TxSlidePanelSize;
 
   /** 제목. 스크린리더가 패널의 이름으로 읽는다. */
   title?: ReactNode;
