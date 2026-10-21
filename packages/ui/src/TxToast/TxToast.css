@@ -11,6 +11,11 @@
   --tx-toast-width: 22rem;
   --tx-toast-gap: 0.5rem;
   --tx-toast-margin: 1rem;
+  /**
+   * 통의 위 · 아래 자리(위에 쌓이면 `top`, 아래면 `bottom`)만 정한다. 기본은 `--tx-toast-margin` 과 같다.
+   * 좌우 여백 · 최대 폭은 계속 `--tx-toast-margin` 이 정한다 — 하단 탭바를 비키려고 이것을 올려도 폭이 줄지 않는다
+   */
+  --tx-toast-offset: var(--tx-toast-margin);
   --tx-toast-duration: 200ms;
 
   /**
@@ -74,12 +79,12 @@
  * 띄우라고 했는데 왼쪽에 뜬다. `<dialog>` 를 쓰는 `TxSlidePanel` 이 같은 자리를 지나갔다.
  */
 .tx-toast[data-position^="top"] {
-  top: var(--tx-toast-margin);
+  top: var(--tx-toast-offset);
   bottom: auto;
 }
 
 .tx-toast[data-position^="bottom"] {
-  bottom: var(--tx-toast-margin);
+  bottom: var(--tx-toast-offset);
   top: auto;
 }
 

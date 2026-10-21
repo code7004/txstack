@@ -187,6 +187,62 @@ describe("TxDropMenu — 키보드와 포커스", () => {
   });
 });
 
+/**
+ * 헤더 오른쪽 끝의 계정 버튼처럼 오른쪽에 붙은 트리거는 메뉴도 오른쪽 끝을 맞춰야 한다 — settlemint.
+ * jsdom 은 모든 것을 0 으로 재므로 트리거의 자리와 메뉴의 폭을 심어 준다(화면 폭은 jsdom 기본 1024).
+ */
+describe("TxDropMenu — 맞추는 끝(align)", () => {
+  const place = (left: number, right: number) => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      const trigger = this.tagName === "BUTTON" && this.getAttribute("aria-haspopup") !== null;
+      const [l, r] = trigger ? [left, right] : [0, 0];
+      return { left: l, right: r, width: r - l, top: 40, bottom: 72, height: 32, x: l, y: 40, toJSON: () => ({}) } as DOMRect;
+    });
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(200);
+  };
+  const popupLeft = async () => {
+    const menu = await openDropMenu();
+    return (menu.closest('[data-tag="TxPopup"]') as HTMLElement).style.left;
+  };
+
+  afterEach(() => vi.restoreAllMocks());
+
+  it("기본은 시작 끝(왼쪽)끼리 맞춘다", async () => {
+    place(600, 700);
+    render(<TxDropMenu label="메뉴">{MENU}</TxDropMenu>);
+    expect(await popupLeft()).toBe("600px");
+  });
+
+  it('align="end" 면 메뉴의 오른쪽 끝을 트리거의 오른쪽 끝에 맞춘다', async () => {
+    place(600, 700);
+    render(
+      <TxDropMenu label="메뉴" align="end">
+        {MENU}
+      </TxDropMenu>
+    );
+    expect(await popupLeft()).toBe("500px");
+  });
+
+  it("화면 밖으로 나가면 안으로 당긴다", async () => {
+    place(10, 60);
+    render(
+      <TxDropMenu label="메뉴" align="end">
+        {MENU}
+      </TxDropMenu>
+    );
+    expect(await popupLeft()).toBe("8px");
+  });
+
+  it("align 은 바깥 div 의 속성으로 새지 않는다", () => {
+    const { container } = render(
+      <TxDropMenu label="메뉴" align="end">
+        {MENU}
+      </TxDropMenu>
+    );
+    expect(container.firstElementChild?.hasAttribute("align")).toBe(false);
+  });
+});
+
 describe("TxContextMenu — 오른쪽 버튼", () => {
   const CTX = (
     <>

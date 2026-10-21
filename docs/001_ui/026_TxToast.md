@@ -34,10 +34,13 @@ TxToast.dismiss(id);
 
 **마우스를 얹거나 키보드로 들어오면 시계가 멈춘다** — 읽는 속도는 사람마다 다르다.
 
+그림과 닫기 버튼은 뺄 수 있다 — `icon: false` · `hideCloseButton: true`(앱 전체는 `TxToast.configure`).
+통의 위 · 아래 자리는 `--tx-toast-offset` 으로 옮긴다(하단 탭바 비키기).
+
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxToast/`
-- [x] **테스트** — 35개
+- [x] **테스트** — 42개
 - [x] **스토리** — `TxToast.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -89,3 +92,28 @@ CSS 도 짝을 맞춘다 — 통을 그냥 `display: flex` 로 두면 작성자 
 똑같이 겪은 것을 **알고도 다시 밟았다** — top layer 에 올라가는 것들은 UA 가 가운데 놓으려고
 네 변을 다 잡아 둔다는 것이 공통점이다. 이제 양쪽 다 반대편 변을 `auto` 로 놓고,
 테스트가 그 짝을 지킨다.
+
+### 그림 · 닫기 버튼 · 위아래 자리 (settlemint 에서 요구됐다)
+
+settlemint 의 알림은 그림도 닫기 버튼도 없는 한 줄이고, 모바일에서는 하단 탭바 위에 떠야 했다.
+
+```ts
+TxToast.show({ message: "복사했습니다", icon: false, hideCloseButton: true });
+TxToast.configure({ position: "bottom-center", icon: false, hideCloseButton: true }); // 앱 전체 기본
+```
+
+```css
+.tx-toast {
+  --tx-toast-offset: 100px; /* 아래에서 100px 위 — 폭은 그대로 */
+}
+```
+
+| 정한 것                                                                   | 왜                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon?: ReactNode \| false` 는 `TxAlert` 의 `icon` 으로 그대로 넘긴다     | 겉은 `TxAlert` 이 그린다. 안 주면 갈래의 그림, `false` 면 없음 — 같은 어휘다                                                                                                                                     |
+| `hideCloseButton` 이면 `TxAlert` 에 `onClose` 를 넘기지 않는다            | `TxAlert` 은 `onClose` 가 있을 때만 닫기 버튼을 그린다. 이름은 `TxModal` · `TxSlidePanel` 의 `hideCloseButton` 과 같다                                                                                           |
+| **`duration: 0` 이면 `hideCloseButton` 이 먹지 않는다**                   | 사라지지 않는 알림에서 닫기까지 없애면 화면에 영영 남는다. 닫을 길이 그것뿐이다                                                                                                                                  |
+| 두 값 다 `configure` 에서 앱 전체 기본을 받는다. 알림마다 준 값이 이긴다  | `icon` 은 `undefined`(안 줌)와 `false`(없음)를 가른다 — 안 준 것만 앱 기본을 쓴다                                                                                                                                |
+| **`--tx-toast-offset` — 위 · 아래 자리만.** 기본 `var(--tx-toast-margin)` | 예전에는 `--tx-toast-margin` 하나가 아래 자리와 최대 폭(`100vw - margin × 2`)을 같이 정해서, 탭바를 비키려고 100px 로 올리면 390 폭 화면에서 알림이 190 으로 줄었다. 좌우 여백 · 최대 폭은 계속 margin 이 정한다 |
+
+브라우저에서 재 봤다 — 390×800 에서 `--tx-toast-offset: 100px` 이면 통이 바닥에서 100 위에 서고 폭은 352(`--tx-toast-width`) 그대로다.

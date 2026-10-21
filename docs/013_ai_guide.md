@@ -37,7 +37,7 @@
 | 선 하나짜리 알약 버튼 (흰 바탕 + 테두리)      | `TxButton` + 토큰                     | `--tx-button-border-width` · `--tx-button-border-color`. `className` 으로 `border` 를 덮지 않는다   |
 | 아이콘만 있는 버튼 (닫기 ✕ · 검색 ⌕ · 더보기) | `TxButton icon`                       | 정사각형이 된다. **`aria-label` 을 함께 준다**                                                      |
 | 눌러서 글자 복사                              | `TxCopyButton`                        |                                                                                                     |
-| ⋯ 더보기 메뉴 · 눌러서 펼치는 동작 목록       | `TxDropMenu`                          |                                                                                                     |
+| ⋯ 더보기 메뉴 · 눌러서 펼치는 동작 목록       | `TxDropMenu`                          | 오른쪽에 붙은 트리거(헤더의 계정 버튼)는 `align="end"` — 메뉴 오른쪽 끝을 트리거에 맞춘다           |
 | 우클릭 메뉴                                   | `TxContextMenu`                       |                                                                                                     |
 | 한 줄 입력 · 검색창                           | `TxInput` · `TxSearchInput`           |                                                                                                     |
 | 여러 줄 입력                                  | `TxTextarea`                          |                                                                                                     |
@@ -81,18 +81,18 @@
 
 ### 기다림 · 빈 자리 · 알림
 
-| 만들려는 것                                     | 쓸 부품                                                 | 짚을 것                                                                                                            |
-| ----------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| 내용이 올 자리를 미리 잡는 회색 덩이 (스켈레톤) | `TxSkeleton`                                            | `loading` 하나로 분기까지 맡는다. 삼항으로 가르지 않는다                                                           |
-| "불러오는 중" 영역 · 전체 화면 딤               | `TxLoading`                                             |                                                                                                                    |
-| 회전 아이콘 하나                                | `TxSpinner`                                             |                                                                                                                    |
-| 데이터 없음 · 검색 결과 없음 · 오류 · 권한 없음 | `TxEmptyState`                                          | `variant` 로 넷을 가른다 — 다음에 할 일이 다르다                                                                   |
-| 페이지 안에 박히는 안내 · 경고 상자             | `TxAlert`                                               |                                                                                                                    |
-| 떴다 사라지는 알림 (토스트)                     | `TxToast.show(…)`                                       | **Provider 없이** 어디서든 부른다 — 컴포넌트 밖 · axios 인터셉터에서도                                             |
-| `alert` · `confirm` 대신                        | `await TxDialog.alert(…)` · `await TxDialog.confirm(…)` | `window.alert` · `window.confirm` 을 쓰지 않는다                                                                   |
-| 화면을 덮는 창 (모달)                           | `TxModal`                                               | 크기를 내용에 맡기려면 `size="auto"`. 본문 여백만 따로는 `--tx-modal-body-padding`                                 |
-| 가장자리에서 밀려 나오는 서랍 (상세 · 필터)     | `TxSlidePanel`                                          |                                                                                                                    |
-| 모바일 하단 시트 (내용만큼 올라오는 아래 패널)  | `TxSlidePanel side="bottom" size="auto"`                | 위 모서리는 `--tx-slide-panel-radius`, 본문 여백은 `--tx-slide-panel-body-padding`. 손으로 짠 시트를 만들지 않는다 |
+| 만들려는 것                                     | 쓸 부품                                                 | 짚을 것                                                                                                                                                              |
+| ----------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 내용이 올 자리를 미리 잡는 회색 덩이 (스켈레톤) | `TxSkeleton`                                            | `loading` 하나로 분기까지 맡는다. 삼항으로 가르지 않는다                                                                                                             |
+| "불러오는 중" 영역 · 전체 화면 딤               | `TxLoading`                                             |                                                                                                                                                                      |
+| 회전 아이콘 하나                                | `TxSpinner`                                             |                                                                                                                                                                      |
+| 데이터 없음 · 검색 결과 없음 · 오류 · 권한 없음 | `TxEmptyState`                                          | `variant` 로 넷을 가른다 — 다음에 할 일이 다르다                                                                                                                     |
+| 페이지 안에 박히는 안내 · 경고 상자             | `TxAlert`                                               |                                                                                                                                                                      |
+| 떴다 사라지는 알림 (토스트)                     | `TxToast.show(…)`                                       | **Provider 없이** 어디서든 부른다 — 컴포넌트 밖 · axios 인터셉터에서도. 그림 · 닫기 없이는 `icon: false` · `hideCloseButton`, 하단 탭바 비키기는 `--tx-toast-offset` |
+| `alert` · `confirm` 대신                        | `await TxDialog.alert(…)` · `await TxDialog.confirm(…)` | `window.alert` · `window.confirm` 을 쓰지 않는다                                                                                                                     |
+| 화면을 덮는 창 (모달)                           | `TxModal`                                               | 크기를 내용에 맡기려면 `size="auto"`. 본문 여백만 따로는 `--tx-modal-body-padding`                                                                                   |
+| 가장자리에서 밀려 나오는 서랍 (상세 · 필터)     | `TxSlidePanel`                                          |                                                                                                                                                                      |
+| 모바일 하단 시트 (내용만큼 올라오는 아래 패널)  | `TxSlidePanel side="bottom" size="auto"`                | 위 모서리는 `--tx-slide-panel-radius`, 본문 여백은 `--tx-slide-panel-body-padding`. 손으로 짠 시트를 만들지 않는다                                                   |
 
 ### 화면 껍데기 · 내비게이션
 

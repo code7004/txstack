@@ -26,7 +26,7 @@ const HOVER_CLOSE_DELAY = 120;
  *
  * 명세: `docs/001_ui/022_TxMenu.md`
  */
-export const TxDropMenuBase = ({ label, children, trigger = "click", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
+export const TxDropMenuBase = ({ label, children, trigger = "click", align = "start", onOpenChange, maxHeight, menuLabel, className, classNames, ...props }: TxDropMenuProps) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [open, setOpen] = useState(false);
@@ -80,7 +80,7 @@ export const TxDropMenuBase = ({ label, children, trigger = "click", onOpenChang
       </button>
 
       <TxMenuCloseContext.Provider value={() => change(false)}>
-        <TxMenuShell anchorRef={triggerRef} open={open} onClose={() => change(false)} menu={children} menuLabel={menuLabel} maxHeight={maxHeight} className={classNames?.menu} returnFocusRef={triggerRef} />
+        <TxMenuShell anchorRef={triggerRef} open={open} onClose={() => change(false)} menu={children} menuLabel={menuLabel} maxHeight={maxHeight} align={align} className={classNames?.menu} returnFocusRef={triggerRef} />
       </TxMenuCloseContext.Provider>
     </div>
   );

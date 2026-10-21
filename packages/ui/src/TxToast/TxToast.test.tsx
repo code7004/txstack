@@ -236,6 +236,60 @@ describe("TxToast — 설정", () => {
   });
 });
 
+/** settlemint 의 알림은 그림 없이 · 닫기 없이 뜬다. 기본은 그대로다 */
+describe("TxToast — 그림과 닫기 버튼", () => {
+  const iconOf = () => document.querySelector('[data-tag="TxToast.Item"] .tx-alert__icon');
+  const closeOf = () => document.querySelector('[data-tag="TxToast.Item"] .tx-alert__close');
+
+  it("기본은 갈래의 그림과 닫기 버튼이 있다", async () => {
+    show("기본");
+    await screen.findByText("기본");
+
+    expect(iconOf()).not.toBeNull();
+    expect(closeOf()).not.toBeNull();
+  });
+
+  it("icon: false 면 그림이 없다", async () => {
+    show({ message: "그림 없이", icon: false });
+    await screen.findByText("그림 없이");
+    expect(iconOf()).toBeNull();
+  });
+
+  it("icon 에 준 것을 그린다", async () => {
+    show({ message: "내 그림", icon: <span data-testid="mine">★</span> });
+    await screen.findByText("내 그림");
+    expect(iconOf()?.querySelector('[data-testid="mine"]')).not.toBeNull();
+  });
+
+  it("hideCloseButton 이면 닫기 버튼이 없다", async () => {
+    show({ message: "닫기 없이", hideCloseButton: true });
+    await screen.findByText("닫기 없이");
+    expect(closeOf()).toBeNull();
+  });
+
+  /** 사라지지 않는 알림에서 닫기까지 없애면 화면에 영영 남는다 */
+  it("duration: 0 이면 hideCloseButton 을 줘도 닫기 버튼이 남는다", async () => {
+    show({ message: "남는 것", duration: 0, hideCloseButton: true });
+    await screen.findByText("남는 것");
+    expect(closeOf()).not.toBeNull();
+  });
+
+  it("configure 로 앱 전체 기본을 바꾸고, 알림마다 준 값이 이긴다", async () => {
+    act(() => TxToast.configure({ icon: false, hideCloseButton: true }));
+    show("앱 기본");
+    await screen.findByText("앱 기본");
+    expect(iconOf()).toBeNull();
+    expect(closeOf()).toBeNull();
+
+    act(() => resetForTest());
+    act(() => TxToast.configure({ icon: false, hideCloseButton: true }));
+    show({ message: "이 알림만", icon: <span data-testid="mine">★</span>, hideCloseButton: false });
+    await screen.findByText("이 알림만");
+    expect(iconOf()).not.toBeNull();
+    expect(closeOf()).not.toBeNull();
+  });
+});
+
 describe("TxToast — 스크린리더", () => {
   /** 떴다 사라지는 것이라 나타나는 순간 읽혀야 한다. */
   it("나타나는 순간 읽힌다", async () => {
@@ -300,6 +354,20 @@ describe("TxToast — CSS 계약", () => {
   const css = strip(readFileSync(join(here, "TxToast.css"), "utf8"));
   const tokens = strip(readFileSync(join(here, "..", "tokens.css"), "utf8"));
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
+
+  /** margin 하나가 아래 자리와 최대 폭을 같이 정해서, 탭바를 비키려고 올리면 모바일 폭이 줄었다 — settlemint */
+  it("위 · 아래 자리는 --tx-toast-offset, 좌우 · 최대 폭은 --tx-toast-margin 이다", () => {
+    const toastCss = strip(readFileSync(join(import.meta.dirname, "TxToast.css"), "utf8"));
+    const base = toastCss.match(/\.tx-toast\s*\{([^}]*)\}/)?.[1] ?? "";
+    const rule = (selector: string) => toastCss.match(new RegExp(`\\.tx-toast\\[data-position\\${selector}\\]\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+
+    expect(base).toMatch(/--tx-toast-offset:\s*var\(--tx-toast-margin\);/);
+    expect(base).toMatch(/max-width:\s*calc\(100vw - var\(--tx-toast-margin\) \* 2\)/);
+    expect(rule('^="top"')).toMatch(/top:\s*var\(--tx-toast-offset\)/);
+    expect(rule('^="bottom"')).toMatch(/bottom:\s*var\(--tx-toast-offset\)/);
+    expect(rule('$="left"')).toMatch(/left:\s*var\(--tx-toast-margin\)/);
+    expect(rule('$="right"')).toMatch(/right:\s*var\(--tx-toast-margin\)/);
+  });
 
   it("색을 하드코딩하지 않는다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);

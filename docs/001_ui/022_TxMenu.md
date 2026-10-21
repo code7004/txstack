@@ -42,7 +42,7 @@
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxMenu/`
-- [x] **테스트** — 34개
+- [x] **테스트** — 38개
 - [x] **스토리** — `TxMenu.stories.tsx`(`Overlay/TxDropMenu`) · `TxContextMenu.stories.tsx`(`Overlay/TxContextMenu`)
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -154,3 +154,23 @@ Next.js·TanStack Router 소비자도 그대로 쓴다. (`TxCard` 는 링크를 
 스토리를 브라우저에서 보다 콘솔이 잡아 준 것이다. 트리거를 감싸는 것이 이미 `<button>` 이라
 `label` 에 버튼을 넣으면 **`<button>` 안의 `<button>`** 이 된다. 타입으로는 못 막으므로
 prop 설명에 적었다. `<div>` 도 버튼 안에 둘 수 없다 — 묶을 때는 `<span>` 을 쓴다.
+
+### 오른쪽 끝에 맞추기 — `align="end"` (settlemint 에서 요구됐다)
+
+헤더 오른쪽 끝의 계정 버튼에 메뉴를 달면, 메뉴가 트리거의 왼쪽 끝부터 펼쳐져 화면 밖으로 나가다 안으로 당겨졌다 —
+트리거와 메뉴의 끝이 어긋나 보였다.
+
+```tsx
+<TxDropMenu label={<AccountLabel />} align="end">
+  <TxDropMenu.Item onClick={logout}>로그아웃</TxDropMenu.Item>
+</TxDropMenu>
+```
+
+| 정한 것                                           | 왜                                                                                                |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `align?: "start" \| "end"`, 기본 `"start"`        | 지금과 같다. `"end"` 면 메뉴의 오른쪽 끝을 트리거의 오른쪽 끝에 맞춘다                            |
+| 이름은 `start` · `end` 이고 글 방향(RTL)을 따른다 | 셸이 좌우를 `inline-start` · `inline-end` 로 짠 것과 같은 결이다. RTL 이면 `"end"` 가 왼쪽 끝이다 |
+| 화면 밖으로 나가면 어느 쪽이든 안으로 당긴다      | 맞추는 끝만 바뀌고 가두는 규칙(`TxPopup`)은 그대로다                                              |
+| 자리 계산은 `TxPopup` 의 `align` 이 한다(내부)    | 드롭다운 · 콤보박스도 같은 층을 쓴다. 지금은 메뉴만 연다 — 요구가 오면 그쪽도 이 값을 넘기면 된다 |
+
+브라우저에서 재 봤다 — 트리거 555–607 에 폭 160 메뉴가 447–607 로 선다(기본은 왼쪽 끝 49 = 49).

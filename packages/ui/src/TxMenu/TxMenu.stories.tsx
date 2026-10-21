@@ -133,6 +133,23 @@ export const UserMenu: Story = {
 };
 
 /**
+ * 오른쪽에 붙은 트리거는 메뉴도 오른쪽 끝을 맞춘다 — `align="end"`. 헤더 오른쪽 끝의 계정 버튼이 그 자리다.
+ * 화면 밖으로 나가면 어느 쪽이든 안으로 당긴다.
+ */
+export const AlignEnd: Story = {
+  name: "오른쪽 끝에 맞추기",
+  parameters: noControls,
+  render: () => (
+    <div className="flex w-[36rem] justify-between rounded border border-dashed p-2">
+      <TxDropMenu label="왼쪽 (기본 start)">{BASIC_MENU}</TxDropMenu>
+      <TxDropMenu label="👤 계정" align="end">
+        {BASIC_MENU}
+      </TxDropMenu>
+    </div>
+  )
+};
+
+/**
  * **키보드로 다뤄 보라.** Tab 으로 트리거에 와서 ↓ 를 누르면 열리며 첫 줄로 들어간다.
  * ↑↓ 로 옮기고 Escape 로 닫으면 **포커스가 트리거로 돌아온다.**
  *

@@ -18,6 +18,11 @@ export interface TxPopupProps {
 
   /** 앵커와 같은 폭으로 맞춘다. 기본 `true`. */
   matchAnchorWidth?: boolean;
+  /**
+   * 앵커의 어느 끝에 맞추나. 기본 `"start"` — 시작 끝(LTR 에서 왼쪽)끼리. `"end"` 면 끝 쪽(LTR 에서 오른쪽)끼리 맞춘다.
+   * 화면 밖으로 나가면 어느 쪽이든 안으로 당긴다. 글 방향(RTL)을 따른다.
+   */
+  align?: "start" | "end";
   /** 넘치면 안에서 스크롤한다. 기본 `20rem`. */
   maxHeight?: number | string;
 
@@ -71,7 +76,7 @@ const toPx = (value: number | string) => {
  * **포커스는 옮기지 않는다.** 목록형 위젯은 포커스를 앵커에 두고 `aria-activedescendant` 로
  * 활성 항목을 가리키는 것이 표준이다. 포커스를 팝업으로 옮기면 타이핑이 끊긴다.
  */
-export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidth = true, maxHeight = "20rem", className, children, ...rest }: TxPopupProps) {
+export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidth = true, align = "start", maxHeight = "20rem", className, children, ...rest }: TxPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ top: number; left: number; width?: number } | null>(null);
 
@@ -81,7 +86,7 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
     if (!popup || (!anchor && !anchorPoint)) return;
 
     // 점을 주면 크기 0 인 사각형으로 본다. 아래 계산은 그대로 돈다
-    const rect = anchorPoint ? { top: anchorPoint.y, bottom: anchorPoint.y, left: anchorPoint.x, width: 0 } : anchor!.getBoundingClientRect();
+    const rect = anchorPoint ? { top: anchorPoint.y, bottom: anchorPoint.y, left: anchorPoint.x, right: anchorPoint.x, width: 0 } : anchor!.getBoundingClientRect();
     const height = Math.min(popup.scrollHeight, toPx(maxHeight));
     const width = matchAnchorWidth ? rect.width : popup.offsetWidth;
 
@@ -91,10 +96,14 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
     const flip = below < height && above > below;
 
     const top = flip ? Math.max(EDGE, rect.top - GAP - height) : rect.bottom + GAP;
-    const left = Math.min(Math.max(EDGE, rect.left), Math.max(EDGE, window.innerWidth - width - EDGE));
+    // 시작 · 끝은 글 방향을 따른다. RTL 이면 시작이 오른쪽이다
+    const rtl = !!anchor && getComputedStyle(anchor).direction === "rtl";
+    const toRight = (align === "end") !== rtl;
+    const wanted = toRight ? rect.right - width : rect.left;
+    const left = Math.min(Math.max(EDGE, wanted), Math.max(EDGE, window.innerWidth - width - EDGE));
 
     setPos({ top, left, width: matchAnchorWidth ? rect.width : undefined });
-  }, [anchorRef, anchorPoint, matchAnchorWidth, maxHeight]);
+  }, [anchorRef, anchorPoint, matchAnchorWidth, align, maxHeight]);
 
   // 첫 배치는 그려지기 전에 끝내야 한다. 안 그러면 왼쪽 위에서 제자리로 튀는 것이 보인다.
   useLayoutEffect(() => {

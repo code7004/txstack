@@ -119,6 +119,76 @@ export const Persistent: Story = {
   }
 };
 
+/**
+ * 그림과 닫기 버튼을 뺄 수 있다 — `icon: false` · `hideCloseButton: true`. 앱 전체는 `TxToast.configure` 로 한 번에.
+ * 사라지지 않는 알림(`duration: 0`)은 닫을 길이 그것뿐이라 **닫기 버튼이 남는다.**
+ *
+ * ```ts
+ * TxToast.show({ message: "복사했습니다", icon: false, hideCloseButton: true });
+ * TxToast.configure({ icon: false, hideCloseButton: true });
+ * ```
+ */
+export const Plain: Story = {
+  name: "그림 · 닫기 없이",
+  render: () => (
+    <TxFlex>
+      <TxButton
+        label="그림 없이"
+        variant="secondary"
+        onClick={() => {
+          TxToast.show({ message: "그림 없이 떴습니다", icon: false });
+        }}
+      />
+      <TxButton
+        label="닫기 없이"
+        variant="secondary"
+        onClick={() => {
+          TxToast.show({ message: "닫기 버튼 없이 떴습니다", hideCloseButton: true });
+        }}
+      />
+      <TxButton
+        label="둘 다 없이"
+        variant="secondary"
+        onClick={() => {
+          TxToast.show({ message: "복사했습니다", icon: false, hideCloseButton: true });
+        }}
+      />
+      <TxButton
+        label="내 그림"
+        variant="secondary"
+        onClick={() => {
+          TxToast.show({ message: "내 그림으로 떴습니다", icon: <span aria-hidden>📋</span> });
+        }}
+      />
+    </TxFlex>
+  )
+};
+
+/**
+ * 위 · 아래 자리만 옮긴다 — `--tx-toast-offset`. 하단 탭바를 비키려고 올려도 **폭은 그대로다**
+ * (좌우 여백 · 최대 폭은 `--tx-toast-margin`).
+ *
+ * ```css
+ * .tx-toast { --tx-toast-offset: 100px; }
+ * ```
+ */
+export const Offset: Story = {
+  render: () => (
+    <TxFlex>
+      {/* 이 스토리가 떠 있는 동안만 통의 자리를 바꾼다 */}
+      <style>{`.tx-toast { --tx-toast-offset: 100px; }`}</style>
+      <TxButton
+        label="아래에서 100px 위에 띄우기"
+        variant="secondary"
+        onClick={() => {
+          TxToast.configure({ position: "bottom-center" });
+          TxToast.show({ message: "탭바 위에 떴습니다", duration: 6000 });
+        }}
+      />
+    </TxFlex>
+  )
+};
+
 /** 여섯 구석 중 하나에 쌓인다. `TxToast.configure({ position })` 로 앱 전체를 한 번에 정한다. */
 export const Positions: Story = {
   render: () => (
