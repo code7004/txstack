@@ -24,6 +24,7 @@
   ],
   "files": [
     "dist",
+    "ai",
     "README.md",
     "LICENSE"
   ],
@@ -46,7 +47,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsup && node scripts/build-css.mjs",
+    "build": "tsup && node scripts/build-css.mjs && node ../../scripts/ai-guide.mjs ai",
     "build:watch": "tsup --watch src --onSuccess \"node scripts/build-css.mjs\"",
     "typecheck": "tsc --noEmit"
   },

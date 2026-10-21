@@ -2,6 +2,8 @@ pnpm-lock.yaml
 dist/
 node_modules/
 *.tgz
+# AI 가이드 — 빌드가 docs/ 에서 만든다
+packages/ui/ai/
 
 # macOS 가 확장속성을 못 싣는 볼륨에 만드는 부산물
 ._*
