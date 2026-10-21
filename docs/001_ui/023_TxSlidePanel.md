@@ -30,12 +30,12 @@
 **닫는 길은 셋이지만 콜백은 하나다** — 닫기 버튼 · 바깥 클릭 · Escape 가 전부 `onClose` 로 온다.
 
 크기는 CSS 변수 하나로 바꾼다 — `.tx-slide-panel { --tx-slide-panel-size: 28rem }`.
-좌우면 폭, 위아래면 높이를 뜻한다.
+좌우면 폭, 위아래면 높이를 뜻한다. **내용에 맞추려면 `size="auto"`** — 아래 "모바일 하단 시트".
 
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxSlidePanel/`
-- [x] **테스트** — 48개
+- [x] **테스트** — 53개
 - [x] **스토리** — `TxSlidePanel.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
@@ -99,3 +99,32 @@ z-index 층이 하나 더 는다 — **한 컴포넌트가 두 동작을 갖는�
 - `showCloseButton` → `hideCloseButton` (`TxModal` 과 이름을 맞췄다)
 - `ITxSlidePanel` · `TTxSlidePanelSide` → `TxSlidePanelProps` · `TxSlidePanelSide`
 - **`prefers-reduced-motion` 을 지킨다.** 원본은 늘 밀었다
+
+### 모바일 하단 시트 — `size="auto"` · 모서리 · 본문 여백 (settlemint 에서 요구됐다)
+
+연동 시트를 아래에서 올리려면 **높이가 내용을 따라야** 했다. `--tx-slide-panel-size` 는 고정 길이라 짧은 내용 위에 빈자리가 남았다.
+같은 시트에 위 두 모서리를 둥글게(20) 하고, 머리(24)와 본문(16 24 32) 여백을 따로 줘야 했다.
+
+```tsx
+<TxSlidePanel open={open} onClose={close} side="bottom" size="auto" title="연동 플랫폼" className="my-sheet">
+  …
+</TxSlidePanel>
+```
+
+```css
+.my-sheet {
+  --tx-slide-panel-radius: 20px;
+  --tx-slide-panel-padding: 24px; /* 머리 — 위 · 좌우 */
+  --tx-slide-panel-body-padding: 16px 24px 32px;
+}
+```
+
+| 정한 것                                                               | 왜                                                                                                                                    |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **`size="auto"` — `TxModal` 의 `size="auto"` 와 같은 이름 · 뜻**      | 두 부품에서 "내용이 크기를 정한다" 를 같은 말로 쓴다                                                                                  |
+| 위아래면 높이, 좌우면 폭이 `fit-content`                              | 크기 손잡이가 방향에 따라 뜻이 바뀌는 것(`--tx-slide-panel-size`)과 같은 규칙이다                                                     |
+| 화면에서 멈춘다 — `max-height: 100dvh` · `max-width: 100vw`           | 넘치면 본문(`__body`)만 굴러간다. 안쪽 판(`__panel`)도 `height: auto` 와 같은 한계를 받아야 본문이 굴러간다                           |
+| 기본은 그대로 `--tx-slide-panel-size`                                 | 필터 서랍처럼 크기가 정해진 패널이 더 흔하다                                                                                          |
+| `--tx-slide-panel-size` 에 `fit-content` 를 넣는 길은 없다            | `min()` 이 키워드를 받지 않는다 — `TxModal` 과 같은 이유로 `[data-size="auto"]` 를 따로 둔다                                          |
+| **`--tx-slide-panel-radius` — 화면 안쪽을 향한 두 모서리만**          | 가장자리에 붙은 쪽은 화면 끝이라 둥글 이유가 없다. 아래 → 위 두 모서리 · 위 → 아래 두 · 왼쪽 → 오른쪽 두 · 오른쪽 → 왼쪽 두. 기본 `0` |
+| **`--tx-slide-panel-body-padding`** — 기본 `--tx-slide-panel-padding` | 머리와 본문 여백이 다른 디자인이 흔하다. 네 값까지 받는 줄임 값이다                                                                   |

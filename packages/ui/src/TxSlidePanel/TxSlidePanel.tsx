@@ -20,11 +20,13 @@ import type { TxSlidePanelProps } from "./TxSlidePanel.types";
  * **닫는 길은 셋이지만 콜백은 하나다** — 닫기 버튼 · 바깥 클릭 · Escape 가 전부 `onClose` 로 온다.
  *
  * 크기는 CSS 변수 하나로 바꾼다 — `.tx-slide-panel { --tx-slide-panel-size: 28rem }`.
+ * 내용에 맞추려면 `size="auto"` — 모바일 하단 시트는 `side="bottom" size="auto"` 에
+ * `--tx-slide-panel-radius` 로 위 두 모서리를 둥글게 한다.
  * 좌우면 폭, 위아래면 높이를 뜻한다.
  *
  * 명세: `docs/001_ui/023_TxSlidePanel.md`
  */
-export const TxSlidePanel = ({ open, onClose, side = "right", title, closeOnBackdrop = true, closeOnEscape = true, closeLabel = "닫기", hideCloseButton = false, className, classNames, children, ...props }: TxSlidePanelProps) => {
+export const TxSlidePanel = ({ open, onClose, side = "right", size, title, closeOnBackdrop = true, closeOnEscape = true, closeLabel = "닫기", hideCloseButton = false, className, classNames, children, ...props }: TxSlidePanelProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closingRef = useRef(false);
   const titleId = useId();
@@ -109,7 +111,18 @@ export const TxSlidePanel = ({ open, onClose, side = "right", title, closeOnBack
   );
 
   return (
-    <dialog {...props} ref={dialogRef} data-tag="TxSlidePanel" data-side={side} className={cm("tx-slide-panel", className)} aria-labelledby={title == null ? undefined : titleId} onCancel={hdCancel} onKeyDown={hdKeyDown} onClick={hdClick}>
+    <dialog
+      {...props}
+      ref={dialogRef}
+      data-tag="TxSlidePanel"
+      data-side={side}
+      data-size={size}
+      className={cm("tx-slide-panel", className)}
+      aria-labelledby={title == null ? undefined : titleId}
+      onCancel={hdCancel}
+      onKeyDown={hdKeyDown}
+      onClick={hdClick}
+    >
       {/* 바탕 클릭을 가리기 위한 한 겹. 여기부터가 패널의 내용이다 */}
       <div className={cm("tx-slide-panel__panel", classNames?.panel)}>
         <div className={cm("tx-slide-panel__header", classNames?.header)}>

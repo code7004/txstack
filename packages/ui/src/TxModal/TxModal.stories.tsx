@@ -187,6 +187,44 @@ export const AutoSize: Story = {
 };
 
 /**
+ * 본문 여백을 머리와 따로 준다 — `--tx-modal-body-padding` 은 네 값까지 받는다.
+ * **버튼 줄은 본문 여백과 상관없이** 바닥과 양옆에 닿는다.
+ *
+ * ```css
+ * .my-modal {
+ *   --tx-modal-width: 400px;
+ *   --tx-modal-padding: 24px;                  // 머리 · 버튼 줄
+ *   --tx-modal-body-padding: 16px 24px 32px;
+ * }
+ * ```
+ */
+export const BodyPadding: Story = {
+  name: "본문 여백",
+  parameters: noControls,
+  render: function BodyPaddingStory() {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <TxButton label="열기" onClick={() => setOpen(true)} />
+
+        <TxModal open={open} onClose={() => setOpen(false)} title="연동 플랫폼" style={vars({ "--tx-modal-width": "400px", "--tx-modal-padding": "24px", "--tx-modal-body-padding": "16px 24px 32px" })}>
+          {LOREM.map((line) => (
+            <p key={line} className="py-1 text-sm">
+              {line}
+            </p>
+          ))}
+          <TxModal.Footer>
+            <TxButton label="취소" variant="secondary" onClick={() => setOpen(false)} />
+            <TxButton label="확인" onClick={() => setOpen(false)} />
+          </TxModal.Footer>
+        </TxModal>
+      </>
+    );
+  }
+};
+
+/**
  * 제목이 없어도 **닫기 버튼은 남는다.** 원본은 제목이 없으면 버튼째 사라져서
  * 닫는 길이 Escape 하나뿐이었다.
  */

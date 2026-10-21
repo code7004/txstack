@@ -333,6 +333,23 @@ describe("TxSlidePanel — 방향", () => {
 
     expect(dialogOf(container).dataset.side).toBe(side);
   });
+  it("크기는 기본이 토큰이다 — size 를 안 주면 표시가 없다", () => {
+    const { container } = render(
+      <TxSlidePanel open onClose={vi.fn()} side="bottom">
+        내용
+      </TxSlidePanel>
+    );
+    expect(dialogOf(container).hasAttribute("data-size")).toBe(false);
+  });
+
+  it('size="auto" 를 그대로 싣는다 — 내용이 크기를 정한다', () => {
+    const { container } = render(
+      <TxSlidePanel open onClose={vi.fn()} side="bottom" size="auto">
+        내용
+      </TxSlidePanel>
+    );
+    expect(dialogOf(container).dataset.size).toBe("auto");
+  });
 });
 
 describe("TxSlidePanel — 스크린리더", () => {
@@ -525,6 +542,42 @@ describe("TxSlidePanel — CSS 계약", () => {
   const tokens = strip(readFileSync(join(here, "..", "tokens.css"), "utf8"));
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = readFileSync(join(here, "TxSlidePanel.tsx"), "utf8");
+
+  /** 모바일 하단 시트 — settlemint 에서 요구됐다. TxModal 의 size="auto" 와 같은 뜻이다 */
+  it('size="auto" 는 위아래면 높이, 좌우면 폭을 내용에 맞추고 화면에서 멈춘다', () => {
+    const vertical = css.match(/\[data-size="auto"\]:is\(\[data-side="top"\], \[data-side="bottom"\]\)\s*\{([^}]*)\}/)?.[1] ?? "";
+    const horizontal = css.match(/\[data-size="auto"\]:is\(\[data-side="left"\], \[data-side="right"\]\)\s*\{([^}]*)\}/)?.[1] ?? "";
+    const panel = css.match(/\[data-size="auto"\]:is\(\[data-side="top"\], \[data-side="bottom"\]\) \.tx-slide-panel__panel\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(vertical).toMatch(/height:\s*fit-content/);
+    expect(vertical).toMatch(/max-height:\s*100dvh/);
+    expect(horizontal).toMatch(/width:\s*fit-content/);
+    expect(horizontal).toMatch(/max-width:\s*100vw/);
+    // 안쪽이 100% 로 남으면 내용 높이를 따라가지 못한다. 한계는 넘겨받아 본문이 굴러간다
+    expect(panel).toMatch(/height:\s*auto/);
+    expect(panel).toMatch(/max-height:\s*100dvh/);
+  });
+
+  it("모서리는 화면 안쪽을 향한 두 곳만 둥글다 — 기본은 각지다", () => {
+    const base = css.match(/\.tx-slide-panel\s*\{([^}]*)\}/)?.[1] ?? "";
+    // 묶은 규칙(높이 · 폭)에도 같은 선택자가 나온다. 모서리를 정한 규칙을 찾는다
+    const radius = (side: string) => [...css.matchAll(new RegExp(`\\.tx-slide-panel\\[data-side="${side}"\\]\\s*\\{([^}]*)\\}`, "g"))].map((match) => match[1].match(/border-radius:\s*([^;]*);/)?.[1]).find(Boolean);
+    const r = "var(--tx-slide-panel-radius)";
+
+    expect(base).toMatch(/--tx-slide-panel-radius:\s*0;/);
+    expect(radius("bottom")).toBe(`${r} ${r} 0 0`);
+    expect(radius("top")).toBe(`0 0 ${r} ${r}`);
+    expect(radius("left")).toBe(`0 ${r} ${r} 0`);
+    expect(radius("right")).toBe(`${r} 0 0 ${r}`);
+  });
+
+  it("본문 여백은 --tx-slide-panel-body-padding 이고 기본은 머리와 같다", () => {
+    const base = css.match(/\.tx-slide-panel\s*\{([^}]*)\}/)?.[1] ?? "";
+    const body = css.match(/\.tx-slide-panel__body\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(base).toMatch(/--tx-slide-panel-body-padding:\s*var\(--tx-slide-panel-padding\);/);
+    expect(body).toMatch(/padding:\s*var\(--tx-slide-panel-body-padding\)/);
+  });
 
   it("색을 하드코딩하지 않는다 — 값이 토큰으로 나가 있다", () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
