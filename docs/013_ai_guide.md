@@ -95,12 +95,13 @@
 
 ### 화면 껍데기 · 내비게이션
 
-| 만들려는 것                                    | 쓸 부품        | 짚을 것                                                                                 |
-| ---------------------------------------------- | -------------- | --------------------------------------------------------------------------------------- |
-| 화면 전체 껍데기 (헤더 · 사이드 · 본문 · 푸터) | `TxAppShell`   | 머무는 헤더 · 본문으로 건너뛰기 · 좁아지면 `left` 를 서랍으로 · 크기 조절까지 셸이 한다 |
-| 사이트 GNB · 가로 메뉴 줄 · 메가메뉴           | `TxNavBar`     | `TxAppShell` 의 `top` 에 넣는다. 패널 속은 앱이 짠다                                    |
-| 세로 사이드 메뉴 · 아이콘 rail · 하위 트리     | `TxSideNav`    | `TxAppShell` 의 `left` 에 넣는다                                                        |
-| 브레드크럼 (지금 위치 경로)                    | `TxBreadcrumb` | 경로 자체는 `@txstack/route-meta` 의 `useCurrentRoute` 가 준다                          |
+| 만들려는 것                                    | 쓸 부품                          | 짚을 것                                                                                               |
+| ---------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 화면 전체 껍데기 (헤더 · 사이드 · 본문 · 푸터) | `TxAppShell`                     | 머무는 헤더 · 본문으로 건너뛰기 · 좁아지면 `left` 를 서랍으로 · 크기 조절까지 셸이 한다               |
+| 사이트 GNB · 가로 메뉴 줄 · 메가메뉴           | `TxNavBar`                       | `TxAppShell` 의 `top` 에 넣는다. 패널 속은 앱이 짠다                                                  |
+| 세로 사이드 메뉴 · 아이콘 rail · 하위 트리     | `TxSideNav`                      | `TxAppShell` 의 `left` 에 넣는다                                                                      |
+| 모바일 하단 탭바 (좁은 화면의 주 이동 줄)      | `TxAppShell tabBar` + `TxTabBar` | 셸의 `tabBar` 는 좁을 때만 화면 아래에 붙고 본문 자리를 비운다. `bottom` 은 콘솔 패널이라 쓰지 않는다 |
+| 브레드크럼 (지금 위치 경로)                    | `TxBreadcrumb`                   | 경로 자체는 `@txstack/route-meta` 의 `useCurrentRoute` 가 준다                                        |
 
 ### 데이터 · 앱 구조
 
@@ -118,22 +119,22 @@
 
 ## 3. 직접 만들지 말 원시 요소
 
-| 이렇게 짜지 않는다                                                   | 대신                                                                     | 이유                                                                                                         |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `<button>`                                                           | `TxButton`                                                               | `type` 기본값 · 비동기 연타 잠금 · 포커스 링 · 토큰이 빠진다. 폼 안의 `<button>` 은 의도치 않게 제출한다     |
-| `<input>` · `<textarea>` · `<select>`                                | `TxInput` · `TxTextarea` · `TxDropdown`                                  | 캡션 · 오류 연결과 토큰이 빠진다                                                                             |
-| `<input type="checkbox · radio · range · number · file">`            | `TxCheckBox` · `TxRadio` · `TxSlider` · `TxNumberInput` · `TxFileUpload` |                                                                                                              |
-| `<details>` · `<summary>`, `useState` 로 짠 펼침                     | `TxCollapsible` · `TxAccordion`                                          | 손으로 짠 펼침은 접힌 글이 페이지 검색에 안 찾히고, `<details>` 를 그대로 쓰면 열림 애니메이션 · 토큰이 없다 |
-| `<dialog>`, `fixed inset-0` 으로 짠 모달, `window.alert` · `confirm` | `TxModal` · `TxDialog`                                                   | 포커스 가두기 · Escape · 뒤 화면 스크롤 잠금 · 토스트와의 층 순서를 다시 풀어야 한다                         |
-| 손으로 짠 토스트 · 스낵바                                            | `TxToast`                                                                | 모달 위에 떠야 하고(`popover`), 올리면 시계가 멈춰야 한다                                                    |
-| 손으로 짠 드롭다운 · 팝오버 · 메뉴                                   | `TxDropdown` · `TxDropMenu` · `TxTooltip`                                | 바깥 클릭 · 화면 끝 넘침 · 방향키 · 팝업 안의 팝업을 다시 풀어야 한다                                        |
-| `border rounded shadow p-4` 를 단 카드 `<div>`                       | `TxCard`                                                                 | 화면마다 모서리 · 그림자가 갈라진다. 다크모드가 토큰으로 안 따라온다                                         |
-| 상태 칩 `<span className="rounded-full bg-green-100 …">`             | `TxTag`                                                                  | 상태색 네 갈래와 대비(AA)가 이미 맞춰져 있다                                                                 |
-| `<hr>`                                                               | `TxDivider`                                                              |                                                                                                              |
-| `<table>`                                                            | `TxAgGrid`                                                               | 정렬 · 페이지 · 선택 · 테마가 표 하나로 간다                                                                 |
-| 손으로 짠 `<header>` + `<nav>` GNB, 헤더 · 사이드 그리드 레이아웃    | `TxAppShell` · `TxNavBar` · `TxSideNav`                                  | 랜드마크 이름 · 건너뛰기 링크 · 좁은 화면 서랍 · 키보드 메뉴 규약이 빠진다                                   |
-| 회색 `animate-pulse` 덩이                                            | `TxSkeleton`                                                             |                                                                                                              |
-| "데이터가 없습니다" 한 줄                                            | `TxEmptyState`                                                           | 왜 비었는지, 다음에 무엇을 할지가 빠진다                                                                     |
+| 이렇게 짜지 않는다                                                            | 대신                                                                     | 이유                                                                                                         |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `<button>`                                                                    | `TxButton`                                                               | `type` 기본값 · 비동기 연타 잠금 · 포커스 링 · 토큰이 빠진다. 폼 안의 `<button>` 은 의도치 않게 제출한다     |
+| `<input>` · `<textarea>` · `<select>`                                         | `TxInput` · `TxTextarea` · `TxDropdown`                                  | 캡션 · 오류 연결과 토큰이 빠진다                                                                             |
+| `<input type="checkbox · radio · range · number · file">`                     | `TxCheckBox` · `TxRadio` · `TxSlider` · `TxNumberInput` · `TxFileUpload` |                                                                                                              |
+| `<details>` · `<summary>`, `useState` 로 짠 펼침                              | `TxCollapsible` · `TxAccordion`                                          | 손으로 짠 펼침은 접힌 글이 페이지 검색에 안 찾히고, `<details>` 를 그대로 쓰면 열림 애니메이션 · 토큰이 없다 |
+| `<dialog>`, `fixed inset-0` 으로 짠 모달, `window.alert` · `confirm`          | `TxModal` · `TxDialog`                                                   | 포커스 가두기 · Escape · 뒤 화면 스크롤 잠금 · 토스트와의 층 순서를 다시 풀어야 한다                         |
+| 손으로 짠 토스트 · 스낵바                                                     | `TxToast`                                                                | 모달 위에 떠야 하고(`popover`), 올리면 시계가 멈춰야 한다                                                    |
+| 손으로 짠 드롭다운 · 팝오버 · 메뉴                                            | `TxDropdown` · `TxDropMenu` · `TxTooltip`                                | 바깥 클릭 · 화면 끝 넘침 · 방향키 · 팝업 안의 팝업을 다시 풀어야 한다                                        |
+| `border rounded shadow p-4` 를 단 카드 `<div>`                                | `TxCard`                                                                 | 화면마다 모서리 · 그림자가 갈라진다. 다크모드가 토큰으로 안 따라온다                                         |
+| 상태 칩 `<span className="rounded-full bg-green-100 …">`                      | `TxTag`                                                                  | 상태색 네 갈래와 대비(AA)가 이미 맞춰져 있다                                                                 |
+| `<hr>`                                                                        | `TxDivider`                                                              |                                                                                                              |
+| `<table>`                                                                     | `TxAgGrid`                                                               | 정렬 · 페이지 · 선택 · 테마가 표 하나로 간다                                                                 |
+| 손으로 짠 `<header>` + `<nav>` GNB · 하단 탭바, 헤더 · 사이드 그리드 레이아웃 | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar`                     | 랜드마크 이름 · 건너뛰기 링크 · 좁은 화면 서랍 · 키보드 메뉴 규약이 빠진다                                   |
+| 회색 `animate-pulse` 덩이                                                     | `TxSkeleton`                                                             |                                                                                                              |
+| "데이터가 없습니다" 한 줄                                                     | `TxEmptyState`                                                           | 왜 비었는지, 다음에 무엇을 할지가 빠진다                                                                     |
 
 **금지가 아닌 것** — `<div>` · `<section>` · `<h1>`~`<h6>` · `<p>` · `<ul>` 같은 구조 요소, 이동하는 링크(`<a>` · 라우터의
 `<Link>` · `<NavLink>`). **이동은 링크로, 동작은 `TxButton` 으로** 가른다.
@@ -201,23 +202,23 @@ import "./styles/txstack.css";
 
 부품 문서에 **"하지 않는다"** 고 적힌 것은 억지로 끼워 맞추지 않는다. 앱에서 직접 만들고 **이유를 남긴다.**
 
-| 부품                  | 하지 않는 것                                                                         | 그럼                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `TxAppShell` `bottom` | **모바일 하단 탭바가 아니다.** 본문 아래의 콘솔 · 로그 패널 자리다(끌어서 크기 조절) | 하단 탭바는 앱이 만든다 → 보완 후보로 기록. 슬롯 · 부품 설계가 제안돼 있다(아직 없음) |
-| `TxAppShell`          | 로고 · 메뉴 구조 · 로그인 상태를 정하지 않는다 — 전부 슬롯이다                       | 슬롯에 넣는다. **좁은 화면 서랍 · 햄버거는 셸이 한다** — 따로 만들지 않는다           |
-| `TxNavBar`            | 스스로 접히지 않는다. 메가 패널의 속(링크 배치 · 그림)을 정하지 않는다               | 좁은 화면은 셸의 `left` 서랍에 `TxSideNav` 를 둔다. 패널 속은 `TxGrid` 등으로 짠다    |
-| `TxSideNav`           | 접는 스위치를 그리지 않는다                                                          | `collapsed` 를 앱이 쥐고 헤더 버튼 등에서 바꾼다                                      |
-| `TxCard`              | 로딩 표시 · 카드 전체가 링크가 되는 것                                               | 로딩은 `TxLoading` · `TxSkeleton`, 링크는 카드 **안**에 둔다                          |
-| `TxFileUpload`        | 서버로 보내지 않는다                                                                 | 업로드 요청은 앱이(`@txstack/axios` 등)                                               |
-| `TxAgGrid`            | ag-grid 모듈을 등록하지 않는다. 가벼운 읽기 전용 표는 없다                           | `ModuleRegistry.registerModules([...])` 를 앱이 한 번 부른다. 표는 늘 `TxAgGrid`      |
-| (없음)                | 맨 위로 버튼 · 별점 · 이미지 최적화 · 사이트맵 판(`TxSiteMap`, 아직 공개 전)         | 앱이 만든다. 이미지는 프레임워크 것을 쓴다                                            |
+| 부품                  | 하지 않는 것                                                                         | 그럼                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `TxAppShell` `bottom` | **모바일 하단 탭바가 아니다.** 본문 아래의 콘솔 · 로그 패널 자리다(끌어서 크기 조절) | 하단 탭바는 `tabBar` 자리 + `TxTabBar` 를 쓴다(2장)                                |
+| `TxAppShell`          | 로고 · 메뉴 구조 · 로그인 상태를 정하지 않는다 — 전부 슬롯이다                       | 슬롯에 넣는다. **좁은 화면 서랍 · 햄버거는 셸이 한다** — 따로 만들지 않는다        |
+| `TxNavBar`            | 스스로 접히지 않는다. 메가 패널의 속(링크 배치 · 그림)을 정하지 않는다               | 좁은 화면은 셸의 `left` 서랍에 `TxSideNav` 를 둔다. 패널 속은 `TxGrid` 등으로 짠다 |
+| `TxSideNav`           | 접는 스위치를 그리지 않는다                                                          | `collapsed` 를 앱이 쥐고 헤더 버튼 등에서 바꾼다                                   |
+| `TxCard`              | 로딩 표시 · 카드 전체가 링크가 되는 것                                               | 로딩은 `TxLoading` · `TxSkeleton`, 링크는 카드 **안**에 둔다                       |
+| `TxFileUpload`        | 서버로 보내지 않는다                                                                 | 업로드 요청은 앱이(`@txstack/axios` 등)                                            |
+| `TxAgGrid`            | ag-grid 모듈을 등록하지 않는다. 가벼운 읽기 전용 표는 없다                           | `ModuleRegistry.registerModules([...])` 를 앱이 한 번 부른다. 표는 늘 `TxAgGrid`   |
+| (없음)                | 맨 위로 버튼 · 별점 · 이미지 최적화 · 사이트맵 판(`TxSiteMap`, 아직 공개 전)         | 앱이 만든다. 이미지는 프레임워크 것을 쓴다                                         |
 
 **기록하는 법** — 직접 만든 자리에 `txstack-gap:` 주석으로 무엇이 왜 없었는지 적는다. 나중에 찾아 모아
 txstack 에 올릴지 정한다.
 
 ```tsx
-// txstack-gap: 모바일 하단 탭바 — TxAppShell 의 bottom 은 콘솔 패널이다
-export function BottomTabBar() { … }
+// txstack-gap: 맨 위로 버튼 — txstack 에 없다(앱이 짠다)
+export function ScrollTopButton() { … }
 ```
 
 부품 CSS 를 덮고 싶어진 자리도 같은 주석을 단다(`txstack-gap: TxCard 머리 높이 토큰 없음`).
@@ -282,10 +283,11 @@ export default [
 
 <!-- prettier-ignore -->
 ```tsx
-<nav className="tab-bar">
-  {/* eslint-disable-next-line react/forbid-elements -- txstack-gap: 하단 탭바, TxAppShell bottom 은 콘솔 패널이다 */}
-  <button className="tab" onClick={go}>홈</button>
-</nav>
+<label className="color-field">
+  배경색
+  {/* eslint-disable-next-line react/forbid-elements -- txstack-gap: 색 고르기, txstack 에 색 입력이 없다 */}
+  <input type="color" value={color} onChange={(evt) => setColor(evt.target.value)} />
+</label>
 ```
 
 ### 버전을 올릴 때

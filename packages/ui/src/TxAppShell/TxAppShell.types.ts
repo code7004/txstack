@@ -77,6 +77,8 @@ export interface TxAppShellLabels {
   right?: string;
   /** 아래 패널의 이름. 기본 `"아래 패널"`. */
   bottom?: string;
+  /** 하단 탭바의 이름. 기본 `"하단 탭"`. */
+  tabBar?: string;
   /**
    * 접었다 펴는 스위치의 이름. 자리 이름을 받아 만든다. 기본은 **자리 이름 그대로** —
    * 접혔는지는 `aria-expanded` 가 말하므로 이름까지 바꾸면 두 번 말하는 것이 된다.
@@ -129,6 +131,26 @@ export interface TxAppShellProps extends HTMLAttributes<HTMLDivElement> {
   footer?: ReactNode;
 
   /**
+   * 하단 탭바. **좁을 때(`breakpoint` 보다 좁은 화면)만 화면 아래에 붙는다.** 넓으면 그리지 않는다.
+   *
+   * `bottom` 과 다르다 — 그쪽은 본문 아래의 콘솔 · 로그 패널이고, 이쪽은 모바일의 주 이동 줄이다.
+   * 셸이 하는 것: `<nav>` 랜드마크 · 화면 아래 고정 · **본문 아래에 탭바 높이만큼 자리 비우기** ·
+   * 아이폰 홈 표시줄 자리(`env(safe-area-inset-bottom)`) · 위쪽 페이드(토큰, 기본 없음).
+   *
+   * 항목은 `TxTabBar` 로 그린다. **`left` 와 같은 라우트 배열에서 뽑는다** — 탭바에 다 안 드는 것은
+   * 서랍(햄버거)에 남는다. 서랍은 탭바가 있어도 그대로다.
+   *
+   * @example
+   * ```tsx
+   * <TxAppShell
+   *   left={<TxSideNav>{nav.map(toSideItem)}</TxSideNav>}
+   *   tabBar={<TxTabBar>{nav.slice(0, 4).map(toTabItem)}</TxTabBar>}
+   * />
+   * ```
+   */
+  tabBar?: ReactNode;
+
+  /**
    * 헤더가 어떻게 머무는가. 기본 `true`.
    *
    * `"hide"` 는 **내리면 숨고 올리면 나온다** — 긴 글에서 화면을 돌려준다.
@@ -177,7 +199,7 @@ export interface TxAppShellProps extends HTMLAttributes<HTMLDivElement> {
   onPanelChange?: (slot: TxAppShellPanelSlot, change: TxAppShellPanelChange) => void;
 
   /**
-   * 이 폭(px)보다 좁아지면 **왼쪽 패널이 서랍으로 간다.** 기본 `960`.
+   * 이 폭(px)보다 좁아지면 **왼쪽 패널이 서랍으로 가고 `tabBar` 가 나타난다.** 기본 `960`.
    *
    * 화면 폭을 잰다 — 셸은 화면 전체를 짜는 것이라 그것이 맞는 자리다.
    * (`TxGrid` 는 놓인 자리의 폭을 보므로 다르다.)
@@ -193,7 +215,7 @@ export interface TxAppShellProps extends HTMLAttributes<HTMLDivElement> {
    * `header` 는 머리 전체(`bar` + `top`)를 감싸는 겉이고, `bar` 는 그 안에서 `header` 슬롯과
    * 햄버거가 놓이는 줄이다. 여백 · 높이는 변수(`--tx-app-shell-bar-*`)로도 끌 수 있다.
    */
-  classNames?: { header?: string; bar?: string; top?: string; left?: string; right?: string; bottom?: string; main?: string; footer?: string };
+  classNames?: { header?: string; bar?: string; top?: string; left?: string; right?: string; bottom?: string; main?: string; footer?: string; tabBar?: string };
 
   children?: ReactNode;
 }

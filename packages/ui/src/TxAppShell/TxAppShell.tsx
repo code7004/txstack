@@ -12,6 +12,7 @@ const DEFAULT_LABELS = {
   left: "하위 메뉴",
   right: "관련 정보",
   bottom: "아래 패널",
+  tabBar: "하단 탭",
   resize: (name: string) => `${name} 크기 조절`,
   toggle: (name: string) => name
 };
@@ -56,6 +57,8 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
  * `right` 는 `<aside>`, `bottom` 은 `<section>` 이고 각각 이름이 다르다.
  * 좌우는 글 방향을 따른다(`inline-start` · `inline-end`).
  *
+ * 좁을 때만 화면 아래에 붙는 **하단 탭바**(`tabBar`)도 있다 — `bottom` 은 콘솔 패널이라 다른 자리다.
+ *
  * 셸이 맡는 것은 여섯이다.
  *
  * 1. **랜드마크** — 제자리에 두고 이름을 붙인다. 이름이 없으면 스크린리더가 "탐색" 여럿을
@@ -73,7 +76,27 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
  *
  * 명세: `docs/001_ui/044_TxAppShell.md`
  */
-export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "main", footer, sticky = true, panelSticky = true, panels, onPanelChange, breakpoint = 960, labels, classNames, className, style, children, ...props }: TxAppShellProps) => {
+export const TxAppShell = ({
+  header,
+  top,
+  left,
+  right,
+  bottom,
+  bottomSpan = "main",
+  footer,
+  tabBar,
+  sticky = true,
+  panelSticky = true,
+  panels,
+  onPanelChange,
+  breakpoint = 960,
+  labels,
+  classNames,
+  className,
+  style,
+  children,
+  ...props
+}: TxAppShellProps) => {
   const text = { ...DEFAULT_LABELS, ...labels };
   const mainId = useId();
 
@@ -93,6 +116,8 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
 
   // 좁을 때만 서랍이 있다. 서랍의 폭은 서랍 것이라 손잡이도 스위치도 같이 사라진다
   const inDrawer = narrow && left != null;
+  // 탭바도 좁을 때만 선다. 넓은 화면에는 left · top 이 이미 그 일을 한다
+  const withTabBar = narrow && tabBar != null;
 
   /**
    * **서랍 안의 링크를 누르면 닫는다.** SPA 에서는 링크가 문서를 바꾸지 않아, 닫지 않으면
@@ -152,6 +177,7 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
       data-panel-sticky={panelSticky ? "" : undefined}
       data-hidden={hidden ? "" : undefined}
       data-narrow={narrow ? "" : undefined}
+      data-tab-bar={withTabBar ? "" : undefined}
       className={cm("tx-app-shell", className)}
       style={{ "--tx-app-shell-breakpoint": `${breakpoint}px`, "--tx-app-shell-header-height": `${headerHeight}px`, ...resize.style(), ...style } as CSSProperties}
     >
@@ -204,6 +230,16 @@ export const TxAppShell = ({ header, top, left, right, bottom, bottomSpan = "mai
       {bottomSpan === "screen" && bottomPanel}
 
       {footer != null && <footer className={cm("tx-app-shell__footer", classNames?.footer)}>{footer}</footer>}
+
+      {/*
+        화면 아래에 붙는다. 본문이 가려지지 않게 셸 아래에 그만큼 자리를 비운다(`[data-tab-bar]`).
+        서랍(TxSlidePanel)은 최상위 층이라 열리면 탭바 위를 덮는다
+      */}
+      {withTabBar && (
+        <nav aria-label={text.tabBar} className={cm("tx-app-shell__tab-bar", classNames?.tabBar)}>
+          {tabBar}
+        </nav>
+      )}
 
       {/*
         **같은 노드를 그대로 쓴다.** 서랍용 메뉴를 따로 받으면 둘이 어긋나고,

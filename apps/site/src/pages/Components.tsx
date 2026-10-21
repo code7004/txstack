@@ -304,7 +304,7 @@ export function Components() {
           <span className="tx-button__label">Storybook에서 props 보기 ↗</span>
         </a>
         <Link to="/api/ui#components-by-category" className="tx-button" data-variant="secondary">
-          <span className="tx-button__label">컴포넌트 49종 목록</span>
+          <span className="tx-button__label">컴포넌트 50종 목록</span>
         </Link>
       </div>
 

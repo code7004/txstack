@@ -50,6 +50,7 @@ export * from "./TxScrollArea";
 export * from "./TxSkeleton";
 export * from "./TxSlider";
 export * from "./TxSwitch";
+export * from "./TxTabBar";
 export * from "./TxSpinner";
 export * from "./TxTabs";
 export * from "./TxTag";

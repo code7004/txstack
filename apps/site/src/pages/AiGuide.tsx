@@ -34,7 +34,7 @@ const RULE_SECTIONS = [
   { title: "결정표", what: "만들려는 것(펼침 · 상자 · 칩 · 아이콘 버튼 · GNB · 화면 껍데기 · 스켈레톤 · 빈 상태 …)마다 쓸 부품" },
   { title: "직접 만들지 말 원시 요소", what: "<button> · <details> · 손으로 짠 모달 · 토스트 · 드롭다운 · 카드와 그 이유" },
   { title: "커스터마이징", what: "부품 CSS 를 덮지 않고 --tx-* 토큰으로. Tailwind 앱의 @layer 순서" },
-  { title: "부품이 못 하는 것", what: "예: TxAppShell 의 bottom 은 콘솔 패널이지 모바일 하단 탭바가 아니다 — 이때만 앱에서 만들고 기록한다" },
+  { title: "부품이 못 하는 것", what: "예: TxCard 는 카드 전체를 링크로 만들지 않는다 — 이런 자리만 앱에서 만들고 기록한다" },
   { title: "시작 묶음", what: "CLAUDE.md · AGENTS.md 에 붙일 문단, eslint react/forbid-elements 설정" }
 ];
 
