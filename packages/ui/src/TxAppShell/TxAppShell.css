@@ -257,6 +257,17 @@
   min-inline-size: 0;
   min-block-size: 0;
   padding: var(--tx-app-shell-main-padding);
+
+  /* 건너뛰기로 굴러올 때 머무는 헤더 밑에 들어가지 않는다. 헤더가 같이 굴러가면 높이는 0 이다 */
+  scroll-margin-block-start: var(--tx-app-shell-header-height, 0px);
+}
+
+/**
+ * 건너뛰기가 본문에 포커스를 옮겨도 **본문 전체에 테두리를 두르지 않는다.** 본문은 누르는 것이 아니라
+ * 읽기를 시작하는 자리다 — 다음 Tab 이 본문 안의 첫 컨트롤로 간다는 것만 맞으면 된다.
+ */
+.tx-app-shell__main:focus {
+  outline: none;
 }
 
 /**

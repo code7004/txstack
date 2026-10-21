@@ -87,7 +87,7 @@ import "@txstack/ui/styles.css";
 | 041  | [`TxSwitch`](041_TxSwitch.md)                    | 그 자리에서 바로 켜고 끄는 자리                     | 24     |
 | 042  | [`TxBreadcrumb`](042_TxBreadcrumb.md)            | 계층 경로                                           | 24     |
 | 043  | [`TxScrollArea`](043_TxScrollArea.md)            | 넘치는 내용을 굴려 보는 자리                        | 18     |
-| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 99     |
+| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 104    |
 | 045  | [`TxAvatar`](045_TxAvatar.md)                    | 사람 한 명을 나타내는 동그란 칸                     | 28     |
 | 046  | [`TxTicker`](046_TxTicker.md)                    | 저절로 움직이는 공지 줄                             | 28     |
 | 047  | [`TxCarousel`](047_TxCarousel.md)                | 여러 장을 옆으로 넘겨 보는 자리                     | 50     |

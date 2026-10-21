@@ -161,8 +161,28 @@ export const TxAppShell = ({
     );
   };
 
+  /**
+   * **주소를 건드리지 않고 본문으로 간다.** `href="#id"` 의 기본 이동은 주소의 조각(hash)을 바꾸는데,
+   * HashRouter 앱에서는 그 조각이 곧 경로라 `#/history` 가 `#_r_0_` 이 되어 라우터가 빈 화면을 그렸다.
+   * 그래서 기본 이동을 막고 포커스 · 스크롤만 옮긴다. `href` 는 남긴다 — JS 가 없을 때의 길이다.
+   *
+   * 보조키 클릭(새 탭 등)은 그대로 둔다. Enter 도 브라우저가 click 으로 보내 여기로 온다.
+   */
+  const hdSkip = (evt: MouseEvent<HTMLAnchorElement>) => {
+    if (evt.button !== 0 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey) return;
+
+    const target = document.getElementById(mainId);
+    if (!target) return;
+
+    evt.preventDefault();
+    // 포커스가 스크롤까지 하게 두지 않는다 — 머무는 헤더 밑으로 들어가지 않게 scroll-margin 을 읽는 쪽으로 굴린다
+    target.focus({ preventScroll: true });
+    target.scrollIntoView?.({ block: "start" });
+  };
+
   const main = (
-    <main id={mainId} className={cm("tx-app-shell__main", classNames?.main)}>
+    // tabIndex -1 — 건너뛰기가 포커스를 옮길 수 있게. Tab 순서에는 들어가지 않는다
+    <main id={mainId} tabIndex={-1} className={cm("tx-app-shell__main", classNames?.main)}>
       {children}
     </main>
   );
@@ -185,7 +205,7 @@ export const TxAppShell = ({
         첫 Tab 에 나타난다. 메뉴가 스무 줄이면 키보드로 본문에 닿는 데 스무 번을 눌러야 하고,
         **어디가 본문인지는 셸만 안다.**
       */}
-      <a href={`#${mainId}`} className="tx-app-shell__skip">
+      <a href={`#${mainId}`} className="tx-app-shell__skip" onClick={hdSkip}>
         {text.skip}
       </a>
 

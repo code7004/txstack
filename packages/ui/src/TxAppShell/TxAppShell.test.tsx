@@ -172,6 +172,35 @@ describe("TxAppShell — 본문으로 건너뛰기", () => {
     expect(main.id).not.toBe("");
   });
 
+  /**
+   * HashRouter 앱에서는 주소의 조각(hash)이 곧 경로다. 기본 이동에 맡기면 `#/history` 가 `#<본문 id>` 로 바뀌어
+   * 라우터가 빈 화면을 그렸다(settlemint 배포 사이트에서 재현). 주소는 그대로 두고 포커스만 옮긴다.
+   */
+  it("누르면 주소는 그대로 두고 본문으로 포커스를 옮긴다", () => {
+    window.history.replaceState(null, "", "/app?tab=1#/history");
+    const { container } = render(<TxAppShell {...SLOTS}>본문</TxAppShell>);
+
+    const skip = screen.getByRole("link", { name: "본문으로 건너뛰기" });
+    const main = container.querySelector("main")!;
+    const notCancelled = fireEvent.click(skip);
+
+    expect(notCancelled).toBe(false);
+    expect(window.location.hash).toBe("#/history");
+    expect(window.location.search).toBe("?tab=1");
+    expect(document.activeElement).toBe(main);
+  });
+
+  it("본문은 포커스를 받을 수 있지만 Tab 순서에는 없다", () => {
+    const { container } = render(<TxAppShell>본문</TxAppShell>);
+    expect(container.querySelector("main")!.getAttribute("tabindex")).toBe("-1");
+  });
+
+  /** 새 탭으로 여는 클릭은 브라우저에 맡긴다 */
+  it("보조키 클릭은 막지 않는다", () => {
+    render(<TxAppShell>본문</TxAppShell>);
+    expect(fireEvent.click(screen.getByRole("link", { name: "본문으로 건너뛰기" }), { metaKey: true })).toBe(true);
+  });
+
   it("글자를 바꿀 수 있다", () => {
     render(<TxAppShell labels={{ skip: "Skip to content" }}>본문</TxAppShell>);
     expect(screen.getByRole("link", { name: "Skip to content" })).toBeTruthy();
@@ -1039,6 +1068,13 @@ describe("TxAppShell — CSS 계약", () => {
 
   /** 평소 투명한 헤더 선이 1px 을 차지해 헤더가 그만큼 높았다 — settlemint 에서 요구됐다 */
   /** settlemint 의 Figma(높이 84 · 위 8 · 아래 24 · 흰 바탕 · 위 선 · 페이드 40)를 전부 토큰으로 맞출 수 있어야 한다 */
+  it("건너뛰기로 온 본문은 테두리를 두르지 않고, 머무는 헤더 밑에 들어가지 않는다", () => {
+    const main = css.match(/\.tx-app-shell__main\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(css).toMatch(/\.tx-app-shell__main:focus\s*\{\s*outline:\s*none;?\s*\}/);
+    expect(main).toMatch(/scroll-margin-block-start:\s*var\(--tx-app-shell-header-height/);
+  });
+
   it("하단 탭바의 높이 · 여백 · 바탕 · 경계선 · 페이드가 전부 토큰이다", () => {
     const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";
     for (const name of ["height", "padding-top", "padding-bottom", "bg", "border-width", "border-color", "fade", "fade-color"]) {
