@@ -28,6 +28,17 @@ if (kind === "core-ui") {
   assert.ok(!js.includes(DAY_PICKER), "루트만 썼는데 react-day-picker 가 번들에 들어왔다");
 }
 
+if (kind === "core-ui") {
+  // AI 가이드가 코드와 같은 버전으로 함께 설치되는지 — 소비자의 CLAUDE.md · AGENTS.md 가 이 자리를 가리킨다
+  const guide = join("node_modules", "@txstack", "ui", "ai");
+  for (const file of ["llms.txt", "llms-full.txt", "rules.md", "docs/001_ui/001_TxButton.md"]) {
+    assert.ok(existsSync(join(guide, file)), `AI 가이드가 설치되지 않았다: ${join(guide, file)}`);
+  }
+  for (const [, link] of readFileSync(join(guide, "llms.txt"), "utf8").matchAll(/\]\(([^)]+)\)/g)) {
+    assert.ok(existsSync(join(guide, link)), `llms.txt 의 링크가 설치본에 없다: ${link}`);
+  }
+}
+
 if (kind === "ui-subpaths") {
   assert.ok(js.includes(AG_GRID), "aggrid 서브패스를 썼는데 ag-grid 가 없다");
 }

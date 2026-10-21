@@ -5,6 +5,7 @@ import { SectionLayout } from "./pages/SectionLayout";
 /**
  * 화면은 그 주소에 처음 들어올 때 받는다(`lib/page`). 묶음의 껍데기(`SectionLayout`)는 작아서 바로 싣는다.
  */
+const AiGuide = page(() => import("./pages/AiGuide"), "AiGuide", "pages/AiGuide.tsx");
 const AboutHome = page(() => import("./pages/AboutHome"), "AboutHome", "pages/AboutHome.tsx");
 const CaseStudy = page(() => import("./pages/CaseStudy"), "CaseStudy", "pages/CaseStudy.tsx");
 const ApiAxios = page(() => import("./pages/api/ApiAxios"), "ApiAxios", "pages/api/ApiAxios.tsx");
@@ -112,6 +113,13 @@ export const routes = {
         path: "/docs/components",
         element: <Components />,
         meta: { label: "Components", description: "분류별 컴포넌트 갤러리" }
+      },
+
+      /** 사람이 아니라 소비자 프로젝트의 AI 코딩 도구가 읽을 것. 파일은 빌드가 만든다(`vite.config.ts` 의 `aiGuide()`) */
+      aiGuide: {
+        path: "/docs/ai-guide",
+        element: <AiGuide />,
+        meta: { label: "AI Guide", description: "AI 코딩 도구가 txstack 부품을 먼저 쓰게 하는 llms.txt · 규칙 · eslint 설정" }
       }
     }
   },

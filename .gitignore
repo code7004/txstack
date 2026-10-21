@@ -7,6 +7,8 @@ coverage/
 # macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물. 소스 옆에 그대로 생긴다
 ._*
 storybook-static/
+# AI 가이드 — @txstack/ui 의 build 가 docs/ 에서 만든다(scripts/ai-guide.mjs)
+packages/ui/ai/
 .env
 .env.*
 !.env.example

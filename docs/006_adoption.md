@@ -204,6 +204,10 @@ import "@/styles/txstack.css";
 **컴포넌트 기본값 덮어쓰기는 `@layer components` 안에** 둔다 — 레이어 밖이면 화면의
 `className` 까지 이겨서 다시 덮을 수 없다.
 
+**AI 코딩 도구를 쓰는 프로젝트는 「txstack 우선」 규칙을 먼저 붙인다.** 안 붙이면 AI 는 부품 문서를 읽지 않고
+`<button>` · 손으로 짠 펼침 · 카드 · GNB 를 만든다(settlemint 에서 실제로 그랬다). 붙일 문단과 eslint 설정은
+[013_ai_guide](013_ai_guide.md) 6장에 있고, 가이드는 `node_modules/@txstack/ui/ai/` 에 설치된 버전 그대로 온다.
+
 겉모습은 **부품 CSS 를 덮지 않고 토큰만 다시 정의한다.** 방법은 사이트의
 `Guide › Tokens` 와 [apps/site/src/theme.css](../apps/site/src/theme.css) 가 실물 예제다.
 

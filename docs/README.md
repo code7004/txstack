@@ -190,6 +190,11 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       Pages 는 폴더 주소에 슬래시를 붙여 301 로 보낸 뒤 200 으로 답한다 — 대표 주소는 슬래시 붙은 쪽이고, 앱은 그리기 전에
       슬래시를 뗀다(`main.tsx`). 없는 주소는 빌드가 쓰는 `404.html`(noindex)이 맡는다. 정적 서버(폴더 → 301, 폴백 없음)로
       직접 링크 + 쿼리 + 앵커 · 탭 제목 · 다음 장을 확인했다. **공유 이미지(`og:image`)는 없다** — 그림이 정해지면 index.html 한 줄이다
+- [x] **AI 가이드**(2026-10-21, [013](013_ai_guide.md)) — 소비자 프로젝트의 AI 코딩 도구가 손으로 `<button>` · 펼침 · 카드 · GNB 를 짜고
+      Tx\* 부품을 거의 안 쓴 일(settlemint 홈)에서 나왔다. 원인은 부품 문서가 tarball 에 없어 AI 가 읽을 수 없었던 것과 「txstack 우선」 규칙이 없던 것.
+      규칙(결정표 · 원시 요소 · 토큰 · 부품의 한계 · CLAUDE.md 문단 · eslint `react/forbid-elements`)은 013 이 갖고, **빌드가 그것과 패키지 문서를 묶는다**
+      (`scripts/ai-guide.mjs`). `@txstack/ui` 의 tarball 에 `ai/` 로 실려 코드와 같은 버전이고, 사이트는 `/llms.txt` · `/llms-full.txt` · `/ai/…` 와
+      `Documents › AI Guide` 를 낸다. 결정표가 공개 부품과 어긋나면 테스트가 깨지고, `verify:packages` 가 설치본에 가이드가 있는지 본다
 - [x] **009 후속 다섯 가지**(2026-10-15, [009](009_site_followup_review.md)) —
       ① **실행 환경**: Getting Started 를 앱(React 18+, Node 는 앱 도구 — Vite 20.19 / 22.12+)과 **저장소 빌드**(Node 24.14.0 · pnpm 10, `nvm use`)로 나눴다.
       확인 범위는 Node 24 뿐이라고 밝혔다(다른 Node 는 미확인).

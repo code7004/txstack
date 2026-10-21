@@ -1,9 +1,43 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+import { buildAiGuide } from "../../scripts/ai-guide.mjs";
 
 const pkg = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, import.meta.url));
+
+/**
+ * **AI 가이드를 사이트에 싣는다** — `/llms.txt` · `/llms-full.txt` 와 `/ai/…`(규칙 · 문서 한 장씩).
+ * 원본은 `docs/` 이고 만드는 일은 `scripts/ai-guide.mjs` 가 한다. `@txstack/ui` 의 tarball 에 실리는 것과 같은 내용이다.
+ *
+ * 개발 서버는 요청마다 새로 만들어 문서를 고치면 바로 보이고, 빌드는 파일로 낸다. 파일을 `public/` 에 두지 않는 것은
+ * 생성물을 저장소에 들이지 않기 위해서다.
+ */
+function aiGuide(): Plugin {
+  const type = (path: string) => (path.endsWith(".md") ? "text/markdown; charset=utf-8" : "text/plain; charset=utf-8");
+  let base = "/";
+
+  return {
+    name: "txstack-ai-guide",
+    configResolved(config) {
+      base = config.base;
+    },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const path = decodeURIComponent((req.url ?? "").split("?")[0]);
+        if (!path.startsWith(base)) return next();
+
+        const body = buildAiGuide({ layout: "site" }).get(path.slice(base.length));
+        if (body === undefined) return next();
+        res.setHeader("Content-Type", type(path));
+        res.end(body);
+      });
+    },
+    generateBundle() {
+      for (const [fileName, source] of buildAiGuide({ layout: "site" })) this.emitFile({ type: "asset", fileName, source });
+    }
+  };
+}
 
 /**
  * txstack 을 소개하는 사이트. **이 앱은 배포 패키지가 아니라 첫 소비자다** —
@@ -14,7 +48,7 @@ const pkg = (path: string) => fileURLToPath(new URL(`../../packages/${path}`, im
 export default defineConfig({
   // GitHub Pages 하위 경로에 올릴 수 있게 열어 둔다. 루트 도메인이면 "/" 로 준다
   base: process.env.SITE_BASE ?? "/",
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), aiGuide()],
   server: { open: false },
   resolve: {
     /**
