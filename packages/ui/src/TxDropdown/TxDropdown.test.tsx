@@ -261,6 +261,35 @@ describe("TxDropdown — 값", () => {
     open();
     expect(options()[0].textContent).toContain("서울");
   });
+
+  /** 머리는 고른 줄을 목록에 보이던 그대로 보인다. 번역한 목록에서 골랐는데 머리에 키 원문이 나오면 안 된다 */
+  it("고른 값의 머리도 locale 을 거친다", () => {
+    const locale = (t: string) => ({ seoul: "서울", busan: "부산" })[t] ?? t;
+    render(<TxDropdown data={["seoul", "busan"]} locale={locale} />);
+
+    open();
+    fireEvent.click(options()[1]);
+    expect(head().textContent).toContain("부산");
+    expect(head().textContent).not.toContain("busan");
+  });
+
+  it("controlled 로 처음부터 고른 값도 번역해 보인다", () => {
+    render(<TxDropdown data={["seoul"]} value="seoul" locale={(t) => (t === "seoul" ? "서울" : t)} />);
+    expect(head().textContent).toContain("서울");
+  });
+
+  /** placeholder · fixedHead 는 소비자가 직접 준 글자다 — 다시 번역하지 않는다(TxDropdownMulti 와 같다) */
+  it("placeholder · fixedHead 는 locale 을 거치지 않는다", () => {
+    const locale = (t: string) => `번역(${t})`;
+    const { unmount } = render(<TxDropdown data={["seoul"]} placeholder="도시" locale={locale} />);
+    expect(head().textContent).toContain("도시");
+    expect(head().textContent).not.toContain("번역");
+    unmount();
+
+    render(<TxDropdown data={["seoul"]} fixedHead="지역" locale={locale} />);
+    expect(head().textContent).toContain("지역");
+    expect(head().textContent).not.toContain("번역");
+  });
 });
 
 describe("TxDropdownMulti", () => {
