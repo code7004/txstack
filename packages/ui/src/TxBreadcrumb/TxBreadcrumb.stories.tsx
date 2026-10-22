@@ -52,6 +52,15 @@ const meta = {
           "라우터는 `as` 로 갈아끼운다 — `TxDropMenu.Item` 과 같은 규약이라 **패키지가 라우터를",
           "알지 못한다.**",
           "",
+          "### 목록으로 넘기기 — `items`",
+          "",
+          "칸이 라우트 트리처럼 **다른 데서 만들어져 오면** `items` 로 넘긴다. 그리는 것은 같다.",
+          "`@txstack/route-meta` 의 `useBreadcrumbs` 가 이 모양을 준다.",
+          "",
+          "```tsx",
+          "<TxBreadcrumb items={useBreadcrumbs(routeTree)} itemAs={NavLink} />;",
+          "```",
+          "",
           "컨트롤 패널은 `Playground` 에서만 동작한다."
         ].join("\n")
       }
@@ -64,6 +73,9 @@ const meta = {
     separator: { control: "text" },
     label: { control: "text", description: "스크린리더가 읽을 이름" },
     children: { control: false },
+    items: { control: false },
+    itemAs: { control: false },
+    itemProps: { control: false },
     classNames: { control: false },
     className: { control: "text", description: "`.tx-breadcrumb` 에 덧붙는다 (교체 아님)" }
   }
@@ -90,13 +102,38 @@ const PATH = (
 );
 
 export const Playground: Story = {
-  render: (args) => <TxBreadcrumb {...args}>{PATH}</TxBreadcrumb>
+  // 손으로 적는 모양만 보인다 — `items` 는 아래 「목록으로 넘기기」
+  render: ({ maxItems, itemsAfterCollapse, separator, label, className }) => (
+    <TxBreadcrumb maxItems={maxItems} itemsAfterCollapse={itemsAfterCollapse} separator={separator} label={label} className={className}>
+      {PATH}
+    </TxBreadcrumb>
+  )
 };
 
 /** **마지막 칸만 링크가 아니다.** 앞의 것들은 밑줄이 뜨고 마지막은 안 뜬다. */
 export const Basic: Story = {
   parameters: noControls,
   render: () => <TxBreadcrumb>{PATH}</TxBreadcrumb>
+};
+
+/**
+ * 칸을 **목록으로** 넘긴다. 손으로 적은 위의 것과 똑같이 그린다 — 마지막 칸은 글자,
+ * `path` 가 없는 칸도 글자다. 라우트 트리에서는 `useBreadcrumbs(routeTree)` 를 그대로 넘긴다.
+ */
+export const Items: Story = {
+  name: "목록으로 넘기기",
+  parameters: noControls,
+  render: () => (
+    <TxBreadcrumb
+      itemAs={DemoLink}
+      items={[
+        { key: "home", label: "홈", path: "/" },
+        { key: "orders", label: "주문", path: "/orders" },
+        { key: "year", label: "2026", path: "/orders/2026" },
+        { key: "order", label: "8213", path: "/orders/2026/8213" }
+      ]}
+    />
+  )
 };
 
 /**

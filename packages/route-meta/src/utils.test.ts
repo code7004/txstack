@@ -65,6 +65,13 @@ describe("buildRouteObjects", () => {
     expect(handle.node).toBe(TREE.group);
     expect(handle.node.meta?.label).toBe("그룹");
   });
+
+  it("handle 에 트리 키도 심는다 — 자식까지", () => {
+    const group = built.find((r) => r.path === "/group");
+
+    expect((group?.handle as RouteHandle).key).toBe("group");
+    expect(group?.children?.map((child) => (child.handle as RouteHandle).key)).toEqual(["visible", "hiddenChild"]);
+  });
 });
 
 describe("getNavRoutes", () => {

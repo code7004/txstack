@@ -1,6 +1,6 @@
-import { Children, Fragment, isValidElement, type ReactElement, type ReactNode } from "react";
+import { Children, Fragment, isValidElement, type ElementType, type ReactElement, type ReactNode } from "react";
 import { cm } from "../tx-ui.utils";
-import type { TxBreadcrumbProps } from "./TxBreadcrumb.types";
+import type { TxBreadcrumbItemData, TxBreadcrumbProps } from "./TxBreadcrumb.types";
 import { TxBreadcrumbCurrentContext, TxBreadcrumbItem } from "./TxBreadcrumbItem";
 
 /**
@@ -39,8 +39,28 @@ const flatten = (nodes: ReactNode): ReactElement[] =>
     return [node];
   });
 
-export const TxBreadcrumbBase = ({ children, maxItems, itemsAfterCollapse = 2, separator, label = "경로", className, classNames, ...props }: TxBreadcrumbProps) => {
-  const items = flatten(children);
+/** `"a"` 는 HTML 이라 `href`, 컴포넌트는 이 세트의 라우터(React Router)의 `to`. */
+const defaultItemProps = (itemAs: ElementType) => (item: TxBreadcrumbItemData) => (typeof itemAs === "string" ? { href: item.path } : { to: item.path });
+
+/**
+ * `items` 를 손으로 적은 것과 **같은 칸**으로 바꾼다. 그 뒤로는 한 길이다 —
+ * 마지막 칸 · 접기 · 가름표가 두 모양에 따로 있지 않다.
+ */
+const fromData = (data: readonly TxBreadcrumbItemData[], itemAs: ElementType, itemProps: (item: TxBreadcrumbItemData) => object = defaultItemProps(itemAs)) =>
+  data.map((item, index) =>
+    item.path == null ? (
+      <TxBreadcrumbItem key={item.key ?? index} current={item.current}>
+        {item.label}
+      </TxBreadcrumbItem>
+    ) : (
+      <TxBreadcrumbItem key={item.key ?? index} as={itemAs} current={item.current} {...itemProps(item)}>
+        {item.label}
+      </TxBreadcrumbItem>
+    )
+  );
+
+export const TxBreadcrumbBase = ({ children, items: data, itemAs = "a", itemProps, maxItems, itemsAfterCollapse = 2, separator, label = "경로", className, classNames, ...props }: TxBreadcrumbProps) => {
+  const items = data ? fromData(data, itemAs, itemProps) : flatten(children);
 
   /**
    * 가운데를 접는다. **첫 칸과 끝 몇 개는 남긴다** — 어디서 왔고 지금 어디인지가

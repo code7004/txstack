@@ -237,7 +237,11 @@ export const TABLES = {
     }
   },
   routeMeta: {
-    installEntry: { section: "Install", searchable: true, rows: [["@txstack/route-meta", "buildRouteObjects · getNavRoutes · useCurrentRoute · RouteTreeRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[] },
+    installEntry: {
+      section: "Install",
+      searchable: true,
+      rows: [["@txstack/route-meta", "buildRouteObjects · getNavRoutes · useCurrentRoute · useBreadcrumbs · RouteTreeRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[]
+    },
     pathroutenode: {
       section: "RouteTree",
       label: "PathRouteNode",
@@ -270,7 +274,8 @@ export const TABLES = {
         ["icon", "ReactNode", "—", "메뉴 아이콘"],
         ["description", "string", "—", "설명. 메뉴 패널이나 인덱스 화면에 씁니다"],
         ["hidden", "boolean", "false", "메뉴에서만 뺍니다. 라우터에는 등록되어 주소로는 열립니다"],
-        ["permissions", "string[]", "—", "접근 권한. 메뉴에 보일지는 getNavRoutes의 canAccess가 정합니다"]
+        ["permissions", "string[]", "—", "접근 권한. 메뉴에 보일지는 getNavRoutes의 canAccess가 정합니다"],
+        ["breadcrumb", "boolean", "true", "false면 경로(useBreadcrumbs)에 칸으로 나오지 않습니다. 아래 칸은 그대로입니다. 레이아웃만 맡는 루트에 줍니다"]
       ] as Row[]
     },
     filterRules: {
@@ -307,6 +312,17 @@ export const TABLES = {
         ["pathname", "string", "—", "지금 주소의 경로"]
       ] as Row[]
     },
+    breadcrumb: {
+      section: "useBreadcrumbs",
+      label: "Breadcrumb",
+      searchable: true,
+      rows: [
+        ["key", "string", "—", "트리에 쓴 키. React의 key로도 씁니다"],
+        ["path", "string", "—", "실제 주소. 동적 세그먼트가 채워져 있습니다(/users/8213)"],
+        ["label", "ReactNode", "—", "meta.label. 이것이 없는 노드는 칸이 되지 않습니다"],
+        ["meta", "RouteMeta?", "—", "트리에 쓴 meta 그대로"]
+      ] as Row[]
+    },
     typeList: {
       section: "Types",
       searchable: true,
@@ -315,11 +331,12 @@ export const TABLES = {
         ["RouteNode", "PathRouteNode | IndexRouteNode", "", "트리의 노드 한 개"],
         ["PathRouteNode", "{ path, element?, children?, meta?, … }", "", "주소가 있는 노드"],
         ["IndexRouteNode", "{ index: true, element?, meta?, … }", "", "부모 주소의 첫 화면"],
-        ["RouteMeta", "{ label?, icon?, description?, hidden?, permissions? }", "", "메뉴 · 현재 위치 정보"],
+        ["RouteMeta", "{ label?, icon?, description?, hidden?, permissions?, breadcrumb? }", "", "메뉴 · 현재 위치 정보"],
         ["NavRoute", "{ key, path, meta?, children? }", "", "getNavRoutes의 결과 한 칸"],
         ["CanAccess", "(permissions, node) => boolean", "", "권한 판정 함수"],
         ["CurrentRoute", "{ node, meta, matches, params, pathname }", "", "useCurrentRoute의 결과"],
-        ["RouteHandle", "{ node: RouteNode }", "", "buildRouteObjects가 각 라우트의 handle에 싣는 값. matchRoutes 결과에서 원래 노드를 찾을 때 씁니다"]
+        ["Breadcrumb", "{ key, path, label, meta? }", "", "useBreadcrumbs의 결과 한 칸. TxBreadcrumb의 items가 그대로 받습니다"],
+        ["RouteHandle", "{ node: RouteNode, key: string }", "", "buildRouteObjects가 각 라우트의 handle에 싣는 값. matchRoutes 결과에서 원래 노드와 키를 찾을 때 씁니다"]
       ] as Row[]
     }
   },

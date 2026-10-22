@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { MemoryRouter, NavLink, Outlet, useRoutes } from "react-router-dom";
-import { buildRouteObjects, getNavRoutes, useCurrentRoute, type CanAccess, type NavRoute, type RouteTree } from "@txstack/route-meta";
-import { TxAppShell, TxButton, TxFlex, TxGrid, TxNavBar, TxSideNav } from "@txstack/ui";
+import { buildRouteObjects, getNavRoutes, useBreadcrumbs, type CanAccess, type NavRoute, type RouteTree } from "@txstack/route-meta";
+import { TxAppShell, TxBreadcrumb, TxButton, TxFlex, TxGrid, TxNavBar, TxSideNav } from "@txstack/ui";
 
 /**
  * 화면 하나. 여기서는 이야기를 짧게 두려고 한 컴포넌트로 돌려쓴다 —
@@ -95,16 +95,11 @@ const barItem = (item: NavRoute) => (
   </TxNavBar.Item>
 );
 
-/** 지금 어디인지. `useCurrentRoute` 가 매칭 사슬을 그대로 준다. */
-const Crumbs = () => {
-  const { matches, pathname } = useCurrentRoute(routes);
-
-  return (
-    <p className="text-sm text-slate-500 dark:text-slate-400">
-      <code>{pathname}</code> — {matches.map((node) => node.meta?.label ?? "?").join(" › ") || "매칭 없음"}
-    </p>
-  );
-};
+/**
+ * 지금 어디인지. **`useBreadcrumbs` 가 주는 칸을 `TxBreadcrumb` 이 그대로 받는다** — 화면마다 칸을 적지 않는다.
+ * 앱에서는 이 한 줄을 컴포넌트로 감싸 두고 화면에 prop 없이 놓는다.
+ */
+const Crumbs = () => <TxBreadcrumb items={useBreadcrumbs(routes)} itemAs={NavLink} />;
 
 /**
  * 트리에서 만든 라우터. `useRoutes` 는 `RouteObject[]` 를 그대로 받는다.
@@ -145,6 +140,17 @@ const meta = {
           "`@txstack/ui` 는 `route-meta` 를 import 하지 않고 그 반대도 아니다. **이어 붙이는",
           "코드는 소비자 몫**이고, 그래서 이 이야기들은 패키지가 아니라 **이 카탈로그 앱 안**에 있다.",
           "부품 쪽은 `as={NavLink}` 하나만 열어 두면 되고, 라우터를 알 필요가 없다.",
+          "",
+          "### 브레드크럼도 트리에서 나온다",
+          "",
+          "`useBreadcrumbs` 가 지금 주소까지의 칸을 주고, `TxBreadcrumb` 이 `items` 로 받는다.",
+          "레이아웃만 맡는 루트는 `meta.breadcrumb: false` 로 뺀다. 메뉴에 없는(`hidden`) 화면도 경로에는 나온다.",
+          "",
+          "```tsx",
+          "export function PageBreadcrumb() {",
+          "  return <TxBreadcrumb items={useBreadcrumbs(routes)} itemAs={NavLink} />;",
+          "}",
+          "```",
           "",
           "### 두 계층의 필터가 다르다",
           "",
