@@ -29,6 +29,13 @@
    * 접기 스위치의 테두리는 경계선이 아니라 그 단추의 것이라 따라가지 않는다
    */
   --tx-app-shell-border-width: 1px;
+  /**
+   * 자리마다 끄는 두께 — 셋 다 위의 공통값을 따른다. 머리 아래 선만 끄려면 `--tx-app-shell-header-border-width: 0`.
+   * **기본값은 여기(루트)에만 둔다** — 패널 · 머리에 준 클래스에서 덮으면 그 자리에만 걸린다
+   */
+  --tx-app-shell-header-border-width: var(--tx-app-shell-border-width);
+  --tx-app-shell-panel-border-width: var(--tx-app-shell-border-width);
+  --tx-app-shell-footer-border-width: var(--tx-app-shell-border-width);
   --tx-app-shell-header-bg: var(--tx-color-surface);
   --tx-app-shell-duration: 200ms;
 
@@ -117,7 +124,7 @@
 
 .tx-app-shell__header {
   z-index: var(--tx-app-shell-header-z);
-  border-block-end: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
+  border-block-end: var(--tx-app-shell-header-border-width) solid var(--tx-app-shell-border-color);
   background-color: var(--tx-app-shell-header-bg);
 }
 
@@ -177,12 +184,12 @@
 
 .tx-app-shell__left {
   inline-size: var(--tx-app-shell-left-width);
-  border-inline-end: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
+  border-inline-end: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
 }
 
 .tx-app-shell__right {
   inline-size: var(--tx-app-shell-right-width);
-  border-inline-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
+  border-inline-start: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /**
@@ -227,7 +234,7 @@
 
 .tx-app-shell__bottom {
   block-size: var(--tx-app-shell-bottom-height);
-  border-block-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
+  border-block-start: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /**
@@ -291,7 +298,7 @@
 }
 
 .tx-app-shell__footer {
-  border-block-start: var(--tx-app-shell-border-width) solid var(--tx-app-shell-border-color);
+  border-block-start: var(--tx-app-shell-footer-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /* --- 크기 조절 손잡이 --------------------------------------------------------- */

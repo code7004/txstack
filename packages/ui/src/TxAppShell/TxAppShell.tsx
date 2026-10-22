@@ -211,14 +211,20 @@ export const TxAppShell = ({
 
       {(header != null || top != null || inDrawer) && (
         <header ref={headerRef} className={cm("tx-app-shell__header", classNames?.header)}>
-          <div className={cm("tx-app-shell__bar", classNames?.bar)}>
-            {inDrawer && (
-              // 머리 줄의 다른 아이콘 버튼과 같은 크기 · 색이 되도록 TxButton icon 으로 그린다
-              <TxButton icon variant="ghost" label="☰" aria-label={text.menu} aria-expanded={drawer} className="tx-app-shell__menu" onClick={() => setDrawer(true)} />
-            )}
+          {/*
+            머리 줄은 **담을 것이 있을 때만** 그린다 — `header` 나 좁은 화면의 ☰.
+            `top` 만 준 셸에서 빈 줄이 최소 높이 · 여백만큼 자리를 잡았다.
+          */}
+          {(header != null || inDrawer) && (
+            <div className={cm("tx-app-shell__bar", classNames?.bar)}>
+              {inDrawer && (
+                // 머리 줄의 다른 아이콘 버튼과 같은 크기 · 색이 되도록 TxButton icon 으로 그린다
+                <TxButton icon variant="ghost" label="☰" aria-label={text.menu} aria-expanded={drawer} className="tx-app-shell__menu" onClick={() => setDrawer(true)} />
+              )}
 
-            {header}
-          </div>
+              {header}
+            </div>
+          )}
 
           {/* 이름이 없으면 스크린리더가 "탐색" 여럿을 구분하지 못한다 */}
           {top != null && (

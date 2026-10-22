@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui`                                                     |
 | 내보내는 것 | `TxAppShell`                                                      |
 | 소스        | [`packages/ui/src/TxAppShell/`](../../packages/ui/src/TxAppShell) |
-| 테스트      | 87개                                                              |
+| 테스트      | 109개                                                             |
 
 ## 개발 목적
 
@@ -283,6 +283,56 @@ footer                              footer
 | 스크롤은 `scroll-margin-block-start` 로 헤더를 비킨다 | 머무는 헤더 밑으로 본문 머리가 들어가지 않는다. 포커스는 `preventScroll` 로 두고 따로 굴린다           |
 | `href` 는 남긴다 · 보조키 클릭은 막지 않는다          | JS 가 없을 때의 길이고, 새 탭으로 여는 클릭은 브라우저의 일이다                                        |
 
+### 머리 줄은 담을 것이 있을 때만 그린다 (2026-10-22, 고쳤다)
+
+**`top` 만 준 셸에 빈 머리 줄이 섰다.** 머리(`<header>`)가 서면 그 안의 줄(`__bar`)도 무조건 그려서,
+`header` 가 없어도 최소 높이(`3.5rem`) · 여백만큼 자리를 잡았다 — usertics 에서 GNB 위에 56px 빈 칸이 생겼다.
+black-message 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding: 0` 으로 덮어 피해 갔다.
+
+이제 줄은 **`header` 가 있거나, 좁은 화면에서 서랍의 ☰ 가 설 때만** 그린다. `top` 은 그대로 줄 아래에 선다.
+`header` 를 주는 셸은 바뀌지 않는다.
+
+### 경계선을 자리마다 끈다 — 머리 · 패널 · 푸터 (2026-10-22)
+
+**경계선 기본값(1px)은 그대로 둔다.** 셸의 선은 구조에 붙어 있다 — 좌우 패널의 선 위에 크기 손잡이 · 접기 스위치가
+얹히고, 접힘 · 서랍 · 머무는 머리에 따라 선이 설 자리를 셸만 안다. 소비자가 슬롯 안에 `border-b` 를 넣게 하지 않는다.
+
+부족한 것은 **자리마다 끄는 길**이다. 두께 토큰이 `--tx-app-shell-border-width` 하나라 머리 아래 선만 끄면 좌우 패널 ·
+푸터 선도 같이 꺼진다 — usertics 는 "GNB 아래 선은 빼고 사이드 메뉴 옆 선은 남기고" 싶었다.
+
+```css
+/* 머리 아래 선만 끈다 — 패널 · 푸터는 그대로 1px */
+.tx-app-shell {
+  --tx-app-shell-header-border-width: 0;
+}
+
+/* 패널 선만 굵게 */
+.tx-app-shell {
+  --tx-app-shell-panel-border-width: 2px;
+}
+
+/* 지금처럼 한꺼번에 — 셋 다 이 값을 따른다 */
+.tx-app-shell {
+  --tx-app-shell-border-width: 0;
+}
+```
+
+| 토큰                                 | 기본                               | 자리                                            |
+| ------------------------------------ | ---------------------------------- | ----------------------------------------------- |
+| `--tx-app-shell-header-border-width` | `var(--tx-app-shell-border-width)` | 머리 아래 (`header` · `top` 을 담은 `<header>`) |
+| `--tx-app-shell-panel-border-width`  | `var(--tx-app-shell-border-width)` | 좌 · 우 · 아래 패널이 본문과 맞닿는 선          |
+| `--tx-app-shell-footer-border-width` | `var(--tx-app-shell-border-width)` | 푸터 위                                         |
+
+정한 것(합의).
+
+- **기본은 모두 공통 토큰을 따른다** — 이미 쓰는 화면은 하나도 바뀌지 않는다. 하단 탭바의 `--tx-app-shell-tab-bar-border-width` 가
+  이미 이 모양이다(공통값을 기본으로 따르고 따로 덮을 수 있다)
+- **두께만 나눈다. 색은 공통 하나로 둔다**(`--tx-app-shell-border-color`) — 자리마다 색을 달리 쓴 소비자가 없다. 필요해지면 같은 모양으로 연다
+- **패널은 하나로 묶는다** — 좌 · 우 · 아래를 따로 끄고 싶은 경우가 아직 없다. 패널마다 끄려면 `classNames.left` 등에 준 클래스에서
+  `--tx-app-shell-panel-border-width` 를 덮으면 된다(그 패널에만 걸린다)
+- **접기 스위치의 테두리는 따라가지 않는다** — 경계선이 아니라 그 단추의 것이다(지금과 같다)
+- **0 이면 자리도 차지하지 않는다** — 색이 아니라 두께라 1px 이 남지 않는다
+
 ### 여백 · 높이 · 색은 기본값을 두되 전부 변수로 연다 (고쳤다)
 
 **처음 문장은 "셸은 색·여백을 손대지 않는다" 였는데 사실이 아니었다.** 헤더 줄(`__bar`)에
@@ -294,16 +344,17 @@ footer                              footer
 다른 컴포넌트(`TxCard` · `TxModal` · `TxCollapsible` …)는 전부 **기본값 + 변수**다. 셸만 어긋나 있었으므로
 같은 방식으로 맞췄다. **기본값은 그대로라 이미 쓰는 화면은 바뀌지 않는다.**
 
-| 변수                            | 기본      | 자리                                        |
-| ------------------------------- | --------- | ------------------------------------------- |
-| `--tx-app-shell-bar-min-height` | `3.5rem`  | 헤더 줄의 최소 높이 — 내용이 크면 늘어난다  |
-| `--tx-app-shell-bar-padding`    | `0 1rem`  | 헤더 줄 여백                                |
-| `--tx-app-shell-bar-gap`        | `0.75rem` | 햄버거 ↔ `header` 슬롯 사이                 |
-| `--tx-app-shell-top-padding`    | `0 1rem`  | `top` 띠 여백                               |
-| `--tx-app-shell-main-padding`   | `1.5rem`  | 본문 여백 (원래 있던 것)                    |
-| `--tx-app-shell-header-bg`      | surface   | 머리 배경 (원래 있던 것)                    |
-| `--tx-app-shell-border-color`   | border    | 머리 · 패널 · footer 경계선 (원래 있던 것)  |
-| `--tx-app-shell-border-width`   | `1px`     | 같은 경계선의 두께 (settlemint 에서 더했다) |
+| 변수                                                          | 기본      | 자리                                              |
+| ------------------------------------------------------------- | --------- | ------------------------------------------------- |
+| `--tx-app-shell-bar-min-height`                               | `3.5rem`  | 헤더 줄의 최소 높이 — 내용이 크면 늘어난다        |
+| `--tx-app-shell-bar-padding`                                  | `0 1rem`  | 헤더 줄 여백                                      |
+| `--tx-app-shell-bar-gap`                                      | `0.75rem` | 햄버거 ↔ `header` 슬롯 사이                       |
+| `--tx-app-shell-top-padding`                                  | `0 1rem`  | `top` 띠 여백                                     |
+| `--tx-app-shell-main-padding`                                 | `1.5rem`  | 본문 여백 (원래 있던 것)                          |
+| `--tx-app-shell-header-bg`                                    | surface   | 머리 배경 (원래 있던 것)                          |
+| `--tx-app-shell-border-color`                                 | border    | 머리 · 패널 · footer 경계선 (원래 있던 것)        |
+| `--tx-app-shell-border-width`                                 | `1px`     | 같은 경계선의 두께 (settlemint 에서 더했다)       |
+| `--tx-app-shell-header-border-width` · `-panel-` · `-footer-` | 공통값    | 자리마다 끄는 두께 (usertics 에서 더했다 — 위 절) |
 
 `classNames` 에는 `bar` 를 더했다 — `header` 는 머리 전체(`bar` + `top`)의 겉이고, `bar` 는 그 안의 줄이다.
 **슬롯을 감싸는 자리의 여백 · 높이가 변수를 거치는지는 CSS 계약 테스트가 지킨다.**

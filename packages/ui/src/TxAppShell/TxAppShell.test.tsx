@@ -160,6 +160,47 @@ describe("TxAppShell — 랜드마크", () => {
   });
 });
 
+/**
+ * **머리 줄(`__bar`)은 담을 것이 있을 때만 그린다.** `top` 만 준 셸에서 빈 줄이 최소 높이 · 여백만큼
+ * 자리를 잡았다(usertics 적용에서 드러났다 — black-message 는 토큰을 0 으로 덮어 피해 갔다).
+ */
+describe("TxAppShell — 머리 줄", () => {
+  const bar = () => document.querySelector(".tx-app-shell__bar");
+
+  it("top 만 주면 머리 줄을 그리지 않는다", () => {
+    setViewport(false);
+    render(<TxAppShell top={<a href="/products">제품</a>}>본문</TxAppShell>);
+
+    expect(screen.getByRole("navigation", { name: "주 메뉴" })).toBeTruthy();
+    expect(bar()).toBeNull();
+  });
+
+  it("header 를 주면 머리 줄에 그린다", () => {
+    setViewport(false);
+    render(<TxAppShell header={<span>브랜드</span>}>본문</TxAppShell>);
+
+    expect(bar()?.textContent).toContain("브랜드");
+  });
+
+  it("좁은 화면에서 서랍이 있으면 header 가 없어도 ☰ 를 담아 그린다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell top={<a href="/products">제품</a>} left={<a href="/settings">설정</a>}>
+        본문
+      </TxAppShell>
+    );
+
+    expect(bar()?.querySelector(".tx-app-shell__menu")).toBeTruthy();
+  });
+
+  it("아무것도 없으면 머리 자체를 그리지 않는다", () => {
+    setViewport(false);
+    const { container } = render(<TxAppShell>본문</TxAppShell>);
+
+    expect(container.querySelector("header")).toBeNull();
+  });
+});
+
 describe("TxAppShell — 본문으로 건너뛰기", () => {
   /** 메뉴가 스무 줄이면 키보드로 본문에 닿는 데 스무 번을 눌러야 한다. */
   it("본문을 가리킨다", () => {
@@ -1107,14 +1148,35 @@ describe("TxAppShell — CSS 계약", () => {
     expect(fade).toMatch(/pointer-events:\s*none/);
   });
 
-  it("경계선 두께는 --tx-app-shell-border-width 하나이고 기본은 1px 이다", () => {
+  /**
+   * 경계선은 **자리마다 끈다** — 머리 · 패널 · 푸터가 각자의 두께 토큰을 읽고, 셋 다 공통 토큰을 기본으로 따른다.
+   * 공통 하나만 있을 때는 머리 아래 선만 끄면 패널 · 푸터 선도 같이 꺼졌다(usertics).
+   */
+  it("경계선 두께는 자리마다 토큰이고, 셋 다 공통 --tx-app-shell-border-width(1px)를 따른다", () => {
     const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";
-    const lines = [...css.matchAll(/(?<![\w-])border(?:-[a-z-]+)?:\s*([^;]*var\(--tx-app-shell-border-color\)[^;]*);/g)].map((match) => match[1]);
-
     expect(base).toMatch(/--tx-app-shell-border-width:\s*1px;/);
-    // 헤더 · 좌우 · 아래 패널 · 푸터 다섯 곳. 접기 스위치(단추 자신의 테두리)만 1px 그대로다
-    expect(lines.filter((value) => value.startsWith("var(--tx-app-shell-border-width)"))).toHaveLength(5);
-    expect(lines.filter((value) => !value.startsWith("var(--tx-app-shell-border-width)"))).toEqual(["1px solid var(--tx-app-shell-border-color)"]);
+    for (const slot of ["header", "panel", "footer"]) {
+      expect(base, slot).toMatch(new RegExp(`--tx-app-shell-${slot}-border-width:\\s*var\\(--tx-app-shell-border-width\\);`));
+    }
+
+    // 같은 선택자가 여러 블록에 나뉘어 있다 — 전부 모아 본다
+    const rule = (selector: string) => [...css.matchAll(new RegExp(`(?:^|[}\\s])${selector.replace(/[.]/g, "\\.")}\\s*\\{([^}]*)\\}`, "g"))].map((match) => match[1]).join("\n");
+    expect(rule(".tx-app-shell__header")).toMatch(/border-block-end:\s*var\(--tx-app-shell-header-border-width\) solid/);
+    expect(rule(".tx-app-shell__left")).toMatch(/border-inline-end:\s*var\(--tx-app-shell-panel-border-width\) solid/);
+    expect(rule(".tx-app-shell__right")).toMatch(/border-inline-start:\s*var\(--tx-app-shell-panel-border-width\) solid/);
+    expect(rule(".tx-app-shell__bottom")).toMatch(/border-block-start:\s*var\(--tx-app-shell-panel-border-width\) solid/);
+    expect(rule(".tx-app-shell__footer")).toMatch(/border-block-start:\s*var\(--tx-app-shell-footer-border-width\) solid/);
+
+    // 공통 토큰을 직접 읽는 선은 없다. 접기 스위치(단추 자신의 테두리)만 1px 그대로다
+    const lines = [...css.matchAll(/(?<![\w-])border(?:-[a-z-]+)?:\s*([^;]*var\(--tx-app-shell-border-color\)[^;]*);/g)].map((match) => match[1]);
+    expect(lines.filter((value) => value.startsWith("var(--tx-app-shell-border-width)"))).toEqual([]);
+    expect(lines.filter((value) => !/^var\(--tx-app-shell-(header|panel|footer)-border-width\)/.test(value))).toEqual(["1px solid var(--tx-app-shell-border-color)"]);
+  });
+
+  /** 패널 하나만 끄려면 그 패널에 준 클래스에서 덮는다 — 기본값을 패널 자신에 선언하면 그 덮기가 안 먹는다 */
+  it("자리별 두께의 기본값은 루트에만 선언한다 — 패널 · 머리에서 덮을 수 있게", () => {
+    const declared = [...css.matchAll(/([^{}]+)\{[^}]*--tx-app-shell-(?:header|panel|footer)-border-width:/g)].map((match) => match[1].trim());
+    expect(declared).toEqual([".tx-app-shell"]);
   });
 
   it("색을 하드코딩하지 않는다", () => {
