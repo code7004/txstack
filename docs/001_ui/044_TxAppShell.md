@@ -292,6 +292,15 @@ black-message 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padd
 이제 줄은 **`header` 가 있거나, 좁은 화면에서 서랍의 ☰ 가 설 때만** 그린다. `top` 은 그대로 줄 아래에 선다.
 `header` 를 주는 셸은 바뀌지 않는다.
 
+### 셸 안의 셸에 바깥 상태가 샜다 (2026-10-22, 고쳤다 · 문서 사이트에서 잡았다)
+
+**사이트 셸 안에 둔 예제 셸의 패널이 화면 높이만큼 늘었다.** 예제는 `panelSticky={false}` 였는데
+바깥 셸의 `.tx-app-shell[data-panel-sticky] :is(__left, __right)` 가 **자손 선택자라 안쪽 셸의 패널까지**
+붙이고 `100dvh` 높이를 주었다. `[data-sticky]` 의 머리 · `[data-narrow]` 의 오른쪽 패널도 같은 모양이었다.
+
+셸의 상태 속성에서 시작하는 규칙은 이제 **제 자식만 짚는다** — `> .tx-app-shell__header`,
+`> .tx-app-shell__body > :is(__left, __right)`. CSS 계약 테스트가 자손 선택자를 다시 못 쓰게 막는다.
+
 ### 경계선을 자리마다 끈다 — 머리 · 패널 · 푸터 (2026-10-22)
 
 **경계선 기본값(1px)은 그대로 둔다.** 셸의 선은 구조에 붙어 있다 — 좌우 패널의 선 위에 크기 손잡이 · 접기 스위치가
