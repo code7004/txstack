@@ -1188,6 +1188,16 @@ describe("TxAppShell — CSS 계약", () => {
     expect(css).toMatch(/\[data-panel-sticky\][^{]*__left[^{]*__right[^{]*\{[^}]*position:\s*sticky[^}]*inset-block-start:\s*var\(--tx-app-shell-panel-top\)[^}]*block-size:\s*calc\(100dvh - var\(--tx-app-shell-panel-top\)\)/);
   });
 
+  /**
+   * 문서 사이트의 예제가 그 모양이다 — 사이트 셸 안에 `panelSticky={false}` 인 셸을 두었더니 바깥의
+   * `[data-panel-sticky]` 가 안쪽 패널까지 붙여 상자 높이를 화면만큼 늘렸다.
+   */
+  it("셸의 상태 속성은 제 자식에게만 닿는다 — 셸 안에 셸을 두어도 바깥 상태가 새지 않는다", () => {
+    const selectors = [...css.matchAll(/([^{}]+)\{/g)].flatMap((match) => match[1].split(/,(?![^(]*\))/).map((part) => part.trim()));
+    const leaking = selectors.filter((selector) => /^\.tx-app-shell\[[^\s]*\]\s+(?!>)/.test(selector));
+    expect(leaking).toEqual([]);
+  });
+
   it("붙는 자리는 헤더가 붙어 있을 때만 헤더 높이이고, 숨거나 같이 굴러가면 0 이다", () => {
     expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-panel-top:\s*0px/);
     expect(css).toMatch(/\.tx-app-shell\[data-sticky\]\s*\{[^}]*--tx-app-shell-panel-top:\s*var\(--tx-app-shell-header-height/);

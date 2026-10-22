@@ -128,17 +128,17 @@
   background-color: var(--tx-app-shell-header-bg);
 }
 
-.tx-app-shell[data-sticky] .tx-app-shell__header {
+.tx-app-shell[data-sticky] > .tx-app-shell__header {
   position: sticky;
   inset-block-start: 0;
 }
 
 /** 내리면 숨고 올리면 나온다. 긴 글에서 화면을 돌려준다 */
-.tx-app-shell[data-sticky="hide"] .tx-app-shell__header {
+.tx-app-shell[data-sticky="hide"] > .tx-app-shell__header {
   transition: translate var(--tx-app-shell-duration) ease;
 }
 
-.tx-app-shell[data-sticky="hide"][data-hidden] .tx-app-shell__header {
+.tx-app-shell[data-sticky="hide"][data-hidden] > .tx-app-shell__header {
   translate: 0 -100%;
 }
 
@@ -215,7 +215,7 @@
   --tx-app-shell-panel-top: 0px;
 }
 
-.tx-app-shell[data-panel-sticky] :is(.tx-app-shell__left, .tx-app-shell__right) {
+.tx-app-shell[data-panel-sticky] > .tx-app-shell__body > :is(.tx-app-shell__left, .tx-app-shell__right) {
   position: sticky;
   inset-block-start: var(--tx-app-shell-panel-top);
   align-self: flex-start;
@@ -226,7 +226,7 @@
  * 헤더가 숨고 나올 때만 같은 속도로 따라간다. 붙어 있는 헤더에서 높이가 다시 재어지는 것
  * (글꼴이 늦게 와서, 가로 메뉴가 줄바꿈해서)은 움직임이 아니라 자리 맞춤이라 바로 옮긴다.
  */
-.tx-app-shell[data-sticky="hide"][data-panel-sticky] :is(.tx-app-shell__left, .tx-app-shell__right) {
+.tx-app-shell[data-sticky="hide"][data-panel-sticky] > .tx-app-shell__body > :is(.tx-app-shell__left, .tx-app-shell__right) {
   transition:
     inset-block-start var(--tx-app-shell-duration) ease,
     block-size var(--tx-app-shell-duration) ease;
@@ -293,7 +293,7 @@
 }
 
 /** 좁아지면 곁들이는 것부터 접는다. 본문이 먼저다 */
-.tx-app-shell[data-narrow] .tx-app-shell__right {
+.tx-app-shell[data-narrow] > .tx-app-shell__body > .tx-app-shell__right {
   display: none;
 }
 
@@ -448,11 +448,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tx-app-shell[data-sticky="hide"][data-panel-sticky] :is(.tx-app-shell__left, .tx-app-shell__right) {
+  .tx-app-shell[data-sticky="hide"][data-panel-sticky] > .tx-app-shell__body > :is(.tx-app-shell__left, .tx-app-shell__right) {
     transition: none;
   }
 
-  .tx-app-shell[data-sticky="hide"] .tx-app-shell__header {
+  .tx-app-shell[data-sticky="hide"] > .tx-app-shell__header {
     transition: none;
   }
 }
