@@ -64,6 +64,18 @@ export function Home() {
             </Link>
           </div>
 
+          {/* 큰 버튼을 늘리지 않고, 시작하기의 두 갈래로 바로 보내는 한 줄(docs/reports/2026-10-22 R2) */}
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            바로 시작 —{" "}
+            <Link to="/docs/start#a-first-screen-with-ui" className="underline">
+              UI로 첫 화면
+            </Link>{" "}
+            ·{" "}
+            <Link to="/docs/start#b-routes-and-menus" className="underline">
+              라우트와 메뉴
+            </Link>
+          </p>
+
           {/* 설치. 배포 전에는 복사 버튼 대신 지금 설치하는 길로 보낸다 — 배포 후 명령을 먼저 복사하면 실패한다 */}
           {PUBLISHED ? (
             <div className="flex w-full max-w-md min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
@@ -189,7 +201,7 @@ export function Home() {
             대시보드 · 계정 · 오류 로그를 묶은 운영 관리 화면. 검색 · 편집 · 저장 · 실패까지
           </LinkCard>
           <LinkCard to="/docs/tutorial" title="Tutorial">
-            네 패키지로 목록 화면 하나를 처음부터 만들어 앱으로 띄우기까지
+            ui · route-meta · hooks · axios 로 목록 화면 하나를 처음부터 만들어 앱으로 띄우기까지
           </LinkCard>
           <LinkCard to="/docs/start" title="Getting Started">
             필요한 패키지를 고르고 설치해 첫 화면을 띄우기

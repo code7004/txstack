@@ -136,6 +136,14 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
 [009 · 사이트 재검수와 후속 개선 작업안](009_site_followup_review.md)에 정리했다.
 다음 사이트 작업은 009의 실행 환경 안내 수정부터 진행한다. 구현 진행 상태는 이 문서에서 관리한다.
 
+- [x] **UI · 라우트 사용 편의 검수 반영**(2026-10-22, [reports/2026-10-22](reports/2026-10-22-ui-route-site-review.md)) —
+      R1 홈 「입력과 폼」 · 「창과 피드백」에 결과/코드 탭(코드는 실물 파일을 `?raw` 로) 과 「부품이 맡는 것 / 앱이 하는 것」 ·
+      R2 · R4 · R5 Getting Started 를 공통 준비(1~3) 뒤 **A. UI 로 첫 화면** · **B. 라우트와 메뉴** 두 갈래로 나누고, 홈에 두 갈래로 가는 한 줄.
+      B 의 네 파일은 `scripts/verify-packages/route-start` 이고 사이트가 그 파일을 그대로 보인다 — **CI 가 새 앱에 설치해 타입 검사 · 빌드한다**
+      (`pnpm verify:packages route-start`). 브라우저에서도 한 번 띄워 `/` → `/members`, 메뉴 · 경로가 함께 바뀌는 것을 확인했다 ·
+      R3 홈 route 데모를 결과 → 코드 순서로(DOM 순서째) · R6 Footer 에 fns, 실습 문구에 쓰는 패키지를 명시.
+      **남은 것** — R7(홈 데모의 `UNSAFE_LocationContext`): route-meta 에 순수 함수 `getBreadcrumbs(tree, pathname)` 을 둘지 S1 부터 정한다
+
 Profile의 공개용 콘텐츠·화면 구성·대표 프로젝트 연결 계획은
 [010 · Profile 구축 계획](<010 profile.md>)에서 구체화한다.
 확정한 공개용 문구와 확인 내역은 [011 · Profile 공개용 콘텐츠 초안](011_profile_content.md)에 있고,

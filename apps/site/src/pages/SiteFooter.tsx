@@ -5,7 +5,8 @@ const PACKAGES = [
   ["@txstack/ui", "/api/ui"],
   ["@txstack/route-meta", "/api/route-meta"],
   ["@txstack/hooks", "/api/hooks"],
-  ["@txstack/axios", "/api/axios"]
+  ["@txstack/axios", "/api/axios"],
+  ["@txstack/fns", "/api/fns"]
 ] as const;
 
 const DOCS = [

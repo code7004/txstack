@@ -16,7 +16,7 @@ const muted = "text-slate-600 dark:text-slate-300";
  */
 export function Tutorial() {
   return (
-    <Page title="Tutorial" lead="회원 목록 화면 하나를 처음부터 끝까지 만듭니다. 네 패키지를 모두 쓰고, 완성된 화면은 이 페이지에서 직접 써 볼 수 있습니다.">
+    <Page title="Tutorial" lead="회원 목록 화면 하나를 처음부터 끝까지 만듭니다. ui · route-meta · hooks · axios 네 패키지를 쓰고, 완성된 화면은 이 페이지에서 직접 써 볼 수 있습니다.">
       <TxAlert variant="info" title="이 화면을 만듭니다">
         검색, 목록, 페이지 이동, 회원 등록, 삭제 확인, 알림이 있는 화면입니다. 맨 아래에 <strong>그대로 붙여 넣을 수 있는 전체 코드</strong>가 있습니다.
       </TxAlert>
@@ -26,7 +26,7 @@ export function Tutorial() {
           <Link to="/docs/start" className="underline">
             Getting Started
           </Link>
-          를 마친 React 앱에서 시작합니다. 이번에는 네 패키지와 함께 <code>react-router-dom</code>, <code>axios</code>가 필요하고, 화면 배치에 쓴 Tailwind도 설치합니다.
+          를 마친 React 앱에서 시작합니다. 이번에는 이 네 패키지와 함께 <code>react-router-dom</code>, <code>axios</code>가 필요하고, 화면 배치에 쓴 Tailwind도 설치합니다.
         </p>
         <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios`}</CodeBlock>
         <PrePublishNote />
