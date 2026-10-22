@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { TxAlert, TxAppShell, TxButton, TxCard, TxFlex, TxGrid, TxNavBar, TxSideNav } from "@txstack/ui";
+import { TxAlert, TxAppShell, TxButton, TxCard, TxFlex, TxGrid, TxNavBar, TxSideNav, type TxAppShellProps } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
 
@@ -54,6 +54,58 @@ function ShellDemo() {
   );
 }
 
+const PANEL_OPTIONS = [
+  ["resize", "끌어서 크기를 바꿉니다. true면 기본 한계로, { min, max }로 한계를 직접 정할 수도 있습니다"],
+  ["collapse", "경계선 가운데에 접기 스위치를 둡니다"],
+  ["defaultSize", "처음 크기(px). 주지 않으면 CSS 기본값을 씁니다"],
+  ["defaultCollapsed", "처음부터 접힌 채로 시작합니다"],
+  ["size · collapsed", "크기와 접힘을 앱이 직접 쥡니다. 주면 셸은 기억하지 않고 이 값을 따릅니다"]
+];
+
+type PanelChange = Parameters<NonNullable<TxAppShellProps["onPanelChange"]>>;
+
+/** 좌 · 우 · 아래 패널을 모두 켠 셸. 끌고 접어 보면 마지막으로 온 onPanelChange 가 아래에 찍힌다. */
+function PanelsDemo() {
+  const [span, setSpan] = useState<"main" | "screen">("main");
+  const [last, setLast] = useState<{ slot: PanelChange[0] } & PanelChange[1]>();
+
+  return (
+    <div className="flex flex-col gap-2">
+      <TxFlex className="items-center text-sm">
+        <span className="text-slate-600 dark:text-slate-300">bottomSpan</span>
+        {(["main", "screen"] as const).map((value) => (
+          <TxButton key={value} label={`"${value}"`} variant={span === value ? "primary" : "secondary"} aria-pressed={span === value} onClick={() => setSpan(value)} />
+        ))}
+      </TxFlex>
+
+      {/* 패널 셋에 본문까지 들어가야 하므로 좁은 화면에서는 상자 안에서 가로로 굴린다 */}
+      <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
+        <TxAppShell
+          panelSticky={false}
+          breakpoint={360}
+          bottomSpan={span}
+          className="min-w-[36rem]"
+          header={<strong className="px-1 text-sm">Console</strong>}
+          left={<div className="p-3 text-sm">left</div>}
+          right={<div className="p-3 text-sm">right</div>}
+          bottom={<div className="p-3 font-mono text-xs">bottom — 로그 · 콘솔 자리</div>}
+          panels={{
+            left: { resize: true, collapse: true, defaultSize: 160 },
+            right: { resize: { min: 120, max: 260 }, collapse: true, defaultSize: 140 },
+            bottom: { resize: { min: 60 }, collapse: true, defaultSize: 90 }
+          }}
+          onPanelChange={(slot, change) => change.settled && setLast({ slot, ...change })}
+          style={{ minBlockSize: 0, blockSize: "24rem" }}
+        >
+          <div className="p-4 text-sm text-slate-600 dark:text-slate-300">경계선을 끌어 크기를 바꾸고, 경계선 가운데의 스위치로 접어 보세요. 본문은 남는 만큼을 갖습니다.</div>
+        </TxAppShell>
+      </div>
+
+      <code className="text-xs text-slate-500 dark:text-slate-400">{last ? `onPanelChange("${last.slot}", { size: ${last.size ?? "undefined"}, collapsed: ${last.collapsed}, settled: true })` : "onPanelChange — 끌거나 접으면 여기에 찍힙니다"}</code>
+    </div>
+  );
+}
+
 export function GuideLayout() {
   return (
     <Page title="Layout" lead="화면 틀은 TxAppShell이 잡고, 각 영역에 무엇을 넣을지는 앱이 정합니다.">
@@ -86,6 +138,77 @@ export function GuideLayout() {
 
       <Block title="Try it">
         <ShellDemo />
+      </Block>
+
+      <Block title="Resize and collapse panels">
+        <p className="text-slate-600 dark:text-slate-300">
+          <code>left</code> · <code>right</code> · <code>bottom</code> 세 패널은 <code>panels</code> 하나로 <strong>끌어서 크기를 바꾸고, 접었다 펼 수 있습니다.</strong> 자리마다 켜고 싶은 것만 적으면 되고, 본문은 패널이 쓰고 남은 만큼을 갖습니다.
+        </p>
+
+        <SideBySide>
+          <CodeBlock title="AppShell.tsx">{`<TxAppShell
+  left={<SideNav />}
+  right={<Inspector />}
+  bottom={<Console />}
+  panels={{
+    left: { resize: true, collapse: true, defaultSize: 280 },
+    right: { resize: { min: 200, max: 520 }, collapse: true, defaultCollapsed: true },
+    bottom: { resize: { min: 100 }, collapse: true }
+  }}
+>
+  <Outlet />
+</TxAppShell>`}</CodeBlock>
+
+          <div className="flex flex-col gap-2 text-sm">
+            {PANEL_OPTIONS.map(([option, what]) => (
+              <div key={option} className="flex gap-3">
+                <code className="min-w-32 shrink-0 text-xs">{option}</code>
+                <span className="text-slate-600 dark:text-slate-300">{what}</span>
+              </div>
+            ))}
+          </div>
+        </SideBySide>
+
+        <PanelsDemo />
+
+        <ul className="flex list-disc flex-col gap-1 ps-5 text-slate-600 dark:text-slate-300">
+          <li>
+            <strong>접으면 패널이 완전히 사라지고</strong> 스위치만 남습니다. 다시 펴면 접기 전 크기로 돌아옵니다. 접힌 패널의 내용은 그리지 않으므로, 보이지 않는 링크에 Tab이 닿지 않습니다.
+          </li>
+          <li>
+            크기는 기본 <code>120px</code> 아래로 줄지 않습니다. <code>max</code>를 주지 않아도 본문이 가로 <code>240px</code>(아래 패널이면 세로 <code>160px</code>)은 남도록 셸이 조입니다.
+          </li>
+          <li>
+            손잡이는 키보드로도 움직입니다. 포커스를 두고 화살표로 16px씩, <code>Home</code> · <code>End</code>로 끝까지 옮깁니다.
+          </li>
+          <li>
+            아래 패널의 폭은 <code>bottomSpan</code>이 정합니다. <code>&quot;main&quot;</code>(기본)은 좌우 패널을 비켜 본문 폭만, <code>&quot;screen&quot;</code>은 좌우까지 덮는 전체 폭입니다.
+          </li>
+          <li>
+            <code>resize</code>를 켜지 않은 패널의 크기는 CSS 변수로 정합니다 — <code>--tx-app-shell-left-width</code> · <code>--tx-app-shell-right-width</code> · <code>--tx-app-shell-bottom-height</code>.
+          </li>
+        </ul>
+
+        <SideBySide>
+          <CodeBlock title="크기와 접힘을 기억하려면">{`const saved = JSON.parse(localStorage.getItem("shell") ?? "{}");
+
+<TxAppShell
+  left={<SideNav />}
+  panels={{ left: { resize: true, collapse: true, defaultSize: saved.size, defaultCollapsed: saved.collapsed } }}
+  onPanelChange={(slot, { size, collapsed, settled }) => {
+    // 끄는 동안에는 settled: false 로 계속 옵니다 — 손을 뗐을 때만 저장
+    if (settled) localStorage.setItem("shell", JSON.stringify({ size, collapsed }));
+  }}
+/>`}</CodeBlock>
+          <TxAlert variant="info" title="저장은 앱이 합니다">
+            어디에 남길지(localStorage, 서버, 사용자 설정)는 앱마다 달라서 TxAppShell은 저장하지 않습니다. <code>onPanelChange</code>로 받아 두었다가 다음에 <code>defaultSize</code> · <code>defaultCollapsed</code>로 돌려주세요.
+          </TxAlert>
+        </SideBySide>
+
+        <TxAlert variant="info" title="스위치를 앱이 그리려면">
+          <code>collapse</code> 없이 <code>collapsed</code>만 주면 경계선에 스위치가 생기지 않고, 접힘은 앱의 상태를 따릅니다. 헤더의 버튼처럼 다른 자리에서 패널을 여닫을 때 씁니다. 좁은 화면에서 서랍으로 들어간 <code>left</code>에는 손잡이도
+          스위치도 없습니다.
+        </TxAlert>
       </Block>
 
       <Block title="Drawer menu on narrow screens">
