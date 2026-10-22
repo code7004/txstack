@@ -337,6 +337,51 @@ describe("TxDayPickerRange — 기간 고르기", () => {
     expect(dayButton("9").disabled).toBe(true);
   });
 
+  /**
+   * **사람이 누르는 순서 그대로** 본다. 라이브러리는 첫 클릭을 "하루짜리 기간"(`10일 ~ 10일`)으로 준다 —
+   * 그걸 끝까지 정해진 기간으로 읽으면 `maxDays` 가 한 번도 걸리지 않았다(시작을 `defaultValue` 로 넣은 테스트는 못 잡았다).
+   */
+  it("첫 클릭은 시작만 정한다 — 그 뒤 maxDays 를 넘는 날은 눌리지 않는다", () => {
+    const onChange = vi.fn();
+    render(<TxDayPickerRange defaultValue={[new Date(2026, 7, 1), new Date(2026, 7, 2)]} maxDays={5} onChange={onChange} />);
+
+    open();
+    fireEvent.click(dayButton("10"));
+    expect(onChange).toHaveBeenLastCalledWith([new Date(2026, 7, 10), undefined]);
+    expect(trigger().textContent).toContain("2026-08-10 ~");
+    expect(dayButton("14").disabled).toBe(false);
+    expect(dayButton("15").disabled).toBe(true);
+  });
+
+  it("두 번째 클릭이 끝을 정한다", () => {
+    const onChange = vi.fn();
+    render(<TxDayPickerRange defaultValue={[new Date(2026, 7, 1), new Date(2026, 7, 2)]} maxDays={5} onChange={onChange} />);
+
+    open();
+    fireEvent.click(dayButton("10"));
+    fireEvent.click(dayButton("12"));
+    expect(onChange).toHaveBeenLastCalledWith([startOfDay(new Date(2026, 7, 10)), endOfDay(new Date(2026, 7, 12))]);
+  });
+
+  it("기간이 정해진 뒤 누르면 새 시작이다 — 끝을 늘이지 않는다", () => {
+    const onChange = vi.fn();
+    render(<TxDayPickerRange defaultValue={[new Date(2026, 7, 10), new Date(2026, 7, 12)]} maxDays={5} onChange={onChange} />);
+
+    open();
+    fireEvent.click(dayButton("25"));
+    expect(onChange).toHaveBeenLastCalledWith([new Date(2026, 7, 25), undefined]);
+  });
+
+  it("같은 날을 두 번 누르면 하루짜리 기간이다", () => {
+    const onChange = vi.fn();
+    render(<TxDayPickerRange onChange={onChange} defaultValue={[new Date(2026, 7, 1), new Date(2026, 7, 2)]} />);
+
+    open();
+    fireEvent.click(dayButton("10"));
+    fireEvent.click(dayButton("10"));
+    expect(onChange).toHaveBeenLastCalledWith([startOfDay(new Date(2026, 7, 10)), endOfDay(new Date(2026, 7, 10))]);
+  });
+
   it("기간이 다 정해지면 다시 아무 날이나 고를 수 있다", () => {
     render(<TxDayPickerRange {...between(new Date(2026, 7, 10), new Date(2026, 7, 12))} maxDays={5} />);
 
@@ -351,6 +396,98 @@ describe("TxDayPickerRange — 기간 고르기", () => {
     // 0번은 여는 트리거, 1번이 지우기다.
     fireEvent.click(screen.getAllByRole("button")[1]);
     expect(onChange).toHaveBeenCalledWith([undefined, undefined]);
+  });
+});
+
+/**
+ * 고를 수 있는 범위. "오늘까지만" 처럼 **고르는 손을 막는다** — 값은 고치지 않는다.
+ * HTML `<input type="date" min max>` 와 같은 뜻이다(양 끝 포함, 날짜 단위).
+ */
+describe("min · max — 고를 수 있는 범위", () => {
+  const between = (from: Date, to: Date) => ({ defaultValue: [from, to] as [Date, Date] });
+  const navButtons = () => [...document.querySelectorAll<HTMLButtonElement>(".tx-daypicker__nav-button")];
+
+  it("범위 밖의 날은 눌리지 않고, 양 끝 날은 눌린다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} min={new Date(2026, 7, 10)} max={new Date(2026, 7, 20)} />);
+
+    open();
+    expect(dayButton("9").disabled).toBe(true);
+    expect(dayButton("10").disabled).toBe(false);
+    expect(dayButton("20").disabled).toBe(false);
+    expect(dayButton("21").disabled).toBe(true);
+  });
+
+  it("시각은 보지 않는다 — 그날 저녁을 줘도 그날은 고를 수 있다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} min={new Date(2026, 7, 10, 18, 30)} max={new Date(2026, 7, 20, 0, 5)} />);
+
+    open();
+    expect(dayButton("10").disabled).toBe(false);
+    expect(dayButton("20").disabled).toBe(false);
+  });
+
+  it("범위 밖의 달로는 넘어가지 않는다", () => {
+    render(<TxDayPicker defaultValue={new Date(2026, 7, 15)} min={new Date(2026, 7, 1)} max={new Date(2026, 7, 31)} />);
+
+    open();
+    // 라이브러리가 넘기기 버튼을 aria-disabled 로 끈다(누르면 아무 일도 없다)
+    const [prev, next] = navButtons();
+    expect(prev!.getAttribute("aria-disabled")).toBe("true");
+    expect(next!.getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("고른 것이 없고 오늘이 범위 밖이면 범위 안의 달로 연다", () => {
+    const { unmount } = render(<TxDayPicker max={new Date(2020, 2, 10)} />);
+    open();
+    expect(shownMonths()).toEqual(["2020-03"]);
+    unmount();
+
+    render(<TxDayPicker min={new Date(2099, 4, 1)} />);
+    open();
+    expect(shownMonths()).toEqual(["2099-05"]);
+  });
+
+  it("값은 고치지 않는다 — 범위 밖의 value 도 그대로 보이고 onChange 는 오지 않는다", () => {
+    const onChange = vi.fn();
+    render(<TxDayPicker value={new Date(2026, 7, 25)} max={new Date(2026, 7, 20)} onChange={onChange} />);
+
+    expect(trigger().textContent).toContain("2026-08-25");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("기간 — maxDays 와 함께 주면 둘 다 건다", () => {
+    // 10일부터 10일이면 19일까지지만, max 가 15일이다
+    render(<TxDayPickerRange defaultValue={[new Date(2026, 7, 10), undefined]} maxDays={10} max={new Date(2026, 7, 15)} />);
+
+    open();
+    // 두 달이 모두 범위 안에 들도록 7월 · 8월을 편다 — 8월은 둘째 달이다
+    expect(shownMonths()).toEqual(["2026-07", "2026-08"]);
+    expect(dayButton("9", 1).disabled).toBe(true);
+    expect(dayButton("15", 1).disabled).toBe(false);
+    expect(dayButton("16", 1).disabled).toBe(true);
+  });
+
+  it("기간 — 다 정해진 뒤에도 min · max 는 남는다", () => {
+    render(<TxDayPickerRange {...between(new Date(2026, 7, 10), new Date(2026, 7, 12))} maxDays={5} max={new Date(2026, 7, 20)} />);
+
+    open();
+    expect(dayButton("18", 1).disabled).toBe(false);
+    expect(dayButton("25", 1).disabled).toBe(true);
+  });
+
+  it("기간 — 두 달을 펴 놓아도 범위 밖으로 넘기지 않는다", () => {
+    render(<TxDayPickerRange {...between(new Date(2026, 7, 10), new Date(2026, 7, 12))} max={new Date(2026, 8, 30)} />);
+
+    open();
+    expect(shownMonths()).toEqual(["2026-08", "2026-09"]);
+    expect(navButtons()[1]!.getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("기간 — ref.setValue 로 넣은 범위 밖 기간은 그대로 둔다(프리셋이 범위를 지키는 것은 앱의 몫)", () => {
+    const ref = createRef<TxDayPickerRangeRef>();
+    render(<TxDayPickerRange ref={ref} max={new Date(2026, 7, 20)} />);
+
+    act(() => ref.current!.setValue([new Date(2026, 7, 18), new Date(2026, 7, 25)]));
+    expect(ref.current!.getValue()[1]?.getDate()).toBe(25);
   });
 });
 

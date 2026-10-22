@@ -163,6 +163,27 @@ export const MaxDays: StoryObj = {
 };
 
 /**
+ * **고를 수 있는 범위 — `min` · `max`.** 그 밖의 날은 눌리지 않고, 그 밖의 달로는 넘어가지 않는다.
+ * 양 끝 날은 고를 수 있다(HTML `<input type="date" min max>` 와 같다).
+ *
+ * 위: 오늘까지만(`max={new Date()}`) · 아래: 이번 달 안에서, 최대 7일
+ */
+export const MinMax: StoryObj = {
+  name: "고를 수 있는 범위",
+  parameters: noControls,
+  render: () => {
+    const today = new Date();
+    return (
+      <div className="flex flex-col gap-3">
+        <TxDayPickerRange className="w-72" max={today} placeholder="오늘까지만" />
+        <TxDayPicker className="w-72" min={new Date(today.getFullYear(), today.getMonth(), 1)} max={new Date(today.getFullYear(), today.getMonth() + 1, 0)} placeholder="이번 달 안에서" />
+        <TxDayPickerRange className="w-72" min={new Date(today.getFullYear(), today.getMonth(), 1)} max={new Date(today.getFullYear(), today.getMonth() + 1, 0)} maxDays={7} numberOfMonths={1} placeholder="이번 달 안에서, 최대 7일" />
+      </div>
+    );
+  }
+};
+
+/**
  * **확인 버튼 모드.** 고치는 동안에는 아무것도 오지 않고, 버튼을 눌러야 한 번 온다.
  *
  * 확인하지 않고 닫으면 열기 전 상태로 되돌아간다.

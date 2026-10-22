@@ -7,7 +7,7 @@
 | 진입점      | `@txstack/ui/daypicker` — 서브패스. peer `react-day-picker`         |
 | 내보내는 것 | `TxDayPicker, TxDayPickerRange`                                     |
 | 소스        | [`packages/ui/src/TxDayPicker/`](../../packages/ui/src/TxDayPicker) |
-| 테스트      | 44개                                                                |
+| 테스트      | 57개                                                                |
 
 ## 개발 목적
 
@@ -31,14 +31,55 @@ import { TxDayPicker } from "@txstack/ui/daypicker";
 
 기간을 고르려면 `TxDayPickerRange` 를 쓴다.
 
+### 고를 수 있는 범위 — `min` · `max`
+
+usertics 적용 준비에서 나왔다. 그 앱의 기간 고르기는 **미래 날짜를 막는다**(`disabled={{ after: new Date() }}`, 22 화면).
+지금 txstack 에는 `disabled: boolean`(통째로 끄기)과 `maxDays`(기간 길이)뿐이라, 옮기면 미래가 골라진다.
+
+```tsx
+// 오늘까지만 — 미래 날짜는 눌리지 않는다
+<TxFormDayPickerRange caption="기간" max={new Date()} maxDays={92} value={range} onChange={setRange} />
+
+// 날짜 하나도 같다
+<TxDayPicker min={new Date(2024, 0, 1)} max={new Date()} value={date} onChange={setDate} />
+```
+
+| prop  | 하는 일                                                                               |
+| ----- | ------------------------------------------------------------------------------------- |
+| `min` | 이 날보다 **앞**은 눌리지 않는다. 그날은 고를 수 있다(날짜 단위 — 시각은 보지 않는다) |
+| `max` | 이 날보다 **뒤**는 눌리지 않는다. 그날은 고를 수 있다                                 |
+
+정한 것(2026-10-22 합의).
+
+- **이름은 `min` · `max`** — HTML `<input type="date" min max>` 와 같은 이름 · 같은 뜻(양 끝 포함)이다
+- **달 넘기기도 막는다** — 범위 밖의 달로는 넘어가지 않는다. 오늘이 끝이면 다음 달 버튼이 꺼진다
+- **펴 놓는 달도 범위 안으로 당긴다** — 고른 것이 없고 오늘이 범위 밖이면 범위 안의 달로 연다.
+  두 달을 펴 놓을 때는 **두 달 모두 범위 안에 들게** 첫 달을 당긴다(`max` 가 8월이면 7월 · 8월)
+- **`maxDays` 와 함께 쓰면 둘 다 건다** — 시작일을 고르면 `maxDays` 로 좁혀지고, 그 안에서도 `max` 를 넘지 않는다
+- **값은 고치지 않는다** — `value` 나 `ref.setValue`(프리셋 버튼)로 범위 밖 날짜가 들어와도 그대로 보인다.
+  고르는 손만 막는다. 프리셋이 범위를 지키는 것은 앱의 몫이다
+- **임의 규칙(주말 · 공휴일 막기)은 이번에 하지 않는다** — 필요가 생기면 `isDayDisabled?: (date: Date) => boolean`
+  처럼 함수로 연다. `react-day-picker` 의 `Matcher` 타입을 공개 API 로 내보내지 않는다(그 라이브러리 버전에 묶인다)
+
 ## 개발 항목
 
 - [x] **구현** — `packages/ui/src/TxDayPicker/`
-- [x] **테스트** — 44개
+- [x] **테스트** — 57개 (`min` · `max` 9개, 누르는 순서 4개)
 - [x] **스토리** — `TxDayPicker.stories.tsx`
 - [x] **CSS 계약 테스트** — 토큰 · 다크 분기 없음 · `styles.css` 적재 · `@layer tx`
 
 ## 정한 것 · 고친 것
+
+### 기간은 두 번 눌러 정한다 — `maxDays` 가 실제 클릭에서 안 걸렸다 (2026-10-22)
+
+Storybook 에서 「최대 7일」 인데 7일을 넘겨 골라졌다. `react-day-picker` 는 **첫 클릭을 하루짜리 기간**(`10일 ~ 10일`)으로
+주는데, 그걸 끝까지 정해진 기간으로 읽어서 "시작만 고른 순간" 이 없었다 — `maxDays` 는 그 순간에만 걸리므로 한 번도
+걸리지 않았다. 정해진 기간에서 다시 누르면 라이브러리가 **끝을 늘여** 몇 달짜리 기간도 됐다.
+테스트는 시작을 `defaultValue` 로 넣어서 이 길을 지나지 않았다.
+
+이제 라이브러리가 주는 기간을 쓰지 않고 **누른 날만** 본다. 시작을 기다리는 중이 아니면 누른 날이 새 시작이고,
+기다리는 중이면 끝이다(시작보다 앞을 누르면 앞뒤를 바로잡는다). 같은 날을 두 번 누르면 하루짜리 기간이다.
+테스트도 사람이 누르는 순서 그대로 넣었다.
 
 빌드 산출물에서 잰 값이다.
 

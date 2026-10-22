@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { clampFirstMonth } from "./TxDayPicker.bounds";
 import { startOfMonth } from "./TxDayPicker.utils";
 
 /** `first` 부터 `count` 달을 펴 놓았을 때, 그 안에 보이는 달인가. */
@@ -18,9 +19,13 @@ const isVisible = (target: Date, first: Date, count: number) => target >= first 
  *
  * **달력 안에서 고른 것은 화면을 옮기지 않는다.** 이미 보이는 달이라 2번에 걸리지 않는다 —
  * 두 달을 펴 놓고 오른쪽 달에서 시작일을 고를 때 화면이 옆으로 밀리면 고르던 자리가 사라진다.
+ *
+ * `min` · `max` 를 주면 **펴 놓는 달을 그 범위 안으로 당긴다** — "오늘까지만" 인데 아직 고른 것이 없는
+ * 달력을 열면, 오늘이 범위 밖일 때 고를 수 없는 달이 펴진다.
  */
-export function useVisibleMonth(anchor: Date | undefined, open: boolean, numberOfMonths = 1) {
-  const [month, setMonth] = useState(() => startOfMonth(anchor ?? new Date()));
+export function useVisibleMonth(anchor: Date | undefined, open: boolean, numberOfMonths = 1, min?: Date, max?: Date) {
+  const fit = (target: Date) => clampFirstMonth(target, numberOfMonths, min, max);
+  const [month, setMonth] = useState(() => fit(startOfMonth(anchor ?? new Date())));
 
   /**
    * 값과 열림이 바뀌었는지 **렌더 중에** 본다. effect 로 미루면 다시 열 때 한 프레임 동안
@@ -34,8 +39,8 @@ export function useVisibleMonth(anchor: Date | undefined, open: boolean, numberO
 
     const target = anchor && startOfMonth(anchor);
 
-    if (open && !prev.open) setMonth(target ?? startOfMonth(new Date()));
-    else if (target && !isVisible(target, month, numberOfMonths)) setMonth(target);
+    if (open && !prev.open) setMonth(fit(target ?? startOfMonth(new Date())));
+    else if (target && !isVisible(target, month, numberOfMonths)) setMonth(fit(target));
   }
 
   return [month, setMonth] as const;

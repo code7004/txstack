@@ -53,10 +53,10 @@ import "@txstack/ui/styles.css";
 | 007  | [`TxTextarea`](007_TxTextarea.md)                | 여러 줄 입력                                        | 29     |
 | 008  | [`TxCheckBox`](008_TxCheckBox.md)                | 고르는 자리                                         | 32     |
 | 009  | [`TxCapsLockCheck`](009_TxCapsLockCheck.md)      | 비밀번호를 칠 때 Caps Lock 이 켜져 있으면 알려 준다 | 22     |
-| 010  | [`TxDropdown`](010_TxDropdown.md)                | 하나를 고르는 드롭다운                              | 41     |
+| 010  | [`TxDropdown`](010_TxDropdown.md)                | 하나를 고르는 드롭다운                              | 44     |
 | 011  | [`TxPopup`](011_TxPopup.md) _(내부)_             | 앵커에 붙어 뜨는 층                                 | 0      |
 | 012  | [`TxCombobox`](012_TxCombobox.md)                | 직접 쳐 넣으면서 후보도 고르는 입력창               | 35     |
-| 013  | [`TxDayPicker`](013_TxDayPicker.md) `/daypicker` | 날짜 하나를 고른다                                  | 44     |
+| 013  | [`TxDayPicker`](013_TxDayPicker.md) `/daypicker` | 날짜 하나를 고른다                                  | 57     |
 | 014  | [`TxForm`](014_TxForm.md)                        | 폼 한 줄을 짜는 계층                                | 39     |
 | 015  | [`TxAgGrid`](015_TxAgGrid.md) `/aggrid`          | ag-grid 위에 목록 화면에서 늘 하는 일을 얹은 표     | 48     |
 | 016  | [`TxPagination`](016_TxPagination.md)            | 쪽 번호                                             | 29     |
