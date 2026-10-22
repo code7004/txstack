@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, NavLink } from "react-router-dom";
-import { RouteTreeRenderer, buildRouteObjects, getNavRoutes, useCurrentRoute, type RouteTree } from "@txstack/route-meta";
+import { RouteTreeRenderer, buildRouteObjects, getBreadcrumbs, getNavRoutes, useCurrentRoute, type RouteTree } from "@txstack/route-meta";
 import { useObjectState } from "@txstack/hooks/useObjectState";
 import { useUrlQuery } from "@txstack/hooks/useUrlQuery";
 import { TxSideNav } from "@txstack/ui";
@@ -24,6 +24,9 @@ const routes = {
 
 // 라우터에 붙일 객체도 만들 수 있어야 한다
 export const routeObjects = buildRouteObjects(routes);
+
+// 라우터 밖에서 주소 하나로 경로 칸을 만들 수 있어야 한다
+export const crumbs: { key: string; path: string }[] = getBreadcrumbs(routes, "/admin/members", "/admin");
 
 function App() {
   const menu = getNavRoutes(routes, (permissions) => permissions.includes("admin"));

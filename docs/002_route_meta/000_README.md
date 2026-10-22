@@ -20,12 +20,12 @@ RouteTree (단일 출처)
    ├─ buildRouteObjects   → React Router 의 RouteObject[]
    ├─ getNavRoutes  → GNB / 사이드 메뉴
    ├─ useCurrentRoute → 현재 위치
-   └─ useBreadcrumbs  → 브레드크럼 칸 목록 (TxBreadcrumb 의 items)
+   └─ useBreadcrumbs  → 브레드크럼 칸 목록 (TxBreadcrumb 의 items) — 라우터 밖에서는 getBreadcrumbs
 ```
 
 ## 개발 리스트
 
-**6개가 끝났다. 테스트 38개.** 번호는 트리를 선언하고 쓰는 차례다.
+**7개가 끝났다. 테스트 49개.** 번호는 트리를 선언하고 쓰는 차례다.
 
 | 번호 | 무엇                                            | 하는 일                                  | 테스트        |
 | ---- | ----------------------------------------------- | ---------------------------------------- | ------------- |
@@ -35,6 +35,7 @@ RouteTree (단일 출처)
 | 004  | [`useCurrentRoute`](004_useCurrentRoute.md)     | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8             |
 | 005  | [`RouteTreeRenderer`](005_RouteTreeRenderer.md) | 002 를 감싼 얇은 포장                    | —             |
 | 006  | [`useBreadcrumbs`](006_useBreadcrumbs.md)       | 지금까지 온 길 — 브레드크럼 칸 목록      | 12            |
+| 007  | [`getBreadcrumbs`](007_getBreadcrumbs.md)       | 006 의 순수 함수판 — 라우터 밖에서       | 11 (node)     |
 
 ## 두 계층의 필터 규칙이 다르다
 
@@ -63,7 +64,7 @@ RouteTree (단일 출처)
 
 ## 검증
 
-테스트 38개.
+테스트 49개.
 
 - `utils.test.ts` 18개 — **node 환경**에서 돈다. 두 함수가 DOM 없이 동작한다는 증거다.
   마지막 둘은 **타입 단정**이다 — 트리를 `satisfies` 로 붙였을 때 키가 리터럴로 남는지를

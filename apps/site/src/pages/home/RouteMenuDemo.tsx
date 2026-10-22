@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Link, NavigationType, UNSAFE_LocationContext } from "react-router-dom";
-import { getNavRoutes, useBreadcrumbs, type Breadcrumb, type NavRoute, type RouteTree } from "@txstack/route-meta";
+import { Link } from "react-router-dom";
+import { getBreadcrumbs, getNavRoutes, type Breadcrumb, type NavRoute, type RouteTree } from "@txstack/route-meta";
 import { TxBreadcrumb, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 
@@ -9,11 +9,11 @@ import { CodeBlock } from "../../components/CodeBlock";
  *
  * 결과 옆(좁으면 아래)의 코드는 그 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열도 경로 칸도 따로 적어 두지 않는다.
  * - 메뉴: `getNavRoutes(tree, canAccess)` → TxNavBar · TxSideNav
- * - 경로: `useBreadcrumbs(tree)` → TxBreadcrumb `items`
+ * - 경로: `getBreadcrumbs(tree, path)` → TxBreadcrumb `items` (앱에서는 같은 규칙의 `useBreadcrumbs(tree)`)
  *
  * 사이트는 이미 라우터 안이라 라우터를 하나 더 두지 않는다. 그래서 메뉴는 링크 대신 버튼이고, 주소는 이 판 안의
- * 상태다 — 시연을 눌러도 사이트의 주소와 메뉴는 그대로다. `useBreadcrumbs` 는 주소를 라우터에서 읽으므로
- * **이 판 안에서만 주소를 바꿔 끼운다**(`LocationContext`). 앱에서는 이 자리가 필요 없다.
+ * 상태다 — 시연을 눌러도 사이트의 주소와 메뉴는 그대로다. 주소를 상태로 들고 있으므로 경로는 그 주소를 받는
+ * `getBreadcrumbs` 로 만든다 — 라우터의 내부를 건드리지 않는다.
  */
 
 const base = {
@@ -81,15 +81,9 @@ const linesWith = (source: string, needle: string) =>
     .map((line, index) => (line.includes(needle) ? index + 1 : 0))
     .filter(Boolean);
 
-/** 이 판 안의 주소를 라우터의 지금 주소로 준다. 사이트의 주소는 건드리지 않는다 */
-function DemoLocation({ path, children }: { path: string; children: ReactNode }) {
-  const value = useMemo(() => ({ location: { pathname: path, search: "", hash: "", state: null, key: path }, navigationType: NavigationType.Pop }), [path]);
-  return <UNSAFE_LocationContext.Provider value={value}>{children}</UNSAFE_LocationContext.Provider>;
-}
-
-/** 경로 칸. 앱에서 쓰는 한 줄 그대로다 — 칸을 적지 않는다. 바뀐 칸에만 표식을 단다 */
-function DemoCrumbs({ tree, mark, go }: { tree: RouteTree; mark: (crumb: Breadcrumb) => ReactNode; go: (path: string) => void }) {
-  const crumbs = useBreadcrumbs(tree).map((crumb) => ({ ...crumb, label: mark(crumb) }));
+/** 경로 칸. 칸을 적지 않는다 — 이 판의 주소로 트리에서 만든다. 바뀐 칸에만 표식을 단다 */
+function DemoCrumbs({ tree, path, mark, go }: { tree: RouteTree; path: string; mark: (crumb: Breadcrumb) => ReactNode; go: (path: string) => void }) {
+  const crumbs = getBreadcrumbs(tree, path).map((crumb) => ({ ...crumb, label: mark(crumb) }));
   return (
     <>
       <TxBreadcrumb items={crumbs} itemAs="button" itemProps={(item) => ({ className: "cursor-pointer hover:underline", onClick: () => item.path && go(item.path) })} style={{ "--tx-breadcrumb-font-size": "1rem" } as React.CSSProperties} />
@@ -188,10 +182,8 @@ export function RouteMenuDemo() {
               <TxSideNav aria-label="샘플 사이드바">{menu.map(sideItem)}</TxSideNav>
             </div>
             <div className="flex flex-col gap-2 p-4">
-              <Slot name="경로" from="useBreadcrumbs" />
-              <DemoLocation path={shown}>
-                <DemoCrumbs tree={tree} mark={(crumb) => `${markOf(crumb.key)}${crumb.label}`} go={setPath} />
-              </DemoLocation>
+              <Slot name="경로" from="getBreadcrumbs" />
+              <DemoCrumbs tree={tree} path={shown} mark={(crumb) => `${markOf(crumb.key)}${crumb.label}`} go={setPath} />
               <p className="font-mono text-xs text-slate-500 dark:text-slate-400">{shown}</p>
             </div>
           </div>

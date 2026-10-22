@@ -1,5 +1,5 @@
-import type { RouteObject } from "react-router-dom";
-import type { NavRoute, RouteHandle, RouteNode, RouteTree } from "./types";
+import { matchRoutes, type RouteObject } from "react-router-dom";
+import type { Breadcrumb, NavRoute, RouteHandle, RouteNode, RouteTree } from "./types";
 
 /**
  * 정의 계층(`RouteTree`)을 React Router 실행 계층(`RouteObject[]`)으로 변환한다.
@@ -81,4 +81,54 @@ export function getNavRoutes(tree: RouteTree, canAccess: CanAccess = DENY_RESTRI
     const children = node.children ? getNavRoutes(node.children, canAccess) : [];
     return [children.length ? { ...item, children } : item];
   });
+}
+
+/**
+ * 트리마다 라우터 형식은 한 번만 만든다. 트리 객체를 키로 기억하므로 트리는 모듈 상수로 둔다 —
+ * 렌더마다 새 트리를 만들면 그때마다 다시 바꾼다(틀리지는 않고 느릴 뿐이다).
+ */
+const routeObjectsByTree = new WeakMap<RouteTree, RouteObject[]>();
+
+function routeObjectsOf(tree: RouteTree) {
+  let routes = routeObjectsByTree.get(tree);
+  if (!routes) routeObjectsByTree.set(tree, (routes = buildRouteObjects(tree)));
+  return routes;
+}
+
+/** 끝 `/` 를 뗀다. `matchRoutes` 는 index · 부모와 같은 경로의 자식에 `/user/` 를 준다. 루트 `/` 는 그대로 둔다. */
+const trimTrailingSlash = (path: string) => (path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path);
+
+/**
+ * 주소 하나로 경로 칸을 만든다. **라우터 밖에서 쓴다** — 시연 · 렌더 전 · 서버 · 테스트.
+ * 라우터 안이라면 지금 주소를 읽는 `useBreadcrumbs` 가 이것을 부른다.
+ *
+ * ```ts
+ * getBreadcrumbs(routes, "/user/dormant");            // 유저관리 / 휴면유저
+ * getBreadcrumbs(routes, location.pathname, "/admin"); // 라우터에 basename 을 줬다면 같은 값을
+ * ```
+ *
+ * - `meta.breadcrumb: false` 인 노드는 빠진다(아래 칸은 남는다). 레이아웃만 맡는 루트에 준다
+ * - `meta.label` 이 없는 노드는 빠진다. 키는 식별자라 화면에 내지 않는다
+ * - **바로 앞 칸과 주소가 같으면 앞 칸을 남긴다.** index 는 부모의 기본 화면이라 부모 이름이 그 자리 이름이다
+ * - `hidden` · `permissions` 는 보지 않는다. 메뉴의 규칙이지 경로의 규칙이 아니다
+ * - 쿼리 · 조각(`?page=2#top`)은 보지 않는다. 매칭이 없으면 빈 배열이다
+ *
+ * 매칭은 react-router 의 `matchRoutes` 에 맡긴다 — 화면에 그려지는 라우트와 늘 같은 노드가 나온다.
+ * **부를 때마다 새 배열이다.**
+ */
+export function getBreadcrumbs(tree: RouteTree, pathname: string, basename?: string): Breadcrumb[] {
+  const crumbs: Breadcrumb[] = [];
+
+  for (const match of matchRoutes(routeObjectsOf(tree), pathname, basename) ?? []) {
+    const handle = match.route.handle as RouteHandle | undefined;
+    const meta = handle?.node.meta;
+    if (!handle || meta?.breadcrumb === false || !meta?.label) continue;
+
+    const path = trimTrailingSlash(match.pathname);
+    if (crumbs.at(-1)?.path === path) continue;
+
+    crumbs.push({ key: handle.key, path, label: meta.label, meta });
+  }
+
+  return crumbs;
 }

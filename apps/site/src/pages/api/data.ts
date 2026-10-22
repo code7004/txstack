@@ -240,7 +240,7 @@ export const TABLES = {
     installEntry: {
       section: "Install",
       searchable: true,
-      rows: [["@txstack/route-meta", "buildRouteObjects · getNavRoutes · useCurrentRoute · useBreadcrumbs · RouteTreeRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[]
+      rows: [["@txstack/route-meta", "buildRouteObjects · getNavRoutes · useCurrentRoute · useBreadcrumbs · getBreadcrumbs · RouteTreeRenderer · 타입", "react >=18 · react-router-dom >=6", "진입점은 하나입니다"]] as Row[]
     },
     pathroutenode: {
       section: "RouteTree",
@@ -335,7 +335,7 @@ export const TABLES = {
         ["NavRoute", "{ key, path, meta?, children? }", "", "getNavRoutes의 결과 한 칸"],
         ["CanAccess", "(permissions, node) => boolean", "", "권한 판정 함수"],
         ["CurrentRoute", "{ node, meta, matches, params, pathname }", "", "useCurrentRoute의 결과"],
-        ["Breadcrumb", "{ key, path, label, meta? }", "", "useBreadcrumbs의 결과 한 칸. TxBreadcrumb의 items가 그대로 받습니다"],
+        ["Breadcrumb", "{ key, path, label, meta? }", "", "useBreadcrumbs · getBreadcrumbs의 결과 한 칸. TxBreadcrumb의 items가 그대로 받습니다"],
         ["RouteHandle", "{ node: RouteNode, key: string }", "", "buildRouteObjects가 각 라우트의 handle에 싣는 값. matchRoutes 결과에서 원래 노드와 키를 찾을 때 씁니다"]
       ] as Row[]
     }
