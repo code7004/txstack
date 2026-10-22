@@ -1,10 +1,9 @@
-import { getNavRoutes, useCurrentRoute, type NavRoute, type RouteTree } from "@txstack/route-meta";
-import { TxAlert, TxBreadcrumb, TxNavBar, TxSideNav, TxSwitch } from "@txstack/ui";
+import { getNavRoutes, type NavRoute, type RouteTree } from "@txstack/route-meta";
+import { TxAlert, TxNavBar, TxSideNav, TxSwitch } from "@txstack/ui";
 import { useState, type ReactNode } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
-import { routes } from "../../routes";
 
 const muted = "text-slate-600 dark:text-slate-300";
 
@@ -31,29 +30,6 @@ const SAMPLE = {
     }
   }
 } satisfies RouteTree;
-
-/** 이 페이지의 위치. 사이트의 진짜 트리에서 읽는다 */
-function CurrentPlace() {
-  const { matches } = useCurrentRoute(routes);
-  const chain = matches.filter((node) => node.meta?.label);
-
-  return (
-    <TxBreadcrumb>
-      <TxBreadcrumb.Item as={Link} to="/">
-        Home
-      </TxBreadcrumb.Item>
-      {chain.map((node, index) =>
-        index < chain.length - 1 && node.path ? (
-          <TxBreadcrumb.Item key={node.path} as={NavLink} to={node.path}>
-            {node.meta?.label}
-          </TxBreadcrumb.Item>
-        ) : (
-          <TxBreadcrumb.Item key={index}>{node.meta?.label}</TxBreadcrumb.Item>
-        )
-      )}
-    </TxBreadcrumb>
-  );
-}
 
 /** 권한을 켜고 끄면 메뉴가 바뀐다. 판정은 앱이 넘기는 함수 하나다 */
 function PermissionDemo() {
@@ -191,23 +167,23 @@ export function GuideRouting() {
       title="Routing & Menu"
       lead={
         <>
-          라우트를 한 곳에 선언하면 라우터, 메뉴, 현재 위치 표시가 모두 거기서 만들어집니다. <code>@txstack/route-meta</code>를 사용합니다.
+          라우트를 한 곳에 선언하면 라우터, 메뉴(GNB · 사이드바), 경로 표시(브레드크럼)가 모두 거기서 만들어집니다. <code>@txstack/route-meta</code>를 사용합니다.
         </>
       }
     >
       <Block title="Why one route tree">
         <p className={muted}>라우트 정의와 메뉴 정의를 따로 관리하면, 주소를 하나 바꿀 때 두 곳을 고쳐야 합니다. 한 곳을 잊으면 메뉴가 없는 페이지를 가리키게 됩니다. 라우트 트리 하나만 두고 나머지는 모두 거기서 만들면 이런 일이 생기지 않습니다.</p>
         <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`routes (라우트 트리)
- ├─ buildRouteObjects   → 라우터에 넘길 라우트 목록
- ├─ getNavRoutes  → 메뉴
- └─ useCurrentRoute → 현재 위치 (경로 표시, 탭 제목)`}</CodeBlock>
+ ├─ buildRouteObjects → 라우터에 넘길 라우트 목록
+ ├─ getNavRoutes      → 메뉴 (GNB · 사이드바)
+ ├─ useBreadcrumbs    → 경로 표시 (브레드크럼)
+ └─ useCurrentRoute   → 지금 화면 (탭 제목)`}</CodeBlock>
       </Block>
 
       <Block title="This site is the example">
-        <p className={muted}>이 사이트의 위쪽 메뉴, 왼쪽 메뉴, 메뉴에 마우스를 올리면 펼쳐지는 사이트 지도, 브라우저 탭 제목이 모두 라우트 트리 하나에서 만들어집니다. 아래 경로 표시도 같은 트리에서 지금 위치를 읽은 것입니다.</p>
-        <Demo>
-          <CurrentPlace />
-        </Demo>
+        <p className={muted}>
+          이 사이트의 위쪽 메뉴, 왼쪽 메뉴, 메뉴에 마우스를 올리면 펼쳐지는 사이트 지도, <strong>이 페이지 맨 위의 경로 표시</strong>, 브라우저 탭 제목이 모두 라우트 트리 하나에서 만들어집니다. 메뉴 이름을 바꾸면 이 다섯 곳이 함께 바뀝니다.
+        </p>
       </Block>
 
       <Block title="1. Declare routes">
@@ -215,8 +191,8 @@ export function GuideRouting() {
           화면마다 주소(<code>path</code>), 화면(<code>element</code>), 메뉴에 보일 정보(<code>meta</code>)를 함께 적습니다. 하위 화면은 <code>children</code>에 넣습니다.
         </p>
         <p className={muted}>
-          관리 화면은 보통 <strong>로그인 화면</strong>과, 헤더 · 메뉴를 그리는 <strong>셸 아래의 화면들</strong>로 나뉩니다. 셸 라우트(<code>app</code>)는 메뉴에 보이지 않게 <code>hidden</code>으로 두고, 메뉴는 그 <code>children</code>에서
-          만듭니다(3단계).
+          관리 화면은 보통 <strong>로그인 화면</strong>과, 헤더 · 메뉴를 그리는 <strong>셸 아래의 화면들</strong>로 나뉩니다. 셸 라우트(<code>app</code>)는 메뉴에 보이지 않게 <code>hidden</code>으로, 경로 표시에도 나오지 않게{" "}
+          <code>breadcrumb: false</code>로 두고, 메뉴는 그 <code>children</code>에서 만듭니다(3단계).
         </p>
         <CodeBlock title="src/routes.tsx">{`import type { RouteTree } from "@txstack/route-meta";
 import { Navigate, Outlet } from "react-router-dom";
@@ -227,7 +203,7 @@ export const routes = {
   app: {
     path: "/",
     element: <AppShell />,                                        // 헤더 · 메뉴 · <Outlet /> 을 그리는 셸
-    meta: { label: "앱", hidden: true },
+    meta: { label: "앱", hidden: true, breadcrumb: false },       // 메뉴에도 경로 표시에도 나오지 않는다
     children: {
       home: { index: true, element: <Navigate to="/dashboard" replace /> },
       dashboard: { path: "/dashboard", element: <Dashboard />, meta: { label: "대시보드" } },
@@ -354,15 +330,29 @@ export function Gnb() {
 
       <Block title="4. Show the current location">
         <p className={muted}>
-          <code>useCurrentRoute</code>는 지금 주소에 맞는 라우트와, 맨 위부터 이어지는 경로(<code>matches</code>)를 돌려줍니다. 경로 표시나 탭 제목을 만들 때 씁니다.
+          <code>useBreadcrumbs</code>가 지금 주소까지 온 길을 칸 목록으로 돌려주고, <code>TxBreadcrumb</code>이 <code>items</code>로 그대로 받습니다. 화면마다 칸을 적지 않습니다 — 한 번 감싸 두고 화면에는 prop 없이 놓습니다.
         </p>
-        <CodeBlock title="src/Breadcrumb.tsx">{`const { matches } = useCurrentRoute(routes);
+        <CodeBlock title="src/PageBreadcrumb.tsx">{`import { useBreadcrumbs } from "@txstack/route-meta";
+import { TxBreadcrumb } from "@txstack/ui";
+import { NavLink } from "react-router-dom";
 
-<TxBreadcrumb>
-  {matches.map((node) => (
-    <TxBreadcrumb.Item key={node.path} as={NavLink} to={node.path}>{node.meta?.label}</TxBreadcrumb.Item>
-  ))}
-</TxBreadcrumb>`}</CodeBlock>
+export const PageBreadcrumb = () => <TxBreadcrumb items={useBreadcrumbs(routes)} itemAs={NavLink} />;
+
+// /members/42 에서 → 회원 / 회원 상세`}</CodeBlock>
+        <ul className={`flex list-disc flex-col gap-1 ps-5 ${muted}`}>
+          <li>
+            셸처럼 레이아웃만 맡는 라우트는 <code>breadcrumb: false</code>로 뺍니다. 그 칸만 빠지고 아래 칸은 남습니다
+          </li>
+          <li>
+            <code>hidden</code>은 메뉴의 규칙이라 경로에는 영향이 없습니다 — 메뉴에 없는 상세 화면(<code>회원 상세</code>)도 경로에는 나옵니다
+          </li>
+          <li>
+            상위 메뉴와 주소가 같은 첫 화면(<code>index</code>)은 상위 칸 하나로 합쳐집니다
+          </li>
+          <li>
+            탭 제목처럼 지금 화면 하나만 필요하면 <code>useCurrentRoute(routes).meta</code>를 씁니다
+          </li>
+        </ul>
       </Block>
 
       <Block title="5. Filter the menu by permission">

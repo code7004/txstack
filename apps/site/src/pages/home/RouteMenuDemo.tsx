@@ -1,18 +1,19 @@
-import { useMemo, useState } from "react";
-import { Link, matchRoutes } from "react-router-dom";
-import { buildRouteObjects, getNavRoutes, type NavRoute, type RouteHandle, type RouteNode, type RouteTree } from "@txstack/route-meta";
+import { useMemo, useState, type ReactNode } from "react";
+import { Link, NavigationType, UNSAFE_LocationContext } from "react-router-dom";
+import { getNavRoutes, useBreadcrumbs, type Breadcrumb, type NavRoute, type RouteTree } from "@txstack/route-meta";
 import { TxBreadcrumb, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
 
 /**
- * **라우트 트리 하나로 GNB 와 사이드바를 함께 그린다**(docs/008 4.5).
+ * **라우트 트리 하나로 GNB · 사이드바 · 경로 표시를 함께 그린다**(docs/008 4.5).
  *
- * 왼쪽 코드는 오른쪽 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열을 따로 적어 두지 않는다.
+ * 왼쪽 코드는 오른쪽 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열도 경로 칸도 따로 적어 두지 않는다.
  * - 메뉴: `getNavRoutes(tree, canAccess)` → TxNavBar · TxSideNav
- * - 지금 화면: `buildRouteObjects(tree)` 를 react-router 의 `matchRoutes` 에 넣어 찾는다
+ * - 경로: `useBreadcrumbs(tree)` → TxBreadcrumb `items`
  *
  * 사이트는 이미 라우터 안이라 라우터를 하나 더 두지 않는다. 그래서 메뉴는 링크 대신 버튼이고, 주소는 이 판 안의
- * 상태다 — 시연을 눌러도 사이트의 주소와 메뉴는 그대로다.
+ * 상태다 — 시연을 눌러도 사이트의 주소와 메뉴는 그대로다. `useBreadcrumbs` 는 주소를 라우터에서 읽으므로
+ * **이 판 안에서만 주소를 바꿔 끼운다**(`LocationContext`). 앱에서는 이 자리가 필요 없다.
  */
 
 const base = {
@@ -80,6 +81,33 @@ const linesWith = (source: string, needle: string) =>
     .map((line, index) => (line.includes(needle) ? index + 1 : 0))
     .filter(Boolean);
 
+/** 이 판 안의 주소를 라우터의 지금 주소로 준다. 사이트의 주소는 건드리지 않는다 */
+function DemoLocation({ path, children }: { path: string; children: ReactNode }) {
+  const value = useMemo(() => ({ location: { pathname: path, search: "", hash: "", state: null, key: path }, navigationType: NavigationType.Pop }), [path]);
+  return <UNSAFE_LocationContext.Provider value={value}>{children}</UNSAFE_LocationContext.Provider>;
+}
+
+/** 경로 칸. 앱에서 쓰는 한 줄 그대로다 — 칸을 적지 않는다. 바뀐 칸에만 표식을 단다 */
+function DemoCrumbs({ tree, mark, go }: { tree: RouteTree; mark: (crumb: Breadcrumb) => ReactNode; go: (path: string) => void }) {
+  const crumbs = useBreadcrumbs(tree).map((crumb) => ({ ...crumb, label: mark(crumb) }));
+  return (
+    <>
+      <TxBreadcrumb items={crumbs} itemAs="button" itemProps={(item) => ({ className: "cursor-pointer hover:underline", onClick: () => item.path && go(item.path) })} style={{ "--tx-breadcrumb-font-size": "1rem" } as React.CSSProperties} />
+      <h4 className="text-lg font-semibold">{crumbs.at(-1)?.label}</h4>
+    </>
+  );
+}
+
+/** 오른쪽 판의 자리 이름. 무엇이 트리에서 나왔는지 짚는다 */
+const Slot = ({ name, from }: { name: string; from: string }) => (
+  <span className="inline-flex shrink-0 items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
+    <span className="rounded px-1 font-semibold" style={{ backgroundColor: "color-mix(in oklab, var(--tx-color-primary) 15%, transparent)", color: "var(--tx-color-primary-strong)" }}>
+      {name}
+    </span>
+    <code>{from}</code>
+  </span>
+);
+
 /** 묶음은 첫 자식 화면으로 간다 */
 const firstLeaf = (item: NavRoute): string => (item.children?.length ? firstLeaf(item.children[0]!) : item.path);
 
@@ -91,32 +119,27 @@ export function RouteMenuDemo() {
   const tree = preset.tree;
   // 같은 트리에서 메뉴와 라우트를 함께 만든다
   const menu = useMemo(() => getNavRoutes(tree, (permissions) => permissions.includes(role)), [tree, role]);
-  const routeObjects = useMemo(() => buildRouteObjects(tree), [tree]);
 
   // 메뉴에 남아 있는 화면인가. 권한으로 빠졌으면 첫 메뉴의 화면을 보인다(상태는 그대로 두고 보이는 값만)
   const inMenu = (items: NavRoute[], target: string): boolean => items.some((item) => item.path === target || (!!item.children && inMenu(item.children, target)));
   const shown = inMenu(menu, path) ? path : menu[0] ? firstLeaf(menu[0]) : path;
-
-  // 지금 화면 — 라우터가 하는 매칭 그대로. 바깥 묶음부터 지금 화면까지의 사슬이 경로 표시가 된다
-  const matches = matchRoutes(routeObjects, shown) ?? [];
-  const trail = matches.map((match) => (match.route.handle as RouteHandle | undefined)?.node).filter((node): node is RouteNode => !!node?.meta?.label);
-  const current = trail.at(-1);
 
   // 무엇이 바뀌었는지 — 코드의 그 줄, 두 메뉴의 그 항목, 한 줄 안내가 함께 가리킨다
   const { added, renamed } = changesOf(tree);
   const source = `export const routes = {\n${toSource(tree)}\n} satisfies RouteTree;`;
   const marked = [...added.flatMap((key) => linesWith(source, `${key}: {`)), ...renamed.flatMap((key) => linesWith(source, `label: "${tree[key]!.meta?.label}"`)), ...(role === "viewer" ? linesWith(source, "permissions:") : [])];
   /** 바뀐 메뉴는 이름 앞에 표식을 단다(＋ 더함 · ✎ 이름 바꿈). 색이 아니라 글자로 보인다 */
-  const labelOf = (item: NavRoute) => `${added.includes(item.key) ? "＋ " : renamed.includes(item.key) ? "✎ " : ""}${item.meta?.label ?? item.key}`;
+  const markOf = (key: string) => (added.includes(key) ? "＋ " : renamed.includes(key) ? "✎ " : "");
+  const labelOf = (item: NavRoute) => `${markOf(item.key)}${item.meta?.label ?? item.key}`;
   const nameOf = (key: string) => tree[key]?.meta?.label ?? key;
   const status =
     role === "viewer"
       ? '뷰어로 보면 permissions가 "admin"인 설정 메뉴가 GNB와 사이드바에서 함께 빠집니다. 메뉴만 거르는 것이고, 주소로 들어오는 것을 막는 일은 앱과 서버가 합니다.'
       : added.length
-        ? `코드에 ${added.join(", ")} 항목을 더했더니 GNB와 사이드바에 “＋ ${added.map(nameOf).join(", ")}”가 함께 생겼습니다.`
+        ? `코드에 ${added.join(", ")} 항목을 더했더니 GNB와 사이드바에 “＋ ${added.map(nameOf).join(", ")}”가 함께 생겼습니다. 눌러 보면 경로도 따라옵니다.`
         : renamed.length
           ? `label 하나를 “${renamed.map(nameOf).join(", ")}”로 바꿨더니 GNB · 사이드바 · 경로 표시가 함께 바뀌었습니다(✎ 표시).`
-          : "설정을 바꿔 보세요. 코드 한 곳이 바뀌면 GNB와 사이드바가 함께 바뀝니다.";
+          : "설정을 바꿔 보세요. 코드 한 곳이 바뀌면 GNB · 사이드바 · 경로가 함께 바뀝니다.";
 
   const go = (item: NavRoute) => setPath(firstLeaf(item));
   const here = (item: NavRoute) => (shown === item.path || shown.startsWith(`${item.path}/`) ? "page" : undefined);
@@ -150,9 +173,10 @@ export function RouteMenuDemo() {
           {source}
         </CodeBlock>
 
-        {/* 같은 트리로 그린 작은 앱. 라우터 대신 이 판의 상태가 주소다 */}
-        <div className="flex flex-col overflow-hidden rounded-lg border h-full" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
-          <div className="border-b px-2" style={{ borderColor: "var(--tx-color-border)" }}>
+        {/* 같은 트리로 그린 작은 앱. 라우터 대신 이 판의 상태가 주소다. 세 자리에 무엇이 그렸는지 이름을 붙인다 */}
+        <div className="flex h-full flex-col overflow-hidden rounded-lg border" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+          <div className="flex items-center gap-2 border-b px-2" style={{ borderColor: "var(--tx-color-border)" }}>
+            <Slot name="GNB" from="getNavRoutes" />
             <TxNavBar aria-label="샘플 상단 메뉴">
               {menu.map((item) => (
                 <TxNavBar.Item key={item.key} label={labelOf(item)} as="button" type="button" aria-current={here(item)} onClick={() => go(item)} />
@@ -160,32 +184,30 @@ export function RouteMenuDemo() {
             </TxNavBar>
           </div>
           <div className="flex min-h-56 flex-1 flex-col sm:flex-row">
-            <div className="border-b p-2 sm:w-40 sm:shrink-0 sm:border-e sm:border-b-0" style={{ borderColor: "var(--tx-color-border)" }}>
+            <div className="flex flex-col gap-1 border-b p-2 sm:w-44 sm:shrink-0 sm:border-e sm:border-b-0" style={{ borderColor: "var(--tx-color-border)" }}>
+              <Slot name="사이드바" from="getNavRoutes" />
               <TxSideNav aria-label="샘플 사이드바">{menu.map(sideItem)}</TxSideNav>
             </div>
-            <div className="flex flex-col gap-1 p-4">
-              <TxBreadcrumb>
-                {trail.map((node, index) => (
-                  <TxBreadcrumb.Item key={node.path} current={index === trail.length - 1}>
-                    {node.meta?.label}
-                  </TxBreadcrumb.Item>
-                ))}
-              </TxBreadcrumb>
-              <h4 className="text-lg font-semibold">{current?.meta?.label}</h4>
+            <div className="flex flex-col gap-2 p-4">
+              <Slot name="경로" from="useBreadcrumbs" />
+              <DemoLocation path={shown}>
+                <DemoCrumbs tree={tree} mark={(crumb) => `${markOf(crumb.key)}${crumb.label}`} go={setPath} />
+              </DemoLocation>
               <p className="font-mono text-xs text-slate-500 dark:text-slate-400">{shown}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <CodeBlock title="App.tsx — 연결 부분만 발췌">{`// 같은 트리 하나에서
-const router = buildRouteObjects(routes);                                  // → useRoutes(router) 또는 <RouteTreeRenderer tree={routes} />
-const menu = getNavRoutes(routes, (perms) => perms.includes(role));  // → 메뉴 데이터
+      <CodeBlock title="App.tsx — 연결 부분만 발췌">{`// 같은 트리 하나에서 세 가지
+const router = buildRouteObjects(routes);                           // 라우터  → useRoutes(router)
+const menu = getNavRoutes(routes, (perms) => perms.includes(role));   // 메뉴    → GNB · 사이드바
 
-<TxNavBar>{menu.map((item) => <TxNavBar.Item key={item.key} label={item.meta?.label} as={NavLink} to={item.path} />)}</TxNavBar>
-<TxSideNav>{menu.map(sideItem)}</TxSideNav>   // sideItem: 자식이 있으면 펼치는 묶음, 없으면 링크`}</CodeBlock>
+<TxNavBar>{menu.map(barItem)}</TxNavBar>
+<TxSideNav>{menu.map(sideItem)}</TxSideNav>
+<TxBreadcrumb items={useBreadcrumbs(routes)} itemAs={NavLink} />     // 경로    → 칸을 적지 않는다`}</CodeBlock>
       <p className="text-sm text-slate-500 dark:text-slate-400">
-        위 두 코드는 메뉴를 보이려고 줄인 발췌입니다 — 화면(<code>element</code>)과 <code>role</code> · <code>sideItem</code> 정의가 빠져 있습니다. 그대로 돌아가는 완성 코드는{" "}
+        위 두 코드는 줄인 발췌입니다 — 화면(<code>element</code>)과 <code>role</code> · <code>barItem</code> · <code>sideItem</code> 정의가 빠져 있습니다. 그대로 돌아가는 완성 코드는{" "}
         <Link to="/example/routes" className="underline">
           Example › Routes
         </Link>

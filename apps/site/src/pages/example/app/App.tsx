@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouteTreeRenderer, getNavRoutes, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
+import { RouteTreeRenderer, getNavRoutes, useBreadcrumbs, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
 import { TxAppShell, TxBreadcrumb, TxButton, TxSideNav } from "@txstack/ui";
 import { TxAgGridProvider } from "@txstack/ui/aggrid";
 import { AllCommunityModule, ModuleRegistry, colorSchemeDarkBlue, themeQuartz } from "ag-grid-community";
@@ -39,9 +39,9 @@ export function App() {
   // 권한 판정은 앱이 정합니다. 라이브러리는 판정 함수만 받습니다 — 뷰어로 바꾸면 "관리" 묶음이 빠집니다
   const menu = getNavRoutes(routes, (permissions) => permissions.includes(role));
 
-  // 지금 위치. matches 는 바깥 묶음부터 지금 화면까지의 사슬이라 그대로 경로 표시가 됩니다
-  const { meta, matches } = useCurrentRoute(routes);
-  const trail = matches.filter((node) => node.meta?.label);
+  // 지금 화면(제목 · 탭 제목)과 지금까지 온 길(경로 표시). 둘 다 같은 트리에서 나옵니다
+  const { meta } = useCurrentRoute(routes);
+  const crumbs = useBreadcrumbs(routes);
 
   useEffect(() => {
     document.title = meta?.label ? `${meta.label} — 운영 관리` : "운영 관리";
@@ -69,17 +69,8 @@ export function App() {
           <main className="flex flex-col gap-4 p-6">
             {meta?.label && (
               <header className="flex flex-col gap-1">
-                <TxBreadcrumb>
-                  {trail.map((node, index) =>
-                    index < trail.length - 1 ? (
-                      <TxBreadcrumb.Item key={node.path} as={NavLink} to={node.path!}>
-                        {node.meta?.label}
-                      </TxBreadcrumb.Item>
-                    ) : (
-                      <TxBreadcrumb.Item key={node.path}>{node.meta?.label}</TxBreadcrumb.Item>
-                    )
-                  )}
-                </TxBreadcrumb>
+                {/* 칸을 적지 않습니다 — 운영 / 대시보드. 마지막 칸(지금 화면)은 링크가 아닙니다 */}
+                <TxBreadcrumb items={crumbs} itemAs={NavLink} />
                 <h1 className="text-2xl font-semibold">{meta.label}</h1>
                 <p className="text-sm text-slate-500 dark:text-slate-400">{meta.description}</p>
               </header>

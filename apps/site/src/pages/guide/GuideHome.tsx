@@ -12,7 +12,7 @@ const DESIGN = [
 ];
 
 const APP = [
-  { to: "/docs/guide/routing", title: "Routing & Menu", pkg: "route-meta", what: "라우트를 한 곳에 선언하고 메뉴, 현재 위치, 권한별 메뉴를 만듭니다" },
+  { to: "/docs/guide/routing", title: "Routing & Menu", pkg: "route-meta", what: "라우트를 한 곳에 선언하고 GNB · 사이드바 · 브레드크럼 · 권한별 메뉴를 만듭니다" },
   { to: "/docs/guide/url-state", title: "URL State", pkg: "hooks", what: "검색어, 필터, 페이지 같은 목록 조건을 주소에 담습니다" },
   { to: "/docs/guide/http-client", title: "HTTP Client", pkg: "axios", what: "토큰, 401 처리, 오류 메시지를 한 곳에 모은 API 클라이언트를 만듭니다" }
 ];

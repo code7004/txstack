@@ -7,7 +7,7 @@ import { ErrorLogsScreen } from "../error-logs/ErrorLogsScreen";
 
 /**
  * **앱의 화면은 이 트리 하나가 정합니다.** 라우터 등록(RouteTreeRenderer), 왼쪽 메뉴(getNavRoutes),
- * 지금 위치(useCurrentRoute)가 모두 여기서 나옵니다. 화면을 더하려면 이 트리에 한 줄을 더합니다.
+ * 경로 표시(useBreadcrumbs), 화면 제목(useCurrentRoute)이 모두 여기서 나옵니다. 화면을 더하려면 이 트리에 한 줄을 더합니다.
  *
  * - `children` 이 있는 노드는 메뉴에서 **펼치는 묶음**이 됩니다. 경로는 부모 경로로 시작하는 절대경로로 씁니다
  * - `permissions` 는 메뉴에서만 거릅니다. 주소로 직접 들어오는 것까지 막으려면 서버가 거절해야 합니다
