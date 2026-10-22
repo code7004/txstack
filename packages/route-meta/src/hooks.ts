@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { matchRoutes, useLocation, type Params } from "react-router-dom";
 import type { Breadcrumb, RouteHandle, RouteMeta, RouteNode, RouteTree } from "./types";
-import { buildRouteObjects } from "./utils";
+import { buildRouteObjects, getBreadcrumbs } from "./utils";
 
 export interface CurrentRoute {
   /** 현재 주소에 매칭된 노드. 매칭이 없으면 `null`. */
@@ -62,9 +62,6 @@ export function useCurrentRoute(tree: RouteTree): CurrentRoute {
   }, [routes, location]);
 }
 
-/** 끝 `/` 를 뗀다. `matchRoutes` 는 index · 부모와 같은 경로의 자식에 `/user/` 를 준다. 루트 `/` 는 그대로 둔다. */
-const trimTrailingSlash = (path: string) => (path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path);
-
 /**
  * 지금 주소까지 온 길을 칸 목록으로 준다. **그리지 않는다** — `TxBreadcrumb` 의 `items` 에 넘긴다.
  *
@@ -72,31 +69,13 @@ const trimTrailingSlash = (path: string) => (path.length > 1 && path.endsWith("/
  * <TxBreadcrumb items={useBreadcrumbs(routes)} itemAs={NavLink} />
  * ```
  *
- * - `meta.breadcrumb: false` 인 노드는 빠진다(아래 칸은 남는다). 레이아웃만 맡는 루트에 준다
- * - `meta.label` 이 없는 노드는 빠진다. 키는 식별자라 화면에 내지 않는다
- * - **바로 앞 칸과 주소가 같으면 앞 칸을 남긴다.** index 는 부모의 기본 화면이라 부모 이름이 그 자리 이름이다
- * - `hidden` · `permissions` 는 보지 않는다. 메뉴의 규칙이지 경로의 규칙이 아니다
+ * 칸이 되는 규칙은 `getBreadcrumbs` 가 갖는다 — 이 훅은 그것을 **라우터의 지금 주소로** 부른다.
+ * 라우터 밖(주소를 상태로 든 시연 · 렌더 전 · 서버)에서는 `getBreadcrumbs` 를 직접 쓴다.
  *
- * 매칭은 `useCurrentRoute` 와 같이 `matchRoutes` 에 맡긴다. `tree` 와 주소가 그대로면 같은 배열을 돌려준다.
+ * `useLocation` 의 주소는 이미 `basename` 을 뗀 것이라 따로 넘기지 않는다.
+ * `tree` 와 주소가 그대로면 같은 배열을 돌려준다 — 쿼리 · 조각만 바뀌어도 그대로다.
  */
 export function useBreadcrumbs(tree: RouteTree): Breadcrumb[] {
-  const location = useLocation();
-  const routes = useMemo(() => buildRouteObjects(tree), [tree]);
-
-  return useMemo(() => {
-    const crumbs: Breadcrumb[] = [];
-
-    for (const match of matchRoutes(routes, location) ?? []) {
-      const handle = match.route.handle as RouteHandle | undefined;
-      const meta = handle?.node.meta;
-      if (!handle || meta?.breadcrumb === false || !meta?.label) continue;
-
-      const path = trimTrailingSlash(match.pathname);
-      if (crumbs.at(-1)?.path === path) continue;
-
-      crumbs.push({ key: handle.key, path, label: meta.label, meta });
-    }
-
-    return crumbs;
-  }, [routes, location]);
+  const { pathname } = useLocation();
+  return useMemo(() => getBreadcrumbs(tree, pathname), [tree, pathname]);
 }

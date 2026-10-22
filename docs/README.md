@@ -142,7 +142,8 @@ pnpm release             # 빌드하고 배포한다 — 사용자가 명시적�
       B 의 네 파일은 `scripts/verify-packages/route-start` 이고 사이트가 그 파일을 그대로 보인다 — **CI 가 새 앱에 설치해 타입 검사 · 빌드한다**
       (`pnpm verify:packages route-start`). 브라우저에서도 한 번 띄워 `/` → `/members`, 메뉴 · 경로가 함께 바뀌는 것을 확인했다 ·
       R3 홈 route 데모를 결과 → 코드 순서로(DOM 순서째) · R6 Footer 에 fns, 실습 문구에 쓰는 패키지를 명시.
-      **남은 것** — R7(홈 데모의 `UNSAFE_LocationContext`): route-meta 에 순수 함수 `getBreadcrumbs(tree, pathname)` 을 둘지 S1 부터 정한다
+      R7 route-meta 에 순수 함수 [`getBreadcrumbs(tree, pathname, basename?)`](002_route_meta/007_getBreadcrumbs.md) 를 공개하고
+      `useBreadcrumbs` 를 그 위의 얇은 포장으로 — 홈 데모가 라우터 내부(`UNSAFE_LocationContext`) 대신 이것을 쓴다
 
 Profile의 공개용 콘텐츠·화면 구성·대표 프로젝트 연결 계획은
 [010 · Profile 구축 계획](<010 profile.md>)에서 구체화한다.

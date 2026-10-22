@@ -133,6 +133,19 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
         <RefTable rows={TABLES.routeMeta.breadcrumb.rows} anchor={tableAnchor(TABLES.routeMeta.breadcrumb)} />
       </Block>
 
+      <Block title="getBreadcrumbs">
+        <Signature>{`function getBreadcrumbs(tree: RouteTree, pathname: string, basename?: string): Breadcrumb[]`}</Signature>
+        <p className={muted}>
+          <code>useBreadcrumbs</code>와 같은 규칙으로, 라우터 밖에서 주소 하나로 칸을 만듭니다. 주소를 상태로 들고 있는 미리보기, 렌더 전의 탭 제목, 서버, 테스트에서 씁니다. 쿼리와 조각은 보지 않고, 부를 때마다 새 배열을 돌려줍니다.
+        </p>
+        <CodeBlock language="ts">{`getBreadcrumbs(routes, "/user/dormant");                    // 유저관리 / 휴면유저
+getBreadcrumbs(routes, window.location.pathname, "/admin");  // 라우터에 basename 을 줬다면 같은 값을`}</CodeBlock>
+        <p className={muted}>
+          라우터에 <code>basename</code>을 줬다면 같은 값을 넘깁니다. <code>window.location.pathname</code>에는 그것이 붙어 있어서, 그대로 넘기면 아무것도 맞지 않습니다. 칸의 <code>path</code>는 <code>basename</code>을 뗀 주소라 <code>NavLink</code>
+          의 <code>to</code>에 그대로 넣습니다.
+        </p>
+      </Block>
+
       <Block title="Types">
         <RefTable head={["Type", "Shape", "", "Description"]} rows={TABLES.routeMeta.typeList.rows} anchor={tableAnchor(TABLES.routeMeta.typeList)} />
       </Block>

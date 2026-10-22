@@ -135,7 +135,10 @@ interface RouteMeta {
 }
 ```
 
-**반환값 identity** — [`useCurrentRoute`](004_useCurrentRoute.md) 와 같다. `tree` 와 주소가 그대로면 같은 배열이다.
+**반환값 identity** — `tree` 와 주소(`pathname`)가 그대로면 같은 배열이다. 쿼리 · 조각만 바뀌어도 그대로다.
+
+**라우터 밖에서는 [`getBreadcrumbs`](007_getBreadcrumbs.md)** — 같은 규칙을 주소 하나로 부르는 순수 함수다. 이 훅은 그것을
+라우터의 지금 주소로 부르는 얇은 포장이다(2026-10-22, 규칙이 한 곳에 있다).
 
 ## 정한 것
 
