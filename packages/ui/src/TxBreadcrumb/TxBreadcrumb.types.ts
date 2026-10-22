@@ -1,9 +1,50 @@
-import type { ComponentPropsWithoutRef, ElementType, HTMLAttributes, ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ElementType, HTMLAttributes, Key, ReactNode } from "react";
 
-export interface TxBreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+/**
+ * `items` 로 넘기는 칸 하나.
+ *
+ * `@txstack/route-meta` 의 `useBreadcrumbs` 가 이 모양을 준다 — 두 패키지는 서로를 import 하지 않고
+ * 모양만 맞춘다.
+ */
+export interface TxBreadcrumbItemData {
+  /** 없으면 순번을 쓴다. */
+  key?: Key;
+  label: ReactNode;
+  /** 갈 주소. **없으면 링크가 아니라 글자다.** */
+  path?: string;
+  /** 지금 자리. 마지막 칸에는 저절로 붙으므로 보통 줄 필요가 없다. */
+  current?: boolean;
+}
+
+/** 칸을 손으로 적는다 — `TxBreadcrumb.Item` 들. */
+interface TxBreadcrumbChildrenProps {
   /** `TxBreadcrumb.Item` 들. */
   children?: ReactNode;
+  items?: never;
+  itemAs?: never;
+  itemProps?: never;
+}
 
+/** 칸이 다른 데서 만들어져 온다 — 라우트 트리(`useBreadcrumbs`) 등. */
+interface TxBreadcrumbItemsProps {
+  /** 칸 목록. **`children` 과 함께 줄 수 없다.** */
+  items: readonly TxBreadcrumbItemData[];
+  /**
+   * `path` 가 있는 칸을 그릴 것. `TxBreadcrumb.Item` 의 `as` 로 그대로 간다 — `NavLink` · `Link` · `"a"`.
+   * 기본 `"a"`.
+   */
+  itemAs?: ElementType;
+  /**
+   * 칸 하나에서 링크 props 를 만든다. 기본은 `itemAs` 가 `"a"` 면 `{ href: path }`, 컴포넌트면 `{ to: path }` 다
+   * (React Router 의 `Link` · `NavLink`). `to` 도 `href` 도 아닌 라우터만 준다.
+   */
+  itemProps?: (item: TxBreadcrumbItemData) => object;
+  children?: never;
+}
+
+export type TxBreadcrumbProps = TxBreadcrumbCommonProps & (TxBreadcrumbChildrenProps | TxBreadcrumbItemsProps);
+
+interface TxBreadcrumbCommonProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /**
    * 이 수를 넘으면 가운데를 접는다. 안 주면 접지 않는다.
    *

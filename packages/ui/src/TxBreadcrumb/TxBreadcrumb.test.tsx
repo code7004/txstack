@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { TxBreadcrumb } from "./TxBreadcrumb";
+import type { TxBreadcrumbProps } from "./TxBreadcrumb.types";
 
 /**
  * 경로에서 가장 조심할 것은 **마지막 칸**이다 — 지금 있는 자리를 다시 누르게 두면
@@ -116,6 +117,113 @@ describe("TxBreadcrumb — 라우터를 알지 못한다", () => {
     for (const file of ["TxBreadcrumb.tsx", "TxBreadcrumbItem.tsx", "TxBreadcrumb.types.ts"]) {
       expect(readFileSync(join(here, file), "utf8"), file).not.toMatch(/from\s+["']react-router/);
     }
+  });
+
+  /** 데이터는 route-meta 가 만들지만 ui 는 그 패키지를 모른다. 모양만 맞춘다. */
+  it("route-meta 를 import 하지 않는다", () => {
+    const here = import.meta.dirname;
+
+    for (const file of ["TxBreadcrumb.tsx", "TxBreadcrumbItem.tsx", "TxBreadcrumb.types.ts"]) {
+      expect(readFileSync(join(here, file), "utf8"), file).not.toMatch(/from\s+["']@txstack\/route-meta/);
+    }
+  });
+});
+
+/**
+ * 칸이 다른 데서 만들어져 오면(`useBreadcrumbs`) `items` 로 넘긴다. **손으로 적은 것과 같은 것을 그려야 한다** —
+ * 마지막 칸 · 접기 · 가름표가 두 모양에서 갈리면 안 된다.
+ */
+describe("TxBreadcrumb — items", () => {
+  const ITEMS = [
+    { key: "home", label: "홈", path: "/" },
+    { key: "orders", label: "주문", path: "/orders" },
+    { key: "order", label: "8213", path: "/orders/8213" }
+  ];
+
+  it("손으로 적은 것과 같은 DOM 을 그린다", () => {
+    const byHand = render(<TxBreadcrumb>{PATH}</TxBreadcrumb>).container.innerHTML;
+    cleanup();
+    const byData = render(<TxBreadcrumb items={[ITEMS[0], ITEMS[1], { label: "8213" }]} itemAs={Link} />).container.innerHTML;
+
+    expect(byData).toBe(byHand);
+  });
+
+  it("기본은 a 이고 href 로 건다", () => {
+    render(<TxBreadcrumb items={ITEMS} />);
+
+    const orders = screen.getByText("주문");
+    expect(orders.tagName).toBe("A");
+    expect(orders.getAttribute("href")).toBe("/orders");
+  });
+
+  it("컴포넌트를 주면 to 로 건다", () => {
+    const seen: string[] = [];
+    const Spy = ({ to, ...props }: { to: string; children?: React.ReactNode }) => {
+      seen.push(to);
+      return <a href={to} {...props} />;
+    };
+    render(<TxBreadcrumb items={ITEMS} itemAs={Spy} />);
+
+    expect(seen).toEqual(["/", "/orders"]);
+  });
+
+  it("마지막 칸은 path 가 있어도 글자이고 지금 자리다", () => {
+    render(<TxBreadcrumb items={ITEMS} />);
+
+    const last = screen.getByText("8213");
+    expect(last.tagName).toBe("SPAN");
+    expect(last.getAttribute("aria-current")).toBe("page");
+  });
+
+  it("path 가 없는 칸은 글자다", () => {
+    render(<TxBreadcrumb items={[{ label: "설정" }, ITEMS[2]]} />);
+    expect(screen.getByText("설정").tagName).toBe("SPAN");
+  });
+
+  it("itemProps 가 기본을 이긴다", () => {
+    const NextLink = ({ href, ...props }: { href: string; children?: React.ReactNode }) => <a data-next href={href} {...props} />;
+    render(<TxBreadcrumb items={ITEMS} itemAs={NextLink} itemProps={(item) => ({ href: item.path })} />);
+
+    expect(screen.getByText("주문").getAttribute("href")).toBe("/orders");
+    expect(screen.getByText("주문").hasAttribute("data-next")).toBe(true);
+  });
+
+  it("current 를 직접 줄 수 있다", () => {
+    render(<TxBreadcrumb items={[ITEMS[0], { ...ITEMS[1], current: true }, ITEMS[2]]} />);
+    expect(screen.getByText("주문").getAttribute("aria-current")).toBe("page");
+  });
+
+  it("key 가 없어도 순번으로 그린다", () => {
+    const { container } = render(<TxBreadcrumb items={[{ label: "가", path: "/a" }, { label: "나" }]} />);
+    expect(container.querySelectorAll("li")).toHaveLength(2);
+  });
+
+  it("접기가 그대로 먹는다", () => {
+    const many = ["가", "나", "다", "라", "마"].map((label) => ({ key: label, label, path: `/${label}` }));
+    const { container } = render(<TxBreadcrumb items={many} maxItems={3} />);
+
+    expect([...container.querySelectorAll("li")].map((li) => li.textContent?.trim())).toEqual(["가", "…", "라", "마"]);
+    expect(screen.getByText("마").getAttribute("aria-current")).toBe("page");
+  });
+
+  /** 둘 다 주면 어느 쪽이 그려지는지 알 수 없다. `tsc` 가 지킨다. */
+  it("children 과 함께 줄 수 없다 (타입)", () => {
+    // @ts-expect-error — items 와 children 은 하나만
+    const both: TxBreadcrumbProps = { items: ITEMS, children: "x" };
+    expect(both).toBeTruthy();
+  });
+
+  it("빈 배열이면 칸이 없다 — 매칭이 없는 주소", () => {
+    const { container } = render(<TxBreadcrumb items={[]} />);
+    expect(container.querySelectorAll("li")).toHaveLength(0);
+  });
+
+  it("items · itemAs · itemProps 는 nav 에 새지 않는다", () => {
+    render(<TxBreadcrumb items={ITEMS} itemAs={Link} />);
+    const nav = screen.getByRole("navigation");
+
+    expect(nav.hasAttribute("items")).toBe(false);
+    expect(nav.hasAttribute("itemas")).toBe(false);
   });
 });
 

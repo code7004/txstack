@@ -33,6 +33,13 @@ export interface RouteMeta {
   hidden?: boolean;
   /** 접근 권한. 판정은 `getNavRoutes` 의 `canAccess` 가 한다. */
   permissions?: string[];
+  /**
+   * `false` 면 경로(`useBreadcrumbs`)에 칸으로 나오지 않는다. **아래 칸은 그대로 나온다.** 기본 `true`.
+   *
+   * 레이아웃만 맡는 루트(`/` 의 셸)에 준다. `hidden` 과는 따로다 — 메뉴에는 없어도 경로에는
+   * 나와야 하는 화면(상세 화면)이 있다.
+   */
+  breadcrumb?: boolean;
 }
 
 interface RouteNodeBase {
@@ -103,4 +110,20 @@ export interface NavRoute {
  */
 export interface RouteHandle {
   node: RouteNode;
+  /** 트리에 쓴 키. 노드 객체에는 키가 없어서 함께 싣는다 — 브레드크럼 칸의 `key` 가 된다. */
+  key: string;
+}
+
+/**
+ * 경로 한 칸. `useBreadcrumbs` 가 주는 형태이고, `@txstack/ui` 의 `TxBreadcrumb` `items` 가
+ * 그대로 받는 모양이다(두 패키지는 서로를 import 하지 않는다 — 모양만 맞춘다).
+ */
+export interface Breadcrumb {
+  /** 트리에 쓴 키. `React` 의 `key` 로도 쓴다. */
+  key: string;
+  /** 실제 주소. 동적 세그먼트가 채워져 있다(`/users/8213`). 끝 `/` 는 없다. */
+  path: string;
+  /** `meta.label`. 이것이 없는 노드는 칸이 되지 않는다. */
+  label: ReactNode;
+  meta?: RouteMeta;
 }

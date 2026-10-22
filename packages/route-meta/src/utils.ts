@@ -1,5 +1,5 @@
 import type { RouteObject } from "react-router-dom";
-import type { NavRoute, RouteNode, RouteTree } from "./types";
+import type { NavRoute, RouteHandle, RouteNode, RouteTree } from "./types";
 
 /**
  * 정의 계층(`RouteTree`)을 React Router 실행 계층(`RouteObject[]`)으로 변환한다.
@@ -11,26 +11,22 @@ import type { NavRoute, RouteNode, RouteTree } from "./types";
  * - `enabled !== false` 인 노드만 등록한다. **`hidden` 은 보지 않는다** —
  *   메뉴에서만 숨길 뿐 주소로는 접근돼야 하기 때문이다.
  * - `meta` 는 `RouteObject` 최상위로 넘어가지 않는다. 라우터는 `meta` 를 모른다.
- * - 각 `RouteObject.handle` 에 원본 노드를 심는다. `useCurrentRoute` 가 이걸로 되찾는다.
+ * - 각 `RouteObject.handle` 에 원본 노드와 그 키를 심는다. `useCurrentRoute` · `useBreadcrumbs` 가 이걸로 되찾는다.
  */
 export function buildRouteObjects(tree: RouteTree): RouteObject[] {
-  return Object.values(tree)
-    .filter((node) => node.enabled !== false)
-    .map(transformNode);
+  return Object.entries(tree)
+    .filter(([, node]) => node.enabled !== false)
+    .map(([key, node]) => transformNode(node, key));
 }
 
-function transformNode(node: RouteNode): RouteObject {
+function transformNode(node: RouteNode, key: string): RouteObject {
   const { element, loader, action, errorElement } = node;
-  const handle = { node };
+  const handle: RouteHandle = { node, key };
 
   // index route 는 path·children 을 가질 수 없다. 타입으로 막혀 있지만 여기서도 넣지 않는다.
   if (node.index) return { index: true, element, loader, action, errorElement, handle };
 
-  const children = node.children
-    ? Object.values(node.children)
-        .filter((child) => child.enabled !== false)
-        .map(transformNode)
-    : undefined;
+  const children = node.children ? buildRouteObjects(node.children) : undefined;
 
   return { path: node.path, element, loader, action, errorElement, children, handle };
 }

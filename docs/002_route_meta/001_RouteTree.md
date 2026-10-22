@@ -75,7 +75,8 @@ routes.users.children.detail.path; // 자동완성이 `detail` 까지 정확히 
 | `children` | 가능                                                                  | **가질 수 없다** |
 | 나머지     | `element` · `loader` · `action` · `errorElement` · `meta` · `enabled` | 동일             |
 
-`RouteMeta`: `label` · `icon` · `description` · `hidden` · `permissions`
+`RouteMeta`: `label` · `icon` · `description` · `hidden` · `permissions` · `breadcrumb`
+(`false` 면 경로 칸에서 빠진다 — [006_useBreadcrumbs](006_useBreadcrumbs.md))
 
 ## 개발 항목
 

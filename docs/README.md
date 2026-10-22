@@ -175,6 +175,11 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       **404 폴백 평가** — 배포 사이트에서 `/` 와 `/storybook/` 은 200, **그 밖의 직접 링크 · 새로고침은 화면은 돌아오지만 HTTP 404** 다
       (`404.html` = `index.html`). 사람에게는 문제없지만 검색 엔진 · 링크 미리보기는 "없는 페이지" 로 본다.
       고치려면 주요 소개 페이지를 경로마다 HTML 로 내보내야 한다(사전 렌더링 + 공유 메타) — 008 대로 **별도 작업**으로 둔다
+- [x] **라우트 트리에서 브레드크럼**(2026-10-22) — black-message 회원 목록에 `TxBreadcrumb` 을 붙이며 나왔다.
+      칸을 화면마다 손으로 적으면 `routeTree` 를 다시 쓰는 것이라 편한 것이 없다. 경계(`ui → hooks` 하나)를 지키려고 둘로 가른다 —
+      데이터는 route-meta 의 [`useBreadcrumbs`](002_route_meta/006_useBreadcrumbs.md)(루트는 `meta.breadcrumb: false` 로 뺀다),
+      그리기는 `TxBreadcrumb` 의 [`items` · `itemAs`](001_ui/042_TxBreadcrumb.md). 같은 주소가 겹치면 앞 칸을 남긴다(합의).
+      **사용자 확인 대기** — Storybook `Layout/TxBreadcrumb › 목록으로 넘기기` · `Recipes/RouteMeta`
 - [x] **도입 안내 정리**(2026-10-15, [008](008_review_and_site_plan.md) 6장) — Getting Started · Tutorial 을 **적힌 그대로** 새 Vite 앱
       (`create vite` react-ts — Vite 8 · TypeScript 6 · React 19)에서 따라 쳤다. 저장소 클론 · 빌드 · `.tgz` 설치 → 첫 화면(SignUp)의
       오류 표시 · 알림 → Tailwind 레이어 순서(`className` 우선, preflight 가 버튼을 지우지 않음) → Tutorial 의 다섯 파일 + 전체 코드

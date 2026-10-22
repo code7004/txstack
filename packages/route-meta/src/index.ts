@@ -5,7 +5,8 @@
  * RouteTree (단일 출처)
  *    ├─ buildRouteObjects   → React Router 의 RouteObject[]
  *    ├─ getNavRoutes  → GNB / 사이드 메뉴
- *    └─ useCurrentRoute → 현재 위치 · 브레드크럼
+ *    ├─ useCurrentRoute → 현재 위치
+ *    └─ useBreadcrumbs  → 브레드크럼 칸 목록 (TxBreadcrumb 의 items)
  * ```
  *
  * 정의 계층과 실행 계층을 의도적으로 분리한다. **`meta` 는 라우터로 전달되지 않는다.**
@@ -14,9 +15,9 @@
 export { buildRouteObjects, getNavRoutes } from "./utils";
 export type { CanAccess } from "./utils";
 
-export { useCurrentRoute } from "./hooks";
+export { useBreadcrumbs, useCurrentRoute } from "./hooks";
 export type { CurrentRoute } from "./hooks";
 
 export { RouteTreeRenderer } from "./renderer";
 
-export type { IndexRouteNode, NavRoute, PathRouteNode, RouteHandle, RouteMeta, RouteNode, RouteTree } from "./types";
+export type { Breadcrumb, IndexRouteNode, NavRoute, PathRouteNode, RouteHandle, RouteMeta, RouteNode, RouteTree } from "./types";

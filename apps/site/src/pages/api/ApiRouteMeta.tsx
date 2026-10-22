@@ -111,6 +111,28 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
         <RefTable rows={TABLES.routeMeta.currentroute.rows} anchor={tableAnchor(TABLES.routeMeta.currentroute)} />
       </Block>
 
+      <Block title="useBreadcrumbs">
+        <Signature>{`function useBreadcrumbs(tree: RouteTree): Breadcrumb[]`}</Signature>
+        <p className={muted}>
+          지금 주소까지 온 길을 칸 목록으로 돌려줍니다. 그리지는 않습니다 — <code>TxBreadcrumb</code>의 <code>items</code>에 그대로 넘깁니다. 라우터 안에서 써야 합니다.
+        </p>
+        <CodeBlock language="tsx">{`<TxBreadcrumb items={useBreadcrumbs(routeTree)} itemAs={NavLink} />`}</CodeBlock>
+        <ul className={`list-disc space-y-1 ps-5 ${muted}`}>
+          <li>
+            <code>meta.breadcrumb: false</code>인 노드는 빠지고 아래 칸은 남습니다. 레이아웃만 맡는 루트에 줍니다
+          </li>
+          <li>
+            <code>meta.label</code>이 없는 노드는 빠집니다
+          </li>
+          <li>바로 앞 칸과 주소가 같으면(부모의 기본 화면) 앞 칸만 남습니다</li>
+          <li>
+            <code>hidden</code> · <code>permissions</code>는 보지 않습니다 — 메뉴에 없는 상세 화면도 경로에는 나옵니다
+          </li>
+        </ul>
+        <RefLabel>Breadcrumb</RefLabel>
+        <RefTable rows={TABLES.routeMeta.breadcrumb.rows} anchor={tableAnchor(TABLES.routeMeta.breadcrumb)} />
+      </Block>
+
       <Block title="Types">
         <RefTable head={["Type", "Shape", "", "Description"]} rows={TABLES.routeMeta.typeList.rows} anchor={tableAnchor(TABLES.routeMeta.typeList)} />
       </Block>

@@ -19,20 +19,22 @@
 RouteTree (단일 출처)
    ├─ buildRouteObjects   → React Router 의 RouteObject[]
    ├─ getNavRoutes  → GNB / 사이드 메뉴
-   └─ useCurrentRoute → 현재 위치 · 브레드크럼
+   ├─ useCurrentRoute → 현재 위치
+   └─ useBreadcrumbs  → 브레드크럼 칸 목록 (TxBreadcrumb 의 items)
 ```
 
 ## 개발 리스트
 
-**5개가 끝났다. 테스트 25개.** 번호는 트리를 선언하고 쓰는 차례다.
+**6개가 끝났다. 테스트 38개.** 번호는 트리를 선언하고 쓰는 차례다.
 
 | 번호 | 무엇                                            | 하는 일                                  | 테스트        |
 | ---- | ----------------------------------------------- | ---------------------------------------- | ------------- |
 | 001  | [`RouteTree`](001_RouteTree.md)                 | 트리 선언 형식 — 이 패키지의 단일 출처   | 2 (타입 단정) |
-| 002  | [`buildRouteObjects`](002_buildRouteObjects.md) | 트리 → React Router `RouteObject[]`      | 6             |
+| 002  | [`buildRouteObjects`](002_buildRouteObjects.md) | 트리 → React Router `RouteObject[]`      | 7             |
 | 003  | [`getNavRoutes`](003_getNavRoutes.md)           | 트리 → GNB · 사이드 메뉴 (`NavRoute[]`)  | 11            |
 | 004  | [`useCurrentRoute`](004_useCurrentRoute.md)     | 지금 어느 노드인가 — 타이틀 · 브레드크럼 | 8             |
 | 005  | [`RouteTreeRenderer`](005_RouteTreeRenderer.md) | 002 를 감싼 얇은 포장                    | —             |
+| 006  | [`useBreadcrumbs`](006_useBreadcrumbs.md)       | 지금까지 온 길 — 브레드크럼 칸 목록      | 12            |
 
 ## 두 계층의 필터 규칙이 다르다
 
@@ -61,9 +63,9 @@ RouteTree (단일 출처)
 
 ## 검증
 
-테스트 25개.
+테스트 38개.
 
-- `utils.test.ts` 17개 — **node 환경**에서 돈다. 두 함수가 DOM 없이 동작한다는 증거다.
+- `utils.test.ts` 18개 — **node 환경**에서 돈다. 두 함수가 DOM 없이 동작한다는 증거다.
   마지막 둘은 **타입 단정**이다 — 트리를 `satisfies` 로 붙였을 때 키가 리터럴로 남는지를
   `tsc` 가 지킨다 (넓어져도 런타임 값은 그대로여서 런타임 기대로는 못 잡는다)
 - `hooks.test.tsx` 8개 — jsdom + `MemoryRouter`. **정적 경로를 동적 경로보다 뒤에 선언해 두고**
