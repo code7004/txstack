@@ -4,11 +4,19 @@ import { CodeBlock } from "../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../components/Page";
 import { SignUp } from "./start/SignUp";
 import SIGN_UP_SOURCE from "./start/SignUp.tsx?raw";
+// B 갈래의 예제는 CI 가 새 앱에 설치해 타입 검사 · 빌드하는 그 파일이다(`pnpm verify:packages route-start`)
+import ROUTE_APP_SOURCE from "../../../../scripts/verify-packages/route-start/src/App.tsx?raw";
+import ROUTE_LAYOUT_SOURCE from "../../../../scripts/verify-packages/route-start/src/Layout.tsx?raw";
+import ROUTE_MAIN_SOURCE from "../../../../scripts/verify-packages/route-start/src/main.tsx?raw";
+import ROUTE_TREE_SOURCE from "../../../../scripts/verify-packages/route-start/src/routes.tsx?raw";
 
 /**
  * 설치부터 첫 화면까지. **처음 온 사람이 위에서 아래로 그대로 따라 치면 돌아야 한다** —
  * 그래서 조각이 아니라 통째로 붙여 넣을 수 있는 파일을 보이고, 그 파일이 이 페이지에서도 돈다
  * (`?raw` 로 같은 소스를 읽는다 — 보이는 코드와 도는 코드가 어긋날 수 없다).
+ *
+ * **공통 준비(1~3) 뒤에 두 갈래로 나뉜다** — A 는 UI 로 첫 화면, B 는 라우트와 메뉴. 라우트만 필요한 사람이
+ * UI 폼 실습을 거치지 않게 한다(docs/reports/2026-10-22 R2 · R4 · R5).
  */
 
 /** 무엇을 하려는지로 고른다. 다섯은 따로 설치되고, 서로 없어도 동작한다 */
@@ -24,7 +32,10 @@ const muted = "text-slate-600 dark:text-slate-300";
 
 export function Start() {
   return (
-    <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 아직 npm에 배포되지 않아서, 처음 한 번은 저장소를 받아 빌드하는 단계가 더 있습니다.">
+    <Page
+      title="Getting Started"
+      lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 1~3은 공통 준비이고, 그다음은 하려는 일에 따라 A(UI로 첫 화면)나 B(라우트와 메뉴)로 갑니다. 아직 npm에 배포되지 않아서, 처음 한 번은 저장소를 받아 빌드하는 단계가 더 있습니다."
+    >
       <Block title="Which packages do you need">
         <p className={muted}>
           txstack은 다섯 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
@@ -129,14 +140,32 @@ pnpm add ag-grid-community@35 ag-grid-react@35
 pnpm add react-day-picker`}</CodeBlock>
       </Block>
 
-      <Block title="3. Import the stylesheet (ui)">
+      <Block title="3. Import the stylesheet">
         <p className={muted}>
           앱 진입점에서 <strong>한 번만</strong> 불러옵니다. 이 줄이 없으면 컴포넌트에 스타일이 적용되지 않습니다.
         </p>
         <CodeBlock title="src/main.tsx">{`import "@txstack/ui/styles.css";`}</CodeBlock>
       </Block>
 
-      <Block title="4. Your first screen (ui)">
+      <Block title="Choose a path">
+        <p className={muted}>공통 준비가 끝났습니다. 하려는 일 하나를 고르세요. 둘 다 할 거라면 A부터 합니다.</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <a href="#a-first-screen-with-ui" className="site-card flex flex-col gap-1 rounded-lg border p-4">
+            <span className="font-semibold">A. UI로 첫 화면 →</span>
+            <span className="text-sm">
+              <code>@txstack/ui</code> — 입력 · 오류 메시지 · 제출 알림이 있는 가입 폼 하나
+            </span>
+          </a>
+          <a href="#b-routes-and-menus" className="site-card flex flex-col gap-1 rounded-lg border p-4">
+            <span className="font-semibold">B. 라우트와 메뉴 →</span>
+            <span className="text-sm">
+              <code>@txstack/route-meta</code> — 트리 하나로 GNB · 사이드바 · 브레드크럼
+            </span>
+          </a>
+        </div>
+      </Block>
+
+      <Block title="A. First screen with UI">
         <p className={muted}>
           아래 코드를 그대로 <code>src/SignUp.tsx</code>로 저장합니다. 바로 아래 예제는 이 코드가 지금 이 페이지에서 실제로 동작하는 모습입니다. 입력란을 비워 둔 채 <strong>가입</strong>을 눌러 보세요.
         </p>
@@ -161,16 +190,51 @@ export default function App() {
     </main>
   );
 }`}</CodeBlock>
-      </Block>
 
-      <Block title="5. Run it">
-        <CodeBlock language="bash" title="sh">{`pnpm dev`}</CodeBlock>
+        <CodeBlock language="bash" title="sh — 띄우기">{`pnpm dev`}</CodeBlock>
         <p className={muted}>
           <code>http://localhost:5173</code>을 열어 위 예제와 같은 폼이 보이면 완료입니다. 오류 메시지는 입력란 아래에 나타나고, 모두 채워서 제출하면 화면 오른쪽 위에 알림이 뜹니다.
         </p>
         <TxAlert variant="success" title="이제 바로 쓸 수 있습니다">
           <code>TxToast</code>와 <code>TxDialog</code>는 호출하면 스스로 화면에 자리를 만듭니다. Provider를 따로 감쌀 필요가 없습니다.
         </TxAlert>
+      </Block>
+
+      <Block title="B. Routes and menus">
+        <p className={muted}>라우트를 트리 하나로 선언하면 라우터, 위쪽 메뉴(GNB), 왼쪽 메뉴(사이드바), 경로 표시(브레드크럼)가 모두 거기서 나옵니다. 화면 세 개짜리 앱을 파일 네 개로 만듭니다. 업무 API · 로그인은 넣지 않았습니다.</p>
+        <CodeBlock language="bash" title="sh — 2단계에 더해 설치">{`pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz ../txstack/.pack/txstack-route-meta-0.1.0.tgz react-router-dom`}</CodeBlock>
+
+        <p className={muted}>
+          <strong>트리</strong> — 화면마다 주소 · 화면 · 메뉴 이름을 한 줄에 적습니다. 맨 바깥은 헤더와 메뉴를 그리는 셸이라 메뉴에도 경로에도 나오지 않게 둡니다.
+        </p>
+        <CodeBlock title="src/routes.tsx">{ROUTE_TREE_SOURCE}</CodeBlock>
+
+        <p className={muted}>
+          <strong>셸</strong> — 같은 메뉴 데이터로 GNB와 사이드바를 그리고, 경로는 <code>useBreadcrumbs</code>가 그대로 줍니다. 메뉴 칸도 경로 칸도 손으로 적지 않습니다.
+        </p>
+        <CodeBlock title="src/Layout.tsx">{ROUTE_LAYOUT_SOURCE}</CodeBlock>
+
+        <SideBySide>
+          <CodeBlock title="src/App.tsx">{ROUTE_APP_SOURCE}</CodeBlock>
+          <CodeBlock title="src/main.tsx">{ROUTE_MAIN_SOURCE}</CodeBlock>
+        </SideBySide>
+
+        <p className={muted}>
+          <code>pnpm dev</code>로 띄우면 <code>/members</code>로 열리고, 메뉴를 누르면 GNB · 사이드바의 지금 항목과 위쪽 경로가 함께 바뀝니다.
+        </p>
+
+        <TxAlert variant="info" title="해 보기 — 화면 하나 더하기">
+          <code>routes.tsx</code>의 <code>children</code>에 아래 한 줄을 더하고 저장하세요. 다른 파일은 고치지 않습니다. GNB와 사이드바에 「리포트」가 생기고, 누르면 경로도 「리포트」가 됩니다.
+          <CodeBlock title="src/routes.tsx — children 에 한 줄">{`reports: { path: "/reports", element: <h1>리포트</h1>, meta: { label: "리포트" } },`}</CodeBlock>
+        </TxAlert>
+
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          위 네 파일은 CI가 새 앱에 그대로 설치해 타입 검사와 빌드를 돌리는 그 파일입니다. 하위 메뉴 · 권한별 메뉴 · 숨긴 화면은{" "}
+          <Link to="/docs/guide/routing" className="underline">
+            Routing & Menu
+          </Link>
+          에 이어집니다.
+        </p>
       </Block>
 
       <Block title="Using with Tailwind">
@@ -200,11 +264,11 @@ import "@txstack/ui/styles.css";   // txstack — 뒤에`}</CodeBlock>
 
       <Block title="Next steps">
         <p className={muted}>
-          첫 화면이 떴다면{" "}
+          A나 B가 떴다면{" "}
           <Link to="/docs/tutorial" className="underline">
             Tutorial
           </Link>
-          에서 네 패키지를 모두 써서 목록 화면 하나를 끝까지 만들어 봅니다. 패키지 하나만 필요하다면 위 표의 가이드로 바로 가도 됩니다.
+          에서 ui · route-meta · hooks · axios 로 목록 화면 하나를 끝까지 만들어 봅니다. 패키지 하나만 필요하다면 위 표의 가이드로 바로 가도 됩니다.
         </p>
       </Block>
 

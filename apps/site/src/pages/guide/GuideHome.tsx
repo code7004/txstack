@@ -19,7 +19,7 @@ const APP = [
 
 export function GuideHome() {
   return (
-    <Page title="Guide" lead="네 패키지로 무엇을 만드는지 주제별로 정리했습니다. 각 장의 예제는 페이지 안에서 실제로 동작합니다.">
+    <Page title="Guide" lead="ui · route-meta · hooks · axios 로 무엇을 만드는지 주제별로 정리했습니다. 각 장의 예제는 페이지 안에서 실제로 동작합니다.">
       <Block title="UI — @txstack/ui">
         <LinkCardGrid>
           {DESIGN.map((item) => (

@@ -7,7 +7,7 @@ import { CodeBlock } from "../../components/CodeBlock";
 /**
  * **라우트 트리 하나로 GNB · 사이드바 · 경로 표시를 함께 그린다**(docs/008 4.5).
  *
- * 왼쪽 코드는 오른쪽 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열도 경로 칸도 따로 적어 두지 않는다.
+ * 결과 옆(좁으면 아래)의 코드는 그 화면이 쓰는 **같은 트리 객체를 글자로 옮긴 것**이다 — 메뉴 배열도 경로 칸도 따로 적어 두지 않는다.
  * - 메뉴: `getNavRoutes(tree, canAccess)` → TxNavBar · TxSideNav
  * - 경로: `useBreadcrumbs(tree)` → TxBreadcrumb `items`
  *
@@ -98,7 +98,7 @@ function DemoCrumbs({ tree, mark, go }: { tree: RouteTree; mark: (crumb: Breadcr
   );
 }
 
-/** 오른쪽 판의 자리 이름. 무엇이 트리에서 나왔는지 짚는다 */
+/** 결과 판의 자리 이름. 무엇이 트리에서 나왔는지 짚는다 */
 const Slot = ({ name, from }: { name: string; from: string }) => (
   <span className="inline-flex shrink-0 items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
     <span className="rounded px-1 font-semibold" style={{ backgroundColor: "color-mix(in oklab, var(--tx-color-primary) 15%, transparent)", color: "var(--tx-color-primary-strong)" }}>
@@ -167,12 +167,11 @@ export function RouteMenuDemo() {
         {status}
       </p>
 
+      {/*
+       * **결과가 먼저, 코드가 다음이다.** 한 열이 되는 좁은 화면에서 설정을 바꾼 결과를 긴 코드 아래로 밀어내지 않는다.
+       * 화면 순서만 CSS 로 바꾸지 않고 DOM 순서를 바꾼다 — 키보드 · 낭독기가 읽는 순서도 같아야 한다.
+       */}
       <div className="grid items-start gap-4 lg:grid-cols-2">
-        {/* 고를 때마다 새로 그려 짚은 줄이 다시 한 번 밝게 뜬다 */}
-        <CodeBlock key={`${preset.name}-${role}`} title="routes.tsx — 이 판이 쓰는 설정 그대로(메뉴 부분)" maxHeight="26rem" marked={marked}>
-          {source}
-        </CodeBlock>
-
         {/* 같은 트리로 그린 작은 앱. 라우터 대신 이 판의 상태가 주소다. 세 자리에 무엇이 그렸는지 이름을 붙인다 */}
         <div className="flex h-full flex-col overflow-hidden rounded-lg border" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
           <div className="flex items-center gap-2 border-b px-2" style={{ borderColor: "var(--tx-color-border)" }}>
@@ -197,6 +196,11 @@ export function RouteMenuDemo() {
             </div>
           </div>
         </div>
+
+        {/* 고를 때마다 새로 그려 짚은 줄이 다시 한 번 밝게 뜬다 */}
+        <CodeBlock key={`${preset.name}-${role}`} title="routes.tsx — 이 판이 쓰는 설정 그대로(메뉴 부분)" maxHeight="26rem" marked={marked}>
+          {source}
+        </CodeBlock>
       </div>
 
       <CodeBlock title="App.tsx — 연결 부분만 발췌">{`// 같은 트리 하나에서 세 가지

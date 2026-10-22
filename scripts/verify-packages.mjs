@@ -25,6 +25,8 @@ const CASES = {
   "core-ui": {},
   "ui-subpaths": {},
   app: {},
+  // Getting Started 「라우트와 메뉴」의 최소 완성 예제. 사이트가 이 src 를 그대로 보여 주므로, 깨지면 문서가 틀린 것이다
+  "route-start": {},
   "node-axios": {},
   "node-fns": {},
   react18: { from: "core-ui", deps: { react: "^18.3.1", "react-dom": "^18.3.1" }, devDeps: { "@types/react": "^18.3.0", "@types/react-dom": "^18.3.0" } },
@@ -83,7 +85,7 @@ for (const name of names) {
         return "—";
       }
     };
-    const react = `${version("react")}${spec.from === "app" || name === "app" ? ` · router ${version("react-router-dom")}` : ""}`;
+    const react = `${version("react")}${spec.from === "app" || name === "app" || name === "route-start" ? ` · router ${version("react-router-dom")}` : ""}`;
     results.push({ name, ok: true, react, note: out.split("\n").at(-1) });
     console.log("ok");
   } catch (error) {

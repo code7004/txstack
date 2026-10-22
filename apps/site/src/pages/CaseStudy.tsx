@@ -181,14 +181,14 @@ export function CaseStudy() {
             <strong>테스트</strong> — lint · 타입 검사 · 테스트 2,134개(<code>pnpm check</code>). 화면 테스트 환경(jsdom)은 스타일시트를 못 보므로, CSS 파일을 글자로 읽어 토큰만 쓰는지 · 레이어 안에 있는지를 검사합니다.
           </li>
           <li>
-            <strong>배포 파일 검증</strong> — 네 패키지를 실제 배포 파일(<code>.tgz</code>)로 묶어 저장소 밖의 새 앱에 설치하고, React 18 · 19와 react-router 6 · 7에서 타입 검사 · 빌드하고, axios는 Node에서 실제로 실행합니다(
+            <strong>배포 파일 검증</strong> — 다섯 패키지를 실제 배포 파일(<code>.tgz</code>)로 묶어 저장소 밖의 새 앱에 설치하고, React 18 · 19와 react-router 6 · 7에서 타입 검사 · 빌드하고, axios는 Node에서 실제로 실행합니다(
             <Src path="scripts/verify-packages.mjs">verify-packages.mjs</Src>).
           </li>
           <li>
             <strong>CI</strong> — PR마다 위 검사를 돌리고, 이 사이트의 배포도 검사를 통과해야만 나갑니다(<Src path=".github/workflows/ci.yml">ci.yml</Src>).
           </li>
           <li>
-            <strong>첫 소비자</strong> — 이 사이트가 네 패키지를 주소창 · 새로고침 · 직접 링크 · 실제 요청과 함께 씁니다. 카탈로그에서는 안 보이던 것을 여기서 찾아 라이브러리에서 고쳤습니다(위의 둘째 · 셋째 결함).
+            <strong>첫 소비자</strong> — 이 사이트가 다섯 패키지를 주소창 · 새로고침 · 직접 링크 · 실제 요청과 함께 씁니다. 카탈로그에서는 안 보이던 것을 여기서 찾아 라이브러리에서 고쳤습니다(위의 둘째 · 셋째 결함).
           </li>
           <li>
             <strong>동작하는 예제</strong> —{" "}

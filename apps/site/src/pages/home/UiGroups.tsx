@@ -1,22 +1,44 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { TxAlert, TxBreadcrumb, TxButton, TxDialog, TxForm, TxPagination, TxSkeleton, TxTabs, TxTag, TxToast } from "@txstack/ui";
+import { TxAlert, TxBreadcrumb, TxPagination, TxSkeleton, TxTabs, TxTag } from "@txstack/ui";
+import { CodeBlock } from "../../components/CodeBlock";
 import { Used } from "../../components/Used";
+import { FeedbackMini } from "./mini/FeedbackMini";
+import FEEDBACK_SOURCE from "./mini/FeedbackMini.tsx?raw";
+import { FormMini } from "./mini/FormMini";
+import FORM_SOURCE from "./mini/FormMini.tsx?raw";
 
 /**
  * UI 를 **기능군으로** 보여 준다. 군마다 작은 실물 하나와 대표 컴포넌트 이름(→ API › ui)을 둔다.
  * 전체 목록과 변형은 Components 갤러리와 Storybook 이 갖는다 — 여기서는 범위만 보인다.
+ *
+ * **두 칸(폼 · 창과 피드백)만 그 실물의 코드를 함께 보인다**(docs/reports/2026-10-22 R1). 코드 탭은 실물이 쓰는
+ * 파일을 `?raw` 로 그대로 읽는다 — 보이는 코드와 도는 코드가 어긋날 수 없다. 모든 칸에 붙이지 않는다.
  */
 export function UiGroups() {
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-      <Group title="입력과 폼" result="입력 · 선택 · 검증 메시지를 갖춘 폼" used={["TxForm", "TxInput", "TxDropdown", "TxCheckBox"]}>
+      <Group
+        title="입력과 폼"
+        result="입력 · 선택 · 검증 메시지를 갖춘 폼"
+        used={["TxForm", "TxInput", "TxDropdown", "TxCheckBox"]}
+        code={FORM_SOURCE}
+        split={{ parts: "캡션과 오류 메시지를 입력란에 잇고, 체크 · 입력의 모양을 맞춥니다", app: "검증 규칙과 제출 처리" }}
+        more={{ to: "/docs/start#a-first-screen-with-ui", label: "전체 가입 폼 → Getting Started" }}
+      >
         <FormMini />
       </Group>
       <Group title="데이터와 목록" result="상태 표시와 페이지 이동이 있는 목록. 큰 표는 TxAgGrid" used={["TxAgGrid", "TxPagination", "TxTag"]}>
         <ListMini />
       </Group>
-      <Group title="창과 피드백" result="확인을 묻고, 처리 결과를 알리는 창" used={["TxDialog", "TxToast", "TxModal", "TxSlidePanel"]}>
+      <Group
+        title="창과 피드백"
+        result="확인을 묻고, 처리 결과를 알리는 창"
+        used={["TxDialog", "TxToast", "TxModal", "TxSlidePanel"]}
+        code={FEEDBACK_SOURCE}
+        split={{ parts: "확인 창의 포커스 · Escape · 층 순서, 알림의 자리와 사라지는 시간", app: "무엇을 물을지, 답에 따라 무엇을 할지" }}
+        more={{ to: "/docs/guide/dialogs", label: "Dialogs & Toasts 가이드" }}
+      >
         <FeedbackMini />
       </Group>
       <Group title="화면 구조" result="헤더 · 메뉴 · 본문을 갖춘 업무 화면의 틀" used={["TxAppShell", "TxSideNav", "TxTabs", "TxBreadcrumb"]}>
@@ -33,28 +55,60 @@ export function UiGroups() {
   );
 }
 
-function Group({ title, result, used, children }: { title: string; result: string; used: string[]; children: ReactNode }) {
+interface GroupProps {
+  title: string;
+  result: string;
+  used: string[];
+  children: ReactNode;
+  /** 실물의 소스. 주면 「결과 / 코드」 탭이 생긴다 */
+  code?: string;
+  /** 부품이 맡는 것과 앱이 하는 것 — 코드를 보인 칸에서만 */
+  split?: { parts: string; app: string };
+  more?: { to: string; label: string };
+}
+
+function Group({ title, result, used, children, code, split, more }: GroupProps) {
   return (
-    <section className="flex flex-col gap-3 rounded-lg border p-4" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+    <section className="flex min-w-0 flex-col gap-3 rounded-lg border p-4" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
       <header className="flex flex-col gap-0.5">
         <h3 className="font-semibold">{title}</h3>
         <p className="text-sm text-slate-600 dark:text-slate-300">{result}</p>
       </header>
-      <div className="flex-1">{children}</div>
+      <div className="min-w-0 flex-1">
+        {code ? (
+          <TxTabs
+            aria-label={`${title} — 결과와 코드`}
+            tabs={[
+              { label: "결과", content: <div className="pt-3">{children}</div> },
+              {
+                label: "코드",
+                content: (
+                  <div className="pt-3">
+                    <CodeBlock maxHeight="16rem">{code}</CodeBlock>
+                  </div>
+                )
+              }
+            ]}
+          />
+        ) : (
+          children
+        )}
+      </div>
+      {split && (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-xs text-slate-600 dark:text-slate-300">
+          <dt className="font-semibold">부품이 맡는 것</dt>
+          <dd>{split.parts}</dd>
+          <dt className="font-semibold">앱이 하는 것</dt>
+          <dd>{split.app}</dd>
+        </dl>
+      )}
       <Used names={used} label="컴포넌트" />
+      {more && (
+        <Link to={more.to} className="text-sm underline">
+          {more.label}
+        </Link>
+      )}
     </section>
-  );
-}
-
-function FormMini() {
-  const [email, setEmail] = useState("kim@");
-  const error = email && !/^\S+@\S+\.\S+$/.test(email) ? "메일 형식이 아닙니다" : undefined;
-
-  return (
-    <TxForm noValidate onSubmit={() => undefined}>
-      <TxForm.Input caption="메일" value={email} onChangeText={setEmail} error={error} />
-      <TxForm.CheckBox caption="약관" label="이용약관에 동의합니다" />
-    </TxForm>
   );
 }
 
@@ -80,22 +134,6 @@ function ListMini() {
         ))}
       </ul>
       <TxPagination currentPage={page} totalRows={15} pageSize={3} onChangePage={setPage} hideGroupButtons />
-    </div>
-  );
-}
-
-function FeedbackMini() {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <TxButton
-        label="삭제 (확인 창)"
-        variant="danger"
-        onClick={async () => {
-          const yes = await TxDialog.confirm({ title: "항목을 삭제할까요?", message: "샘플이라 실제로 지워지지는 않습니다.", tone: "danger", confirmLabel: "삭제" });
-          TxToast.show(yes ? { variant: "info", title: "삭제했습니다" } : { title: "취소했습니다" });
-        }}
-      />
-      <TxButton label="저장 (알림)" variant="secondary" onClick={() => void TxToast.show({ variant: "success", title: "저장했습니다" })} />
     </div>
   );
 }
