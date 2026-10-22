@@ -27,7 +27,7 @@ const NO_CHOICE: TxDropdownItem<undefined> = { name: "선택 안 함", value: un
  * 명세: `docs/001_ui/010_TxDropdown.md`
  */
 export function TxDropdown<TData extends TxDropdownData>(props: TxDropdownProps<TData>) {
-  const { data, value, addNoChoiceItem, fixedHead, placeholder = "선택", onChangeValue, onChangeText, onChangeNumber, onChangeBool, ...shell } = props;
+  const { data, value, addNoChoiceItem, fixedHead, placeholder = "선택", locale, onChangeValue, onChangeText, onChangeNumber, onChangeBool, ...shell } = props;
 
   // prop 을 아예 안 준 것과 `value={undefined}` 를 준 것을 구분한다.
   const isControlled = Object.hasOwn(props, "value");
@@ -44,7 +44,11 @@ export function TxDropdown<TData extends TxDropdownData>(props: TxDropdownProps<
   const shellItems = useMemo(() => items.map((item) => ({ item, selected: picked != null && item.value === picked.value })), [items, picked]);
 
   const selected = shellItems.find((i) => i.selected)?.item;
-  const head = fixedHead ?? selected?.name ?? placeholder;
+  /**
+   * 고른 줄은 **목록에 보이던 그대로** 머리에 보인다 — 목록은 이름을 `locale` 로 번역해 그린다.
+   * `fixedHead` · `placeholder` 는 소비자가 직접 준 글자라 다시 번역하지 않는다(`TxDropdownMulti` 와 같다).
+   */
+  const head = fixedHead ?? (selected ? (locale ? locale(selected.name) : selected.name) : placeholder);
 
   const hdPick = (index: number) => {
     const item = items[index];
@@ -56,5 +60,5 @@ export function TxDropdown<TData extends TxDropdownData>(props: TxDropdownProps<
     emitByType(item.value, { text: onChangeText, number: onChangeNumber, bool: onChangeBool });
   };
 
-  return <TxDropdownShell {...shell} items={shellItems} head={head} empty={selected == null && fixedHead == null} multiple={false} onPick={hdPick} closeOnPick />;
+  return <TxDropdownShell {...shell} locale={locale} items={shellItems} head={head} empty={selected == null && fixedHead == null} multiple={false} onPick={hdPick} closeOnPick />;
 }
