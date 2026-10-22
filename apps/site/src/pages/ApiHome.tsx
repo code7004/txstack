@@ -4,7 +4,7 @@ import { Page } from "../components/Page";
 
 const PACKAGES = [
   { to: "/api/ui", name: "@txstack/ui", what: "UI를 위한 다양한 Tx* 컴포넌트", peer: "react" },
-  { to: "/api/route-meta", name: "@txstack/route-meta", what: "라우트를 메타데이터 트리 하나로 관리", peer: "react-router-dom" },
+  { to: "/api/route-meta", name: "@txstack/route-meta", what: "라우트 트리 하나로 라우터 · GNB · 사이드바 · 브레드크럼", peer: "react-router-dom" },
   { to: "/api/hooks", name: "@txstack/hooks", what: "범용 훅과 URL 쿼리 상태 관리", peer: "react" },
   { to: "/api/axios", name: "@txstack/axios", what: "정책을 주입받는 HTTP 클라이언트", peer: "axios" },
   { to: "/api/fns", name: "@txstack/fns", what: "숫자 포맷 · 날짜 · 폼 검사 · 전화번호 같은 작은 함수", peer: "의존 없음" }

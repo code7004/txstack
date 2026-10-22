@@ -34,14 +34,12 @@ const menu = getNavRoutes(routes, (permissions) => permissions.includes(role));
 
       <Block title="Where you are">
         <p className={muted}>
-          <code>useCurrentRoute</code>가 주는 <code>matches</code>는 바깥 묶음부터 지금 화면까지의 사슬입니다. 그대로 경로 표시가 되고, 마지막 노드의 <code>meta</code>가 화면 제목과 탭 제목이 됩니다. 화면마다 제목을 따로 적지 않습니다.
+          <code>useBreadcrumbs</code>가 지금 주소까지 온 길을 칸 목록으로 주고, <code>TxBreadcrumb</code>이 그대로 받습니다. <code>useCurrentRoute</code>의 <code>meta</code>는 화면 제목과 탭 제목이 됩니다. 화면마다 제목도 경로도 따로 적지 않습니다.
         </p>
-        <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta, matches } = useCurrentRoute(routes);
-const trail = matches.filter((node) => node.meta?.label);   // 운영 › 대시보드
+        <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta } = useCurrentRoute(routes);
+const crumbs = useBreadcrumbs(routes);   // 운영 / 대시보드
 
-<TxBreadcrumb>
-  {trail.map((node, index) => /* 마지막이 아니면 링크 */)}
-</TxBreadcrumb>
+<TxBreadcrumb items={crumbs} itemAs={NavLink} />
 <h1>{meta?.label}</h1>`}</CodeBlock>
       </Block>
 

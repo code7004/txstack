@@ -17,7 +17,7 @@ import { UiGroups } from "./home/UiGroups";
 /** 다섯 패키지. 다 설치할 필요가 없다 — 필요한 때만 고른다 */
 const PACKAGES = [
   { name: "@txstack/ui", when: "버튼 · 폼 · 표 · 메뉴 등 화면 부품이 필요할 때", extra: "표는 ag-grid, 달력은 react-day-picker를 쓸 때만 추가", to: "/api/ui" },
-  { name: "@txstack/route-meta", when: "라우트 정의 하나로 메뉴와 지금 위치를 함께 관리할 때", extra: "react-router-dom", to: "/api/route-meta" },
+  { name: "@txstack/route-meta", when: "라우트 정의 하나로 라우터 · GNB · 사이드바 · 브레드크럼을 함께 관리할 때", extra: "react-router-dom", to: "/api/route-meta" },
   { name: "@txstack/hooks", when: "객체 상태나 URL 검색 조건을 관리할 때", extra: "URL 상태는 react-router-dom", to: "/api/hooks" },
   { name: "@txstack/axios", when: "인증 · 응답 · 오류 처리 정책을 HTTP 클라이언트에 연결할 때", extra: "axios. React 없이도 동작", to: "/api/axios" },
   { name: "@txstack/fns", when: "숫자 포맷 · 날짜 범위 · 폼 검사 · 전화번호 마스킹을 매번 다시 쓰고 있을 때", extra: "없음. React 없이도 동작", to: "/api/fns" }
@@ -42,7 +42,7 @@ export function Home() {
             <TxTag>TypeScript</TxTag>
           </div>
 
-          {/* 첫 화면은 짧게 — 정체(UI)와 대표 장점(라우트 하나로 두 메뉴)만 둔다. 디자인 · URL 상태 · HTTP 는 아래 구역이 맡는다(docs/009) */}
+          {/* 첫 화면은 짧게 — 정체(UI)와 대표 장점(라우트 하나로 메뉴 · 경로)만 둔다. 디자인 · URL 상태 · HTTP 는 아래 구역이 맡는다(docs/009) */}
           <h1 className="text-4xl leading-tight font-semibold sm:text-5xl">
             관리 화면을 만드는 <span style={{ color: "var(--tx-color-primary-strong)" }}>React UI</span>와 도구
           </h1>
@@ -50,9 +50,9 @@ export function Home() {
           <p className="text-lg text-slate-600 dark:text-slate-300">
             폼 · 표 · 모달 · 레이아웃을 조립하고,{" "}
             <a href="#routes-to-menus" className="underline">
-              라우트 설정 하나로 GNB와 사이드바
+              라우트 설정 하나로 GNB · 사이드바 · 브레드크럼
             </a>
-            를 관리하세요.
+            까지 관리하세요.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -99,18 +99,19 @@ export function Home() {
         <UiGroups />
       </section>
 
-      {/* --- 3. 라우트 하나로 GNB · 사이드바 -------------------------------------- */}
+      {/* --- 3. 라우트 하나로 GNB · 사이드바 · 경로 ------------------------------- */}
       <section id="routes-to-menus" className="site-anchor flex flex-col gap-4">
         <header className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">One route tree, both menus</h2>
+          <h2 className="text-xl font-semibold">One route tree — menus and breadcrumb</h2>
           <p className="text-slate-600 dark:text-slate-300">
-            <strong>라우트 한 곳에 정의하고, GNB와 사이드바를 함께 구성하세요.</strong> 경로와 메뉴 이름, 하위 메뉴를 메타데이터 트리로 선언합니다. 같은 트리에서 라우터와 메뉴 데이터를 만들고, UI 컴포넌트에 연결해 상단 메뉴와 사이드바를 구성합니다.
-            메뉴를 추가하거나 이름을 바꿀 때도 이 설정 한 곳만 고칩니다.
+            <strong>라우트 한 곳에 정의하면 라우터 · GNB · 사이드바 · 브레드크럼이 거기서 나옵니다.</strong> 경로와 메뉴 이름, 하위 메뉴를 메타데이터 트리로 선언하고, 같은 트리에서 라우터(
+            <code>buildRouteObjects</code>), 메뉴(<code>getNavRoutes</code>), 경로 칸(<code>useBreadcrumbs</code>)을 만듭니다. 메뉴를 추가하거나 이름을 바꿀 때도 이 설정 한 곳만 고칩니다.
           </p>
         </header>
         <RouteMenuDemo />
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          <code>route-meta</code>는 라우트 변환과 메뉴 데이터를 만들고, 메뉴를 그리는 일은 UI 컴포넌트와 위의 짧은 연결 코드가 합니다. 권한은 메뉴에서 항목을 거르는 데까지입니다. 이 사이트의 메뉴도 같은 방식으로 구성했습니다 —{" "}
+          <code>route-meta</code>는 라우트 변환과 메뉴 데이터를 만들고, 메뉴를 그리는 일은 UI 컴포넌트와 위의 짧은 연결 코드가 합니다. 권한은 메뉴에서 항목을 거르는 데까지입니다. 이 사이트의 메뉴와 문서 맨 위의 경로 표시도 같은 방식으로 구성했습니다
+          —{" "}
           <Link to="/docs/guide/routing" className="underline">
             Routing & Menu
           </Link>

@@ -1,7 +1,7 @@
-import { buildRouteObjects, getNavRoutes, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
+import { buildRouteObjects, getNavRoutes, useBreadcrumbs, useCurrentRoute, type NavRoute } from "@txstack/route-meta";
 import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useRoutes } from "react-router-dom";
-import { TxAppShell, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
+import { TxAppShell, TxBreadcrumb, TxButton, TxNavBar, TxSideNav } from "@txstack/ui";
 import { DocPager } from "./components/DocPager";
 import { PageToc } from "./components/PageToc";
 import { STORYBOOK_TARGET, STORYBOOK_URL } from "./lib/links";
@@ -81,6 +81,12 @@ const sideItem = (item: NavRoute): ReactNode =>
   ) : (
     <TxSideNav.Item key={item.key} label={item.meta?.label ?? item.key} as={NavLink} to={item.path} />
   );
+
+/**
+ * **지금 자리까지 온 길.** 칸은 라우트 트리에서 나온다 — 화면마다 적지 않는다(`Documents / Guide / Routing & Menu`).
+ * 메뉴 이름을 바꾸면 가로 줄 · 왼쪽 줄 · 사이트 지도 · 탭 제목과 함께 바뀐다.
+ */
+const PageBreadcrumb = () => <TxBreadcrumb className="mb-6" items={useBreadcrumbs(routes)} itemAs={NavLink} />;
 
 /** 조각의 자리를 기다리는 한도. 화면을 처음 받는 느린 연결도 넉넉히 덮는다 */
 const ANCHOR_WAIT_MS = 10_000;
@@ -244,6 +250,8 @@ function Layout({ children }: { children: ReactNode }) {
       <div className={`mx-auto flex w-full gap-10 px-4 py-8 sm:px-6 sm:py-10 ${home ? "max-w-6xl" : "max-w-[76rem]"}`}>
         <div ref={body} className={`min-w-0 flex-1 ${home || showcase ? "" : "max-w-4xl"}`}>
           {/* 화면을 처음 받는 동안. 다른 화면으로 옮길 때는 라우터가 앞 화면을 받을 때까지 남겨 둔다 */}
+          {/* Home 은 맨 위라 갈 길이 없다 */}
+          {!home && <PageBreadcrumb />}
           <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
             {children}
             <DocPager menu={MENU} />
