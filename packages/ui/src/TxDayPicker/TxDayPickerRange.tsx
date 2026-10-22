@@ -3,6 +3,7 @@ import { DayPicker, type DateRange, type Matcher } from "react-day-picker";
 import { TxInputLike } from "../TxInput/TxInputLike";
 import { TxPopup } from "../TxPopup";
 import { cm } from "../tx-ui.utils";
+import { boundMatchers } from "./TxDayPicker.bounds";
 import { CALENDAR_CLASS_NAMES } from "./TxDayPicker.calendar";
 import { useVisibleMonth } from "./TxDayPicker.month";
 import type { TxDateRange, TxDayPickerRangeProps, TxDayPickerRangeRef } from "./TxDayPicker.types";
@@ -26,6 +27,7 @@ const toDateRange = (range: TxDateRange): DateRange | undefined => (range[0] || 
  * 마지막 날이 통째로 포함된다.
  *
  * `maxDays` 를 주면 시작일을 고른 뒤 **범위를 넘는 날짜가 아예 눌리지 않는다.**
+ * `min` · `max` 는 그와 따로 늘 걸린다 — 오늘까지만이면 `max={new Date()}`. 둘 다 주면 둘 다 건다.
  *
  * `onSubmit*` 을 주면 확인 버튼이 생기고 `onChange*` 는 불리지 않는다 —
  * 기간을 고치는 동안 서버를 치지 않으려는 자리에 쓴다.
@@ -52,6 +54,8 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
     format = "YYYY-MM-DD",
     keepOpen = true,
     disabled = false,
+    min,
+    max,
     id,
     className,
     style,
@@ -74,7 +78,7 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
   const anchorRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
-  const [month, setMonth] = useVisibleMonth(current[0], open, numberOfMonths);
+  const [month, setMonth] = useVisibleMonth(current[0], open, numberOfMonths, min, max);
 
   const close = () => {
     setOpen(false);
@@ -106,26 +110,38 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
    * 원본은 고르고 나서 `alert()` 로 알리고 값을 보정했다. 브라우저 모달로 흐름을 끊는 데다
    * 문구를 바꿀 수도 없었다 — 애초에 못 고르게 하는 편이 낫다.
    */
-  const blocked = useMemo<Matcher | undefined>(() => {
+  // 날짜 단위로만 본다 — 렌더마다 새 Date 를 받아도(`max={new Date()}`) 같은 날이면 다시 만들지 않는다
+  const minDay = min && startOfDay(min).getTime();
+  const maxDay = max && startOfDay(max).getTime();
+
+  const blocked = useMemo<Matcher[]>(() => {
+    const bounds = boundMatchers(minDay === undefined ? undefined : new Date(minDay), maxDay === undefined ? undefined : new Date(maxDay));
     const from = current[0];
-    if (!maxDays || !from || current[1]) return undefined;
+    if (!maxDays || !from || current[1]) return bounds;
 
-    return { before: startOfDay(from), after: endOfDay(addDays(from, maxDays - 1)) } as Matcher;
-  }, [maxDays, current]);
+    return [...bounds, { before: startOfDay(from), after: endOfDay(addDays(from, maxDays - 1)) } as Matcher];
+  }, [maxDays, current, minDay, maxDay]);
 
-  const hdSelect = (next: DateRange | undefined) => {
-    if (!next?.from && !next?.to) {
-      apply(EMPTY);
+  /**
+   * **두 번 눌러 정한다** — 시작을 기다리는 중이 아니면 누른 날이 새 시작이고, 기다리는 중이면 끝이다.
+   *
+   * 라이브러리가 주는 기간(`_next`)을 그대로 쓰지 않는다. 첫 클릭을 "하루짜리 기간"(`10일 ~ 10일`)으로
+   * 주고, 정해진 기간에서 다시 누르면 끝을 늘인다 — 그렇게 읽으면 시작만 고른 순간이 없어서 `maxDays` 가
+   * 한 번도 걸리지 않았고, 정해진 기간을 몇 달로 늘일 수 있었다. 누른 날(`triggerDate`)만 본다.
+   */
+  const hdSelect = (_next: DateRange | undefined, triggerDate: Date) => {
+    const start = current[0];
+    const waitingEnd = start && !current[1];
+
+    // 시작만 고른 중간 상태. 아직 기간이 아니므로 끝 경계를 맞추지 않는다.
+    if (!waitingEnd) {
+      apply([startOfDay(triggerDate), undefined]);
       return;
     }
 
-    // 시작만 고른 중간 상태. 아직 기간이 아니므로 경계를 맞추지 않는다.
-    if (!next.from || !next.to) {
-      apply([next.from, next.to]);
-      return;
-    }
-
-    apply([startOfDay(next.from), endOfDay(next.to)]);
+    // 시작보다 앞을 눌러도 기간이다 — 앞뒤를 바로잡는다(`maxDays` 가 있으면 앞은 애초에 막혀 있다)
+    const [from, to] = triggerDate < start ? [triggerDate, start] : [start, triggerDate];
+    apply([startOfDay(from), endOfDay(to)]);
     if (!keepOpen && !useSubmit) setOpen(false);
   };
 
@@ -168,7 +184,19 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
       <TxPopup anchorRef={anchorRef} open={open} onClose={close} id={panelId} role="dialog" aria-label={placeholder} matchAnchorWidth={false} maxHeight="none" className="tx-daypicker__panel">
         {header && <div className="tx-daypicker__header">{header}</div>}
 
-        <DayPicker mode="range" selected={toDateRange(current)} onSelect={hdSelect} disabled={blocked} numberOfMonths={numberOfMonths} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
+        <DayPicker
+          mode="range"
+          selected={toDateRange(current)}
+          onSelect={hdSelect}
+          disabled={blocked}
+          startMonth={min}
+          endMonth={max}
+          numberOfMonths={numberOfMonths}
+          month={month}
+          onMonthChange={setMonth}
+          autoFocus
+          classNames={CALENDAR_CLASS_NAMES}
+        />
 
         {footer && <div className="tx-daypicker__footer">{footer}</div>}
 

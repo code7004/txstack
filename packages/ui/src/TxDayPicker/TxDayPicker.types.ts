@@ -10,6 +10,18 @@ interface TxDayPickerCommon {
   format?: string;
   disabled?: boolean;
 
+  /**
+   * 고를 수 있는 첫날. **이날 앞은 눌리지 않고, 그 앞 달로도 넘어가지 않는다.** 이날은 고를 수 있다 —
+   * HTML `<input type="date" min>` 과 같은 뜻이다. 날짜 단위로 보므로 시각은 상관없다.
+   *
+   * **고르는 손만 막는다** — `value` 나 `ref.setValue` 로 범위 밖 날짜가 들어와도 고치지 않는다.
+   */
+  min?: Date;
+  /**
+   * 고를 수 있는 마지막 날. 오늘까지만 고르게 하려면 `max={new Date()}`. 뜻은 `min` 과 같다.
+   */
+  max?: Date;
+
   className?: string;
   /** `className` 과 같은 자리에 붙는다. 토큰을 인라인으로 줄 때 쓴다. */
   style?: CSSProperties;

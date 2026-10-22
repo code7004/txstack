@@ -1,8 +1,9 @@
-import { useId, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { TxInputLike } from "../TxInput/TxInputLike";
 import { TxPopup } from "../TxPopup";
 import { cm } from "../tx-ui.utils";
+import { boundMatchers } from "./TxDayPicker.bounds";
 import { CALENDAR_CLASS_NAMES } from "./TxDayPicker.calendar";
 import { useVisibleMonth } from "./TxDayPicker.month";
 import type { TxDayPickerProps } from "./TxDayPicker.types";
@@ -25,11 +26,13 @@ import { formatDate, startOfDay } from "./TxDayPicker.utils";
  * 달력은 화면 맨 위 층으로 뜬다 — `overflow: hidden` 안에 넣어도 잘리지 않고,
  * 아래가 좁으면 위로 뒤집고, **스크롤해도 따라간다.**
  *
+ * `min` · `max` 를 주면 **그 밖의 날은 눌리지 않고 그 밖의 달로 넘어가지 않는다** — 오늘까지만이면 `max={new Date()}`.
+ *
  * 기간을 고르려면 `TxDayPickerRange` 를 쓴다.
  *
  * 명세: `docs/001_ui/013_TxDayPicker.md`
  */
-export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날짜 선택", format = "YYYY-MM-DD", keepOpen = false, disabled = false, id, className, style, ...rest }: TxDayPickerProps) {
+export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날짜 선택", format = "YYYY-MM-DD", keepOpen = false, disabled = false, min, max, id, className, style, ...rest }: TxDayPickerProps) {
   const [inner, setInner] = useState<Date | undefined>(defaultValue);
   const selected = value ?? inner;
 
@@ -37,7 +40,12 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
   const anchorRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
-  const [month, setMonth] = useVisibleMonth(selected, open);
+  const [month, setMonth] = useVisibleMonth(selected, open, 1, min, max);
+
+  // 날짜 단위로만 본다 — 렌더마다 새 Date 를 받아도(`max={new Date()}`) 같은 날이면 다시 만들지 않는다
+  const minDay = min && startOfDay(min).getTime();
+  const maxDay = max && startOfDay(max).getTime();
+  const blocked = useMemo(() => boundMatchers(minDay === undefined ? undefined : new Date(minDay), maxDay === undefined ? undefined : new Date(maxDay)), [minDay, maxDay]);
 
   const hdSelect = (date: Date | undefined) => {
     const next = date ? startOfDay(date) : undefined;
@@ -74,7 +82,7 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
 
       <TxPopup anchorRef={anchorRef} open={open} onClose={() => setOpen(false)} id={panelId} role="dialog" aria-label={placeholder} matchAnchorWidth={false} maxHeight="none" className="tx-daypicker__panel">
         {/* 펴 놓을 달은 우리가 쥔다 — 안 쥐면 고른 날이 언제든 늘 오늘 달로 열린다. */}
-        <DayPicker mode="single" selected={selected} onSelect={hdSelect} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
+        <DayPicker mode="single" selected={selected} onSelect={hdSelect} disabled={blocked} startMonth={min} endMonth={max} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
       </TxPopup>
     </div>
   );
