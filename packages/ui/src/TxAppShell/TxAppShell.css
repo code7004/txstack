@@ -12,6 +12,8 @@
   --tx-app-shell-left-width: 15rem;
   --tx-app-shell-right-width: 14rem;
   --tx-app-shell-bottom-height: 12rem;
+  /** 접혀도 남는 크기. 기본은 0 — 완전히 감춘다. `panels[slot].collapsedSize` 가 그 패널에서만 덮는다 */
+  --tx-app-shell-collapsed-size: 0px;
   --tx-app-shell-main-padding: 1.5rem;
 
   /** 헤더 줄(`header` 슬롯과 햄버거가 놓이는 줄). 높이는 최소값이다 — 내용이 크면 늘어난다 */
@@ -280,16 +282,31 @@
 /**
  * **접히면 완전히 사라진다.** 경계선도 같이 지운다 — 남기면 빈 줄 하나가 떠 있다.
  * 스위치만 제자리에 남아 다시 펼 길이 된다(`overflow: visible`).
+ *
+ * `collapsedSize` 를 준 패널은 그만큼 남는다(`--tx-app-shell-collapsed-size`, 기본 0).
  */
 .tx-app-shell__left[data-collapsed],
 .tx-app-shell__right[data-collapsed] {
-  inline-size: 0;
+  inline-size: var(--tx-app-shell-collapsed-size);
   border-inline: 0;
 }
 
 .tx-app-shell__bottom[data-collapsed] {
-  block-size: 0;
+  block-size: var(--tx-app-shell-collapsed-size);
   border-block-start: 0;
+}
+
+/** 남는 자리는 경계선도 남는다 — 남은 줄과 본문 사이에 선이 있어야 한다 */
+.tx-app-shell__left[data-collapsed="kept"] {
+  border-inline-end: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
+}
+
+.tx-app-shell__right[data-collapsed="kept"] {
+  border-inline-start: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
+}
+
+.tx-app-shell__bottom[data-collapsed="kept"] {
+  border-block-start: var(--tx-app-shell-panel-border-width) solid var(--tx-app-shell-border-color);
 }
 
 /** 좁아지면 곁들이는 것부터 접는다. 본문이 먼저다 */

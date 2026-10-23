@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState, type CSSProperties } from "react";
+import { TxSideNav } from "../TxSideNav";
 import { TxAppShell } from "./TxAppShell";
 
 /** CSS 변수를 인라인 스타일로 주려면 타입을 넓혀야 한다. 스토리에서만 쓴다. */
@@ -178,6 +179,21 @@ const meta = {
           "준다 — 그러면 스위치를 눌러도 밖이 정한 값이 이긴다. 스위치를 직접 그릴 때 쓰는",
           "길이기도 하다(`collapse` 를 안 주고 `collapsed` 만).",
           "",
+          "### 접어도 아이콘 줄은 남긴다 — `collapsedSize`",
+          "",
+          "```tsx",
+          "<TxAppShell left={<TxSideNav>{items}</TxSideNav>} panels={{ left: { collapse: true, collapsedSize: 56 } }} />",
+          "```",
+          "",
+          "`collapsedSize`(px)를 함께 주면 스위치를 눌러도 **완전히 사라지지 않고 그만큼 남는다.** 남는 동안에도",
+          "내용을 그리고 경계선도 남는다. 안에 `TxSideNav` 를 두면 **따라서 아이콘 줄이 된다** — 메뉴에",
+          "`collapsed` 를 따로 주지 않아도 되고, 메뉴는 패널 폭을 채운다. 접힌 채로 하위가 있는 항목을 누르면",
+          "패널이 먼저 펴진다.",
+          "",
+          "- 접힌 동안에는 손잡이가 없다. 다시 펴면 접기 전 크기로 돌아온다",
+          "- `onPanelChange` 는 완전히 감출 때와 똑같이 `collapsed: true` 를 보낸다",
+          "- 아이콘으로 줄어들 줄 모르는 내용을 넣으면 그 폭에 눌려 잘린다",
+          "",
           "### 좁아지면 left 가 서랍으로 간다",
           "",
           "`breakpoint`(기본 960px)보다 좁아지면 헤더에 햄버거가 생기고, 누르면 왼쪽에서",
@@ -351,6 +367,44 @@ export const 접었다펴기: Story = {
       <TxAppShell {...args} style={{ minBlockSize: "34rem" }} />
     </div>
   )
+};
+
+/**
+ * 스위치를 누르면 메뉴가 **아이콘 줄만 남기고** 접힌다. `collapsedSize` 하나로 셸은 그 폭만 남기고,
+ * 안의 `TxSideNav` 가 따라서 글자를 감춘다. 접힌 채로 「설정」을 누르면 패널이 먼저 펴진다.
+ */
+export const 아이콘줄만남기기: Story = {
+  name: "아이콘 줄만 남기기",
+  render: function IconRailStory() {
+    const [picked, setPicked] = useState("대시보드");
+    const item = (icon: string, label: string) => <TxSideNav.Item icon={icon} label={label} as="button" type="button" aria-current={picked === label ? "page" : undefined} onClick={() => setPicked(label)} />;
+
+    return (
+      <div style={frame}>
+        <TxAppShell
+          panelSticky={false}
+          header={<Brand />}
+          left={
+            <TxSideNav className="p-2">
+              {item("◧", "대시보드")}
+              {item("▤", "보고서")}
+              <TxSideNav.Item icon="⚙" label="설정">
+                {item("", "계정")}
+                {item("", "알림")}
+              </TxSideNav.Item>
+            </TxSideNav>
+          }
+          panels={{ left: { collapse: true, collapsedSize: 56 } }}
+          style={{ minBlockSize: "24rem" }}
+        >
+          <div className="flex flex-col gap-2 p-6">
+            <h3 className="font-semibold">{picked}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300">왼쪽 경계선 가운데의 스위치를 눌러 보세요. 메뉴가 아이콘 줄만 남기고 접히고, 본문이 그만큼 넓어집니다.</p>
+          </div>
+        </TxAppShell>
+      </div>
+    );
+  }
 };
 
 /**

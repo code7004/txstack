@@ -13,7 +13,10 @@ export interface TxSideNavProps extends HTMLAttributes<HTMLElement> {
    *
    * 스위치는 그리지 않는다 — 헤더에 두는 앱이 많고, `TxAppShell` 의 `left.collapse` 와
    * 겹치면 접는 길이 둘이 된다. **셸의 접기와 이것은 다른 것이다** — 셸은 패널을 폭 0 으로
-   * 감추고, 이쪽은 아이콘 줄로 남는다. 둘 중 하나만 쓴다.
+   * 감추고, 이쪽은 아이콘 줄로 남는다. 한 화면에서는 한 길만 쓴다.
+   *
+   * **셸에 `collapsedSize` 를 준 패널 안에서는 주지 않아도 된다** — 셸의 스위치를 따라 접힌다.
+   * 주면 이것이 이긴다.
    */
   collapsed?: boolean;
   /** 처음부터 접힌 채로. 이후는 이 컴포넌트가 쥔다. */
