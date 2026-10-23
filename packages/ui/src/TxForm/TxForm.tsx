@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { cm } from "../tx-ui.utils";
+import { TxFormCaptionContext } from "./TxForm.context";
 import { TxFormCheckBox, TxFormCombobox, TxFormDropdown, TxFormDropdownMulti, TxFormInput, TxFormSearchInput, TxFormTextarea } from "./TxFormControls";
 import { TxFormField } from "./TxFormField";
 import { TxFormFlex } from "./TxFormFlex";
@@ -11,6 +12,7 @@ import type { TxFormProps } from "./TxForm.types";
  *
  * - `onSubmit` 은 `preventDefault` 가 이미 걸려 있다. 소비자가 다시 부를 필요가 없다
  * - `labelWidth` 를 주면 **모든 필드의 캡션이 왼쪽으로 가고** 그 너비로 정렬된다
+ * - `captionPlacement="border"` 를 주면 **캡션이 컨트롤의 윗 테두리에 얹힌다** — `labelWidth` 보다 이긴다
  *
  * @example
  * ```tsx
@@ -26,7 +28,7 @@ import type { TxFormProps } from "./TxForm.types";
  *
  * 명세: `docs/001_ui/014_TxForm.md`
  */
-export const TxFormBase = ({ labelWidth, className, style, onSubmit, children, ...props }: TxFormProps) => {
+export const TxFormBase = ({ labelWidth, captionPlacement, className, style, onSubmit, children, ...props }: TxFormProps) => {
   /*
     핸들러를 useCallback 으로 감싸지 않는다. 소비자는 onSubmit 을 인라인으로 주는 것이 보통이라
     deps 가 매 렌더 바뀌고, <form> 은 memo 된 자식도 아니라 안정화해서 얻는 것이 없다.
@@ -47,7 +49,7 @@ export const TxFormBase = ({ labelWidth, className, style, onSubmit, children, .
       data-label-width={labelWidth == null ? undefined : ""}
       onSubmit={hdSubmit}
     >
-      {children}
+      {captionPlacement ? <TxFormCaptionContext.Provider value={captionPlacement}>{children}</TxFormCaptionContext.Provider> : children}
     </form>
   );
 };

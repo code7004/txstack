@@ -1,5 +1,6 @@
-import { forwardRef, useId, type AriaAttributes, type ReactNode } from "react";
+import { forwardRef, useContext, useId, type AriaAttributes, type ReactNode } from "react";
 import { cm } from "../tx-ui.utils";
+import { TxFormCaptionContext } from "./TxForm.context";
 import type { TxFormFieldProps } from "./TxForm.types";
 
 /**
@@ -27,9 +28,12 @@ export const TxFormField = forwardRef<HTMLDivElement, TxFormFieldProps>(function
   const tone = error != null ? "error" : warning != null ? "warning" : undefined;
   const msgId = messageId ?? (htmlFor ? `${htmlFor}-message` : undefined);
 
+  // 가장 가까운 TxForm · TxForm.Flex 가 정한 캡션 자리. 배치는 CSS 가 이 표시를 보고 한다
+  const placement = useContext(TxFormCaptionContext);
+
   return (
     // data-tag 를 스프레드 뒤에 둔다. 원본은 앞에 둬서 통과 props 가 이름을 덮어썼다.
-    <div {...props} ref={ref} className={cm("tx-form-field", className)} data-tag="TxForm.Field">
+    <div {...props} ref={ref} className={cm("tx-form-field", className)} data-tag="TxForm.Field" data-caption-placement={placement}>
       {caption != null && (
         <FieldCaption id={captionId} htmlFor={htmlFor}>
           {caption}
