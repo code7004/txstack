@@ -205,8 +205,43 @@ export function GuideForms() {
   --tx-form-message-reserve: 0;
 }`}</CodeBlock>
         <p className={muted}>
-          <code>labelWidth</code>와 이 한 줄을 함께 쓰면 한 줄의 높이가 절반 가까이 줄어듭니다. 같은 필드를 세 가지 밀도로 나란히 놓은 비교는 Storybook의 TxForm › Density에 있습니다.
+          <code>labelWidth</code>와 이 한 줄을 함께 쓰면 한 줄의 높이가 절반 가까이 줄어듭니다. 같은 필드를 네 가지 밀도로 나란히 놓은 비교는 Storybook의 TxForm › Density에 있습니다.
         </p>
+      </Block>
+
+      <Block title="7. Search and filter toolbars">
+        <p className={muted}>
+          표 위의 검색 · 필터 한 줄처럼 가로로 빽빽한 자리에서는 캡션을 입력란의 <strong>윗 테두리에 얹을</strong> 수 있습니다. <code>captionPlacement=&quot;border&quot;</code>를 주면 캡션이 따로 줄을 차지하지 않고, 문구 자리도 미리 비워 두지
+          않습니다. 캡션은 그대로 입력란의 이름이라 눌러도 입력란으로 갑니다.
+        </p>
+        <CodeBlock title="src/UserToolbar.tsx">{`// <form> 이 아니어도 TxForm.Flex 하나로 쓴다
+<TxForm.Flex captionPlacement="border">
+  <TxForm.SearchInput caption="검색어" className="flex-[3]" onSubmitText={search} />
+  <TxForm.Dropdown caption="금액필터" data={FIELDS} value={field} onChangeText={setField} />
+  <TxForm.Input caption="총입금 이상" type="number" onSubmitNumber={setLow} />
+  <TxForm.Input caption="총입금 이하" type="number" onSubmitNumber={setHigh} />
+</TxForm.Flex>`}</CodeBlock>
+        <Demo>
+          <TxForm.Flex captionPlacement="border" className="items-start">
+            <TxForm.SearchInput caption="검색어" placeholder="아이디 · 닉네임" className="flex-[3]" />
+            <TxForm.Dropdown caption="금액필터" data={["총입금", "총출금", "총베팅"]} value="총입금" />
+            <TxForm.Input caption="총입금 이상" type="number" placeholder="0" />
+          </TxForm.Flex>
+        </Demo>
+        <ul className={`flex list-disc flex-col gap-1 ps-5 ${muted}`}>
+          <li>
+            <code>TxForm</code>에 주면 폼 안의 모든 칸이, <code>TxForm.Flex</code>에 주면 그 줄의 칸만 따릅니다. 안쪽 줄에 <code>captionPlacement=&quot;top&quot;</code>을 주면 그 줄만 위에 쌓습니다 — 가까운 쪽이 이깁니다.
+          </li>
+          <li>
+            오류 문구는 입력란 아래 제자리에 뜹니다. 미리 자리를 잡고 싶으면 <code>--tx-form-message-reserve</code>를 덮으세요.
+          </li>
+          <li>
+            <code>labelWidth</code>와 함께 주면 <code>captionPlacement</code>가 이깁니다. 테두리가 없는 체크박스는 얹지 않고 위에 쌓습니다.
+          </li>
+          <li>
+            캡션 뒤에는 테두리 선을 가리는 바탕이 깔립니다. 카드처럼 다른 색 위에 놓을 때는 <code>--tx-form-caption-bg</code>를 맞추세요.
+          </li>
+        </ul>
       </Block>
 
       <p className={muted}>
