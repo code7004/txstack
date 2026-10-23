@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { TxSideNav } from "../TxSideNav";
 import { TxAppShell } from "./TxAppShell";
 
 /**
@@ -929,6 +930,152 @@ describe("TxAppShell — 접기", () => {
 });
 
 /**
+ * 접어도 남는 자리 — `collapsedSize`. **셸은 숫자만 알고**, 안의 `TxSideNav` 가 컨텍스트로 따라 아이콘 줄이 된다.
+ * usertics 에서 "완전히 감추는 대신 아이콘 줄만 남기고 싶다" 로 요구됐다.
+ */
+describe("TxAppShell — 접어도 남는 크기", () => {
+  const left = () => document.querySelector(".tx-app-shell__left") as HTMLElement;
+  const nav = () => document.querySelector('[data-tag="TxSideNav"]') as HTMLElement;
+  const MENU = (
+    <TxSideNav>
+      <TxSideNav.Item icon="◧" label="대시보드" href="/" onClick={stay} />
+      <TxSideNav.Item icon="⚙" label="설정">
+        <TxSideNav.Item label="계정" href="/settings/account" onClick={stay} />
+      </TxSideNav.Item>
+    </TxSideNav>
+  );
+
+  it("접혀도 그 크기만큼 남고, 내용을 계속 그린다", () => {
+    render(
+      <TxAppShell {...SLOTS} panels={{ left: { collapse: true, collapsedSize: 56 } }}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+
+    expect(left().getAttribute("data-collapsed")).toBe("kept");
+    expect(left().style.getPropertyValue("--tx-app-shell-collapsed-size")).toBe("56px");
+    expect(screen.getByRole("link", { name: "설정" })).toBeTruthy();
+  });
+
+  /** 남은 자리도 끌 수는 없다 — 끌면 접힌 것인지 작은 것인지 모호해진다 */
+  it("접히면 크기 손잡이는 사라지고 스위치는 남는다", () => {
+    render(
+      <TxAppShell {...SLOTS} panels={{ left: { resize: true, collapse: true, collapsedSize: 56 } }}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+
+    expect(screen.queryAllByRole("separator")).toHaveLength(0);
+    expect(screen.getByRole("button", { name: "하위 메뉴" }).getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("안 주면 지금처럼 완전히 감춘다", () => {
+    render(
+      <TxAppShell {...SLOTS} panels={{ left: { collapse: true } }}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+
+    expect(left().getAttribute("data-collapsed")).toBe("");
+    expect(left().style.getPropertyValue("--tx-app-shell-collapsed-size")).toBe("");
+  });
+
+  it("0 은 주지 않은 것과 같다", () => {
+    render(
+      <TxAppShell {...SLOTS} panels={{ left: { collapse: true, collapsedSize: 0 } }}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+    expect(screen.queryByRole("link", { name: "설정" })).toBeNull();
+  });
+
+  it("안의 TxSideNav 가 셸의 스위치를 따라 아이콘 줄이 된다", () => {
+    render(
+      <TxAppShell left={MENU} panels={{ left: { collapse: true, collapsedSize: 56 } }}>
+        본문
+      </TxAppShell>
+    );
+
+    expect(nav().hasAttribute("data-collapsed")).toBe(false);
+    expect(nav().hasAttribute("data-in-panel")).toBe(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+    expect(nav().hasAttribute("data-collapsed")).toBe(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+    expect(nav().hasAttribute("data-collapsed")).toBe(false);
+  });
+
+  /** 아이콘 줄에는 하위 목록을 펼칠 자리가 없다 — 줄을 펴는 것은 셸의 일이다 */
+  it("접힌 채로 하위가 있는 항목을 누르면 셸이 펴진다", () => {
+    const onPanelChange = vi.fn();
+    render(
+      <TxAppShell left={MENU} panels={{ left: { collapse: true, collapsedSize: 56, defaultCollapsed: true } }} onPanelChange={onPanelChange}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "설정" }));
+
+    expect(onPanelChange).toHaveBeenCalledWith("left", { size: undefined, collapsed: false, settled: true });
+    expect(left().hasAttribute("data-collapsed")).toBe(false);
+    expect(nav().hasAttribute("data-collapsed")).toBe(false);
+  });
+
+  it("TxSideNav 에 collapsed 를 주면 그쪽이 이긴다", () => {
+    render(
+      <TxAppShell
+        left={
+          <TxSideNav collapsed={false}>
+            <TxSideNav.Item icon="◧" label="대시보드" href="/" onClick={stay} />
+          </TxSideNav>
+        }
+        panels={{ left: { collapse: true, collapsedSize: 56 } }}
+      >
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "하위 메뉴" }));
+
+    expect(nav().hasAttribute("data-collapsed")).toBe(false);
+    expect(nav().hasAttribute("data-in-panel")).toBe(false);
+  });
+
+  /** 남지 않는 셸에서는 컨텍스트가 없다 — 메뉴는 제 `collapsed` 만 본다 */
+  it("collapsedSize 가 없으면 TxSideNav 는 셸을 따르지 않는다", () => {
+    render(
+      <TxAppShell left={MENU} panels={{ left: { collapse: true } }}>
+        본문
+      </TxAppShell>
+    );
+
+    expect(nav().hasAttribute("data-in-panel")).toBe(false);
+  });
+
+  /** 서랍의 메뉴는 늘 다 펼쳐져 있다 — 서랍에는 접는 스위치가 없다 */
+  it("서랍 안의 메뉴는 셸을 따르지 않는다", () => {
+    setViewport(true);
+    render(
+      <TxAppShell left={MENU} panels={{ left: { collapse: true, collapsedSize: 56, defaultCollapsed: true } }}>
+        본문
+      </TxAppShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
+    expect(nav().hasAttribute("data-collapsed")).toBe(false);
+  });
+});
+
+/**
  * 하단 탭바. **좁을 때만 선다** — 넓은 화면에는 top · left 가 이미 그 일을 한다.
  * `bottom`(콘솔 패널)과는 다른 자리다.
  */
@@ -1198,6 +1345,20 @@ describe("TxAppShell — CSS 계약", () => {
     expect(leaking).toEqual([]);
   });
 
+  it("접힌 크기는 토큰을 따르고 기본은 0 이다 — 남는 자리만 경계선을 다시 긋는다", () => {
+    expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-collapsed-size:\s*0px/);
+    expect(css).toMatch(/__right\[data-collapsed\]\s*\{[^}]*inline-size:\s*var\(--tx-app-shell-collapsed-size\)/);
+    expect(css).toMatch(/__bottom\[data-collapsed\]\s*\{[^}]*block-size:\s*var\(--tx-app-shell-collapsed-size\)/);
+
+    for (const [slot, side] of [
+      ["left", "inline-end"],
+      ["right", "inline-start"],
+      ["bottom", "block-start"]
+    ]) {
+      expect(css).toMatch(new RegExp(`__${slot}\\[data-collapsed="kept"\\]\\s*\\{[^}]*border-${side}:\\s*var\\(--tx-app-shell-panel-border-width\\)`));
+    }
+  });
+
   it("붙는 자리는 헤더가 붙어 있을 때만 헤더 높이이고, 숨거나 같이 굴러가면 0 이다", () => {
     expect(css).toMatch(/\.tx-app-shell\s*\{[^}]*--tx-app-shell-panel-top:\s*0px/);
     expect(css).toMatch(/\.tx-app-shell\[data-sticky\]\s*\{[^}]*--tx-app-shell-panel-top:\s*var\(--tx-app-shell-header-height/);
@@ -1304,10 +1465,10 @@ describe("TxAppShell — CSS 계약", () => {
   });
 
   /** 접힌 패널의 경계선이 남으면 빈 줄 하나가 떠 있다. */
+  /** 크기는 접힌 크기 토큰(기본 0)을 따른다 — 아래 "접힌 크기는 토큰을 따르고" 가 그 값을 본다 */
   it("접히면 경계선까지 지운다", () => {
-    expect(css).toMatch(/\.tx-app-shell__right\[data-collapsed\]\s*\{[^}]*inline-size:\s*0/s);
     expect(css).toMatch(/\[data-collapsed\][^{]*\{[^}]*border-inline:\s*0/s);
-    expect(css).toMatch(/\.tx-app-shell__bottom\[data-collapsed\]\s*\{[^}]*block-size:\s*0/);
+    expect(css).toMatch(/\.tx-app-shell__bottom\[data-collapsed\]\s*\{[^}]*border-block-start:\s*0/);
   });
 
   /** 경계선에 얹는 탭이라 14px 이다. 그대로 두면 손가락이 닿는 자리가 너무 좁다. */

@@ -241,7 +241,8 @@ export const TextOnly: Story = {
  * 셸은 안에 무엇이 있는지 몰라도 된다.
  *
  * 랜드마크는 셸이 붙이므로 여기서는 `label` 을 주지 않는다. 셸의 `left.collapse`
- * (폭 0 으로 **감추기**)와 이쪽의 rail(아이콘 줄로 **남기기**)은 다른 것이라 둘 중 하나만 쓴다.
+ * (폭 0 으로 **감추기**)와 이쪽의 rail(아이콘 줄로 **남기기**)은 다른 것이라 한 화면에서는 하나만 쓴다.
+ * 셸의 스위치로 아이콘 줄까지 접으려면 다음 스토리(`collapsedSize`)를 본다.
  *
  * `breakpoint` 를 `360` 으로 낮춰 두었다 — **셸의 기본은 `960`** 인데 그러면 문서 페이지처럼
  * 좁은 자리에서 셸이 좁은 화면으로 보고 `left` 를 **서랍으로** 옮긴다. 그 모습을 보려면
@@ -273,6 +274,27 @@ export const WithShell: StoryObj = {
         >
           <Body picked={picked}>
             <p className="text-slate-500 dark:text-slate-400">헤더의 ☰ 로 왼쪽 줄을 아이콘만 남기고 접는다. 접힌 채로 설정을 누르면 줄이 먼저 펴진다.</p>
+          </Body>
+        </TxAppShell>
+      </div>
+    );
+  }
+};
+
+/**
+ * **셸의 스위치로 아이콘 줄까지 접는다.** 셸에 `collapsedSize` 를 주면 그 패널 안의 줄이 셸의 접힘을
+ * 따른다 — `collapsed` 를 주지 않아도 되고, 폭은 패널을 채운다. 헤더에 따로 버튼을 둘 자리가 없을 때 쓴다.
+ */
+export const WithShellSwitch: StoryObj = {
+  parameters: noControls,
+  render: function WithShellSwitchStory() {
+    const [picked, setPicked] = useState("대시보드");
+
+    return (
+      <div style={{ border: "1px solid var(--tx-color-border)", borderRadius: "var(--tx-radius)", overflow: "hidden" }}>
+        <TxAppShell panelSticky={false} header={<strong>IDK</strong>} left={<TxSideNav>{items(setPicked, picked)}</TxSideNav>} panels={{ left: { collapse: true, collapsedSize: 56 } }} breakpoint={360} style={{ minBlockSize: "34rem" }}>
+          <Body picked={picked}>
+            <p className="text-slate-500 dark:text-slate-400">경계선 가운데의 스위치로 왼쪽 줄을 아이콘만 남기고 접는다. 접힌 채로 설정을 누르면 패널이 먼저 펴진다.</p>
           </Body>
         </TxAppShell>
       </div>

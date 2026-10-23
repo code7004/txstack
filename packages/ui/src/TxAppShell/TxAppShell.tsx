@@ -3,6 +3,7 @@ import { TxButton } from "../TxButton";
 import { TxSlidePanel } from "../TxSlidePanel";
 import { cm } from "../tx-ui.utils";
 import { useCollapse, useElementHeight, useHideOnScroll, useNarrow, useResize } from "./TxAppShell.hook";
+import { TxAppShellPanelContext } from "./TxAppShell.context";
 import type { TxAppShellPanelSlot, TxAppShellProps } from "./TxAppShell.types";
 
 const DEFAULT_LABELS = {
@@ -68,8 +69,9 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
  * 4. **좁아지면 `left` 를 서랍으로** — 헤더에 햄버거가 생기고 **같은 노드**를 그대로 그린다
  * 5. **크기 조절** — `resizable` 을 준 자리는 끌어서 바꾼다. 한계를 안 줘도 **본문이 남을
  *    만큼만** 늘어난다
- * 6. **접기** — `collapsible` 을 준 자리는 경계선의 스위치로 접는다. 다시 펴면 **접기 전
- *    크기로** 돌아온다
+ * 6. **접기** — `collapse` 를 준 자리는 경계선의 스위치로 접는다. 다시 펴면 **접기 전
+ *    크기로** 돌아온다. `collapsedSize` 를 함께 주면 완전히 감추지 않고 그만큼 남긴다 —
+ *    안의 `TxSideNav` 가 따라서 아이콘 줄이 된다
  *
  * 로고 · 메뉴 구조 · 로그인 상태는 **전부 슬롯이다.** 그것이 앱마다 다른 부분이고,
  * 넣는 순간 범용이 아니게 된다.
@@ -138,6 +140,7 @@ export const TxAppShell = ({
   /**
    * 세 패널이 같은 부품으로 이뤄진다 — 내용 · 크기 손잡이 · 접기 스위치.
    * **접히면 내용을 그리지 않는다.** 폭만 0 으로 두면 안의 링크에 Tab 이 그대로 닿는다.
+   * `collapsedSize` 로 남는 자리는 예외다 — 보이는 만큼 남으니 그대로 그린다.
    *
    * 내용이 한 겹 더 들어간 이유는 **스크롤이 스위치를 자르기 때문**이다 — 넘치는 것을
    * 패널이 직접 감추면 경계선 위에 얹힌 스위치가 같이 잘려 나간다.
@@ -148,9 +151,21 @@ export const TxAppShell = ({
     const handleProps = off ? null : resize.handleProps(slot, text[slot], text.resize);
     const toggleProps = collapse.toggleProps(slot, text[slot], text.toggle);
 
+    // 접어도 남는 자리. **남는 동안은 내용을 그린다** — 아이콘 줄처럼 접힌 모습을 내용이 가진다
+    const keep = panels?.[slot]?.collapsedSize;
+    const kept = keep != null && keep > 0;
+    const content = <div className="tx-app-shell__pane">{node}</div>;
+
     return (
-      <Tag aria-label={text[slot]} data-collapsed={off ? "" : undefined} className={cm(`tx-app-shell__${slot}`, extra)}>
-        {!off && <div className="tx-app-shell__pane">{node}</div>}
+      <Tag
+        aria-label={text[slot]}
+        // 완전히 감추면 `""`, 조금 남기면 `"kept"` — 경계선은 남는 쪽만 그린다
+        data-collapsed={off ? (kept ? "kept" : "") : undefined}
+        className={cm(`tx-app-shell__${slot}`, extra)}
+        style={kept ? ({ "--tx-app-shell-collapsed-size": `${keep}px` } as CSSProperties) : undefined}
+      >
+        {/* 남는 자리만 안의 내용에게 접힘을 알린다. 없으면 내용은 지금처럼 제 상태만 본다 */}
+        {kept ? <TxAppShellPanelContext.Provider value={{ collapsed: off, expand: () => collapse.set(slot, false) }}>{content}</TxAppShellPanelContext.Provider> : !off && content}
         {handleProps && <div {...handleProps} />}
         {toggleProps && (
           <button {...toggleProps}>

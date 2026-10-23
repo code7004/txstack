@@ -249,6 +249,11 @@ describe("TxSideNav — CSS 계약과 경계", () => {
     expect(css).toMatch(/\.tx-side-nav\[data-collapsed\]\s*\{[^}]*inline-size:\s*var\(--tx-side-nav-rail\)/);
   });
 
+  /** 셸의 `collapsedSize` 패널 안에서는 폭을 셸이 쥔다 — rail 폭을 두 곳에 적지 않는다 */
+  it("셸의 접히는 패널 안에서는 펼쳐도 접혀도 패널 폭을 채운다", () => {
+    expect(css).toMatch(/\.tx-side-nav\[data-in-panel\],\s*\.tx-side-nav\[data-in-panel\]\[data-collapsed\]\s*\{[^}]*inline-size:\s*100%/);
+  });
+
   /**
    * **들여쓰기가 조용히 지워진 적이 있다.** 위의 목록 초기화가 `padding: 0` 을 갖는데
    * 들여쓰기를 한 겹 선택자로 써서 특이도에 밀렸다. 겹쳐 쓴 선택자를 여기서 지킨다.

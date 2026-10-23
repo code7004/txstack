@@ -281,6 +281,12 @@ export function useCollapse({ panels, onChange }: Pick<TxAppShellProps, "panels"
   /** `collapse` 없이 `collapsed` 만 줘도 접힌다 — 스위치를 직접 그리는 길이다. */
   const isCollapsed = (slot: TxAppShellPanelSlot) => panels?.[slot]?.collapsed ?? own[slot] ?? panels?.[slot]?.defaultCollapsed ?? false;
 
+  /** 스위치를 누른 것과 같다 — 밖에서 쥔 자리는 알리기만 한다. 안의 내용이 펴 달라고 할 때도 이 길로 온다 */
+  const set = (slot: TxAppShellPanelSlot, next: boolean) => {
+    if (panels?.[slot]?.collapsed == null) setOwn((current) => ({ ...current, [slot]: next }));
+    onChange(slot, next);
+  };
+
   const toggleProps = (slot: TxAppShellPanelSlot, name: string, label: (name: string) => string) => {
     if (!panels?.[slot]?.collapse) return null;
 
@@ -292,12 +298,9 @@ export function useCollapse({ panels, onChange }: Pick<TxAppShellProps, "panels"
       "aria-expanded": !off,
       "aria-label": label(name),
       className: `tx-app-shell__toggle tx-app-shell__toggle--${slot}`,
-      onClick: () => {
-        if (panels?.[slot]?.collapsed == null) setOwn((current) => ({ ...current, [slot]: !off }));
-        onChange(slot, !off);
-      }
+      onClick: () => set(slot, !off)
     };
   };
 
-  return { isCollapsed, toggleProps };
+  return { isCollapsed, set, toggleProps };
 }

@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { TxAppShellPanelContext } from "../TxAppShell/TxAppShell.context";
 import { cm } from "../tx-ui.utils";
 import { TxSideNavContext } from "./TxSideNav.context";
 import { TxSideNavGroup } from "./TxSideNavGroup";
@@ -29,8 +30,12 @@ import type { TxSideNavProps } from "./TxSideNav.types";
  * 주장하지 않고 방향만 주장한다.
  *
  * **접기는 두 가지가 있고 서로 다르다.** `TxAppShell` 의 `left.collapse` 는 패널을 폭 0 으로
- * 감추고, 이쪽의 `collapsed` 는 **아이콘 줄로 남긴다.** 둘 중 하나만 쓴다 —
+ * 감추고, 이쪽의 `collapsed` 는 **아이콘 줄로 남긴다.** 한 화면에서는 한 길만 쓴다 —
  * 접는 길이 둘이면 소비자가 무엇을 눌러야 하는지 모른다.
+ *
+ * **셸의 스위치로 아이콘 줄까지 접으려면** 셸에 `collapsedSize` 를 함께 준다
+ * (`panels={{ left: { collapse: true, collapsedSize: 56 } }}`). 그 패널 안에서는 **셸의 접힘을 따르고
+ * 패널 폭을 채운다.** `collapsed` 를 주면 그쪽이 이긴다.
  *
  * 스위치는 그리지 않는다. 헤더의 버튼이나 셸의 스위치가 그 자리를 이미 갖고 있어서,
  * 여기서 또 그리면 화면에 접는 것이 둘이 된다.
@@ -39,17 +44,22 @@ import type { TxSideNavProps } from "./TxSideNav.types";
  */
 export function TxSideNav({ label, collapsed, defaultCollapsed = false, onCollapsedChange, className, children, ...props }: TxSideNavProps) {
   const [inner, setInner] = useState(defaultCollapsed);
-  const rail = collapsed ?? inner;
+  // 접어도 남는 셸 패널(`collapsedSize`) 안이면 셸이 접힘을 쥔다. 밖에서 준 `collapsed` 가 늘 이긴다
+  const panel = useContext(TxAppShellPanelContext);
+  const follows = collapsed === undefined && panel != null;
+  const rail = collapsed ?? (follows ? panel.collapsed : inner);
 
   const expand = useCallback(() => {
-    if (collapsed === undefined) setInner(false);
+    if (follows) panel.expand();
+    else if (collapsed === undefined) setInner(false);
     onCollapsedChange?.(false);
-  }, [collapsed, onCollapsedChange]);
+  }, [follows, panel, collapsed, onCollapsedChange]);
 
   const shared = useMemo(() => ({ collapsed: rail, expand }), [rail, expand]);
 
   const inside = (
-    <div {...props} data-tag="TxSideNav" data-collapsed={rail ? "" : undefined} className={cm("tx-side-nav", className)}>
+    // 셸을 따를 때는 폭도 패널을 채운다 — rail 폭을 셸의 `collapsedSize` 와 두 곳에 적지 않는다
+    <div {...props} data-tag="TxSideNav" data-collapsed={rail ? "" : undefined} data-in-panel={follows ? "" : undefined} className={cm("tx-side-nav", className)}>
       <TxSideNavContext.Provider value={shared}>
         <ul className="tx-side-nav__list">{children}</ul>
       </TxSideNavContext.Provider>

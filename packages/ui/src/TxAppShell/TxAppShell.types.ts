@@ -32,8 +32,29 @@ export interface TxAppShellPanel {
   /** 끌어서 크기를 바꾼다. `true` 면 기본 한계로 켠다. */
   resize?: boolean | TxAppShellResizeLimit;
 
-  /** 접었다 편다. **경계선 가운데에 스위치가 생긴다.** */
+  /**
+   * 접었다 편다. **경계선 가운데에 스위치가 생긴다.**
+   *
+   * 기본은 **완전히 감춘다** — 폭(아래 패널은 높이)이 0 이 되고 내용을 그리지 않는다.
+   * 아이콘 줄처럼 조금 남기려면 `collapsedSize` 를 함께 준다.
+   */
   collapse?: boolean;
+
+  /**
+   * **접어도 이만큼(px) 남긴다.** 주면 접힌 동안에도 내용을 그리고 경계선도 남는다.
+   *
+   * 안에 `TxSideNav` 를 두면 **따라서 아이콘 줄이 된다** — 셸이 이 패널이 접혔는지를 알려 주고,
+   * 메뉴는 패널 폭을 채운다(rail 폭을 따로 맞추지 않는다). 하위가 있는 항목을 접힌 채로 누르면 패널이 펴진다.
+   *
+   * @example
+   * ```tsx
+   * <TxAppShell left={<TxSideNav>{items}</TxSideNav>} panels={{ left: { collapse: true, collapsedSize: 56 } }} />
+   * ```
+   *
+   * 접힌 상태(`onPanelChange` 의 `collapsed: true`)와 다시 펼 때의 크기는 주지 않았을 때와 같다.
+   * 아이콘으로 줄어들 줄 모르는 내용을 넣으면 이 폭에 눌려 잘린다.
+   */
+  collapsedSize?: number;
 
   /** 처음 크기(px). 안 주면 CSS 기본값이 산다. 이후는 셸이 쥔다. */
   defaultSize?: number;
