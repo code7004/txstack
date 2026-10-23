@@ -389,6 +389,78 @@ describe("TxFormDayPicker — 서브패스 필드", () => {
   });
 });
 
+/**
+ * 캡션을 테두리에 얹는 배치 — `captionPlacement`. 표 위 툴바에서 소비자 둘(black-message · usertics)이
+ * 요구했다. **가장 가까운 `TxForm` · `TxForm.Flex` 가 이긴다** — 필드가 그 값을 표시로 갖는다.
+ */
+describe("TxForm — 캡션을 테두리에 얹기", () => {
+  const field = (name: string) => screen.getByLabelText(name).closest(".tx-form-field") as HTMLElement;
+
+  it("안 주면 표시가 없다 — 지금처럼 위에 쌓는다", () => {
+    render(
+      <TxForm>
+        <TxForm.Input caption="이름" />
+      </TxForm>
+    );
+    expect(field("이름").hasAttribute("data-caption-placement")).toBe(false);
+  });
+
+  it("TxForm 에 주면 안의 모든 필드가 따른다", () => {
+    render(
+      <TxForm captionPlacement="border">
+        <TxForm.Input caption="이름" />
+        <TxForm.Dropdown caption="나이" data={["10", "20"]} />
+      </TxForm>
+    );
+    expect(field("이름").getAttribute("data-caption-placement")).toBe("border");
+    expect(screen.getByText("나이").closest(".tx-form-field")!.getAttribute("data-caption-placement")).toBe("border");
+  });
+
+  /** 툴바는 `<form>` 이 아닌 경우가 많다 — 줄 하나로도 쓸 수 있어야 한다 */
+  it("TxForm.Flex 하나로도 쓴다 — 폼이 없어도 된다", () => {
+    render(
+      <TxForm.Flex captionPlacement="border">
+        <TxForm.SearchInput caption="검색어" />
+      </TxForm.Flex>
+    );
+    expect(field("검색어").getAttribute("data-caption-placement")).toBe("border");
+  });
+
+  it("가까운 쪽이 이긴다 — 얹는 폼 안에서 한 줄만 위로 쌓는다", () => {
+    render(
+      <TxForm captionPlacement="border">
+        <TxForm.Input caption="이름" />
+        <TxForm.Flex captionPlacement="top">
+          <TxForm.Input caption="메모" />
+        </TxForm.Flex>
+      </TxForm>
+    );
+    expect(field("이름").getAttribute("data-caption-placement")).toBe("border");
+    expect(field("메모").getAttribute("data-caption-placement")).toBe("top");
+  });
+
+  it("값을 안 준 줄은 바깥 폼을 따른다", () => {
+    render(
+      <TxForm captionPlacement="border">
+        <TxForm.Flex>
+          <TxForm.Input caption="시" />
+        </TxForm.Flex>
+      </TxForm>
+    );
+    expect(field("시").getAttribute("data-caption-placement")).toBe("border");
+  });
+
+  /** 얹어도 캡션은 진짜 이름이다 — 눌러도 컨트롤로 간다 */
+  it("캡션은 그대로 컨트롤의 이름이다", () => {
+    render(
+      <TxForm.Flex captionPlacement="border">
+        <TxForm.Input caption="총입금 이상" />
+      </TxForm.Flex>
+    );
+    expect(screen.getByRole("textbox", { name: "총입금 이상" })).toBeTruthy();
+  });
+});
+
 describe("TxForm — CSS 계약", () => {
   const here = import.meta.dirname;
   const strip = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -409,6 +481,29 @@ describe("TxForm — CSS 계약", () => {
   it("참조하는 전역 토큰이 전부 tokens.css 에 정의돼 있다", () => {
     const referenced = new Set([...css.matchAll(/var\(\s*(--tx-(?:color|state|radius|focus)[\w-]*)/g)].map((m) => m[1]));
     expect([...referenced].filter((name) => !tokens.includes(`${name}:`))).toEqual([]);
+  });
+
+  it("테두리에 얹는 배치 — 캡션은 띄우고 메시지는 제자리, 빈 자리는 잡지 않는다", () => {
+    const field = css.match(/\.tx-form-field\[data-caption-placement="border"\]:not\(:has\(> \.tx-checkbox\)\)\s*\{([^}]*)\}/)?.[1] ?? "";
+    const caption = css.match(/\[data-caption-placement="border"\]:not\(:has\(> \.tx-checkbox\)\) > \.tx-form-field__caption\s*\{([^}]*)\}/)?.[1] ?? "";
+    const message = css.match(/\[data-caption-placement="border"\] > \.tx-form-field__message\s*\{([^}]*)\}/)?.[1] ?? "";
+
+    expect(field).toMatch(/grid-template-areas:\s*"control"\s*"message"/);
+    expect(caption).toContain("position: absolute");
+    expect(caption).toContain("background-color: var(--tx-form-caption-bg, var(--tx-color-surface))");
+    // 원본이 겹친 것은 메시지를 띄웠기 때문이다 — 메시지는 띄우지 않는다
+    expect(message).not.toContain("absolute");
+    expect(message).toContain("min-height: var(--tx-form-message-reserve, 0)");
+  });
+
+  /** 자손 선택자로 배치를 정하면 바깥 폼이 안쪽 줄을 이긴다. 자리를 받은 필드는 labelWidth 에서 빠진다 */
+  it("labelWidth 는 캡션 자리를 따로 받은 필드에 걸리지 않는다", () => {
+    expect(css).toContain(".tx-form[data-label-width] .tx-form-field:not([data-caption-placement]) {");
+    // 표시는 필드 자신에게서 시작한다 — 조상의 속성으로 안쪽 필드를 짚으면 가까운 쪽이 이기지 못한다
+    const selectors = [...css.matchAll(/([^{}]+)\{/g)].flatMap((m) => m[1].split(",").map((part) => part.trim()));
+    const keyed = selectors.filter((selector) => selector.includes('data-caption-placement="'));
+    expect(keyed.length).toBeGreaterThan(0);
+    expect(keyed.filter((selector) => !selector.startsWith(".tx-form-field[data-caption-placement="))).toEqual([]);
   });
 
   it("styles.css 에 실려 나간다 — 안 실리면 소비자에게 도달하지 않는다", () => {

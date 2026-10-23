@@ -197,18 +197,49 @@ export const Density: Story = {
         [
           { label: "기본 — 세로 쌓기", labelWidth: undefined, tight: false },
           { label: "labelWidth — 캡션이 왼쪽으로", labelWidth: "5rem", tight: false },
-          { label: "labelWidth + 메시지 자리 안 잡기", labelWidth: "5rem", tight: true }
+          { label: "labelWidth + 메시지 자리 안 잡기", labelWidth: "5rem", tight: true },
+          { label: 'captionPlacement="border" — 캡션을 테두리에 얹기', labelWidth: undefined, tight: false, border: true }
         ] as const
-      ).map(({ label, labelWidth, tight }) => (
+      ).map(({ label, labelWidth, tight, ...rest }) => (
         <div key={label} className="flex flex-col gap-2">
           <div className="text-xs font-bold text-slate-500 dark:text-slate-400">{label}</div>
-          <TxForm labelWidth={labelWidth} className="max-w-md" style={tight ? vars({ "--tx-form-message-reserve": "0" }) : undefined}>
+          <TxForm labelWidth={labelWidth} captionPlacement={"border" in rest ? "border" : undefined} className="max-w-md" style={tight ? vars({ "--tx-form-message-reserve": "0" }) : undefined}>
             <TxForm.Input caption="이름" placeholder="홍길동" />
             <TxForm.Input caption="연락처" placeholder="010-0000-0000" />
             <TxForm.Dropdown caption="나이" data={AGES} placeholder="고르세요" />
           </TxForm>
         </div>
       ))}
+    </div>
+  )
+};
+
+/**
+ * **표 위의 검색 · 필터 한 줄.** `captionPlacement="border"` 를 준 줄에서는 캡션이 컨트롤의 윗 테두리에
+ * 얹혀 따로 줄을 차지하지 않는다. `<form>` 이 아니어도 `TxForm.Flex` 하나로 쓴다.
+ *
+ * 메시지는 컨트롤 아래 제자리에 뜬다 — 오른쪽 끝 칸에 오류를 넣어 두었다. 빈 자리는 미리 잡지 않는다.
+ *
+ * 안쪽 줄에 `captionPlacement="top"` 을 주면 그 줄만 위에 쌓는다 — **가까운 쪽이 이긴다.**
+ */
+export const Toolbar: Story = {
+  parameters: noControls,
+  render: () => (
+    <div className="flex max-w-3xl flex-col gap-6">
+      <TxForm.Flex captionPlacement="border" className="items-start">
+        <TxForm.SearchInput caption="검색어" placeholder="아이디 · 닉네임" className="flex-[3]" />
+        <TxForm.Dropdown caption="금액필터" data={["총입금", "총출금", "총베팅"]} value="총입금" />
+        <TxForm.Input caption="총입금 이상" type="number" placeholder="0" />
+        <TxForm.Input caption="총입금 이하" type="number" placeholder="0" error="이상보다 커야 합니다" />
+      </TxForm.Flex>
+
+      <TxForm captionPlacement="border" className="max-w-md">
+        <TxForm.Input caption="이름" placeholder="홍길동" />
+        <TxForm.Flex captionPlacement="top">
+          <TxForm.Input caption="시" placeholder="위에 쌓는다" />
+          <TxForm.Input caption="분" placeholder="위에 쌓는다" />
+        </TxForm.Flex>
+      </TxForm>
     </div>
   )
 };

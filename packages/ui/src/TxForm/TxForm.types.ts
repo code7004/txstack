@@ -1,5 +1,17 @@
 import type { FormHTMLAttributes, HTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
 
+/**
+ * 캡션을 어디에 놓는가.
+ *
+ * - `"top"` — 컨트롤 **위** 한 줄에 쌓는다(기본). 아래에 메시지 한 줄을 미리 잡는다
+ * - `"border"` — 컨트롤의 **윗 테두리에 얹는다.** 캡션이 따로 줄을 차지하지 않고 메시지 자리도
+ *   미리 잡지 않는다(`--tx-form-message-reserve` 기본 0). 표 위 검색 · 필터처럼 가로로 빽빽한 툴바용이다.
+ *   테두리가 없는 체크박스는 얹지 않고 위에 쌓는다
+ *
+ * 왼쪽에 두는 배치는 `TxForm` 의 `labelWidth` 가 켠다. `"border"` · `"top"` 을 주면 그쪽이 이긴다.
+ */
+export type TxFormCaptionPlacement = "top" | "border";
+
 export interface TxFormProps extends FormHTMLAttributes<HTMLFormElement> {
   /**
    * 캡션의 너비. **CSS 길이**를 준다 — `"8rem"` · `"120px"`.
@@ -9,6 +21,20 @@ export interface TxFormProps extends FormHTMLAttributes<HTMLFormElement> {
    * CSS 로 주고 싶으면 prop 대신 그 변수를 직접 덮어도 된다.
    */
   labelWidth?: string;
+
+  /**
+   * 캡션을 어디에 놓는가 — **이 폼 안의 모든 필드**에 걸린다. 안 주면 위에 쌓는다.
+   *
+   * 안에 다른 값을 준 `TxForm.Flex` 가 있으면 **그 줄은 그쪽을 따른다** — 가까운 쪽이 이긴다.
+   *
+   * @example
+   * ```tsx
+   * <TxForm captionPlacement="border" onSubmit={save}>
+   *   <TxForm.Input caption="이름" value={name} onChangeText={setName} />
+   * </TxForm>
+   * ```
+   */
+  captionPlacement?: TxFormCaptionPlacement;
 }
 
 /** 모든 `TxForm.*` 필드가 함께 받는 것. */
@@ -47,4 +73,19 @@ export interface TxFormFieldProps extends TxFormFieldSlots, Omit<HTMLAttributes<
 
 export type TxFormLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
 
-export type TxFormFlexProps = HTMLAttributes<HTMLDivElement>;
+export interface TxFormFlexProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * 캡션을 어디에 놓는가 — **이 줄 안의 필드**에만 걸린다. 안 주면 바깥 `TxForm` 을 따른다.
+   *
+   * `<form>` 이 아닌 툴바(표 위의 검색 · 필터 한 줄)는 이것만으로 쓴다.
+   *
+   * @example
+   * ```tsx
+   * <TxForm.Flex captionPlacement="border">
+   *   <TxForm.SearchInput caption="검색어" onSubmitText={search} />
+   *   <TxForm.Dropdown caption="금액필터" data={FIELDS} value={field} onChangeText={setField} />
+   * </TxForm.Flex>
+   * ```
+   */
+  captionPlacement?: TxFormCaptionPlacement;
+}

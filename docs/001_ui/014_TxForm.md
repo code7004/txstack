@@ -107,6 +107,56 @@ Context 로 내려간 값을 읽는 것은 `TxForm.Label` 뿐이었는데, 필�
 소비자는 그걸 겪고 나서야 알게 된다. 반대로 조밀하게 만드는 것은 한 줄이면 되고,
 그 줄을 쓰는 사람은 무엇을 맞바꾸는지 알고 쓴다. `Density` 스토리가 셋을 나란히 보여 준다.
 
+### 캡션을 테두리에 얹는다 — `captionPlacement="border"` (2026-10-23, 사용자 결정)
+
+```tsx
+// 검색 툴바 — 이 줄 안의 필드는 캡션이 컨트롤의 윗 테두리에 얹힌다
+<TxForm.Flex captionPlacement="border">
+  <TxForm.SearchInput caption="검색어" className="flex-[3]" onSubmitText={search} />
+  <TxForm.Dropdown caption="금액필터" data={FIELDS} value={field} onChangeText={setField} />
+  <TxForm.Input caption="총입금 이상" type="number" onSubmitNumber={setLow} />
+  <TxForm.Input caption="총입금 이하" type="number" onSubmitNumber={setHigh} />
+</TxForm.Flex>
+
+// 폼 전체에 줄 수도 있다
+<TxForm captionPlacement="border" onSubmit={save}>
+  <TxForm.Input caption="이름" value={name} onChangeText={setName} error={nameError} />
+</TxForm>
+```
+
+**왜 지금 다시 보는가.** 위 결정은 **폼**을 보고 내렸다 — 캡션을 왼쪽으로 보내면(`labelWidth`) 조밀하고
+겹치지 않는다. 그런데 소비자 둘에서 나온 자리는 **툴바**(표 위의 검색 · 필터 한 줄)다.
+
+- 툴바는 가로로 빽빽하다. `labelWidth` 는 캡션마다 가로 칸을 떼어 줘서 그만큼 컨트롤이 좁아진다
+- 위에 쌓으면 캡션 한 줄 + 메시지 한 줄이 늘어 한 행이 두 배가 된다 — usertics 의 가입자 표 위가 그랬다
+- black-message 는 이미 `FilterDropdown` 을 따로 만들어 이 모양을 잇고 있다. usertics 도 같은 것이 필요하다.
+  앱마다 컨트롤마다 감싸개가 늘어나는 자리다
+
+**원본의 겹침은 되살리지 않는다.** 원본이 겹친 것은 **메시지**를 띄웠기 때문이다(`absolute -bottom-5`).
+이 안은 **캡션만** 얹고 메시지는 지금처럼 컨트롤 아래 제자리에 둔다.
+
+| 무엇                 | 이 안에서                                                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 캡션                 | 컨트롤의 윗 테두리 왼쪽에 얹힌다. 테두리 선이 글자를 가로지르지 않게 바탕(`--tx-form-caption-bg`, 기본 표면색)을 깐다                            |
+| 캡션의 뜻            | 그대로 진짜 `<label>` · `aria-labelledby` 다. 눌러도 컨트롤로 포커스가 간다                                                                      |
+| 메시지               | 컨트롤 아래 제자리. **빈 자리는 잡지 않는다**(`--tx-form-message-reserve` 기본 0) — 툴바에 메시지가 뜰 일이 드물다. 잡고 싶으면 그 토큰을 덮는다 |
+| 위 여백              | 얹힌 캡션의 절반 높이만큼 필드 위에 둔다 — 윗줄 · 카드 제목과 겹치지 않게                                                                        |
+| `labelWidth` 와 함께 | `border` 가 이긴다. 둘은 캡션을 놓는 자리라 한 번에 하나다                                                                                       |
+| 체크박스             | 얹지 않는다 — 테두리가 없는 컨트롤이라 위에 쌓던 그대로 둔다                                                                                     |
+
+**정한 것**
+
+1. **이름은 `captionPlacement`** — `"top"`(기본) · `"border"`. 왼쪽은 이미 `labelWidth` 하나로 켜지므로
+   `"start"` 는 만들지 않았다. `floatingCaption`(불리언)은 자리가 하나 더 생기면 이름이 또 늘어서 버렸다
+2. **`TxForm` 과 `TxForm.Flex` 둘에 붙는다.** 툴바는 `<form>` 이 아닌 경우가 많다
+3. **가까운 쪽이 이긴다.** 그래서 **CSS 자손 선택자로 하지 않았다** — 바깥 폼의 속성이 안쪽 줄의 필드까지
+   똑같이 짚어 바깥이 이길 수 있다(셸 안의 셸에서 겪은 것과 같다). 대신 폼 · 줄이 컨텍스트로 값을 내려 주고
+   **필드가 자기 표시(`data-caption-placement`)를 갖는다.** 값을 안 준 줄은 공급하지 않아 바깥 값이 흘러든다
+4. **`labelWidth` 보다 이긴다.** `labelWidth` 의 규칙이 표시가 없는 필드에만 걸리게(`:not([data-caption-placement])`)
+   바꿨다 — `"top"` 을 준 줄도 `labelWidth` 폼 안에서 위에 쌓인다
+
+체크박스는 `:has(> .tx-checkbox)` 로 걸러 위에 쌓던 그대로 둔다. 캡션 글자는 이 배치에서만 기본 `0.75rem` 이다.
+
 ### `TxForm.Flex` 는 폭을 나눈다
 
 `TxFlex` 와 겹쳐 보이지만 다르다 — **자식이 남는 폭을 똑같이 나눠 갖는다.**

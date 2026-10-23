@@ -1,4 +1,5 @@
 import { cm } from "../tx-ui.utils";
+import { TxFormCaptionContext } from "./TxForm.context";
 import type { TxFormFlexProps } from "./TxForm.types";
 
 /**
@@ -16,5 +17,12 @@ import type { TxFormFlexProps } from "./TxForm.types";
  * ```
  *
  * 폭을 나누고 싶지 않은 자식은 `className` 으로 되돌린다 — `<TxButton className="flex-none" />`.
+ *
+ * `captionPlacement="border"` 를 주면 **이 줄의 필드 캡션이 테두리에 얹힌다** — 툴바용이다.
  */
-export const TxFormFlex = ({ className, ...props }: TxFormFlexProps) => <div {...props} className={cm("tx-form-flex", className)} data-tag="TxForm.Flex" />;
+export const TxFormFlex = ({ captionPlacement, className, children, ...props }: TxFormFlexProps) => (
+  <div {...props} className={cm("tx-form-flex", className)} data-tag="TxForm.Flex">
+    {/* 준 곳만 공급한다. 안 주면 바깥 폼의 값이 그대로 흘러든다 */}
+    {captionPlacement ? <TxFormCaptionContext.Provider value={captionPlacement}>{children}</TxFormCaptionContext.Provider> : children}
+  </div>
+);
