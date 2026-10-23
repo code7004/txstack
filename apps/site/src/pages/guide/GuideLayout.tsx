@@ -56,7 +56,8 @@ function ShellDemo() {
 
 const PANEL_OPTIONS = [
   ["resize", "끌어서 크기를 바꿉니다. true면 기본 한계로, { min, max }로 한계를 직접 정할 수도 있습니다"],
-  ["collapse", "경계선 가운데에 접기 스위치를 둡니다"],
+  ["collapse", "경계선 가운데에 접기 스위치를 둡니다. 접으면 패널이 완전히 사라집니다"],
+  ["collapsedSize", "접어도 이만큼(px) 남깁니다. 남는 동안에도 내용을 그리고, 안의 TxSideNav는 아이콘 줄이 됩니다"],
   ["defaultSize", "처음 크기(px). 주지 않으면 CSS 기본값을 씁니다"],
   ["defaultCollapsed", "처음부터 접힌 채로 시작합니다"],
   ["size · collapsed", "크기와 접힘을 앱이 직접 쥡니다. 주면 셸은 기억하지 않고 이 값을 따릅니다"]
@@ -102,6 +103,40 @@ function PanelsDemo() {
       </div>
 
       <code className="text-xs text-slate-500 dark:text-slate-400">{last ? `onPanelChange("${last.slot}", { size: ${last.size ?? "undefined"}, collapsed: ${last.collapsed}, settled: true })` : "onPanelChange — 끌거나 접으면 여기에 찍힙니다"}</code>
+    </div>
+  );
+}
+
+/** 셸의 스위치로 아이콘 줄까지 접는 셸. 메뉴에는 collapsed 를 주지 않는다 — 셸을 따른다 */
+function IconRailDemo() {
+  const [picked, setPicked] = useState("Dashboard");
+  const item = (icon: string, label: string) => <TxSideNav.Item icon={icon} label={label} as="button" type="button" aria-current={picked === label ? "page" : undefined} onClick={() => setPicked(label)} />;
+
+  return (
+    <div className="overflow-x-auto rounded-lg border" style={{ borderColor: "var(--tx-color-border)" }}>
+      <TxAppShell
+        panelSticky={false}
+        breakpoint={360}
+        className="min-w-[28rem]"
+        header={<strong className="px-1 text-sm">Console</strong>}
+        left={
+          <TxSideNav className="p-2">
+            {item("◧", "Dashboard")}
+            {item("▤", "Reports")}
+            <TxSideNav.Item icon="⚙" label="Settings">
+              {item("", "Account")}
+              {item("", "Alerts")}
+            </TxSideNav.Item>
+          </TxSideNav>
+        }
+        panels={{ left: { collapse: true, collapsedSize: 56 } }}
+        style={{ minBlockSize: 0, blockSize: "20rem" }}
+      >
+        <div className="flex flex-col gap-2 p-4 text-sm text-slate-600 dark:text-slate-300">
+          <strong className="text-base text-slate-900 dark:text-slate-100">{picked}</strong>
+          <p>왼쪽 경계선 가운데의 스위치를 눌러 보세요. 메뉴가 아이콘 줄만 남기고 접힙니다. 접힌 채로 Settings를 누르면 패널이 먼저 펴집니다.</p>
+        </div>
+      </TxAppShell>
     </div>
   );
 }
@@ -205,6 +240,41 @@ export function GuideLayout() {
           </TxAlert>
         </SideBySide>
 
+        <h3 className="mt-2 font-semibold">접어도 아이콘 줄은 남기기 — collapsedSize</h3>
+        <p className="text-slate-600 dark:text-slate-300">
+          <code>collapse</code>만 주면 접을 때 패널이 <strong>완전히 사라집니다.</strong> 메뉴처럼 아이콘은 남겨 두고 싶다면 <code>collapsedSize</code>(px)를 함께 주세요. 접어도 그 크기만큼 남고, 남는 동안에도 내용을 그리며 경계선도 남습니다.
+        </p>
+        <SideBySide>
+          <CodeBlock title="AppShell.tsx">{`<TxAppShell
+  left={
+    // collapsed 를 주지 않는다 — 셸의 스위치를 따른다
+    <TxSideNav>
+      <TxSideNav.Item icon={<IconChart />} label="대시보드" as={NavLink} to="/" />
+      <TxSideNav.Item icon={<IconCog />} label="설정">
+        <TxSideNav.Item label="계정" as={NavLink} to="/settings/account" />
+      </TxSideNav.Item>
+    </TxSideNav>
+  }
+  panels={{ left: { collapse: true, collapsedSize: 56 } }}
+>
+  <Outlet />
+</TxAppShell>`}</CodeBlock>
+          <ul className="flex list-disc flex-col gap-1 ps-5 text-sm text-slate-600 dark:text-slate-300">
+            <li>
+              안에 둔 <code>TxSideNav</code>는 <strong>셸의 접힘을 따라 아이콘 줄이 됩니다.</strong> 메뉴에 <code>collapsed</code>를 따로 줄 필요가 없고, 메뉴 폭은 패널을 그대로 채웁니다.
+            </li>
+            <li>접힌 채로 하위 메뉴가 있는 항목을 누르면 패널이 먼저 펴집니다.</li>
+            <li>
+              <code>TxSideNav</code>에 <code>collapsed</code>를 주면 그쪽이 이깁니다. 셸과 따로 접고 싶을 때만 쓰세요.
+            </li>
+            <li>
+              접힌 동안에는 크기 손잡이가 없습니다. <code>onPanelChange</code>는 완전히 감출 때와 똑같이 <code>collapsed: true</code>를 보내고, 다시 펴면 접기 전 크기로 돌아옵니다.
+            </li>
+            <li>아이콘으로 줄어들 줄 모르는 내용(평범한 목록 등)을 넣으면 그 폭에 눌려 잘립니다.</li>
+          </ul>
+        </SideBySide>
+        <IconRailDemo />
+
         <TxAlert variant="info" title="스위치를 앱이 그리려면">
           <code>collapse</code> 없이 <code>collapsed</code>만 주면 경계선에 스위치가 생기지 않고, 접힘은 앱의 상태를 따릅니다. 헤더의 버튼처럼 다른 자리에서 패널을 여닫을 때 씁니다. 좁은 화면에서 서랍으로 들어간 <code>left</code>에는 손잡이도
           스위치도 없습니다.
@@ -223,8 +293,19 @@ export function GuideLayout() {
         <p className="text-slate-600 dark:text-slate-300">서랍 안의 링크를 누르면 서랍이 저절로 닫힙니다. 새 탭으로 열거나 ⌘ · Ctrl을 누른 채 누르면 열린 채로 남습니다. 이 사이트는 좁은 화면에서 메뉴 바를 내리고 서랍에 메뉴 전체를 넣습니다.</p>
 
         <p className="text-slate-600 dark:text-slate-300">
-          <strong>접는 방법은 두 가지이고 동작이 다릅니다.</strong> TxAppShell의 <code>left.collapse</code>는 패널을 폭 0으로 감추고, <code>TxSideNav</code>의 <code>collapsed</code>는 아이콘만 남깁니다. 둘 중 하나만 사용하세요.
+          <strong>왼쪽 메뉴를 접는 길은 세 가지입니다.</strong> 한 화면에서는 하나만 쓰세요.
         </p>
+        <ul className="flex list-disc flex-col gap-1 ps-5 text-slate-600 dark:text-slate-300">
+          <li>
+            셸의 <code>collapse</code> — 경계선 스위치로 패널을 완전히 감춥니다.
+          </li>
+          <li>
+            셸의 <code>collapse</code> + <code>collapsedSize</code> — 같은 스위치로 아이콘 줄만 남깁니다(위 「접어도 아이콘 줄은 남기기」).
+          </li>
+          <li>
+            <code>TxSideNav</code>의 <code>collapsed</code> — 헤더의 ☰처럼 앱이 그린 버튼으로 아이콘 줄만 남깁니다. 이때는 아래처럼 패널 폭을 내용에 맞춥니다.
+          </li>
+        </ul>
 
         <CodeBlock language="css" title="메뉴를 접을 때 패널 폭도 줄이려면">{`/* 왼쪽 패널 폭을 내용에 맞추면, 메뉴를 접을 때 패널도 함께 줄어듭니다 */
 .tx-app-shell { --tx-app-shell-left-width: fit-content; }`}</CodeBlock>
