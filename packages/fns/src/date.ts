@@ -150,15 +150,19 @@ const ELAPSED_LABELS: Record<ElapsedKey, string> = { just_now: "just now", secon
  */
 export function elapsed(seconds: number, options: { decimals?: number; t?: (key: ElapsedKey) => string } = {}): string {
   const { decimals = 2, t = (key) => ELAPSED_LABELS[key] } = options;
-  if (seconds == null || Number.isNaN(seconds)) return "";
-  if (seconds < 0) return t("just_now");
+  if (seconds == null) return "";
 
-  const min = seconds / 60;
+  // 표 셀처럼 타입이 없는 자리에서는 숫자 문자열("12.5")로 온다 — 숫자로 읽는다. 원본도 Number() 로 감쌌다
+  const total = Number(seconds);
+  if (Number.isNaN(total)) return "";
+  if (total < 0) return t("just_now");
+
+  const min = total / 60;
   const hour = min / 60;
   const day = hour / 24;
   const month = day / 30;
 
-  if (seconds < 60) return `${parseFloat(seconds.toFixed(decimals))}${t("second")}`;
+  if (total < 60) return `${parseFloat(total.toFixed(decimals))}${t("second")}`;
 
   if (min < 60) {
     const m = Math.floor(min);

@@ -98,6 +98,13 @@ describe("elapsed", () => {
     expect(elapsed(120)).toBe("2m");
   });
 
+  /** 표 셀(ag-grid valueFormatter)처럼 타입이 없는 자리에서는 숫자 문자열로 온다 — usertics 스케줄러 화면이 이것으로 깨졌다 */
+  it("숫자 문자열도 숫자로 읽는다", () => {
+    expect(elapsed("12.345" as unknown as number)).toBe("12.35s");
+    expect(elapsed("90" as unknown as number)).toBe("1m 30s");
+    expect(elapsed("abc" as unknown as number)).toBe("");
+  });
+
   it("하루 미만은 시 · 분", () => {
     expect(elapsed(3665)).toBe("1h 1m");
     expect(elapsed(7200)).toBe("2h");
