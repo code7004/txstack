@@ -12,6 +12,30 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["site:dev"],
       "port": 6410
+    },
+    {
+      "name": "black-message-backend",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/jaehoonkim/Work/black-message/apps/backend", "service"],
+      "port": 8080
+    },
+    {
+      "name": "black-message",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/jaehoonkim/Work/black-message/apps/frontend", "exec", "vite", "--host", "localhost", "--port", "5173", "--strictPort"],
+      "port": 5173
+    },
+    {
+      "name": "usertics-backend",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/jaehoonkim/Work/usertics/apps/backend", "service"],
+      "port": 8080
+    },
+    {
+      "name": "usertics",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/jaehoonkim/Work/usertics/apps/frontend", "exec", "vite", "--host", "localhost", "--port", "5173", "--strictPort"],
+      "port": 5173
     }
   ]
 }
