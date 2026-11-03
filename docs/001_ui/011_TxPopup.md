@@ -20,7 +20,10 @@
 이 부품이 맡는 것은 넷이다.
 
 1. **포털** — `document.body` 로 낸다. 조상의 `overflow: hidden` 이나 `transform` 안에 갇히면
-   목록이 잘리거나 엉뚱한 자리에 뜬다
+   목록이 잘리거나 엉뚱한 자리에 뜬다.
+   **앵커가 열린 `<dialog>`(`TxModal` · `TxSlidePanel`) 안이면 그 dialog 로 내고 `popover="manual"` 로 top layer 에 올린다.**
+   모달은 top layer 라 body 의 층은 `--tx-popup-z` 와 상관없이 그 밑에 깔리고, 모달 바깥은 inert 라 눌리지도 않는다.
+   top layer 의 기준은 화면이라 패널의 `translate` 에도 어긋나지 않는다. `showPopover` 가 없는 환경(jsdom)에서는 dialog 안에 그냥 둔다
 2. **위치** — 앵커 아래가 좁으면 위로 뒤집고, 화면 밖으로 나가지 않게 가둔다
 3. **바깥 클릭** — `pointerdown` 을 **캡처 단계**에서 듣는다. 버블 단계면 중간에서
    `stopPropagation` 한 코드에 막혀 안 닫힌다
