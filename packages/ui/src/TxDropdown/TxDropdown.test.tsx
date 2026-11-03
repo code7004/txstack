@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { TxDropdown } from "./TxDropdown";
 import { TxDropdownMulti } from "./TxDropdownMulti";
 
@@ -58,6 +58,54 @@ describe("TxDropdown — 여닫기", () => {
     open();
     expect(container.querySelector('[role="listbox"]')).toBeNull();
     expect(document.body.querySelector('[data-tag="TxPopup"] [role="option"]')).not.toBeNull();
+  });
+
+  /**
+   * 모달 · 슬라이드 패널은 top layer 의 `<dialog>` 다. body 로 내면 z-index 와 상관없이 그 밑에 깔리고,
+   * 모달 바깥은 inert 라 눌리지도 않는다. 그래서 열린 dialog 안에서는 그 dialog 로 내고 popover 로 올린다.
+   */
+  it("열린 dialog 안에서는 목록을 그 dialog 안에 popover 로 띄운다", () => {
+    // jsdom 에는 popover 가 없다. 브라우저처럼 있다고 치고 부른 것만 확인한다
+    const showPopover = vi.fn();
+    HTMLElement.prototype.showPopover = showPopover;
+    onTestFinished(() => {
+      delete (HTMLElement.prototype as Partial<HTMLElement>).showPopover;
+    });
+
+    render(
+      <dialog open>
+        <TxDropdown data={["서울"]} />
+      </dialog>
+    );
+
+    open();
+    const popup = document.querySelector('[data-tag="TxPopup"]');
+    expect(popup?.closest("dialog")).not.toBeNull();
+    expect(popup?.getAttribute("popover")).toBe("manual");
+    expect(showPopover).toHaveBeenCalledOnce();
+
+    // 가짜 showPopover 라 열리지 않은 popover 로 남고, 접근성 트리에서 빠진다. DOM 으로 직접 고른다
+    fireEvent.click(popup!.querySelector('[role="option"]')!);
+    expect(head().textContent).toContain("서울");
+  });
+
+  it("dialog 밖에서는 popover 를 쓰지 않는다", () => {
+    render(<TxDropdown data={["서울"]} />);
+
+    open();
+    expect(document.querySelector('[data-tag="TxPopup"]')?.hasAttribute("popover")).toBe(false);
+  });
+
+  it("popover 가 없는 환경이면 dialog 안에 그냥 띄운다 — 숨은 채 남지 않는다", () => {
+    render(
+      <dialog open>
+        <TxDropdown data={["서울"]} />
+      </dialog>
+    );
+
+    open();
+    expect(options()[0].closest("dialog")).not.toBeNull();
+    expect(document.querySelector('[data-tag="TxPopup"]')?.hasAttribute("popover")).toBe(false);
   });
 
   it("바깥을 누르면 닫힌다", () => {

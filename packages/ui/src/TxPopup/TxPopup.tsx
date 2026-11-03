@@ -105,6 +105,13 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
     setPos({ top, left, width: matchAnchorWidth ? rect.width : undefined });
   }, [anchorRef, anchorPoint, matchAnchorWidth, align, maxHeight]);
 
+  // dialog 안이면 popover 로 top layer 에 올린다. 띄우기 전에는 display: none 이라 잴 수 없으므로 아래 배치보다 먼저 온다.
+  // 닫히면 요소가 사라지므로 열릴 때마다 새 요소에 한 번만 부른다
+  useLayoutEffect(() => {
+    const popup = popupRef.current;
+    if (open && popup?.hasAttribute("popover")) popup.showPopover();
+  }, [open]);
+
   // 첫 배치는 그려지기 전에 끝내야 한다. 안 그러면 왼쪽 위에서 제자리로 튀는 것이 보인다.
   useLayoutEffect(() => {
     if (open) place();
@@ -166,10 +173,19 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
   // SSR 에는 document 가 없다. 뜨는 층은 클라이언트에서 의미가 생기므로 이 절충을 받아들인다.
   if (!open || typeof document === "undefined") return null;
 
+  // 열린 dialog(TxModal · TxSlidePanel) 안이면 body 가 아니라 그 dialog 로 낸다. 모달은 top layer 에 있어
+  // body 의 층은 z-index 와 상관없이 그 밑에 깔리고, 모달 바깥은 inert 라 눌리지도 않는다.
+  // dialog 안에서는 popover 로 top layer 에 다시 올린다 — 나중에 올라간 것이 위이고, 기준이 화면이라
+  // 패널의 translate 나 overflow: hidden 에 갇히지 않는다
+  const dialog = anchorRef.current?.closest<HTMLDialogElement>("dialog[open]") ?? null;
+  // popover 를 못 띄우는 환경(jsdom 등)에서 속성만 달면 목록이 숨은 채 남는다. 그때는 dialog 안에 그냥 둔다
+  const canPopover = typeof HTMLElement.prototype.showPopover === "function";
+
   return createPortal(
     <div
       {...rest}
       ref={popupRef}
+      popover={dialog && canPopover ? "manual" : undefined}
       data-tag="TxPopup"
       className={cm("tx-popup", className)}
       style={{
@@ -186,6 +202,6 @@ export function TxPopup({ anchorRef, anchorPoint, open, onClose, matchAnchorWidt
     >
       {children}
     </div>,
-    document.body
+    dialog ?? document.body
   );
 }

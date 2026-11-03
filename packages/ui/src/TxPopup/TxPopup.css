@@ -16,7 +16,8 @@
 
   /**
    * 쌓임 순서. `document.body` 직속이라 조상의 쌓임 맥락에 갇히지 않지만,
-   * 모달 같은 다른 층과는 여기서 겨룬다. 토큰이라 소비자가 올릴 수 있다.
+   * 다른 층과는 여기서 겨룬다. 토큰이라 소비자가 올릴 수 있다.
+   * 모달 · 슬라이드 패널(`<dialog>`) 안에서 열리면 popover 로 top layer 에 올라가므로 이 값과 상관없이 그 위에 뜬다.
    */
   --tx-popup-z: 60;
 
@@ -29,4 +30,14 @@
   background-color: var(--tx-popup-bg);
   color: var(--tx-popup-fg);
   box-shadow: var(--tx-popup-shadow);
+}
+
+/**
+ * popover 의 브라우저 기본값(inset: 0 · margin: auto · padding)을 걷는다. 자리는 인라인 top · left 가 정한다.
+ * `:where` 로 명시도를 0 으로 둔다 — 브라우저 기본값은 이것으로도 이기고, 목록 · 메뉴가 준 여백은 그대로 남는다
+ */
+:where(.tx-popup[popover]) {
+  inset: auto;
+  margin: 0;
+  padding: 0;
 }
