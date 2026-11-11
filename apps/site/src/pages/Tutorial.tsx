@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../components/CodeBlock";
-import { INSTALL_TITLE, PrePublishNote } from "../components/PrePublish";
 import { Block, Demo, Page } from "../components/Page";
 import { MemberScreen } from "./tutorial/MemberScreen";
 import MEMBER_API_SOURCE from "./tutorial/memberApi.ts?raw";
@@ -28,8 +27,7 @@ export function Tutorial() {
           </Link>
           를 마친 React 앱에서 시작합니다. 이번에는 이 네 패키지와 함께 <code>react-router-dom</code>, <code>axios</code>가 필요하고, 화면 배치에 쓴 Tailwind도 설치합니다.
         </p>
-        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios`}</CodeBlock>
-        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios`}</CodeBlock>
         <CodeBlock language="bash" title="sh">{`pnpm add react-router-dom axios
 pnpm add -D tailwindcss @tailwindcss/vite`}</CodeBlock>
         <div className="overflow-x-auto">

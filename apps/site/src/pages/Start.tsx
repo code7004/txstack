@@ -32,10 +32,7 @@ const muted = "text-slate-600 dark:text-slate-300";
 
 export function Start() {
   return (
-    <Page
-      title="Getting Started"
-      lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 1~3은 공통 준비이고, 그다음은 하려는 일에 따라 A(UI로 첫 화면)나 B(라우트와 메뉴)로 갑니다. 아직 npm에 배포되지 않아서, 처음 한 번은 저장소를 받아 빌드하는 단계가 더 있습니다."
-    >
+    <Page title="Getting Started" lead="필요한 패키지를 고르고, 설치해서 첫 화면을 띄우기까지 안내합니다. 1~3은 공통 준비이고, 그다음은 하려는 일에 따라 A(UI로 첫 화면)나 B(라우트와 메뉴)로 갑니다.">
       <Block title="Which packages do you need">
         <p className={muted}>
           txstack은 다섯 개의 패키지로 나뉘어 있고, 각각 따로 설치합니다. 하려는 일에 맞는 것만 고르면 됩니다. 처음이라면 <code>@txstack/ui</code>부터 시작하세요.
@@ -74,19 +71,13 @@ export function Start() {
       </Block>
 
       <Block title="Prerequisites">
-        <p className={muted}>
-          환경이 두 가지입니다. <strong>여러분의 앱</strong>이 돌아가는 환경과, npm 배포 전이라 잠시 필요한 <strong>txstack 저장소를 빌드하는</strong> 환경입니다.
-        </p>
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>앱</strong> — <strong>React 18 이상</strong>. Node 버전은 앱의 도구가 정합니다. 1단계의 Vite는 <strong>Node 20.19 이상 또는 22.12 이상</strong>을 요구합니다.
-          </li>
-          <li>
-            <strong>저장소 빌드</strong> — <strong>Node 24.14.0</strong>(저장소의 <code>.nvmrc</code>)과 <strong>pnpm 10 이상</strong>. 2단계에서 한 번만 씁니다.
+            <strong>React 18 이상</strong>인 앱이면 됩니다. Node 버전은 앱의 도구가 정합니다. 1단계의 Vite는 <strong>Node 20.19 이상 또는 22.12 이상</strong>을 요구합니다.
           </li>
         </ul>
-        <CodeBlock language="bash" title="버전 확인">{`node -v     # 앱: v20.19 이상 또는 v22.12 이상 · 저장소 빌드: v24.14.0
-pnpm -v     # 10 이상. 없다면: npm i -g pnpm`}</CodeBlock>
+        <CodeBlock language="bash" title="버전 확인">{`node -v     # v20.19 이상 또는 v22.12 이상
+pnpm -v     # 없다면: npm i -g pnpm  (npm · yarn 으로 설치해도 됩니다)`}</CodeBlock>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           확인한 범위: Node 24에서 React 18 · 19, react-router 6 · 7, Vite 7 · 8 앱에 설치해 타입 검사와 빌드를 확인했고, 이 페이지의 절차는 새 Vite 앱에서 끝까지 띄워 봤습니다. 패키지 자체는 Node 버전을 따로 요구하지 않지만, 다른 Node 버전은 아직
           확인하지 않았습니다.
@@ -106,28 +97,12 @@ rm src/App.css`}</CodeBlock>
       </Block>
 
       <Block title="2. Install">
-        <TxAlert variant="warning" title="아직 npm에 배포되지 않았습니다">
-          지금은 저장소에서 직접 빌드한 패키지 파일(<code>.tgz</code>)로 설치합니다. npm에 배포된 뒤에는 아래의 한 줄로 바뀌고, 이후 단계는 같습니다.
-        </TxAlert>
+        <p className={muted}>필요한 패키지만 골라 설치합니다. 예를 들어 UI와 HTTP 클라이언트를 쓴다면 이렇습니다.</p>
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui
+pnpm add @txstack/axios axios
 
-        <CodeBlock language="bash" title="지금 — 저장소에서 빌드해 설치">{`# my-app 옆에 txstack을 받아 빌드하고 패키지 파일로 묶습니다
-cd ..
-git clone https://github.com/code7004/txstack.git
-cd txstack
-nvm use     # .nvmrc 의 Node 24.14.0 으로. nvm 이 없다면 node -v 로 확인만
-pnpm install && pnpm build
-pnpm -r --filter "./packages/*" exec pnpm pack --pack-destination "$PWD/.pack"
-
-# 앱으로 돌아와 필요한 패키지를 설치합니다 (예: ui와 axios). Node 는 앱의 버전으로 돌아가도 됩니다
-cd ../my-app
-pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz
-pnpm add ../txstack/.pack/txstack-axios-0.1.0.tgz axios
-
-# 모든 패키지를 쓴다면 한 번에
-pnpm add ../txstack/.pack/*.tgz react-router-dom axios`}</CodeBlock>
-
-        <CodeBlock language="bash" title="npm 배포 후">{`pnpm add @txstack/ui
-pnpm add @txstack/axios axios`}</CodeBlock>
+# 다섯 패키지를 모두 쓴다면 한 번에
+pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios @txstack/fns react-router-dom axios`}</CodeBlock>
 
         <p className={muted}>
           <code>react</code>와 <code>react-dom</code>은 peer 의존성이라 앱에 이미 설치된 버전을 사용합니다. 표와 달력은 <strong>쓸 때만</strong> 따로 설치합니다. 기본 경로(<code>@txstack/ui</code>)만 쓰면 설치하지 않아도 됩니다.
@@ -202,7 +177,7 @@ export default function App() {
 
       <Block title="B. Routes and menus">
         <p className={muted}>라우트를 트리 하나로 선언하면 라우터, 위쪽 메뉴(GNB), 왼쪽 메뉴(사이드바), 경로 표시(브레드크럼)가 모두 거기서 나옵니다. 화면 세 개짜리 앱을 파일 네 개로 만듭니다. 업무 API · 로그인은 넣지 않았습니다.</p>
-        <CodeBlock language="bash" title="sh — 2단계에 더해 설치">{`pnpm add ../txstack/.pack/txstack-ui-0.1.0.tgz ../txstack/.pack/txstack-route-meta-0.1.0.tgz react-router-dom`}</CodeBlock>
+        <CodeBlock language="bash" title="sh — 2단계에 더해 설치">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
 
         <p className={muted}>
           <strong>트리</strong> — 화면마다 주소 · 화면 · 메뉴 이름을 한 줄에 적습니다. 맨 바깥은 헤더와 메뉴를 그리는 셸이라 메뉴에도 경로에도 나오지 않게 둡니다.
@@ -276,22 +251,6 @@ import "@txstack/ui/styles.css";   // txstack — 뒤에`}</CodeBlock>
         <dl className={`flex flex-col gap-4 ${muted}`}>
           <div>
             <dt className="font-semibold text-[color:var(--tx-color-text)]">
-              <code>pnpm add @txstack/ui</code>가 <code>404</code>로 실패합니다
-            </dt>
-            <dd>
-              아직 npm에 배포되지 않았습니다. 2단계의 <strong>저장소에서 빌드해 설치</strong>하는 방법을 따라 주세요.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-semibold text-[color:var(--tx-color-text)]">
-              저장소의 <code>pnpm install</code>이 <code>Unsupported engine</code>을 경고하거나 빌드가 실패합니다
-            </dt>
-            <dd>
-              저장소는 Node 24.14.0 · pnpm 10 이상에서 빌드합니다. <code>txstack</code> 폴더에서 <code>nvm use</code>로 바꾸거나 같은 버전을 설치해 주세요. 앱의 Node 버전과는 상관없습니다.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-semibold text-[color:var(--tx-color-text)]">
               <code>@txstack/ui/aggrid</code>나 <code>@txstack/ui/daypicker</code>를 불러오면 모듈을 찾을 수 없다고 합니다
             </dt>
             <dd>표와 달력은 외부 라이브러리를 씁니다. 2단계의 &quot;쓸 때만&quot; 명령으로 함께 설치해 주세요.</dd>
@@ -317,8 +276,8 @@ import "@txstack/ui/styles.css";   // txstack — 뒤에`}</CodeBlock>
               <code>Invalid hook call</code> 오류가 납니다
             </dt>
             <dd>
-              React가 두 벌 로드된 경우입니다. <code>link:</code>로 저장소를 직접 연결했을 때 생기며, <code>vite.config.ts</code>에 <code>{`resolve: { dedupe: ["react", "react-dom", "react-router-dom"] }`}</code>를 추가하면 해결됩니다.{" "}
-              <code>.tgz</code>나 npm으로 설치했다면 생기지 않습니다.
+              React가 두 벌 로드된 경우입니다. <code>link:</code>로 저장소를 직접 연결했을 때 생기며, <code>vite.config.ts</code>에 <code>{`resolve: { dedupe: ["react", "react-dom", "react-router-dom"] }`}</code>를 추가하면 해결됩니다. npm으로
+              설치했다면 생기지 않습니다.
             </dd>
           </div>
           <div>

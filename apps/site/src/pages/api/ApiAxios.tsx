@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
-import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
 import { TABLES, tableAnchor } from "./data";
@@ -14,7 +13,8 @@ export function ApiAxios() {
       title="@txstack/axios"
       lead={
         <>
-          정책을 주입받는 HTTP 클라이언트입니다. 토큰, 401 처리, 응답 형식은 라이브러리가 아니라 앱이 정합니다. React 없이 동작하며, 사용법은{" "}
+          토큰을 어디서 읽을지, 401이 오면 무엇을 할지, 서버 응답이 <code>{"{ body }"}</code>로 오는지 <code>{"{ data }"}</code>로 오는지는 앱마다 다릅니다. 이 클라이언트는 그런 것을 정하지 않고 앱이 옵션으로 넘기게 해서, 어느 프로젝트에 붙여도 그
+          프로젝트의 규칙대로 동작합니다. React를 쓰지 않아 Node에서도 돌아갑니다. 화면에 붙이는 순서는{" "}
           <Link to="/docs/guide/http-client" className="underline">
             Guide › HTTP Client
           </Link>
@@ -23,15 +23,14 @@ export function ApiAxios() {
       }
     >
       <Block title="Install">
-        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/axios axios`}</CodeBlock>
-        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/axios axios`}</CodeBlock>
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.axios.installEntry.rows} anchor={tableAnchor(TABLES.axios.installEntry)} />
       </Block>
 
       <Block title="createHttpClient">
         <Signature>{`function createHttpClient(options: HttpClientOptions): HttpClient`}</Signature>
         <p className={muted}>
-          클라이언트를 만듭니다. 모듈에서 한 번 만들어 export하고, 앱 전체에서 가져다 씁니다. <code>baseURL</code>이 없으면 오류를 던집니다.
+          앱에 파일 하나를 두고 클라이언트를 만들어 export합니다. 화면에서는 이것만 가져다 씁니다. ES 모듈은 한 번만 실행되니 전역 변수 없이도 앱 전체가 같은 클라이언트를 씁니다. <code>baseURL</code>이 없으면 오류를 던집니다.
         </p>
         <CodeBlock title="src/lib/api.ts">{`export const api = createHttpClient({
   baseURL: "/api",
@@ -49,7 +48,8 @@ export function ApiAxios() {
 
       <Block title="HttpClient">
         <p className={muted}>
-          <code>createHttpClient</code>가 돌려주는 객체입니다. 요청 메서드는 <code>unwrap</code>을 거친 데이터를 돌려줍니다.
+          <code>createHttpClient</code>가 돌려주는 객체입니다. <code>get</code> · <code>post</code> 같은 요청 메서드는 <code>unwrap</code>으로 꺼낸 데이터를 돌려주고, 파일을 받는 <code>getBlob</code> · <code>getText</code>는 원본 응답을 그대로
+          돌려줍니다. 이 래퍼가 다루지 않는 경우에는 <code>instance</code>로 원본 axios 인스턴스를 꺼내 쓰면 됩니다.
         </p>
         <RefTable head={["Member", "Signature", "Returns", "Description"]} rows={TABLES.axios.httpClientMembers.rows} anchor={tableAnchor(TABLES.axios.httpClientMembers)} />
         <p className={muted}>
@@ -60,7 +60,8 @@ export function ApiAxios() {
       <Block title="parseApiError">
         <Signature>{`function parseApiError(error: unknown): ApiError`}</Signature>
         <p className={muted}>
-          어떤 오류든 <code>ApiError</code> 한 가지 모양으로 맞춰 줍니다. 화면에서는 이것의 <code>statusCode</code>와 <code>message</code>만 보여 주면 됩니다.
+          서버마다 오류 응답의 모양이 조금씩 다릅니다. <code>parseApiError</code>는 axios 오류든, 네트워크 끊김이든, 평범한 <code>Error</code>든 <code>ApiError</code> 한 가지 모양으로 맞춰 줍니다. 화면에서는 <code>statusCode</code>와{" "}
+          <code>message</code>만 보여 주면 됩니다.
         </p>
         <RefTable head={["Input", "statusCode", "message", "Note"]} rows={TABLES.axios.parseApiErrorCases.rows} anchor={tableAnchor(TABLES.axios.parseApiErrorCases)} />
         <RefLabel>ApiError</RefLabel>
@@ -70,8 +71,7 @@ export function ApiAxios() {
       <Block title="attachInterceptors">
         <Signature>{`function attachInterceptors(instance: AxiosInstance, options: HttpClientOptions): void`}</Signature>
         <p className={muted}>
-          이미 있는 axios 인스턴스에 이 패키지의 정책(인증, 401 처리, 로그)만 붙입니다. 기존 코드를 <code>createHttpClient</code>로 한 번에 바꾸기 어려울 때 씁니다. <code>baseURL</code>, <code>unwrap</code> 등 클라이언트 생성에 쓰이는 옵션은
-          무시됩니다.
+          기존 코드를 <code>createHttpClient</code>로 한 번에 바꾸기 어렵다면, 가지고 있는 axios 인스턴스에 인증 · 401 처리 · 로그 정책만 붙일 수 있습니다. <code>baseURL</code>, <code>unwrap</code> 등 클라이언트 생성에 쓰이는 옵션은 무시됩니다.
         </p>
       </Block>
 
