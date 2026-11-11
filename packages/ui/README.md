@@ -1,25 +1,23 @@
 # @txstack/ui
 
-Tx\* React 컴포넌트. 목표는 두 가지 — **쉬운 사용법, 쉬운 커스터마이징.**
+관리자 화면을 만들 때 필요한 React 컴포넌트 모음입니다. 버튼 · 입력 · 폼 · 표 · 모달부터 사이드 메뉴가 있는
+앱 골격까지 40여 가지가 들어 있습니다.
+
+두 가지를 목표로 만들었습니다. **props 몇 개로 바로 쓸 수 있을 것**, 그리고 **CSS 변수 몇 줄로 우리 서비스의 모습으로 바꿀 수 있을 것.**
 
 ```sh
-pnpm add @txstack/ui react react-dom
+npm install @txstack/ui
 ```
 
-| 진입점                   | 내용                                   | 추가 peer 의존                      |
-| ------------------------ | -------------------------------------- | ----------------------------------- |
-| `@txstack/ui`            | 대부분의 컴포넌트                      | 없음                                |
-| `@txstack/ui/aggrid`     | `TxAgGrid` 계열                        | `ag-grid-community` `ag-grid-react` |
-| `@txstack/ui/daypicker`  | `TxDayPicker` 계열 · `TxFormDayPicker` | `react-day-picker`                  |
-| `@txstack/ui/styles.css` | 전체 스타일시트                        | —                                   |
+`react` · `react-dom` 18 이상이 필요합니다.
 
-루트를 import 한 소비자는 무거운 선택적 의존을 **설치하지 않아도 동작한다.**
-`ag-grid` 관련은 값이든 타입이든 전부 `/aggrid`, 날짜 선택 관련은 전부 `/daypicker` 에서 꺼낸다.
+## 시작하기
+
+스타일시트를 한 번 불러오고, 컴포넌트를 가져다 씁니다.
 
 ```tsx
-import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
-import { TxAgGrid, type TxAgGridOption } from "@txstack/ui/aggrid";
 import "@txstack/ui/styles.css";
+import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 
 <TxFlex>
   <TxButton label="취소" variant="ghost" />
@@ -29,55 +27,66 @@ import "@txstack/ui/styles.css";
 <TxLoading visible={rows} text="목록을 불러오는 중" />
 ```
 
-`onClick` 이 **Promise 를 반환하면** 해제될 때까지 버튼이 잠기고 스피너가 뜬다. 연타해도 한 번만 실행된다.
-`TxLoading` 의 `visible` 에 **배열**을 주면 그 배열이 비어 있는 동안 보인다.
+자주 손이 가는 부분은 컴포넌트가 미리 처리합니다. 예를 들어 `TxButton` 의 `onClick` 이 Promise 를 돌려주면,
+끝날 때까지 버튼이 잠기고 스피너가 돕니다. 여러 번 눌러도 한 번만 실행됩니다.
+`TxLoading` 의 `visible` 에 배열을 넘기면 그 배열이 비어 있는 동안만 보입니다.
 
-`TxAgGrid` 를 쓰면 **ag-grid 모듈 등록은 앱이 한다** — 필요한 모듈만 고르거나 enterprise 를 쓸 수 있게.
+## 들어 있는 것
+
+| 종류         | 컴포넌트                                                                                                                               |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 입력         | `TxInput` · `TxSearchInput` · `TxTextarea` · `TxNumberInput` · `TxCheckBox` · `TxRadio` · `TxSwitch` · `TxSlider` · `TxCapsLockCheck`  |
+| 고르기       | `TxDropdown` · `TxDropdownMulti` · `TxCombobox` · `TxDayPicker` · `TxFileUpload`                                                       |
+| 폼           | `TxForm` — 라벨 · 오류 메시지 · 배치를 한 번에 묶습니다                                                                                |
+| 표 · 데이터  | `TxAgGrid` · `TxPagination` · `TxJsonTree`                                                                                             |
+| 버튼 · 메뉴  | `TxButton` · `TxCopyButton` · `TxMenu` (`TxDropMenu` · `TxContextMenu`)                                                                |
+| 겹쳐 뜨는 것 | `TxModal` · `TxDialog` · `TxSlidePanel` · `TxTooltip` · `TxToast`                                                                      |
+| 알림 · 상태  | `TxAlert` · `TxLoading` · `TxSpinner` · `TxSkeleton` · `TxProgress` · `TxEmptyState` · `TxBadge` · `TxTag` · `TxTicker`                |
+| 배치 · 묶음  | `TxFlex` · `TxGrid` · `TxCard` · `TxDivider` · `TxTabs` · `TxCollapsible` · `TxAccordion` · `TxScrollArea` · `TxCarousel` · `TxAvatar` |
+| 앱 골격      | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar` · `TxBreadcrumb`                                                                  |
+
+컴포넌트마다 무엇을 할 수 있는지는 [Storybook](https://code7004.github.io/txstack/storybook/) 에서 직접 눌러 보며 확인할 수 있습니다.
+
+### 표와 달력은 따로 가져옵니다
+
+`TxAgGrid` 는 ag-grid 를, `TxDayPicker` 는 react-day-picker 를 씁니다. 둘 다 무거운 라이브러리라서
+루트(`@txstack/ui`)와 분리해 두었습니다. 루트만 쓰는 앱은 이 라이브러리들을 설치하지 않아도 됩니다.
+
+| 쓰려는 것                                                     | 가져오는 곳             | 함께 설치할 것                            |
+| ------------------------------------------------------------- | ----------------------- | ----------------------------------------- |
+| 표 (`TxAgGrid` 계열)                                          | `@txstack/ui/aggrid`    | `ag-grid-community@35` `ag-grid-react@35` |
+| 달력 (`TxDayPicker` · `TxDayPickerRange` · `TxFormDayPicker`) | `@txstack/ui/daypicker` | `react-day-picker@10`                     |
+
+```tsx
+import { TxAgGrid, type TxAgGridOption } from "@txstack/ui/aggrid";
+import { TxDayPicker } from "@txstack/ui/daypicker";
+```
+
+ag-grid 모듈 등록은 앱에서 합니다. 필요한 모듈만 고르거나 Enterprise 판을 쓸 수 있게 하려는 것입니다.
 
 ```ts
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 ModuleRegistry.registerModules([AllCommunityModule]);
 ```
 
-## 컴포넌트
+## 모습 바꾸기
 
-| 무엇          | 컴포넌트                                                                                                                               |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 입력          | `TxInput` · `TxSearchInput` · `TxTextarea` · `TxNumberInput` · `TxCheckBox` · `TxRadio` · `TxSwitch` · `TxSlider` · `TxCapsLockCheck`  |
-| 고르기        | `TxDropdown` · `TxDropdownMulti` · `TxCombobox` · `TxDayPicker` _(/daypicker)_ · `TxFileUpload`                                        |
-| 폼            | `TxForm` — 캡션 · 에러 · 배치를 한 줄로 묶는다                                                                                         |
-| 표 · 데이터   | `TxAgGrid` _(/aggrid)_ · `TxPagination` · `TxJsonTree`                                                                                 |
-| 누르기        | `TxButton` · `TxCopyButton` · `TxMenu` (`TxDropMenu` · `TxContextMenu`)                                                                |
-| 겹쳐 뜨는 것  | `TxModal` · `TxDialog` · `TxSlidePanel` · `TxTooltip` · `TxToast`                                                                      |
-| 알리기 · 상태 | `TxAlert` · `TxLoading` · `TxSpinner` · `TxSkeleton` · `TxProgress` · `TxEmptyState` · `TxBadge` · `TxTag` · `TxTicker`                |
-| 담기 · 배치   | `TxFlex` · `TxGrid` · `TxCard` · `TxDivider` · `TxTabs` · `TxCollapsible` · `TxAccordion` · `TxScrollArea` · `TxCarousel` · `TxAvatar` |
-| 화면 · 길찾기 | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxBreadcrumb`                                                                               |
+### 색 · 모서리 · 크기는 CSS 변수로
 
-컴포넌트마다 무엇을 할 수 있는지는 [docs/001_ui](https://github.com/code7004/txstack/blob/main/docs/001_ui/000_README.md) 에서
-한 장씩 본다.
-
-## 스타일
-
-스타일시트는 **하나만 import 한다.**
-
-```tsx
-import "@txstack/ui/styles.css";
-```
-
-커스터마이징은 **CSS 커스텀 프로퍼티 토큰**으로 한다. 전역 토큰 한 줄만 바꾸면
-`hover` · `focus` · `.dark` 가 저절로 따라온다 — 상태별로 하나씩 덮을 필요가 없다.
+모든 겉모습은 `--tx-*` CSS 변수로 정해져 있습니다. 전체에 걸린 변수 하나를 바꾸면
+hover · focus · 다크 모드까지 따라 바뀝니다. 상태마다 하나씩 덮어쓸 필요가 없습니다.
 
 ```css
 :root {
-  --tx-color-primary: #7c3aed;
-  --tx-radius: 9999px;
+  --tx-color-primary: #7c3aed; /* 브랜드 색 */
+  --tx-radius: 9999px; /* 모든 모서리를 둥글게 */
 }
 ```
 
-**강조색은 둘이다** — 채우는 `--tx-color-primary` 와 면 위에서 글자 · 선 · 포커스 링으로
-읽히는 `--tx-color-primary-strong`. 브랜드색이 밝으면 둘을 각각 줘야 글자가 읽힌다.
+강조색은 두 가지입니다. 버튼 바탕처럼 **채우는** `--tx-color-primary`, 그리고 흰 바탕 위에서 글자 · 테두리 · 포커스 링으로
+**읽히는** `--tx-color-primary-strong` 입니다. 브랜드 색이 밝은 노랑이나 하늘색이라면 둘을 따로 정해야 글자가 잘 보입니다.
 
-컴포넌트 하나만 바꾸려면 그 컴포넌트 토큰을 덮는다.
+컴포넌트 하나만 바꾸고 싶다면 그 컴포넌트의 변수를 덮어씁니다.
 
 ```css
 .tx-button {
@@ -85,15 +94,15 @@ import "@txstack/ui/styles.css";
 }
 ```
 
-### `className` 이 그냥 먹는다
+### className 은 그냥 먹힙니다
 
-모든 스타일이 `@layer tx` 안에 있다. **레이어를 안 쓰는 평범한 CSS 는 레이어 안 CSS 를
-특이도와 무관하게 이긴다** — 순수 CSS · Sass · CSS Modules 를 쓰는 쪽은 아무것도 안 해도 된다.
+모든 스타일은 `@layer tx` 안에 들어 있습니다. 레이어를 쓰지 않은 평범한 CSS 는 선택자가 얼마나 구체적이든 레이어 안의 스타일을 이깁니다.
+그래서 순수 CSS · Sass · CSS Modules 로 `className` 을 주면 따로 할 일이 없습니다.
 
-**Tailwind 를 쓴다면 한 줄이 필요하다.** `tx` 가 preflight 뒤, 유틸리티 앞이어야 한다.
+**Tailwind 를 쓴다면 한 줄이 필요합니다.** `tx` 레이어가 Tailwind 의 기본 스타일 뒤, 유틸리티 클래스 앞에 오도록 순서를 적어 줍니다.
 
 ```css
-/* src/index.css — Tailwind 진입 CSS. 맨 위에 순서 한 줄 */
+/* src/index.css — Tailwind 진입 CSS 의 맨 위 */
 @layer theme, base, tx, components, utilities;
 
 @import "tailwindcss";
@@ -105,15 +114,38 @@ import "./index.css";
 import "@txstack/ui/styles.css";
 ```
 
-레이어 순서는 처음 등장한 순서로 정해진다. 순서 한 줄이 있는 CSS 가 **가장 먼저** 로드되도록
-같은 진입 모듈에서 정적 import 로 앞에 둔다. 지연 로딩되는 청크에서 불러오지 않는다.
+레이어 순서는 처음 나온 순서로 정해집니다. 순서를 적은 CSS 가 가장 먼저 불리도록 진입 파일에서 바로 import 하세요.
+지연 로딩되는 화면에서 불러오면 순서가 어긋날 수 있습니다.
 
-앱 전체의 토큰 · 컴포넌트 기본값을 덮을 때는 txstack 전용 CSS 하나에 모으고, 컴포넌트
-기본값 덮어쓰기는 `@layer components` 안에 둔다 — 레이어 밖이면 화면의 `className` 까지 이긴다.
+앱 전체에 걸 기본 모습(변수 값, 컴포넌트 기본 스타일)은 txstack 전용 CSS 파일 하나에 모아 두세요.
+컴포넌트 기본 스타일을 덮어쓰는 규칙은 `@layer components` 안에 넣습니다. 레이어 밖에 두면 화면에서 준 `className` 보다 강해집니다.
 
 ### 다크 모드
 
-`.dark` 클래스 전략이다. 토글 시점은 소비자가 통제한다.
+`dark` 클래스를 붙인 요소의 안쪽이 다크 모드가 됩니다. 보통은 `<html>` 에 붙입니다. 언제 붙일지(시스템 설정을 따를지, 토글을 둘지)는 앱이 정합니다.
+다크 모드 색을 바꾸고 싶다면 `.dark` 아래에서 같은 변수를 다시 정의하면 됩니다.
+
+## AI 코딩 도구와 함께 쓰기
+
+패키지 안에 AI 코딩 도구가 읽을 가이드가 들어 있습니다. 설치한 버전과 내용이 항상 같습니다.
+
+- `node_modules/@txstack/ui/ai/rules.md` — 만들려는 화면에 어떤 컴포넌트를 쓸지, 직접 만들면 안 되는 요소, 토큰으로 바꾸는 법
+- `node_modules/@txstack/ui/ai/llms.txt` · `llms-full.txt` — 컴포넌트 목록과 전체 문서
+
+Claude Code · Cursor 같은 도구의 프로젝트 지침(`CLAUDE.md` 등)에서 `rules.md` 를 읽게 해 두면, 이미 있는 컴포넌트를 새로 만드는 일이 줄어듭니다.
+
+## 지원 환경
+
+- ESM 전용이고, TypeScript 타입 선언이 들어 있습니다.
+- React 18 · 19 에서 확인했습니다.
+- 런타임 의존성은 `clsx` 하나입니다.
+
+## 같은 시리즈
+
+[`@txstack/hooks`](https://www.npmjs.com/package/@txstack/hooks) · [`@txstack/route-meta`](https://www.npmjs.com/package/@txstack/route-meta) ·
+[`@txstack/axios`](https://www.npmjs.com/package/@txstack/axios) · [`@txstack/fns`](https://www.npmjs.com/package/@txstack/fns)
+
+문서와 예제: <https://code7004.github.io/txstack/>
 
 ## 라이선스
 

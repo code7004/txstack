@@ -16,7 +16,7 @@
     "url": "git+https://github.com/code7004/txstack.git",
     "directory": "packages/route-meta"
   },
-  "homepage": "https://github.com/code7004/txstack/tree/main/packages/route-meta#readme",
+  "homepage": "https://code7004.github.io/txstack/api/route-meta",
   "bugs": "https://github.com/code7004/txstack/issues",
   "type": "module",
   "sideEffects": false,
