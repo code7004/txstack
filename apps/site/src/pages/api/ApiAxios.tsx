@@ -58,29 +58,13 @@ export function ApiAxios() {
       </Block>
 
       <Block title="parseApiError">
-        <Signature>{`function parseApiError(error: unknown): IApiError`}</Signature>
+        <Signature>{`function parseApiError(error: unknown): ApiError`}</Signature>
         <p className={muted}>
-          어떤 오류든 <code>IApiError</code> 한 가지 모양으로 맞춰 줍니다. 화면에서는 이것의 <code>statusCode</code>와 <code>message</code>만 보여 주면 됩니다.
+          어떤 오류든 <code>ApiError</code> 한 가지 모양으로 맞춰 줍니다. 화면에서는 이것의 <code>statusCode</code>와 <code>message</code>만 보여 주면 됩니다.
         </p>
         <RefTable head={["Input", "statusCode", "message", "Note"]} rows={TABLES.axios.parseApiErrorCases.rows} anchor={tableAnchor(TABLES.axios.parseApiErrorCases)} />
-        <RefLabel>IApiError</RefLabel>
-        <RefTable rows={TABLES.axios.iapierror.rows} anchor={tableAnchor(TABLES.axios.iapierror)} />
-      </Block>
-
-      <Block title="removeUndefined">
-        <Signature>{`function removeUndefined<T extends object>(params?: T): Partial<T>`}</Signature>
-        <p className={muted}>
-          쿼리 객체에서 <code>undefined</code>와 공백뿐인 문자열을 뺍니다. <code>null</code>, <code>0</code>, <code>false</code>는 남깁니다. 비어 있는 검색 조건을 요청에서 빼고 싶을 때 씁니다.
-        </p>
-        <CodeBlock title="example">{`removeUndefined({ q: "  ", page: 1, sort: undefined, active: false });
-// → { page: 1, active: false }`}</CodeBlock>
-      </Block>
-
-      <Block title="isTokenExpired">
-        <Signature>{`function isTokenExpired(expiresAt: number | undefined): boolean`}</Signature>
-        <p className={muted}>
-          만료 시각(밀리초 단위 epoch)이 지났는지 알려 줍니다. 값이 없으면 만료된 것으로 봅니다. <code>getToken</code>에서 토큰을 새로 받을지 정할 때 씁니다.
-        </p>
+        <RefLabel>ApiError</RefLabel>
+        <RefTable rows={TABLES.axios.apierror.rows} anchor={tableAnchor(TABLES.axios.apierror)} />
       </Block>
 
       <Block title="attachInterceptors">

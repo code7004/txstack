@@ -12,6 +12,6 @@
  */
 export { createHttpClient } from "./client";
 export { attachInterceptors } from "./interceptors";
-export { isTokenExpired, parseApiError, removeUndefined } from "./utils";
+export { parseApiError } from "./utils";
 
-export type { DeleteOptions, HttpClient, HttpClientOptions, IApiError, RequestLog, ResponseLog } from "./types";
+export type { DeleteOptions, HttpClient, HttpClientOptions, ApiError, RequestLog, ResponseLog } from "./types";

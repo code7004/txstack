@@ -33,7 +33,7 @@ Authorization 헤더 붙이기, 401 이면 로그아웃, `res.data.body` 벗기�
 | 002  | [`HttpClient`](002_HttpClient.md)             | 요청을 보낸다 — `get` · `post` · `getBlob` … | ↑      |
 | 003  | [로깅](003_logging.md)                        | 요청·응답을 콘솔 밖으로. 가릴 것은 가리고    | 13     |
 | 004  | [싱글턴 서브패스](004_singleton.md)           | 옮겨오는 동안의 호환 계층                    | 4      |
-| 005  | [유틸과 타입](005_utils.md)                   | `parseApiError` 계열 순수 함수와 공개 타입   | 4      |
+| 005  | [유틸과 타입](005_utils.md)                   | `parseApiError` 와 공개 타입                 | 1      |
 
 ## 이식하며 고친 것
 
@@ -50,13 +50,13 @@ Node 미지원)과 **동작 결함 1건**(FormData 업로드가 깨짐)이 나�
 
 ## 검증
 
-테스트 37개. 원본 18개를 옮기고 위 변경분을 덮는 11개를 더했다. 검수(docs/008 A)에서 로그 가리기를 넓히며 6개를 더했다.
+테스트 34개. 원본 18개를 옮기고 위 변경분을 덮는 11개를 더했다. 검수(docs/008 A)에서 로그 가리기를 넓히며 6개를 더했다.
+배포 전 정리에서 뺀 유틸 둘의 테스트 3개를 지웠다.
 `vitest` 의 `node` 프로젝트에서 돈다 — **React 없이 도는 것이 테스트로 증명된다.**
 
 ## 남은 것
 
-- [ ] `removeUndefined` 의 이름 · `isTokenExpired` 의 자리 · `IApiError` 의 `I` 접두사 —
-      [005_utils](005_utils.md)
+- [x] `removeUndefined` · `isTokenExpired` 를 빼고 `IApiError` → `ApiError` — [005_utils](005_utils.md)
 
 ## 문서 규칙
 

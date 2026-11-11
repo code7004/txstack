@@ -249,14 +249,18 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
    새로고침 · 딥링크 · 진짜 요청은 테스트와 카탈로그가 못 겪는 것들이다. 실제로
    여기서 결함 셋이 나왔다 (콤마 분해 · 로그로 새던 토큰 · AA 미달 강조색)
 
-3. **기존 프로젝트에 적용한다** ← **지금 여기** — `black-message` · `usertics` · `chain-wallet-service`.
+3. **기존 프로젝트에 적용한다** — **끝났다** (2026-11-11). `black-message` · `usertics` · `settlemint` 셋 다 적용해 운영에 배포했다.
    **배포 전에 완성도를 올리는 단계다.** 절차 · 붙이는 방법 · 기록할 곳은
    [006_adoption](006_adoption.md) 이 갖는다. 세 저장소는 이제 원본이 아니라 **소비자**다.
-4. **npm 배포 — 그 전에 정해야 하는 것이 있다.** `0.1.0` 을 올리고 나면 이름을 바꾸는 것이
-   깨는 변경이 된다. **위 3번이 그 답을 준다.**
-   - [ ] `removeUndefined` 의 이름 · `isTokenExpired` 의 자리 · `IApiError` 의 `I` 접두사 —
-         [004_axios/005_utils](004_axios/005_utils.md)
-   - [ ] `urlKeys` 로 읽은 키에 타입이 안 따라온다 — [003_hooks/002](003_hooks/002_useUrlQuery.md)
+4. **npm 배포** ← **지금 여기.** `0.1.0` 을 올리고 나면 이름을 바꾸는 것이 깨는 변경이 된다.
+   - [x] `removeUndefined` · `isTokenExpired` 를 빼고 `IApiError` → `ApiError` (2026-11-11) —
+         세 프로젝트에서 쓰는 곳이 0이었다. [004_axios/005_utils](004_axios/005_utils.md)
+   - [x] `urlKeys` 의 타입 — API 는 그대로, "`T` 를 직접 적는다" 를 사용 규칙으로 (2026-11-11).
+         `usertics` 27개 화면이 그렇게 쓴다. [003_hooks/002](003_hooks/002_useUrlQuery.md)
+   - [ ] npm 로그인 · `txstack` 조직 만들기 — 사용자가 한다 (2026-11-11 기준 조직 없음)
+   - [ ] 쌓인 changeset 정리 — 처음 배포는 `0.1.0` 그대로 올린다
+   - [ ] `pnpm release` — 사용자가 명시적으로 요청할 때만
+   - [ ] 세 소비자를 `link:` · `.tgz` 에서 npm 버전으로 — 사용자가 한다
    - [ ] 사이트를 만들며 드러난 열린 자리들 — [005_site](005_site.md) 의 "만들며 드러난 것"
 
 `ui` 의 이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는

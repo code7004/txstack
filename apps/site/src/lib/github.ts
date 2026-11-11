@@ -1,4 +1,4 @@
-import { createHttpClient, parseApiError, type IApiError } from "@txstack/axios";
+import { createHttpClient, parseApiError, type ApiError } from "@txstack/axios";
 
 /**
  * **공개 API 를 부르는 자리.** 백엔드를 두지 않고도 진짜 요청 · 에러 · 지연을 겪는다 —
@@ -74,7 +74,7 @@ export async function searchRepos({ q, page, perPage, sort }: SearchInput): Prom
  * `parseApiError` 는 어떤 실패든 `{ statusCode, message }` 로 정규화한다 —
  * 네트워크가 끊긴 것, 시간이 초과된 것, 서버가 준 본문까지 한 형태로 온다.
  */
-export function toMessage(error: unknown): IApiError {
+export function toMessage(error: unknown): ApiError {
   const parsed = parseApiError(error);
 
   // GitHub 는 한계를 넘으면 403 에 안내 문구를 담아 준다. 그대로 보여 주면 무슨 일인지 읽힌다

@@ -52,6 +52,28 @@ const [query, setQuery] = useUrlQuery({
 });
 ```
 
+### `urlKeys` 를 쓰면 `T` 를 직접 적는다
+
+`T` 는 `defaults` 에서 추론된다. `urlKeys` 의 키는 `defaults` 에 없으니, 추론에 맡기면
+그 키가 `T` 에 없어 `query.keyword` 가 타입 에러다. **선택 필드를 가진 타입을 직접 넘긴다.**
+
+```tsx
+interface Query {
+  from: number;
+  size: number;
+  keyword?: string;
+  userGrade?: number;
+}
+
+const [q, setQ] = useUrlQuery<Query>({
+  defaults: { from: 0, size: 50 }, // 필수 필드만 기본값을 준다
+  urlKeys: ["keyword", "userGrade"], // Query 에 있는 키만 받는다 — 오타는 컴파일 에러
+  queryTypes: { userGrade: "number" } // 기본값이 없으니 복원 규칙을 준다
+});
+
+q.keyword; // string | undefined
+```
+
 배열은 `key[]` 로 읽고 쓴다 — `?ids[]=1&ids[]=2` → `{ ids: [1, 2] }`.
 같은 키를 두 번 준 것(`?ids=1&ids=2`)도 배열로 읽는다.
 
@@ -75,7 +97,8 @@ const [query, setQuery] = useUrlQuery({
 - [x] **구현** — `packages/hooks/src/useUrlQuery.ts`
 - [x] **테스트** — 19개. jsdom + `MemoryRouter` 로 **실제 주소 변화**를 관찰한다
 - [x] **서브패스 분리** — 루트 배럴은 `react-router-dom` 을 모른다
-- [ ] `urlKeys` 로 읽은 키는 `T` 에 없어 타입이 따라오지 않는다. 쓰는 자리가 생기면 다시 본다
+- [x] `urlKeys` 의 타입 — API 는 그대로 두고 "`T` 를 직접 적는다" 를 사용 규칙으로 올렸다 (2026-11-11).
+      `usertics` 27개 화면이 이 모양으로 쓰고 타입이 따라온다
 
 ## 정한 것 · 고친 것
 

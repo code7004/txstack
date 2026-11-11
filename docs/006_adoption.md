@@ -348,7 +348,9 @@ import { type TxAgGridOption } from "@txstack/ui"; // 이렇게 쓰려다 TS2305
 
 - `removeUndefined` 의 이름 · `isTokenExpired` 의 자리 · `IApiError` 의 `I` 접두사 —
   세 프로젝트에서 실제로 불러 보면 맞는지 드러난다
+  → **쓰는 곳이 0이라 둘은 빼고 `ApiError` 로 바꿨다** (2026-11-11)
 - `urlKeys` 의 타입 미전파 — 진짜 쿼리 화면에서 걸리는지
+  → **`usertics` 27개 화면이 `T` 를 직접 적어 걸리지 않았다.** 사용 규칙으로 올렸다
 
 **npm 은 72시간이 지나면 unpublish 가 안 된다.** 이름은 그때 굳는다.
 
