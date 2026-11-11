@@ -44,11 +44,14 @@ function shallowEqual<T extends object>(a: T, b: T): boolean {
  * setFilter({ keyword: "kim" });                  // page 는 유지된다
  * setFilter((prev) => ({ page: prev.page + 1 })); // 함수형 업데이트
  *
- * @example 상호 의존 필드 — 검색어가 바뀌면 페이지를 되돌린다
- * const [filter, setFilter] = useObjectState(
- *   { keyword: "", page: 1 },
- *   (next) => (next.keyword !== "" ? { page: 1 } : {})
+ * @example 언제나 지킬 규칙 — 시작일이 종료일을 넘으면 종료일을 따라 옮긴다
+ * const [range, setRange] = useObjectState(
+ *   { from: "2026-01-01", to: "2026-01-31" },
+ *   (next) => (next.from > next.to ? { to: next.from } : {})
  * );
+ *
+ * `postParse` 는 무엇이 바뀌었는지 모른다. "검색어가 바뀌면 첫 페이지로" 를 여기 적으면
+ * 검색어가 있는 동안 페이지를 넘길 수 없다 — 그런 것은 바꾸는 쪽에서 `{ keyword, page: 1 }` 로 함께 넘긴다.
  */
 export function useObjectState<T extends object>(initialValue: T, postParse?: (next: T) => Partial<T>) {
   // 인라인으로 넘어오는 postParse 가 update 의 identity 를 흔들지 않도록 ref 로 붙잡는다.

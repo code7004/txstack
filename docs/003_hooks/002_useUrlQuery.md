@@ -44,7 +44,7 @@ const [query, setQuery] = useUrlQuery({
 
   urlKeys: ["status"], // defaults 에 없지만 URL 에서 읽을 키
   queryTypes: { status: "number" }, // 기본값이 없어 복원 규칙을 직접 줘야 하는 키
-  postParse: (q) => (q.keyword ? { page: 1 } : {}),
+  postParse: (q) => ((q.size ?? 0) > 100 ? { size: 100 } : {}), // 주소를 손으로 고쳐도 한도를 지킨다
 
   encode: true, // 쿼리 전체를 base64url 한 덩어리로 감춘다 → ?_q=eyJ...
   encodeKey: "_q", // 그때 쓸 키 이름. 기본 "_q"
