@@ -1,7 +1,7 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 /** 정규화된 API 에러. `parseApiError` 의 반환 타입이다. */
-export interface IApiError {
+export interface ApiError {
   statusCode: number;
   message: string;
   error?: string;

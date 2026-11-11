@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createHttpClient } from "./client";
 import { getHttpClient, initHttpClient, resetHttpClient } from "./singleton";
 import type { HttpClientOptions } from "./types";
-import { isTokenExpired, parseApiError, removeUndefined } from "./utils";
+import { parseApiError } from "./utils";
 
 /**
  * 실제 네트워크를 타지 않도록 axios adapter 를 목으로 교체한다. 이 방식은 인터셉터·설정을
@@ -385,29 +385,6 @@ describe("singleton", () => {
 });
 
 describe("utils", () => {
-  /**
-   * ⚠ 이름과 달리 **공백 문자열도 지운다.** query string 에 빈 파라미터가 붙는 것을 막는
-   * 것이 목적이라 의도된 동작이다. 이름이 동작보다 좁게 읽히는 문제는 개선 후보로 남아 있다.
-   */
-  it("removeUndefined — undefined 와 공백 문자열을 지우고, null·0·false 는 남긴다", () => {
-    expect(removeUndefined({ a: 1, b: undefined, c: null, d: "", e: "   ", f: 0, g: false })).toEqual({
-      a: 1,
-      c: null,
-      f: 0,
-      g: false
-    });
-  });
-
-  it("removeUndefined 는 인자가 없으면 빈 객체", () => {
-    expect(removeUndefined()).toEqual({});
-  });
-
-  it("isTokenExpired — 과거면 true, 미래면 false, undefined 면 true", () => {
-    expect(isTokenExpired(Date.now() - 1000)).toBe(true);
-    expect(isTokenExpired(Date.now() + 60_000)).toBe(false);
-    expect(isTokenExpired(undefined)).toBe(true);
-  });
-
   it("parseApiError 는 어떤 입력이든 message 를 가진 객체로 정규화한다", () => {
     expect(typeof parseApiError(new Error("plain")).message).toBe("string");
     expect(typeof parseApiError("문자열").message).toBe("string");

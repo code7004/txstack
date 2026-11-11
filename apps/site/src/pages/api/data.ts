@@ -71,7 +71,7 @@ export const TABLES = {
       section: "Install",
       searchable: true,
       rows: [
-        ["@txstack/axios", "createHttpClient · parseApiError · removeUndefined · isTokenExpired · attachInterceptors", "axios >=1.6", "기본 진입점"],
+        ["@txstack/axios", "createHttpClient · parseApiError · attachInterceptors", "axios >=1.6", "기본 진입점"],
         ["@txstack/axios/singleton", "initHttpClient · getHttpClient · resetHttpClient", "axios >=1.6", "전역 클라이언트가 필요한 기존 코드를 옮길 때만 씁니다"]
       ] as Row[]
     },
@@ -127,9 +127,9 @@ export const TABLES = {
         ["그 밖의 값", "500", '"Unknown error"', ""]
       ] as Row[]
     },
-    iapierror: {
+    apierror: {
       section: "parseApiError",
-      label: "IApiError",
+      label: "ApiError",
       searchable: true,
       rows: [
         ["statusCode", "number", "—", "HTTP 상태 코드 또는 서버가 보낸 코드"],
