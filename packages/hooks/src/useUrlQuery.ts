@@ -237,7 +237,7 @@ function buildSearchParams<T extends object>(query: Partial<T>, encode: boolean,
  *   defaults: { page: 1, size: 20, keyword: "" },
  *   urlKeys: ["status"],                    // defaults 에 없지만 URL 에서 읽을 키
  *   queryTypes: { status: "number" },       // 기본값이 없어 복원 규칙을 직접 준다
- *   postParse: (q) => (q.keyword ? { page: 1 } : {})
+ *   postParse: (q) => ((q.size ?? 0) > 100 ? { size: 100 } : {}), // 주소를 손으로 고쳐도 한도를 지킨다
  * });
  *
  * @example 쿼리를 감추기
