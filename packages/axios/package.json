@@ -16,7 +16,7 @@
     "url": "git+https://github.com/code7004/txstack.git",
     "directory": "packages/axios"
   },
-  "homepage": "https://github.com/code7004/txstack/tree/main/packages/axios#readme",
+  "homepage": "https://code7004.github.io/txstack/api/axios",
   "bugs": "https://github.com/code7004/txstack/issues",
   "type": "module",
   "sideEffects": false,
