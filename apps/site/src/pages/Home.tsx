@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { TxCopyButton, TxTag } from "@txstack/ui";
 import type { CSSProperties } from "react";
 import { LinkCard } from "../components/LinkCard";
-import { PUBLISHED, PrePublishNote } from "../components/PrePublish";
 import { Used } from "../components/Used";
 import { HomePreview } from "./home/HomePreview";
 import { RouteMenuDemo } from "./home/RouteMenuDemo";
@@ -76,15 +75,11 @@ export function Home() {
             </Link>
           </p>
 
-          {/* 설치. 배포 전에는 복사 버튼 대신 지금 설치하는 길로 보낸다 — 배포 후 명령을 먼저 복사하면 실패한다 */}
-          {PUBLISHED ? (
-            <div className="flex w-full max-w-md min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
-              <code className="min-w-0 flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
-              <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="shrink-0 text-xs" style={{ "--tx-copy-button-min-width": "5rem" } as CSSProperties} />
-            </div>
-          ) : (
-            <PrePublishNote standalone />
-          )}
+          {/* 설치 — 복사해서 바로 붙여 넣는다 */}
+          <div className="flex w-full max-w-md min-w-0 items-center gap-2 rounded-lg border px-3 py-1.5" style={{ borderColor: "var(--tx-color-border)", backgroundColor: "var(--tx-color-surface)" }}>
+            <code className="min-w-0 flex-1 overflow-x-auto font-mono text-sm whitespace-nowrap">pnpm add @txstack/ui</code>
+            <TxCopyButton value="pnpm add @txstack/ui" variant="ghost" className="shrink-0 text-xs" style={{ "--tx-copy-button-min-width": "5rem" } as CSSProperties} />
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">

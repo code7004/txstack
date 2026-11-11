@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
-import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefLabel, RefTable, Signature } from "../../components/Reference";
 import { TABLES, tableAnchor } from "./data";
@@ -14,7 +13,8 @@ export function ApiRouteMeta() {
       title="@txstack/route-meta"
       lead={
         <>
-          라우트를 메타데이터 트리 하나로 선언하고, 라우터와 메뉴, 현재 위치를 모두 이 트리에서 만듭니다. 사용법은{" "}
+          라우트 설정과 메뉴 설정을 따로 두면, 경로 하나를 바꿀 때 두 곳을 고쳐야 하고 한 곳을 잊으면 메뉴가 없는 주소를 가리키게 됩니다. route-meta는 경로 옆에 이름 · 아이콘 · 권한을 함께 적은 <strong>트리 하나</strong>에서 라우터 설정 · 메뉴 · 지금
+          화면 · 브레드크럼을 모두 만들어 냅니다. 화면에 붙이는 순서는{" "}
           <Link to="/docs/guide/routing" className="underline">
             Guide › Routing & Menu
           </Link>
@@ -23,8 +23,7 @@ export function ApiRouteMeta() {
       }
     >
       <Block title="Install">
-        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
-        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.routeMeta.installEntry.rows} anchor={tableAnchor(TABLES.routeMeta.installEntry)} />
       </Block>
 
@@ -32,7 +31,8 @@ export function ApiRouteMeta() {
         <Signature>{`type RouteTree = Record<string, RouteNode>;
 type RouteNode = PathRouteNode | IndexRouteNode;`}</Signature>
         <p className={muted}>
-          키는 메뉴 항목의 <code>key</code>가 되고, 선언한 순서가 메뉴 순서가 됩니다. <code>satisfies RouteTree</code>로 검사하면 <code>routes.docs.children.start</code> 같은 자동 완성이 살아 있습니다.
+          화면마다 주소 · 화면 · 메뉴 이름을 한 줄에 적습니다. 객체의 키는 메뉴 항목의 <code>key</code>가 되고, 적은 순서가 그대로 메뉴 순서가 됩니다. 타입 주석 대신 <code>satisfies RouteTree</code>로 검사하면 <code>routes.docs.children.start</code>{" "}
+          같은 자동 완성도 그대로 쓸 수 있습니다.
         </p>
 
         <RefLabel>PathRouteNode — 주소가 있는 화면</RefLabel>
@@ -84,12 +84,13 @@ export const App = () => useRoutes(ROUTE_OBJECTS);`}</CodeBlock>
         <Signature>{`function getNavRoutes(tree: RouteTree, canAccess?: CanAccess): NavRoute[]
 
 type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signature>
-        <p className={muted}>메뉴에 보일 항목만 골라 같은 모양의 배열로 돌려줍니다. 선언 순서를 지킵니다.</p>
+        <p className={muted}>사이드 메뉴나 상단 메뉴에 쓸 목록을 만듭니다. 트리에서 메뉴에 보일 항목만 골라 같은 모양의 배열로 돌려주고, 순서는 트리에 적은 그대로입니다.</p>
 
         <RefLabel>Router vs. menu filtering</RefLabel>
         <RefTable head={["Node", "Router", "Menu", "Note"]} rows={TABLES.routeMeta.filterRules.rows} anchor={tableAnchor(TABLES.routeMeta.filterRules)} />
         <p className={muted}>
-          <code>canAccess</code>는 <code>meta.permissions</code>가 있는 노드에서만 불립니다. 넘기지 않으면 권한이 걸린 노드는 모두 빠집니다. 권한 모델(단일 · 다중 · 계층)은 앱이 이 함수로 정합니다.
+          권한을 어떻게 판단할지는 앱이 정합니다. 단일 권한이든 역할 목록이든 계층이든, 두 번째 인자 <code>canAccess</code>가 결정합니다. 이 함수는 <code>meta.permissions</code>가 있는 노드에서만 불리고, 넘기지 않으면 권한이 걸린 노드는 모두 메뉴에서
+          빠집니다.
         </p>
 
         <RefLabel>NavRoute</RefLabel>
@@ -105,7 +106,8 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
       <Block title="useCurrentRoute">
         <Signature>{`function useCurrentRoute(tree: RouteTree): CurrentRoute`}</Signature>
         <p className={muted}>
-          지금 주소에 맞는 노드와, 맨 위에서 거기까지 이어지는 경로를 돌려줍니다. 트리와 주소가 그대로면 같은 객체를 돌려주므로 <code>useEffect</code> 의존성에 넣어도 됩니다. 라우터 안에서 써야 합니다.
+          화면 제목이나 아이콘을 그릴 때 씁니다. 지금 주소에 맞는 노드와, 맨 위에서 거기까지 이어지는 경로를 돌려줍니다. 매칭은 React Router에 맡기므로 화면에 실제로 그려진 라우트와 언제나 같은 노드가 나옵니다. 트리와 주소가 그대로면 같은 객체를
+          돌려주므로 <code>useEffect</code> 의존성에 넣어도 됩니다. 라우터 안에서 써야 합니다.
         </p>
         <RefLabel>CurrentRoute</RefLabel>
         <RefTable rows={TABLES.routeMeta.currentroute.rows} anchor={tableAnchor(TABLES.routeMeta.currentroute)} />
@@ -114,7 +116,7 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
       <Block title="useBreadcrumbs">
         <Signature>{`function useBreadcrumbs(tree: RouteTree): Breadcrumb[]`}</Signature>
         <p className={muted}>
-          지금 주소까지 온 길을 칸 목록으로 돌려줍니다. 그리지는 않습니다 — <code>TxBreadcrumb</code>의 <code>items</code>에 그대로 넘깁니다. 라우터 안에서 써야 합니다.
+          지금 주소까지 온 길을 칸 목록으로 돌려줍니다. 그리는 일은 하지 않으니 <code>TxBreadcrumb</code>의 <code>items</code>에 그대로 넘기면 됩니다. 칸을 화면마다 손으로 적지 않아도 됩니다. 라우터 안에서 써야 합니다.
         </p>
         <CodeBlock language="tsx">{`<TxBreadcrumb items={useBreadcrumbs(routeTree)} itemAs={NavLink} />`}</CodeBlock>
         <ul className={`list-disc space-y-1 ps-5 ${muted}`}>

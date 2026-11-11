@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { TxAlert } from "@txstack/ui";
 import { CodeBlock } from "../../components/CodeBlock";
-import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Page } from "../../components/Page";
 import { RefTable } from "../../components/Reference";
 import { STORYBOOK_TARGET, STORYBOOK_URL } from "../../lib/links";
@@ -9,20 +8,20 @@ import { CATALOG, TABLES, componentAnchor, storyUrl, tableAnchor } from "./data"
 
 export function ApiUi() {
   return (
-    <Page title="@txstack/ui" lead="UI를 위한 Tx* 컴포넌트 50종입니다. 스타일시트 한 줄로 적용하고, 디자인은 CSS 변수로 바꿉니다.">
+    <Page title="@txstack/ui" lead="버튼 · 입력 · 폼 · 표 · 모달부터 사이드 메뉴가 있는 앱 골격까지, 관리자 화면에 필요한 Tx* 컴포넌트를 모았습니다. props 몇 개로 바로 쓰고, CSS 변수 몇 줄로 우리 서비스의 모습으로 바꿀 수 있게 만들었습니다.">
       <Block title="Install">
-        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/ui`}</CodeBlock>
-        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui`}</CodeBlock>
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.ui.installEntry.rows} anchor={tableAnchor(TABLES.ui.installEntry)} />
 
-        <TxAlert variant="info" title="루트를 import해도 서브패스는 딸려 오지 않습니다">
-          루트 진입점은 서브패스를 <strong>참조하지 않습니다.</strong> 그래서 ag-grid나 react-day-picker를 설치하지 않아도 나머지 컴포넌트는 모두 동작합니다.
+        <TxAlert variant="info" title="표와 달력은 쓸 때만 설치합니다">
+          <code>TxAgGrid</code>는 ag-grid를, <code>TxDayPicker</code>는 react-day-picker를 씁니다. 둘 다 무거워서 <code>@txstack/ui/aggrid</code> · <code>@txstack/ui/daypicker</code>로 따로 떼어 두었습니다. 루트(<code>@txstack/ui</code>)만 쓰는 앱은
+          이 라이브러리들을 설치하지 않아도 모든 컴포넌트가 동작합니다.
         </TxAlert>
       </Block>
 
       <Block title="Components by category">
         <p className="text-slate-600 dark:text-slate-300">
-          props, 디자인 토큰, 예제는 Storybook에 정리되어 있습니다. 같은 내용을 두 곳에서 관리하면 어긋나기 쉬워서 여기에는 목록만 두고, 이름(↗)을 누르면 해당 컴포넌트의 props와 예제가 있는 Storybook 문서가 새 탭에서 열립니다.
+          컴포넌트마다 props · 디자인 토큰 · 예제는 Storybook에서 직접 눌러 보며 확인할 수 있습니다. 여기에는 무엇이 있는지만 모아 두었습니다. 이름(↗)을 누르면 그 컴포넌트의 Storybook 문서가 새 탭에서 열립니다.
         </p>
         {CATALOG.map(([category, items]) => (
           <div key={category} className="flex flex-col gap-2">
@@ -61,7 +60,7 @@ export function ApiUi() {
 
       <Block title="Design tokens">
         <p className="text-slate-600 dark:text-slate-300">
-          모든 컴포넌트가 따르는 전역 CSS 변수입니다. <code>:root</code>에서 값을 바꾸면 사이트 전체에 적용되고, <code>.dark</code>는 표의 다크 모드 값으로 바꿉니다. 바꾸는 방법은{" "}
+          모든 컴포넌트가 따르는 전역 CSS 변수입니다. <code>:root</code>에서 값 하나를 바꾸면 hover · focus · 다크 모드까지 모든 컴포넌트가 따라 바뀝니다. <code>.dark</code> 아래에는 다크 모드 값이 따로 있습니다. 자세한 방법은{" "}
           <Link to="/docs/guide/styling" className="underline">
             Guide › Styling
           </Link>
@@ -69,7 +68,7 @@ export function ApiUi() {
         </p>
         <RefTable head={["Token", "Default", "Dark mode", "Description"]} rows={TABLES.ui.tokens.rows} anchor={tableAnchor(TABLES.ui.tokens)} />
         <p className="text-slate-600 dark:text-slate-300">
-          컴포넌트마다 전용 토큰도 있습니다(<code>--tx-button-*</code>, <code>--tx-side-nav-*</code> 등). 컴포넌트별 토큰은 위 목록에서 이름을 눌러 Storybook 문서에서 확인하세요.
+          컴포넌트 하나만 바꾸고 싶다면 그 컴포넌트의 토큰(<code>--tx-button-*</code>, <code>--tx-side-nav-*</code> 등)을 덮어쓰면 됩니다. 어떤 토큰이 있는지는 위 목록에서 이름을 눌러 Storybook 문서에서 볼 수 있습니다.
         </p>
       </Block>
 
@@ -79,13 +78,13 @@ export function ApiUi() {
             <strong>
               <code>className</code>은 덧붙습니다
             </strong>{" "}
-            — 기본 클래스를 대체하지 않습니다. 위치와 여백은 사용하는 쪽에서 정합니다.
+            — 기본 클래스를 지우지 않고 그 위에 더해집니다. 화면 안에서의 위치와 여백은 쓰는 쪽에서 정하면 됩니다.
           </p>
           <p>
-            <strong>문구는 번역된 텍스트로 넘깁니다</strong> — 번역 키를 넘겨 컴포넌트 안에서 번역하는 방식이 아닙니다(<code>labels</code> prop).
+            <strong>문구는 번역이 끝난 텍스트로 넘깁니다</strong> — 기본 문구를 가진 컴포넌트는 <code>labels</code> prop으로 그 문구를 바꿀 수 있습니다. 컴포넌트가 번역 키를 받아 직접 번역하지는 않습니다.
           </p>
           <p>
-            <strong>controlled · uncontrolled 모두 지원합니다</strong> — <code>value</code>를 넘기면 앱이 값을 관리하고, <code>defaultValue</code>를 넘기면 컴포넌트가 관리합니다.
+            <strong>값을 앱이 들고 있어도, 컴포넌트에 맡겨도 됩니다</strong> — <code>value</code>를 넘기면 앱이 값을 관리하고(controlled), <code>defaultValue</code>를 넘기면 컴포넌트가 관리합니다(uncontrolled).
           </p>
           <p>
             <strong>

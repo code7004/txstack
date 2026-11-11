@@ -207,15 +207,12 @@ export function CaseStudy() {
       <Block title="Limits">
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>
           <li>
-            <strong>npm에 아직 배포하지 않았습니다.</strong> 다섯 패키지 모두 <code>0.1.0</code>이고, 지금은 저장소에서 빌드한 파일로 설치합니다.
-          </li>
-          <li>
-            <strong>기존 서비스에 적용하는 중입니다.</strong> 실제 서비스에서 드러나는 것을 라이브러리에서 고치는 단계이고, npm 배포는 그 다음입니다.
+            <strong>아직 0.x 버전입니다.</strong> 세 서비스에 적용해 운영하고 있지만, 1.0 전까지는 minor 버전에서 깨는 변경이 있을 수 있습니다. 바뀐 내용은 패키지마다 CHANGELOG에 적습니다.
           </li>
           <li>
             <strong>확인한 범위가 좁습니다.</strong> Node 24에서만 확인했고, 표(ag-grid)는 35 버전을 기준으로 합니다.
           </li>
-          <li>배포 전에 정할 이름이 남아 있고, 영문 문서는 아직 없습니다.</li>
+          <li>영문 문서는 아직 없습니다.</li>
         </ul>
       </Block>
     </Page>

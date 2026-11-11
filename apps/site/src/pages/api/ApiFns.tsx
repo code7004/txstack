@@ -3,7 +3,6 @@ import { TxInput } from "@txstack/ui";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CodeBlock } from "../../components/CodeBlock";
-import { INSTALL_TITLE, PrePublishNote } from "../../components/PrePublish";
 import { Block, Demo, Page } from "../../components/Page";
 import { RefLabel, RefTable } from "../../components/Reference";
 import { slug } from "../../lib/slug";
@@ -118,20 +117,23 @@ function SecondsTry() {
 
 export function ApiFns() {
   return (
-    <Page title="@txstack/fns" lead="화면마다 다시 쓰게 되는 작은 함수 모음입니다. React를 쓰지 않고 의존성이 없어서 Node에서도 돌아갑니다. 함수마다 아래에 그대로 복사해 쓸 수 있는 예제가 있습니다.">
+    <Page
+      title="@txstack/fns"
+      lead="숫자에 콤마 찍기, 최근 7일 기간 만들기, 전화번호 가리기, 폼 빈칸 검사처럼 프로젝트마다 또 쓰게 되는 함수를 모았습니다. React를 쓰지 않고 의존성도 없어서 Node에서도 그대로 돌아갑니다. 함수마다 그대로 복사해 쓸 수 있는 예제가 있습니다."
+    >
       <Block title="Install">
-        <CodeBlock language="bash" title={INSTALL_TITLE}>{`pnpm add @txstack/fns`}</CodeBlock>
-        <PrePublishNote />
+        <CodeBlock language="bash" title="sh">{`pnpm add @txstack/fns`}</CodeBlock>
         <Table table={TABLES.fns.installEntry} head={["Entry", "Exports", "Runs on", "Description"]} />
       </Block>
 
       <Block title="Import">
         <p className={muted}>
+          함수는 모두{" "}
           <strong>
-            루트(<code>@txstack/fns</code>)에서 이름으로 가져오세요.
+            루트(<code>@txstack/fns</code>)에서 이름으로
           </strong>{" "}
-          함수 이름이 패키지 안에서 겹치지 않게 지어서(<code>formatNumber</code> · <code>readTextFile</code> · <code>getCookie</code>) 앱의 변수 이름(<code>file</code> · <code>date</code> · <code>form</code>)과도 부딪히지 않습니다. 쓰지 않은 함수는
-          번들에서 빠집니다.
+          가져옵니다. 이름을 <code>formatNumber</code> · <code>readTextFile</code> · <code>getCookie</code>처럼 겹치지 않게 지어 두어서, 앱에서 흔히 쓰는 <code>file</code> · <code>date</code> · <code>form</code> 같은 변수 이름과 부딪히지 않습니다.
+          쓰지 않은 함수는 번들에 들어가지 않습니다.
         </p>
         <CodeBlock title="example">{`import { formatNumber, lastDays, readTextFile } from "@txstack/fns";
 
@@ -143,11 +145,12 @@ const text = await readTextFile(file); // file 은 앱의 상태 변수 그대�
 import * as fns from "@txstack/fns";
 fns.formatNumber(1234567);`}</CodeBlock>
         <p className={muted}>
-          그룹 진입점(<code>@txstack/fns/num</code> · <code>@txstack/fns/browser/file</code> …)도 그대로 있습니다. 가져오는 범위를 좁혀 두고 싶을 때 씁니다. <code>browser</code> 그룹은 <code>document</code>를 쓰므로 브라우저에서만 부르세요 — 루트에서
-          불러오는 것만으로는 Node에서도 괜찮습니다.
+          가져오는 범위를 좁히고 싶다면 묶음 단위 진입점(<code>@txstack/fns/num</code> · <code>@txstack/fns/browser/file</code> …)을 써도 됩니다. 루트와 같은 함수입니다. <code>browser</code> 묶음은 <code>document</code>를 쓰기 때문에 브라우저에서만
+          부르세요. 루트에서 import 하는 것만으로는 Node에서도 문제없습니다.
         </p>
         <p className={muted}>
-          lodash에 있는 기능(<code>pick</code> · <code>isEqual</code> · <code>clamp</code> · <code>inRange</code> · <code>sortBy</code> …)은 넣지 않았습니다. 같은 일을 하는 함수가 두 벌이면 어느 쪽을 써야 할지 헷갈리기 때문입니다.
+          lodash에 이미 있는 것(<code>pick</code> · <code>isEqual</code> · <code>clamp</code> · <code>inRange</code> · <code>sortBy</code> …)은 만들지 않았습니다. 같은 일을 하는 함수가 두 벌이면 어느 쪽을 써야 할지 헷갈리니까요. 필요하면 lodash를
+          함께 쓰세요.
         </p>
         <p className={muted}>
           아래 예제에서 <code>{"// →"}</code> 뒤의 값은 테스트가 예제를 실제로 실행해 맞춰 본 결과입니다.
@@ -156,8 +159,9 @@ fns.formatNumber(1234567);`}</CodeBlock>
 
       <Block title="num">
         <p className={muted}>
-          포맷 함수는 <strong>빈 값을 0으로 그립니다</strong> — <code>null</code> · <code>undefined</code> · <code>NaN</code> · 숫자가 아닌 문자열 모두. 다른 글자가 필요하면 <code>fallback</code>을 주세요. <code>locale</code>을 빼면 실행 환경의
-          로케일을 씁니다. 한국어로 고정하려면 앱에서 한 번 감쌉니다 — <code>{`const won = (n) => formatNumber(n, { locale: "ko-KR", style: "currency", currency: "KRW" })`}</code>.
+          숫자 · 비율 · 용량을 화면에 보여 줄 때 씁니다. <code>null</code> · <code>undefined</code> · <code>NaN</code> 처럼 <strong>값이 비어 있어도 0으로 그려서</strong> 화면이 깨지지 않습니다. 대신 <code>&quot;-&quot;</code>를 보여 주고 싶다면{" "}
+          <code>fallback</code>을 넘기세요. <code>locale</code>을 정하지 않으면 실행 환경의 것을 따릅니다. 늘 원화로 보여 줄 거라면 앱에서 한 번 감싸 두면 편합니다 —{" "}
+          <code>{`const won = (n) => formatNumber(n, { locale: "ko-KR", style: "currency", currency: "KRW" })`}</code>.
         </p>
         <NumberTry />
         <Table table={TABLES.fns.num} />
@@ -165,7 +169,7 @@ fns.formatNumber(1234567);`}</CodeBlock>
       </Block>
 
       <Block title="date">
-        <p className={muted}>모든 계산은 실행 환경의 시간대를 씁니다. 기간 함수는 마지막 날을 23:59:59.999까지 넣어서, 그대로 서버의 검색 조건으로 넘길 수 있습니다.</p>
+        <p className={muted}>조회 기간을 만들거나 경과 시간을 글로 바꿀 때 씁니다. 시간대는 실행 환경의 것을 따릅니다. 기간 함수는 마지막 날을 23:59:59.999까지 채워 주므로, 결과를 그대로 서버의 검색 조건으로 넘기면 됩니다.</p>
         <SecondsTry />
         <Table table={TABLES.fns.date} />
         <Examples groups={["date"]} />
