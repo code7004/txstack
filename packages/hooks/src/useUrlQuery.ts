@@ -40,7 +40,13 @@ export interface UseUrlQueryOptions<T extends object> {
    */
   urlKeys?: (keyof NoInfer<T>)[];
 
-  /** `defaults` 값만으로 타입을 정할 수 없을 때(예: 기본값이 `undefined`) 복원 규칙을 직접 준다. */
+  /**
+   * `defaults` 값만으로 타입을 정할 수 없을 때(예: 기본값이 `undefined`) 복원 규칙을 직접 준다.
+   * 기본값이 배열이면 **원소**의 타입이다(`ids: []` → `queryTypes: { ids: "number" }`).
+   *
+   * 선언한 키는 주소가 어떻게 생겼든 그 모양을 지킨다 — 단일 값 키가 반복되면 첫 값, 배열 키는 값이 하나여도 배열,
+   * 읽을 수 없는 값(`?page=abc`)은 기본값.
+   */
   queryTypes?: Partial<Record<keyof NoInfer<T>, UrlQueryValueType>>;
 
   /** URL·기본값 병합 직후 호출되어 추가 패치를 반환한다. 값 정규화나 상호 의존 필드 정리에 쓴다. */
@@ -67,10 +73,24 @@ function parseValue(value: string): UrlQueryPrimitive {
   return value;
 }
 
-function parseTypedValue(value: string, type?: UrlQueryValueType): UrlQueryPrimitive {
+/**
+ * 선언된 타입으로 읽는다. **읽을 수 없으면 `undefined`** 를 돌려 그 키를 기본값으로 넘긴다.
+ *
+ * `?page=abc` 를 `NaN` 으로, `?page=` 를 `0` 으로, `?on=yes` 를 `false` 로 읽지 않는다 —
+ * 주소를 손으로 고친 것이지 그 값을 원한 것이 아니다.
+ */
+function parseTypedValue(value: string, type?: UrlQueryValueType): UrlQueryPrimitive | undefined {
   if (type === "string") return value;
-  if (type === "number") return Number(value);
-  if (type === "boolean") return value === "true";
+  if (type === "number") {
+    if (value.trim() === "") return undefined;
+    const num = Number(value);
+    return Number.isFinite(num) ? num : undefined;
+  }
+  if (type === "boolean") {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return undefined;
+  }
 
   return parseValue(value);
 }
@@ -81,6 +101,57 @@ function getDefaultType(defaultValue: unknown): UrlQueryValueType | undefined {
   if (typeof defaultValue === "boolean") return "boolean";
 
   return undefined;
+}
+
+/**
+ * 키의 모양 — 배열인지, 값(배열이면 원소)의 타입이 무엇인지.
+ *
+ * **모양은 선언이 정한다. URL 이 정하지 않는다.** 기본값이 배열이면 배열, `queryTypes` 나
+ * 기본값의 타입이 있으면 그 타입의 단일 값이다. 둘 다 없으면 `undefined` — 선언되지 않은 키라
+ * URL 의 생김새(`key[]` · 반복 · 숫자 모양)로 짐작한다.
+ */
+interface KeyShape {
+  array: boolean;
+  type?: UrlQueryValueType;
+}
+
+function getKeyShape(key: string, queryTypes?: Partial<Record<string, UrlQueryValueType>>, defaults?: Record<string, unknown>): KeyShape | undefined {
+  const defaultValue = defaults?.[key];
+  const array = Array.isArray(defaultValue);
+  const type = queryTypes?.[key] ?? getDefaultType(defaultValue);
+
+  if (!array && type === undefined) return undefined;
+  return { array, type };
+}
+
+function matchesType(value: unknown, type?: UrlQueryValueType): boolean {
+  if (type === "string") return typeof value === "string";
+  if (type === "number") return typeof value === "number" && Number.isFinite(value);
+  if (type === "boolean") return typeof value === "boolean";
+
+  return true;
+}
+
+/**
+ * `encode` 로 감춘 값도 같은 규칙을 지킨다. JSON 이라 타입이 실려 오지만, 주소는 누구나 고칠 수 있다 —
+ * `{ "q": ["a"] }` 를 `q: string` 자리에 그대로 넘기지 않는다. 맞지 않는 키는 버려 기본값으로 넘긴다.
+ */
+function conformDecoded(decoded: UrlQueryRecord, queryTypes?: Partial<Record<string, UrlQueryValueType>>, defaults?: Record<string, unknown>): UrlQueryRecord {
+  const result: UrlQueryRecord = {};
+
+  Object.entries(decoded).forEach(([key, value]) => {
+    const shape = getKeyShape(key, queryTypes, defaults);
+
+    if (!shape) {
+      result[key] = value;
+    } else if (shape.array) {
+      if (Array.isArray(value)) result[key] = value.filter((item) => matchesType(item, shape.type));
+    } else if (matchesType(value, shape.type)) {
+      result[key] = value;
+    }
+  });
+
+  return result;
 }
 
 function isEmptyValue(value: unknown): value is null | undefined {
@@ -131,33 +202,46 @@ function decodeObject(value: string): UrlQueryRecord | null {
 
 function parseSearchParams(params: URLSearchParams, encodeKey: string, queryTypes?: Partial<Record<string, UrlQueryValueType>>, defaults?: Record<string, unknown>): UrlQueryRecord {
   const encoded = params.get(encodeKey);
-  if (encoded) return decodeObject(encoded) ?? {};
+  if (encoded) {
+    const decoded = decodeObject(encoded);
+    return decoded ? conformDecoded(decoded, queryTypes, defaults) : {};
+  }
 
   const result: UrlQueryRecord = {};
   const handledKeys = new Set<string>();
 
   params.forEach((_, key) => {
-    if (handledKeys.has(key)) return;
-    handledKeys.add(key);
+    const cleanKey = key.endsWith("[]") ? key.slice(0, -2) : key;
+    if (handledKeys.has(cleanKey)) return;
+    handledKeys.add(cleanKey);
 
-    const isArrayKey = key.endsWith("[]");
-    const cleanKey = isArrayKey ? key.slice(0, -2) : key;
-    const values = params.getAll(key);
-    const valueType = queryTypes?.[cleanKey] ?? getDefaultType(defaults?.[cleanKey]);
+    // `?ids=1&ids[]=2` 처럼 두 표기가 섞여도 한 키로 모은다.
+    const plain = params.getAll(cleanKey);
+    const bracketed = params.getAll(`${cleanKey}[]`);
+    const values = [...plain, ...bracketed];
+    const shape = getKeyShape(cleanKey, queryTypes, defaults);
 
-    if (values.length > 1 || isArrayKey) {
-      result[cleanKey] = values.map((value) => parseTypedValue(value, valueType));
+    /**
+     * **배열인지 아닌지는 선언이 정한다.** 한때 같은 키가 두 번 오면 무조건 배열로 만들었는데,
+     * 그러면 `defaults: { q: "" }` 로 `string` 을 선언한 자리에 `?q=a&q=b` 하나로 `string[]` 이
+     * 들어온다 — 소비자는 타입을 믿고 `query.q.trim()` 을 쓰다가 흰 화면을 본다.
+     * (콤마로 쪼개던 시절에도 같은 이유로 터졌고, 그래서 콤마도 쪼개지 않는다.)
+     */
+    if (shape?.array) {
+      // `?ids=1` 하나뿐이어도 배열이다. 읽을 수 없는 원소는 버린다.
+      result[cleanKey] = values.map((value) => parseTypedValue(value, shape.type)).filter((value) => value !== undefined);
       return;
     }
 
-    /**
-     * **콤마로 쪼개지 않는다.** 한때 값에 `,` 가 있으면 배열로 나눴는데, 그러면
-     * `defaults: { q: "" }` 로 `string` 을 선언한 자리에 런타임에 `string[]` 이 들어온다 —
-     * 소비자는 타입을 믿고 `query.q.trim()` 을 쓰다가 흰 화면을 본다(실제로 그렇게 터졌다).
-     *
-     * 배열은 **선언해서 쓴다** — `?ids[]=1&ids[]=2` 나 같은 키를 두 번(`?ids=1&ids=2`).
-     */
-    result[cleanKey] = parseTypedValue(values[0] ?? "", valueType);
+    if (shape) {
+      // 단일 값 키가 반복되면 **첫 값**을 쓴다 — `URLSearchParams.get()` 과 같다.
+      const value = parseTypedValue(values[0] ?? "", shape.type);
+      if (value !== undefined) result[cleanKey] = value;
+      return;
+    }
+
+    // 선언되지 않은 키(`urlKeys` 에만 있고 기본값 · `queryTypes` 가 없는 키)는 URL 의 생김새로 짐작한다.
+    result[cleanKey] = values.length > 1 || bracketed.length > 0 ? values.map((value) => parseValue(value)) : parseValue(values[0] ?? "");
   });
 
   return result;
