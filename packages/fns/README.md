@@ -56,7 +56,7 @@ import { readTextFile } from "@txstack/fns/browser/file";
 
 ## 조금 더 자세히
 
-**빈 값을 넣어도 화면이 깨지지 않습니다.** 포맷 함수는 `null` · `undefined` · `NaN` 을 0 으로 보고 그립니다
+**포맷 함수는 빈 값에도 기본 표시값을 돌려줍니다.** `null` · `undefined` · `NaN` 은 0 으로 보고 포맷합니다
 (`"0"` · `"0.0%"` · `"0 B"`). 대신 `"-"` 를 보여 주고 싶다면 `formatNumber` · `formatPercent` · `formatCompact` 에 `fallback` 을 넘기면 됩니다. 로케일을 정하지 않으면 실행 환경의 것을 따릅니다.
 
 **폼 검사는 첫 번째 문제 하나만 알려 줍니다.** `checkForm` 은 문제가 없으면 `null`, 있으면 `{ 필드: 메시지 }` 를 돌려줍니다.

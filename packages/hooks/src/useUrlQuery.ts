@@ -52,7 +52,7 @@ export interface UseUrlQueryOptions<T extends object> {
   /** URL·기본값 병합 직후 호출되어 추가 패치를 반환한다. 값 정규화나 상호 의존 필드 정리에 쓴다. */
   postParse?: (query: Partial<NoInfer<T>>) => Partial<NoInfer<T>>;
 
-  /** 쿼리 전체를 base64url JSON 한 덩어리로 감춘다. 기본 `false`. */
+  /** 쿼리 전체를 base64url 문자열 하나로 인코딩한다(암호화는 아니다 — 누구나 풀어 볼 수 있다). 기본 `false`. */
   encode?: boolean;
 
   /** `encode: true` 일 때 쓸 키 이름. 기본 `"_q"`. */

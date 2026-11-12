@@ -52,7 +52,7 @@ pnpm add -D tailwindcss @tailwindcss/vite`}</CodeBlock>
 
       <Block title="1. Register the screen — route-meta">
         <p className={muted}>
-          라우트 트리에 화면을 추가합니다. <code>meta.label</code>을 적으면 메뉴에 자동으로 나타나고, 경로 표시와 탭 제목에도 쓰입니다. 라우트와 메뉴를 따로 고칠 필요가 없습니다.
+          라우트 트리에 화면을 추가합니다. <code>meta.label</code>을 적으면 메뉴에 자동으로 나타나고, 브레드크럼과 탭 제목에도 쓰입니다. 라우트와 메뉴를 따로 고칠 필요가 없습니다.
         </p>
         <CodeBlock title="src/routes.tsx">{`export const routes = {
   home: { path: "/", element: <Home />, meta: { label: "홈" } },

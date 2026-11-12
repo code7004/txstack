@@ -34,7 +34,8 @@ const menu = getNavRoutes(routes, (permissions) => permissions.includes(role));
 
       <Block title="Where you are">
         <p className={muted}>
-          <code>useBreadcrumbs</code>가 지금 주소까지 온 길을 칸 목록으로 주고, <code>TxBreadcrumb</code>이 그대로 받습니다. <code>useCurrentRoute</code>의 <code>meta</code>는 화면 제목과 탭 제목이 됩니다. 화면마다 제목도 경로도 따로 적지 않습니다.
+          <code>useBreadcrumbs</code>가 현재 화면까지의 경로를 브레드크럼 항목 배열로 주고, <code>TxBreadcrumb</code>이 그대로 받습니다. <code>useCurrentRoute</code>의 <code>meta</code>는 화면 제목과 탭 제목이 됩니다. 화면마다 제목도 경로도 따로 적지
+          않습니다.
         </p>
         <CodeBlock title="src/App.tsx — 지금 위치">{`const { meta } = useCurrentRoute(routes);
 const crumbs = useBreadcrumbs(routes);   // 운영 / 대시보드

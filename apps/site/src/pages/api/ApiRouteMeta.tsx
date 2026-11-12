@@ -116,7 +116,7 @@ type CanAccess = (permissions: string[], node: RouteNode) => boolean;`}</Signatu
       <Block title="useBreadcrumbs">
         <Signature>{`function useBreadcrumbs(tree: RouteTree): Breadcrumb[]`}</Signature>
         <p className={muted}>
-          지금 주소까지 온 길을 칸 목록으로 돌려줍니다. 그리는 일은 하지 않으니 <code>TxBreadcrumb</code>의 <code>items</code>에 그대로 넘기면 됩니다. 칸을 화면마다 손으로 적지 않아도 됩니다. 라우터 안에서 써야 합니다.
+          현재 화면까지의 경로를 브레드크럼 항목 배열로 돌려줍니다. 그리는 일은 하지 않으니 <code>TxBreadcrumb</code>의 <code>items</code>에 그대로 넘기면 됩니다. 칸을 화면마다 손으로 적지 않아도 됩니다. 라우터 안에서 써야 합니다.
         </p>
         <CodeBlock language="tsx">{`<TxBreadcrumb items={useBreadcrumbs(routeTree)} itemAs={NavLink} />`}</CodeBlock>
         <ul className={`list-disc space-y-1 ps-5 ${muted}`}>

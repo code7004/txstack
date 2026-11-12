@@ -13,8 +13,8 @@ export function ApiAxios() {
       title="@txstack/axios"
       lead={
         <>
-          토큰을 어디서 읽을지, 401이 오면 무엇을 할지, 서버 응답이 <code>{"{ body }"}</code>로 오는지 <code>{"{ data }"}</code>로 오는지는 앱마다 다릅니다. 이 클라이언트는 그런 것을 정하지 않고 앱이 옵션으로 넘기게 해서, 어느 프로젝트에 붙여도 그
-          프로젝트의 규칙대로 동작합니다. React를 쓰지 않아 Node에서도 돌아갑니다. 화면에 붙이는 순서는{" "}
+          토큰을 어디서 읽을지, 401이 오면 무엇을 할지, 서버 응답이 <code>{"{ body }"}</code>로 오는지 <code>{"{ data }"}</code>로 오는지는 앱마다 다릅니다. 이 클라이언트는 이런 정책을 정하지 않고 옵션으로 받으므로, 프로젝트마다 다른 인증 · 응답 처리
+          정책을 그대로 설정할 수 있습니다. React를 쓰지 않아 Node에서도 돌아갑니다. 화면에 붙이는 순서는{" "}
           <Link to="/docs/guide/http-client" className="underline">
             Guide › HTTP Client
           </Link>

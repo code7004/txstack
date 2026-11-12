@@ -49,8 +49,8 @@ setFilter({ keyword: "kim" });                  // page는 그대로 1
 setFilter((prev) => ({ page: prev.page + 1 })); // 이전 값을 보고 고칠 수도 있습니다
 setFilter({ keyword: "lee", page: 1 });         // 함께 바뀌는 필드는 한 번에 넘깁니다`}</CodeBlock>
         <p className={muted}>
-          두 번째 인자 <code>postParse</code>에는 <strong>언제나 지켜야 할 규칙</strong>을 적습니다. 값이 합쳐질 때마다 불리고, 돌려준 필드가 한 번 더 덮어씁니다. &quot;검색어가 바뀌면 첫 페이지로&quot;처럼 특정 변경에만 따라야 하는 일은 여기가
-          아니라 바꾸는 쪽에서 함께 넘기세요. <code>postParse</code>는 무엇이 바뀌었는지 모르기 때문에, 검색어가 있는 동안 페이지를 넘길 수 없게 됩니다.
+          두 번째 인자 <code>postParse</code>에는 <strong>언제나 지켜야 할 규칙</strong>을 적습니다. 상태를 병합할 때마다 호출되며, 돌려준 필드로 병합 결과를 한 번 더 덮어씁니다. &quot;검색어가 바뀌면 첫 페이지로&quot;처럼 특정 변경에만 따라야 하는
+          일은 여기가 아니라 바꾸는 쪽에서 함께 넘기세요. <code>postParse</code>는 무엇이 바뀌었는지 모르기 때문에, 검색어가 있는 동안 페이지를 넘길 수 없게 됩니다.
         </p>
         <CodeBlock title="example — postParse">{`// 시작일이 종료일보다 뒤로 가면 종료일을 따라 옮깁니다
 const [range, setRange] = useObjectState(

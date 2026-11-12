@@ -53,7 +53,7 @@ export function ExampleRoutes() {
             <strong>
               <code>label</code> · <code>description</code>
             </strong>{" "}
-            — 메뉴의 이름이 되고, App이 화면 위에 제목 · 설명 · 경로 표시(운영 › 대시보드)로 씁니다.
+            — 메뉴의 이름이 되고, App이 화면 위에 제목 · 설명 · 브레드크럼(운영 › 대시보드)으로 씁니다.
           </li>
           <li>
             <strong>

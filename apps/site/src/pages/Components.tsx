@@ -310,7 +310,7 @@ export function Components() {
 
       <Section
         title="Form"
-        lead="입력란, 선택, 숫자, 라디오, 슬라이더, 스위치를 TxForm 한 벌로 묶었습니다. 캡션과 입력란이 자동으로 이어집니다."
+        lead="입력란, 선택, 숫자, 라디오, 슬라이더, 스위치를 TxForm 한 벌로 묶었습니다. 캡션과 입력란이 자동으로 연결됩니다."
         used={["TxForm", "TxInput", "TxDropdown", "TxNumberInput", "TxRadioGroup", "TxSlider", "TxSwitch", "TxCheckBox"]}
       >
         <FormDemo />
@@ -328,7 +328,7 @@ export function Components() {
         <DataDemo />
       </Section>
 
-      <Section title="Layout" lead="경로 표시, 탭, 카드, 펼침 목록으로 설정 화면 하나를 나눴습니다. 화면 전체의 틀은 TxAppShell이 잡습니다." used={["TxBreadcrumb", "TxTabs", "TxCard", "TxAccordion", "TxAppShell"]}>
+      <Section title="Layout" lead="브레드크럼, 탭, 카드, 펼침 목록으로 설정 화면 하나를 나눴습니다. 화면 전체의 틀은 TxAppShell이 잡습니다." used={["TxBreadcrumb", "TxTabs", "TxCard", "TxAccordion", "TxAppShell"]}>
         <LayoutDemo />
       </Section>
 

@@ -1,8 +1,8 @@
 # @txstack/axios
 
 axios 를 감싼 HTTP 클라이언트입니다. 토큰을 어디서 읽을지, 401 이 오면 무엇을 할지, 서버 응답이 `{ body }` 로 오는지
-`{ data }` 로 오는지는 앱마다 다릅니다. 이 패키지는 그런 것을 정하지 않고, 앱이 옵션으로 넘기게 합니다.
-그래서 어느 프로젝트에 붙여도 그 프로젝트의 규칙대로 동작합니다.
+`{ data }` 로 오는지는 앱마다 다릅니다. 이 패키지는 이런 정책을 정하지 않습니다. 토큰을 읽는 함수, 401 처리, 응답에서 데이터를 꺼내는 함수를
+옵션으로 받으므로 프로젝트마다 다른 인증 · 응답 처리 정책을 그대로 설정할 수 있습니다.
 
 React 를 쓰지 않으므로 Node 스크립트에서도 그대로 쓸 수 있습니다.
 
@@ -23,7 +23,7 @@ import { createHttpClient } from "@txstack/axios";
 export const api = createHttpClient({
   baseURL: "/api",
   getToken: () => localStorage.getItem("accessToken"), // 요청마다 불러 Authorization: Bearer <토큰> 을 붙입니다
-  onUnauthorized: () => logout(), // 401 이 오면 불립니다
+  onUnauthorized: () => logout(), // 401 이 오면 호출됩니다
   unwrap: (data) => (data as { body: unknown }).body // 서버가 { body: ... } 로 감싸 보낸다면
 });
 ```
@@ -56,7 +56,7 @@ try {
 }
 ```
 
-모든 오류 응답을 한곳에서 보고 싶다면 `onError` 를 넘깁니다. 401 일 때는 `onUnauthorized` 와 `onError` 가 둘 다 불립니다.
+모든 오류 응답을 한곳에서 보고 싶다면 `onError` 를 넘깁니다. 401 일 때는 `onUnauthorized` 와 `onError` 가 모두 호출됩니다.
 
 ## 로그 남기기
 
@@ -72,7 +72,7 @@ createHttpClient({
 });
 ```
 
-개발 중에 콘솔로 보고 싶다면 `debug: true` 만 주면 됩니다. 훅을 직접 넘긴 자리는 그 훅이 우선합니다.
+개발 중에 콘솔로 보고 싶다면 `debug: true` 만 주면 됩니다. `onRequest` · `onResponse` 를 직접 넘겼다면 그쪽이 우선합니다.
 
 비밀번호나 토큰이 로그로 새지 않도록, `password` · `privateKey` · `token` · `accessToken` · `refreshToken` 필드는
 **로그로 넘기기 전에 가려집니다.** 중첩된 객체와 URL 쿼리까지 가리며, 가릴 필드 이름은 `maskFields` 로 바꿀 수 있습니다.
@@ -86,10 +86,10 @@ createHttpClient({
 | `getToken`                  | 요청마다 토큰을 돌려줍니다. 없으면 인증 헤더를 붙이지 않습니다 | —                                           |
 | `authHeader` · `authScheme` | 인증 헤더 이름과 스킴                                          | `"Authorization"` · `"Bearer"`              |
 | `unwrap`                    | 응답 본문에서 실제 데이터를 꺼냅니다                           | 본문 그대로                                 |
-| `onUnauthorized`            | 401 응답이 오면 불립니다                                       | —                                           |
-| `onError`                   | 모든 오류 응답에서 불립니다                                    | —                                           |
+| `onUnauthorized`            | 401 응답이 오면 호출됩니다                                     | —                                           |
+| `onError`                   | 모든 오류 응답에서 호출됩니다                                  | —                                           |
 | `onRequest` · `onResponse`  | 요청 · 응답 로그를 받습니다                                    | —                                           |
-| `debug`                     | 훅을 주지 않은 자리에 콘솔 로거를 붙입니다                     | `false`                                     |
+| `debug`                     | 직접 넘기지 않은 로그 훅에 콘솔 로거를 붙입니다                | `false`                                     |
 | `maskFields`                | 로그에서 가릴 필드 이름                                        | `password` · `token` 등 5개                 |
 | `withCredentials`           | 다른 도메인 요청에 쿠키를 싣습니다                             | `false` (쿠키 인증을 쓰는 앱이 직접 켭니다) |
 | `headers` · `timeout`       | 모든 요청에 붙일 헤더와 제한 시간                              | —                                           |
