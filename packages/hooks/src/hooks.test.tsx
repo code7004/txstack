@@ -251,4 +251,76 @@ describe("useUrlQuery — encode", () => {
     error.mockRestore();
     warn.mockRestore();
   });
+
+  it("감춘 값도 선언한 타입과 맞지 않는 키는 기본값으로 넘어간다", () => {
+    const payload = btoa(JSON.stringify({ q: ["a"], page: "x", ids: 3, keep: 5 })).replace(/=+$/, "");
+    const { result } = renderHook(() => useHarness({ defaults: { q: "", page: 1, ids: [] as number[], keep: 0 }, encode: true }), { wrapper: wrapper(`/?_q=${payload}`) });
+
+    expect(result.current.query).toEqual({ q: "", page: 1, ids: [], keep: 5 });
+  });
+});
+
+/**
+ * **배열인지 아닌지는 선언이 정한다. URL 이 정하지 않는다.** 공유된 주소는 누구나 고칠 수 있다 —
+ * `?q=a&q=b` 하나로 `string` 자리에 `string[]` 이 들어오면 소비자의 `query.q.trim()` 이 터진다.
+ */
+describe("useUrlQuery — 주소가 선언과 맞지 않을 때", () => {
+  it("문자열로 선언한 키가 반복되면 첫 값을 문자열로 쓴다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { q: "" } }), { wrapper: wrapper("/?q=a&q=b") });
+    expect(result.current.query.q).toBe("a");
+  });
+
+  it("문자열로 선언한 키에 key[] 로 와도 문자열이다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { q: "" } }), { wrapper: wrapper("/?q[]=a&q[]=b") });
+    expect(result.current.query.q).toBe("a");
+  });
+
+  it("숫자로 선언한 키가 반복되면 첫 값이다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { page: 1 } }), { wrapper: wrapper("/?page=3&page=9") });
+    expect(result.current.query.page).toBe(3);
+  });
+
+  it("queryTypes 로 선언한 키도 반복되면 첫 값이다", () => {
+    const { result } = renderHook(() => useHarness<{ a: number; status?: number }>({ defaults: { a: 1 }, urlKeys: ["status"], queryTypes: { status: "number" } }), { wrapper: wrapper("/?status=2&status=5") });
+    expect(result.current.query.status).toBe(2);
+  });
+
+  it("배열로 선언한 키는 값이 하나여도 배열이다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { ids: [] as number[] } }), { wrapper: wrapper("/?ids=1") });
+    expect(result.current.query.ids).toEqual([1]);
+  });
+
+  it("배열은 두 표기가 섞여도 한 배열로 모은다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { ids: [] as number[] }, queryTypes: { ids: "number" } }), { wrapper: wrapper("/?ids=1&ids[]=2") });
+    expect(result.current.query.ids).toEqual([1, 2]);
+  });
+
+  it("숫자 원소 배열에서 읽을 수 없는 원소는 버린다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { ids: [] as number[] }, queryTypes: { ids: "number" } }), { wrapper: wrapper("/?ids[]=1&ids[]=x&ids[]=3") });
+    expect(result.current.query.ids).toEqual([1, 3]);
+  });
+
+  it.each([
+    ["숫자가 아닌 값", "/?page=abc"],
+    ["빈 값", "/?page="],
+    ["무한대", "/?page=Infinity"]
+  ])("숫자로 선언한 키에 %s 이 오면 기본값이다", (_, url) => {
+    const { result } = renderHook(() => useHarness({ defaults: { page: 1 } }), { wrapper: wrapper(url) });
+    expect(result.current.query.page).toBe(1);
+  });
+
+  it("boolean 으로 선언한 키는 true · false 만 읽고, 나머지는 기본값이다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { on: true } }), { wrapper: wrapper("/?on=yes") });
+    expect(result.current.query.on).toBe(true);
+  });
+
+  it("선언되지 않은 키는 전처럼 URL 의 생김새로 읽는다", () => {
+    const { result } = renderHook(() => useHarness<{ a: number; tag?: number[] }>({ defaults: { a: 1 }, urlKeys: ["tag"] }), { wrapper: wrapper("/?tag=1&tag=2") });
+    expect(result.current.query.tag).toEqual([1, 2]);
+  });
+
+  it("잘못된 값으로 들어와도 마운트만으로 주소를 고쳐 쓰지 않는다", () => {
+    const { result } = renderHook(() => useHarness({ defaults: { q: "" } }), { wrapper: wrapper("/?q=a&q=b") });
+    expect(result.current.search).toBe("?q=a&q=b");
+  });
 });
