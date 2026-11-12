@@ -1,6 +1,6 @@
 {
   "name": "@txstack/fns",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Small, dependency-free TypeScript functions — number formatting, dates, random data, forms, Korean phone numbers, browser helpers",
   "keywords": [
     "utils",

@@ -1,6 +1,6 @@
 {
   "name": "@txstack/hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React hooks for admin screens — object state with partial updates, URL query as state",
   "keywords": [
     "react",
