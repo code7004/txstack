@@ -1,5 +1,11 @@
 # @txstack/route-meta
 
+## 0.1.2
+
+### Patch Changes
+
+- README 문구를 다듬었다 — 비유 대신 기술 용어를 쓰고, 장담하던 문장을 실제 동작 설명으로 바꿨다. 코드 변경은 없다.
+
 ## 0.1.1
 
 ### Patch Changes
