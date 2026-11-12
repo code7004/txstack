@@ -167,7 +167,7 @@ export function GuideRouting() {
       title="Routing & Menu"
       lead={
         <>
-          라우트를 한 곳에 선언하면 라우터, 메뉴(GNB · 사이드바), 경로 표시(브레드크럼)가 모두 거기서 만들어집니다. <code>@txstack/route-meta</code>를 사용합니다.
+          라우트를 한 곳에 선언하면 라우터, 메뉴(GNB · 사이드바), 브레드크럼이 모두 거기서 만들어집니다. <code>@txstack/route-meta</code>를 사용합니다.
         </>
       }
     >
@@ -176,13 +176,13 @@ export function GuideRouting() {
         <CodeBlock language="text" title="트리 하나에서 만들어지는 것">{`routes (라우트 트리)
  ├─ buildRouteObjects → 라우터에 넘길 라우트 목록
  ├─ getNavRoutes      → 메뉴 (GNB · 사이드바)
- ├─ useBreadcrumbs    → 경로 표시 (브레드크럼)
+ ├─ useBreadcrumbs    → 브레드크럼
  └─ useCurrentRoute   → 지금 화면 (탭 제목)`}</CodeBlock>
       </Block>
 
       <Block title="This site is the example">
         <p className={muted}>
-          이 사이트의 위쪽 메뉴, 왼쪽 메뉴, 메뉴에 마우스를 올리면 펼쳐지는 사이트 지도, <strong>이 페이지 맨 위의 경로 표시</strong>, 브라우저 탭 제목이 모두 라우트 트리 하나에서 만들어집니다. 메뉴 이름을 바꾸면 이 다섯 곳이 함께 바뀝니다.
+          이 사이트의 위쪽 메뉴, 왼쪽 메뉴, 메뉴에 마우스를 올리면 펼쳐지는 사이트 지도, <strong>이 페이지 맨 위의 브레드크럼</strong>, 브라우저 탭 제목이 모두 라우트 트리 하나에서 만들어집니다. 메뉴 이름을 바꾸면 이 다섯 곳이 함께 바뀝니다.
         </p>
       </Block>
 
@@ -191,7 +191,7 @@ export function GuideRouting() {
           화면마다 주소(<code>path</code>), 화면(<code>element</code>), 메뉴에 보일 정보(<code>meta</code>)를 함께 적습니다. 하위 화면은 <code>children</code>에 넣습니다.
         </p>
         <p className={muted}>
-          관리 화면은 보통 <strong>로그인 화면</strong>과, 헤더 · 메뉴를 그리는 <strong>셸 아래의 화면들</strong>로 나뉩니다. 셸 라우트(<code>app</code>)는 메뉴에 보이지 않게 <code>hidden</code>으로, 경로 표시에도 나오지 않게{" "}
+          관리 화면은 보통 <strong>로그인 화면</strong>과, 헤더 · 메뉴를 그리는 <strong>셸 아래의 화면들</strong>로 나뉩니다. 셸 라우트(<code>app</code>)는 메뉴에 보이지 않게 <code>hidden</code>으로, 브레드크럼에도 나오지 않게{" "}
           <code>breadcrumb: false</code>로 두고, 메뉴는 그 <code>children</code>에서 만듭니다(3단계).
         </p>
         <CodeBlock title="src/routes.tsx">{`import type { RouteTree } from "@txstack/route-meta";
@@ -203,7 +203,7 @@ export const routes = {
   app: {
     path: "/",
     element: <AppShell />,                                        // 헤더 · 메뉴 · <Outlet /> 을 그리는 셸
-    meta: { label: "앱", hidden: true, breadcrumb: false },       // 메뉴에도 경로 표시에도 나오지 않는다
+    meta: { label: "앱", hidden: true, breadcrumb: false },       // 메뉴에도 브레드크럼에도 나오지 않는다
     children: {
       home: { index: true, element: <Navigate to="/dashboard" replace /> },
       dashboard: { path: "/dashboard", element: <Dashboard />, meta: { label: "대시보드" } },
@@ -330,7 +330,7 @@ export function Gnb() {
 
       <Block title="4. Show the current location">
         <p className={muted}>
-          <code>useBreadcrumbs</code>가 지금 주소까지 온 길을 칸 목록으로 돌려주고, <code>TxBreadcrumb</code>이 <code>items</code>로 그대로 받습니다. 화면마다 칸을 적지 않습니다 — 한 번 감싸 두고 화면에는 prop 없이 놓습니다.
+          <code>useBreadcrumbs</code>가 현재 화면까지의 경로를 브레드크럼 항목 배열로 돌려주고, <code>TxBreadcrumb</code>이 <code>items</code>로 그대로 받습니다. 화면마다 칸을 적지 않습니다 — 한 번 감싸 두고 화면에는 prop 없이 놓습니다.
         </p>
         <CodeBlock title="src/PageBreadcrumb.tsx">{`import { useBreadcrumbs } from "@txstack/route-meta";
 import { TxBreadcrumb } from "@txstack/ui";

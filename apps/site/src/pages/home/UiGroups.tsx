@@ -23,7 +23,7 @@ export function UiGroups() {
         result="입력 · 선택 · 검증 메시지를 갖춘 폼"
         used={["TxForm", "TxInput", "TxDropdown", "TxCheckBox"]}
         code={FORM_SOURCE}
-        split={{ parts: "캡션과 오류 메시지를 입력란에 잇고, 체크 · 입력의 모양을 맞춥니다", app: "검증 규칙과 제출 처리" }}
+        split={{ parts: "캡션과 오류 메시지를 입력란에 연결하고, 체크 · 입력의 모양을 맞춥니다", app: "검증 규칙과 제출 처리" }}
         more={{ to: "/docs/start#a-first-screen-with-ui", label: "전체 가입 폼 → Getting Started" }}
       >
         <FormMini />
@@ -96,7 +96,7 @@ function Group({ title, result, used, children, code, split, more }: GroupProps)
       </div>
       {split && (
         <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-xs text-slate-600 dark:text-slate-300">
-          <dt className="font-semibold">부품이 맡는 것</dt>
+          <dt className="font-semibold">컴포넌트가 처리하는 것</dt>
           <dd>{split.parts}</dd>
           <dt className="font-semibold">앱이 하는 것</dt>
           <dd>{split.app}</dd>
@@ -148,7 +148,7 @@ function StructureMini() {
       <TxTabs
         aria-label="샘플 탭"
         tabs={[
-          { label: "개요", content: <p className="pt-2 text-sm text-slate-600 dark:text-slate-300">탭 · 경로 표시 · 메뉴 · 화면 틀.</p> },
+          { label: "개요", content: <p className="pt-2 text-sm text-slate-600 dark:text-slate-300">탭 · 브레드크럼 · 메뉴 · 화면 틀.</p> },
           { label: "설정", content: <p className="pt-2 text-sm text-slate-600 dark:text-slate-300">지금 이 사이트의 틀이 TxAppShell입니다.</p> }
         ]}
       />

@@ -67,8 +67,8 @@ export function ThemeTry() {
           ))}
         </fieldset>
         <div className="flex flex-col gap-1">
-          <TxSwitch label="이 판만 다크 모드" checked={dark} disabled={siteDark} onChangeBool={setPanelDark} />
-          {siteDark && <span className="text-xs text-slate-500 dark:text-slate-400">사이트가 다크 모드라 이 판도 다크입니다. 오른쪽 위 ☀로 라이트로 바꾸면 판만 따로 바꿔 볼 수 있습니다.</span>}
+          <TxSwitch label="이 예제만 다크 모드" checked={dark} disabled={siteDark} onChangeBool={setPanelDark} />
+          {siteDark && <span className="text-xs text-slate-500 dark:text-slate-400">사이트가 다크 모드라 이 예제도 다크입니다. 오른쪽 위 ☀로 라이트로 바꾸면 이 예제만 따로 바꿔 볼 수 있습니다.</span>}
         </div>
 
         {/* 바뀐 값만 보인다. 판 밖(사이트 전체)은 그대로다 */}

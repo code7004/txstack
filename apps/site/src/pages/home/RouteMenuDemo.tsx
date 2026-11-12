@@ -132,7 +132,7 @@ export function RouteMenuDemo() {
       : added.length
         ? `코드에 ${added.join(", ")} 항목을 더했더니 GNB와 사이드바에 “＋ ${added.map(nameOf).join(", ")}”가 함께 생겼습니다. 눌러 보면 경로도 따라옵니다.`
         : renamed.length
-          ? `label 하나를 “${renamed.map(nameOf).join(", ")}”로 바꿨더니 GNB · 사이드바 · 경로 표시가 함께 바뀌었습니다(✎ 표시).`
+          ? `label 하나를 “${renamed.map(nameOf).join(", ")}”로 바꿨더니 GNB · 사이드바 · 브레드크럼이 함께 바뀌었습니다(✎ 표시).`
           : "설정을 바꿔 보세요. 코드 한 곳이 바뀌면 GNB · 사이드바 · 경로가 함께 바뀝니다.";
 
   const go = (item: NavRoute) => setPath(firstLeaf(item));
@@ -190,7 +190,7 @@ export function RouteMenuDemo() {
         </div>
 
         {/* 고를 때마다 새로 그려 짚은 줄이 다시 한 번 밝게 뜬다 */}
-        <CodeBlock key={`${preset.name}-${role}`} title="routes.tsx — 이 판이 쓰는 설정 그대로(메뉴 부분)" maxHeight="26rem" marked={marked}>
+        <CodeBlock key={`${preset.name}-${role}`} title="routes.tsx — 이 예제가 쓰는 설정 그대로(메뉴 부분)" maxHeight="26rem" marked={marked}>
           {source}
         </CodeBlock>
       </div>

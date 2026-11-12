@@ -29,7 +29,7 @@ const line = { borderColor: "var(--tx-color-border)" };
 /** 라이브러리가 하는 일과 앱이 정해서 넘기는 일 */
 const POLICY = [
   ["토큰을 요청에 붙이고 401 을 감지한다", "토큰을 어디서 읽나(getToken), 401 에 무엇을 하나(onUnauthorized)"],
-  ["응답에서 본문을 꺼내는 자리를 둔다", "응답 봉투의 모양(unwrap) — { body } 인지 { data } 인지"],
+  ["응답에서 데이터를 꺼내는 함수를 옵션으로 받는다", "응답 데이터 구조(unwrap) — { body } 인지 { data } 인지"],
   ["오류를 한 형태로 읽는다(parseApiError)", "그 오류를 어디에 어떻게 보여 주나"],
   ["로그의 민감한 값을 가린다", "무엇을 가리고(maskFields) 로그를 어디로 보낼지(onRequest · onResponse)"],
   ["메뉴에서 권한 없는 항목을 뺀다", "권한 판정(canAccess). 주소 접근을 막는 일은 앱과 서버"],
@@ -64,7 +64,7 @@ const FIXES = [
     title: "강조색 하나가 채움과 글자를 겸했다",
     found: "사이트의 강조색을 밝은 민트로 바꾸자 버튼은 괜찮은데 현재 메뉴 표시와 포커스 링이 흰 바탕에서 읽히지 않았습니다(대비 1.7:1).",
     cause: "같은 토큰이 채우는 면과 바탕 위의 글자 · 선에 함께 쓰였습니다. 밝은 색은 채움에는 맞고 글자에는 맞지 않습니다.",
-    fix: "글자 · 선용 토큰(--tx-color-primary-strong)을 따로 냈습니다. 사이트가 부품 토큰을 하나씩 돌려 놓던 여섯 줄이 한 줄이 됐고, 기본 팔레트의 대비 미달도 함께 고쳐졌습니다.",
+    fix: "글자 · 선용 토큰(--tx-color-primary-strong)을 따로 냈습니다. 사이트가 컴포넌트 토큰을 하나씩 돌려 놓던 여섯 줄이 한 줄이 됐고, 기본 팔레트의 대비 미달도 함께 고쳐졌습니다.",
     proof: (
       <>
         <Src path="packages/ui/src/index.test.ts">index.test.ts</Src> — 포커스 링과 글자용 토큰은 읽히는 쪽을 쓴다
@@ -123,7 +123,7 @@ export function CaseStudy() {
 
       <Block title="Main case: one route tree">
         <p className={muted}>
-          관리 화면에서 가장 자주 어긋나던 것은 라우트와 메뉴였습니다. <code>route-meta</code>는 라우트를 트리 하나로 선언하고, 거기서 라우터 등록(<code>buildRouteObjects</code>) · GNB와 사이드바의 메뉴 데이터(<code>getNavRoutes</code>) · 경로 표시(
+          관리 화면에서 가장 자주 어긋나던 것은 라우트와 메뉴였습니다. <code>route-meta</code>는 라우트를 트리 하나로 선언하고, 거기서 라우터 등록(<code>buildRouteObjects</code>) · GNB와 사이드바의 메뉴 데이터(<code>getNavRoutes</code>) · 브레드크럼(
           <code>useBreadcrumbs</code>)를 모두 만듭니다. 화면을 더하거나 이름을 바꿀 때 고치는 곳이 한 곳입니다.
         </p>
         <ul className={`flex list-inside list-disc flex-col gap-1 ${muted}`}>

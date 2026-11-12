@@ -15,7 +15,7 @@ import { UiGroups } from "./home/UiGroups";
 
 /** 다섯 패키지. 다 설치할 필요가 없다 — 필요한 때만 고른다 */
 const PACKAGES = [
-  { name: "@txstack/ui", when: "버튼 · 폼 · 표 · 메뉴 등 화면 부품이 필요할 때", extra: "표는 ag-grid, 달력은 react-day-picker를 쓸 때만 추가", to: "/api/ui" },
+  { name: "@txstack/ui", when: "버튼 · 폼 · 표 · 메뉴 등 UI 컴포넌트가 필요할 때", extra: "표는 ag-grid, 달력은 react-day-picker를 쓸 때만 추가", to: "/api/ui" },
   { name: "@txstack/route-meta", when: "라우트 정의 하나로 라우터 · GNB · 사이드바 · 브레드크럼을 함께 관리할 때", extra: "react-router-dom", to: "/api/route-meta" },
   { name: "@txstack/hooks", when: "객체 상태나 URL 검색 조건을 관리할 때", extra: "URL 상태는 react-router-dom", to: "/api/hooks" },
   { name: "@txstack/axios", when: "인증 · 응답 · 오류 처리 정책을 HTTP 클라이언트에 연결할 때", extra: "axios. React 없이도 동작", to: "/api/axios" },
@@ -112,12 +112,12 @@ export function Home() {
           <h2 className="text-xl font-semibold">One route tree — menus and breadcrumb</h2>
           <p className="text-slate-600 dark:text-slate-300">
             <strong>라우트 한 곳에 정의하면 라우터 · GNB · 사이드바 · 브레드크럼이 거기서 나옵니다.</strong> 경로와 메뉴 이름, 하위 메뉴를 메타데이터 트리로 선언하고, 같은 트리에서 라우터(
-            <code>buildRouteObjects</code>), 메뉴(<code>getNavRoutes</code>), 경로 칸(<code>useBreadcrumbs</code>)을 만듭니다. 메뉴를 추가하거나 이름을 바꿀 때도 이 설정 한 곳만 고칩니다.
+            <code>buildRouteObjects</code>), 메뉴(<code>getNavRoutes</code>), 브레드크럼(<code>useBreadcrumbs</code>)을 만듭니다. 메뉴를 추가하거나 이름을 바꿀 때도 이 설정 한 곳만 고칩니다.
           </p>
         </header>
         <RouteMenuDemo />
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          <code>route-meta</code>는 라우트 변환과 메뉴 데이터를 만들고, 메뉴를 그리는 일은 UI 컴포넌트와 위의 짧은 연결 코드가 합니다. 권한은 메뉴에서 항목을 거르는 데까지입니다. 이 사이트의 메뉴와 문서 맨 위의 경로 표시도 같은 방식으로 구성했습니다
+          <code>route-meta</code>는 라우트 변환과 메뉴 데이터를 만들고, 메뉴를 그리는 일은 UI 컴포넌트와 위의 짧은 연결 코드가 합니다. 권한은 메뉴에서 항목을 거르는 데까지입니다. 이 사이트의 메뉴와 문서 맨 위의 브레드크럼도 같은 방식으로 구성했습니다
           —{" "}
           <Link to="/docs/guide/routing" className="underline">
             Routing & Menu

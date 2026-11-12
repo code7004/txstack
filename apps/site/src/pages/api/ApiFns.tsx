@@ -159,7 +159,7 @@ fns.formatNumber(1234567);`}</CodeBlock>
 
       <Block title="num">
         <p className={muted}>
-          숫자 · 비율 · 용량을 화면에 보여 줄 때 씁니다. <code>null</code> · <code>undefined</code> · <code>NaN</code> 처럼 <strong>값이 비어 있어도 0으로 그려서</strong> 화면이 깨지지 않습니다. 대신 <code>&quot;-&quot;</code>를 보여 주고 싶다면{" "}
+          숫자 · 비율 · 용량을 화면에 보여 줄 때 씁니다. <code>null</code> · <code>undefined</code> · <code>NaN</code> 처럼 <strong>값이 비어 있으면 0으로 보고 포맷한 문자열</strong>을 돌려줍니다. 대신 <code>&quot;-&quot;</code>를 보여 주고 싶다면{" "}
           <code>fallback</code>을 넘기세요. <code>locale</code>을 정하지 않으면 실행 환경의 것을 따릅니다. 늘 원화로 보여 줄 거라면 앱에서 한 번 감싸 두면 편합니다 —{" "}
           <code>{`const won = (n) => formatNumber(n, { locale: "ko-KR", style: "currency", currency: "KRW" })`}</code>.
         </p>

@@ -209,7 +209,7 @@ export const TABLES = {
         ["queryTypes", 'Partial<Record<keyof T, "string" | "number" | "boolean">>', "—", "기본값만으로 타입을 정할 수 없을 때(기본값이 undefined 등) 읽는 방법을 직접 지정합니다"],
         ["postParse", "(query: Partial<T>) => Partial<T>", "—", "주소와 기본값을 합친 직후 불려 추가로 바꿀 값을 돌려줍니다"],
         ["replace", "boolean", "true", "true면 방문 기록을 쌓지 않고 지금 주소를 바꿉니다. 조건마다 뒤로 가기로 되돌리려면 false"],
-        ["encode", "boolean", "false", "쿼리 전체를 base64url JSON 하나로 감춥니다(?_q=eyJ…)"],
+        ["encode", "boolean", "false", "쿼리 전체를 base64url 문자열 하나로 인코딩합니다(?_q=eyJ…). 암호화는 아닙니다"],
         ["encodeKey", "string", '"_q"', "encode를 켰을 때 쓸 키 이름"]
       ] as Row[]
     },
@@ -270,7 +270,7 @@ export const TABLES = {
       label: "RouteMeta",
       searchable: true,
       rows: [
-        ["label", "string", "—", "메뉴 · 경로 표시 · 탭 제목에 보일 이름"],
+        ["label", "string", "—", "메뉴 · 브레드크럼 · 탭 제목에 보일 이름"],
         ["icon", "ReactNode", "—", "메뉴 아이콘"],
         ["description", "string", "—", "설명. 메뉴 패널이나 인덱스 화면에 씁니다"],
         ["hidden", "boolean", "false", "메뉴에서만 뺍니다. 라우터에는 등록되어 주소로는 열립니다"],
@@ -307,7 +307,7 @@ export const TABLES = {
       rows: [
         ["node", "RouteNode | null", "—", "지금 주소의 노드. 맞는 것이 없으면 null"],
         ["meta", "RouteMeta?", "—", "node.meta 바로가기. 탭 제목에 씁니다"],
-        ["matches", "RouteNode[]", "—", "맨 위부터 지금까지의 노드. 경로 표시에 씁니다"],
+        ["matches", "RouteNode[]", "—", "맨 위부터 지금까지의 노드. 브레드크럼에 씁니다"],
         ["params", "Params", "—", '주소 매개변수. 예: { id: "42" }'],
         ["pathname", "string", "—", "지금 주소의 경로"]
       ] as Row[]

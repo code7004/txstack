@@ -25,16 +25,16 @@ const ESLINT = fenceAfter(RULES, "eslint — 대체품이 있는 원시 요소�
 const BASE = import.meta.env.BASE_URL;
 
 const FILES = [
-  { file: "llms.txt", href: `${BASE}llms.txt`, installed: "ai/llms.txt", what: "목차. 핵심 원칙과 부품마다 한 줄 — 처음 읽힐 파일" },
+  { file: "llms.txt", href: `${BASE}llms.txt`, installed: "ai/llms.txt", what: "목차. 핵심 원칙과 컴포넌트마다 한 줄 — 처음 읽힐 파일" },
   { file: "llms-full.txt", href: `${BASE}llms-full.txt`, installed: "ai/llms-full.txt", what: "규칙과 다섯 패키지 문서 전부를 한 파일로" },
-  { file: "rules.md", href: `${BASE}ai/rules.md`, installed: "ai/rules.md", what: "규칙만 — 결정표 · 쓰지 말 원시 요소 · 토큰 · 부품이 못 하는 것" }
+  { file: "rules.md", href: `${BASE}ai/rules.md`, installed: "ai/rules.md", what: "규칙만 — 결정표 · 쓰지 말 원시 요소 · 토큰 · 컴포넌트가 못 하는 것" }
 ];
 
 const RULE_SECTIONS = [
-  { title: "결정표", what: "만들려는 것(펼침 · 상자 · 칩 · 아이콘 버튼 · GNB · 화면 껍데기 · 스켈레톤 · 빈 상태 …)마다 쓸 부품" },
+  { title: "결정표", what: "만들려는 것(펼침 · 상자 · 칩 · 아이콘 버튼 · GNB · 화면 껍데기 · 스켈레톤 · 빈 상태 …)마다 쓸 컴포넌트" },
   { title: "직접 만들지 말 원시 요소", what: "<button> · <details> · 손으로 짠 모달 · 토스트 · 드롭다운 · 카드와 그 이유" },
-  { title: "커스터마이징", what: "부품 CSS 를 덮지 않고 --tx-* 토큰으로. Tailwind 앱의 @layer 순서" },
-  { title: "부품이 못 하는 것", what: "예: TxCard 는 카드 전체를 링크로 만들지 않는다 — 이런 자리만 앱에서 만들고 기록한다" },
+  { title: "커스터마이징", what: "컴포넌트 CSS 를 덮지 않고 --tx-* 토큰으로. Tailwind 앱의 @layer 순서" },
+  { title: "컴포넌트가 못 하는 것", what: "예: TxCard 는 카드 전체를 링크로 만들지 않는다 — 이런 자리만 앱에서 만들고 기록한다" },
   { title: "시작 묶음", what: "CLAUDE.md · AGENTS.md 에 붙일 문단, eslint react/forbid-elements 설정" }
 ];
 
@@ -42,7 +42,7 @@ const muted = "text-slate-600 dark:text-slate-300";
 
 export function AiGuide() {
   return (
-    <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 부품을 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · 펼침 · 카드 · GNB를 다시 만드는 대신 결정표에서 부품을 고르게 합니다.">
+    <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 컴포넌트를 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · 펼침 · 카드 · GNB를 다시 만드는 대신 결정표에서 컴포넌트를 고르게 합니다.">
       <Block title="Files">
         <p className={muted}>
           문서에서 빌드할 때마다 새로 만듭니다. <code>@txstack/ui</code>를 설치하면 <strong>같은 버전의 가이드가 패키지 안에 함께</strong> 들어옵니다 — AI에게는 설치된 쪽을 읽게 하는 것이 좋습니다. 이 사이트의 파일은 최신 <code>main</code>{" "}
@@ -81,7 +81,7 @@ export function AiGuide() {
           </table>
         </div>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          부품 문서 한 장씩은 <code>ai/docs/001_ui/NNN_TxName.md</code>에 있고, <code>llms.txt</code>의 링크가 그 자리를 가리킵니다.
+          컴포넌트 문서 한 장씩은 <code>ai/docs/001_ui/NNN_TxName.md</code>에 있고, <code>llms.txt</code>의 링크가 그 자리를 가리킵니다.
         </p>
       </Block>
 
@@ -103,7 +103,7 @@ export function AiGuide() {
         <CodeBlock language="markdown" title="CLAUDE.md · AGENTS.md">
           {RULE_PARAGRAPH}
         </CodeBlock>
-        <p className={muted}>대체품이 있는 원시 요소에는 eslint가 경고하게 합니다. 오류가 아니라 경고입니다 — 부품이 정말 못 하는 자리는 그 줄에서 끄고 이유를 적습니다.</p>
+        <p className={muted}>대체품이 있는 원시 요소에는 eslint가 경고하게 합니다. 오류가 아니라 경고입니다 — 컴포넌트가 정말 못 하는 자리는 그 줄에서 끄고 이유를 적습니다.</p>
         <CodeBlock language="js" title="eslint.config.js">
           {ESLINT}
         </CodeBlock>

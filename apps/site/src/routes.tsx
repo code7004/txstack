@@ -119,7 +119,7 @@ export const routes = {
       aiGuide: {
         path: "/docs/ai-guide",
         element: <AiGuide />,
-        meta: { label: "AI Guide", description: "AI 코딩 도구가 txstack 부품을 먼저 쓰게 하는 llms.txt · 규칙 · eslint 설정" }
+        meta: { label: "AI Guide", description: "AI 코딩 도구가 txstack 컴포넌트를 먼저 쓰게 하는 llms.txt · 규칙 · eslint 설정" }
       }
     }
   },

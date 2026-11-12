@@ -78,10 +78,13 @@ export function Start() {
         </ul>
         <CodeBlock language="bash" title="버전 확인">{`node -v     # v20.19 이상 또는 v22.12 이상
 pnpm -v     # 없다면: npm i -g pnpm  (npm · yarn 으로 설치해도 됩니다)`}</CodeBlock>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          확인한 범위: Node 24에서 React 18 · 19, react-router 6 · 7, Vite 7 · 8 앱에 설치해 타입 검사와 빌드를 확인했고, 이 페이지의 절차는 새 Vite 앱에서 끝까지 띄워 봤습니다. 패키지 자체는 Node 버전을 따로 요구하지 않지만, 다른 Node 버전은 아직
-          확인하지 않았습니다.
-        </p>
+        <details className="text-sm">
+          <summary className="cursor-pointer text-slate-500 select-none hover:underline dark:text-slate-400">확인한 환경</summary>
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
+            확인한 범위: Node 24에서 React 18 · 19, react-router 6 · 7, Vite 7 · 8 앱에 설치해 타입 검사와 빌드를 확인했고, 이 페이지의 절차는 새 Vite 앱에서 끝까지 띄워 봤습니다. 패키지 자체는 Node 버전을 따로 요구하지 않지만, 다른 Node 버전은 아직
+            확인하지 않았습니다.
+          </p>
+        </details>
       </Block>
 
       <Block title="1. Create an app">
@@ -105,14 +108,22 @@ pnpm add @txstack/axios axios
 pnpm add @txstack/ui @txstack/route-meta @txstack/hooks @txstack/axios @txstack/fns react-router-dom axios`}</CodeBlock>
 
         <p className={muted}>
-          <code>react</code>와 <code>react-dom</code>은 peer 의존성이라 앱에 이미 설치된 버전을 사용합니다. 표와 달력은 <strong>쓸 때만</strong> 따로 설치합니다. 기본 경로(<code>@txstack/ui</code>)만 쓰면 설치하지 않아도 됩니다.
+          <code>react</code>와 <code>react-dom</code>은 peer 의존성이라 앱에 이미 설치된 버전을 사용합니다.
         </p>
-        <CodeBlock language="bash" title="쓸 때만 — 표와 달력">{`# 표: TxAgGrid — import { TxAgGrid } from "@txstack/ui/aggrid"
+        <details className="text-sm">
+          <summary className="cursor-pointer text-slate-500 select-none hover:underline dark:text-slate-400">표(TxAgGrid)나 달력(TxDayPicker)을 쓴다면</summary>
+          <div className="mt-2 flex flex-col gap-2">
+            <p className={muted}>
+              표와 달력은 <strong>쓸 때만</strong> 따로 설치합니다. 기본 경로(<code>@txstack/ui</code>)만 쓰면 설치하지 않아도 됩니다.
+            </p>
+            <CodeBlock language="bash" title="쓸 때만 — 표와 달력">{`# 표: TxAgGrid — import { TxAgGrid } from "@txstack/ui/aggrid"
 # @txstack/ui 가 맞춘 메이저(35)로 받습니다. 모듈 등록은 Guide › Tables & Lists
 pnpm add ag-grid-community@35 ag-grid-react@35
 
 # 달력: TxDayPicker · TxFormDayPicker — import { TxDayPicker } from "@txstack/ui/daypicker"
 pnpm add react-day-picker`}</CodeBlock>
+          </div>
+        </details>
       </Block>
 
       <Block title="3. Import the stylesheet">
@@ -176,16 +187,16 @@ export default function App() {
       </Block>
 
       <Block title="B. Routes and menus">
-        <p className={muted}>라우트를 트리 하나로 선언하면 라우터, 위쪽 메뉴(GNB), 왼쪽 메뉴(사이드바), 경로 표시(브레드크럼)가 모두 거기서 나옵니다. 화면 세 개짜리 앱을 파일 네 개로 만듭니다. 업무 API · 로그인은 넣지 않았습니다.</p>
+        <p className={muted}>라우트를 트리 하나로 선언하면 라우터, 위쪽 메뉴(GNB), 왼쪽 메뉴(사이드바), 브레드크럼이 모두 거기서 나옵니다. 화면 세 개짜리 앱을 파일 네 개로 만듭니다. 업무 API · 로그인은 넣지 않았습니다.</p>
         <CodeBlock language="bash" title="sh — 2단계에 더해 설치">{`pnpm add @txstack/route-meta react-router-dom`}</CodeBlock>
 
         <p className={muted}>
-          <strong>트리</strong> — 화면마다 주소 · 화면 · 메뉴 이름을 한 줄에 적습니다. 맨 바깥은 헤더와 메뉴를 그리는 셸이라 메뉴에도 경로에도 나오지 않게 둡니다.
+          <strong>트리</strong> — 화면마다 주소 · 화면 · 메뉴 이름을 한 줄에 적습니다. 맨 바깥은 헤더와 메뉴를 그리는 셸이라 메뉴에도 브레드크럼에도 나오지 않게 둡니다.
         </p>
         <CodeBlock title="src/routes.tsx">{ROUTE_TREE_SOURCE}</CodeBlock>
 
         <p className={muted}>
-          <strong>셸</strong> — 같은 메뉴 데이터로 GNB와 사이드바를 그리고, 경로는 <code>useBreadcrumbs</code>가 그대로 줍니다. 메뉴 칸도 경로 칸도 손으로 적지 않습니다.
+          <strong>셸</strong> — 같은 메뉴 데이터로 GNB와 사이드바를 그리고, 브레드크럼 항목은 <code>useBreadcrumbs</code>가 그대로 줍니다. 메뉴 항목도 브레드크럼 항목도 손으로 적지 않습니다.
         </p>
         <CodeBlock title="src/Layout.tsx">{ROUTE_LAYOUT_SOURCE}</CodeBlock>
 
