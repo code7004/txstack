@@ -30,18 +30,20 @@ pnpm install
 
 ## 3. 이전 구현 꺼내기
 
-이식할 원본은 **원격의 `legacy` 브랜치**에 53개 커밋과 함께 들어 있다.
+이식할 원본(53개 커밋)은 **저장소 밖 번들** `<작업폴더>/txstack-legacy.bundle` 에 있다.
+원격의 `legacy` 브랜치는 2026-11-17 에 지웠다 — 공개 저장소에 기존 프로젝트의 이름이 남지 않게.
 **이식이 끝났으므로 클론해 두지 않는다** — 별도 작업 트리를 두면 관리할 것만 늘고,
 필요한 것은 파일 몇 개다.
 
 ```sh
-git fetch origin legacy:refs/remotes/origin/legacy   # 한 번만
-git show origin/legacy:packages/hooks/src/useSafePolling.ts
-git ls-tree --name-only origin/legacy:packages/ui/src
-git log --oneline origin/legacy | head              # 53개 커밋도 그대로 읽힌다
+git fetch <작업폴더>/txstack-legacy.bundle legacy:legacy   # 로컬에 없을 때 한 번만
+git show legacy:packages/hooks/src/useSafePolling.ts
+git ls-tree --name-only legacy:packages/ui/src
+git log --oneline legacy | head                           # 53개 커밋도 그대로 읽힌다
 ```
 
-**`legacy` 는 읽기만 한다.** 커밋하지 않고, **지우지 않는다** — 이식 이전의 유일한 사본이다.
+**`legacy` 는 읽기만 한다.** 커밋하지 않고, **원격에 올리지 않고**, 번들을 **지우지 않는다** — 이식 이전의 유일한 사본이다.
+다른 PC 로 옮길 때는 번들 파일을 직접 복사한다.
 
 ## 4. 확인
 
