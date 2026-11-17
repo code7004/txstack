@@ -75,7 +75,9 @@ export function TxJsonTreeEditor({ withKey = false, initialKey = "", initialValu
 
   return (
     // 칸 전체가 Enter·Escape 를 함께 받는다. 안의 input·select 에서 올라온다
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- 안의 input · select 에서 올라오는 Enter · Escape 를 함께 받는다
     <span className="tx-json-tree__editor" onKeyDown={hdKeyDown}>
+      {/* eslint-disable-next-line jsx-a11y/no-autofocus -- 사용자가 연 편집칸에 포커스를 둔다 */}
       {withKey && <input className="tx-json-tree__input" value={key} onChange={(event) => setKey(event.target.value)} aria-label={locale("키")} placeholder={locale("키")} autoFocus />}
 
       <select className="tx-json-tree__select" value={type} onChange={(event) => setType(event.target.value as TxJsonType)} aria-label={locale("타입")}>
@@ -101,6 +103,7 @@ export function TxJsonTreeEditor({ withKey = false, initialKey = "", initialValu
           onChange={(event) => setRaw(event.target.value)}
           aria-label={locale("값")}
           // 키 칸이 있으면 그쪽이 먼저다
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- 사용자가 연 편집칸에 포커스를 둔다
           autoFocus={!withKey}
         />
       )}

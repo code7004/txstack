@@ -194,6 +194,7 @@ export const TxDayPickerRange = forwardRef<TxDayPickerRangeRef, TxDayPickerRange
           numberOfMonths={numberOfMonths}
           month={month}
           onMonthChange={setMonth}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- 사용자가 연 달력으로 포커스를 옮긴다
           autoFocus
           classNames={CALENDAR_CLASS_NAMES}
         />

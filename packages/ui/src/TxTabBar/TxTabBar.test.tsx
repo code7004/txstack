@@ -68,7 +68,11 @@ describe("TxTabBar — 그리기", () => {
   });
 
   it("as 로 링크를 갈아끼운다", () => {
-    const Fake = ({ to, ...props }: { to: string; className?: string; children?: React.ReactNode }) => <a href={`#${to}`} data-fake="" {...props} />;
+    const Fake = ({ to, children, ...props }: { to: string; className?: string; children?: React.ReactNode }) => (
+      <a href={`#${to}`} data-fake="" {...props}>
+        {children}
+      </a>
+    );
     render(
       <TxTabBar>
         <TxTabBar.Item as={Fake} to="/x" label="엑스" />

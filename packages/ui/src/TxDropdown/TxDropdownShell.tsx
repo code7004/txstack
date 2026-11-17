@@ -176,6 +176,7 @@ export function TxDropdownShell({
         const info: TxDropdownItemRender = { item, selected, active: index === active, multiple };
 
         return (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- aria-activedescendant 방식. 포커스와 키보드는 트리거에 있고 선택지는 마우스로 누른다
           <div
             key={`${item.name}-${String(item.value)}-${index}`}
             id={optionId(index)}
@@ -249,6 +250,7 @@ export function TxDropdownShell({
         <div ref={listRef} className="tx-dropdown__list-inner">
           {onPickAll && (
             <>
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- aria-activedescendant 방식. 포커스와 키보드는 트리거에 있고 선택지는 마우스로 누른다 */}
               <div
                 id={optionId(-1)}
                 role="option"

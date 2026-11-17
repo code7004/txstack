@@ -418,6 +418,7 @@ export function TxCarousel({
           className="tx-carousel__viewport"
           data-drag={drag ? "" : undefined}
           // 스크롤 되는 자리는 키보드로도 닿아야 한다 — 화살표 키로 그대로 밀린다
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- 스크롤 영역은 키보드로 닿아야 한다. 이름은 감싼 section 의 aria-label 이 준다
           tabIndex={0}
           onPointerEnter={() => setHeld(true)}
           onPointerLeave={() => setHeld(false)}

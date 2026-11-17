@@ -15,7 +15,7 @@ import { TxDayPickerRange } from "./TxDayPickerRange";
 
 afterEach(cleanup);
 
-const trigger = () => screen.getAllByRole("button")[0];
+const trigger = () => screen.getByRole("combobox");
 const panel = () => screen.queryByRole("dialog");
 const open = () => fireEvent.click(trigger());
 /**
@@ -393,8 +393,7 @@ describe("TxDayPickerRange — 기간 고르기", () => {
     const onChange = vi.fn();
     render(<TxDayPickerRange {...between(new Date(2026, 7, 1), new Date(2026, 7, 5))} onChange={onChange} />);
 
-    // 0번은 여는 트리거, 1번이 지우기다.
-    fireEvent.click(screen.getAllByRole("button")[1]);
+    fireEvent.click(screen.getByRole("button", { name: "지우기" }));
     expect(onChange).toHaveBeenCalledWith([undefined, undefined]);
   });
 });

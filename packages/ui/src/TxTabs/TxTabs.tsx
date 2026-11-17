@@ -78,6 +78,7 @@ export const TxTabs = ({ tabs, value, defaultValue = 0, onChange, className, cla
 
   return (
     <div {...props} data-tag="TxTabs" className={cm("tx-tabs", className)}>
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- WAI-ARIA 탭 패턴. 포커스는 탭 버튼이 받고 목록은 화살표 키를 함께 듣는다 */}
       <div ref={listRef} role="tablist" aria-label={ariaLabel} className={cm("tx-tabs__list", classNames?.list)} onKeyDown={hdKeyDown}>
         {tabs.map((tab, index) => (
           <button

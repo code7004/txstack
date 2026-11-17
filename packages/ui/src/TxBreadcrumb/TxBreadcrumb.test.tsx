@@ -15,7 +15,11 @@ import type { TxBreadcrumbProps } from "./TxBreadcrumb.types";
 afterEach(cleanup);
 
 /** 라우터를 안 쓰는 테스트라 평범한 `<a>` 로 대신한다. */
-const Link = ({ to, ...props }: { to: string; children?: React.ReactNode }) => <a href={to} {...props} />;
+const Link = ({ to, children, ...props }: { to: string; children?: React.ReactNode }) => (
+  <a href={to} {...props}>
+    {children}
+  </a>
+);
 
 const PATH = (
   <>
@@ -158,9 +162,13 @@ describe("TxBreadcrumb — items", () => {
 
   it("컴포넌트를 주면 to 로 건다", () => {
     const seen: string[] = [];
-    const Spy = ({ to, ...props }: { to: string; children?: React.ReactNode }) => {
+    const Spy = ({ to, children, ...props }: { to: string; children?: React.ReactNode }) => {
       seen.push(to);
-      return <a href={to} {...props} />;
+      return (
+        <a href={to} {...props}>
+          {children}
+        </a>
+      );
     };
     render(<TxBreadcrumb items={ITEMS} itemAs={Spy} />);
 
@@ -181,7 +189,11 @@ describe("TxBreadcrumb — items", () => {
   });
 
   it("itemProps 가 기본을 이긴다", () => {
-    const NextLink = ({ href, ...props }: { href: string; children?: React.ReactNode }) => <a data-next href={href} {...props} />;
+    const NextLink = ({ href, children, ...props }: { href: string; children?: React.ReactNode }) => (
+      <a data-next href={href} {...props}>
+        {children}
+      </a>
+    );
     render(<TxBreadcrumb items={ITEMS} itemAs={NextLink} itemProps={(item) => ({ href: item.path })} />);
 
     expect(screen.getByText("주문").getAttribute("href")).toBe("/orders");

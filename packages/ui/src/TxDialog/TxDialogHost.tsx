@@ -37,6 +37,7 @@ export function TxDialogHost() {
           label={options.confirmLabel ?? labels.confirm}
           variant={options.tone === "danger" ? "danger" : "primary"}
           // 열리자마자 Enter 로 답할 수 있게 확인에 포커스를 둔다
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- 열리자마자 Enter 로 답하게 확인에 포커스를 둔다
           autoFocus
           onClick={() => {
             if (current) settle(current.id, true);

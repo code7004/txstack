@@ -115,6 +115,7 @@ export const TxTooltip = ({ tip, children, openDelay = 300, closeDelay = 100, ma
         data-tag="TxTooltip"
         className={cm("tx-tooltip-anchor", className)}
         // 감싼 내용이 포커스를 못 받을 때만 감싸개가 받는다
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- 감싼 내용이 포커스를 못 받을 때만이다. 없으면 키보드로 툴팁에 닿지 못한다
         tabIndex={selfFocusable ? 0 : undefined}
         aria-describedby={selfFocusable && open ? tipId : undefined}
         onPointerEnter={hdPointerEnter}

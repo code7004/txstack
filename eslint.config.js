@@ -18,5 +18,16 @@ export default [
     rules: {
       "@typescript-eslint/no-explicit-any": "off"
     }
+  },
+
+  {
+    // 테스트 · 스토리는 "부모 행의 클릭으로 이벤트가 퍼지는가" 를 보려고 <div onClick> 을 일부러 만들고,
+    // 로그인 예시는 첫 칸에 포커스를 둔다. 배포되는 화면이 아니라 시험대라 상호작용 규칙 셋만 끈다
+    files: ["**/*.test.tsx", "**/*.stories.tsx"],
+    rules: {
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/no-autofocus": "off"
+    }
   }
 ];

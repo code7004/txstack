@@ -111,6 +111,7 @@ export const TxSlidePanel = ({ open, onClose, side = "right", size, title, close
   );
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- 바탕 클릭으로 닫는 것은 마우스용이다. 키보드는 Esc(cancel)로 닫는다
     <dialog
       {...props}
       ref={dialogRef}

@@ -138,9 +138,9 @@ describe("@txstack/dev-guide — 설정 프리셋", () => {
     expect(rules).toContain("react-hooks/rules-of-hooks");
     expect(rules).toContain("@typescript-eslint/consistent-type-imports");
     expect(rules).toContain("react/jsx-key");
-    // 접근성 규칙은 경고로만 — recommended 가 끈 규칙은 그대로 꺼져 있다
+    // 접근성 규칙은 recommended 그대로(오류) — recommended 가 끈 규칙은 그대로 꺼져 있다
     const a11y = await eslint.calculateConfigForFile(join(root, "fixture/web/App.tsx"));
-    expect(a11y.rules["jsx-a11y/click-events-have-key-events"]?.[0]).toBe(1);
+    expect(a11y.rules["jsx-a11y/click-events-have-key-events"]?.[0]).toBe(2);
     expect(a11y.rules["jsx-a11y/label-has-for"]?.[0]).toBe(0);
     expect(web.messages.filter((m) => m.ruleId === "@typescript-eslint/no-unused-vars").map((m) => m.message.split("'")[1])).toEqual(["unused"]);
 
@@ -148,7 +148,8 @@ describe("@txstack/dev-guide — 설정 프리셋", () => {
     const [api] = await eslint.lintText("export const port = process.env.PORT;\n", { filePath: join(root, "fixture/api/main.ts") });
     expect(api.messages).toEqual([]);
     expect(await eslint.isPathIgnored(join(root, "vendor/x.ts"))).toBe(true);
-  });
+    // eslint 와 플러그인 넷을 처음 불러오는 데 시간이 든다 — 전체 테스트를 함께 돌리면 10초를 넘긴다
+  }, 30_000);
 
   it("commitlint · lint-staged — 모양", async () => {
     const { default: commitlint } = await import("../packages/dev-guide/config/commitlint.js");

@@ -15,4 +15,5 @@ import type { TxFormLabelProps } from "./TxForm.types";
  * </TxForm.Flex>
  * ```
  */
+// eslint-disable-next-line jsx-a11y/label-has-associated-control -- 범용 label 이다. htmlFor 와 내용은 쓰는 쪽이 넘긴다
 export const TxFormLabel = ({ className, ...props }: TxFormLabelProps) => <label {...props} className={cm("tx-form-label", className)} data-tag="TxForm.Label" />;

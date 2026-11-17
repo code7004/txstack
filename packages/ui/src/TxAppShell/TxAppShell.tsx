@@ -288,6 +288,7 @@ export const TxAppShell = ({
       */}
       {inDrawer && (
         <TxSlidePanel open={drawer} onClose={() => setDrawer(false)} side="left" title={text.left}>
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- 서랍 안 링크를 누르면 닫는다. 링크는 Enter 로도 click 이 나서 키보드도 같다 */}
           <nav aria-label={text.left} onClick={hdDrawerClick}>
             {left}
           </nav>

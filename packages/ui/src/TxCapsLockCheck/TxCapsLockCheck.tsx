@@ -58,6 +58,7 @@ export function TxCapsLockCheck({ children, text = "Caps Lock 이 켜져 있습�
 
   return (
     <div data-tag="TxCapsLockCheck" data-on={on ? "" : undefined} data-preserve-space={preserveSpace ? "" : undefined} className={cm("tx-capslock", className)} style={style}>
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions -- 안의 입력칸에서 올라오는 키를 듣기만 한다. 포커스는 입력칸이 받는다 */}
       <div className={cm("tx-capslock__field", classNames?.field)} onKeyDown={hdKey} onKeyUp={hdKey} onBlur={hdBlur}>
         {field}
       </div>

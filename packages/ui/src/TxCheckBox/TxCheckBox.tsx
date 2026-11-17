@@ -38,6 +38,7 @@ export const TxCheckBox = forwardRef<HTMLInputElement, TxCheckBoxProps>(function
       `<label>` 이 전부를 감싼다. 그래서 글을 눌러도 토글되고, `htmlFor` 로 id 를 이을 필요가 없다.
       원본은 `<div onClick>` 이라 키보드로 도달할 수 없었고 폼 제출에도 안 실렸다.
     */
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- 전파만 막는다. 키보드 조작은 안의 input 이 받는다
     <label data-tag="TxCheckBox" data-disabled={props.disabled ? "" : undefined} className={cm("tx-checkbox", className)} style={style} onClick={hdClick}>
       {/*
         진짜 `<input>` 이다. 눈에만 안 보이게 하고 포커스는 그대로 받는다 —

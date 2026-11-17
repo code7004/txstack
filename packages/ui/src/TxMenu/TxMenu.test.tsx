@@ -303,6 +303,82 @@ describe("TxContextMenu — 오른쪽 버튼", () => {
   });
 });
 
+/**
+ * 왼쪽 클릭으로 여는 자리는 키보드로도 열려야 한다 — 감싼 내용이 포커스를 못 받으면 키보드로는 닿을 길이 없었다.
+ * 키보드가 만든 이벤트는 좌표가 (0, 0) 이라 화면 왼쪽 위에 떴다. 감싼 요소의 가운데에 띄운다.
+ */
+describe("TxContextMenu — 키보드", () => {
+  const CTX = <TxContextMenu.Item onClick={() => {}}>복사</TxContextMenu.Item>;
+  const wrapper = () => document.querySelector<HTMLElement>('[data-tag="TxContextMenu"]')!;
+  /** 메뉴를 담은 팝업 — 위치(style.left · top)가 걸리는 요소 */
+  const popupOf = (menu: HTMLElement) => {
+    let el: HTMLElement | null = menu;
+    while (el && !el.style.left) el = el.parentElement;
+    return el!;
+  };
+
+  it("오른쪽 버튼으로만 여는 기본은 Tab 자리를 더하지 않는다", () => {
+    render(<TxContextMenu menu={CTX}>대상</TxContextMenu>);
+    expect(wrapper().hasAttribute("tabindex")).toBe(false);
+  });
+
+  it.each(["left", "both"] as const)("button=%s 면 Tab 으로 닿고 Enter · Space 로 열린다", async (button) => {
+    render(
+      <TxContextMenu menu={CTX} button={button}>
+        대상
+      </TxContextMenu>
+    );
+    expect(wrapper().tabIndex).toBe(0);
+
+    fireEvent.keyDown(wrapper(), { key: "Enter" });
+    expect(await screen.findByRole("menu")).toBeTruthy();
+    cleanup();
+
+    render(
+      <TxContextMenu menu={CTX} button={button}>
+        대상
+      </TxContextMenu>
+    );
+    fireEvent.keyDown(wrapper(), { key: " " });
+    expect(await screen.findByRole("menu")).toBeTruthy();
+  });
+
+  it("안의 입력칸에서 친 Enter 는 가로채지 않는다", () => {
+    render(
+      <TxContextMenu menu={CTX} button="left">
+        <input aria-label="이름" />
+      </TxContextMenu>
+    );
+    fireEvent.keyDown(screen.getByLabelText("이름"), { key: "Enter" });
+    expect(screen.queryByRole("menu")).toBeNull();
+  });
+
+  it("키보드로 열면 감싼 요소의 가운데에 뜬다 — 좌표 (0, 0) 이 아니다", async () => {
+    render(
+      <TxContextMenu menu={CTX} button="left">
+        대상
+      </TxContextMenu>
+    );
+    wrapper().getBoundingClientRect = () => ({ left: 200, top: 100, width: 200, height: 100, right: 400, bottom: 200, x: 200, y: 100, toJSON: () => ({}) });
+
+    // 키보드가 만든 click 은 좌표가 0 이다
+    fireEvent.click(wrapper(), { clientX: 0, clientY: 0 });
+    const popup = popupOf(await screen.findByRole("menu"));
+    expect(popup.style.left).toBe("300px");
+  });
+
+  it("마우스로 누르면 그 자리에 뜬다", async () => {
+    render(
+      <TxContextMenu menu={CTX} button="left">
+        대상
+      </TxContextMenu>
+    );
+    fireEvent.click(wrapper(), { clientX: 120, clientY: 80 });
+    const popup = popupOf(await screen.findByRole("menu"));
+    expect(popup.style.left).toBe("120px");
+  });
+});
+
 describe("두 메뉴가 같은 속을 쓴다", () => {
   /** 항목이 같은 부품이라 스타일도 키보드도 갈릴 자리가 없다. */
   it("Item 과 Divider 가 같은 컴포넌트다", () => {

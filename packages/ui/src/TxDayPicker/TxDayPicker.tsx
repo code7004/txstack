@@ -82,6 +82,7 @@ export function TxDayPicker({ value, defaultValue, onChange, placeholder = "날�
 
       <TxPopup anchorRef={anchorRef} open={open} onClose={() => setOpen(false)} id={panelId} role="dialog" aria-label={placeholder} matchAnchorWidth={false} maxHeight="none" className="tx-daypicker__panel">
         {/* 펴 놓을 달은 우리가 쥔다 — 안 쥐면 고른 날이 언제든 늘 오늘 달로 열린다. */}
+        {/* eslint-disable-next-line jsx-a11y/no-autofocus -- 사용자가 연 달력으로 포커스를 옮긴다 */}
         <DayPicker mode="single" selected={selected} onSelect={hdSelect} disabled={blocked} startMonth={min} endMonth={max} month={month} onMonthChange={setMonth} autoFocus classNames={CALENDAR_CLASS_NAMES} />
       </TxPopup>
     </div>

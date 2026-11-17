@@ -175,6 +175,7 @@ export function TxNavBar({ label, panel, panelWidth = "bar", trigger = "hover", 
   };
 
   const inner = (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions -- 항목(링크 · 버튼)이 포커스를 받고 바깥이 키 · 클릭을 함께 듣는다
     <div
       {...props}
       ref={rootRef}

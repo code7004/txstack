@@ -110,6 +110,7 @@ export function TxMenuShell({ anchorRef, anchorPoint, open, onClose, menu, menuL
 
   return (
     <TxPopup anchorRef={anchorRef} anchorPoint={anchorPoint} open={open} onClose={onClose} matchAnchorWidth={false} align={align} maxHeight={maxHeight} className="tx-menu">
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- WAI-ARIA 메뉴 패턴. 포커스는 항목이 받고 목록은 키를 함께 듣는다 */}
       <div ref={menuRef} role="menu" aria-label={menuLabel} className={cm("tx-menu__list", className)} onKeyDown={hdKeyDown}>
         {menu}
       </div>

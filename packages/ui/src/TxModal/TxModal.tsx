@@ -116,6 +116,7 @@ export const TxModalBase = ({ open, onClose, title, closeOnBackdrop = true, size
   );
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- 바탕 클릭으로 닫는 것은 마우스용이다. 키보드는 Esc(cancel)로 닫는다
     <dialog {...props} ref={dialogRef} data-tag="TxModal" data-size={size} className={cm("tx-modal", className)} aria-labelledby={title == null ? undefined : titleId} onCancel={hdCancel} onKeyDown={hdKeyDown} onClick={hdClick}>
       {/* 바탕 클릭을 가리기 위한 한 겹. 여기부터가 모달의 내용이다 */}
       <div className={cm("tx-modal__panel", classNames?.panel)}>

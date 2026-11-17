@@ -41,8 +41,9 @@ export interface TxInputLikeProps {
  * 입력창처럼 생겼지만 실제로는 버튼인 자리. **지금 쓰는 곳은 `TxDayPicker` 와 `TxDayPickerRange`** 로,
  * 닫혀 있을 때 고른 날짜를 보여 주는 껍데기다.
  *
- * 값을 직접 타이핑하지 않고 눌러서 고르는 자리라, `<input>` 대신 `<button>` 이어야
- * 스크린리더가 "누르면 무언가 뜬다" 를 읽어 준다.
+ * 값을 직접 타이핑하지 않고 눌러서 고르는 자리라 `<input>` 대신 `<button>` 이고, 역할은 `combobox` 다 —
+ * `aria-haspopup="dialog"` 와 함께 "누르면 고르는 창이 뜬다" 로 읽히고, 버튼 역할에서는 무시되는
+ * `aria-invalid` 가 전달된다 (2026-11-17, jsx-a11y `role-supports-aria-props` 가 잡았다).
  *
  * **`aria-expanded` 를 하드코딩하지 않는다.** 여는 쪽이 상태를 주입한다.
  * 공개하지 않는 이유도 이것이다 — 열림 상태를 모르는 소비자가 쓰면 접근성이 거짓이 된다.
@@ -63,6 +64,9 @@ export function TxInputLike({ id, value, placeholder = "", className, onClick, o
     <div data-tag="TxInputLike" data-empty={hasValue ? undefined : ""} className={cm("tx-input", "tx-input-like", className)}>
       <button
         type="button"
+        // 눌러서 고르는 칸이라 버튼이지만, 역할은 콤보박스다(WAI-ARIA 의 날짜 고르기 패턴). 그래야 `aria-invalid` 가
+        // 읽히고 `aria-expanded` · `aria-haspopup` 과 함께 "고르는 칸" 으로 들린다 — `TxDropdown` 의 트리거와 같다
+        role="combobox"
         id={id}
         className="tx-input-like__trigger"
         onClick={onClick}

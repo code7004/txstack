@@ -33,6 +33,7 @@ export const TxSwitch = forwardRef<HTMLInputElement, TxSwitchProps>(function TxS
 
   return (
     // `<label>` 이 전부를 감싼다. 그래서 글을 눌러도 켜지고, `htmlFor` 로 id 를 이을 필요가 없다
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- 전파만 막는다. 키보드 조작은 안의 input 이 받는다
     <label data-tag="TxSwitch" data-disabled={props.disabled ? "" : undefined} className={cm("tx-switch", className)} style={style} onClick={hdClick}>
       {/*
         진짜 `<input>` 이다. 눈에만 안 보이게 하고 포커스는 그대로 받는다 —

@@ -28,16 +28,6 @@ import tseslint from "typescript-eslint";
 /** @typedef {import("eslint").Linter.Config} Config */
 
 /**
- * error 인 규칙만 warn 으로 낮춘다. off 인 규칙과 옵션은 그대로 둔다.
- *
- * @param {Record<string, import("eslint").Linter.RuleEntry>} rules
- */
-function asWarnings(rules) {
-  const level = (value) => (value === "error" || value === 2 ? "warn" : value);
-  return Object.fromEntries(Object.entries(rules).map(([rule, entry]) => [rule, Array.isArray(entry) ? [level(entry[0]), ...entry.slice(1)] : level(entry)]));
-}
-
-/**
  * 모든 저장소의 바탕 — ignores · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 ·
  * `*.d.ts` 완화 · 설정 파일 · 스크립트에 Node 전역 · 맨 끝에 `eslint-config-prettier`.
  *
@@ -97,8 +87,8 @@ export function react({ files }) {
       plugins: { react: reactPlugin, "react-hooks": reactHooks, "react-refresh": reactRefresh, "jsx-a11y": jsxA11y },
       settings: { react: { version: "detect" } },
       rules: {
-        // 접근성 규칙은 경고로 둔다 — 부품이 의도한 동작인지 하나씩 판단해야 해서 검사를 막지 않는다 (2026-11-17 사용자 결정)
-        ...asWarnings(jsxA11y.flatConfigs.recommended.rules),
+        // 접근성 규칙은 recommended 그대로(오류). 의도된 예외는 그 줄에서 끄고 이유를 적는다
+        ...jsxA11y.flatConfigs.recommended.rules,
         // 라우터 링크를 <a> 로 그리는 부품과 장식 이미지가 흔하다 — 이 둘만 끈다
         "jsx-a11y/anchor-is-valid": "off",
         "jsx-a11y/alt-text": "off",

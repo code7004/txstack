@@ -140,11 +140,21 @@ packages/dev-guide/
 
 ## 6. 구현하며 정한 것
 
-- **`jsx-a11y` recommended 는 경고(warn)로 낮췄다** (2026-11-17 사용자 결정). 이 플러그인의 recommended 는 오류 수준이라
-  txstack 자신에서 오류 50건(컴포넌트 20개 + 테스트 · 스토리)이 나와 검사가 막혔다. 부품이 의도한 동작인지 하나씩 판단해야 하는
-  일이라 검사를 막지 않고 경고로 보이게 한다. **error 인 것만** warn 으로 바꾸고, recommended 가 끈 규칙과 옵션은 그대로 둔다
-  (처음에 전부 warn 으로 바꿨더니 꺼져 있던 `label-has-for` 등이 켜져 경고가 80건이 됐다 — 테스트로 막았다)
-- txstack 은 경고 50건(`jsx-a11y` 만)으로 시작한다. 컴포넌트 접근성 정리는 부품 동작을 바꾸는 일이라 따로 다룬다
+- **`jsx-a11y` recommended 는 그대로(오류) 켠다.** 처음 켜자 txstack 자신에서 오류 50건이 나와 잠시 경고로 낮췄고
+  (그때 recommended 가 끈 규칙까지 켜지는 실수가 있었다), 50건을 하나씩 분류해 정리한 뒤 오류로 되돌렸다 (2026-11-17 사용자 결정).
+
+  | 묶음                   | 건수 | 처리                                                                                                                                                            |
+  | ---------------------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | 실제 결함              | 3    | `TxDayPicker` 트리거 `role="combobox"`(버튼 역할에서 `aria-invalid` 가 무시됐다) · `TxContextMenu` 왼쪽 클릭 모드를 키보드로 열기 + 키보드로 열면 가운데에 뜨기 |
+  | 테스트 스텁            | 4    | 가짜 `<a>` 가 `children` 을 명시해 넘긴다                                                                                                                       |
+  | 의도된 동작            | 27   | 그 줄에서 끄고 이유를 적었다 — 바깥이 키를 함께 듣는 구조 · `aria-activedescendant` · 바탕 클릭 닫기 · 사용자가 연 화면의 `autoFocus` · 스크롤 영역 포커스 등   |
+  | 테스트 · 스토리 하네스 | 16   | txstack `eslint.config.js` 에서 `*.test.tsx` · `*.stories.tsx` 에 한해 상호작용 규칙 셋을 끈다                                                                  |
+
+  분류표에서 결함으로 봤던 `TxCarousel` 의 스크롤 영역은 다시 보니 의도된 동작이었다 — 이름은 감싼 `section` 이 주고,
+  스크롤 영역은 키보드로 닿아야 한다. `TxInputLike` 는 `aria-invalid` 를 빼는 대신 `role="combobox"` 를 줬다 —
+  `TxForm` 이 오류 상태를 트리거에 싣는 계약(테스트)을 지키고 `TxDropdown` 과 같아진다
+
+- txstack 은 lint 경고 0 · 오류 0 으로 시작한다
 - txstack 자신이 첫 소비자다 — `prettier.config.js` · `lint-staged.config.mjs` 는 한 줄, `eslint.config.js` 는 txstack 고유의 예외 하나.
   루트에 `@txstack/dev-guide: workspace:*`. 포맷 결과는 그대로다
 - 패키지에 `"type": "module"` 을 더했다 — `config/*.js` 가 ESM 이다

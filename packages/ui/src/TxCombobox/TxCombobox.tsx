@@ -196,6 +196,7 @@ const TxComboboxBase = forwardRef<HTMLInputElement, TxComboboxProps<TxComboboxIt
       <TxPopup anchorRef={anchorRef} open={visible} onClose={close} maxHeight={maxHeight} id={listId} role="listbox" className={cm("tx-combobox__list", classNames?.list)}>
         <div ref={listRef}>
           {shown.map((entry, index) => (
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus -- aria-activedescendant 방식. 포커스와 키보드는 입력칸에 있고 선택지는 마우스로 누른다
             <div
               key={`${valueOf(entry)}-${index}`}
               id={optionId(index)}
