@@ -1,4 +1,5 @@
 import { TxAlert } from "@txstack/ui";
+import { Link } from "react-router-dom";
 import { CodeBlock } from "../components/CodeBlock";
 import { Block, Page } from "../components/Page";
 import RULES from "../../../../docs/013_ai_guide.md?raw";
@@ -43,6 +44,10 @@ const muted = "text-slate-600 dark:text-slate-300";
 export function AiGuide() {
   return (
     <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 컴포넌트를 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · 펼침 · 카드 · GNB를 다시 만드는 대신 결정표에서 컴포넌트를 고르게 합니다.">
+      <TxAlert variant="info">
+        스크립트 이름 · 커밋 · docs 구조 · 작업 흐름처럼 <strong>프로젝트를 굴리는 규칙</strong>은 여기가 아니라 <Link to="/docs/dev-guide">Dev Guide</Link>에 있습니다. AI Guide는 화면 부품을 고르는 규칙만 갖습니다.
+      </TxAlert>
+
       <Block title="Files">
         <p className={muted}>
           문서에서 빌드할 때마다 새로 만듭니다. <code>@txstack/ui</code>를 설치하면 <strong>같은 버전의 가이드가 패키지 안에 함께</strong> 들어옵니다 — AI에게는 설치된 쪽을 읽게 하는 것이 좋습니다. 이 사이트의 파일은 최신 <code>main</code>{" "}

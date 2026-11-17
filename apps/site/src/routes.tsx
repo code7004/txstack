@@ -16,6 +16,7 @@ const ApiRouteMeta = page(() => import("./pages/api/ApiRouteMeta"), "ApiRouteMet
 const ApiUi = page(() => import("./pages/api/ApiUi"), "ApiUi", "pages/api/ApiUi.tsx");
 const Components = page(() => import("./pages/Components"), "Components", "pages/Components.tsx");
 const Contact = page(() => import("./pages/Contact"), "Contact", "pages/Contact.tsx");
+const DevGuide = page(() => import("./pages/DevGuide"), "DevGuide", "pages/DevGuide.tsx");
 const DocsHome = page(() => import("./pages/DocsHome"), "DocsHome", "pages/DocsHome.tsx");
 const ExampleAccounts = page(() => import("./pages/example/ExampleAccounts"), "ExampleAccounts", "pages/example/ExampleAccounts.tsx");
 const ExampleApp = page(() => import("./pages/example/ExampleApp"), "ExampleApp", "pages/example/ExampleApp.tsx");
@@ -120,6 +121,13 @@ export const routes = {
         path: "/docs/ai-guide",
         element: <AiGuide />,
         meta: { label: "AI Guide", description: "AI 코딩 도구가 txstack 컴포넌트를 먼저 쓰게 하는 llms.txt · 규칙 · eslint 설정" }
+      },
+
+      /** 프로젝트를 굴리는 규칙 — `@txstack/dev-guide`. 장 · 양식 파일은 빌드가 싣는다(`vite.config.ts` 의 `devGuide()`) */
+      devGuide: {
+        path: "/docs/dev-guide",
+        element: <DevGuide />,
+        meta: { label: "Dev Guide", description: "프로젝트를 굴리는 규칙 — 스크립트 이름 · 커밋 · docs 구조 · 작업 흐름 · 문서 양식" }
       }
     }
   },

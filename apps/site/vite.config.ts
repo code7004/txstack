@@ -1,5 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
 import { buildAiGuide } from "../../scripts/ai-guide.mjs";
@@ -40,6 +42,41 @@ function aiGuide(): Plugin {
 }
 
 /**
+ * **`@txstack/dev-guide` 의 장 · 양식을 그대로 싣는다** — `/dev-guide/rules/scripts.md` 처럼 패키지 안의 경로 그대로.
+ * 실리는 것은 패키지의 `files` 와 같다 — npm 으로 설치하는 것과 사이트에서 여는 것이 같은 파일이다.
+ * 사이트에는 마크다운을 그리는 기능이 없어서 원문을 준다. 개발 서버는 요청마다 다시 읽는다.
+ */
+function devGuide(): Plugin {
+  const dir = pkg("dev-guide");
+  const type = (path: string) => (path.endsWith(".md") ? "text/markdown; charset=utf-8" : "text/plain; charset=utf-8");
+  const walk = (path: string): string[] => (statSync(path).isDirectory() ? readdirSync(path).flatMap((name) => walk(join(path, name))) : [path]);
+  const files = () => {
+    const { files: shipped } = JSON.parse(readFileSync(join(dir, "package.json"), "utf8")) as { files: string[] };
+    return new Map(shipped.flatMap((entry) => walk(join(dir, entry))).map((file) => [`dev-guide/${relative(dir, file).split("\\").join("/")}`, file]));
+  };
+  let base = "/";
+
+  return {
+    name: "txstack-dev-guide",
+    configResolved(config) {
+      base = config.base;
+    },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const path = decodeURIComponent((req.url ?? "").split("?")[0]);
+        const file = path.startsWith(base) ? files().get(path.slice(base.length)) : undefined;
+        if (!file) return next();
+        res.setHeader("Content-Type", type(path));
+        res.end(readFileSync(file, "utf8"));
+      });
+    },
+    generateBundle() {
+      for (const [fileName, file] of files()) this.emitFile({ type: "asset", fileName, source: readFileSync(file, "utf8") });
+    }
+  };
+}
+
+/**
  * txstack 을 소개하는 사이트. **이 앱은 배포 패키지가 아니라 첫 소비자다** —
  * 다섯 패키지를 진짜로 써 보는 자리이므로, 소스에 별칭을 걸어 고친 것이 바로 반영되게 한다.
  *
@@ -48,7 +85,7 @@ function aiGuide(): Plugin {
 export default defineConfig({
   // GitHub Pages 하위 경로에 올릴 수 있게 열어 둔다. 루트 도메인이면 "/" 로 준다
   base: process.env.SITE_BASE ?? "/",
-  plugins: [react(), tailwindcss(), aiGuide()],
+  plugins: [react(), tailwindcss(), aiGuide(), devGuide()],
   server: { open: false },
   resolve: {
     /**
