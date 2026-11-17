@@ -1,6 +1,6 @@
 {
   "name": "@txstack/dev-guide",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Shared development guide — script naming, code and commit rules, a document-driven workflow (requirements → plans → verification → reports) and document templates",
   "keywords": [
     "conventions",
@@ -16,7 +16,7 @@
     "url": "git+https://github.com/code7004/txstack.git",
     "directory": "packages/dev-guide"
   },
-  "homepage": "https://github.com/code7004/txstack/tree/main/packages/dev-guide#readme",
+  "homepage": "https://code7004.github.io/txstack/docs/dev-guide",
   "bugs": "https://github.com/code7004/txstack/issues",
   "files": [
     "README.md",

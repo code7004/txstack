@@ -1,5 +1,11 @@
 # @txstack/dev-guide
 
+## 0.1.2
+
+### Patch Changes
+
+- npm 의 홈페이지 링크가 문서 사이트의 Dev Guide 페이지(`https://code7004.github.io/txstack/docs/dev-guide`)로 간다. 내용은 바뀌지 않았다.
+
 ## 0.1.1
 
 ### Patch Changes
