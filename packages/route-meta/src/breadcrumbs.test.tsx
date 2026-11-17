@@ -6,7 +6,7 @@ import { useBreadcrumbs } from "./hooks";
 import type { RouteTree } from "./types";
 
 /**
- * project-a 의 트리 모양 그대로다 — 레이아웃 루트(`/`)가 모든 경로 앞에 붙고, 묶음마다
+ * 실제 관리 화면의 트리 모양이다 — 레이아웃 루트(`/`)가 모든 경로 앞에 붙고, 묶음마다
  * 기본 화면이 부모와 **같은 주소**(`/user`)이거나 index 다. 문서(006)의 표를 여기서 못 박는다.
  */
 const TREE = {
@@ -22,13 +22,13 @@ const TREE = {
         meta: { label: "대시보드" },
         children: { DashboardIndex: { index: true, element: null, meta: { label: "대시보드", hidden: true } } }
       },
-      Notices: { path: "/black", element: null, meta: { label: "공지관리" } },
-      Message: {
-        path: "/message",
+      Notices: { path: "/notice", element: null, meta: { label: "공지관리" } },
+      Orders: {
+        path: "/order",
         element: null,
         meta: { label: "주문관리" },
         children: {
-          OrderDetail: { path: "/message/detail", element: null, meta: { label: "주문상세", hidden: true } }
+          OrderDetail: { path: "/order/detail", element: null, meta: { label: "주문상세", hidden: true } }
         }
       },
       Users: {
@@ -63,7 +63,7 @@ describe("useBreadcrumbs — 칸", () => {
   });
 
   it("breadcrumb: false 인 노드는 빠지고 아래 칸은 남는다", () => {
-    expect(labels("/black")).toEqual(["공지관리"]);
+    expect(labels("/notice")).toEqual(["공지관리"]);
   });
 
   it("label 이 없는 노드는 빠진다", () => {
@@ -79,7 +79,7 @@ describe("useBreadcrumbs — 칸", () => {
   });
 
   it("hidden 은 보지 않는다 — 메뉴에 없는 상세 화면도 나온다", () => {
-    expect(labels("/message/detail")).toEqual(["주문관리", "주문상세"]);
+    expect(labels("/order/detail")).toEqual(["주문관리", "주문상세"]);
   });
 
   it("permissions 는 보지 않는다", () => {

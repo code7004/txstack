@@ -275,7 +275,7 @@ describe("TxButton — CSS 계약", () => {
   const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim(), body }));
   const variantRules = rules.filter((rule) => rule.selector.includes("[data-variant="));
 
-  /** 흰 바탕 + 선 하나짜리 알약 버튼을 className 으로 덮지 않게 — project-c 에서 요구됐다 */
+  /** 흰 바탕 + 선 하나짜리 알약 버튼을 className 으로 덮지 않게 — 적용하며 요구됐다 */
   it("테두리는 두께 · 색 토큰으로 나가 있고 기본은 없다", () => {
     const base = css.match(/\.tx-button\s*\{([^}]*)\}/)?.[1] ?? "";
 

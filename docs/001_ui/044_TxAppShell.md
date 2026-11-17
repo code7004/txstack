@@ -199,7 +199,7 @@ footer                              footer
 `collapse` 없이 `collapsed` 만 주면 **스위치를 직접 그리는 길**이 된다.
 원본 `TxLayout` 의 `visible` 이 그 자리다.
 
-### 접어도 남는 크기 — `collapsedSize` (2026-10-23, 사용자 결정 · project-b 에서 요구됐다)
+### 접어도 남는 크기 — `collapsedSize` (2026-10-23, 사용자 결정 · 적용하며 요구됐다)
 
 ```tsx
 <TxAppShell
@@ -208,7 +208,7 @@ footer                              footer
 />
 ```
 
-**완전히 감추는 것보다 아이콘 줄로 남기고 싶다**는 요구가 project-b 에서 나왔다. 앱이 스위치를
+**완전히 감추는 것보다 아이콘 줄로 남기고 싶다**는 요구가 적용한 프로젝트에서 나왔다. 앱이 스위치를
 따로 그리는 길(`TxSideNav collapsed` + `fit-content`, 049 참고)은 이미 있었지만, 그 스위치를
 놓을 자리가 화면과 어울리지 않았다 — **셸의 경계선 스위치로 아이콘 줄까지 접고 싶다.**
 
@@ -298,7 +298,7 @@ footer                              footer
 본문의 `id` 는 `useId` 로 만든다. **한 페이지에 셸이 둘이어도 서로의 본문을 가리키지
 않는다.**
 
-### 건너뛰기는 주소를 바꾸지 않는다 — HashRouter 에서 빈 화면이 됐다 (project-c 에서 잡았다)
+### 건너뛰기는 주소를 바꾸지 않는다 — HashRouter 에서 빈 화면이 됐다 (적용한 프로젝트에서 잡았다)
 
 건너뛰기는 `<a href="#본문id">` 이고 처음에는 이동을 브라우저에 맡겼다. **HashRouter 앱에서는 주소의 조각(hash)이 곧 경로라**
 누르는 순간 `#/history` 가 `#_r_0_` 로 바뀌었고, 라우터는 그런 경로가 없어 빈 화면을 그렸다(배포 사이트에서 재현).
@@ -314,8 +314,8 @@ footer                              footer
 ### 머리 줄은 담을 것이 있을 때만 그린다 (2026-10-22, 고쳤다)
 
 **`top` 만 준 셸에 빈 머리 줄이 섰다.** 머리(`<header>`)가 서면 그 안의 줄(`__bar`)도 무조건 그려서,
-`header` 가 없어도 최소 높이(`3.5rem`) · 여백만큼 자리를 잡았다 — project-b 에서 GNB 위에 56px 빈 칸이 생겼다.
-project-a 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding: 0` 으로 덮어 피해 갔다.
+`header` 가 없어도 최소 높이(`3.5rem`) · 여백만큼 자리를 잡았다 — 적용한 프로젝트에서 GNB 위에 56px 빈 칸이 생겼다.
+다른 프로젝트는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding: 0` 으로 덮어 피해 갔다.
 
 이제 줄은 **`header` 가 있거나, 좁은 화면에서 서랍의 ☰ 가 설 때만** 그린다. `top` 은 그대로 줄 아래에 선다.
 `header` 를 주는 셸은 바뀌지 않는다.
@@ -335,7 +335,7 @@ project-a 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding:
 얹히고, 접힘 · 서랍 · 머무는 머리에 따라 선이 설 자리를 셸만 안다. 소비자가 슬롯 안에 `border-b` 를 넣게 하지 않는다.
 
 부족한 것은 **자리마다 끄는 길**이다. 두께 토큰이 `--tx-app-shell-border-width` 하나라 머리 아래 선만 끄면 좌우 패널 ·
-푸터 선도 같이 꺼진다 — project-b 는 "GNB 아래 선은 빼고 사이드 메뉴 옆 선은 남기고" 싶었다.
+푸터 선도 같이 꺼진다 — 한 프로젝트는 "GNB 아래 선은 빼고 사이드 메뉴 옆 선은 남기고" 싶었다.
 
 ```css
 /* 머리 아래 선만 끈다 — 패널 · 푸터는 그대로 1px */
@@ -375,23 +375,23 @@ project-a 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding:
 **처음 문장은 "셸은 색·여백을 손대지 않는다" 였는데 사실이 아니었다.** 헤더 줄(`__bar`)에
 `padding-inline: 1rem` · `min-block-size: 3.5rem` · `gap: 0.75rem`, 가로 띠(`__top`)에
 `padding-inline: 1rem` 이 고정값으로 박혀 있었다. `__bar` 에는 `classNames` 슬롯도 없어서
-**공개된 방법으로는 끌 수 없었다** — project-a 에 붙이자 `h-8` 로 준 헤더가 56px 로 서고
+**공개된 방법으로는 끌 수 없었다** — 기존 프로젝트에 붙이자 `h-8` 로 준 헤더가 56px 로 서고
 좌우에 1rem 이 생겼다. 끄려면 내부 클래스(`.tx-app-shell__bar`)를 덮어써야 했다.
 
 다른 컴포넌트(`TxCard` · `TxModal` · `TxCollapsible` …)는 전부 **기본값 + 변수**다. 셸만 어긋나 있었으므로
 같은 방식으로 맞췄다. **기본값은 그대로라 이미 쓰는 화면은 바뀌지 않는다.**
 
-| 변수                                                          | 기본      | 자리                                              |
-| ------------------------------------------------------------- | --------- | ------------------------------------------------- |
-| `--tx-app-shell-bar-min-height`                               | `3.5rem`  | 헤더 줄의 최소 높이 — 내용이 크면 늘어난다        |
-| `--tx-app-shell-bar-padding`                                  | `0 1rem`  | 헤더 줄 여백                                      |
-| `--tx-app-shell-bar-gap`                                      | `0.75rem` | 햄버거 ↔ `header` 슬롯 사이                       |
-| `--tx-app-shell-top-padding`                                  | `0 1rem`  | `top` 띠 여백                                     |
-| `--tx-app-shell-main-padding`                                 | `1.5rem`  | 본문 여백 (원래 있던 것)                          |
-| `--tx-app-shell-header-bg`                                    | surface   | 머리 배경 (원래 있던 것)                          |
-| `--tx-app-shell-border-color`                                 | border    | 머리 · 패널 · footer 경계선 (원래 있던 것)        |
-| `--tx-app-shell-border-width`                                 | `1px`     | 같은 경계선의 두께 (project-c 에서 더했다)       |
-| `--tx-app-shell-header-border-width` · `-panel-` · `-footer-` | 공통값    | 자리마다 끄는 두께 (project-b 에서 더했다 — 위 절) |
+| 변수                                                          | 기본      | 자리                                         |
+| ------------------------------------------------------------- | --------- | -------------------------------------------- |
+| `--tx-app-shell-bar-min-height`                               | `3.5rem`  | 헤더 줄의 최소 높이 — 내용이 크면 늘어난다   |
+| `--tx-app-shell-bar-padding`                                  | `0 1rem`  | 헤더 줄 여백                                 |
+| `--tx-app-shell-bar-gap`                                      | `0.75rem` | 햄버거 ↔ `header` 슬롯 사이                  |
+| `--tx-app-shell-top-padding`                                  | `0 1rem`  | `top` 띠 여백                                |
+| `--tx-app-shell-main-padding`                                 | `1.5rem`  | 본문 여백 (원래 있던 것)                     |
+| `--tx-app-shell-header-bg`                                    | surface   | 머리 배경 (원래 있던 것)                     |
+| `--tx-app-shell-border-color`                                 | border    | 머리 · 패널 · footer 경계선 (원래 있던 것)   |
+| `--tx-app-shell-border-width`                                 | `1px`     | 같은 경계선의 두께 (적용하며 더했다)         |
+| `--tx-app-shell-header-border-width` · `-panel-` · `-footer-` | 공통값    | 자리마다 끄는 두께 (적용하며 더했다 — 위 절) |
 
 `classNames` 에는 `bar` 를 더했다 — `header` 는 머리 전체(`bar` + `top`)의 겉이고, `bar` 는 그 안의 줄이다.
 **슬롯을 감싸는 자리의 여백 · 높이가 변수를 거치는지는 CSS 계약 테스트가 지킨다.**
@@ -408,7 +408,7 @@ project-a 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding:
 ```
 
 **경계선을 없애려면 두께를 `0` 으로 둔다.** 색만 `transparent` 로 두면 보이지 않는 1px 이 남아 헤더가
-그만큼 높아진다 — project-c 는 그래서 `--tx-app-shell-bar-min-height` 를 56 대신 55 로 줘서 맞췄다.
+그만큼 높아진다 — 적용한 프로젝트는 그래서 `--tx-app-shell-bar-min-height` 를 56 대신 55 로 줘서 맞췄다.
 접기 스위치의 테두리는 경계선이 아니라 그 단추의 것이라 두께를 따라가지 않는다.
 
 ```css
@@ -423,7 +423,7 @@ project-a 는 `--tx-app-shell-bar-min-height: 0` · `--tx-app-shell-bar-padding:
 ### 화면을 꽉 채우는 앱은 소비자가 두 가지를 정한다
 
 **셸의 기본은 문서가 스크롤되는 페이지다** — 겉은 `min-block-size: 100dvh` 이고 본문(`__main`)은
-`display: block` 이라 내용만큼 늘어난다. project-a 에 붙이자 **표가 있는 화면의 높이가 0** 이 됐다.
+`display: block` 이라 내용만큼 늘어난다. 기존 프로젝트에 붙이자 **표가 있는 화면의 높이가 0** 이 됐다.
 예전 앱 레이아웃은 `h-screen` 겉 안에 `<div className="flex min-w-0 flex-1 overflow-hidden"><Outlet /></div>`
 였고, 화면들은 그 flex 부모를 `flex-1` 로 채우게 짜여 있었다. 셸 본문은 flex 가 아니라
 `flex-1` 이 먹지 않고, 그 안의 `height: 100%` 그리드는 기준 높이가 없어 0 이 된다.
@@ -447,7 +447,7 @@ site 의 `Guide › Layout › Fill the screen with the content` 가 소비자�
 같이 나와, 스크롤 이벤트는 손으로 보내 확인했다 — 8px 손떨림은 무시하고 500 → 300 에서
 바로 다시 나온다.
 
-### 하단 탭바 — `tabBar` (project-c 에서 요구됐다 · 사용자 결정)
+### 하단 탭바 — `tabBar` (적용하며 요구됐다 · 사용자 결정)
 
 `bottom` 은 본문 아래의 콘솔 · 로그 패널이라 모바일 하단 탭바 자리가 아니다. 그래서 자리를 따로 열었다 —
 **좁을 때(`breakpoint` 보다 좁은 화면)만** 화면 아래에 붙는다. 항목은 [051_TxTabBar](051_TxTabBar.md) 가 그린다.

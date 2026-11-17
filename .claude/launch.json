@@ -12,30 +12,6 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["site:dev"],
       "port": 6410
-    },
-    {
-      "name": "project-a-backend",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "~/Work/project-a/apps/backend", "service"],
-      "port": 8080
-    },
-    {
-      "name": "project-a",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "~/Work/project-a/apps/frontend", "exec", "vite", "--host", "localhost", "--port", "5173", "--strictPort"],
-      "port": 5173
-    },
-    {
-      "name": "project-b-backend",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "~/Work/project-b/apps/backend", "service"],
-      "port": 8080
-    },
-    {
-      "name": "project-b",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "~/Work/project-b/apps/frontend", "exec", "vite", "--host", "localhost", "--port", "5173", "--strictPort"],
-      "port": 5173
     }
   ]
 }

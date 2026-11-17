@@ -236,7 +236,7 @@ describe("TxToast — 설정", () => {
   });
 });
 
-/** project-c 의 알림은 그림 없이 · 닫기 없이 뜬다. 기본은 그대로다 */
+/** 어떤 앱의 알림은 그림 없이 · 닫기 없이 뜬다. 기본은 그대로다 */
 describe("TxToast — 그림과 닫기 버튼", () => {
   const iconOf = () => document.querySelector('[data-tag="TxToast.Item"] .tx-alert__icon');
   const closeOf = () => document.querySelector('[data-tag="TxToast.Item"] .tx-alert__close');
@@ -355,7 +355,7 @@ describe("TxToast — CSS 계약", () => {
   const tokens = strip(readFileSync(join(here, "..", "tokens.css"), "utf8"));
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
 
-  /** margin 하나가 아래 자리와 최대 폭을 같이 정해서, 탭바를 비키려고 올리면 모바일 폭이 줄었다 — project-c */
+  /** margin 하나가 아래 자리와 최대 폭을 같이 정해서, 탭바를 비키려고 올리면 모바일 폭이 줄었다 */
   it("위 · 아래 자리는 --tx-toast-offset, 좌우 · 최대 폭은 --tx-toast-margin 이다", () => {
     const toastCss = strip(readFileSync(join(import.meta.dirname, "TxToast.css"), "utf8"));
     const base = toastCss.match(/\.tx-toast\s*\{([^}]*)\}/)?.[1] ?? "";

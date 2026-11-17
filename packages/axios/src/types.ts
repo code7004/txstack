@@ -64,7 +64,7 @@ export interface HttpClientOptions {
    * 요청/응답을 콘솔에 출력한다. **`onRequest`/`onResponse` 를 주지 않은 자리에만** 기본
    * 콘솔 로거를 붙이는 편의 플래그다. 훅을 직접 주면 그쪽이 이긴다.
    *
-   * 원본(project-d)은 `import.meta.env.VITE_API_DEBUG` 를 직접 읽었는데,
+   * 옛 구현은 `import.meta.env.VITE_API_DEBUG` 를 직접 읽었는데,
    * 그러면 Vite 가 아닌 소비자(Next.js, Node, Jest)에서 깨진다. 옵션으로 주입받는다.
    */
   debug?: boolean;

@@ -64,7 +64,7 @@ function PermissionDemo() {
 
 /**
  * 가로 메뉴(GNB) 예제. **셸 라우트의 자식만** 메뉴로 쓰고, 하위가 있는 항목만 그 아래에 드롭다운을 연다.
- * 실제 관리 화면(project-a 의 GNB)과 같은 짜임이다. 누르면 이동하지 않고 고른 이름만 바뀐다.
+ * 실제 관리 화면의 GNB 와 같은 짜임이다. 누르면 이동하지 않고 고른 이름만 바뀐다.
  */
 const GNB_SAMPLE = {
   login: { path: "/login", meta: { label: "로그인", hidden: true } },

@@ -390,7 +390,7 @@ describe("TxFormDayPicker — 서브패스 필드", () => {
 });
 
 /**
- * 캡션을 테두리에 얹는 배치 — `captionPlacement`. 표 위 툴바에서 소비자 둘(project-a · project-b)이
+ * 캡션을 테두리에 얹는 배치 — `captionPlacement`. 표 위 툴바에서 소비자 프로젝트 둘이
  * 요구했다. **가장 가까운 `TxForm` · `TxForm.Flex` 가 이긴다** — 필드가 그 값을 표시로 갖는다.
  */
 describe("TxForm — 캡션을 테두리에 얹기", () => {

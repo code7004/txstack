@@ -56,20 +56,18 @@ pnpm storybook:dev   # http://localhost:6310
 ## 5. 두 대에서 쓸 때 — 윈도우 PC 쪽
 
 **Mac 과 Windows PC 를 오가며 개발한다.** 위 1~4는 txstack 한 저장소 이야기고,
-적용 단계에 들어가면 **저장소 넷이 서로를 참조**하므로 배치와 순서가 생긴다.
+적용 단계에 들어가면 **txstack 과 소비자 저장소가 서로를 참조**하므로 배치와 순서가 생긴다.
 
 ### 0. Mac 에서 push 가 먼저다
 
-윈도우 쪽에서 할 수 있는 것이 없다. 네 저장소 모두 올리고 시작한다 —
-`project-a` 의 적용 브랜치는 `-u` 로 업스트림까지 잡아 준다.
+윈도우 쪽에서 할 수 있는 것이 없다. 관련 저장소를 모두 올리고 시작한다 —
+소비자의 적용 브랜치는 `-u` 로 업스트림까지 잡아 준다.
 
 ### 1. 저장소를 형제로 둔다
 
 ```
 <작업폴더>/txstack                이 저장소
-<작업폴더>/project-a
-<작업폴더>/project-b
-<작업폴더>/project-d
+<작업폴더>/<소비자 프로젝트>     link: 로 txstack 을 참조하는 쪽
 ```
 
 **이 배치가 규약이다.** 소비자가 txstack 을 `link:../../../txstack/packages/ui` 로
@@ -101,11 +99,11 @@ cd txstack && pnpm install
 `prepare` 스크립트가 husky 를 걸어서, 커밋할 때 스테이징된 파일의 포맷이 자동으로
 맞춰진다. **설치를 건너뛰면 훅이 없는 채로 커밋하게 된다.**
 
-### 4. project-a — 링크로 붙어 있다
+### 4. 소비자 — 링크로 붙어 있을 때
 
 ```sh
-cd project-a
-git checkout feat/txstack-adoption
+cd <소비자 프로젝트>
+git checkout <적용 브랜치>
 pnpm install
 ```
 
@@ -123,10 +121,10 @@ cd txstack && pnpm build:watch
 **이 문서 첫 줄의 "옮길 파일이 따로 없다" 는 txstack 에만 해당한다.** 소비자
 프로젝트의 환경 파일은 `.gitignore` 대상이라 **머신마다 따로 있고, 따로 틀어진다.**
 
-| 파일                                         | 무엇                         |
-| -------------------------------------------- | ---------------------------- |
-| `project-a/apps/backend/src/config/.env` | DB · 비밀값 · `CORS_ORIGINS` |
-| `project-a/apps/frontend/.env.*`         | `VITE_*`                     |
+| 파일              | 무엇                         |
+| ----------------- | ---------------------------- |
+| 백엔드의 `.env`   | DB · 비밀값 · `CORS_ORIGINS` |
+| 프론트의 `.env.*` | `VITE_*`                     |
 
 **2026-09-03 에 `CORS_ORIGINS` 가 바뀌었다.** dev 서버 포트를 80 에서 5173 으로
 옮겼기 때문이다(macOS 는 1024 미만 포트를 root 에게만 허용한다). 윈도우 쪽 `.env` 도

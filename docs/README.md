@@ -8,8 +8,8 @@
 
 ## 왜 만드는가
 
-같은 UI 컴포넌트와 같은 axios 설정을 세 프로젝트(`project-a` · `project-b` · `project-d`)가
-각자 복사해 쓰고 있었다. 고칠 일이 생기면 세 번 고쳐야 하고, 세 곳이 조금씩 달라졌다.
+같은 UI 컴포넌트와 같은 axios 설정을 여러 프로젝트가
+각자 복사해 쓰고 있었다. 고칠 일이 생기면 여러 번 고쳐야 하고, 복사본이 조금씩 달라졌다.
 
 그래서 **공통분모만 뽑아 도메인 지식 없는 라이브러리로 분리**한다.
 핵심 판정 기준은 하나다 — **네 번째 프로젝트가 그대로 설치해 쓸 수 있는가.**
@@ -184,7 +184,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       **404 폴백 평가** — 배포 사이트에서 `/` 와 `/storybook/` 은 200, **그 밖의 직접 링크 · 새로고침은 화면은 돌아오지만 HTTP 404** 다
       (`404.html` = `index.html`). 사람에게는 문제없지만 검색 엔진 · 링크 미리보기는 "없는 페이지" 로 본다.
       고치려면 주요 소개 페이지를 경로마다 HTML 로 내보내야 한다(사전 렌더링 + 공유 메타) — 008 대로 **별도 작업**으로 둔다
-- [x] **라우트 트리에서 브레드크럼**(2026-10-22) — project-a 회원 목록에 `TxBreadcrumb` 을 붙이며 나왔다.
+- [x] **라우트 트리에서 브레드크럼**(2026-10-22) — 기존 프로젝트의 회원 목록에 `TxBreadcrumb` 을 붙이며 나왔다.
       칸을 화면마다 손으로 적으면 `routeTree` 를 다시 쓰는 것이라 편한 것이 없다. 경계(`ui → hooks` 하나)를 지키려고 둘로 가른다 —
       데이터는 route-meta 의 [`useBreadcrumbs`](002_route_meta/006_useBreadcrumbs.md)(루트는 `meta.breadcrumb: false` 로 뺀다),
       그리기는 `TxBreadcrumb` 의 [`items` · `itemAs`](001_ui/042_TxBreadcrumb.md). 같은 주소가 겹치면 앞 칸을 남긴다(합의).
@@ -205,7 +205,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       슬래시를 뗀다(`main.tsx`). 없는 주소는 빌드가 쓰는 `404.html`(noindex)이 맡는다. 정적 서버(폴더 → 301, 폴백 없음)로
       직접 링크 + 쿼리 + 앵커 · 탭 제목 · 다음 장을 확인했다. **공유 이미지(`og:image`)는 없다** — 그림이 정해지면 index.html 한 줄이다
 - [x] **AI 가이드**(2026-10-21, [013](013_ai_guide.md)) — 소비자 프로젝트의 AI 코딩 도구가 손으로 `<button>` · 펼침 · 카드 · GNB 를 짜고
-      Tx\* 부품을 거의 안 쓴 일(project-c 홈)에서 나왔다. 원인은 부품 문서가 tarball 에 없어 AI 가 읽을 수 없었던 것과 「txstack 우선」 규칙이 없던 것.
+      Tx\* 부품을 거의 안 쓴 일에서 나왔다. 원인은 부품 문서가 tarball 에 없어 AI 가 읽을 수 없었던 것과 「txstack 우선」 규칙이 없던 것.
       규칙(결정표 · 원시 요소 · 토큰 · 부품의 한계 · CLAUDE.md 문단 · eslint `react/forbid-elements`)은 013 이 갖고, **빌드가 그것과 패키지 문서를 묶는다**
       (`scripts/ai-guide.mjs`). `@txstack/ui` 의 tarball 에 `ai/` 로 실려 코드와 같은 버전이고, 사이트는 `/llms.txt` · `/llms-full.txt` · `/ai/…` 와
       `Documents › AI Guide` 를 낸다. 결정표가 공개 부품과 어긋나면 테스트가 깨지고, `verify:packages` 가 설치본에 가이드가 있는지 본다
@@ -223,7 +223,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
       ⑤ **공유 그림**: `public/og.png`(1200×630, 원본 `apps/site/scripts/og-image.html` — 헤드리스 Chrome 으로 굽는다).
       빌드가 `og:image` 를 배포 주소로 넣고, 카드는 `summary_large_image` 다
 
-**컴포넌트는 다 만들었다 — 50개.** 마지막 `TxTabBar` 는 project-c 에서 요구돼 2026-10-21 에 더했다. 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가
+**컴포넌트는 다 만들었다 — 50개.** 마지막 `TxTabBar` 는 모바일 화면을 적용하며 요구돼 2026-10-21 에 더했다. 목록 · 목적 · 진행은 [001_ui](001_ui/000_README.md) 가
 소유하고, 하나하나의 기능과 정한 것은 `docs/001_ui/NNN_TxName.md` 각 장에 있다.
 
 가벼운 표(`TxTable`)는 **후보였다가 접었다** — 표는 `TxAgGrid` 하나로 간다.
@@ -249,14 +249,14 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
    새로고침 · 딥링크 · 진짜 요청은 테스트와 카탈로그가 못 겪는 것들이다. 실제로
    여기서 결함 셋이 나왔다 (콤마 분해 · 로그로 새던 토큰 · AA 미달 강조색)
 
-3. **기존 프로젝트에 적용한다** — **끝났다** (2026-11-11). `project-a` · `project-b` · `project-c` 셋 다 적용해 운영에 배포했다.
+3. **기존 프로젝트에 적용한다** — **끝났다** (2026-11-11). 적용한 프로젝트들이 운영에 배포했다.
    **배포 전에 완성도를 올리는 단계다.** 절차 · 붙이는 방법 · 기록할 곳은
-   [006_adoption](006_adoption.md) 이 갖는다. 세 저장소는 이제 원본이 아니라 **소비자**다.
+   [006_adoption](006_adoption.md) 이 갖는다. 기존 저장소는 이제 원본이 아니라 **소비자**다.
 4. **npm 배포** — **`0.1.0` 을 올렸다.** 이제부터 이름을 바꾸는 것은 깨는 변경이다.
    - [x] `removeUndefined` · `isTokenExpired` 를 빼고 `IApiError` → `ApiError` (2026-11-11) —
-         세 프로젝트에서 쓰는 곳이 0이었다. [004_axios/005_utils](004_axios/005_utils.md)
+         적용한 프로젝트에서 쓰는 곳이 0이었다. [004_axios/005_utils](004_axios/005_utils.md)
    - [x] `urlKeys` 의 타입 — API 는 그대로, "`T` 를 직접 적는다" 를 사용 규칙으로 (2026-11-11).
-         `project-b` 27개 화면이 그렇게 쓴다. [003_hooks/002](003_hooks/002_useUrlQuery.md)
+         적용한 프로젝트의 27개 화면이 그렇게 쓴다. [003_hooks/002](003_hooks/002_useUrlQuery.md)
    - [x] npm 로그인 · `txstack` 조직 · 2FA(보안 키) — 사용자가 했다 (2026-11-11)
    - [x] 쌓인 changeset 정리 (2026-11-11) — 15개를 지우고 각 패키지 CHANGELOG 의 `0.1.0` "첫 버전" 에
          녹였다. 처음 배포는 `0.1.0` 그대로다. 그 뒤부터 changeset 을 다시 쌓는다
@@ -268,9 +268,8 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
    - [x] `0.1.1` (다섯 패키지 patch, 2026-11-12) — 새 README 와 `homepage` 를 npm 에 실었다. 코드는 그대로이고 `hooks` 는
          JSDoc 예제만 고쳤다. **이미 있는 패키지도 새 버전마다 stage 승인이 필요하다** — npmjs.com 계정 설정의
          **Staged Packages** 탭에서 Approve(보안 키). CLI(`npm stage approve`)는 npm 11.15.0 이상
-   - [x] 세 소비자를 `link:` · `.tgz` 에서 npm 버전으로 (2026-11-17, 사용자 요청으로 Claude 가) — `project-a` · `project-b` ·
-         `project-c` 모두 `^0.1.2`. 셋 다 typecheck · 빌드 통과. `project-b` 는 `react-day-picker` 가 `^9` 였다 — link 일 때는
-         txstack 쪽 v10 이 잡혀 가려져 있었다. `^10` 으로 올렸다. project-c 는 `vendor/txstack/` 와 `update:txstack` 을 지웠다
+   - [x] 소비자를 `link:` · `.tgz` 에서 npm 버전으로 (2026-11-17, 사용자 요청으로 Claude 가) — 모두 `^0.1.2`, typecheck · 빌드 통과.
+         한 곳은 `react-day-picker` 가 `^9` 였다 — link 일 때는 txstack 쪽 v10 이 잡혀 가려져 있었다. `^10` 으로 올렸다
    - [ ] 사이트를 만들며 드러난 열린 자리들 — [005_site](005_site.md) 의 "만들며 드러난 것"
    - [x] **`@txstack/dev-guide` `0.1.0` 배포** (2026-11-17) — 스크립트 이름 · 코딩 규칙 · 문서 프로세스 · 양식을 버전 있는 패키지로.
          `monorepo` 저장소는 그것을 따르는 스타터로 다시 짠다. [014_dev_guide](014_dev_guide/000_README.md) —

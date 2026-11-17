@@ -47,7 +47,7 @@ const text = await readTextFile(file); // file 은 앱의 상태 변수 그대�
 ## 이름 — 왜 고유한 이름인가 (2026-10-20)
 
 처음에는 **그룹 진입점 + 짧은 이름**(`import * as num from "@txstack/fns/num"` → `num.format`)으로 갔다.
-소비자에 붙여 보니 불편했다 — 네임스페이스 이름이 앱의 흔한 변수와 부딪힌다. 실제로 project-a 의
+소비자에 붙여 보니 불편했다 — 네임스페이스 이름이 앱의 흔한 변수와 부딪힌다. 실제로 적용한 프로젝트의
 `UserCompareModal` 에서 상태 변수 `file` 이 `import * as file` 을 가렸다. `date` · `form` · `phone` · `css` 도 마찬가지다.
 그리고 `get` · `set` · `remove` · `inject` · `format` 은 이름으로 가져오면 뜻이 안 보여 늘 네임스페이스가 필요했다.
 
@@ -63,12 +63,12 @@ const text = await readTextFile(file); // file 은 앱의 상태 변수 그대�
 - **lodash 에 있는 것은 만들지 않는다.** `pick` · `isEqual` · `clamp` · `inRange` · `sortBy` 를 두 벌 두면
   어느 쪽을 써야 할지 헷갈린다. lodash 로 **같은 결과**를 낼 수 없는 것만 넣는다 — bias 가 있는 `randomInt`,
   fallback 이 있는 `toNumber`. `diffObject` 의 깊은 비교도 만들지 않고 **비교 함수를 받는다**(기본 `Object.is`).
-  패키지는 lodash 에 의존하지 않는다 — project-d 엔 lodash 가 없다.
+  패키지는 lodash 에 의존하지 않는다 — lodash 를 쓰지 않는 프로젝트도 있다.
 - **포맷은 빈 값을 0 으로 그린다.** `null` · `undefined` · `NaN` · 숫자 아닌 문자열 → `"0"` · `"0.0%"` · `"0 B"`. `fallback` 으로 바꾼다.
 - **로케일 기본은 실행 환경의 것.** 한국어 고정이 필요하면 앱에서 한 번 감싼다.
 - **정책을 정하지 않는다.** `withLoading` 은 `alert` 를 띄우지 않고(`onError` 가 없으면 다시 던진다),
   `maskPhone` 은 `NODE_ENV` 를 보지 않는다. axios 패키지와 같은 원칙이다.
-- **한국 전화번호는 넣는다.** "정지/문자/지갑" 같은 업무 도메인이 아니라 로케일 지식이라 경계 안으로 봤다.
+- **한국 전화번호는 넣는다.** 업무 도메인이 아니라 로케일 지식이라 경계 안으로 봤다.
   진입점 이름에 `kr` 을 박아 범위를 분명히 했다. `parseUserData` 처럼 한 프로젝트의 데이터 형식인 것은 뺐다.
 - **루트에 browser 함수가 섞여도 된다.** 불러오는 것만으로는 `document` 를 건드리지 않는다 —
   `index.test.ts`(node) 와 `verify:packages` 의 `node-fns` 가 확인한다.
@@ -105,9 +105,9 @@ const text = await readTextFile(file); // file 은 앱의 상태 변수 그대�
 - `num2Money` 는 `"₩ 1,234"`(공백), `formatNumber(n, { style: "currency", currency: "KRW" })` 는 `"₩1,234"`
 - `diffObject(a, b)` 는 이제 비교 함수를 안 주면 배열 · 객체 필드를 늘 다르다고 본다 → `diffObject(a, b, _.isEqual)`
 - `isInRange` → lodash `_.inRange` 는 **끝값을 포함하지 않고** 경계를 생략할 수 없다
-- `checkForm(f, r, ex)` → `checkForm(f, r, { optional: ex })`, 규칙의 `reg` → `pattern`. project-d 의 구버전은 `{ message }` 를 돌려줬다
+- `checkForm(f, r, ex)` → `checkForm(f, r, { optional: ex })`, 규칙의 `reg` → `pattern`. 한 프로젝트의 구버전은 `{ message }` 를 돌려줬다
 - `validPhoneNumber` 의 실패 값 `false` → `parseMobile` 은 `null`
-- `excludePhonesAsync` 의 결과 필드 `duplicates` → `excludePhones` 는 `excluded`. project-b `@core/util` 의 `dedupe` 는 배열만 돌려줬다
+- `excludePhonesAsync` 의 결과 필드 `duplicates` → `excludePhones` 는 `excluded`. 옛 `dedupe` 는 배열만 돌려줬다
 - `downloadMessageFile(name, lines)` → `downloadFile(name + ".txt", lines)`. 빈 내용이면 `alert` 대신 `false`
 - `maskPhone` 이 개발 중에 가리지 않던 분기는 앱으로 — `import.meta.env.DEV ? phone : maskPhone(phone)`
 
@@ -118,4 +118,4 @@ const text = await readTextFile(file); // file 은 앱의 상태 변수 그대�
 ## 상태
 
 **이식 완료 (2026-10-20).** 루트 + 그룹 진입점 13개. 사이트 `API › fns` 가 첫 소비자이고,
-project-a 의 `UserCompareModal` 이 `readTextFile` 로 첫 화면 적용을 시작했다.
+적용한 프로젝트의 비교 화면이 `readTextFile` 로 첫 화면 적용을 시작했다.

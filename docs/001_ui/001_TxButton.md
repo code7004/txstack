@@ -42,7 +42,7 @@
 ### 테두리 (`--tx-button-border-width` · `--tx-button-border-color`)
 
 기본은 테두리가 없다(`0` · `transparent`). **흰 바탕에 선 하나짜리 알약 버튼**은 이 둘로 만든다 —
-`className` 으로 `border` 를 덮지 않는다. project-c 의 계정 버튼 · 「+」 칩에서 요구됐다.
+`className` 으로 `border` 를 덮지 않는다. 적용한 프로젝트의 계정 버튼 · 「+」 칩에서 요구됐다.
 
 ```css
 .my-pill {

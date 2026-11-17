@@ -1,4 +1,4 @@
-# 012 · `@txstack/fns` 제안 — 세 프로젝트의 extensions/util 분석
+# 012 · `@txstack/fns` 제안 — 기존 프로젝트 A · B · C 의 extensions/util 분석
 
 > **결정 기록이다.** 이 문서로 범위 · 이름 · 원칙을 합의했고, 그 뒤 구현했다(2026-10-20).
 > **최종 공개 API 는 [000_README](000_README.md) 가 갖는다** — 구현하며 바뀐 이름(`exclude` 의
@@ -12,18 +12,18 @@
 
 ## 1. 현황 — 같은 파일이 네 벌
 
-| 파일                                                      | 줄   | 관계                                                          |
-| --------------------------------------------------------- | ---- | ------------------------------------------------------------- |
-| `project-b/apps/frontend/src/core/extensions.ts`           | 1103 | **가장 최신본.** 아래 분석의 기준                             |
-| `project-d/apps/portal/src/core/extensions.ts` | 1072 | 따옴표·포맷 차이 + `checkForm` 계열이 구버전                  |
-| `project-a/apps/frontend/src/core/extensions.ts`      | 1069 | project-d 과 포맷만 다름                                   |
-| `project-b/apps/frontend/src/@core/Extension.ts`           | 1063 | 구버전 사본 (`@core` → `core` 이관 중 남은 것)                |
-| `project-a/apps/frontend/src/core/Extension.js`       | 503  | JS 원조 버전. `classNames` · `maskPhone` · `maskKeyword` 추가 |
-| `project-a/apps/frontend/src/core/util.ts`            | 255  | 전화번호 · 파일 다운로드 (도메인)                             |
-| `project-b/apps/frontend/src/@core/util.ts`                | 128  | 위의 축소판                                                   |
-| `project-b/apps/parser/src/@core/utils/extentions.js`      | 29   | `rand` · `randInt` · `toUTCFromKST` (백엔드 JS)               |
+| 파일                                          | 줄   | 관계                                                          |
+| --------------------------------------------- | ---- | ------------------------------------------------------------- |
+| `A/apps/frontend/src/core/extensions.ts`      | 1103 | **가장 최신본.** 아래 분석의 기준                             |
+| `B/apps/portal/src/core/extensions.ts`        | 1072 | 따옴표·포맷 차이 + `checkForm` 계열이 구버전                  |
+| `C/apps/frontend/src/core/extensions.ts`      | 1069 | B 와 포맷만 다름                                              |
+| `A/apps/frontend/src/@core/Extension.ts`      | 1063 | 구버전 사본 (`@core` → `core` 이관 중 남은 것)                |
+| `C/apps/frontend/src/core/Extension.js`       | 503  | JS 원조 버전. `classNames` · `maskPhone` · `maskKeyword` 추가 |
+| `C/apps/frontend/src/core/util.ts`            | 255  | 전화번호 · 파일 다운로드 (도메인)                             |
+| `A/apps/frontend/src/@core/util.ts`           | 128  | 위의 축소판                                                   |
+| `A/apps/parser/src/@core/utils/extentions.js` | 29   | `rand` · `randInt` · `toUTCFromKST` (백엔드 JS)               |
 
-export 목록은 네 `extensions.ts` 가 **완전히 같다** (project-b 최신본만 `num2*` 4개 추가).
+export 목록은 네 `extensions.ts` 가 **완전히 같다** (A 최신본만 `num2*` 4개 추가).
 즉 이미 "복사해 쓰는 패키지" 상태이고, 버전이 갈라지기 시작했다 — 분리할 이유로 충분하다.
 
 ---
@@ -35,15 +35,15 @@ export 목록은 네 `extensions.ts` 가 **완전히 같다** (project-b 최신�
 
 ### `num` — 숫자 판정·변환·포맷
 
-| 현재                                                                   | 제안                    | 비고                                                                                                 |
-| ---------------------------------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------- |
-| `isNumeric` (0/0/1) · `isNumber` (0/0/2)                               | `isNumeric`             | `isNumber` 는 `parseInt` 기반이라 `"12abc"` 도 true. **하나로 합친다**                               |
-| `safeNumber` (0/0/0)                                                   | `toNumber(v, fallback)` | `_.toNumber` 는 fallback 이 없고 `null` → 0 이라 동작이 다르다. 유지                                 |
-| `isInRange` (0/0/2)                                                    | **제외 → `_.inRange`**  | lodash 원칙. 단 `_.inRange` 는 **끝값 미포함**이고 경계를 생략할 수 없다 — project-b 2곳 이관 시 주의 |
-| `numberWithDelimiter` · `toFormattedNumber` · `num2str` · `num2String` | `format(n, opts?)`      | **4개가 같은 일.** `Intl.NumberFormat` 하나로                                                        |
-| `num2Percent` (0/0/1)                                                  | `percent(n, digits=1)`  |                                                                                                      |
-| `compactFormatter` (0/0/8)                                             | `compact(n, opts?)`     | `ko-KR` 고정 → `locale` 옵션으로                                                                     |
-| `formatBytes` (1/0/3)                                                  | `bytes(n, decimals=2)`  |                                                                                                      |
+| 현재                                                                   | 제안                    | 비고                                                                                          |
+| ---------------------------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------------------- |
+| `isNumeric` (0/0/1) · `isNumber` (0/0/2)                               | `isNumeric`             | `isNumber` 는 `parseInt` 기반이라 `"12abc"` 도 true. **하나로 합친다**                        |
+| `safeNumber` (0/0/0)                                                   | `toNumber(v, fallback)` | `_.toNumber` 는 fallback 이 없고 `null` → 0 이라 동작이 다르다. 유지                          |
+| `isInRange` (0/0/2)                                                    | **제외 → `_.inRange`**  | lodash 원칙. 단 `_.inRange` 는 **끝값 미포함**이고 경계를 생략할 수 없다 — A 2곳 이관 시 주의 |
+| `numberWithDelimiter` · `toFormattedNumber` · `num2str` · `num2String` | `format(n, opts?)`      | **4개가 같은 일.** `Intl.NumberFormat` 하나로                                                 |
+| `num2Percent` (0/0/1)                                                  | `percent(n, digits=1)`  |                                                                                               |
+| `compactFormatter` (0/0/8)                                             | `compact(n, opts?)`     | `ko-KR` 고정 → `locale` 옵션으로                                                              |
+| `formatBytes` (1/0/3)                                                  | `bytes(n, decimals=2)`  |                                                                                               |
 
 ### `rand` — 랜덤 · ID (목업 데이터에 주로 쓰임)
 
@@ -87,20 +87,20 @@ export 목록은 네 `extensions.ts` 가 **완전히 같다** (project-b 최신�
 
 ### `phone-kr` — 한국 전화번호 (**결정: 넣는다**)
 
-한국 번호 형식은 "정지/문자/지갑" 같은 **업무** 도메인이 아니라 **로케일** 지식이라 패키지 경계 안으로 본다.
-이름에 `kr` 을 박아 범위를 분명히 한다. `parseUserData` 는 project-a 의 데이터 형식이라 여전히 뺀다.
+한국 번호 형식은 **업무** 도메인이 아니라 **로케일** 지식이라 패키지 경계 안으로 본다.
+이름에 `kr` 을 박아 범위를 분명히 한다. `parseUserData` 는 C 의 데이터 형식이라 여전히 뺀다.
 
-| 현재 (BM util.ts · Extension.js)             | 제안                                  | 비고                                                                                                                                                     |
-| -------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `normalizePhoneNumber` (4/0/0)               | `normalize`                           | `+82`, `82-010`, 앞자리 생략 처리                                                                                                                        |
-| `validPhoneNumber` (1/0/0)                   | `parseMobile` → `string \| null`      | `false` 대신 `null`                                                                                                                                      |
-| `maskPhone` (2/0/0)                          | `mask`                                | `NODE_ENV === 'development'` 이면 마스킹 안 하는 분기는 **정책이라 제거** — 소비자가 정한다                                                              |
-| `maskKeyword` (1/0/0)                        | `maskIfPhone`                         |                                                                                                                                                          |
-| `validate/dedupe/excludePhone*Async` (3/0/0) | `validateMany` · `dedupe` · `exclude` | 1만 건씩 끊어 이벤트 루프를 양보하는 구조는 유지. project-b `@core/util.ts` 의 `dedupe` 는 반환 형태가 다르다 → BM 쪽(`{ uniques, duplicates }`)으로 통일 |
+| 현재 (BM util.ts · Extension.js)             | 제안                                  | 비고                                                                                                                                              |
+| -------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `normalizePhoneNumber` (4/0/0)               | `normalize`                           | `+82`, `82-010`, 앞자리 생략 처리                                                                                                                 |
+| `validPhoneNumber` (1/0/0)                   | `parseMobile` → `string \| null`      | `false` 대신 `null`                                                                                                                               |
+| `maskPhone` (2/0/0)                          | `mask`                                | `NODE_ENV === 'development'` 이면 마스킹 안 하는 분기는 **정책이라 제거** — 소비자가 정한다                                                       |
+| `maskKeyword` (1/0/0)                        | `maskIfPhone`                         |                                                                                                                                                   |
+| `validate/dedupe/excludePhone*Async` (3/0/0) | `validateMany` · `dedupe` · `exclude` | 1만 건씩 끊어 이벤트 루프를 양보하는 구조는 유지. A `@core/util.ts` 의 `dedupe` 는 반환 형태가 다르다 → BM 쪽(`{ uniques, duplicates }`)으로 통일 |
 
-### `form` — 폼 검증 (project-b 최신 제네릭 버전 기준)
+### `form` — 폼 검증 (A 의 최신 제네릭 버전 기준)
 
-`checkEmptyFields` · `checkRegexFields` · `checkForm` (0/1/5). project-d 은 구버전
+`checkEmptyFields` · `checkRegexFields` · `checkForm` (0/1/5). B 는 구버전
 시그니처라 이관 시 반환 타입이 `Record<'message', string>` → `Partial<Record<keyof T, string>> | null`
 로 바뀐다. **소비자 쪽 수정이 필요한 유일한 그룹.**
 
@@ -129,15 +129,15 @@ export 목록은 네 `extensions.ts` 가 **완전히 같다** (project-b 최신�
 
 ## 3. 넣지 않을 것
 
-**도메인 지식** — CLAUDE.md 의 "정지/문자/지갑/유저타입" 금지에 걸린다. 각 프로젝트에 남긴다.
+**도메인 지식** — CLAUDE.md 의 업무 도메인 금지에 걸린다. 각 프로젝트에 남긴다.
 
 | 함수                                  | 이유                                                                               |
 | ------------------------------------- | ---------------------------------------------------------------------------------- |
-| `oddPriceFormat` · `oddPredictMoney`  | 배당률 계산 (환불 도메인). 0회 사용 → 지워도 됨                                    |
+| `oddPriceFormat` · `oddPredictMoney`  | 배당률 계산 (업무 도메인). 0회 사용 → 지워도 됨                                    |
 | `getMoneyColor` · `MoneyColorVariant` | 입출금 도메인 + Tailwind 클래스 하드코딩                                           |
 | `num2Money`                           | `₩` 하드코딩. `num.format(n, { style: 'currency', currency: 'KRW' })` 로 대체 가능 |
 | `toHashRrouterUrl`                    | `/Landing` 하드코딩                                                                |
-| `parseUserData`                       | project-a 데이터 포맷                                                          |
+| `parseUserData`                       | C 의 데이터 포맷                                                                   |
 | `toUTCFromKST`                        | 운영사 DB 의 KST 저장 버그 보정용 (parser 전용, JS)                                |
 | `randImageUri`                        | picsum.photos 외부 서비스 고정. 0회 사용                                           |
 
@@ -154,7 +154,7 @@ export 목록은 네 `extensions.ts` 가 **완전히 같다** (project-b 최신�
 소비자가 어느 쪽을 써야 할지 헷갈린다. 판정은 "lodash 함수로 **같은 결과**를 낼 수 있는가" 다.
 bias 가중치가 있는 `rand.int`(vs `_.random`)나 fallback 이 있는 `toNumber` 처럼
 lodash 로 대신할 수 없는 기능이 있으면 넣는다.
-패키지는 lodash 를 **의존하지 않는다** — project-d 엔 lodash 가 없다.
+패키지는 lodash 를 **의존하지 않는다** — B 에는 lodash 가 없다.
 
 **미사용 (세 프로젝트 모두 0회)** — `math` 전체, `sortArray`, `sortByOrder`,
 `safeNumber`, `parseTimestamps`, `intergrity`, `createCSSWithPseudo` 등.

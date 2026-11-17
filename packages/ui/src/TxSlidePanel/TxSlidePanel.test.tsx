@@ -543,7 +543,7 @@ describe("TxSlidePanel — CSS 계약", () => {
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = readFileSync(join(here, "TxSlidePanel.tsx"), "utf8");
 
-  /** 모바일 하단 시트 — project-c 에서 요구됐다. TxModal 의 size="auto" 와 같은 뜻이다 */
+  /** 모바일 하단 시트 — 적용하며 요구됐다. TxModal 의 size="auto" 와 같은 뜻이다 */
   it('size="auto" 는 위아래면 높이, 좌우면 폭을 내용에 맞추고 화면에서 멈춘다', () => {
     const vertical = css.match(/\[data-size="auto"\]:is\(\[data-side="top"\], \[data-side="bottom"\]\)\s*\{([^}]*)\}/)?.[1] ?? "";
     const horizontal = css.match(/\[data-size="auto"\]:is\(\[data-side="left"\], \[data-side="right"\]\)\s*\{([^}]*)\}/)?.[1] ?? "";

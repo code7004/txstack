@@ -100,7 +100,7 @@ z-index 층이 하나 더 는다 — **한 컴포넌트가 두 동작을 갖는�
 - `ITxSlidePanel` · `TTxSlidePanelSide` → `TxSlidePanelProps` · `TxSlidePanelSide`
 - **`prefers-reduced-motion` 을 지킨다.** 원본은 늘 밀었다
 
-### 모바일 하단 시트 — `size="auto"` · 모서리 · 본문 여백 (project-c 에서 요구됐다)
+### 모바일 하단 시트 — `size="auto"` · 모서리 · 본문 여백 (적용하며 요구됐다)
 
 연동 시트를 아래에서 올리려면 **높이가 내용을 따라야** 했다. `--tx-slide-panel-size` 는 고정 길이라 짧은 내용 위에 빈자리가 남았다.
 같은 시트에 위 두 모서리를 둥글게(20) 하고, 머리(24)와 본문(16 24 32) 여백을 따로 줘야 했다.

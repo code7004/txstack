@@ -289,7 +289,7 @@ describe("TxCollapsible — CSS 계약", () => {
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = readFileSync(join(here, "TxCollapsible.tsx"), "utf8");
 
-  /** 색만 투명하게 하면 1px 이 남아 줄이 2px 높고 안쪽으로 1px 들어간다 — project-c 에서 요구됐다 */
+  /** 색만 투명하게 하면 1px 이 남아 줄이 2px 높고 안쪽으로 1px 들어간다 — 적용하며 요구됐다 */
   it("테두리 두께는 --tx-collapsible-border-width 이고 기본은 1px 이다", () => {
     const base = css.match(/\.tx-collapsible\s*\{([^}]*)\}/)?.[1] ?? "";
 

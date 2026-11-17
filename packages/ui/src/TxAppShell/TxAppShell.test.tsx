@@ -163,7 +163,7 @@ describe("TxAppShell — 랜드마크", () => {
 
 /**
  * **머리 줄(`__bar`)은 담을 것이 있을 때만 그린다.** `top` 만 준 셸에서 빈 줄이 최소 높이 · 여백만큼
- * 자리를 잡았다(project-b 적용에서 드러났다 — project-a 는 토큰을 0 으로 덮어 피해 갔다).
+ * 자리를 잡았다(기존 프로젝트 적용에서 드러났다 — 다른 프로젝트는 토큰을 0 으로 덮어 피해 갔다).
  */
 describe("TxAppShell — 머리 줄", () => {
   const bar = () => document.querySelector(".tx-app-shell__bar");
@@ -216,7 +216,7 @@ describe("TxAppShell — 본문으로 건너뛰기", () => {
 
   /**
    * HashRouter 앱에서는 주소의 조각(hash)이 곧 경로다. 기본 이동에 맡기면 `#/history` 가 `#<본문 id>` 로 바뀌어
-   * 라우터가 빈 화면을 그렸다(project-c 배포 사이트에서 재현). 주소는 그대로 두고 포커스만 옮긴다.
+   * 라우터가 빈 화면을 그렸다(적용한 프로젝트의 배포 사이트에서 재현). 주소는 그대로 두고 포커스만 옮긴다.
    */
   it("누르면 주소는 그대로 두고 본문으로 포커스를 옮긴다", () => {
     window.history.replaceState(null, "", "/app?tab=1#/history");
@@ -931,7 +931,7 @@ describe("TxAppShell — 접기", () => {
 
 /**
  * 접어도 남는 자리 — `collapsedSize`. **셸은 숫자만 알고**, 안의 `TxSideNav` 가 컨텍스트로 따라 아이콘 줄이 된다.
- * project-b 에서 "완전히 감추는 대신 아이콘 줄만 남기고 싶다" 로 요구됐다.
+ * 적용한 프로젝트에서 "완전히 감추는 대신 아이콘 줄만 남기고 싶다" 로 요구됐다.
  */
 describe("TxAppShell — 접어도 남는 크기", () => {
   const left = () => document.querySelector(".tx-app-shell__left") as HTMLElement;
@@ -1254,8 +1254,8 @@ describe("TxAppShell — CSS 계약", () => {
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
   const source = strip(readFileSync(join(here, "TxAppShell.tsx"), "utf8"));
 
-  /** 평소 투명한 헤더 선이 1px 을 차지해 헤더가 그만큼 높았다 — project-c 에서 요구됐다 */
-  /** project-c 의 Figma(높이 84 · 위 8 · 아래 24 · 흰 바탕 · 위 선 · 페이드 40)를 전부 토큰으로 맞출 수 있어야 한다 */
+  /** 평소 투명한 헤더 선이 1px 을 차지해 헤더가 그만큼 높았다 — 적용하며 요구됐다 */
+  /** Figma 시안(높이 84 · 위 8 · 아래 24 · 흰 바탕 · 위 선 · 페이드 40)를 전부 토큰으로 맞출 수 있어야 한다 */
   it("건너뛰기로 온 본문은 테두리를 두르지 않고, 머무는 헤더 밑에 들어가지 않는다", () => {
     const main = css.match(/\.tx-app-shell__main\s*\{([^}]*)\}/)?.[1] ?? "";
 
@@ -1297,7 +1297,7 @@ describe("TxAppShell — CSS 계약", () => {
 
   /**
    * 경계선은 **자리마다 끈다** — 머리 · 패널 · 푸터가 각자의 두께 토큰을 읽고, 셋 다 공통 토큰을 기본으로 따른다.
-   * 공통 하나만 있을 때는 머리 아래 선만 끄면 패널 · 푸터 선도 같이 꺼졌다(project-b).
+   * 공통 하나만 있을 때는 머리 아래 선만 끄면 패널 · 푸터 선도 같이 꺼졌다.
    */
   it("경계선 두께는 자리마다 토큰이고, 셋 다 공통 --tx-app-shell-border-width(1px)를 따른다", () => {
     const base = css.match(/\.tx-app-shell\s*\{([^}]*)\}/)?.[1] ?? "";

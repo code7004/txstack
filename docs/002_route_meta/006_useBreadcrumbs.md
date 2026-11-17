@@ -12,7 +12,7 @@
 
 ## 개발 목적
 
-project-a 의 회원 목록에 `TxBreadcrumb` 을 붙이다 나왔다. 화면마다 칸을 손으로 적으면
+기존 프로젝트의 회원 목록에 `TxBreadcrumb` 을 붙이다 나왔다. 화면마다 칸을 손으로 적으면
 
 ```tsx
 <TxBreadcrumb>
@@ -94,15 +94,15 @@ export const routeTree = {
 | 동적 경로 `/users/:id`                          | `path` 는 **실제 주소**(`/users/8213`)다. `label` 은 트리의 글자 그대로 |
 | 매칭이 없다 (404)                               | 빈 배열                                                                 |
 
-project-a 트리(`Contents` 에 `breadcrumb: false`)에서 나오는 것:
+관리 화면 트리(`Contents` 에 `breadcrumb: false`)에서 나오는 것:
 
-| 주소                          | 매칭 사슬                                       | 칸                  |
-| ----------------------------- | ----------------------------------------------- | ------------------- |
-| `/user/dormant`               | Contents · Users · DormantUsers                 | 유저관리 / 휴면유저 |
-| `/user`                       | Contents · Users · UsersIndex(`/user`)          | 유저관리            |
-| `/dashboard`                  | Contents · Dashboard · DashboardIndex(index)    | 대시보드            |
-| `/message/detail` | Contents · Message · OrderDetail(hidden) | 주문관리 / 주문상세 |
-| `/black`                      | Contents · Notices                           | 공지관리            |
+| 주소            | 매칭 사슬                                    | 칸                  |
+| --------------- | -------------------------------------------- | ------------------- |
+| `/user/dormant` | Contents · Users · DormantUsers              | 유저관리 / 휴면유저 |
+| `/user`         | Contents · Users · UsersIndex(`/user`)       | 유저관리            |
+| `/dashboard`    | Contents · Dashboard · DashboardIndex(index) | 대시보드            |
+| `/order/detail` | Contents · Orders · OrderDetail(hidden)      | 주문관리 / 주문상세 |
+| `/notice`       | Contents · Notices                           | 공지관리            |
 
 ### 칸의 글자를 바꿀 때 — 받은 배열을 고친다
 
@@ -163,6 +163,6 @@ index 는 부모의 기본 화면이라 부모 이름이 그 자리 이름이다
 
 - [x] **S1 합의** — 이 문서 (2026-10-22)
 - [x] **구현** — `hooks.ts` 의 `useBreadcrumbs`, `types.ts` 의 `Breadcrumb` · `RouteMeta.breadcrumb` · `RouteHandle.key`
-- [x] **테스트** — 12개. project-a 모양의 트리로 위 다섯 주소를 그대로 못 박았다. 끝 `/` · 루트를 빼지 않은 트리 · identity 포함
+- [x] **테스트** — 12개. 관리 화면 모양의 트리로 위 다섯 주소를 그대로 못 박았다. 끝 `/` · 루트를 빼지 않은 트리 · identity 포함
 - [x] **문서** — [001_RouteTree](001_RouteTree.md) 의 `RouteMeta`, [000_README](000_README.md) 의 그림
 - [x] **Storybook** — `Recipes/RouteMeta` 의 경로 줄이 `TxBreadcrumb items={useBreadcrumbs(routes)}` 다

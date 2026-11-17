@@ -114,7 +114,7 @@ describe("TxTabBar — CSS 계약", () => {
     expect(styles).toContain('@import "./TxTabBar/TxTabBar.css" layer(tx);');
   });
 
-  /** project-c 의 Figma 값(아이콘 칸 20 · 간격 4 · 11px · 색 둘)을 전부 토큰으로 맞출 수 있어야 한다 */
+  /** Figma 시안의 값(아이콘 칸 20 · 간격 4 · 11px · 색 둘)을 전부 토큰으로 맞출 수 있어야 한다 */
   it("칸 안의 크기 · 글자 · 색이 전부 토큰이다", () => {
     for (const name of ["icon-size", "gap", "font-size", "font-weight", "color", "current-color", "current-font-weight", "max-width", "padding-inline"]) {
       expect(base, name).toMatch(new RegExp(`--tx-tab-bar-${name}:`));

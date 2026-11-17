@@ -118,7 +118,7 @@ describe("TxTag — CSS 계약", () => {
   const tokens = strip(readFileSync(join(here, "..", "tokens.css"), "utf8"));
   const styles = readFileSync(join(here, "..", "styles.css"), "utf8");
 
-  /** 선택된 칩의 바탕을 바꾼 소비자가 hover 에서 엉뚱한 색을 보지 않게 — project-c 에서 요구됐다 */
+  /** 선택된 칩의 바탕을 바꾼 소비자가 hover 에서 엉뚱한 색을 보지 않게 — 적용하며 요구됐다 */
   it("hover 바탕은 --tx-tag-hover-bg 하나다 — 칠하는 방식 · 선택 상태가 그 값만 다시 정한다", () => {
     const base = css.match(/\.tx-tag\s*\{([^}]*)\}/)?.[1] ?? "";
     const outline = css.match(/\.tx-tag\[data-appearance="outline"\]\s*\{([^}]*)\}/)?.[1] ?? "";

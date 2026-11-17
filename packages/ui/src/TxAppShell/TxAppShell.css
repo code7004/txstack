@@ -27,7 +27,7 @@
   --tx-app-shell-border-color: var(--tx-color-border);
   /**
    * 경계선(헤더 아래 · 좌우 · 아래 패널 · 푸터)의 두께. `0` 이면 선이 자리도 차지하지 않는다 —
-   * 색만 `transparent` 로 두면 투명한 1px 이 남아 헤더가 그만큼 높아진다(project-c 에서 요구됐다).
+   * 색만 `transparent` 로 두면 투명한 1px 이 남아 헤더가 그만큼 높아진다(적용하며 요구됐다).
    * 접기 스위치의 테두리는 경계선이 아니라 그 단추의 것이라 따라가지 않는다
    */
   --tx-app-shell-border-width: 1px;

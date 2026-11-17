@@ -12,7 +12,7 @@
 
 ## 개발 목적
 
-project-a GNB 를 **항목별 드롭다운**(`panelWidth="item"`)으로 옮기자 위아래가 어긋나는
+기존 프로젝트의 GNB 를 **항목별 드롭다운**(`panelWidth="item"`)으로 옮기자 위아래가 어긋나는
 문제는 사라졌지만, 한 번에 **한 묶음의 하위만** 보인다. 줄이 함께 쓰는 패널(`panel` on `TxNavBar`)로
 전체를 펼치면 열이 상위 항목과 따로 놓여 **어느 열이 어느 항목의 것인지 헷갈렸다** — 하위가 없는
 항목은 열이 없어 한 칸씩 밀렸다.
@@ -20,7 +20,7 @@ project-a GNB 를 **항목별 드롭다운**(`panelWidth="item"`)으로 옮기�
 그래서 둘을 가른다. **항목 아래에는 그 항목의 하위만**, **전체는 따로 연 지도에서.**
 지도는 상위 항목과 줄을 맞추지 않으므로 어긋날 것이 없다 — 열마다 묶음 이름이 머리에 붙는다.
 
-이미 쓸 곳이 둘이다. `apps/site` 의 `SITE_MAP`(직접 짠 20줄)과 project-a 의 GNB 다.
+이미 쓸 곳이 둘이다. `apps/site` 의 `SITE_MAP`(직접 짠 20줄)과 기존 프로젝트의 GNB 다.
 
 ## 쓰는 법
 
@@ -30,11 +30,11 @@ project-a GNB 를 **항목별 드롭다운**(`panelWidth="item"`)으로 옮기�
 import { TxSiteMap } from "@txstack/ui";
 
 <TxSiteMap>
-  <TxSiteMap.Group label="주문관리" as={NavLink} to="/message">
-    <TxSiteMap.Item label="발송파일" as={NavLink} to="/message/sendedmessagefilelist" />
-    <TxSiteMap.Item label="실패파일" as={NavLink} to="/message/failedgroups" />
+  <TxSiteMap.Group label="주문관리" as={NavLink} to="/order">
+    <TxSiteMap.Item label="주문목록" as={NavLink} to="/order/list" />
+    <TxSiteMap.Item label="취소내역" as={NavLink} to="/order/cancels" />
   </TxSiteMap.Group>
-  <TxSiteMap.Group label="공지관리" as={NavLink} to="/black" />
+  <TxSiteMap.Group label="공지관리" as={NavLink} to="/notice" />
 </TxSiteMap>;
 ```
 
@@ -151,5 +151,5 @@ interface TxNavBarSiteMapProps {
 | ✅ `TxNavBar.SiteMap` — 기존 `TxNavBar` 를 넓히는 일(맨 오른쪽 칸 · 늘 줄 폭 · 누를 때만). 테스트 11개 · 스토리 `Site Map Corner` | 🤖   |
 | 테스트(동작 + CSS 계약) · 스토리                                                                                                  | 🤖   |
 | `apps/site` 의 `SITE_MAP` 을 이것으로 바꾸기                                                                                      | 🤖   |
-| project-a GNB 에 붙이기                                                                                                       | 🧑   |
+| 기존 프로젝트 GNB 에 붙이기                                                                                                       | 🧑   |
 | Storybook 확인                                                                                                                    | 🧑   |

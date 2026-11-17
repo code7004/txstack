@@ -88,10 +88,10 @@ DOM 에 남는다 — uncontrolled 값을 내부 상태로 들고 있는다.
 남긴다. 상자를 떨어뜨려 쌓는 것은 `TxCollapsible` 여러 개가 이미 하는 일이라, 그것을 위한
 `gap` 옵션을 두지 않았다 — 두면 모서리 규칙이 갈라져 둘 다 어중간해진다.
 
-### 테두리 두께 `--tx-collapsible-border-width` (project-c 에서 요구됐다)
+### 테두리 두께 `--tx-collapsible-border-width` (적용하며 요구됐다)
 
 선 없는 목록 줄(위아래 12 · 높이 42)을 만들려고 `--tx-collapsible-border-color: transparent` 를 주면
-**보이지 않는 1px 이 남아** 줄이 2px 높아지고 내용이 좌우로 1px 들어간다. project-c 는 위아래 여백을 11 로 줄여 맞췄다.
+**보이지 않는 1px 이 남아** 줄이 2px 높아지고 내용이 좌우로 1px 들어간다. 그 프로젝트는 위아래 여백을 11 로 줄여 맞췄다.
 
 ```css
 .my-row {

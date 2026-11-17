@@ -35,7 +35,7 @@ const { statusCode, message }: ApiError = parseApiError(err); // axios 에러 ·
 
 ### 첫 배포 전에 뺀 것 · 바꾼 것 (2026-11-11)
 
-세 프로젝트(`project-a` · `project-b` · `project-c`)에 적용한 뒤, 실제 쓰임을 근거로 정했다.
+기존 프로젝트들에 적용한 뒤, 실제 쓰임을 근거로 정했다.
 npm 에 올리기 전이라 깨지는 소비자가 없다.
 
 | 전                | 지금       | 근거                                                                                                                |

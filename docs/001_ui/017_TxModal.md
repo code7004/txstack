@@ -108,9 +108,9 @@ Escape 를 브라우저가 스스로 처리하면 창은 닫히는데 `open` 은
 - `preventOutside` → `closeOnBackdrop`. **부정형 prop 을 만들지 않는다**
 - `visible`/`onExit` → `open`/`onClose` (`TxPopup`·`TxDropdown` 과 같은 이름)
 
-### 크기는 한 곳에서 — `size="auto"` (project-a 에서 요구됐다)
+### 크기는 한 곳에서 — `size="auto"` (적용하며 요구됐다)
 
-예전 로컬 모달은 **내용 크기를 따라** 커졌다. 그래서 앱은 큰 작업 창(대량 등록 · 발송 등록)의 크기를
+예전 로컬 모달은 **내용 크기를 따라** 커졌다. 그래서 앱은 큰 작업 창(대량 등록 · 일괄 처리)의 크기를
 안쪽 `<div className="h-[82vh] w-[80vw]">` 한 곳에 적어 두었다. txstack 의 폭은 `size`(24 · 32 · 48rem)라,
 옮기자 패널이 32rem 에 머물고 안쪽이 넘쳐 가로 스크롤이 생겼다. `--tx-modal-width` 로 폭을 셸에 주면
 풀리지만 **폭은 셸에, 높이는 안쪽에 — 크기가 두 곳으로 갈린다.**
@@ -130,7 +130,7 @@ Escape 를 브라우저가 스스로 처리하면 창은 닫히는데 `open` 은
 
 닫힌 `<dialog>` 를 숨기는 것은 브라우저 기본 규칙(`dialog:not([open]) { display: none }`)이다. 그런데
 `className` 은 `<dialog>` 자신에 붙고 **작성자 CSS 는 브라우저 기본을 이긴다** — `className="flex flex-col"` 을 주면
-**닫혀 있어도 그려진다**(project-a 의 발송 등록 창이 그랬다). 배치는 안쪽 내용이나 `classNames.body` 에 준다.
+**닫혀 있어도 그려진다**(적용한 프로젝트의 큰 등록 창이 그랬다). 배치는 안쪽 내용이나 `classNames.body` 에 준다.
 
 ### framer-motion 을 걷어낸 첫 사례
 
@@ -141,7 +141,7 @@ Escape 를 브라우저가 스스로 처리하면 창은 닫히는데 `open` 은
 전역 토큰이 하나 늘었다 — `--tx-color-backdrop`. **다크모드에서 뒤집지 않는다**:
 라이트든 다크든 "뒤를 가린다" 는 뜻이 같다.
 
-### 본문 여백 `--tx-modal-body-padding` — 버튼 줄은 그것을 계산에 쓰지 않는다 (project-c 에서 요구됐다)
+### 본문 여백 `--tx-modal-body-padding` — 버튼 줄은 그것을 계산에 쓰지 않는다 (적용하며 요구됐다)
 
 PC 연동 창(폭 400)이 모바일 시트와 같은 여백을 써야 했다 — 머리 24, 본문 16 24 32. 본문 여백이 `--tx-modal-padding` 하나에 묶여 있었다.
 

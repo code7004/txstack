@@ -33,7 +33,7 @@ import { TxDayPicker } from "@txstack/ui/daypicker";
 
 ### 고를 수 있는 범위 — `min` · `max`
 
-project-b 적용 준비에서 나왔다. 그 앱의 기간 고르기는 **미래 날짜를 막는다**(`disabled={{ after: new Date() }}`, 22 화면).
+기존 프로젝트 적용 준비에서 나왔다. 그 앱의 기간 고르기는 **미래 날짜를 막는다**(`disabled={{ after: new Date() }}`, 22 화면).
 지금 txstack 에는 `disabled: boolean`(통째로 끄기)과 `maxDays`(기간 길이)뿐이라, 옮기면 미래가 골라진다.
 
 ```tsx

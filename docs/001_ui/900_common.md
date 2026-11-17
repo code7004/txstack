@@ -105,7 +105,7 @@ import "@txstack/ui/styles.css";
   청크에서 불러오면 그 순서가 보장되지 않으므로 거기서 불러오지 않는다.
   (예전에는 "JS 에서 import 하면 순서가 번들러 손에 넘어간다" 며 한 CSS 파일 안에서 `@import`
   하게 했다. 순서가 흔들리는 경우는 지연 청크이고, 진입 모듈의 정적 import 는 순서대로 나온다 —
-  project-a 의 Vite 빌드 결과에서 `theme → base → tx → components → utilities` 를 확인했다.)
+  기존 프로젝트의 Vite 빌드 결과에서 `theme → base → tx → components → utilities` 를 확인했다.)
 
   **컴포넌트 기본값을 덮는 규칙은 `@layer components` 에 둔다.** 레이어 밖에 두면 `tx` 뿐 아니라
   `utilities` 까지 이겨서, 앱 전체에 준 값을 화면 하나에서 `className` 으로 다시 바꿀 수 없다.
@@ -139,7 +139,7 @@ import "@txstack/ui/styles.css";
 | `TxContextMenu`                           | **감싼다** | 대상(표 · 그리드)       | 뜨는 것은 `menu`                |
 | `TxNavBar` 줄의 공유 패널                 | —          | 줄의 children 은 항목들 | 그래서 `panel` prop 으로 남는다 |
 
-**왜** — project-a 의 계정 메뉴를 옮길 때 `TxDropMenu` 의 항목이 `menu={<>…</>}` 안에 갇혀
+**왜** — 기존 프로젝트의 계정 메뉴를 옮길 때 `TxDropMenu` 의 항목이 `menu={<>…</>}` 안에 갇혀
 들여쓰기가 깊어졌고, `TxSideNav.Item` 은 하위를 children 으로 받는데 `TxDropMenu` · `TxNavBar.Item` 만
 반대였다. "대상이냐 내용이냐" 로 맞췄던 것을 **"품는 것"** 으로 다시 정해 메뉴 계열을 한 모양으로 모았다.
 감싸는 부품(`TxTooltip` · `TxContextMenu`)은 대상이 크고(표 · 그리드) 뜨는 것이 짧아 그대로 둔다.
@@ -203,7 +203,7 @@ jsdom 에는 스타일시트가 없어 **렌더 결과로는 스타일을 볼 �
 
 - **`TxTheme` / Tailwind 클래스 문자열** — 위 `TxTheme` 절. CSS + `--tx-*` 토큰으로 옮긴다.
 - **앱 전역(ambient) 타입** — 소비자 프로젝트에는 그 전역이 없다.
-- **도메인 지식** — 정지/문자/지갑/유저타입 등. props 로 받거나 잘라낸다.
+- **도메인 지식** — 업무 도메인의 용어 · 규칙. props 로 받거나 잘라낸다.
 - **`import.meta.env` 직접 참조** — Vite 아닌 소비자에서 깨진다. 옵션으로 받는다.
 - **다른 Tx\* 컴포넌트로의 숨은 의존** — 배럴 import 라면 순환이 생길 수 있다.
 - **default export** — 배럴의 `export *` 는 default 를 실어 나르지 않는다. named 로 바꾼다.
