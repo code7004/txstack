@@ -18,7 +18,7 @@ import { forwardRef, type AriaAttributes } from "react";
  * </TxForm>
  * ```
  *
- * 달력 껍데기는 `<button>` 이라 `<label for>` 가 안 먹는다 — 캡션을 `aria-labelledby` 로 잇는다.
+ * 달력 wrapper 는 `<button>` 이라 `<label for>` 가 안 먹는다 — 캡션을 `aria-labelledby` 로 잇는다.
  */
 export type TxFormDayPickerProps = TxFormFieldSlots & TxDayPickerProps;
 export type TxFormDayPickerRangeProps = TxFormFieldSlots & TxDayPickerRangeProps;

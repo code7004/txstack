@@ -29,7 +29,7 @@
 <TxFlex className="flex-col">…</TxFlex>   // 방향은 소비자가 정한다
 ```
 
-화면 골격은 이 컴포넌트가 하지 않는다 → `TxLayout`.
+페이지 layout 은 이 컴포넌트가 하지 않는다 → `TxLayout`.
 
 ## 개발 항목
 

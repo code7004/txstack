@@ -27,7 +27,7 @@ export interface TxDropMenuProps extends TxMenuCommonProps, Omit<HTMLAttributes<
   /**
    * 떠오르는 메뉴 — `TxDropMenu.Item` · `TxDropMenu.Divider` 들.
    *
-   * **부품이 스스로 버튼을 만들고 그 아래 펼치는 것이라 children 이 펼쳐질 내용이다** —
+   * **컴포넌트가 스스로 버튼을 만들고 그 아래 펼치는 것이라 children 이 펼쳐질 내용이다** —
    * `TxSideNav.Item` · `TxNavBar.Item` 과 같다. 이미 있는 것을 감싸는 `TxContextMenu` 는 반대로
    * children 이 대상이고 메뉴는 `menu` 다(docs/001_ui/900_common.md 「children 은 품는 것」).
    */
@@ -54,7 +54,7 @@ export interface TxContextMenuProps extends TxMenuCommonProps, Omit<HTMLAttribut
   children: ReactNode;
 
   /**
-   * 떠오르는 메뉴. **`TxTooltip` 의 `tip` 과 같은 자리다** — 이미 있는 것을 감싸는 부품이라
+   * 떠오르는 메뉴. **`TxTooltip` 의 `tip` 과 같은 자리다** — 이미 있는 것을 감싸는 컴포넌트라
    * `children` 은 손대는 대상이고 뜨는 것은 prop 으로 준다.
    */
   menu: ReactNode;

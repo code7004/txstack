@@ -71,14 +71,14 @@ const [data, setData] = useState(SAMPLE);
   (원본은 `null` 자리에 문자열밖에 못 넣었다)
 - **키 추가가 네이티브 `prompt()` 였다.** 샌드박스 iframe 에서 막히고 번역도 안 된다 —
   `alert`·`confirm` 을 `TxDialog` 로 바꾼 것과 같은 문제다. 이제 줄 안에서 받는다
-- **펼침·편집 상태를 노드마다 `useState` 로 들고 있었다.** 배열 항목의 React key 가
-  인덱스라, 한 줄을 지우면 **상태가 그 자리에 남아 다른 줄의 것이 됐다.** 펼침은 루트가
+- **expand · edit 상태를 노드마다 `useState` 로 들고 있었다.** 배열 항목의 React key 가
+  인덱스라, 한 줄을 지우면 **상태가 그 자리에 남아 다른 줄의 것이 됐다.** expand 상태는 루트가
   경로(`pathKey`)로 들고 있게 바꿨다
 - **`onEdit` 하나가 편집과 삭제 버튼을 함께 켰다.** 삭제만 열 수 없었다. 이제 `onChange`
   하나가 편집 전체를 켜고, 안 주면 읽기 전용이다
 - 배열의 `+ add` 는 `onAdd` 없이도 보였다 — 눌러도 아무 일이 없었다
 - `data` 가 밖에서 바뀌어도 편집 칸은 옛 값을 들고 있었다 (초기화 함수에 한 번 갇혔다)
-- 펼침 버튼이 `+`/`-` 글자뿐이라 이름도 `aria-expanded` 도 없었고, 키와 값은 `<span onClick>`
+- expand 버튼이 `+`/`-` 글자뿐이라 이름도 `aria-expanded` 도 없었고, 키와 값은 `<span onClick>`
   이라 키보드로 닿지 않았다
 - `ml-4` · `flex` · `space-x-1` 이 테마도 아니고 **컴포넌트에 박혀** 있었다
 - 타입이 `JsonLike` · `JsonLikeObject` · `JsonObject` · `JsonArray` · `EditableValue` 로
@@ -88,7 +88,7 @@ const [data, setData] = useState(SAMPLE);
 
 그 역할은 화살표 이동과 roving tabindex 까지 갖춘 위젯을 뜻한다. **이름만 달고 규약이
 없으면 스크린리더 사용자에게 거짓**이 된다 — `TxSlidePanel` 원본의 `aria-modal` 과 같은
-종류의 잘못이다. 중첩 목록과 진짜 펼침 버튼으로 짜면 Tab 만으로 전부 닿고 아무것도 속이지 않는다.
+종류의 잘못이다. 중첩 목록과 진짜 expand 버튼으로 짜면 Tab 만으로 전부 닿고 아무것도 속이지 않는다.
 
 ### 타입 색에 새 전역 토큰을 만들지 않는다 (판단)
 

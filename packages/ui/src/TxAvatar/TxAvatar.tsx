@@ -53,7 +53,7 @@ export function TxAvatar({ src, name, initials, icon, size = "md", shape = "circ
   };
 
   /**
-   * 안쪽은 전부 **읽히지 않는다.** 이름은 껍데기가 한 번만 말한다 —
+   * 안쪽은 전부 **읽히지 않는다.** 이름은 wrapper 가 한 번만 말한다 —
    * 사진의 `alt` 와 이니셜 글자가 함께 읽히면 같은 사람이 두 번 불린다.
    */
   const content =

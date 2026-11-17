@@ -8,7 +8,7 @@ import { CATALOG, TABLES, componentAnchor, storyUrl, tableAnchor } from "./data"
 
 export function ApiUi() {
   return (
-    <Page title="@txstack/ui" lead="버튼 · 입력 · 폼 · 표 · 모달부터 사이드 메뉴가 있는 앱 골격까지, 관리자 화면에 필요한 Tx* 컴포넌트를 모았습니다. props 몇 개로 바로 쓰고, CSS 변수 몇 줄로 우리 서비스의 모습으로 바꿀 수 있게 만들었습니다.">
+    <Page title="@txstack/ui" lead="버튼 · 입력 · 폼 · 표 · 모달부터 사이드 메뉴가 있는 app shell 까지, 관리자 화면에 필요한 Tx* 컴포넌트를 모았습니다. props 몇 개로 바로 쓰고, CSS 변수 몇 줄로 우리 서비스의 모습으로 바꿀 수 있게 만들었습니다.">
       <Block title="Install">
         <CodeBlock language="bash" title="sh">{`pnpm add @txstack/ui`}</CodeBlock>
         <RefTable head={["Entry", "Exports", "Peer", "Description"]} rows={TABLES.ui.installEntry.rows} anchor={tableAnchor(TABLES.ui.installEntry)} />

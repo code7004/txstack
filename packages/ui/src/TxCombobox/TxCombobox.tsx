@@ -171,7 +171,7 @@ const TxComboboxBase = forwardRef<HTMLInputElement, TxComboboxProps<TxComboboxIt
   };
 
   return (
-    // 껍데기는 .tx-input 을 함께 건다 — 폼에 나란히 놓았을 때 줄이 맞아야 한다.
+    // wrapper 는 .tx-input 을 함께 건다 — 폼에 나란히 놓았을 때 줄이 맞아야 한다.
     <div ref={anchorRef} data-tag="TxCombobox" data-open={visible ? "" : undefined} data-disabled={props.disabled ? "" : undefined} className={cm("tx-input", "tx-combobox", className)} style={style}>
       <input
         {...props}

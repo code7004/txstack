@@ -30,7 +30,7 @@
 <TxCollapsible title="배송 안내" open={open} onOpenChange={setOpen}>…</TxCollapsible>
 ```
 
-여러 덩이를 묶어 하나씩만 열리게 하려면 **`TxAccordion`** 을 쓴다 — 이것을 부품으로 쓴다.
+여러 덩이를 묶어 하나씩만 열리게 하려면 **`TxAccordion`** 을 쓴다 — 이것을 구성 요소로 쓴다.
 
 겉모습은 CSS 변수로 바꾼다 — `.tx-collapsible { --tx-collapsible-padding: 1rem }`.
 테두리를 없애려면 **두께**를 `0` 으로 둔다 — `--tx-collapsible-border-width: 0`.

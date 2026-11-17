@@ -120,7 +120,7 @@ const meta = {
       description: {
         component: [
           "**트리 하나를 선언하고 라우터 · 메뉴 · 현재위치를 전부 거기서 뽑는다.**",
-          "`@txstack/route-meta` 와 `@txstack/ui` 의 메뉴 부품을 이어 붙이는 자리다.",
+          "`@txstack/route-meta` 와 `@txstack/ui` 의 메뉴 컴포넌트를 이어 붙이는 자리다.",
           "",
           "```tsx",
           'import { buildRouteObjects, getNavRoutes, type NavRoute } from "@txstack/route-meta";',
@@ -139,7 +139,7 @@ const meta = {
           "",
           "`@txstack/ui` 는 `route-meta` 를 import 하지 않고 그 반대도 아니다. **이어 붙이는",
           "코드는 소비자 몫**이고, 그래서 이 이야기들은 패키지가 아니라 **이 카탈로그 앱 안**에 있다.",
-          "부품 쪽은 `as={NavLink}` 하나만 열어 두면 되고, 라우터를 알 필요가 없다.",
+          "컴포넌트 쪽은 `as={NavLink}` 하나만 열어 두면 되고, 라우터를 알 필요가 없다.",
           "",
           "### 브레드크럼도 트리에서 나온다",
           "",
@@ -162,7 +162,7 @@ const meta = {
           "",
           "`MemoryRouter` 라 카탈로그를 벗어나지 않을 뿐, `useRoutes` 와 `NavLink` 는 앱에서와",
           "똑같이 돈다. **지금 있는 자리 표시(`aria-current`)는 `NavLink` 가 붙인다** —",
-          "부품이 따로 `active` prop 을 받지 않는 이유다."
+          "컴포넌트가 따로 `active` prop 을 받지 않는 이유다."
         ].join("\n")
       }
     }

@@ -572,7 +572,7 @@ export const CATALOG: [category: string, items: CatalogItem[]][] = [
       { name: "TxSpinner", desc: "회전하는 로딩 아이콘" },
       { name: "TxProgress", desc: "진행률 막대" },
       { name: "TxSkeleton", desc: "내용이 올 자리를 미리 잡아 두는 회색 영역" },
-      { name: "TxTag", desc: "상태 · 분류를 표시하는 작은 이름표" },
+      { name: "TxTag", desc: "상태 · 분류를 표시하는 작은 tag" },
       { name: "TxBadge", desc: "알림 점 · 개수 표시" },
       { name: "TxTicker", desc: "흘러가는 공지 줄" }
     ]

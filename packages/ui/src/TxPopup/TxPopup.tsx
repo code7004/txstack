@@ -64,7 +64,7 @@ const toPx = (value: number | string) => {
  *
  * 앵커에 붙어 뜨는 층. `TxDropdown` 계열이 쓰고, 앞으로 `TxCombobox` 와 메뉴 계열도 쓴다.
  *
- * 이 부품이 맡는 것은 넷이다.
+ * 이 컴포넌트가 맡는 것은 넷이다.
  *
  * 1. **포털** — `document.body` 로 낸다. 조상의 `overflow: hidden` 이나 `transform` 안에 갇히면
  *    목록이 잘리거나 엉뚱한 자리에 뜬다

@@ -33,7 +33,7 @@ export function SideBySide({ children }: { children: ReactNode }) {
 }
 
 /**
- * 살아 있는 예제가 놓이는 판. **부품이 실제로 도는 자리**라 바탕을 표면색으로 두어
+ * 살아 있는 예제가 놓이는 판. **컴포넌트가 실제로 도는 자리**라 바탕을 표면색으로 두어
  * 코드 판과 구분한다.
  */
 export function Demo({ children }: { children: ReactNode }) {

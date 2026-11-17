@@ -3,7 +3,7 @@ import { cm } from "../tx-ui.utils";
 import type { TxTagProps } from "./TxTag.types";
 
 /**
- * 작은 이름표. 상태 · 개수 · 분류를 한 낱말로 붙인다.
+ * 작은 tag. 상태 · 개수 · 분류를 한 낱말로 붙인다.
  *
  * @example
  * ```tsx
@@ -20,7 +20,7 @@ import type { TxTagProps } from "./TxTag.types";
  * 갈래는 **`TxAlert` · `TxToast` 와 같은 어휘**에 `neutral` 하나가 더 있다.
  *
  * **`onClick` 을 주면 글자가 눌리고, `onRemove` 를 주면 지우기(×)가 붙는다.**
- * 둘 다 안 주면 읽기만 하는 이름표다. 켜고 끄는 칩이면 `selected` 를 함께 준다.
+ * 둘 다 안 주면 읽기만 하는 tag 다. 켜고 끄는 칩이면 `selected` 를 함께 준다.
  *
  * 겉모습은 CSS 변수로 바꾼다 — `.tx-tag { --tx-tag-radius: 0.25rem }`.
  *

@@ -93,7 +93,7 @@ export type TxNavBarItemProps<E extends ElementType = "a"> = {
    * **`as` 를 함께 주면 제목이 링크가 되고 여는 일은 옆의 `▾` 버튼이 맡는다.**
    * 안 주면 제목 자체가 여는 버튼이다.
    *
-   * children 인 이유: 항목이 스스로 버튼을 만들어 펼치는 부품이라 children 이 품는 것은 하위다 —
+   * children 인 이유: 항목이 스스로 버튼을 만들어 펼치는 컴포넌트라 children 이 품는 것은 하위다 —
    * `TxSideNav.Item` · `TxDropMenu` 와 같다(docs/001_ui/900_common.md 「children 은 품는 것」).
    */
   children?: ReactNode;

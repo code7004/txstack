@@ -22,7 +22,7 @@ const theme: PrismTheme = {
 export interface CodeBlockProps {
   children: string;
   language?: string;
-  /** 위에 붙는 이름표 — 파일 이름이나 `sh` 같은 것. */
+  /** 위에 붙는 label — 파일 이름이나 `sh` 같은 것. */
   title?: string;
   /** 복사 버튼을 없앤다. 짧은 한 줄에는 성가시다. */
   hideCopy?: boolean;
@@ -55,7 +55,7 @@ export function CodeBlock({ children, language = "tsx", title, hideCopy = false,
           {title ?? language}
         </span>
 
-        {/* 복사는 우리 부품이 한다 — 클립보드·되돌리기·실패까지 이미 들어 있다 */}
+        {/* 복사는 우리 컴포넌트가 한다 — 클립보드·되돌리기·실패까지 이미 들어 있다 */}
         {/* 코드 판은 라이트에서도 어둡다. 버튼 글자를 판의 글자색에 맞춰야 라이트에서 묻히지 않는다 */}
         {!hideCopy && (
           <TxCopyButton value={code} variant="ghost" className="ms-auto shrink-0 text-xs" style={{ "--tx-button-fg": "var(--site-code-text)", "--tx-color-state": "#ffffff", "--tx-copy-button-min-width": "5rem" } as React.CSSProperties} />

@@ -79,7 +79,7 @@ RouteTree (단일 출처)
 - [x] `RouteMeta.onClick` 을 **뺐다** — [001_RouteTree](001_RouteTree.md)
 - [x] `getNavRoutes` 가 **`NavRoute[]` 하나로 통일** — [003_getNavRoutes](003_getNavRoutes.md)
 
-`@txstack/ui` 의 메뉴 부품과의 연결은 **소비자 몫이다.** 두 패키지는 서로를 import 하지
+`@txstack/ui` 의 메뉴 컴포넌트와의 연결은 **소비자 몫이다.** 두 패키지는 서로를 import 하지
 않는다(의존 방향은 `ui → hooks` 하나) — 이어 붙이는 15줄은
 [`apps/storybook`](../../apps/storybook) 의 `Recipes/RouteMeta` 이야기가 보여 준다.
 

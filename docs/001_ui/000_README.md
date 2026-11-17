@@ -72,7 +72,7 @@ import "@txstack/ui/styles.css";
 | 026  | [`TxToast`](026_TxToast.md)                      | 떴다 사라지는 알림                                  | 42     |
 | 027  | [`TxCollapsible`](027_TxCollapsible.md)          | 눌러서 접고 펴는 한 덩이                            | 33     |
 | 028  | [`TxAccordion`](028_TxAccordion.md)              | 여러 덩이를 이어 붙이고 하나씩만 열리게 한다        | 37     |
-| 029  | [`TxTag`](029_TxTag.md)                          | 작은 이름표                                         | 42     |
+| 029  | [`TxTag`](029_TxTag.md)                          | 작은 tag                                            | 42     |
 | 030  | [`TxSkeleton`](030_TxSkeleton.md)                | 내용이 올 자리를 미리 잡아 두는 회색 덩이           | 45     |
 | 031  | [`TxBadge`](031_TxBadge.md)                      | 무언가에 붙는 알림 점·개수                          | 26     |
 | 032  | [`TxCopyButton`](032_TxCopyButton.md)            | 눌러서 글자를 복사하는 버튼                         | 21     |
@@ -87,7 +87,7 @@ import "@txstack/ui/styles.css";
 | 041  | [`TxSwitch`](041_TxSwitch.md)                    | 그 자리에서 바로 켜고 끄는 자리                     | 24     |
 | 042  | [`TxBreadcrumb`](042_TxBreadcrumb.md)            | 계층 경로 — 손으로 적거나 목록(`items`)으로         | 37     |
 | 043  | [`TxScrollArea`](043_TxScrollArea.md)            | 넘치는 내용을 굴려 보는 자리                        | 18     |
-| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 껍데기                             | 109    |
+| 044  | [`TxAppShell`](044_TxAppShell.md)                | 화면 전체를 짜는 app shell                          | 109    |
 | 045  | [`TxAvatar`](045_TxAvatar.md)                    | 사람 한 명을 나타내는 동그란 칸                     | 28     |
 | 046  | [`TxTicker`](046_TxTicker.md)                    | 저절로 움직이는 공지 줄                             | 28     |
 | 047  | [`TxCarousel`](047_TxCarousel.md)                | 여러 장을 옆으로 넘겨 보는 자리                     | 50     |
@@ -96,7 +96,7 @@ import "@txstack/ui/styles.css";
 | 050  | [`TxSiteMap`](050_TxSiteMap.md)                  | 메뉴 전체를 한 판에 펼쳐 보이는 지도 (S1 합의 중)   | —      |
 | 051  | [`TxTabBar`](051_TxTabBar.md)                    | 좁은 화면 아래쪽의 탭 줄 — 셸의 `tabBar` 에 넣는다  | 17     |
 
-_(내부)_ 는 배럴에서 내보내지 않는 부품이다 — 소비자가 이름을 볼 수 없다.
+_(내부)_ 는 배럴에서 내보내지 않는 컴포넌트다 — 소비자가 이름을 볼 수 없다.
 `/daypicker` `/aggrid` 는 서브패스 전용이다.
 
 ## 아직 없는 것

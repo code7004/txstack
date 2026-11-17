@@ -18,7 +18,7 @@ import type { TxTextareaProps, TxTextareaRef } from "./TxTextarea.types";
  * <TxTextarea autoGrow rows={2} />
  * ```
  *
- * **껍데기는 `TxInput` 과 같은 것을 쓴다** — `.tx-input` 클래스를 함께 건다.
+ * **wrapper 는 `TxInput` 과 같은 것을 쓴다** — `.tx-input` 클래스를 함께 건다.
  * 폼 안에 나란히 놓았을 때 테두리·배경·포커스 링이 어긋나면 안 되기 때문이다.
  * 원본은 각자 그려서 **텍스트영역만 배경이 없었다** (다크모드에서 부모가 비쳤다).
  *
@@ -93,7 +93,7 @@ export const TxTextarea = forwardRef<TxTextareaRef, TxTextareaProps>(function Tx
   }, []);
 
   return (
-    // .tx-input 을 함께 건다 — 껍데기를 공유해야 입력창과 나란히 놓았을 때 줄이 맞는다.
+    // .tx-input 을 함께 건다 — wrapper 를 공유해야 입력창과 나란히 놓았을 때 줄이 맞는다.
     <div data-tag="TxTextarea" data-readonly={readOnly ? "" : undefined} data-disabled={props.disabled ? "" : undefined} data-auto-grow={autoGrow ? "" : undefined} className={cm("tx-input", "tx-textarea", className)} style={style}>
       <textarea
         // 통과 props 를 먼저 편다. 아래 계약 속성은 덮이면 안 된다.

@@ -33,7 +33,7 @@ import { TxDayPicker } from "@txstack/ui/daypicker";
 
 ### 고를 수 있는 범위 — `min` · `max`
 
-기존 프로젝트 적용 준비에서 나왔다. 그 앱의 기간 고르기는 **미래 날짜를 막는다**(`disabled={{ after: new Date() }}`, 22 화면).
+기존 프로젝트 적용 준비에서 나왔다. 그 앱의 기간 picker 는 **미래 날짜를 막는다**(`disabled={{ after: new Date() }}`, 22 화면).
 지금 txstack 에는 `disabled: boolean`(통째로 끄기)과 `maxDays`(기간 길이)뿐이라, 옮기면 미래가 골라진다.
 
 ```tsx
@@ -108,7 +108,7 @@ Storybook 에서 「최대 7일」 인데 7일을 넘겨 골라졌다. `react-da
   고르고 나서 알리는 것보다 못 고르게 하는 편이 낫다
 - `TxInputLike` 를 쓰면서 열림 상태를 안 넘겨 스크린리더가 늘 "닫힘" 으로 들었다
 - 트리거가 `role="button"` 이라 `aria-invalid` 가 무시돼, 폼 오류 상태가 전달되지 않았다 — **`role="combobox"`** 로 바꿨다
-  (2026-11-17, WAI-ARIA 날짜 고르기 패턴 · `TxDropdown` 의 트리거와 같다). 테스트에서 트리거는 `getByRole("combobox")` 로 찾는다
+  (2026-11-17, WAI-ARIA date picker 패턴 · `TxDropdown` 의 트리거와 같다). 테스트에서 트리거는 `getByRole("combobox")` 로 찾는다
 - `header` render prop 이 값과 콜백 넷을 되넘기는 복잡한 시그니처였다 → `ReactNode` + `ref`
 - **좌우 버튼이 보이는데 눌리지 않았다.** `react-day-picker` 10 은 그 버튼들을 **달 캡션 안이
   아니라 달들(`__months`) 옆에 한 벌만** 놓는데, CSS 는 캡션 안에 있다고 보고 캡션에

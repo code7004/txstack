@@ -66,8 +66,8 @@ const SYNONYMS: Record<string, string[]> = {
   클라이언트: ["client"],
 
   /**
-   * **다른 라이브러리에서 쓰는 이름.** 같은 부품을 그쪽 이름으로 찾아도 걸리게 한다.
-   * 켜고 끄는 부품은 `TxSwitch` 다 — ARIA(`role="switch"`) · MUI · Ant Design · Radix · Mantine 이 모두
+   * **다른 라이브러리에서 쓰는 이름.** 같은 컴포넌트를 그쪽 이름으로 찾아도 걸리게 한다.
+   * 켜고 끄는 컴포넌트는 `TxSwitch` 다 — ARIA(`role="switch"`) · MUI · Ant Design · Radix · Mantine 이 모두
    * Switch 라 부른다. Toggle 은 여러 곳에서 "눌린 채로 남는 버튼"(`aria-pressed`)을 뜻해 이름으로 쓰지 않았다.
    */
   toggle: ["switch"],

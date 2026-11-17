@@ -4,7 +4,7 @@ import type { TxAlertVariant } from "../TxAlert";
 /**
  * 갈래. **`TxAlert` · `TxToast` 의 넷을 그대로 물려받고 `neutral` 이 하나 더 있다.**
  *
- * 태그에는 **색이 뜻을 갖지 않는 라벨**이 흔하다 — 개수, 분류, 그냥 이름표.
+ * 태그에는 **색이 뜻을 갖지 않는 라벨**이 흔하다 — 개수, 분류, 그냥 이름.
  * 그런 자리에 `info`(브랜드색)를 쓰면 안 해도 될 강조가 붙는다.
  */
 export type TxTagVariant = TxAlertVariant | "neutral";

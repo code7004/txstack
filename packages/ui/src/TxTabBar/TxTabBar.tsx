@@ -20,7 +20,7 @@ import type { TxTabBarProps } from "./TxTabBar.types";
  *
  * **자리는 셸이 갖는다** — 언제 보일지(셸의 `breakpoint` 보다 좁을 때) · 화면 아래에 붙기 ·
  * 본문 아래에 자리 비우기 · 아이폰 홈 표시줄은 `TxAppShell` 의 `tabBar` 가 한다.
- * 이 부품은 **항목만** 그린다. 가로 메뉴가 `top` + `TxNavBar`, 세로 메뉴가 `left` + `TxSideNav` 인 것과 같은 결이다.
+ * 이 컴포넌트는 **항목만** 그린다. 가로 메뉴가 `top` + `TxNavBar`, 세로 메뉴가 `left` + `TxSideNav` 인 것과 같은 결이다.
  *
  * 지금 탭은 라우터의 `aria-current` 를 읽어 **글자색 · 굵기 · 위쪽 막대**로 알린다. 막대와 굵기는 토큰으로 끌 수 있다.
  *

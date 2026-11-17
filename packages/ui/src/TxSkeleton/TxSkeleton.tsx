@@ -19,7 +19,7 @@ import type { TxSkeletonProps } from "./TxSkeleton.types";
  * **`lines` · `variant` · `width` · `height` 중 하나라도 주면 그 모양을 그리고,
  * 아무것도 안 주면 `children` 에서 가져온다.**
  *
- * `loading` 이 `false` 가 되면 `children` 을 그대로 낸다 — 껍데기를 남기지 않아서
+ * `loading` 이 `false` 가 되면 `children` 을 그대로 낸다 — wrapper 를 남기지 않아서
  * 밖에서 삼항으로 가르던 것과 결과가 같다. 다만 **JSX 는 삼항과 달리 먼저 평가되므로**
  * 불러오는 동안에도 안전한 값이어야 한다 (`user?.name`).
  *
@@ -31,7 +31,7 @@ import type { TxSkeletonProps } from "./TxSkeleton.types";
  * 명세: `docs/001_ui/030_TxSkeleton.md`
  */
 export const TxSkeleton = ({ variant, lines, width, height, loading = true, className, style, children, ...props }: TxSkeletonProps) => {
-  // 껍데기를 남기지 않는다. 남기면 소비자가 준 className·flex 자리가 한 겹 더 생겨 놀란다
+  // wrapper 를 남기지 않는다. 남기면 소비자가 준 className·flex 자리가 한 겹 더 생겨 놀란다
   if (!loading) return children;
 
   const shaped = variant != null || lines != null || width != null || height != null;
@@ -42,7 +42,7 @@ export const TxSkeleton = ({ variant, lines, width, height, loading = true, clas
    * 값이 아직 없는 자리는 빈 요소로 남으므로, CSS 가 `:empty` 인 것만 칠한다 —
    * 붙박이 글은 그대로 보이고 값이 올 자리만 회색이 된다. **자식을 훑거나 재지 않는다.**
    *
-   * `display: contents` 라 자리를 차지하지 않는다. 다 불러오면 이 껍데기가 사라지는데,
+   * `display: contents` 라 자리를 차지하지 않는다. 다 불러오면 이 wrapper 가 사라지는데,
    * 그때 배치가 달라지면 안 되기 때문이다.
    *
    * `inert` 는 **빈 버튼·입력에 초점이 들어가는 것**을 막는다. 이름도 내용도 없는 것에

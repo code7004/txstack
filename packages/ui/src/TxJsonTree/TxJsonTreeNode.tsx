@@ -29,7 +29,7 @@ const useTree = () => {
   return value;
 };
 
-/** 펼침 화살표. 아이콘 하나 때문에 공개 아이콘 목록을 늘리지 않는다. */
+/** expand 화살표. 아이콘 하나 때문에 공개 아이콘 목록을 늘리지 않는다. */
 const Chevron = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" {...props}>
     <path fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="m9 6l6 6l-6 6" />
@@ -47,7 +47,7 @@ export interface TxJsonTreeNodeProps {
 /**
  * **내부 전용.** 한 줄과 그 아래.
  *
- * 펼침·편집 상태를 스스로 갖지 않는다 — **펼침은 루트가 경로로 들고 있다.** 노드마다
+ * expand · edit 상태를 스스로 갖지 않는다 — **expand 상태는 루트가 경로로 들고 있다.** 노드마다
  * `useState` 를 두면 배열에서 한 줄을 지웠을 때 상태가 엉뚱한 줄로 옮겨 간다.
  */
 export function TxJsonTreeNode({ value, path, depth, label }: TxJsonTreeNodeProps) {

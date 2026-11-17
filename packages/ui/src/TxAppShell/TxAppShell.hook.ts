@@ -119,7 +119,7 @@ type Drag = { vertical: boolean; from: number; size: number; step: number; min: 
  * **내부 전용.** 끌어서 좌우 패널과 아래 패널의 크기를 바꾼다.
  *
  * 한계를 안 줘도 **본문이 남을 만큼만** 늘어난다 — 이건 셸만 알 수 있는 값이라
- * 크기 조절을 독립 부품이 아니라 셸이 맡기로 한 이유다.
+ * 크기 조절을 독립 컴포넌트가 아니라 셸이 맡기로 한 이유다.
  */
 export function useResize({ panels, onChange }: Pick<TxAppShellProps, "panels"> & { onChange: (slot: TxAppShellPanelSlot, size: number, settled: boolean) => void }) {
   const [own, setOwn] = useState<Partial<Record<TxAppShellPanelSlot, number>>>({});

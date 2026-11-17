@@ -18,7 +18,7 @@ const HOVER_CLOSE_DELAY = 120;
  * </TxDropMenu>
  * ```
  *
- * **`label` 은 누르는 것, `children` 은 펼쳐질 항목이다** — 부품이 스스로 버튼을 만들고
+ * **`label` 은 누르는 것, `children` 은 펼쳐질 항목이다** — 컴포넌트가 스스로 버튼을 만들고
  * 그 아래 펼치므로 children 이 품는 것은 항목이다. `TxNavBar.Item` · `TxSideNav.Item` 과 같다.
  *
  * 키보드는 메뉴 규약을 따른다 — ↓ 로 열고, ↑↓ 로 옮기고, Home·End 로 양 끝,

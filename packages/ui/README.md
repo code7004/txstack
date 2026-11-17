@@ -1,7 +1,7 @@
 # @txstack/ui
 
 관리자 화면을 만들 때 필요한 React 컴포넌트 모음입니다. 버튼 · 입력 · 폼 · 표 · 모달부터 사이드 메뉴가 있는
-앱 골격까지 40여 가지가 들어 있습니다.
+app shell 까지 40여 가지가 들어 있습니다.
 
 두 가지를 목표로 만들었습니다. **props 몇 개로 바로 쓸 수 있을 것**, 그리고 **CSS 변수 몇 줄로 우리 서비스의 모습으로 바꿀 수 있을 것.**
 
@@ -33,17 +33,17 @@ import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 
 ## 들어 있는 것
 
-| 종류         | 컴포넌트                                                                                                                               |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 입력         | `TxInput` · `TxSearchInput` · `TxTextarea` · `TxNumberInput` · `TxCheckBox` · `TxRadio` · `TxSwitch` · `TxSlider` · `TxCapsLockCheck`  |
-| 고르기       | `TxDropdown` · `TxDropdownMulti` · `TxCombobox` · `TxDayPicker` · `TxFileUpload`                                                       |
-| 폼           | `TxForm` — 라벨 · 오류 메시지 · 배치를 한 번에 묶습니다                                                                                |
-| 표 · 데이터  | `TxAgGrid` · `TxPagination` · `TxJsonTree`                                                                                             |
-| 버튼 · 메뉴  | `TxButton` · `TxCopyButton` · `TxMenu` (`TxDropMenu` · `TxContextMenu`)                                                                |
-| 겹쳐 뜨는 것 | `TxModal` · `TxDialog` · `TxSlidePanel` · `TxTooltip` · `TxToast`                                                                      |
-| 알림 · 상태  | `TxAlert` · `TxLoading` · `TxSpinner` · `TxSkeleton` · `TxProgress` · `TxEmptyState` · `TxBadge` · `TxTag` · `TxTicker`                |
-| 배치 · 묶음  | `TxFlex` · `TxGrid` · `TxCard` · `TxDivider` · `TxTabs` · `TxCollapsible` · `TxAccordion` · `TxScrollArea` · `TxCarousel` · `TxAvatar` |
-| 앱 골격      | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar` · `TxBreadcrumb`                                                                  |
+| Types          | Components                                                                                                                             |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Input          | `TxInput` · `TxSearchInput` · `TxTextarea` · `TxNumberInput` · `TxCheckBox` · `TxRadio` · `TxSwitch` · `TxSlider` · `TxCapsLockCheck`  |
+| Choice         | `TxDropdown` · `TxDropdownMulti` · `TxCombobox` · `TxDayPicker` · `TxFileUpload`                                                       |
+| Form           | `TxForm` — 라벨 · 오류 메시지 · 배치를 한 번에 묶습니다                                                                                |
+| Table · Data   | `TxAgGrid` · `TxPagination` · `TxJsonTree`                                                                                             |
+| Button · Menu  | `TxButton` · `TxCopyButton` · `TxMenu` (`TxDropMenu` · `TxContextMenu`)                                                                |
+| Overlay        | `TxModal` · `TxDialog` · `TxSlidePanel` · `TxTooltip` · `TxToast`                                                                      |
+| Alert · Status | `TxAlert` · `TxLoading` · `TxSpinner` · `TxSkeleton` · `TxProgress` · `TxEmptyState` · `TxBadge` · `TxTag` · `TxTicker`                |
+| Layout         | `TxFlex` · `TxGrid` · `TxCard` · `TxDivider` · `TxTabs` · `TxCollapsible` · `TxAccordion` · `TxScrollArea` · `TxCarousel` · `TxAvatar` |
+| Wireframe      | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar` · `TxBreadcrumb`                                                                  |
 
 컴포넌트마다 무엇을 할 수 있는지는 [Storybook](https://code7004.github.io/txstack/storybook/) 에서 직접 눌러 보며 확인할 수 있습니다.
 
@@ -52,10 +52,10 @@ import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 `TxAgGrid` 는 ag-grid 를, `TxDayPicker` 는 react-day-picker 를 씁니다. 둘 다 무거운 라이브러리라서
 루트(`@txstack/ui`)와 분리해 두었습니다. 루트만 쓰는 앱은 이 라이브러리들을 설치하지 않아도 됩니다.
 
-| 쓰려는 것                                                     | 가져오는 곳             | 함께 설치할 것                            |
-| ------------------------------------------------------------- | ----------------------- | ----------------------------------------- |
-| 표 (`TxAgGrid` 계열)                                          | `@txstack/ui/aggrid`    | `ag-grid-community@35` `ag-grid-react@35` |
-| 달력 (`TxDayPicker` · `TxDayPickerRange` · `TxFormDayPicker`) | `@txstack/ui/daypicker` | `react-day-picker@10`                     |
+| 쓰려는 것                                                            | 가져오는 곳             | 함께 설치할 것                            |
+| -------------------------------------------------------------------- | ----------------------- | ----------------------------------------- |
+| Table (`TxAgGrid` 계열)                                              | `@txstack/ui/aggrid`    | `ag-grid-community@35` `ag-grid-react@35` |
+| Date picker (`TxDayPicker` · `TxDayPickerRange` · `TxFormDayPicker`) | `@txstack/ui/daypicker` | `react-day-picker@10`                     |
 
 ```tsx
 import { TxAgGrid, type TxAgGridOption } from "@txstack/ui/aggrid";
@@ -69,7 +69,7 @@ import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 ModuleRegistry.registerModules([AllCommunityModule]);
 ```
 
-## 모습 바꾸기
+## Theming
 
 ### 색 · 모서리 · 크기는 CSS 변수로
 

@@ -20,11 +20,20 @@
 
 ## 둘로 나눈다 — 패키지는 기준, 스타터는 골격 (2026-11-17 결정)
 
-|             | `@txstack/dev-guide` (이 패키지)                                   | `monorepo` 저장소 (스타터)                                                                  |
+|             | `@txstack/dev-guide` (이 패키지)                                   | `templates/starter` (스타터)                                                                |
 | ----------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
 | 맡는 것     | 규칙 · 문서 프로세스 · 문서 양식 · (2단계) 설정 프리셋 · AI 가이드 | 빈 골격 — `apps/` · 규칙대로 지은 스크립트 · dev-guide 를 가리키는 `CLAUDE.md` · 빈 `docs/` |
 | 쓰는 법     | 설치해서 **따른다**. 버전이 오르면 갱신한다                        | 새 프로젝트를 시작할 때 **한 번 복사**한다                                                  |
 | 규칙을 갖나 | 갖는다 — 유일한 원본                                               | 갖지 않는다. dev-guide 를 가리키기만 한다                                                   |
+
+**스타터는 txstack 의 `templates/starter` 에 둔다 (2026-11-17 사용자 결정).** 처음에는 따로 `monorepo` 저장소였다.
+dev-guide 를 바꿀 때 골격이 깨지는지를 같은 저장소에서 보려고 옮겼다 — `pnpm verify:packages starter` 가 묶은 dev-guide · ui 로
+골격을 설치해 골격 자신의 `check` · `build` 를 돌린다. 이번에 프리셋 결함(NestJS 주입)을 찾은 것도 골격을 지으면서였다.
+
+- `packages/` 가 아니다 — 배포하는 라이브러리가 아니라 한 번 복사하는 것이고, 자기 `pnpm-workspace.yaml` · 설정 파일 · lockfile 을 갖는다.
+  txstack 의 워크스페이스 · eslint · prettier 에서 뺐다
+- 복사는 `pnpm dlx degit code7004/txstack/templates/starter <이름>`. CLI(`pnpm create …`)는 쓰는 횟수가 쌓이면 다시 본다 — 그때 이 폴더를 그대로 쓴다
+- 공개 저장소 규칙이 그대로 적용된다 — 골격에 특정 프로젝트의 내용을 넣지 않는다
 
 `monorepo` 의 `docs/template/` 10장(2026-05-28)은 버리지 않고 1단계 본문의 재료로 쓴다 — 아래 "어디서 가져오나".
 
@@ -152,16 +161,16 @@ txstack 의 다른 패키지와 서로 참조하지 않는다.
 |           | AI Guide                                         | dev-guide                                                |
 | --------- | ------------------------------------------------ | -------------------------------------------------------- |
 | 답하는 것 | 화면을 무엇으로 짓나 — 결정표 · 토큰 · 원시 요소 | 프로젝트를 어떻게 굴리나 — 스크립트 · 커밋 · docs · 흐름 |
-| 바뀌는 때 | 부품이 바뀔 때 — ui 버전과 묶인다                | 일하는 방식이 바뀔 때                                    |
+| 바뀌는 때 | 컴포넌트가 바뀔 때 — ui 버전과 묶인다            | 일하는 방식이 바뀔 때                                    |
 | 대상      | `@txstack/ui` 를 쓰는 화면                       | 모든 프로젝트 (백엔드만 있는 저장소도)                   |
 
 dev-guide 를 ui 에 넣으면 백엔드 저장소가 UI 라이브러리를 설치해야 하고, AI Guide 를 dev-guide 로 옮기면
-빌드가 부품 목록에서 만드는 결정표가 설치된 ui 버전과 어긋난다.
+빌드가 컴포넌트 목록에서 만드는 결정표가 설치된 ui 버전과 어긋난다.
 
-- **부품 고르기 · 토큰은 AI Guide 만 갖는다.** dev-guide `rules/code.md` 5장은 그쪽을 가리키기만 한다
+- **컴포넌트 고르기 · 토큰은 AI Guide 만 갖는다.** dev-guide `rules/code.md` 5장은 그쪽을 가리키기만 한다
 - **`CLAUDE.md` 에는 두 문단을 둔다.** dev-guide `templates/CLAUDE.md` 가 UI 문단의 자리를 비워 두고 출처를 적는다
-- **eslint `react/forbid-elements`(원시 요소 경고)는 2단계 프리셋에 넣지 않는다.** Tx 부품 이름과 함께 바뀌므로 AI Guide 에 남는다.
-  dev-guide 프리셋은 부품과 상관없는 규칙만 갖는다
+- **eslint `react/forbid-elements`(원시 요소 경고)는 2단계 프리셋에 넣지 않는다.** Tx 컴포넌트 이름과 함께 바뀌므로 AI Guide 에 남는다.
+  dev-guide 프리셋은 컴포넌트와 상관없는 규칙만 갖는다
 - 사이트에서도 두 페이지를 따로 두고 서로 한 줄씩 링크한다
 
 ## 배포 전 검토를 반영한 것 (2026-11-17)
@@ -180,5 +189,5 @@ dev-guide 를 ui 에 넣으면 백엔드 저장소가 UI 라이브러리를 설�
 - [x] `0.1.0` 배포 (2026-11-17) — `pnpm publish` + 브라우저 2FA + Staged Packages 승인. 일반 저장소에서 `pnpm add -D` 로 받아 21개 파일 확인
 - [ ] 사이트 · AI 가이드(`scripts/ai-guide.mjs`)에 싣기
 - [x] 2단계 — 설정 프리셋 (prettier · eslint · commitlint · lint-staged) — [001_config_presets](001_config_presets.md). `0.2.0` 배포, import 규칙 셋 · `node({ decorators })` 는 `0.3.0` 배포 (2026-11-17)
-- [x] 3단계 — `monorepo` 스타터 (2026-11-17) — frontend(Vite · React · Tailwind v4 · React Compiler · `@txstack/ui`) · backend(NestJS `/health`), dev-guide `0.3.0` 프리셋 · 차이 없음
+- [x] 3단계 — 스타터 `templates/starter` (2026-11-17, `monorepo` 저장소에서 옮김) — frontend(Vite · React · Tailwind v4 · React Compiler · `@txstack/ui`) · backend(NestJS `/health`), dev-guide `0.3.0` 프리셋 · 차이 없음
 - [ ] 4단계 — 네 프로젝트 적용

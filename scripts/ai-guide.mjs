@@ -1,12 +1,12 @@
 /**
- * **AI 가이드를 만든다** — 소비자 프로젝트의 AI 코딩 도구가 txstack 부품을 먼저 쓰게 하는 문서 묶음.
+ * **AI 가이드를 만든다** — 소비자 프로젝트의 AI 코딩 도구가 txstack 컴포넌트를 먼저 쓰게 하는 문서 묶음.
  *
  * 원본은 이미 있는 문서다. 손으로 따로 관리하는 큰 문서를 두지 않는다.
  *
  * - `docs/013_ai_guide.md` 의 `ai-guide:end` 표시 위쪽 → `rules.md` (결정표 · 원시 요소 · 토큰 · 한계 · 시작 묶음)
  * - `docs/{001_ui,002_route_meta,003_hooks,004_axios,012_fns}/*.md` → `docs/…` (폴더 구조 그대로)
  * - `packages/<이름>/README.md` → `packages/…`
- * - `llms.txt` — 목차. 부품 목록은 각 장의 제목 · 첫 인용문 · 진입점 줄에서 뽑는다
+ * - `llms.txt` — 목차. 컴포넌트 목록은 각 장의 제목 · 첫 인용문 · 진입점 줄에서 뽑는다
  * - `llms-full.txt` — 위 전부를 한 파일로
  *
  * 두 곳이 쓴다. 놓이는 자리만 다르고 내용은 같다.
@@ -14,7 +14,7 @@
  *   node scripts/ai-guide.mjs <폴더>      `@txstack/ui` 의 build — 전부 `<폴더>/` 아래 (`layout: "package"`)
  *   apps/site/vite.config.ts               사이트 — `llms*.txt` 는 루트, 나머지는 `ai/` 아래 (`layout: "site"`)
  *
- * 배럴에서 내보내지 않는 부품(내부 전용 · 아직 공개 전)의 장은 싣지 않는다 — AI 가 그 이름을 쓰게 된다.
+ * 배럴에서 내보내지 않는 컴포넌트(내부 전용 · 아직 공개 전)의 장은 싣지 않는다 — AI 가 그 이름을 쓰게 된다.
  * 그 장을 가리키는 링크는 GitHub 의 원본으로 바꾼다.
  */
 import { execSync } from "node:child_process";
@@ -42,7 +42,7 @@ const RULES_END = /^<!-- ai-guide:end/m;
 
 const read = (root, path) => readFileSync(join(root, path), "utf8");
 
-/** `@txstack/ui` 의 배럴(루트 · 서브패스)이 내보내는 부품 폴더 이름 — `TxMenu` 처럼 폴더가 곧 장의 이름이다 */
+/** `@txstack/ui` 의 배럴(루트 · 서브패스)이 내보내는 컴포넌트 폴더 이름 — `TxMenu` 처럼 폴더가 곧 장의 이름이다 */
 function exportedFolders(root) {
   const barrels = ["index.ts", "aggrid.ts", "daypicker.ts"].map((file) => read(root, `packages/ui/src/${file}`)).join("\n");
   return new Set([...barrels.matchAll(/from "\.\/(Tx\w+)/g)].map((match) => match[1]));
@@ -76,7 +76,7 @@ function collect(root) {
       const source = `${section.dir}/${file}`;
       if (EXCLUDE.has(source)) continue;
 
-      // 부품 장은 배럴이 내보낼 때만 싣는다. 000_README · 900_common 같은 장은 늘 싣는다
+      // 컴포넌트 장은 배럴이 내보낼 때만 싣는다. 000_README · 900_common 같은 장은 늘 싣는다
       const component = file.match(/^\d+_(Tx\w+)\.md$/)?.[1];
       if (section.pkg === "ui" && component && !exported.has(component)) continue;
 
@@ -176,13 +176,13 @@ export function buildAiGuide({ root = ROOT, layout = "package" } = {}) {
     "",
     `> 관리 화면과 서비스를 위한 React 라이브러리 세트 — \`@txstack/ui\` · \`route-meta\` · \`hooks\` · \`axios\` · \`fns\`. 이 가이드는 ${stamp} 과 같은 버전이다.`,
     "",
-    `화면 요소를 만들기 전에 [규칙](${link("rules.md")})을 읽는다 — 만들려는 것마다 쓸 부품을 정한 결정표가 거기 있다. 부품을 쓰기 전에는 그 부품의 장을 읽는다.`,
+    `화면 요소를 만들기 전에 [규칙](${link("rules.md")})을 읽는다 — 만들려는 것마다 쓸 컴포넌트를 정한 결정표가 거기 있다. 컴포넌트를 쓰기 전에는 그 컴포넌트의 장을 읽는다.`,
     "",
     principles(rules),
     "",
     "## 규칙",
     "",
-    `- [txstack 우선 규칙](${link("rules.md")}): 결정표 · 직접 만들지 말 원시 요소 · 토큰 커스터마이징 · 부품이 못 하는 것 · CLAUDE.md 문단과 eslint 설정`,
+    `- [txstack 우선 규칙](${link("rules.md")}): 결정표 · 직접 만들지 말 원시 요소 · 토큰 커스터마이징 · 컴포넌트가 못 하는 것 · CLAUDE.md 문단과 eslint 설정`,
     `- [전체 본문](llms-full.txt): 규칙과 아래 문서 전부를 한 파일로`,
     ...SECTIONS.flatMap((section) => {
       const chapters = docs.filter((doc) => doc.section === section);

@@ -14,7 +14,7 @@
  * 앱 폴더 이름은 프로젝트마다 다르므로 `react` · `node` 는 경로를 받는다.
  * 도구와 플러그인은 프로젝트가 설치한다(선택 peer) — 이 파일을 import 할 때만 불러온다.
  *
- * UI 부품을 고르는 규칙(`react/forbid-elements`)은 여기 없다. `@txstack/ui` 의 `ai/rules.md` 가 갖는다.
+ * UI 컴포넌트를 고르는 규칙(`react/forbid-elements`)은 여기 없다. `@txstack/ui` 의 `ai/rules.md` 가 갖는다.
  */
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
@@ -102,7 +102,7 @@ export function react({ files }) {
       rules: {
         // 접근성 규칙은 recommended 그대로(오류). 의도된 예외는 그 줄에서 끄고 이유를 적는다
         ...jsxA11y.flatConfigs.recommended.rules,
-        // 라우터 링크를 <a> 로 그리는 부품과 장식 이미지가 흔하다 — 이 둘만 끈다
+        // 라우터 링크를 <a> 로 그리는 컴포넌트와 장식 이미지가 흔하다 — 이 둘만 끈다
         "jsx-a11y/anchor-is-valid": "off",
         "jsx-a11y/alt-text": "off",
         "react/react-in-jsx-scope": "off",

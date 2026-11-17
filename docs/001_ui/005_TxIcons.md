@@ -57,7 +57,7 @@
 `TxSpinner` 와 같다.
 
 안 가져온 5개에 결함이 몰려 있었다 — `IconDragHandleHonrizonBold` 오타, `IconLayout` 의
-kebab-case DOM 속성(React 콘솔 경고), `SVGRepo_*` 껍데기 `<g>` 3중첩(하드코딩 `id` 라 같은
+kebab-case DOM 속성(React 콘솔 경고), `SVGRepo_*` wrapper `<g>` 3중첩(하드코딩 `id` 라 같은
 페이지에 둘만 놓여도 중복), `1em` 누락. 가져온 둘에는 하나도 없다.
 
 `TxForm.DayPicker` / `DayPickerRange` 는 **루트 배럴에 없다.** `@txstack/ui/daypicker` 가
@@ -68,7 +68,7 @@ kebab-case DOM 속성(React 콘솔 경고), `SVGRepo_*` 껍데기 `<g>` 3중첩(
 
 갈래마다 붙는 아이콘 네 개는 `TxAlert` 안에 둔다. **`TxIcons` 에 이름을 더하는 것은
 공개 API 를 늘리는 일**이라 따로 정할 문제다. `TxToast` 는 같은 어휘를 쓰므로 여기서
-가져다 쓴다. (`TxDropdown` 의 화살표, `TxJsonTree` 의 펼침표가 같은 선례다.)
+가져다 쓴다. (`TxDropdown` 의 화살표, `TxJsonTree` 의 expand 아이콘이 같은 선례다.)
 
 ### `title` 이 `HTMLAttributes` 와 부딪힌다
 

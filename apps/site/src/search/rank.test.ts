@@ -42,7 +42,7 @@ describe("사이트 검색 — 순위", () => {
     expect(titles("권한")).toEqual(expect.arrayContaining(["permissions", "5. Filter the menu by permission"]));
   });
 
-  /** 켜고 끄는 부품의 이름은 Switch 다. 다른 라이브러리의 Toggle 로 찾아도 닿아야 한다 */
+  /** 켜고 끄는 컴포넌트의 이름은 Switch 다. 다른 라이브러리의 Toggle 로 찾아도 닿아야 한다 */
   it("다른 이름으로 찾아도 걸린다 — TxToggle · toggle · 토글 → TxSwitch", () => {
     expect(titles("TxToggle")).toEqual(["TxSwitch"]);
     expect(titles("toggle")).toContain("TxSwitch");

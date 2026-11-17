@@ -3,7 +3,7 @@ import { page } from "./lib/page";
 import { SectionLayout } from "./pages/SectionLayout";
 
 /**
- * 화면은 그 주소에 처음 들어올 때 받는다(`lib/page`). 묶음의 껍데기(`SectionLayout`)는 작아서 바로 싣는다.
+ * 화면은 그 주소에 처음 들어올 때 받는다(`lib/page`). 묶음의 layout(`SectionLayout`)는 작아서 바로 싣는다.
  */
 const AiGuide = page(() => import("./pages/AiGuide"), "AiGuide", "pages/AiGuide.tsx");
 const AboutHome = page(() => import("./pages/AboutHome"), "AboutHome", "pages/AboutHome.tsx");
@@ -83,7 +83,7 @@ export const routes = {
 
       /**
        * **메뉴 차례가 곧 읽는 차례다** — 장 끝의 "다음" 도 이 순서를 따른다.
-       * 설치 → 한 화면 만들기 → 내 화면에 맞추기 → 부품 찾아보기.
+       * 설치 → 한 화면 만들기 → 내 화면에 맞추기 → 컴포넌트 찾아보기.
        */
       tutorial: {
         path: "/docs/tutorial",

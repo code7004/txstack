@@ -5,13 +5,13 @@
 ## 개발 기준
 
 이 프로젝트는 **`@txstack/dev-guide`** 를 따른다. 규칙은 설치된 버전에 있다 —
-`node_modules/@txstack/dev-guide/llms.txt` (목차), `rules/` (스크립트 · 커밋 · 작업 공간 · 코드), `process/` (문서 프로세스 · AI 와 일하는 법).
+`node_modules/@txstack/dev-guide/llms.txt` (목차), `rules/` (스크립트 · 커밋 · 작업 공간 · 용어 · 코드), `process/` (문서 프로세스 · AI 와 일하는 법).
 dev-guide 와 다르게 하는 것은 [docs/rules/00_DEV_GUIDE_DIFF.md](docs/rules/00_DEV_GUIDE_DIFF.md) 에만 적는다.
 
 <!--
 UI 를 @txstack/ui 로 짓는 프로젝트는 여기에 "UI 는 txstack 을 먼저 쓴다" 문단을 붙인다.
 문단은 설치된 @txstack/ui 의 ai/rules.md 「소비자 프로젝트 시작 묶음」에 있다 — 그 판 그대로 복사한다.
-dev-guide 는 프로젝트를 굴리는 규칙, 그 문단은 화면 부품을 고르는 규칙이다. 둘 다 둔다.
+dev-guide 는 프로젝트를 굴리는 규칙, 그 문단은 화면 컴포넌트를 고르는 규칙이다. 둘 다 둔다.
 -->
 
 ## 시작하기

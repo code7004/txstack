@@ -29,7 +29,7 @@ interface TxDayPickerCommon {
   /** 트리거 버튼의 `id`. 바깥 캡션이 `aria-labelledby` 로 가리킬 때 필요하다. */
   id?: string;
   /**
-   * 껍데기가 `<button>` 이라 이름은 aria 로 붙인다.
+   * wrapper 가 `<button>` 이라 이름은 aria 로 붙인다.
    * 캡션을 밖에서 그려 주는 쪽(`TxFormDayPicker`)은 `aria-labelledby` 를 쓴다.
    */
   "aria-label"?: string;

@@ -25,9 +25,9 @@ export function isBranch(value: unknown): value is Record<string, unknown> | unk
 }
 
 /**
- * 경로를 하나의 문자열로 만든다. 펼침 상태와 반짝임을 이것으로 짚는다.
+ * 경로를 하나의 문자열로 만든다. expand 상태와 반짝임을 이것으로 짚는다.
  *
- * 배열 인덱스로 React `key` 를 삼으면 한 줄을 지웠을 때 펼침·편집 상태가 **엉뚱한 줄로
+ * 배열 인덱스로 React `key` 를 삼으면 한 줄을 지웠을 때 expand · edit 상태가 **엉뚱한 줄로
  * 옮겨 간다.** 원본이 그랬다. 경로로 짚으면 그런 일이 없다.
  */
 export function pathKey(path: TxJsonPath): string {

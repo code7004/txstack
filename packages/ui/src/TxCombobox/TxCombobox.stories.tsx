@@ -42,7 +42,7 @@ const meta = {
           "",
           "### 뜨는 층은 `TxPopup` 을 바탕으로 한다",
           "",
-          "`TxPopup` 은 **앵커에 붙어 뜨는 층**을 맡는 내부 부품이다. `TxDropdown` · `TxCombobox` ·",
+          "`TxPopup` 은 **앵커에 붙어 뜨는 층**을 맡는 내부 컴포넌트다. `TxDropdown` · `TxCombobox` ·",
           "`TxDayPicker` · `TxTooltip` · 메뉴 2종이 같은 것을 쓰므로, **아래 성질은 그 컴포넌트들과",
           "똑같이 동작한다.**",
           "",
@@ -244,7 +244,7 @@ export const AlignsWithOthers: Story = {
   )
 };
 
-/** 토큰 한 줄로 바꾼다. 껍데기는 `TxInput` 과 같은 토큰을 쓴다. */
+/** 토큰 한 줄로 바꾼다. wrapper 는 `TxInput` 과 같은 토큰을 쓴다. */
 export const CustomizingTokens: Story = {
   parameters: noControls,
   render: () => (

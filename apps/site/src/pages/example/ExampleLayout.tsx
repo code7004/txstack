@@ -4,7 +4,7 @@ import { api } from "./api";
 import { mockAdapter } from "./mock/server";
 
 /**
- * `/example` 묶음의 껍데기. **실제 앱이라면 진입점(`main.tsx`)에서 한 번 감싸는 자리**다.
+ * `/example` 묶음의 layout. **실제 앱이라면 진입점(`main.tsx`)에서 한 번 감싸는 자리**다.
  *
  * 클라이언트를 묶음 하나가 함께 쓰므로 캐시도 함께다 — `Error Logs` 에서 상태를 바꾸면
  * 같은 키를 무효화하므로 `Dashboard` 의 숫자도 따라 바뀐다.

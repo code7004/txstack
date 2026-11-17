@@ -1,7 +1,7 @@
 /**
  * TxDropdown · TxDropdownMulti — 골라서 값을 정하는 자리.
  *
- * **껍데기는 `TxInput` 과 같은 토큰을 쓴다.** 폼 안에 나란히 놓았을 때 높이와 테두리가
+ * **wrapper 는 `TxInput` 과 같은 토큰을 쓴다.** 폼 안에 나란히 놓았을 때 높이와 테두리가
  * 어긋나면 안 된다. 목록은 `TxPopup` 이 화면 맨 위 층으로 띄우므로 여기서는 안쪽 줄만 그린다.
  *
  * 명세: docs/001_ui/010_TxDropdown.md

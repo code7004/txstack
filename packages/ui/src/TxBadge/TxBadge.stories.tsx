@@ -41,7 +41,7 @@ const meta = {
           "| | `TxBadge` | `TxTag` |",
           "| --- | --- | --- |",
           "| 어디에 | **무언가에 얹힌다** | 혼자 선다 |",
-          "| 무엇을 | 알림 점 · 개수 | 상태 · 분류 이름표 |",
+          "| 무엇을 | 알림 점 · 개수 | 상태 · 분류 tag |",
           "",
           "이름이 갈리는 자리라 정해 두었다 — MUI · Chakra · Ant Design 이 `Badge` 라 부르는",
           "것은 이쪽(알림 점·카운트)이고, 상태 라벨은 `Tag`(Ant Design) 또는 `Chip`(MUI) 이다.",
@@ -156,7 +156,7 @@ export const DoesNotBlockClicks: Story = {
   }
 };
 
-/** 자식이 없으면 홀로 선다. **다만 혼자 서는 이름표는 `TxTag` 가 맞는다.** */
+/** 자식이 없으면 홀로 선다. **다만 혼자 서는 tag 는 `TxTag` 가 맞는다.** */
 export const Standalone: Story = {
   parameters: noControls,
   render: () => (

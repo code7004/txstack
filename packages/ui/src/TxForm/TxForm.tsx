@@ -8,7 +8,7 @@ import { TxFormLabel } from "./TxFormLabel";
 import type { TxFormProps } from "./TxForm.types";
 
 /**
- * 폼의 바깥 껍데기. `<form>` 하나에 **줄 간격**과 **캡션 배치**를 준다.
+ * 폼의 바깥 wrapper. `<form>` 하나에 **줄 간격**과 **캡션 배치**를 준다.
  *
  * - `onSubmit` 은 `preventDefault` 가 이미 걸려 있다. 소비자가 다시 부를 필요가 없다
  * - `labelWidth` 를 주면 **모든 필드의 캡션이 왼쪽으로 가고** 그 너비로 정렬된다

@@ -64,7 +64,7 @@ const meta = {
           "",
           "### 먼저 알아 둘 세 가지",
           "",
-          "**① 무거운 부품이라 서브패스에 있다.** `ag-grid-community` · `ag-grid-react` 는",
+          "**① 무거운 컴포넌트라 서브패스에 있다.** `ag-grid-community` · `ag-grid-react` 는",
           "**설치하는 쪽이 고르는** optional peer 다.",
           "",
           "```sh",
@@ -364,7 +364,7 @@ export const Editing: Story = {
  *
  * 쪽을 넘겨 보라 — 순번이 `11` · `21` 로 **이어진다.** 그러면서도 **넘긴 행 객체에는 순번이
  * 없다**(번호는 그릴 때 행 위치에서 계산한다). 쪽 번호는 `TxPagination` 이 그리므로
- * 카드 목록에서도 같은 부품을 쓴다.
+ * 카드 목록에서도 같은 컴포넌트를 쓴다.
  */
 export const RowNumberAndPaging: Story = {
   parameters: noControls,

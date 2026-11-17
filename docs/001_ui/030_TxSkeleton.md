@@ -31,7 +31,7 @@
 **`lines` · `variant` · `width` · `height` 중 하나라도 주면 그 모양을 그리고,
 아무것도 안 주면 `children` 에서 가져온다.**
 
-`loading` 이 `false` 가 되면 `children` 을 그대로 낸다 — 껍데기를 남기지 않아서
+`loading` 이 `false` 가 되면 `children` 을 그대로 낸다 — wrapper 를 남기지 않아서
 밖에서 삼항으로 가르던 것과 결과가 같다. 다만 **JSX 는 삼항과 달리 먼저 평가되므로**
 불러오는 동안에도 안전한 값이어야 한다 (`user?.name`).
 
@@ -88,7 +88,7 @@ padding-block: calc(var(--tx-skeleton-lead) / 2);
 <div aria-busy={loading}>{loading ? <TxSkeleton lines={3} /> : <Content />}</div>
 ```
 
-`loading` 을 받아 **`false` 면 `children` 을 그대로 내도록** 바꿨다. 껍데기를 남기지
+`loading` 을 받아 **`false` 면 `children` 을 그대로 내도록** 바꿨다. wrapper 를 남기지
 않으므로 결과는 삼항과 같고, **`aria-busy` 를 스스로 붙인다** — "바깥에 `aria-busy` 를
 두라" 를 문서로만 적어 두면 그건 잊힌다.
 
@@ -117,7 +117,7 @@ padding-block: calc(var(--tx-skeleton-lead) / 2);
 - **소비자 CSS 와 싸우지 않는다.** 빈 요소라 감출 글자가 없어서
   `color: transparent !important` 가 필요 없다 (테스트가 `!important` 를 금한다)
 
-껍데기는 `display: contents` 라 자리를 차지하지 않는다 — 다 불러오면 사라지는데 그때
+wrapper 는 `display: contents` 라 자리를 차지하지 않는다 — 다 불러오면 사라지는데 그때
 배치가 달라지면 "자리를 잡아 둔다" 가 거짓이 된다. 카드 높이를 재니 **132.5 → 132.5** 였다.
 
 **걸리는 데가 셋 있고 셋 다 조용히 실패한다** — 회색 막대가 안 나올 뿐 배치는 멀쩡하다.

@@ -30,7 +30,7 @@ export interface TxSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * 불러오는 중인가. 기본 `true`.
    *
-   * **`false` 가 되면 `children` 을 그대로 낸다** — 껍데기를 남기지 않아서, 밖에서
+   * **`false` 가 되면 `children` 을 그대로 낸다** — wrapper 를 남기지 않아서, 밖에서
    * 삼항으로 가르던 것과 결과가 같다. 불러오는 동안에는 `aria-busy` 를 스스로 붙인다.
    */
   loading?: boolean;

@@ -32,7 +32,7 @@ const FILES = [
 ];
 
 const RULE_SECTIONS = [
-  { title: "결정표", what: "만들려는 것(펼침 · 상자 · 칩 · 아이콘 버튼 · GNB · 화면 껍데기 · 스켈레톤 · 빈 상태 …)마다 쓸 컴포넌트" },
+  { title: "결정표", what: "만들려는 것(collapsible · 상자 · 칩 · 아이콘 버튼 · GNB · app shell · 스켈레톤 · 빈 상태 …)마다 쓸 컴포넌트" },
   { title: "직접 만들지 말 원시 요소", what: "<button> · <details> · 손으로 짠 모달 · 토스트 · 드롭다운 · 카드와 그 이유" },
   { title: "커스터마이징", what: "컴포넌트 CSS 를 덮지 않고 --tx-* 토큰으로. Tailwind 앱의 @layer 순서" },
   { title: "컴포넌트가 못 하는 것", what: "예: TxCard 는 카드 전체를 링크로 만들지 않는다 — 이런 자리만 앱에서 만들고 기록한다" },
@@ -43,7 +43,7 @@ const muted = "text-slate-600 dark:text-slate-300";
 
 export function AiGuide() {
   return (
-    <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 컴포넌트를 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · 펼침 · 카드 · GNB를 다시 만드는 대신 결정표에서 컴포넌트를 고르게 합니다.">
+    <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 컴포넌트를 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · collapsible · 카드 · GNB를 다시 만드는 대신 결정표에서 컴포넌트를 고르게 합니다.">
       <TxAlert variant="info">
         AI Guide는 <code>@txstack/ui</code>의 컴포넌트를 선택하고 사용하는 규칙을 다룹니다. 스크립트 이름 · 커밋 · 문서 구조 · 작업 절차 같은 <strong>프로젝트의 개발 규칙</strong>은 <Link to="/docs/dev-guide">Dev Guide</Link>에서 확인할 수 있습니다.
       </TxAlert>

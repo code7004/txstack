@@ -90,7 +90,7 @@ export default [
 | `react()` | 브라우저 전역 · `react` · `react-hooks` · `react-refresh` · `jsx-a11y` · 위 표의 "넷이 같음" 규칙                                                                                                                         |
 | `node()`  | Node 전역. 규칙은 `base` 그대로                                                                                                                                                                                           |
 
-UI 부품을 고르는 규칙(`react/forbid-elements`)은 넣지 않는다 — [AI Guide 와의 경계](000_README.md) 대로 `@txstack/ui` 의 `ai/rules.md` 에 남는다.
+UI 컴포넌트를 고르는 규칙(`react/forbid-elements`)은 넣지 않는다 — [AI Guide 와의 경계](000_README.md) 대로 `@txstack/ui` 의 `ai/rules.md` 에 남는다.
 
 ### 설치
 

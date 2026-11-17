@@ -328,7 +328,7 @@ export function Components() {
         <DataDemo />
       </Section>
 
-      <Section title="Layout" lead="브레드크럼, 탭, 카드, 펼침 목록으로 설정 화면 하나를 나눴습니다. 화면 전체의 틀은 TxAppShell이 잡습니다." used={["TxBreadcrumb", "TxTabs", "TxCard", "TxAccordion", "TxAppShell"]}>
+      <Section title="Layout" lead="브레드크럼, 탭, 카드, accordion 으로 설정 화면 하나를 나눴습니다. 화면 전체의 틀은 TxAppShell이 잡습니다." used={["TxBreadcrumb", "TxTabs", "TxCard", "TxAccordion", "TxAppShell"]}>
         <LayoutDemo />
       </Section>
 

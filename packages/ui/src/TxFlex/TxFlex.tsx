@@ -20,7 +20,7 @@ export interface TxFlexProps extends HTMLAttributes<HTMLDivElement> {}
  * <TxFlex className="flex-col">…</TxFlex>   // 방향은 소비자가 정한다
  * ```
  *
- * 화면 골격은 이 컴포넌트가 하지 않는다 → `TxLayout`.
+ * 페이지 layout 은 이 컴포넌트가 하지 않는다 → `TxLayout`.
  *
  * 명세: `docs/001_ui/002_TxFlex.md`
  */

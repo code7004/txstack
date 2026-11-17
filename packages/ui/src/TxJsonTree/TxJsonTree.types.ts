@@ -39,7 +39,7 @@ export interface TxJsonTreeProps extends Omit<HTMLAttributes<HTMLDivElement>, "o
   watch?: boolean;
 
   /**
-   * 처음에 이 깊이까지 펼친다. 기본은 전부 펼침.
+   * 처음에 이 깊이까지 펼친다. 기본은 전부 펼친다.
    *
    * `0` 이면 맨 윗줄만 보이고 나머지는 접힌 채로 시작한다. 큰 응답을 볼 때 쓴다.
    */

@@ -3,7 +3,7 @@ import { useLayoutEffect, type Dispatch, type SetStateAction } from "react";
 /**
  * **내부 전용. 움직임을 줄여 달라고 한 사람에게는 멈춘 채로 시작한다.**
  *
- * 저절로 움직이는 부품이 둘 이상이라 규약을 한 곳에 둔다 — `TxTicker` · `TxCarousel`.
+ * 저절로 움직이는 컴포넌트가 둘 이상이라 규약을 한 곳에 둔다 — `TxTicker` · `TxCarousel`.
  *
  * `useLayoutEffect` 로 잡는다. 그려지기 전에 멈춰야 **한 프레임도 움직이지 않는다.**
  * 서버에는 `matchMedia` 가 없으므로 그쪽에서는 "도는 상태" 로 두고 클라이언트에서 고친다.

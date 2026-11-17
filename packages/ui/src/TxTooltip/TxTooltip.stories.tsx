@@ -48,7 +48,7 @@ const meta = {
           "",
           "### 뜨는 층은 `TxPopup` 을 바탕으로 한다",
           "",
-          "`TxPopup` 은 **앵커에 붙어 뜨는 층**을 맡는 내부 부품이다. `TxDropdown` · `TxCombobox` ·",
+          "`TxPopup` 은 **앵커에 붙어 뜨는 층**을 맡는 내부 컴포넌트다. `TxDropdown` · `TxCombobox` ·",
           "`TxDayPicker` · 메뉴 2종이 같은 것을 쓰므로, **아래 성질은 그 컴포넌트들과 똑같이 동작한다.**",
           "",
           "- **맨 위 층으로 나간다** — `document.body` 로 포털되어 `overflow: hidden` 이나",

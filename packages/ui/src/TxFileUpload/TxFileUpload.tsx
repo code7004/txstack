@@ -181,7 +181,7 @@ export const TxFileUpload = ({ uploader, accept, multiple = true, maxSize, maxFi
 
       {/*
         진짜 `<input type="file">` 이다. 눈에서만 지운다 — `display: none` 이면
-        `<form>` 제출에 안 실리고, 파일 고르기 창을 여는 표준 길도 잃는다.
+        `<form>` 제출에 안 실리고, 파일 선택 창을 여는 표준 길도 잃는다.
       */}
       <input ref={inputRef} type="file" className="tx-file-upload__input" accept={accept} multiple={multiple} disabled={disabled} tabIndex={-1} onChange={hdInput} />
 

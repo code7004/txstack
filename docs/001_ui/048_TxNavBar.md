@@ -67,7 +67,7 @@ const menu = (
 ```
 
 **패널 안은 소비자 것이다.** 라이브러리가 메가 패널의 속을 정하지 않는다 —
-그 배치가 곧 그 사이트의 정보 구조라 도메인이다. 있는 부품으로 짠다.
+그 배치가 곧 그 사이트의 정보 구조라 도메인이다. 있는 컴포넌트로 짠다.
 
 ```tsx
 const ProductPanel = () => (
@@ -93,7 +93,7 @@ const ProductPanel = () => (
 ```
 
 좁은 화면에서는 **셸이 `left` 를 서랍으로 옮기고 그 안에 `TxSideNav` 가 선다.**
-이 부품은 스스로 접히지 않는다 — 상황이 하나만 남는다.
+이 컴포넌트는 스스로 접히지 않는다 — 상황이 하나만 남는다.
 
 ```tsx
 <TxAppShell top={<TxNavBar>{menu}</TxNavBar>} left={<TxSideNav>{sideItems}</TxSideNav>} />
@@ -130,7 +130,7 @@ const ProductPanel = () => (
 
 ### 2. 가로와 세로를 갈랐다 (다시 정했다)
 
-처음에는 한 부품이 `orientation` 으로 둘을 겸하고 `collapseAt` 으로 스스로 접기까지 했다.
+처음에는 한 컴포넌트가 `orientation` 으로 둘을 겸하고 `collapseAt` 으로 스스로 접기까지 했다.
 **되짚어 정했다** — 두 물건의 기능이 실제로 안 겹친다.
 
 |           | 가로 (`TxNavBar`)                          | 세로 (`TxSideNav`)                                   |
@@ -138,7 +138,7 @@ const ProductPanel = () => (
 | 하는 일   | **큰 패널이 떠오른다**                     | **아이콘 rail 로 접힌다 · 하위메뉴가 트리로 접힌다** |
 | 겹치는 것 | 항목 · 활성 표시 · `as` 주입 · 키보드 이동 | 같음                                                 |
 
-한 부품에 다섯 가지를 얹는 것보다 갈라 두는 것이 낫고, **`TxDropMenu`·`TxContextMenu`**
+한 컴포넌트에 다섯 가지를 얹는 것보다 갈라 두는 것이 낫고, **`TxDropMenu`·`TxContextMenu`**
 (공개는 둘, 속은 하나)라는 전례가 이미 있다.
 
 **이름은 방향으로 간다.** 역할 이름(`GNB`·`SNB`)을 쓰면 _1차 내비게이션을 세로로 두는_
@@ -148,7 +148,7 @@ const ProductPanel = () => (
 **속은 아직 합치지 않았다.** 메뉴 2종도 _둘 다 올린 뒤에_ 겹치는 것을 세어 보고 합쳤다.
 같은 순서를 따른다 — 지금 합치면 무엇이 공통인지 모르는 채로 추상화를 먼저 만드는 것이 된다.
 
-좁아지면 **셸이 `left` 를 서랍으로 옮기고 그 안에 `TxSideNav` 가 선다.** 그래서 이 부품에서
+좁아지면 **셸이 `left` 를 서랍으로 옮기고 그 안에 `TxSideNav` 가 선다.** 그래서 이 컴포넌트에서
 `collapseAt` 을 뗐다 — 접히는 길이 하나면 상황도 하나다.
 
 ### 3. 패널 폭은 `panelWidth` — 기본은 줄 전체 폭
@@ -207,8 +207,8 @@ const ProductPanel = () => (
 ### 항목의 하위는 `children` 이다 (다시 정했다)
 
 처음에는 항목의 패널을 `panel` prop 으로 받았다(`<TxNavBar.Item label="문서" panel={<Panel />} />`).
-`TxDropMenu` 를 고치면서 **"children 은 그 부품이 품는 것"** 으로 기준을 정했고
-([900_common](900_common.md)), 항목은 스스로 버튼을 만들어 그 아래 펼치는 부품이라 **children 이 하위**가 됐다.
+`TxDropMenu` 를 고치면서 **"children 은 그 컴포넌트가 품는 것"** 으로 기준을 정했고
+([900_common](900_common.md)), 항목은 스스로 버튼을 만들어 그 아래 펼치는 컴포넌트라 **children 이 하위**가 됐다.
 `TxSideNav.Item` 이 처음부터 그랬고, `TxNavBar.SiteMap` 도 그렇다.
 
 ```tsx

@@ -56,7 +56,7 @@ put rule.md            docs/project/01_PROJECT_OVERVIEW.md
 ## 개발 기준
 
 이 프로젝트는 **`@txstack/dev-guide`** 를 따른다. 규칙은 설치된 버전에 있다 —
-`node_modules/@txstack/dev-guide/llms.txt` (목차), `rules/` (스크립트 · 커밋 · 작업 공간 · 코드), `process/` (문서 프로세스 · AI 와 일하는 법).
+`node_modules/@txstack/dev-guide/llms.txt` (목차), `rules/` (스크립트 · 커밋 · 작업 공간 · 용어 · 코드), `process/` (문서 프로세스 · AI 와 일하는 법).
 dev-guide 와 다르게 하는 것은 [docs/rules/00_DEV_GUIDE_DIFF.md](docs/rules/00_DEV_GUIDE_DIFF.md) 에만 적는다.
 ```
 
@@ -158,6 +158,7 @@ UI 컴포넌트를 고르는 규칙(원시 `<button>` 경고 등)은 포함하�
 | [rules/scripts.md](rules/scripts.md)                   | 실행 스크립트 이름 — `<동작>:<대상>[:<변형>]`, `dev` · `start` 의 뜻   |
 | [rules/commits.md](rules/commits.md)                   | Conventional Commits + 한글 · 커밋 단위 · 브랜치 · 커밋 훅             |
 | [rules/workspace.md](rules/workspace.md)               | pnpm · Node 고정 · `apps/` 와 `packages/` · 의존성 · 환경 변수         |
+| [rules/terms.md](rules/terms.md)                       | 개발 용어는 영어로 — 이름 자리는 영어, 설명은 한국어                   |
 | [rules/code.md](rules/code.md)                         | 파일 · 이름 · TypeScript · import · 화면 · 서버 · 주석 · 테스트        |
 | [process/docs-structure.md](process/docs-structure.md) | docs 폴더 구성 · 파일 이름과 번호 · `CURRENT.md` · 색인                |
 | [process/workflow.md](process/workflow.md)             | 요구사항 → 계획 → 구현 → 검증(QA) → 보고, 단계별 시작 조건과 완료 기준 |

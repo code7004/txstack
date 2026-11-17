@@ -18,6 +18,7 @@ txstack 작업 시 지켜야 할 핵심 규약. **상세는 `docs/` 가 소유�
 
 **여러 프로젝트에서 재사용할 수 있는 범용 React 라이브러리 세트**와, 그 프로젝트들이 따르는 **개발 기준(`dev-guide`)**. npm 에 배포한다.
 pnpm workspace 모노레포. `packages/*` 6종이 각각 독립 배포되고, `apps/*` 는 배포하지 않는다.
+`templates/starter` 는 dev-guide 를 따르는 새 프로젝트 골격이다 — 워크스페이스 밖이고 자기 설정을 가지며, `verify:packages starter` 가 검사한다.
 
 | 번호  | 패키지                | 역할                                                          | React 의존 |
 | ----- | --------------------- | ------------------------------------------------------------- | ---------- |
@@ -84,6 +85,7 @@ git ls-tree --name-only legacy:packages/ui/src
 - **pnpm 만 사용한다.** npm/yarn lockfile 을 만들지 않는다. Node `24.14.0`, pnpm `>=10.0.0`.
 - ESLint / Prettier 설정은 **루트가 소유**한다. 패키지 개별 설정을 추가하지 않는다.
 - 커밋 메시지는 Conventional Commits + 한글 (예: `feat: TxDropdown 다중선택 지원`).
+- **개발 용어는 영어로 쓴다** — 한국어로 지어 부르지 않는다(부품 → component, 겹쳐 뜨는 것 → overlay). 이름 자리는 영어, 설명은 한국어. dev-guide [`rules/terms.md`](packages/dev-guide/rules/terms.md)
 - **기존 프로젝트는 이제 원본이 아니라 소비자다.** 저장소 이름 · 경로 · 업무 내용을 이 저장소에 적지 않는다 — 공개 저장소다.
   txstack 을 적용하는 작업은 그 저장소를 **고치는** 일이다. 브랜치를 파고 작업하며, 절차는
   [docs/006_adoption.md](docs/006_adoption.md) 를 따른다. **패키지와 그 프로젝트를 한 커밋에 담지 않는다.**

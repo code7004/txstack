@@ -26,7 +26,7 @@ const ARROW: Record<TxAppShellPanelSlot, [string, string]> = {
 };
 
 /**
- * 화면 전체를 짜는 껍데기. **여섯 자리를 한 자리에서 맡는다** —
+ * 화면 전체를 짜는 app shell. **여섯 자리를 한 자리에서 맡는다** —
  * `header` · `top` · `left` · `right` · `bottom` · `footer`, 그리고 `children` 이 본문이다.
  *
  * @example
@@ -138,7 +138,7 @@ export const TxAppShell = ({
   };
 
   /**
-   * 세 패널이 같은 부품으로 이뤄진다 — 내용 · 크기 손잡이 · 접기 스위치.
+   * 세 패널이 같은 컴포넌트로 이뤄진다 — 내용 · 크기 손잡이 · 접기 스위치.
    * **접히면 내용을 그리지 않는다.** 폭만 0 으로 두면 안의 링크에 Tab 이 그대로 닿는다.
    * `collapsedSize` 로 남는 자리는 예외다 — 보이는 만큼 남으니 그대로 그린다.
    *

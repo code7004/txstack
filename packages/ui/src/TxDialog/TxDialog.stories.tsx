@@ -69,7 +69,7 @@ type Story = StoryObj<typeof meta>;
 
 const noControls = { controls: { disable: true } };
 
-/** 결과를 찍어 주는 껍데기. 스토리에서만 쓴다. */
+/** 결과를 찍어 주는 wrapper. 스토리에서만 쓴다. */
 const Result = ({ value }: { value: string }) => <div className="font-mono text-sm text-slate-500 dark:text-slate-400">결과: {value}</div>;
 
 /** 알리고 확인만 받는다. 버튼이 하나다. */

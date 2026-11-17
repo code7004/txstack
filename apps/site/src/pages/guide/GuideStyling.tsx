@@ -5,7 +5,7 @@ import { CodeBlock } from "../../components/CodeBlock";
 import { Block, Demo, Page, SideBySide } from "../../components/Page";
 
 /**
- * **토큰을 손으로 돌려 보는 자리.** 값을 바꾸면 아래 부품이 전부 따라온다 —
+ * **토큰을 손으로 돌려 보는 자리.** 값을 바꾸면 아래 컴포넌트가 전부 따라온다 —
  * 이 판(`div`)에만 변수를 얹었으므로 사이트의 나머지는 그대로다.
  */
 function Playground() {

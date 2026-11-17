@@ -62,7 +62,7 @@ interface GroupProps {
   children: ReactNode;
   /** 실물의 소스. 주면 「결과 / 코드」 탭이 생긴다 */
   code?: string;
-  /** 부품이 맡는 것과 앱이 하는 것 — 코드를 보인 칸에서만 */
+  /** 컴포넌트가 맡는 것과 앱이 하는 것 — 코드를 보인 칸에서만 */
   split?: { parts: string; app: string };
   more?: { to: string; label: string };
 }

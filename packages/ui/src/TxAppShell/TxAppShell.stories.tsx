@@ -102,7 +102,7 @@ const meta = {
     docs: {
       description: {
         component: [
-          "화면 전체를 짜는 껍데기.",
+          "화면 전체를 짜는 app shell.",
           "",
           "```tsx",
           'import { TxAppShell } from "@txstack/ui";',

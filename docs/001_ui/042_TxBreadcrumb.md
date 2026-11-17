@@ -79,7 +79,7 @@ export interface TxBreadcrumbItemData {
 type TxBreadcrumbProps = ({ children?: ReactNode; items?: never } & Common) | ({ items: readonly TxBreadcrumbItemData[]; itemAs?: ElementType; itemProps?: (item: TxBreadcrumbItemData) => object; children?: never } & Common);
 ```
 
-**`children` 이 아니라 데이터 prop 인 이유** — [900_common](900_common.md) 의 「`children` 은 그 부품이 품는 것」은
+**`children` 이 아니라 데이터 prop 인 이유** — [900_common](900_common.md) 의 「`children` 은 그 컴포넌트가 품는 것」은
 **손으로 적는 칸**에 그대로다(위 모양은 바뀌지 않는다). `items` 는 칸이 **다른 데서 만들어져 오는** 경우의 길이다 —
 `map` 으로 `TxBreadcrumb.Item` 을 만드는 세 줄을 소비자마다 쓰게 하지 않는다. `TxAccordion` 의 `items` 와 같은 자리다.
 

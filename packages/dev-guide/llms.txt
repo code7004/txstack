@@ -8,7 +8,8 @@
 - [rules/scripts.md](rules/scripts.md): 실행 스크립트 이름 — <동작>:<대상>[:<변형>], dev = 개발 · start = 운영, 루트 공통 스크립트, check 의 뜻
 - [rules/commits.md](rules/commits.md): Conventional Commits + 한글, 커밋 단위, 커밋 · 푸시 · 배포는 요청할 때만, 브랜치, 커밋 훅
 - [rules/workspace.md](rules/workspace.md): pnpm · Node 고정, apps/ 와 packages/, 의존성, link: 를 main 에 올리지 않기, 환경 변수 local · dev · live
-- [rules/code.md](rules/code.md): 파일 · 이름 규칙, TypeScript strict, import 순서와 공개 진입점, 화면 · 서버 계층(부품 고르기는 @txstack/ui 의 ai/rules.md), 주석 · 테스트
+- [rules/terms.md](rules/terms.md): 개발 용어는 영어로 — 한국어로 지어 부르지 않는다(부품 → component, 겹쳐 뜨는 것 → overlay), 이름 자리는 영어 · 설명은 한국어, 그대로 두는 음역
+- [rules/code.md](rules/code.md): 파일 · 이름 규칙, TypeScript strict, import 순서와 공개 진입점, 화면 · 서버 계층(UI 컴포넌트 선택은 @txstack/ui 의 ai/rules.md), 주석 · 테스트
 
 ## 프로세스
 

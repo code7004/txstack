@@ -8,7 +8,7 @@
  * - 소비자의 번들러가 `node_modules` 안의 CSS 를 처리할 수 있어야 할 이유가 없다
  * - 그쪽이 버전을 올려 클래스 구조를 바꿔도 우리 규칙이 조용히 깨지지 않는다
  *
- * 껍데기(닫혀 있을 때의 입력창)는 `TxInputLike` 가 `.tx-input` 을 걸어 준다.
+ * wrapper(닫혀 있을 때의 입력창)는 `TxInputLike` 가 `.tx-input` 을 걸어 준다.
  * 달력은 `TxPopup` 이 화면 맨 위 층으로 띄운다.
  *
  * 명세: docs/001_ui/013_TxDayPicker.md
@@ -18,7 +18,7 @@
   display: inline-block;
 }
 
-/* 소비자가 폭을 주면 껍데기가 그 폭을 채운다 */
+/* 소비자가 폭을 주면 wrapper 가 그 폭을 채운다 */
 .tx-daypicker .tx-input-like {
   width: 100%;
 }

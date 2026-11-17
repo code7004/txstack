@@ -71,7 +71,7 @@ export function DashboardScreen() {
         {kpis.map((kpi) => (
           <Link key={kpi.label} to={kpi.to} relative="path" className={card}>
             <TxCard>
-              {/* 이름표에 색 점을 붙여 무엇의 숫자인지와 성격을 함께 보입니다 */}
+              {/* label 에 색 점을 붙여 무엇의 숫자인지와 성격을 함께 보입니다 */}
               <TxTag variant={kpi.tone} dot className="self-start whitespace-nowrap">
                 {kpi.label}
               </TxTag>

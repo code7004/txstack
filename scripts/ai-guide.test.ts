@@ -8,8 +8,8 @@ import { buildAiGuide, describeDoc } from "./ai-guide.mjs";
  * **AI 가이드의 결정표는 손으로 쓴다** — "무엇을 만들 때 무엇을 고르나" 는 문서에서 뽑을 수 없다.
  * 그래서 손으로 쓴 것이 코드와 어긋나지 않는지를 여기서 지킨다(docs/013_ai_guide.md).
  *
- * - 규칙에 적힌 `Tx*` 이름이 전부 실제로 내보내진다 — 없는 부품을 쓰라고 하면 AI 가 그대로 쓴다
- * - 내보내는 부품이 결정표에서 하나도 빠지지 않는다 — 빠지면 AI 는 그 부품을 모르고 손으로 짠다
+ * - 규칙에 적힌 `Tx*` 이름이 전부 실제로 내보내진다 — 없는 컴포넌트를 쓰라고 하면 AI 가 그대로 쓴다
+ * - 내보내는 컴포넌트가 결정표에서 하나도 빠지지 않는다 — 빠지면 AI 는 그 컴포넌트를 모르고 손으로 짠다
  */
 
 const root = join(import.meta.dirname, "..");
@@ -27,18 +27,18 @@ describe("AI 가이드 — 규칙과 공개 API", () => {
   it("규칙에 적힌 Tx* 이름은 전부 내보내진다", () => {
     const mentioned = new Set([...rules.matchAll(/\bTx[A-Z]\w*/g)].map((match) => match[0]));
     const missing = [...mentioned].filter((name) => !exported.has(name) && !NOT_PUBLIC.has(name));
-    expect(missing, "규칙이 없는 부품을 쓰라고 한다").toEqual([]);
+    expect(missing, "규칙이 없는 컴포넌트를 쓰라고 한다").toEqual([]);
   });
 
-  it("내보내는 부품은 전부 규칙에 한 번 이상 나온다", () => {
-    // 부품 장 하나 = 부품 하나. 그 장이 내보내는 이름 중 하나라도 규칙에 있으면 된다(TxRadioGroup 은 TxRadio 로 충분하다)
+  it("내보내는 컴포넌트는 전부 규칙에 한 번 이상 나온다", () => {
+    // 컴포넌트 장 하나 = 컴포넌트 하나. 그 장이 내보내는 이름 중 하나라도 규칙에 있으면 된다(TxRadioGroup 은 TxRadio 로 충분하다)
     const chapters = [...files.keys()].filter((path) => /^docs\/001_ui\/\d+_Tx\w+\.md$/.test(path));
     const absent = chapters.filter((path) => {
       const { title, exports } = describeDoc(files.get(path) ?? "");
       const names = [title, ...(exports ?? "").replace(/`/g, "").split(/[,·]/)].map((name) => name.trim().split(".")[0]);
       return !names.some((name) => new RegExp(`\`${name}\\b`).test(rules));
     });
-    expect(absent, "새 부품을 결정표에 더하지 않았다 — docs/013_ai_guide.md 2장").toEqual([]);
+    expect(absent, "새 컴포넌트를 결정표에 더하지 않았다 — docs/013_ai_guide.md 2장").toEqual([]);
   });
 });
 
@@ -54,7 +54,7 @@ describe("AI 가이드 — 묶음", () => {
     expect(files.get("llms-full.txt")).not.toContain("이 장을 고칠 때");
   });
 
-  it("내보내지 않는 부품의 장은 싣지 않는다 — AI 가 그 이름을 쓰게 된다", () => {
+  it("내보내지 않는 컴포넌트의 장은 싣지 않는다 — AI 가 그 이름을 쓰게 된다", () => {
     expect(files.has("docs/001_ui/005_TxIcons.md")).toBe(false);
     expect(files.has("docs/001_ui/011_TxPopup.md")).toBe(false);
     expect(files.has("docs/001_ui/050_TxSiteMap.md")).toBe(false);
