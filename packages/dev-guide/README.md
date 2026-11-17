@@ -76,6 +76,54 @@ cp "$G/verification.md" "docs/verification/$n.md"
 **공통 규칙은 패키지를 참조하고, 프로젝트별 예외만 기록하세요.** 규칙을 프로젝트 문서에 복사해 관리하면
 패키지를 업데이트해도 변경 사항이 반영되지 않습니다.
 
+## 설정 프리셋
+
+prettier · eslint · commitlint · lint-staged 설정을 그대로 가져다 쓸 수 있습니다. 규칙의 뜻은 `rules/` 문서와 같습니다.
+도구와 플러그인은 **선택 peer** 라 쓰는 것만 설치하면 됩니다 — 문서만 쓰는 프로젝트는 아무것도 더 받지 않습니다.
+
+```sh
+pnpm add -D prettier
+pnpm add -D @commitlint/cli @commitlint/config-conventional
+pnpm add -D lint-staged husky
+pnpm add -D eslint @eslint/js typescript-eslint typescript globals eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-jsx-a11y
+```
+
+```js
+// prettier.config.js
+export { default } from "@txstack/dev-guide/prettier";
+```
+
+```js
+// commitlint.config.mjs
+export { default } from "@txstack/dev-guide/commitlint";
+```
+
+```js
+// lint-staged.config.mjs
+export { default } from "@txstack/dev-guide/lint-staged";
+```
+
+eslint 는 조각으로 제공합니다. 앱 폴더 이름은 프로젝트마다 다르므로 `react` · `node` 에 경로를 넘기고,
+프로젝트 고유의 규칙은 그 아래에 둡니다. 다르게 적용한 규칙은 `00_DEV_GUIDE_DIFF.md` 에도 이유와 함께 기록하세요.
+
+```js
+// eslint.config.js
+import { base, react, node } from "@txstack/dev-guide/eslint";
+
+export default [...base({ ignores: ["vendor/**"] }), ...react({ files: ["apps/web/**/*.{ts,tsx}"] }), ...node({ files: ["apps/api/**/*.ts", "scripts/**/*.mjs"] })];
+```
+
+| 조각      | 담는 것                                                                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `base()`  | 무시 경로 · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 · `*.d.ts` 완화 · 설정 파일과 스크립트의 Node 전역 · `eslint-config-prettier` |
+| `react()` | 브라우저 전역 · `react` · `react-hooks` · `react-refresh` · `jsx-a11y` recommended — **경고**로(`anchor-is-valid` · `alt-text` 제외)                    |
+| `node()`  | Node 전역 — 규칙은 `base` 그대로                                                                                                                        |
+
+무시할 파일 목록은 프리셋으로 줄 수 없어(prettier 가 패키지에서 읽지 않습니다) [templates/prettierignore](templates/prettierignore) 를
+저장소 루트의 `.prettierignore` 로 복사합니다. 커밋 훅(`.husky/pre-commit` · `commit-msg`)의 내용은 [rules/commits.md](rules/commits.md) 5장에 있습니다.
+
+UI 컴포넌트를 고르는 규칙(원시 `<button>` 경고 등)은 포함하지 않습니다 — `@txstack/ui` 의 AI Guide 가 제공합니다.
+
 ## 업데이트하기
 
 패키지를 업데이트하면 AI 도구가 참조하는 개발 규칙도 함께 바뀝니다. 규칙이 바뀌는 업데이트는
@@ -130,6 +178,7 @@ cp "$G/verification.md" "docs/verification/$n.md"
 | [CURRENT.md](templates/CURRENT.md)               | 저장소 루트 `CURRENT.md`                              |
 | [CLAUDE.md](templates/CLAUDE.md)                 | 저장소 루트 `CLAUDE.md` · `AGENTS.md`                 |
 | [DEV_GUIDE_DIFF.md](templates/DEV_GUIDE_DIFF.md) | `docs/rules/00_DEV_GUIDE_DIFF.md`                     |
+| [prettierignore](templates/prettierignore)       | 저장소 루트 `.prettierignore`                         |
 
 ## 제공 범위
 
@@ -137,7 +186,5 @@ cp "$G/verification.md" "docs/verification/$n.md"
 `docs/project/` 또는 `docs/rules/` 에서 관리합니다.
 
 UI 컴포넌트 선택과 사용 규칙은 `@txstack/ui` 의 AI Guide(`ai/rules.md`)에서 별도로 제공합니다.
-
-ESLint · Prettier · commitlint 설정 프리셋은 현재 제공하지 않습니다. 후속 단계에서 검토할 예정입니다.
 
 MIT

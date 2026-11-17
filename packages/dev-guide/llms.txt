@@ -27,6 +27,14 @@
 - [templates/CURRENT.md](templates/CURRENT.md): 저장소 루트 — 지금 상태 · 다음 할 일
 - [templates/CLAUDE.md](templates/CLAUDE.md): 저장소 루트 — AI 도구가 먼저 읽는 문서
 - [templates/DEV_GUIDE_DIFF.md](templates/DEV_GUIDE_DIFF.md): docs/rules/00_DEV_GUIDE_DIFF.md — dev-guide 와 다른 점
+- [templates/prettierignore](templates/prettierignore): .prettierignore — 프리셋으로 줄 수 없는 무시 목록
+
+## 설정 프리셋
+
+- [config/eslint.js](config/eslint.js): `@txstack/dev-guide/eslint` — base() · react({ files }) · node({ files }) 조각. eslint 9 flat config
+- [config/prettier.js](config/prettier.js): `@txstack/dev-guide/prettier` — printWidth 250 · 큰따옴표 · semi · 끝 쉼표 없음
+- [config/commitlint.js](config/commitlint.js): `@txstack/dev-guide/commitlint` — config-conventional + 한글 제목 · 긴 본문 허용
+- [config/lint-staged.js](config/lint-staged.js): `@txstack/dev-guide/lint-staged` — 코드는 eslint --fix · prettier --write, 나머지는 prettier --write
 
 ## 버전
 

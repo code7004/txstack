@@ -18,6 +18,7 @@
   },
   "homepage": "https://code7004.github.io/txstack/docs/dev-guide",
   "bugs": "https://github.com/code7004/txstack/issues",
+  "type": "module",
   "files": [
     "README.md",
     "CHANGELOG.md",
@@ -25,9 +26,14 @@
     "llms.txt",
     "rules",
     "process",
-    "templates"
+    "templates",
+    "config"
   ],
   "exports": {
+    "./prettier": "./config/prettier.js",
+    "./commitlint": "./config/commitlint.js",
+    "./lint-staged": "./config/lint-staged.js",
+    "./eslint": "./config/eslint.js",
     "./llms.txt": "./llms.txt",
     "./rules/*": "./rules/*",
     "./process/*": "./process/*",
@@ -35,6 +41,67 @@
     "./package.json": "./package.json",
     "./CHANGELOG.md": "./CHANGELOG.md",
     "./README.md": "./README.md"
+  },
+  "peerDependencies": {
+    "prettier": ">=3",
+    "eslint": ">=9",
+    "@eslint/js": ">=9",
+    "typescript-eslint": ">=8",
+    "globals": ">=15",
+    "eslint-config-prettier": ">=9",
+    "eslint-plugin-react": ">=7",
+    "eslint-plugin-react-hooks": ">=5",
+    "eslint-plugin-react-refresh": ">=0.4",
+    "eslint-plugin-jsx-a11y": ">=6",
+    "@commitlint/config-conventional": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "prettier": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "@eslint/js": {
+      "optional": true
+    },
+    "typescript-eslint": {
+      "optional": true
+    },
+    "globals": {
+      "optional": true
+    },
+    "eslint-config-prettier": {
+      "optional": true
+    },
+    "eslint-plugin-react": {
+      "optional": true
+    },
+    "eslint-plugin-react-hooks": {
+      "optional": true
+    },
+    "eslint-plugin-react-refresh": {
+      "optional": true
+    },
+    "eslint-plugin-jsx-a11y": {
+      "optional": true
+    },
+    "@commitlint/config-conventional": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "eslint": "^9.39.1",
+    "@eslint/js": "^9.39.1",
+    "typescript-eslint": "^8.48.0",
+    "globals": "^16.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "@commitlint/config-conventional": "^20.5.0"
   },
   "publishConfig": {
     "access": "public"

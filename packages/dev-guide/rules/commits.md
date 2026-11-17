@@ -59,3 +59,15 @@ chore: txstack 을 link 대신 npm 배포본(^0.1.2)으로 설치한다
 
 - 전체 검사(`pnpm check`)는 훅에 두지 않는다. 느리면 사람이 훅을 끈다
 - 훅을 건너뛰지 않는다(`--no-verify` 금지). 훅이 실패하면 원인을 고친다
+
+설정은 `@txstack/dev-guide/lint-staged` · `@txstack/dev-guide/commitlint` 프리셋을 쓴다 (README 「설정 프리셋」). 훅 파일은 이렇게 둔다.
+
+```sh
+# .husky/pre-commit
+pnpm lint-staged
+```
+
+```sh
+# .husky/commit-msg
+pnpm exec commitlint --edit "$1"
+```

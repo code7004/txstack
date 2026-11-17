@@ -179,6 +179,6 @@ dev-guide 를 ui 에 넣으면 백엔드 저장소가 UI 라이브러리를 설�
 
 - [x] `0.1.0` 배포 (2026-11-17) — `pnpm publish` + 브라우저 2FA + Staged Packages 승인. 일반 저장소에서 `pnpm add -D` 로 받아 21개 파일 확인
 - [ ] 사이트 · AI 가이드(`scripts/ai-guide.mjs`)에 싣기
-- [ ] 2단계 — 설정 프리셋 (prettier · eslint · commitlint)
+- [x] 2단계 — 설정 프리셋 (prettier · eslint · commitlint · lint-staged) — [001_config_presets](001_config_presets.md). 구현 · 검증 완료, `0.2.0` 배포 대기
 - [ ] 3단계 — `monorepo` 스타터
 - [ ] 4단계 — 네 프로젝트 적용

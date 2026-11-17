@@ -1,86 +1,15 @@
-import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import reactPlugin from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import { base, node, react } from "@txstack/dev-guide/eslint";
 
+/**
+ * 규칙은 `@txstack/dev-guide/eslint` 가 갖는다 — 이 저장소가 첫 소비자다.
+ * 여기에는 txstack 에만 해당하는 것만 둔다.
+ */
 export default [
-  {
-    // `._*` 는 macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물이다. 소스 옆에 그대로 생긴다
-    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", "**/.temp/**", "**/.changeset/**", "**/._*"]
-  },
-
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  prettier,
-
-  {
-    files: ["packages/**/*.{ts,tsx}", "apps/**/*.{ts,tsx}"],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true }
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      }
-    },
-    plugins: {
-      "@typescript-eslint": tseslint.plugin,
-      react: reactPlugin,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
-      "jsx-a11y": jsxA11y
-    },
-    settings: {
-      react: { version: "detect" }
-    },
-    rules: {
-      "no-redeclare": "off",
-      "no-undef": "off",
-      "no-unused-vars": "off",
-      // _ 접두사는 "일부러 안 쓴다" 는 표시로 쓴다. ignoreRestSiblings 는
-      // `const { children: _dropped, ...rest } = node` 처럼 필드를 빼는 관용구를 허용한다.
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", ignoreRestSiblings: true }],
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "separate-type-imports" }],
-      "@typescript-eslint/no-empty-object-type": "off",
-      "@typescript-eslint/triple-slash-reference": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-unused-expressions": [
-        "error",
-        {
-          allowShortCircuit: true,
-          allowTernary: true,
-          allowTaggedTemplates: true
-        }
-      ],
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-key": "error",
-      "react/prop-types": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "error",
-      "react-refresh/only-export-components": "off",
-      "jsx-a11y/anchor-is-valid": "off",
-      "jsx-a11y/alt-text": "off",
-      "no-constant-condition": "off"
-    }
-  },
-
-  {
-    files: ["**/*.d.ts"],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      // 선언 파일은 앰비언트 계약이라 escape-hatch(any) 사용을 허용한다. (예: type TAny = any)
-      "@typescript-eslint/no-explicit-any": "off"
-    }
-  },
+  // `._*` 는 macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물이다. 소스 옆에 그대로 생긴다
+  ...base({ ignores: ["**/.changeset/**", "**/._*"] }),
+  ...react({ files: ["packages/**/*.{ts,tsx}", "apps/**/*.{ts,tsx}"] }),
+  // 패키지는 브라우저와 Node 양쪽에서 돈다 (axios · fns 는 Node 에서도 불린다)
+  ...node({ files: ["packages/**/*.{ts,tsx}", "apps/**/*.{ts,tsx}", "**/vite.config.ts", "**/tsup.config.ts"] }),
 
   {
     // 제네릭 재사용 UI/훅 라이브러리 계층. 제네릭 기본값(<TData = any>)과 ag-grid 등 서드파티 interop 때문에
@@ -88,13 +17,6 @@ export default [
     files: ["packages/ui/src/**/*.{ts,tsx}", "packages/hooks/src/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off"
-    }
-  },
-
-  {
-    files: ["**/*.config.{js,ts,mjs}", "**/tsup.config.ts", "**/vite.config.ts", "**/scripts/**/*.mjs"],
-    languageOptions: {
-      globals: { ...globals.node }
     }
   }
 ];

@@ -38,7 +38,8 @@ const DEST: Record<string, string[]> = {
   "docs-README.md": ["docs/README.md"],
   "CURRENT.md": ["CURRENT.md"],
   "CLAUDE.md": ["CLAUDE.md", "AGENTS.md"],
-  "DEV_GUIDE_DIFF.md": ["docs/rules/00_DEV_GUIDE_DIFF.md"]
+  "DEV_GUIDE_DIFF.md": ["docs/rules/00_DEV_GUIDE_DIFF.md"],
+  prettierignore: [".prettierignore"]
 };
 
 describe("@txstack/dev-guide — 싣는 것", () => {
@@ -91,5 +92,69 @@ describe("@txstack/dev-guide — 양식", () => {
   it.each(Object.entries(DEST).flatMap(([file, dests]) => dests.map((dest) => [file, dest])))("%s → %s 에 놓으면 링크가 열린다", (file, dest) => {
     const at = join(consumer, dest);
     for (const href of links(read(at))) expect(existsSync(resolve(dirname(at), href)), `${dest} → ${href}`).toBe(true);
+  });
+});
+
+describe("@txstack/dev-guide — 설정 프리셋", () => {
+  it("exports 의 서브패스가 config/ 의 파일을 가리킨다", () => {
+    const exportsMap = JSON.parse(read(join(pkgDir, "package.json"))).exports as Record<string, string>;
+    for (const name of ["prettier", "commitlint", "lint-staged", "eslint"]) {
+      expect(exportsMap[`./${name}`]).toBe(`./config/${name}.js`);
+      expect(existsSync(join(pkgDir, "config", `${name}.js`)), name).toBe(true);
+    }
+  });
+
+  it("prettier — 큰따옴표 · 끝 쉼표 없음 · 줄 폭 250", async () => {
+    const { format } = await import("prettier");
+    const { default: options } = await import("../packages/dev-guide/config/prettier.js");
+    const out = await format("const a = { b: 'x', c: [1, 2,], };\n", { ...options, parser: "typescript" });
+    expect(out).toBe('const a = { b: "x", c: [1, 2] };\n');
+  });
+
+  it("eslint — React 화면의 훅 규칙 · 타입 import · 쓰지 않는 이름을 잡는다", async () => {
+    const { ESLint } = await import("eslint");
+    const { base, react, node } = await import("../packages/dev-guide/config/eslint.js");
+    const eslint = new ESLint({
+      cwd: root,
+      overrideConfigFile: true,
+      overrideConfig: [...base({ ignores: ["vendor/**"] }), ...react({ files: ["fixture/web/**/*.tsx"] }), ...node({ files: ["fixture/api/**/*.ts"] })]
+    });
+    const tsx = [
+      'import { useState } from "react";',
+      'import { Props } from "./types";',
+      "export function App(props: Props) {",
+      "  if (props.on) {",
+      "    const [v] = useState(0);",
+      "    return <p>{v}</p>;",
+      "  }",
+      "  const _unused = 1;",
+      "  const unused = 2;",
+      "  return <ul>{[1, 2].map((n) => <li>{n}</li>)}</ul>;",
+      "}",
+      ""
+    ].join("\n");
+    const [web] = await eslint.lintText(tsx, { filePath: join(root, "fixture/web/App.tsx") });
+    const rules = web.messages.map((m) => m.ruleId);
+    expect(rules).toContain("react-hooks/rules-of-hooks");
+    expect(rules).toContain("@typescript-eslint/consistent-type-imports");
+    expect(rules).toContain("react/jsx-key");
+    // 접근성 규칙은 경고로만 — recommended 가 끈 규칙은 그대로 꺼져 있다
+    const a11y = await eslint.calculateConfigForFile(join(root, "fixture/web/App.tsx"));
+    expect(a11y.rules["jsx-a11y/click-events-have-key-events"]?.[0]).toBe(1);
+    expect(a11y.rules["jsx-a11y/label-has-for"]?.[0]).toBe(0);
+    expect(web.messages.filter((m) => m.ruleId === "@typescript-eslint/no-unused-vars").map((m) => m.message.split("'")[1])).toEqual(["unused"]);
+
+    // node 조각 — process 를 전역으로 안다. 무시 경로는 검사하지 않는다
+    const [api] = await eslint.lintText("export const port = process.env.PORT;\n", { filePath: join(root, "fixture/api/main.ts") });
+    expect(api.messages).toEqual([]);
+    expect(await eslint.isPathIgnored(join(root, "vendor/x.ts"))).toBe(true);
+  });
+
+  it("commitlint · lint-staged — 모양", async () => {
+    const { default: commitlint } = await import("../packages/dev-guide/config/commitlint.js");
+    expect(commitlint.extends).toEqual(["@commitlint/config-conventional"]);
+    expect(commitlint.rules["subject-case"]).toEqual([0]);
+    const { default: lintStaged } = await import("../packages/dev-guide/config/lint-staged.js");
+    expect(Object.values(lintStaged).flat()).toEqual(["eslint --fix", "prettier --write", "prettier --write"]);
   });
 });

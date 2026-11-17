@@ -9,7 +9,7 @@
  * 5. 놓인 문서의 링크가 그 자리에서 열린다 (이름 자리표시 nnn_title · NN_TITLE 은 사람이 고칠 몫이라 뺀다)
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const guide = "node_modules/@txstack/dev-guide";
@@ -64,4 +64,45 @@ for (const file of [...made.filter((file) => file !== "CURRENT.md"), ...task]) {
   }
 }
 
-console.log(`README 절차 실행 · 덮어쓰지 않음 · 첫 작업 · 링크 ${checked}개`);
+// 6. 설정 프리셋 — README 의 js 블록 중 첫 줄이 `// <파일 이름>` 인 것을 그 이름으로 그대로 쓴다
+const jsBlocks = [...readme.matchAll(/```js\n\/\/ ([^\s]+)\n([\s\S]*?)```/g)];
+const written = jsBlocks.map(([, file, body]) => (writeFileSync(file, body), file));
+for (const file of ["prettier.config.js", "commitlint.config.mjs", "lint-staged.config.mjs", "eslint.config.js"]) if (!written.includes(file)) fail(`README 에 ${file} 예제가 없다`);
+
+const bin = (name, args, input) => {
+  try {
+    return { code: 0, out: execFileSync(`node_modules/.bin/${name}`, args, { encoding: "utf8", input, stdio: ["pipe", "pipe", "pipe"] }) };
+  } catch (error) {
+    return { code: error.status ?? 1, out: `${error.stdout ?? ""}${error.stderr ?? ""}` };
+  }
+};
+
+// eslint — README 예제의 react 경로(apps/web)에서 훅 규칙이 걸리고, node 경로(apps/api)는 process 를 안다
+mkdirSync("apps/web/src", { recursive: true });
+mkdirSync("apps/api", { recursive: true });
+writeFileSync("apps/web/src/App.tsx", 'import { useState } from "react";\n\nexport function App({ on }: { on: boolean }) {\n  if (on) {\n    const [v] = useState(0);\n    return <p>{v}</p>;\n  }\n  return null;\n}\n');
+writeFileSync("apps/api/main.ts", "export const port = process.env.PORT;\n");
+const lint = bin("eslint", ["--format", "json", "apps"]);
+const results = JSON.parse(lint.out.slice(lint.out.indexOf("[")));
+const ruleIds = results.flatMap((r) => r.messages.map((m) => m.ruleId));
+if (!ruleIds.includes("react-hooks/rules-of-hooks")) fail(`eslint 가 훅 규칙을 잡지 않았다: ${ruleIds.join(", ") || lint.out.slice(0, 400)}`);
+const apiMessages = results.find((r) => r.filePath.endsWith("main.ts"))?.messages ?? [];
+if (apiMessages.length) fail(`apps/api 에 경고가 있다: ${apiMessages.map((m) => m.ruleId).join(", ")}`);
+
+// prettier — 프리셋 모양(큰따옴표 · 끝 쉼표 없음)은 통과하고, 어긋난 것은 걸린다
+writeFileSync("ok.ts", 'export const a = { b: "x" };\n');
+writeFileSync("bad.ts", "export const a = { b: 'x', };\n");
+if (bin("prettier", ["--check", "ok.ts"]).code !== 0) fail("prettier 가 프리셋 모양의 파일을 거절했다");
+if (bin("prettier", ["--check", "bad.ts"]).code === 0) fail("prettier 가 작은따옴표 · 끝 쉼표를 통과시켰다");
+
+// commitlint — 한글 제목 · 긴 본문은 통과, 형식이 틀린 제목은 거절
+const longBody = `feat: 한글 제목도 된다\n\n${"표와 목록이 든 긴 본문 ".repeat(20)}\n`;
+const good = bin("commitlint", [], longBody);
+if (good.code !== 0) fail(`commitlint 가 올바른 메시지를 거절했다: ${good.out}`);
+if (bin("commitlint", [], "그냥 고쳤다\n").code === 0) fail("commitlint 가 type 없는 메시지를 통과시켰다");
+
+// lint-staged — 설정 파일이 프리셋을 그대로 불러온다
+const { default: staged } = await import(resolve("lint-staged.config.mjs"));
+if (!Object.values(staged).flat().includes("eslint --fix")) fail("lint-staged 설정을 불러오지 못했다");
+
+console.log(`README 절차 실행 · 덮어쓰지 않음 · 첫 작업 · 링크 ${checked}개 · 프리셋 넷(eslint · prettier · commitlint · lint-staged)`);
