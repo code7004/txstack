@@ -268,7 +268,9 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
    - [x] `0.1.1` (다섯 패키지 patch, 2026-11-12) — 새 README 와 `homepage` 를 npm 에 실었다. 코드는 그대로이고 `hooks` 는
          JSDoc 예제만 고쳤다. **이미 있는 패키지도 새 버전마다 stage 승인이 필요하다** — npmjs.com 계정 설정의
          **Staged Packages** 탭에서 Approve(보안 키). CLI(`npm stage approve`)는 npm 11.15.0 이상
-   - [ ] 세 소비자를 `link:` · `.tgz` 에서 npm 버전으로 — 사용자가 한다
+   - [x] 세 소비자를 `link:` · `.tgz` 에서 npm 버전으로 (2026-11-17, 사용자 요청으로 Claude 가) — `project-a` · `project-b` ·
+         `project-c` 모두 `^0.1.2`. 셋 다 typecheck · 빌드 통과. `project-b` 는 `react-day-picker` 가 `^9` 였다 — link 일 때는
+         txstack 쪽 v10 이 잡혀 가려져 있었다. `^10` 으로 올렸다. project-c 는 `vendor/txstack/` 와 `update:txstack` 을 지웠다
    - [ ] 사이트를 만들며 드러난 열린 자리들 — [005_site](005_site.md) 의 "만들며 드러난 것"
 
 `ui` 의 이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는

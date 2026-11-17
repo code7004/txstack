@@ -163,6 +163,10 @@ pnpm build:watch   # 네 패키지를 동시에 지켜본다. ui 는 CSS 까지 
 서버는 `origin/main` 을 pull 하므로 **적용 브랜치에 머무는 동안은 안전하다.**
 머지 전에 npm 버전으로 바꾼다.
 
+**2026-11-17 부터 세 소비자 모두 npm 버전(`^0.1.2`)이 기본이다.** `link:` 는 txstack 을 함께 고칠 때만
+잠시 덮어쓰고, 끝나면 버전으로 되돌린다. 되돌릴 때 **선택 peer 버전**을 다시 본다 — link 는 txstack 쪽
+`node_modules` 의 peer 를 쓰므로 소비자가 선언한 버전이 틀려도 드러나지 않는다(`project-b` 의 `react-day-picker@9`).
+
 ### 붙인 직후 할 일
 
 ```ts
