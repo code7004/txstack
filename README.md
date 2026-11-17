@@ -2,13 +2,14 @@
 
 여러 프로젝트에서 재사용할 수 있는 범용 React 라이브러리 세트.
 
-| 패키지                                       | 역할                                          | React |
-| -------------------------------------------- | --------------------------------------------- | ----- |
-| [`@txstack/ui`](packages/ui)                 | Tx\* UI 컴포넌트                              | O     |
-| [`@txstack/route-meta`](packages/route-meta) | 라우트를 메타데이터 트리로 관리               | O     |
-| [`@txstack/hooks`](packages/hooks)           | 범용 React 훅 + URL 쿼리 상태                 | O     |
-| [`@txstack/axios`](packages/axios)           | axios 래퍼 — 인증·에러·봉투 정책을 주입받는다 | **X** |
-| [`@txstack/fns`](packages/fns)               | 작은 함수 모음 — 포맷 · 날짜 · 폼 · 전화번호  | **X** |
+| 패키지                                       | 역할                                               | React |
+| -------------------------------------------- | -------------------------------------------------- | ----- |
+| [`@txstack/ui`](packages/ui)                 | Tx\* UI 컴포넌트                                   | O     |
+| [`@txstack/route-meta`](packages/route-meta) | 라우트를 메타데이터 트리로 관리                    | O     |
+| [`@txstack/hooks`](packages/hooks)           | 범용 React 훅 + URL 쿼리 상태                      | O     |
+| [`@txstack/axios`](packages/axios)           | axios 래퍼 — 인증·에러·봉투 정책을 주입받는다      | **X** |
+| [`@txstack/fns`](packages/fns)               | 작은 함수 모음 — 포맷 · 날짜 · 폼 · 전화번호       | **X** |
+| [`@txstack/dev-guide`](packages/dev-guide)   | 개발 기준 — 스크립트 · 규칙 · 문서 프로세스 · 양식 | **X** |
 
 React 관리 화면을 빠르게 만들기 위해, 실제 서비스 세 곳에 복사돼 있던 반복 코드를 독립 패키지로 정리했다.
 다섯 패키지 모두 npm 에 배포되어 있고, 서비스 세 곳이 운영 환경에서 쓰고 있다.

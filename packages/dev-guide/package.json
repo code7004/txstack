@@ -1,0 +1,39 @@
+{
+  "name": "@txstack/dev-guide",
+  "version": "0.1.0",
+  "description": "Shared development guide — script naming, code and commit rules, a document-driven workflow (requirements → plans → verification → reports) and document templates",
+  "keywords": [
+    "conventions",
+    "guide",
+    "workflow",
+    "templates",
+    "monorepo",
+    "ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code7004/txstack.git",
+    "directory": "packages/dev-guide"
+  },
+  "homepage": "https://github.com/code7004/txstack/tree/main/packages/dev-guide#readme",
+  "bugs": "https://github.com/code7004/txstack/issues",
+  "files": [
+    "README.md",
+    "LICENSE",
+    "llms.txt",
+    "rules",
+    "process",
+    "templates"
+  ],
+  "exports": {
+    "./llms.txt": "./llms.txt",
+    "./rules/*": "./rules/*",
+    "./process/*": "./process/*",
+    "./templates/*": "./templates/*",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
