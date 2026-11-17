@@ -155,6 +155,13 @@ packages/dev-guide/
   `TxForm` 이 오류 상태를 트리거에 싣는 계약(테스트)을 지키고 `TxDropdown` 과 같아진다
 
 - txstack 은 lint 경고 0 · 오류 0 으로 시작한다
+- **0.3.0 — monorepo 스타터를 지으며 더한 둘** (2026-11-17 사용자 결정)
+  - **import 규칙 셋** — `import/no-duplicates` · `import/first` · `import/no-self-import` (오류). create-next-app 의 `eslint-config-next` 에
+    든 플러그인 가운데 우리 프리셋에 없던 것이 `eslint-plugin-import` 하나였다. 파일 하나만 보는 셋만 켠다 —
+    `no-cycle` 은 TypeScript 경로 해석기가 더 필요하고 큰 저장소에서 lint 가 느려져 프로젝트 몫으로 남겼다.
+    `no-duplicates` 는 `import type` 줄을 따로 세므로 `consistent-type-imports`(separate) 와 부딪히지 않는다
+  - **`node({ decorators: true })`** — `consistent-type-imports` 를 끈다. NestJS 는 생성자 인자의 타입을 런타임 메타데이터로 읽어
+    주입하므로 `import type` 으로 바꾸면 주입이 깨진다. 기존 프로젝트도 같은 예외를 각자 두고 있었다
 - txstack 자신이 첫 소비자다 — `prettier.config.js` · `lint-staged.config.mjs` 는 한 줄, `eslint.config.js` 는 txstack 고유의 예외 하나.
   루트에 `@txstack/dev-guide: workspace:*`. 포맷 결과는 그대로다
 - 패키지에 `"type": "module"` 을 더했다 — `config/*.js` 가 ESM 이다

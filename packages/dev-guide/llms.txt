@@ -31,7 +31,7 @@
 
 ## 설정 프리셋
 
-- [config/eslint.js](config/eslint.js): `@txstack/dev-guide/eslint` — base() · react({ files }) · node({ files }) 조각. eslint 9 flat config
+- [config/eslint.js](config/eslint.js): `@txstack/dev-guide/eslint` — base() · react({ files }) · node({ files, decorators? }) 조각. eslint 9 flat config
 - [config/prettier.js](config/prettier.js): `@txstack/dev-guide/prettier` — printWidth 250 · 큰따옴표 · semi · 끝 쉼표 없음
 - [config/commitlint.js](config/commitlint.js): `@txstack/dev-guide/commitlint` — config-conventional + 한글 제목 · 긴 본문 허용
 - [config/lint-staged.js](config/lint-staged.js): `@txstack/dev-guide/lint-staged` — 코드는 eslint --fix · prettier --write, 나머지는 prettier --write

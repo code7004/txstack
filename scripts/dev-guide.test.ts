@@ -144,9 +144,30 @@ describe("@txstack/dev-guide — 설정 프리셋", () => {
     expect(a11y.rules["jsx-a11y/label-has-for"]?.[0]).toBe(0);
     expect(web.messages.filter((m) => m.ruleId === "@typescript-eslint/no-unused-vars").map((m) => m.message.split("'")[1])).toEqual(["unused"]);
 
+    // import 셋 — 같은 모듈을 두 줄로 부르면 잡고, import type 줄은 따로 센다. import 는 맨 위에
+    const imports = [
+      'import type { Ref } from "react";',
+      'import { useId } from "react";',
+      'import { useRef } from "react";',
+      "export const f = (r: Ref<null>) => [r, useId, useRef];",
+      'import { join } from "node:path";',
+      "export { join };",
+      ""
+    ].join("\n");
+    const [dup] = await eslint.lintText(imports, { filePath: join(root, "fixture/web/imports.ts") });
+    expect(dup.messages.map((m) => `${m.ruleId}:${m.line}`).sort()).toEqual(["import/first:5", "import/no-duplicates:2", "import/no-duplicates:3"]);
+
     // node 조각 — process 를 전역으로 안다. 무시 경로는 검사하지 않는다
     const [api] = await eslint.lintText("export const port = process.env.PORT;\n", { filePath: join(root, "fixture/api/main.ts") });
     expect(api.messages).toEqual([]);
+
+    // decorators: true — 데코레이터 메타데이터로 주입하는 서버는 값 import 를 type-only 로 바꾸라 하지 않는다
+    const service = 'import { Config } from "./config";\nexport class S {\n  constructor(readonly config: Config) {}\n}\n';
+    const [plain] = await eslint.lintText(service, { filePath: join(root, "fixture/api/s.ts") });
+    expect(plain.messages.map((m) => m.ruleId)).toEqual(["@typescript-eslint/consistent-type-imports"]);
+    const nest = new ESLint({ cwd: root, overrideConfigFile: true, overrideConfig: [...base(), ...node({ files: ["fixture/api/**/*.ts"], decorators: true })] });
+    const [decorated] = await nest.lintText(service, { filePath: join(root, "fixture/api/s.ts") });
+    expect(decorated.messages).toEqual([]);
     expect(await eslint.isPathIgnored(join(root, "vendor/x.ts"))).toBe(true);
     // eslint 와 플러그인 넷을 처음 불러오는 데 시간이 든다 — 전체 테스트를 함께 돌리면 10초를 넘긴다
   }, 30_000);

@@ -85,7 +85,7 @@ prettier · eslint · commitlint · lint-staged 설정을 그대로 가져다 �
 pnpm add -D prettier
 pnpm add -D @commitlint/cli @commitlint/config-conventional
 pnpm add -D lint-staged husky
-pnpm add -D eslint @eslint/js typescript-eslint typescript globals eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-jsx-a11y
+pnpm add -D eslint @eslint/js typescript-eslint typescript globals eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-jsx-a11y eslint-plugin-import
 ```
 
 ```js
@@ -110,14 +110,14 @@ eslint 는 조각으로 제공합니다. 앱 폴더 이름은 프로젝트마다
 // eslint.config.js
 import { base, react, node } from "@txstack/dev-guide/eslint";
 
-export default [...base({ ignores: ["vendor/**"] }), ...react({ files: ["apps/web/**/*.{ts,tsx}"] }), ...node({ files: ["apps/api/**/*.ts", "scripts/**/*.mjs"] })];
+export default [...base({ ignores: ["vendor/**"] }), ...react({ files: ["apps/web/**/*.{ts,tsx}"] }), ...node({ files: ["apps/api/**/*.ts", "scripts/**/*.mjs"], decorators: true })];
 ```
 
-| 조각      | 담는 것                                                                                                                                                                |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `base()`  | 무시 경로 · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 · `*.d.ts` 완화 · 설정 파일과 스크립트의 Node 전역 · `eslint-config-prettier`                |
-| `react()` | 브라우저 전역 · `react` · `react-hooks` · `react-refresh` · `jsx-a11y` recommended(`anchor-is-valid` · `alt-text` 제외) — 의도된 예외는 그 줄에서 끄고 이유를 적습니다 |
-| `node()`  | Node 전역 — 규칙은 `base` 그대로                                                                                                                                       |
+| 조각      | 담는 것                                                                                                                                                                                                                |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `base()`  | 무시 경로 · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 · import 규칙 셋(`no-duplicates` · `first` · `no-self-import`) · `*.d.ts` 완화 · 설정 파일과 스크립트의 Node 전역 · `eslint-config-prettier` |
+| `react()` | 브라우저 전역 · `react` · `react-hooks` · `react-refresh` · `jsx-a11y` recommended(`anchor-is-valid` · `alt-text` 제외) — 의도된 예외는 그 줄에서 끄고 이유를 적습니다                                                 |
+| `node()`  | Node 전역 — 규칙은 `base` 그대로. NestJS 처럼 데코레이터 메타데이터로 주입하는 서버는 `decorators: true` 로 `consistent-type-imports` 를 끕니다                                                                        |
 
 무시할 파일 목록은 프리셋으로 줄 수 없어(prettier 가 패키지에서 읽지 않습니다) [templates/prettierignore](templates/prettierignore) 를
 저장소 루트의 `.prettierignore` 로 복사합니다. 커밋 훅(`.husky/pre-commit` · `commit-msg`)의 내용은 [rules/commits.md](rules/commits.md) 5장에 있습니다.

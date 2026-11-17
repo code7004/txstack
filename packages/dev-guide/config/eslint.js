@@ -7,7 +7,7 @@
  *   export default [
  *     ...base({ ignores: ["vendor/**"] }),
  *     ...react({ files: ["apps/web/**\/*.{ts,tsx}"] }),
- *     ...node({ files: ["apps/api/**\/*.ts"] })
+ *     ...node({ files: ["apps/api/**\/*.ts"], decorators: true })
  *     // 프로젝트 고유의 것은 그 아래에
  *   ];
  *
@@ -18,6 +18,7 @@
  */
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
+import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -28,7 +29,7 @@ import tseslint from "typescript-eslint";
 /** @typedef {import("eslint").Linter.Config} Config */
 
 /**
- * 모든 저장소의 바탕 — ignores · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 ·
+ * 모든 저장소의 바탕 — ignores · `@eslint/js` · `typescript-eslint` recommended · 공통 TS 규칙 · import 규칙 셋 ·
  * `*.d.ts` 완화 · 설정 파일 · 스크립트에 Node 전역 · 맨 끝에 `eslint-config-prettier`.
  *
  * @param {{ ignores?: string[] }} [options] 더 무시할 경로 (`vendor/**` 등)
@@ -55,6 +56,18 @@ export function base({ ignores = [] } = {}) {
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-unused-expressions": ["error", { allowShortCircuit: true, allowTernary: true, allowTaggedTemplates: true }],
         "no-constant-condition": "off"
+      }
+    },
+    {
+      // 파일 하나만 보고 판단하는 셋만 켠다 — 경로 해석기가 필요 없고 느려지지 않는다.
+      // no-cycle(순환 import)은 파일 사이를 따라가야 해서 해석기 · 시간이 든다. 필요하면 프로젝트가 켠다
+      files: ["**/*.{js,mjs,cjs,jsx,ts,tsx,mts,cts}"],
+      plugins: { import: importPlugin },
+      rules: {
+        // 같은 모듈을 두 줄로 import 하지 않는다. `import type` 줄은 따로 센다 (consistent-type-imports 와 맞물린다)
+        "import/no-duplicates": "error",
+        "import/first": "error",
+        "import/no-self-import": "error"
       }
     },
     {
@@ -106,9 +119,13 @@ export function react({ files }) {
 /**
  * Node 코드 — 서버 · 워커 · 스크립트. 전역만 바꾸고 규칙은 `base` 그대로다.
  *
- * @param {{ files: string[] }} options Node 코드가 있는 경로 (`apps/api/**\/*.ts` 등)
+ * `decorators: true` 는 데코레이터 메타데이터로 주입하는 서버(NestJS 등)를 위한 것이다.
+ * 생성자 인자의 타입을 런타임에 읽으므로 `import type` 으로 바꾸면 주입이 깨진다 — `consistent-type-imports` 를 끈다.
+ *
+ * @param {{ files: string[], decorators?: boolean }} options Node 코드가 있는 경로 (`apps/api/**\/*.ts` 등)
  * @returns {Config[]}
  */
-export function node({ files }) {
-  return [{ files, languageOptions: { globals: { ...globals.node } } }];
+export function node({ files, decorators = false }) {
+  const rules = decorators ? { "@typescript-eslint/consistent-type-imports": "off" } : {};
+  return [{ files, languageOptions: { globals: { ...globals.node } }, rules }];
 }
