@@ -127,7 +127,7 @@ export const routes = {
       devGuide: {
         path: "/docs/dev-guide",
         element: <DevGuide />,
-        meta: { label: "Dev Guide", description: "프로젝트를 굴리는 규칙 — 스크립트 이름 · 커밋 · docs 구조 · 작업 흐름 · 문서 양식" }
+        meta: { label: "Dev Guide", description: "프로젝트의 개발 규칙과 작업 절차 — 스크립트 이름 · 커밋 · 문서 구조 · 문서 템플릿" }
       }
     }
   },

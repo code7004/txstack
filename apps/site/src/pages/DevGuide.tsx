@@ -48,17 +48,14 @@ const border = { borderColor: "var(--tx-color-border)" };
 
 export function DevGuide() {
   return (
-    <Page
-      title="Dev Guide"
-      lead="프로젝트를 굴리는 규칙입니다 — 실행 스크립트 이름, 커밋, 작업 공간, 코드, 그리고 요구사항 → 계획 → 구현 → 검증 → 보고로 이어지는 문서 프로세스와 그 양식. 새 프로젝트가 기존 프로젝트를 '참고' 하는 대신 이 패키지를 '따르게' 합니다."
-    >
+    <Page title="Dev Guide" lead="프로젝트에서 공통으로 사용할 개발 규칙과 문서 템플릿을 제공합니다. 스크립트 이름과 코드 · 커밋 규칙을 정리하고, 요구사항부터 계획 · 구현 · 검증 · 보고까지 일관된 절차로 관리할 수 있습니다.">
       <TxAlert variant="info">
-        화면 부품을 고르는 규칙(결정표 · 토큰 · 쓰지 말 원시 요소)은 여기가 아니라 <Link to="/docs/ai-guide">AI Guide</Link>에 있습니다. Dev Guide는 UI를 무엇으로 짓든 모든 프로젝트에 붙입니다.
+        Dev Guide는 프로젝트의 개발 규칙과 작업 절차를 다룹니다. <code>@txstack/ui</code>의 컴포넌트를 선택하고 사용하는 방법은 <Link to="/docs/ai-guide">AI Guide</Link>에서 확인할 수 있습니다.
       </TxAlert>
 
       <Block title="Install">
         <p className={muted}>
-          런타임 코드가 없는 마크다운 묶음입니다. 설치된 버전과 가이드가 늘 같습니다 — 지금 <code>{VERSION}</code>.
+          마크다운 문서와 템플릿으로 구성된 개발용 패키지입니다. 런타임 코드는 없으며, 설치한 버전의 규칙과 양식을 확인할 수 있습니다. 이 사이트가 보여 주는 버전은 <code>{VERSION}</code>(<code>main</code> 기준)입니다.
         </p>
         <CodeBlock language="bash" title="일반 저장소">
           {INSTALL}
@@ -70,22 +67,24 @@ export function DevGuide() {
 
       <Block title="Set up a project">
         <p className={muted}>
-          저장소 루트에서 문서 폴더를 만들고 기본 양식을 놓습니다. <strong>이미 있는 파일은 덮어쓰지 않고</strong> 이름을 알려 줍니다 — 그 파일은 양식과 비교해 손으로 합칩니다.
+          저장소 루트에서 아래 명령을 실행하면 문서 폴더와 기본 파일을 만듭니다. <strong>기존 파일은 덮어쓰지 않으므로</strong>, 출력된 경로를 확인하고 템플릿에서 필요한 내용을 반영하세요.
         </p>
         <CodeBlock language="bash" title="폴더 · 기본 양식">
           {SETUP}
         </CodeBlock>
         <p className={muted}>
-          <code>{"<…>"}</code> 자리를 채우고, <code>docs/rules/00_DEV_GUIDE_DIFF.md</code>에 따르는 판을 적습니다. 다르게 할 것이 생기면 그 파일에만 적습니다 — 규칙을 프로젝트 문서에 옮겨 적으면 그 순간 갈라집니다.
+          <code>{"<…>"}</code> 표시를 프로젝트에 맞게 바꾸고, <code>docs/rules/00_DEV_GUIDE_DIFF.md</code>에 적용 버전을 기록하세요. 공통 규칙과 다르게 적용할 내용이 생기면 같은 문서에 예외와 이유를 추가합니다 — 규칙을 프로젝트 문서에 복사하면
+          패키지를 업데이트해도 반영되지 않습니다.
         </p>
         <CodeBlock language="bash" title="첫 작업">
           {FIRST_TASK}
         </CodeBlock>
       </Block>
 
-      <Block title="Add it to CLAUDE.md">
+      <Block title="AI tool instructions">
         <p className={muted}>
-          <code>CLAUDE.md</code>(Claude Code) · <code>AGENTS.md</code>(Codex) 맨 위에 둡니다. UI를 txstack으로 짓는다면 그 아래에 <Link to="/docs/ai-guide">AI Guide</Link>의 문단도 붙입니다 — 둘은 담는 것이 달라서 둘 다 둡니다.
+          Claude Code는 <code>CLAUDE.md</code>, Codex는 <code>AGENTS.md</code>에서 프로젝트 지침을 확인합니다. 아래 문단을 맨 위에 추가해 설치된 Dev Guide를 참조하도록 안내하세요. <code>@txstack/ui</code>를 사용한다면{" "}
+          <Link to="/docs/ai-guide">AI Guide</Link>의 UI 사용 지침도 함께 추가할 수 있습니다.
         </p>
         <CodeBlock language="markdown" title="CLAUDE.md · AGENTS.md">
           {PARAGRAPH}
@@ -94,7 +93,7 @@ export function DevGuide() {
 
       <Block title="What's inside">
         <p className={muted}>
-          사이트의 파일은 최신 <code>main</code> 기준입니다. AI에게는 설치된 쪽(<code>node_modules/@txstack/dev-guide/…</code>)을 읽게 하세요.
+          아래 문서는 사이트에 배포된 <code>main</code> 기준입니다. AI 도구에는 프로젝트에 설치된 <code>node_modules/@txstack/dev-guide/…</code> 경로의 문서를 참조하도록 안내하세요.
         </p>
         {SECTIONS.map((section) => (
           <div key={section.title} className="overflow-x-auto">
@@ -102,7 +101,7 @@ export function DevGuide() {
               <thead>
                 <tr className="border-b text-start" style={border}>
                   <th className="w-56 py-2 pe-4 text-start font-semibold">{section.title}</th>
-                  <th className="py-2 text-start font-semibold">무엇</th>
+                  <th className="py-2 text-start font-semibold">내용</th>
                 </tr>
               </thead>
               <tbody className={muted}>
@@ -113,7 +112,7 @@ export function DevGuide() {
                         {item.path}
                       </a>
                     </td>
-                    <td className="py-2" data-label="무엇">
+                    <td className="py-2" data-label="내용">
                       {item.what}
                     </td>
                   </tr>
@@ -126,11 +125,11 @@ export function DevGuide() {
 
       <Block title="Upgrading">
         <p className={muted}>
-          판을 올리면 AI가 읽는 규칙이 그 자리에서 바뀝니다. 그래서 올리는 것 자체를 작업 하나로 다룹니다 — <a href={`${BASE}dev-guide/CHANGELOG.md`}>CHANGELOG</a>를 읽고, <code>00_DEV_GUIDE_DIFF.md</code>와 비교해 받아들일 것과 예외를 정한 뒤 따르는
-          판을 고칩니다. <strong>이미 복사한 양식은 저절로 바뀌지 않습니다.</strong>
+          규칙이 바뀌는 버전으로 업데이트할 때는 <a href={`${BASE}dev-guide/CHANGELOG.md`}>CHANGELOG</a>와 프로젝트별 예외(<code>00_DEV_GUIDE_DIFF.md</code>)를 비교해 영향을 확인하세요. 적용할 변경과 예외를 정한 뒤 적용 버전을 기록합니다.
+          <strong>프로젝트에 복사한 템플릿은 자동으로 바뀌지 않으므로</strong> 필요한 내용을 별도로 반영해야 합니다.
         </p>
         <TxAlert variant="info">
-          patch(<code>0.1.x</code>)는 문구만 바뀝니다. minor(<code>0.x.0</code>)는 규칙이 바뀌므로 위 절차를 밟습니다. 자세한 것은 <a href={`${BASE}dev-guide/README.md`}>README</a>의 「버전을 올릴 때」.
+          patch(<code>0.1.x</code>)는 문구만 바뀌어 별도 검토가 필요 없습니다. minor(<code>0.x.0</code>)는 규칙이 바뀌므로 영향을 검토한 뒤 적용합니다. 자세한 절차는 <a href={`${BASE}dev-guide/README.md`}>README</a>의 「업데이트하기」에 있습니다.
         </TxAlert>
       </Block>
     </Page>

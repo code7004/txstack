@@ -1,8 +1,14 @@
 # @txstack/dev-guide
 
-**프로젝트를 시작할 때 "참고한다" 가 아니라 "따른다" 로 쓰는 개발 기준.**
-실행 스크립트 이름 · 커밋 · 작업 공간 · 코드 규칙과, 요구사항 → 계획 → 구현 → 검증 → 보고로 이어지는
-문서 프로세스, 그리고 그 문서들의 양식이 들어 있다. 런타임 코드가 없다 — 마크다운 묶음이다.
+프로젝트마다 반복해서 정리하던 개발 규칙과 문서 양식을 한곳에 모은 패키지입니다.
+실행 스크립트 이름, 코드 작성, 커밋 규칙과 함께 요구사항 정리부터 계획 · 구현 · 검증 · 보고까지
+이어지는 작업 절차를 제공합니다.
+
+새 프로젝트를 시작하거나 여러 저장소의 개발 기준을 맞출 때 사용할 수 있습니다.
+공통 규칙은 설치된 패키지에서 확인하고, 프로젝트별로 다르게 적용하는 내용만 별도 문서에 기록합니다.
+Claude Code 나 Codex 같은 AI 코딩 도구에도 같은 기준을 안내할 수 있습니다.
+
+마크다운 문서와 템플릿으로 구성되어 있으며, 런타임 코드나 의존성은 없습니다.
 
 ## 설치
 
@@ -14,19 +20,21 @@ pnpm add -D @txstack/dev-guide        # 일반 저장소
 pnpm add -D -w @txstack/dev-guide     # pnpm 모노레포 — 루트에 한 번
 ```
 
-설치된 버전과 가이드가 늘 같다. 무엇이 바뀌었는지는 함께 설치되는 [CHANGELOG.md](CHANGELOG.md) 에 있다.
+개발 가이드는 패키지에 포함되어 있어, 설치한 버전의 규칙과 양식을 그대로 확인할 수 있습니다.
+버전별 변경 내용은 함께 설치되는 [CHANGELOG.md](CHANGELOG.md) 에서 확인할 수 있습니다.
 
-## 새 프로젝트에 붙이기
+## 프로젝트에 적용하기
 
-**이미 있는 파일은 덮어쓰지 않는다.** 아래 명령은 없는 파일만 만들고, 있는 파일은 이름을 알려 준다 — 그 파일은 양식과 비교해 손으로 합친다.
+설치만으로 규칙이 적용되지는 않습니다. 아래 순서로 문서를 준비하고 AI 도구의 지침에 연결합니다.
+**기존 파일은 덮어쓰지 않습니다** — 이미 있는 파일은 경로를 알려 주므로, 템플릿과 비교해 필요한 내용을 반영하세요.
 
-**1. 설치** — 위의 [설치](#설치).
+**1. 설치합니다** — 위의 [설치](#설치).
 
-**2 · 3. 문서 폴더를 만들고 기본 양식을 놓는다** — 저장소 루트에서.
+**2. 저장소 루트에서 문서 폴더와 기본 파일을 만듭니다.**
 
 ```sh
 G=node_modules/@txstack/dev-guide/templates
-put() { if [ -e "$2" ]; then echo "이미 있다 — 양식과 비교해 손으로 합친다: $2"; else cp "$G/$1" "$2"; fi; }
+put() { if [ -e "$2" ]; then echo "기존 파일이 있어 생성을 건너뜁니다 — 템플릿과 비교해 반영하세요: $2"; else cp "$G/$1" "$2"; fi; }
 mkdir -p docs/project docs/rules docs/requirements docs/plans docs/verification docs/reports
 put docs-README.md     docs/README.md
 put CURRENT.md         CURRENT.md
@@ -36,11 +44,13 @@ put DEV_GUIDE_DIFF.md  docs/rules/00_DEV_GUIDE_DIFF.md
 put rule.md            docs/project/01_PROJECT_OVERVIEW.md
 ```
 
-**4. 프로젝트 정보를 채운다.** `<…>` 자리를 채운다 — `CURRENT.md` 의 지금 상태, `docs/project/01_PROJECT_OVERVIEW.md` 의 서비스 소개,
-`docs/rules/00_DEV_GUIDE_DIFF.md` 의 **따르는 판**(설치한 버전). 다르게 할 것이 없으면 표는 비워 둔다.
+**3. 프로젝트 정보를 입력합니다.** `<…>` 표시를 프로젝트에 맞는 내용으로 바꾸세요 — `CURRENT.md` 의 현재 상태,
+`docs/project/01_PROJECT_OVERVIEW.md` 의 서비스 소개, `docs/rules/00_DEV_GUIDE_DIFF.md` 의 **적용 버전**(설치한 버전).
+공통 규칙과 다르게 적용할 내용이 없다면 차이점 문서의 예시 행을 지우고 표를 비워 두세요.
 
-**5. `CLAUDE.md` · `AGENTS.md` 를 잇는다.** 새로 만들었으면 `<…>` 만 채운다. 이미 있던 파일이면 맨 위에 아래 문단을 넣는다.
-UI 를 `@txstack/ui` 로 짓는다면 그 아래에 `@txstack/ui` 의 `ai/rules.md` 「소비자 프로젝트 시작 묶음」 문단도 넣는다.
+**4. AI 도구의 프로젝트 지침을 설정합니다.** Claude Code 는 `CLAUDE.md`, Codex 는 `AGENTS.md` 를 읽습니다.
+새로 만든 파일은 `<…>` 만 채우면 됩니다. 기존 파일이라면 맨 위에 아래 문단을 추가하세요.
+`@txstack/ui` 를 사용한다면 그 아래에 `@txstack/ui` 의 `ai/rules.md` 「소비자 프로젝트 시작 묶음」 문단도 함께 추가할 수 있습니다.
 
 ```md
 ## 개발 기준
@@ -50,7 +60,8 @@ UI 를 `@txstack/ui` 로 짓는다면 그 아래에 `@txstack/ui` 의 `ai/rules.
 dev-guide 와 다르게 하는 것은 [docs/rules/00_DEV_GUIDE_DIFF.md](docs/rules/00_DEV_GUIDE_DIFF.md) 에만 적는다.
 ```
 
-**6. 첫 작업을 쓴다.** 번호와 이름을 정하고 양식 셋을 복사한 뒤, `docs/README.md` 의 「작업」 링크를 그 이름으로 고친다.
+**5. 첫 작업 문서를 작성합니다.** 작업 번호와 이름을 정하고 요구사항 · 계획 · 검증 템플릿을 복사한 뒤,
+`docs/README.md` 의 「작업」 링크를 그 이름으로 바꾸세요.
 
 ```sh
 G=node_modules/@txstack/dev-guide/templates
@@ -60,50 +71,55 @@ cp "$G/plan.md"         "docs/plans/$n.md"
 cp "$G/verification.md" "docs/verification/$n.md"
 ```
 
-양식 안의 `nnn_title.md` 링크도 같은 이름으로 바꾼다. 무엇을 언제 쓰는지는 [process/workflow.md](process/workflow.md).
+템플릿 안의 `nnn_title.md` 링크도 같은 이름으로 바꿉니다. 문서별 작성 시점과 역할은 [process/workflow.md](process/workflow.md) 에서 확인할 수 있습니다.
 
-**dev-guide 의 규칙을 프로젝트 문서에 옮겨 적지 않는다** — 옮긴 순간 갈라진다. 다르게 하는 것만 `00_DEV_GUIDE_DIFF.md` 에 적는다.
+**공통 규칙은 패키지를 참조하고, 프로젝트별 예외만 기록하세요.** 규칙을 프로젝트 문서에 복사해 관리하면
+패키지를 업데이트해도 변경 사항이 반영되지 않습니다.
 
-## 버전을 올릴 때
+## 업데이트하기
 
-판을 올리면 **AI 가 읽는 규칙이 그 자리에서 바뀐다.** 그래서 올리는 것 자체를 작업 하나로 다룬다.
+패키지를 업데이트하면 AI 도구가 참조하는 개발 규칙도 함께 바뀝니다. 규칙이 바뀌는 업데이트는
+프로젝트에 미치는 영향을 검토한 뒤 적용하세요.
 
-1. 설치된 `CHANGELOG.md` 에서 지금 판과 새 판 사이에 바뀐 규칙을 읽는다
-2. `docs/rules/00_DEV_GUIDE_DIFF.md` 와 비교한다 — 예외로 두었던 규칙이 바뀌었나, 새 규칙이 이 프로젝트와 부딪히나
-3. 영향을 본다 — 스크립트 이름 · `docs/` 구조 · 진행 중인 작업 문서 · `CLAUDE.md` 의 문단
-4. 받아들일 것과 예외로 둘 것을 정해 `00_DEV_GUIDE_DIFF.md` 표에 날짜와 함께 적는다
-5. **따르는 판**을 고치고, 받아들인 규칙대로 프로젝트를 맞춘다
-6. 한 커밋에 담는다 — `chore: dev-guide 0.2.0 을 따른다`
+1. 업데이트할 버전의 [CHANGELOG](https://github.com/code7004/txstack/blob/main/packages/dev-guide/CHANGELOG.md) 를 저장소에서 먼저 확인합니다 —
+   설치된 `CHANGELOG.md` 에는 아직 새 버전의 기록이 없습니다
+2. 기존 예외(`docs/rules/00_DEV_GUIDE_DIFF.md`)에 영향을 주거나 프로젝트의 규칙과 충돌하는 변경이 있는지 확인합니다
+3. 스크립트 · 문서 구조 · 진행 중인 작업 · AI 지침에 미치는 영향을 확인합니다
+4. 적용할 변경과 프로젝트별 예외를 정해 `00_DEV_GUIDE_DIFF.md` 에 날짜와 함께 기록합니다
+5. 업데이트한 뒤 **적용 버전**을 고치고, 채택한 규칙에 맞게 프로젝트를 수정합니다.
+   함께 설치된 `CHANGELOG.md` 와 규칙 문서를 기준으로 다시 점검합니다
+6. 관련 변경은 하나의 커밋으로 관리합니다 — 예: `chore: dev-guide 0.2.0 적용`
 
-**이미 복사한 양식은 저절로 바뀌지 않는다.** 설치된 규칙만 바뀐다. 새 작업부터 새 양식을 쓰고, 진행 중인 문서는 그대로 둬도 된다.
-`CURRENT.md` · `docs/README.md` · `CLAUDE.md` 처럼 계속 쓰는 문서는 새 양식과 비교해 필요한 것만 옮긴다.
+**프로젝트에 복사한 템플릿은 자동으로 업데이트되지 않습니다.** 새 작업부터 새 템플릿을 쓰고,
+진행 중인 문서는 그대로 두어도 됩니다. `CURRENT.md` · `docs/README.md` · `CLAUDE.md` 처럼 계속 쓰는 문서는
+새 템플릿과 비교해 필요한 내용만 반영하세요.
 
-### 판 번호의 뜻
+### 버전 정책
 
-| 판            | 무엇이 바뀌나                                          | 위의 절차  |
-| ------------- | ------------------------------------------------------ | ---------- |
-| patch `0.1.x` | 문구 · 오타 · 예시. 따르는 방법은 그대로               | 필요 없다  |
-| minor `0.x.0` | 규칙을 더하거나 바꾸거나 뺐다 · 양식의 구조가 바뀌었다 | **밟는다** |
+| 버전          | 바뀌는 것                                               | 적용 절차             |
+| ------------- | ------------------------------------------------------- | --------------------- |
+| patch `0.1.x` | 문구 · 오타 · 예시. 규칙을 적용하는 방법은 그대로입니다 | 별도 영향 검토 불필요 |
+| minor `0.x.0` | 규칙의 추가 · 변경 · 삭제, 템플릿 구조 변경             | **영향 검토 후 적용** |
 
-1.0 이후에는 규칙을 바꾸거나 빼면 major, 더하면 minor, 문구는 patch 다.
+1.0 이후에는 기존 규칙의 변경 · 삭제는 major, 규칙 추가는 minor, 문구 수정은 patch 버전으로 배포합니다.
 
-## 들어 있는 것
+## 문서
 
-| 장                                                     | 무엇                                                                 |
-| ------------------------------------------------------ | -------------------------------------------------------------------- |
-| [rules/scripts.md](rules/scripts.md)                   | 실행 스크립트 이름 — `<동작>:<대상>[:<변형>]`, `dev` · `start` 의 뜻 |
-| [rules/commits.md](rules/commits.md)                   | Conventional Commits + 한글 · 커밋 단위 · 브랜치 · 커밋 훅           |
-| [rules/workspace.md](rules/workspace.md)               | pnpm · Node 고정 · `apps/` 와 `packages/` · 의존성 · 환경 변수       |
-| [rules/code.md](rules/code.md)                         | 파일 · 이름 · TypeScript · import · 화면 · 서버 · 주석 · 테스트      |
-| [process/docs-structure.md](process/docs-structure.md) | `docs/` 여섯 칸 · 파일 이름과 번호 · `CURRENT.md` · 색인             |
-| [process/workflow.md](process/workflow.md)             | 요구사항 → 계획 → 구현 → 검증(QA) → 보고, 단계마다 시작 · 끝 조건    |
-| [process/agents.md](process/agents.md)                 | 사람과 AI 의 몫 · 다시 제안하기 · 증거로 말하기                      |
-| [llms.txt](llms.txt)                                   | AI 가 먼저 읽는 목차                                                 |
-| [CHANGELOG.md](CHANGELOG.md)                           | 판마다 바뀐 규칙                                                     |
+| 문서                                                   | 내용                                                                   |
+| ------------------------------------------------------ | ---------------------------------------------------------------------- |
+| [rules/scripts.md](rules/scripts.md)                   | 실행 스크립트 이름 — `<동작>:<대상>[:<변형>]`, `dev` · `start` 의 뜻   |
+| [rules/commits.md](rules/commits.md)                   | Conventional Commits + 한글 · 커밋 단위 · 브랜치 · 커밋 훅             |
+| [rules/workspace.md](rules/workspace.md)               | pnpm · Node 고정 · `apps/` 와 `packages/` · 의존성 · 환경 변수         |
+| [rules/code.md](rules/code.md)                         | 파일 · 이름 · TypeScript · import · 화면 · 서버 · 주석 · 테스트        |
+| [process/docs-structure.md](process/docs-structure.md) | docs 폴더 구성 · 파일 이름과 번호 · `CURRENT.md` · 색인                |
+| [process/workflow.md](process/workflow.md)             | 요구사항 → 계획 → 구현 → 검증(QA) → 보고, 단계별 시작 조건과 완료 기준 |
+| [process/agents.md](process/agents.md)                 | 사용자와 AI 도구의 역할 · 다시 제안하기 · 증거로 말하기                |
+| [llms.txt](llms.txt)                                   | AI 도구가 먼저 읽는 목차                                               |
+| [CHANGELOG.md](CHANGELOG.md)                           | 버전별 규칙 변경 내역                                                  |
 
-## 양식
+## 문서 템플릿
 
-| 양식                                             | 놓는 곳                                               |
+| 문서 템플릿                                      | 복사할 위치                                           |
 | ------------------------------------------------ | ----------------------------------------------------- |
 | [requirements.md](templates/requirements.md)     | `docs/requirements/nnn_title.md`                      |
 | [plan.md](templates/plan.md)                     | `docs/plans/nnn_title.md`                             |
@@ -115,10 +131,13 @@ cp "$G/verification.md" "docs/verification/$n.md"
 | [CLAUDE.md](templates/CLAUDE.md)                 | 저장소 루트 `CLAUDE.md` · `AGENTS.md`                 |
 | [DEV_GUIDE_DIFF.md](templates/DEV_GUIDE_DIFF.md) | `docs/rules/00_DEV_GUIDE_DIFF.md`                     |
 
-## 담지 않는 것
+## 제공 범위
 
-**도메인 지식 · 특정 서버 · 특정 클라우드의 절차.** 그것은 각 프로젝트의 `docs/project/` · `docs/rules/` 가 갖는다.
-**화면 부품을 고르는 규칙**도 담지 않는다 — `@txstack/ui` 의 `ai/rules.md` 가 갖는다.
-eslint · prettier · commitlint 설정 프리셋은 다음 판에 서브패스로 더한다.
+업무 도메인, 서버 구성, 클라우드별 운영 절차는 포함하지 않습니다. 해당 내용은 각 프로젝트의
+`docs/project/` 또는 `docs/rules/` 에서 관리합니다.
+
+UI 컴포넌트 선택과 사용 규칙은 `@txstack/ui` 의 AI Guide(`ai/rules.md`)에서 별도로 제공합니다.
+
+ESLint · Prettier · commitlint 설정 프리셋은 현재 제공하지 않습니다. 후속 단계에서 검토할 예정입니다.
 
 MIT

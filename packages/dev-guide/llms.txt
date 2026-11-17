@@ -12,9 +12,9 @@
 
 ## 프로세스
 
-- [process/docs-structure.md](process/docs-structure.md): docs/ 여섯 칸(project · rules · requirements · plans · verification · reports), NN_TITLE.md 와 nnn_title.md, 작업 번호 공유, CURRENT.md, 색인
-- [process/workflow.md](process/workflow.md): 작업 번호가 필요한가, 요구사항 → 계획 → 구현 → 검증(QA) → 보고 단계마다 시작 · 끝 조건
-- [process/agents.md](process/agents.md): 사람과 AI 의 몫, 판단은 멈추고 묻는다, 그대로 따르지 않고 다시 제안한다, 증거로 말한다, 시작 문장
+- [process/docs-structure.md](process/docs-structure.md): docs 폴더 구성(project · rules · requirements · plans · verification · reports), NN_TITLE.md 와 nnn_title.md, 작업 번호 공유, CURRENT.md, 색인
+- [process/workflow.md](process/workflow.md): 작업 번호가 필요한가, 요구사항 → 계획 → 구현 → 검증(QA) → 보고, 단계별 시작 조건과 완료 기준
+- [process/agents.md](process/agents.md): 사용자와 AI 도구의 역할, 판단이 필요하면 멈추고 묻는다, 그대로 따르지 않고 다시 제안한다, 증거로 말한다, 시작 문장
 
 ## 양식
 
@@ -28,6 +28,6 @@
 - [templates/CLAUDE.md](templates/CLAUDE.md): 저장소 루트 — AI 도구가 먼저 읽는 문서
 - [templates/DEV_GUIDE_DIFF.md](templates/DEV_GUIDE_DIFF.md): docs/rules/00_DEV_GUIDE_DIFF.md — dev-guide 와 다른 점
 
-## 판
+## 버전
 
-- [CHANGELOG.md](CHANGELOG.md): 판마다 바뀐 규칙. 판을 올릴 때의 절차는 README 「버전을 올릴 때」
+- [CHANGELOG.md](CHANGELOG.md): 버전별 규칙 변경 내역. 업데이트 절차와 버전 정책은 README 「업데이트하기」

@@ -45,7 +45,7 @@ export function AiGuide() {
   return (
     <Page title="AI Guide" lead="Claude Code · Codex 같은 AI 코딩 도구가 화면을 짤 때 txstack 컴포넌트를 먼저 쓰게 하는 가이드입니다. 손으로 버튼 · 펼침 · 카드 · GNB를 다시 만드는 대신 결정표에서 컴포넌트를 고르게 합니다.">
       <TxAlert variant="info">
-        스크립트 이름 · 커밋 · docs 구조 · 작업 흐름처럼 <strong>프로젝트를 굴리는 규칙</strong>은 여기가 아니라 <Link to="/docs/dev-guide">Dev Guide</Link>에 있습니다. AI Guide는 화면 부품을 고르는 규칙만 갖습니다.
+        AI Guide는 <code>@txstack/ui</code>의 컴포넌트를 선택하고 사용하는 규칙을 다룹니다. 스크립트 이름 · 커밋 · 문서 구조 · 작업 절차 같은 <strong>프로젝트의 개발 규칙</strong>은 <Link to="/docs/dev-guide">Dev Guide</Link>에서 확인할 수 있습니다.
       </TxAlert>
 
       <Block title="Files">
