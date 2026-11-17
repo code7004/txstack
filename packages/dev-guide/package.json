@@ -1,6 +1,6 @@
 {
   "name": "@txstack/dev-guide",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Shared development guide — script naming, code and commit rules, a document-driven workflow (requirements → plans → verification → reports) and document templates",
   "keywords": [
     "conventions",
