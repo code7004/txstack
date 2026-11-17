@@ -43,7 +43,7 @@ import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 | Overlay        | `TxModal` · `TxDialog` · `TxSlidePanel` · `TxTooltip` · `TxToast`                                                                      |
 | Alert · Status | `TxAlert` · `TxLoading` · `TxSpinner` · `TxSkeleton` · `TxProgress` · `TxEmptyState` · `TxBadge` · `TxTag` · `TxTicker`                |
 | Layout         | `TxFlex` · `TxGrid` · `TxCard` · `TxDivider` · `TxTabs` · `TxCollapsible` · `TxAccordion` · `TxScrollArea` · `TxCarousel` · `TxAvatar` |
-| Wireframe      | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar` · `TxBreadcrumb`                                                                  |
+| App shell      | `TxAppShell` · `TxNavBar` · `TxSideNav` · `TxTabBar` · `TxBreadcrumb`                                                                  |
 
 컴포넌트마다 무엇을 할 수 있는지는 [Storybook](https://code7004.github.io/txstack/storybook/) 에서 직접 눌러 보며 확인할 수 있습니다.
 
