@@ -272,8 +272,9 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
          `project-c` 모두 `^0.1.2`. 셋 다 typecheck · 빌드 통과. `project-b` 는 `react-day-picker` 가 `^9` 였다 — link 일 때는
          txstack 쪽 v10 이 잡혀 가려져 있었다. `^10` 으로 올렸다. project-c 는 `vendor/txstack/` 와 `update:txstack` 을 지웠다
    - [ ] 사이트를 만들며 드러난 열린 자리들 — [005_site](005_site.md) 의 "만들며 드러난 것"
-   - [ ] **`@txstack/dev-guide`** — 스크립트 이름 · 코딩 규칙 · 문서 프로세스 · 양식을 버전 있는 패키지로.
-         `monorepo` 저장소는 그것을 따르는 스타터로 다시 짠다(2026-11-17 결정). 설계 합의(2026-11-17) · 1단계 본문 작성 — [014_dev_guide](014_dev_guide/000_README.md). **사용자 검토 → 배포 대기**
+   - [x] **`@txstack/dev-guide` `0.1.0` 배포** (2026-11-17) — 스크립트 이름 · 코딩 규칙 · 문서 프로세스 · 양식을 버전 있는 패키지로.
+         `monorepo` 저장소는 그것을 따르는 스타터로 다시 짠다. [014_dev_guide](014_dev_guide/000_README.md) —
+         다음: 사이트 페이지 · 설정 프리셋(2단계) · monorepo 스타터 · 네 프로젝트 적용
 
 `ui` 의 이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는
 [001_ui](001_ui/000_README.md) 의 "자른 것" 이 갖는다.
