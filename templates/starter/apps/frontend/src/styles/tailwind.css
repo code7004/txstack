@@ -1,0 +1,4 @@
+/* tx 레이어가 Tailwind 의 base 뒤 · utilities 앞에 오도록 순서를 먼저 정한다 — 그래야 className 의 유틸리티가 Tx* 를 덮는다 */
+@layer theme, base, tx, components, utilities;
+
+@import "tailwindcss";

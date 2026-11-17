@@ -5,8 +5,9 @@ import { base, node, react } from "@txstack/dev-guide/eslint";
  * 여기에는 txstack 에만 해당하는 것만 둔다.
  */
 export default [
+  // templates/ 는 새 프로젝트 골격이다 — 자기 eslint 설정을 갖고, verify:packages 가 그 안에서 검사한다
   // `._*` 는 macOS 가 확장속성을 못 싣는 볼륨(exFAT 등)에 만드는 부산물이다. 소스 옆에 그대로 생긴다
-  ...base({ ignores: ["**/.changeset/**", "**/._*"] }),
+  ...base({ ignores: ["**/.changeset/**", "**/._*", "templates/**"] }),
   ...react({ files: ["packages/**/*.{ts,tsx}", "apps/**/*.{ts,tsx}"] }),
   // 패키지는 브라우저와 Node 양쪽에서 돈다 (axios · fns 는 Node 에서도 불린다)
   ...node({ files: ["packages/**/*.{ts,tsx}", "apps/**/*.{ts,tsx}", "**/vite.config.ts", "**/tsup.config.ts"] }),

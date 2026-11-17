@@ -9,11 +9,13 @@
  *   pnpm build && pnpm verify:packages            # 전부
  *   pnpm verify:packages core-ui node-axios       # 골라서
  *
- * 소비자 앱은 scripts/verify-packages/ 에 있다. 외부 의존(react · vite 등)은 레지스트리에서 받는다.
+ * 소비자 앱은 scripts/verify-packages/ 에 있다. `starter` 는 새 프로젝트 골격(templates/starter)을 그대로 복사해
+ * 모든 package.json 의 @txstack/* 를 묶은 파일로 바꾸고, 골격 자신의 `pnpm check` · `pnpm build` 를 돌린다.
+ * 외부 의존(react · vite 등)은 레지스트리에서 받는다.
  * UI 앱은 타입 검사와 빌드까지 본다(브라우저에서 띄우지는 않는다). node-axios · node-fns 는 Node 에서 실제로 실행한다.
  */
 import { execSync } from "node:child_process";
-import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -31,6 +33,8 @@ const CASES = {
   "node-fns": {},
   // 문서 패키지. 워크스페이스가 아닌 저장소에 설치하고 README 의 「새 프로젝트에 붙이기」를 그대로 돌린다
   "dev-guide": {},
+  // 새 프로젝트 골격. dev-guide 프리셋 · @txstack/ui 를 바꾸면 골격이 그대로 통과하는지 본다 (docs/014_dev_guide)
+  starter: { source: "templates/starter", command: "pnpm check && pnpm build" },
   react18: { from: "core-ui", deps: { react: "^18.3.1", "react-dom": "^18.3.1" }, devDeps: { "@types/react": "^18.3.0", "@types/react-dom": "^18.3.0" } },
   // route-meta · hooks 의 peer 하한(react-router-dom >=6)
   router6: { from: "app", deps: { "react-router-dom": "^6.30.0" } }
@@ -64,22 +68,34 @@ for (const name of names) {
   if (!spec) throw new Error(`없는 소비자 앱: ${name}`);
 
   const dir = join(work, name);
-  cpSync(join(fixtures, spec.from ?? name), dir, { recursive: true });
+  if (spec.source) {
+    // 골격은 손대지 않고 복사한다 — 로컬에 설치 · 빌드해 둔 것과 lockfile 은 빼고(묶은 파일로 다시 푼다)
+    const skip = /(^|\/)(node_modules|dist|\.env|pnpm-lock\.yaml)$/;
+    cpSync(join(root, spec.source), dir, { recursive: true, filter: (from) => !skip.test(from) });
+    const manifests = ["package.json", ...["apps", "packages"].flatMap((group) => (existsSync(join(dir, group)) ? readdirSync(join(dir, group)).map((app) => join(group, app, "package.json")) : []))];
+    for (const file of manifests.filter((file) => existsSync(join(dir, file)))) {
+      const pkg = JSON.parse(readFileSync(join(dir, file), "utf8"));
+      for (const field of ["dependencies", "devDependencies"]) for (const dep of Object.keys(pkg[field] ?? {})) if (tarballs[dep]) pkg[field][dep] = tarballs[dep];
+      writeFileSync(join(dir, file), `${JSON.stringify(pkg, null, 2)}\n`);
+    }
+  } else {
+    cpSync(join(fixtures, spec.from ?? name), dir, { recursive: true });
 
-  const pkgPath = join(dir, "package.json");
-  const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
-  for (const field of ["dependencies", "devDependencies"]) {
-    for (const dep of Object.keys(pkg[field] ?? {})) if (pkg[field][dep] === "TXSTACK") pkg[field][dep] = tarballs[dep];
+    const pkgPath = join(dir, "package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+    for (const field of ["dependencies", "devDependencies"]) {
+      for (const dep of Object.keys(pkg[field] ?? {})) if (pkg[field][dep] === "TXSTACK") pkg[field][dep] = tarballs[dep];
+    }
+    Object.assign((pkg.dependencies ??= {}), spec.deps);
+    Object.assign((pkg.devDependencies ??= {}), spec.devDeps);
+    pkg.name = `verify-${name}`;
+    writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
   }
-  Object.assign((pkg.dependencies ??= {}), spec.deps);
-  Object.assign((pkg.devDependencies ??= {}), spec.devDeps);
-  pkg.name = `verify-${name}`;
-  writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 
   process.stdout.write(`- ${name} … `);
   try {
     run("pnpm install --prefer-offline --ignore-scripts", dir);
-    const out = run("pnpm run --silent verify", dir).trim();
+    const out = (spec.command ? (run(spec.command, dir), "골격의 pnpm check · pnpm build 통과") : run("pnpm run --silent verify", dir)).trim();
     const version = (dep) => {
       try {
         return JSON.parse(readFileSync(join(dir, "node_modules", dep, "package.json"), "utf8")).version;

@@ -1,0 +1,51 @@
+{
+  "name": "starter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "@txstack/dev-guide 를 따르는 새 프로젝트 골격 — frontend(Vite + React) · backend(NestJS)",
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": "24.14.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "dev": "pnpm run \"/^dev:(frontend|backend)$/\"",
+    "dev:frontend": "pnpm --filter @app/frontend dev",
+    "dev:backend": "pnpm --filter @app/backend dev",
+    "build": "pnpm -r build",
+    "build:frontend": "pnpm --filter @app/frontend build",
+    "build:frontend:dev": "pnpm --filter @app/frontend build:dev",
+    "build:frontend:live": "pnpm --filter @app/frontend build:live",
+    "build:backend": "pnpm --filter @app/backend build",
+    "preview:frontend": "pnpm --filter @app/frontend preview",
+    "start:backend": "pnpm --filter @app/backend start",
+    "lint": "eslint apps packages scripts --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint apps packages scripts --fix --no-error-on-unmatched-pattern",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm lint && pnpm typecheck && pnpm format:check",
+    "clean": "node scripts/clean.mjs"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^9.39.5",
+    "@txstack/dev-guide": "^0.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.0"
+  }
+}

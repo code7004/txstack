@@ -1,0 +1,5 @@
+@import "@txstack/ui/styles.css";
+
+/* 브랜드색 · 글꼴은 토큰으로 바꾼다 — 예: --tx-color-primary: #2684ff; */
+:root {
+}

@@ -7,3 +7,6 @@ packages/ui/ai/
 
 # macOS 가 확장속성을 못 싣는 볼륨에 만드는 부산물
 ._*
+
+# 새 프로젝트 골격 — 자기 prettier 설정(dev-guide 프리셋)을 갖고, verify:packages 가 그 안에서 검사한다
+templates/
