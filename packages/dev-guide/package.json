@@ -20,6 +20,7 @@
   "bugs": "https://github.com/code7004/txstack/issues",
   "files": [
     "README.md",
+    "CHANGELOG.md",
     "LICENSE",
     "llms.txt",
     "rules",
@@ -31,7 +32,9 @@
     "./rules/*": "./rules/*",
     "./process/*": "./process/*",
     "./templates/*": "./templates/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./CHANGELOG.md": "./CHANGELOG.md",
+    "./README.md": "./README.md"
   },
   "publishConfig": {
     "access": "public"

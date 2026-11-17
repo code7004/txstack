@@ -29,6 +29,8 @@ const CASES = {
   "route-start": {},
   "node-axios": {},
   "node-fns": {},
+  // 문서 패키지. 워크스페이스가 아닌 저장소에 설치하고 README 의 「새 프로젝트에 붙이기」를 그대로 돌린다
+  "dev-guide": {},
   react18: { from: "core-ui", deps: { react: "^18.3.1", "react-dom": "^18.3.1" }, devDeps: { "@types/react": "^18.3.0", "@types/react-dom": "^18.3.0" } },
   // route-meta · hooks 의 peer 하한(react-router-dom >=6)
   router6: { from: "app", deps: { "react-router-dom": "^6.30.0" } }

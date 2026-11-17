@@ -46,8 +46,8 @@ import { Row } from "./Row"; // 4. 같은 폴더
 
 ## 5. 화면 (React)
 
-- **UI 는 txstack 부품을 먼저 쓴다.** 고르는 법은 `node_modules/@txstack/ui/ai/rules.md`
-- 겉모습은 `--tx-*` 토큰으로 바꾼다. 부품 CSS 를 덮지 않는다
+- **UI 를 `@txstack/ui` 로 짓는다면, 어떤 부품을 고르고 어떻게 꾸미는지는 그 패키지의 AI 가이드가 갖는다** —
+  `node_modules/@txstack/ui/ai/rules.md`. 여기에 다시 적지 않는다 (부품과 함께 바뀌므로)
 - 화면(page)은 조립만 한다. 데이터 가져오기 · 변환은 훅이나 데이터 계층으로
 - 전역 상태는 최소로. URL 에 둘 수 있는 상태(필터 · 페이지)는 URL 에
 

@@ -8,7 +8,7 @@
 - [rules/scripts.md](rules/scripts.md): 실행 스크립트 이름 — <동작>:<대상>[:<변형>], dev = 개발 · start = 운영, 루트 공통 스크립트, check 의 뜻
 - [rules/commits.md](rules/commits.md): Conventional Commits + 한글, 커밋 단위, 커밋 · 푸시 · 배포는 요청할 때만, 브랜치, 커밋 훅
 - [rules/workspace.md](rules/workspace.md): pnpm · Node 고정, apps/ 와 packages/, 의존성, link: 를 main 에 올리지 않기, 환경 변수 local · dev · live
-- [rules/code.md](rules/code.md): 파일 · 이름 규칙, TypeScript strict, import 순서와 공개 진입점, 화면은 txstack 먼저, 서버 계층, 주석 · 테스트
+- [rules/code.md](rules/code.md): 파일 · 이름 규칙, TypeScript strict, import 순서와 공개 진입점, 화면 · 서버 계층(부품 고르기는 @txstack/ui 의 ai/rules.md), 주석 · 테스트
 
 ## 프로세스
 
@@ -27,3 +27,7 @@
 - [templates/CURRENT.md](templates/CURRENT.md): 저장소 루트 — 지금 상태 · 다음 할 일
 - [templates/CLAUDE.md](templates/CLAUDE.md): 저장소 루트 — AI 도구가 먼저 읽는 문서
 - [templates/DEV_GUIDE_DIFF.md](templates/DEV_GUIDE_DIFF.md): docs/rules/00_DEV_GUIDE_DIFF.md — dev-guide 와 다른 점
+
+## 판
+
+- [CHANGELOG.md](CHANGELOG.md): 판마다 바뀐 규칙. 판을 올릴 때의 절차는 README 「버전을 올릴 때」

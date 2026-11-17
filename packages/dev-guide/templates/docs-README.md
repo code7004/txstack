@@ -22,6 +22,6 @@
 
 ## 작업
 
-### 001 — <제목>
+### nnn — <제목>
 
-[요구사항](requirements/001_title.md) → [계획](plans/001_title.md) → [검증](verification/001_title.md)
+[요구사항](requirements/nnn_title.md) → [계획](plans/nnn_title.md) → [검증](verification/nnn_title.md)

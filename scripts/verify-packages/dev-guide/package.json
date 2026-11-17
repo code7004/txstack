@@ -1,0 +1,12 @@
+{
+  "name": "verify-dev-guide",
+  "private": true,
+  "type": "module",
+  "description": "워크스페이스가 아닌 일반 저장소에 @txstack/dev-guide 를 설치하고 README 의 「새 프로젝트에 붙이기」를 그대로 돌린다",
+  "scripts": {
+    "verify": "node check.mjs"
+  },
+  "devDependencies": {
+    "@txstack/dev-guide": "TXSTACK"
+  }
+}
