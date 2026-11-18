@@ -39,4 +39,4 @@
 
 ## 버전
 
-- [CHANGELOG.md](CHANGELOG.md): 버전별 규칙 변경 내역. 업데이트 절차와 버전 정책은 README 「업데이트하기」
+- [CHANGELOG.md](CHANGELOG.md): 버전별 규칙 변경 내역. 업데이트 절차와 버전 정책은 README 「Update」

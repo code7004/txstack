@@ -1,5 +1,5 @@
 /**
- * 설치된 @txstack/dev-guide 의 README 에서 「새 프로젝트에 붙이기」의 sh 블록을 꺼내 **그대로** 돌린다.
+ * 설치된 @txstack/dev-guide 의 README 에서 「Setup」의 sh 블록을 꺼내 **그대로** 돌린다.
  * README 의 명령이 틀리면 여기서 깨진다 — 문서가 곧 검증 대상이다.
  *
  * 1. 설치본에 llms.txt 가 가리키는 장이 모두 있다 (`files` 에서 빠지면 여기서 드러난다)

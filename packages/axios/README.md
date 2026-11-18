@@ -12,7 +12,7 @@ npm install @txstack/axios axios
 
 `axios` 1.6 이상이 함께 설치되어 있어야 합니다(peerDependency).
 
-## 시작하기
+## Getting started
 
 앱에 파일 하나를 두고 클라이언트를 만들어 내보냅니다. 화면에서는 이것만 가져다 씁니다.
 
@@ -40,7 +40,7 @@ const csv = await api.getText("/export/csv");
 
 `unwrap` 은 일반 요청에만 적용됩니다. `getBlob` · `getText` 는 원본 응답을 그대로 돌려줍니다.
 
-## 오류 다루기
+## Error handling
 
 서버마다 오류 응답의 모양이 조금씩 다릅니다. `parseApiError` 는 axios 오류든, 네트워크 끊김이든, 평범한 `Error` 든
 `{ statusCode, message }` 한 가지 모양으로 맞춰 줍니다. 화면에서는 이 둘만 보여 주면 됩니다.
@@ -58,7 +58,7 @@ try {
 
 모든 오류 응답을 한곳에서 보고 싶다면 `onError` 를 넘깁니다. 401 일 때는 `onUnauthorized` 와 `onError` 가 모두 호출됩니다.
 
-## 로그 남기기
+## Logging
 
 요청과 응답을 콘솔이 아닌 곳(모니터링 서버, Sentry 등)으로 보내고 싶을 때는 `onRequest` · `onResponse` 를 씁니다.
 
@@ -78,9 +78,9 @@ createHttpClient({
 **로그로 넘기기 전에 가려집니다.** 중첩된 객체와 URL 쿼리까지 가리며, 가릴 필드 이름은 `maskFields` 로 바꿀 수 있습니다.
 실제로 서버에 보내는 요청은 바뀌지 않습니다.
 
-## 옵션 한눈에 보기
+## Options
 
-| 옵션                        | 하는 일                                                        | 기본값                                      |
+| Option                      | Description                                                    | Default                                     |
 | --------------------------- | -------------------------------------------------------------- | ------------------------------------------- |
 | `baseURL`                   | 요청 주소의 앞부분 (필수)                                      | —                                           |
 | `getToken`                  | 요청마다 토큰을 돌려줍니다. 없으면 인증 헤더를 붙이지 않습니다 | —                                           |
@@ -99,7 +99,7 @@ axios 가 알아서 정합니다.
 
 이 래퍼가 다루지 않는 경우에는 `api.instance` 로 원본 axios 인스턴스를 꺼내 쓸 수 있습니다.
 
-## 이미 axios 인스턴스가 있다면
+## Using an existing axios instance
 
 기존 코드를 한 번에 바꾸기 어렵다면, 가지고 있는 인스턴스에 인증 · 401 처리 · 로그 정책만 붙일 수 있습니다.
 
@@ -114,18 +114,18 @@ attachInterceptors(instance, { baseURL: "/api", getToken, onUnauthorized: logout
 `initHttpClient` · `getHttpClient` 로 전역 클라이언트를 두던 코드라면 `@txstack/axios/singleton` 이 있습니다.
 옮겨 오는 동안 쓰라고 둔 것이라 새 코드에는 권하지 않습니다. 위의 "시작하기" 처럼 모듈에서 내보내면 같은 효과를 얻습니다.
 
-## 지원 환경
+## Requirements
 
 - ESM 전용이고, TypeScript 타입 선언이 들어 있습니다.
 - 브라우저와 Node 모두에서 동작합니다.
 
-## 같은 시리즈
+## Related packages
 
 [`@txstack/ui`](https://www.npmjs.com/package/@txstack/ui) · [`@txstack/hooks`](https://www.npmjs.com/package/@txstack/hooks) ·
 [`@txstack/route-meta`](https://www.npmjs.com/package/@txstack/route-meta) · [`@txstack/fns`](https://www.npmjs.com/package/@txstack/fns)
 
 문서와 예제: <https://code7004.github.io/txstack/>
 
-## 라이선스
+## License
 
 MIT

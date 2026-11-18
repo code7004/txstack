@@ -9,7 +9,7 @@ React 를 쓰지 않고 런타임 의존성도 없습니다. 브라우저 전용
 npm install @txstack/fns
 ```
 
-## 한눈에 보기
+## Overview
 
 ```ts
 import { formatNumber, formatCompact, lastDays, maskPhone, checkForm, elapsed } from "@txstack/fns";
@@ -31,9 +31,9 @@ checkForm({ name: "", phone: "010-12" }, { phone: { pattern: /^010-\d{4}-\d{4}$/
 함수는 모두 루트(`@txstack/fns`)에서 이름으로 가져옵니다. 패키지 안에서 이름이 겹치지 않게 지어 두었기 때문에,
 `date` · `file` · `form` 처럼 앱에서 흔히 쓰는 변수 이름과 부딪히지 않습니다.
 
-## 들어 있는 것
+## What's included
 
-| 묶음       | 이럴 때 씁니다                                         | 함수                                                                                                                 |
+| Group      | Use when                                               | Functions                                                                                                            |
 | ---------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `num`      | 숫자 · 비율 · 용량을 화면에 보여 줄 때                 | `formatNumber` · `formatPercent` · `formatCompact` · `formatBytes` · `toNumber` · `isNumeric`                        |
 | `date`     | 조회 기간을 만들거나, 경과 시간을 글로 바꿀 때         | `lastDays` · `dayRange` · `elapsed` · `splitSeconds` · `parseYmd` · `isoWeek` · `parseTimestamps` · `localTimeZone`  |
@@ -54,7 +54,7 @@ import { maskPhone } from "@txstack/fns/phone-kr";
 import { readTextFile } from "@txstack/fns/browser/file";
 ```
 
-## 조금 더 자세히
+## Details
 
 **포맷 함수는 빈 값에도 기본 표시값을 돌려줍니다.** `null` · `undefined` · `NaN` 은 0 으로 보고 포맷합니다
 (`"0"` · `"0.0%"` · `"0 B"`). 대신 `"-"` 를 보여 주고 싶다면 `formatNumber` · `formatPercent` · `formatCompact` 에 `fallback` 을 넘기면 됩니다. 로케일을 정하지 않으면 실행 환경의 것을 따릅니다.
@@ -73,19 +73,19 @@ await save(form);
 **lodash 에 이미 있는 것은 만들지 않았습니다.** `pick` · `isEqual` · `clamp` · `sortBy` 같은 함수가 필요하면 lodash 를 함께 쓰세요.
 `diffObject` 처럼 비교 함수를 받는 곳에는 `_.isEqual` 을 그대로 넘길 수 있습니다.
 
-## 지원 환경
+## Requirements
 
 - ESM 전용입니다. `require()` 로는 불러올 수 없습니다.
 - `browser` 묶음(쿠키 · CSS · 파일)은 `document` 같은 브라우저 API 를 씁니다. 그 밖의 함수는 Node 에서도 돌아갑니다.
 - TypeScript 타입 선언이 함께 들어 있습니다.
 
-## 같은 시리즈
+## Related packages
 
 [`@txstack/ui`](https://www.npmjs.com/package/@txstack/ui) · [`@txstack/hooks`](https://www.npmjs.com/package/@txstack/hooks) ·
 [`@txstack/route-meta`](https://www.npmjs.com/package/@txstack/route-meta) · [`@txstack/axios`](https://www.npmjs.com/package/@txstack/axios)
 
 문서와 예제: <https://code7004.github.io/txstack/>
 
-## 라이선스
+## License
 
 MIT

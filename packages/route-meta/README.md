@@ -12,7 +12,7 @@ npm install @txstack/route-meta
 
 `react` 18 이상과 `react-router-dom` 6 이상이 필요합니다.
 
-## 트리 적기
+## Defining the tree
 
 ```tsx
 import type { RouteTree } from "@txstack/route-meta";
@@ -37,7 +37,7 @@ export const routes: RouteTree = {
 
 트리는 컴포넌트 밖, 모듈 상수로 두세요. 그래야 아래 훅들이 주소가 바뀌지 않는 동안 같은 결과를 돌려줍니다.
 
-## 트리에서 만들어 내는 것
+## What the tree generates
 
 **라우터** — 트리를 그대로 라우터에 넘깁니다. 둘 중 편한 쪽을 쓰면 됩니다.
 
@@ -87,11 +87,11 @@ const crumbs = useBreadcrumbs(routes);
 라우터 밖에서 주소 하나로 만들어야 할 때(서버, 테스트, 탭 제목 등)는 `getBreadcrumbs(routes, pathname)` 을 씁니다.
 레이아웃만 맡는 노드처럼 경로에 보이지 않아야 하는 칸에는 `meta.breadcrumb: false` 를 줍니다.
 
-## 라우터와 메뉴는 거르는 기준이 다릅니다
+## Router and menu filter differently
 
 메뉴에 보이지 않는다고 해서 주소로 들어갈 수 없는 것은 아닙니다. 상세 화면은 메뉴에는 없지만 주소로는 열려야 하니까요.
 
-|                    | 라우터         | 메뉴                   |
+|                    | Router         | Menu                   |
 | ------------------ | -------------- | ---------------------- |
 | `enabled: false`   | 빠집니다       | 빠집니다               |
 | `meta.hidden`      | **등록됩니다** | 빠집니다               |
@@ -100,18 +100,18 @@ const crumbs = useBreadcrumbs(routes);
 
 `permissions` 는 메뉴에 보일지만 정합니다. 화면 접근 자체를 막으려면 라우트의 `element` 나 `loader` 에서 따로 막아야 합니다.
 
-## 지원 환경
+## Requirements
 
 - ESM 전용이고, TypeScript 타입 선언이 들어 있습니다.
 - React 18 · 19, react-router-dom 6 · 7 에서 확인했습니다.
 
-## 같은 시리즈
+## Related packages
 
 [`@txstack/ui`](https://www.npmjs.com/package/@txstack/ui) · [`@txstack/hooks`](https://www.npmjs.com/package/@txstack/hooks) ·
 [`@txstack/axios`](https://www.npmjs.com/package/@txstack/axios) · [`@txstack/fns`](https://www.npmjs.com/package/@txstack/fns)
 
 문서와 예제: <https://code7004.github.io/txstack/>
 
-## 라이선스
+## License
 
 MIT

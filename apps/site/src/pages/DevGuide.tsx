@@ -129,7 +129,7 @@ export function DevGuide() {
           <strong>프로젝트에 복사한 템플릿은 자동으로 바뀌지 않으므로</strong> 필요한 내용을 별도로 반영해야 합니다.
         </p>
         <TxAlert variant="info">
-          patch(<code>0.1.x</code>)는 문구만 바뀌어 별도 검토가 필요 없습니다. minor(<code>0.x.0</code>)는 규칙이 바뀌므로 영향을 검토한 뒤 적용합니다. 자세한 절차는 <a href={`${BASE}dev-guide/README.md`}>README</a>의 「업데이트하기」에 있습니다.
+          patch(<code>0.1.x</code>)는 문구만 바뀌어 별도 검토가 필요 없습니다. minor(<code>0.x.0</code>)는 규칙이 바뀌므로 영향을 검토한 뒤 적용합니다. 자세한 절차는 <a href={`${BASE}dev-guide/README.md`}>README</a>의 「Update」에 있습니다.
         </TxAlert>
       </Block>
     </Page>

@@ -11,7 +11,7 @@ npm install @txstack/ui
 
 `react` · `react-dom` 18 이상이 필요합니다.
 
-## 시작하기
+## Getting started
 
 스타일시트를 한 번 불러오고, 컴포넌트를 가져다 씁니다.
 
@@ -31,7 +31,7 @@ import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 끝날 때까지 버튼이 비활성화되고 로딩 스피너가 표시됩니다. 여러 번 눌러도 한 번만 실행됩니다.
 `TxLoading` 의 `visible` 에 배열을 넘기면 그 배열이 비어 있는 동안만 보입니다.
 
-## 들어 있는 것
+## What's included
 
 | Types          | Components                                                                                                                             |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -47,12 +47,12 @@ import { TxButton, TxFlex, TxLoading } from "@txstack/ui";
 
 컴포넌트마다 무엇을 할 수 있는지는 [Storybook](https://code7004.github.io/txstack/storybook/) 에서 직접 눌러 보며 확인할 수 있습니다.
 
-### 표와 달력은 따로 가져옵니다
+### Subpaths — table and date picker
 
 `TxAgGrid` 는 ag-grid 를, `TxDayPicker` 는 react-day-picker 를 씁니다. 둘 다 무거운 라이브러리라서
 루트(`@txstack/ui`)와 분리해 두었습니다. 루트만 쓰는 앱은 이 라이브러리들을 설치하지 않아도 됩니다.
 
-| 쓰려는 것                                                            | 가져오는 곳             | 함께 설치할 것                            |
+| Use                                                                  | Import from             | Install with                              |
 | -------------------------------------------------------------------- | ----------------------- | ----------------------------------------- |
 | Table (`TxAgGrid` 계열)                                              | `@txstack/ui/aggrid`    | `ag-grid-community@35` `ag-grid-react@35` |
 | Date picker (`TxDayPicker` · `TxDayPickerRange` · `TxFormDayPicker`) | `@txstack/ui/daypicker` | `react-day-picker@10`                     |
@@ -71,7 +71,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 ## Theming
 
-### 색 · 모서리 · 크기는 CSS 변수로
+### CSS variables
 
 모든 겉모습은 `--tx-*` CSS 변수로 정해져 있습니다. 전체에 걸린 변수 하나를 바꾸면
 hover · focus · 다크 모드까지 따라 바뀝니다. 상태마다 하나씩 덮어쓸 필요가 없습니다.
@@ -94,7 +94,7 @@ hover · focus · 다크 모드까지 따라 바뀝니다. 상태마다 하나�
 }
 ```
 
-### className 으로 스타일을 덮어쓸 수 있습니다
+### Overriding with className
 
 모든 스타일은 `@layer tx` 안에 들어 있습니다. 레이어를 쓰지 않은 평범한 CSS 는 선택자가 얼마나 구체적이든 레이어 안의 스타일을 이깁니다.
 그래서 순수 CSS · Sass · CSS Modules 로 준 `className` 은 별도 설정 없이 컴포넌트 기본 스타일을 덮어씁니다.
@@ -120,12 +120,12 @@ import "@txstack/ui/styles.css";
 앱 전체에 걸 기본 모습(변수 값, 컴포넌트 기본 스타일)은 txstack 전용 CSS 파일 하나에 모아 두세요.
 컴포넌트 기본 스타일을 덮어쓰는 규칙은 `@layer components` 안에 넣습니다. 레이어 밖에 두면 화면에서 준 `className` 보다 강해집니다.
 
-### 다크 모드
+### Dark mode
 
 `dark` 클래스를 붙인 요소의 안쪽이 다크 모드가 됩니다. 보통은 `<html>` 에 붙입니다. 언제 붙일지(시스템 설정을 따를지, 토글을 둘지)는 앱이 정합니다.
 다크 모드 색을 바꾸고 싶다면 `.dark` 아래에서 같은 변수를 다시 정의하면 됩니다.
 
-## AI 코딩 도구와 함께 쓰기
+## With AI coding tools
 
 패키지 안에 AI 코딩 도구가 읽을 가이드가 들어 있습니다. 설치한 버전과 내용이 항상 같습니다.
 
@@ -134,19 +134,19 @@ import "@txstack/ui/styles.css";
 
 Claude Code · Cursor 같은 도구의 프로젝트 지침(`CLAUDE.md` 등)에서 `rules.md` 를 읽게 해 두면, 이미 있는 컴포넌트를 새로 만드는 일이 줄어듭니다.
 
-## 지원 환경
+## Requirements
 
 - ESM 전용이고, TypeScript 타입 선언이 들어 있습니다.
 - React 18 · 19 에서 확인했습니다.
 - 런타임 의존성은 `clsx` 하나입니다.
 
-## 같은 시리즈
+## Related packages
 
 [`@txstack/hooks`](https://www.npmjs.com/package/@txstack/hooks) · [`@txstack/route-meta`](https://www.npmjs.com/package/@txstack/route-meta) ·
 [`@txstack/axios`](https://www.npmjs.com/package/@txstack/axios) · [`@txstack/fns`](https://www.npmjs.com/package/@txstack/fns)
 
 문서와 예제: <https://code7004.github.io/txstack/>
 
-## 라이선스
+## License
 
 MIT

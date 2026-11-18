@@ -31,7 +31,7 @@ const CASES = {
   "route-start": {},
   "node-axios": {},
   "node-fns": {},
-  // 문서 패키지. 워크스페이스가 아닌 저장소에 설치하고 README 의 「새 프로젝트에 붙이기」를 그대로 돌린다
+  // 문서 패키지. 워크스페이스가 아닌 저장소에 설치하고 README 의 「Setup」을 그대로 돌린다
   "dev-guide": {},
   // 새 프로젝트 골격. dev-guide 프리셋 · @txstack/ui 를 바꾸면 골격이 그대로 통과하는지 본다 (docs/014_dev_guide)
   starter: { source: "templates/starter", command: "pnpm check && pnpm build" },

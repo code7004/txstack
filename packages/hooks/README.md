@@ -11,7 +11,7 @@ npm install @txstack/hooks
 
 `react` 18 이상이 필요합니다. `useUrlQuery` 를 쓴다면 `react-router-dom` 6 이상도 필요합니다.
 
-## 가져오는 방법
+## Import
 
 훅마다 진입점이 따로 있고, import 경로는 훅 이름과 같습니다. 쓰지 않는 훅이 요구하는 패키지는 설치하지 않아도 됩니다.
 
@@ -67,7 +67,7 @@ setQuery({ keyword: "kim", page: 1 }); // 주소가 ?page=1&size=20&keyword=kim 
 - **`useEffect` 의존성에 그대로 넣어도 됩니다.** `query` 는 주소가 바뀔 때만 새 객체가 되고, `setQuery` 는 항상 같은 함수입니다.
   `defaults` 를 매번 새 객체로 넘겨도 마찬가지입니다.
 
-### 기본값이 없는 키 읽기
+### Keys without a default
 
 선택 필터처럼 기본값을 두고 싶지 않은 키는 `urlKeys` 에 적습니다. 이때는 타입을 직접 적어 주세요.
 `defaults` 에 없는 키는 추론으로 알 수 없기 때문입니다.
@@ -88,16 +88,16 @@ const [query, setQuery] = useUrlQuery<Query>({
 query.status; // number | undefined
 ```
 
-### 그 밖의 옵션
+### Options
 
-| 옵션        | 하는 일                                                                            | 기본값  |
+| Option      | Description                                                                        | Default |
 | ----------- | ---------------------------------------------------------------------------------- | ------- |
 | `postParse` | 주소를 읽은 직후 값을 바로잡습니다 (`useObjectState` 의 두 번째 인자와 같습니다)   | —       |
 | `encode`    | 쿼리 전체를 base64url 문자열 하나로 인코딩합니다 → `?_q=eyJ...`. 암호화는 아닙니다 | `false` |
 | `encodeKey` | `encode` 에 쓸 키 이름                                                             | `"_q"`  |
 | `replace`   | 주소를 바꿀 때 뒤로 가기 기록을 쌓지 않습니다                                      | `true`  |
 
-### 주소를 누가 고쳐도 타입은 그대로입니다
+### Types survive URL edits
 
 공유된 주소는 누구나 손댈 수 있습니다. 그래도 `query` 는 `defaults` 와 `queryTypes` 에 적은 타입을 지킵니다.
 
@@ -105,18 +105,18 @@ query.status; // number | undefined
 - 문자열 · 숫자로 선언한 키가 `?q=a&q=b` 처럼 여러 번 오면 첫 값만 씁니다. `?q=a,b` 의 콤마도 쪼개지 않고 `"a,b"` 그대로 둡니다.
 - 숫자로 선언한 키에 `?page=abc` 처럼 읽을 수 없는 값이 오면 기본값을 씁니다. boolean 은 `true` · `false` 만 읽습니다.
 
-## 지원 환경
+## Requirements
 
 - ESM 전용이고, TypeScript 타입 선언이 들어 있습니다.
 - React 18 · 19, react-router-dom 6 · 7 에서 확인했습니다.
 
-## 같은 시리즈
+## Related packages
 
 [`@txstack/ui`](https://www.npmjs.com/package/@txstack/ui) · [`@txstack/route-meta`](https://www.npmjs.com/package/@txstack/route-meta) ·
 [`@txstack/axios`](https://www.npmjs.com/package/@txstack/axios) · [`@txstack/fns`](https://www.npmjs.com/package/@txstack/fns)
 
 문서와 예제: <https://code7004.github.io/txstack/>
 
-## 라이선스
+## License
 
 MIT
