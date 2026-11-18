@@ -18,8 +18,8 @@ importers:
         specifier: ^9.39.5
         version: 9.39.5
       '@txstack/dev-guide':
-        specifier: ^0.4.1
-        version: 0.4.1(@commitlint/config-conventional@20.5.3)(@eslint/js@9.39.5)(eslint-config-prettier@10.1.8(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-import@2.32.0(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-refresh@0.4.26(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)))(eslint@9.39.5(jiti@2.7.0))(globals@16.5.0)(prettier@3.10.1)(typescript-eslint@8.73.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))
+        specifier: ^0.4.2
+        version: 0.4.2(@commitlint/config-conventional@20.5.3)(@eslint/js@9.39.5)(eslint-config-prettier@10.1.8(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-import@2.32.0(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-refresh@0.4.26(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)))(eslint@9.39.5(jiti@2.7.0))(globals@16.5.0)(prettier@3.10.1)(typescript-eslint@8.73.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@2.7.0)
@@ -1031,8 +1031,8 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@txstack/dev-guide@0.4.1':
-    resolution: {integrity: sha512-+fiLPZn99wlkfa48n4nXV/TpS4R6AmMfmxweBVEFX19SCvoY6tkd+qoPHgNC9Ol3MJOHhYeoG9hOvPGawIb2uw==}
+  '@txstack/dev-guide@0.4.2':
+    resolution: {integrity: sha512-sgGsQb/PeZtl22kChbV8F5zf9sGu7WNJHP1NpxNgf6RKJUEudZwJskFwvL4qdvN2/lzNZFQUdVbUlNeCwRUHSg==}
     peerDependencies:
       '@commitlint/config-conventional': '>=19'
       '@eslint/js': '>=9'
@@ -4151,7 +4151,7 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@txstack/dev-guide@0.4.1(@commitlint/config-conventional@20.5.3)(@eslint/js@9.39.5)(eslint-config-prettier@10.1.8(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-import@2.32.0(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-refresh@0.4.26(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)))(eslint@9.39.5(jiti@2.7.0))(globals@16.5.0)(prettier@3.10.1)(typescript-eslint@8.73.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))':
+  '@txstack/dev-guide@0.4.2(@commitlint/config-conventional@20.5.3)(@eslint/js@9.39.5)(eslint-config-prettier@10.1.8(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-import@2.32.0(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react-refresh@0.4.26(eslint@9.39.5(jiti@2.7.0)))(eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)))(eslint@9.39.5(jiti@2.7.0))(globals@16.5.0)(prettier@3.10.1)(typescript-eslint@8.73.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))':
     optionalDependencies:
       '@commitlint/config-conventional': 20.5.3
       '@eslint/js': 9.39.5

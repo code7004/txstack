@@ -33,7 +33,7 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^9.39.5",
-    "@txstack/dev-guide": "^0.4.1",
+    "@txstack/dev-guide": "^0.4.2",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
