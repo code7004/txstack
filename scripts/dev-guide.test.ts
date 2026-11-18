@@ -176,6 +176,7 @@ describe("@txstack/dev-guide — 설정 프리셋", () => {
     const { default: commitlint } = await import("../packages/dev-guide/config/commitlint.js");
     expect(commitlint.extends).toEqual(["@commitlint/config-conventional"]);
     expect(commitlint.rules["subject-case"]).toEqual([0]);
+    expect(commitlint.rules["header-max-length"]).toEqual([2, "always", 200]);
     const { default: lintStaged } = await import("../packages/dev-guide/config/lint-staged.js");
     expect(Object.values(lintStaged).flat()).toEqual(["eslint --fix", "prettier --write", "prettier --write"]);
   });
