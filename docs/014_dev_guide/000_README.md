@@ -190,4 +190,4 @@ dev-guide 를 ui 에 넣으면 백엔드 저장소가 UI 라이브러리를 설�
 - [ ] 사이트 · AI 가이드(`scripts/ai-guide.mjs`)에 싣기
 - [x] 2단계 — 설정 프리셋 (prettier · eslint · commitlint · lint-staged) — [001_config_presets](001_config_presets.md). `0.2.0` 배포, import 규칙 셋 · `node({ decorators })` 는 `0.3.0` 배포 (2026-11-17)
 - [x] 3단계 — 스타터 `templates/starter` (2026-11-17, `monorepo` 저장소에서 옮김) — frontend(Vite · React · Tailwind v4 · React Compiler · `@txstack/ui`) · backend(NestJS `/health`), dev-guide `0.3.0` 프리셋 · 차이 없음
-- [ ] 4단계 — 네 프로젝트 적용 — txstack · 소비자 1곳 적용 (2026-11-18). 남은 소비자 2곳
+- [x] 4단계 — 네 프로젝트 적용 (2026-11-18) — txstack · 소비자 셋. 저장소마다 스크립트 이름 변경표 · `CLAUDE.md` 「개발 기준」 문단 · `docs/rules/00_DEV_GUIDE_DIFF.md`. 서버가 부르는 이름(배포 스크립트 · pm2)은 같은 커밋에서 고쳤다. 설정 프리셋 적용은 프로젝트마다 따로 한다
