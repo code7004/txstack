@@ -1,5 +1,11 @@
 # @txstack/hooks
 
+## 0.1.3
+
+### Patch Changes
+
+- README 의 제목 · 표 머리글을 영어로 맞췄다 (Getting started · What's included · Requirements · Related packages · License 등). 본문과 코드는 바뀌지 않았다. ui 는 문서 · 스토리 · 주석의 개발 용어도 함께 정리했다 (부품 → 컴포넌트, 화면 껍데기 → app shell).
+
 ## 0.1.2
 
 ### Patch Changes
