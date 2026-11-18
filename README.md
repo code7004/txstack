@@ -29,8 +29,8 @@ pnpm install
 pnpm check     # lint + typecheck + test
 pnpm build     # packages/* 전체 빌드
 
-pnpm storybook:dev   # 컴포넌트 카탈로그
-pnpm site:dev        # 소개 사이트 — 가이드 · 예제 · API
+pnpm dev:storybook   # 컴포넌트 카탈로그
+pnpm dev:site        # 소개 사이트 — 가이드 · 예제 · API
 ```
 
 Node `24.14.0` · pnpm `>=10.0.0`. **pnpm 만 사용한다.**

@@ -50,7 +50,7 @@ git log --oneline legacy | head                           # 53개 커밋도 그�
 ```sh
 pnpm check           # lint + typecheck + test
 pnpm build           # dist 와 dist/styles.css
-pnpm storybook:dev   # http://localhost:6310
+pnpm dev:storybook   # http://localhost:6310
 ```
 
 셋 다 통과하면 옮기기 끝이다.

@@ -10,3 +10,6 @@ packages/ui/ai/
 
 # 새 프로젝트 골격 — 자기 prettier 설정(dev-guide 프리셋)을 갖고, verify:packages 가 그 안에서 검사한다
 templates/
+
+# Claude Code 가 만드는 작업 트리 사본 — 저장소의 일부가 아니다
+.claude/worktrees/

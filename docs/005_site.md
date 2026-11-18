@@ -6,7 +6,7 @@
 | ------ | ------------------------------------------------------------------- |
 | 자리   | [`apps/site/`](../apps/site) — `@txstack/site`, `private`           |
 | 스택   | Vite + React + react-router-dom + Tailwind v4                       |
-| 띄우기 | `pnpm site:dev` (6410) · `pnpm site:build`                          |
+| 띄우기 | `pnpm dev:site` (6410) · `pnpm build:site`                          |
 | 짝     | 컴포넌트 레퍼런스는 [`apps/storybook`](../apps/storybook) 이 갖는다 |
 
 ## 왜 만드는가

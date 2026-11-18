@@ -307,7 +307,7 @@ export default [
 | 산출물                | 만드는 곳                                                       | 언제                                    |
 | --------------------- | --------------------------------------------------------------- | --------------------------------------- |
 | `packages/ui/ai/`     | `@txstack/ui` 의 `build` (`node ../../scripts/ai-guide.mjs ai`) | `pnpm build` · `pnpm pack` 전           |
-| 사이트 `/llms.txt` 등 | `apps/site/vite.config.ts` 의 `aiGuide()` 플러그인              | `pnpm site:dev` (메모리) · `site:build` |
+| 사이트 `/llms.txt` 등 | `apps/site/vite.config.ts` 의 `aiGuide()` 플러그인              | `pnpm dev:site` (메모리) · `build:site` |
 
 생성기는 [`scripts/ai-guide.mjs`](../scripts/ai-guide.mjs) 하나다. 묶는 것:
 

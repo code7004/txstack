@@ -70,7 +70,7 @@
 | `route-meta`  | **완료** — 테스트 25개 통과. `ui` 의 메뉴 컴포넌트와 이어 붙였고, **실사용 검증은 `apps/site` 가 한다**                                                                                                                          |
 | `fns`         | **이식 완료**(2026-10-20) — 루트 + 그룹 진입점 13개. 함수마다 예제가 있고 테스트가 그 예제를 실행해 본다. 사이트 `API › fns` 가 첫 소비자 ([012_fns](012_fns/000_README.md))                                                     |
 | `ui`          | **컴포넌트 50개 완료** — 목록·진행은 [001_ui](001_ui/000_README.md). 테스트 1,674개                                                                                                                                              |
-| `apps/*`      | **storybook** — 컴포넌트 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트. 뼈대·내용·진짜 데이터까지 섰고 **배포(D)가 남았다** ([005_site](005_site.md)). `pnpm storybook:dev` · `pnpm site:dev` |
+| `apps/*`      | **storybook** — 컴포넌트 레퍼런스 + `소개/시작하기`(MDX) + `Recipes` 5종. **`site`** — 소개·검증용 사이트. 뼈대·내용·진짜 데이터까지 섰고 **배포(D)가 남았다** ([005_site](005_site.md)). `pnpm dev:storybook` · `pnpm dev:site` |
 | 배포 도구     | **changesets 붙였다** — 다섯 패키지 모두 `0.1.0`. **husky 도 붙였다**(커밋할 때 포맷 자동 정리). commitlint 는 아직 (사람이 둘 이상 커밋할 때)                                                                                   |
 
 `pnpm build` 가 **진입점 22개**(`ui` 3 · `hooks` 2 · `axios` 2 · `route-meta` 1 · `fns` 14)를
@@ -282,7 +282,7 @@ Profile 한 페이지(010 §8의 3단계)는 2026-10-15에 `apps/site/src/pages/
 `ui` 의 이식은 **원본 26개 중 23개로 끝났다.** 자른 셋과 그 이유는
 [001_ui](001_ui/000_README.md) 의 "자른 것" 이 갖는다.
 
-playground 는 아직 없다. Storybook 은 세웠다 (`pnpm storybook:dev`, 포트 6310).
+playground 는 아직 없다. Storybook 은 세웠다 (`pnpm dev:storybook`, 포트 6310).
 
 ### 아직 안 가져온 것
 

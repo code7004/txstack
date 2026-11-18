@@ -2,6 +2,12 @@
 
 txstack 작업 시 지켜야 할 핵심 규약. **상세는 `docs/` 가 소유한다. 이 문서는 얇게 유지한다.**
 
+## 개발 기준
+
+이 저장소는 **`@txstack/dev-guide`** 를 따른다(만드는 곳이기도 하다). 규칙은 설치된 버전에 있다 —
+`node_modules/@txstack/dev-guide/llms.txt` (목차), `rules/` (스크립트 · 커밋 · 작업 공간 · 용어 · 코드), `process/` (문서 프로세스 · AI 와 일하는 법).
+dev-guide 와 다르게 하는 것은 [docs/rules/00_DEV_GUIDE_DIFF.md](docs/rules/00_DEV_GUIDE_DIFF.md) 에만 적는다.
+
 ## 시작하기
 
 **작업을 이어받는다면 [`docs/README.md`](docs/README.md) 를 먼저 읽는다.**
@@ -104,7 +110,7 @@ git ls-tree --name-only legacy:packages/ui/src
 | 4    | **S2 구현**                                                                                        | 🤖   |
 | 5    | **S3 테스트** — 동작 + **CSS 계약**                                                                | 🤖   |
 | 6    | **S4 스토리** — `packages/ui/src/<Name>/<Name>.stories.tsx`                                        | 🤖   |
-| 7    | **확인** — `pnpm storybook:dev` 로 직접 본다. **여기서 멈춘다**                                    | 🧑   |
+| 7    | **확인** — `pnpm dev:storybook` 로 직접 본다. **여기서 멈춘다**                                    | 🧑   |
 | 8    | 지시가 오면 2차 개선                                                                               | 🤖   |
 
 **판단이 필요하면 3단계에서 멈추고 묻는다.** 옮긴 뒤에 고치면 무엇이 원본이고 무엇이 판단이었는지
@@ -149,10 +155,11 @@ jsdom 에는 스타일시트가 없어 렌더 결과로는 안 보인다. 그래
 ## 검증 명령
 
 ```sh
-pnpm check           # lint + typecheck + test  ← 기본
+pnpm check           # lint + typecheck + format:check + test  ← 기본
 pnpm test            # 회귀 테스트 (vitest)
 pnpm build           # packages/* 전체 빌드 (ui 는 dist/styles.css 까지)
 pnpm verify:packages # 빌드한 .tgz 를 저장소 밖 소비자 앱에 설치해 검증 (build 뒤에)
 pnpm build:watch     # 소비자에 link: 로 붙여 놓고 고칠 때 — 안 띄우면 옛 dist 를 보게 된다
-pnpm storybook:dev   # 컴포넌트 카탈로그 — 사용자가 직접 보는 자리
+pnpm dev             # Storybook(6310) · 사이트(6410) 를 함께 띄운다
+pnpm dev:storybook   # 컴포넌트 카탈로그 — 사용자가 직접 보는 자리
 ```
